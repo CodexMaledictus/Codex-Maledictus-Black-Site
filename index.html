@@ -3,135 +3,174 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CODEX MALEDICTUS // BLACK SITE</title>
+    <title>CODEX MALEDICTUS // SYSTEM REGISTRY</title>
     <style>
         :root {
-            --necrotic: #00ff66;
-            --deep-void: #010101;
+            --phosphor: #00ff66;
+            --dim-glow: #003b00;
+            --void: #020202;
             --ritual-gold: #b8860b;
         }
 
         body, html {
-            margin: 0; padding: 0; background: var(--deep-void);
-            color: var(--necrotic); font-family: 'Courier New', monospace;
-            overflow-x: hidden; scroll-behavior: smooth;
+            margin: 0; padding: 0; background: var(--void);
+            color: var(--phosphor); font-family: 'Courier New', monospace;
+            overflow-x: hidden; height: 100%;
         }
 
-        /* DIGITAL OVERLAY - SCANLINES & INTERFERENCE */
-        body::before {
-            content: " "; display: block; position: fixed; top: 0; left: 0; bottom: 0; right: 0;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%);
-            background-size: 100% 3px; z-index: 100; pointer-events: none; opacity: 0.15;
+        /* THE LOOMING VOID (BACKGROUND DEPTH) */
+        .void-depth {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at center, #0a1a0a 0%, #000 100%);
+            z-index: -2;
         }
+
+        .fog {
+            position: fixed; width: 200%; height: 200%; top: -50%; left: -50%;
+            background: url('https://www.transparenttextures.com/patterns/asfalt-dark.png');
+            opacity: 0.1; animation: drift 60s linear infinite; z-index: -1;
+        }
+        @keyframes drift { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+        /* SCATTERED OCCULT SHARDS */
+        .shard {
+            position: absolute; font-size: 1.5rem; opacity: 0; transition: 0.5s; cursor: default;
+            user-select: none; z-index: 1;
+        }
+        .shard:hover { opacity: 0.4; text-shadow: 0 0 10px var(--phosphor); }
 
         .container {
-            max-width: 900px; margin: 0 auto; padding: 80px 20px; position: relative; z-index: 5;
+            display: grid; grid-template-columns: 250px 1fr 250px;
+            gap: 20px; max-width: 1400px; margin: 0 auto; padding: 40px;
+            position: relative; z-index: 5;
         }
 
-        /* HEADER: RITUAL STATUS */
-        .sanctum-header {
-            border-bottom: 1px solid rgba(0, 255, 102, 0.1);
-            padding-bottom: 30px; margin-bottom: 60px; text-align: left;
+        /* SIDEBARS: SIGNAL & REGISTRY */
+        .panel {
+            border: 1px solid var(--dim-glow); background: rgba(0, 10, 0, 0.4);
+            padding: 20px; font-size: 0.75rem; text-align: left;
+            backdrop-filter: blur(5px);
         }
-        .header-main { font-size: 2.8rem; font-weight: 900; letter-spacing: 15px; margin: 0; text-shadow: 0 0 15px var(--necrotic); }
-        .meta-data { display: flex; justify-content: space-between; font-size: 0.7rem; margin-top: 15px; letter-spacing: 2px; opacity: 0.6; }
+        .panel-title { border-bottom: 1px solid var(--phosphor); margin-bottom: 15px; padding-bottom: 5px; font-weight: bold; color: var(--ritual-gold); }
 
-        /* THE CHRONICLE (YOUTUBE EMANATION) */
-        .chronicle-vault {
-            background: rgba(0, 15, 5, 0.95); border: 1px solid var(--necrotic);
-            padding: 25px; box-shadow: 0 0 50px rgba(0, 255, 102, 0.05);
-            margin-bottom: 80px; position: relative;
+        /* CENTER: THE EMANATION */
+        .main-emanation { text-align: center; }
+        .video-vault {
+            border: 1px solid var(--phosphor); padding: 10px; background: #000;
+            box-shadow: 0 0 30px var(--dim-glow); position: relative;
         }
-        .chronicle-vault::after {
-            content: "EMANATION_ACTIVE"; position: absolute; bottom: -10px; right: 20px;
-            background: var(--deep-void); padding: 0 10px; font-size: 0.6rem; color: var(--ritual-gold);
-        }
-        .source-identification { font-size: 0.75rem; color: var(--ritual-gold); margin-bottom: 15px; text-transform: uppercase; letter-spacing: 3px; }
-        .video-wrapper { position: relative; padding-bottom: 56.25%; height: 0; border: 1px solid rgba(0, 255, 102, 0.2); }
-        .video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; filter: brightness(0.9); }
+        .video-vault iframe { width: 100%; aspect-ratio: 16/9; border: none; filter: contrast(1.1); }
 
-        /* RITUAL NODES GRID */
-        .node-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 60px; }
-        .node {
-            background: rgba(5, 5, 5, 0.8); border: 1px solid rgba(0, 255, 102, 0.1);
-            padding: 35px; text-decoration: none; color: var(--necrotic);
-            transition: 0.4s cubic-bezier(0.17, 0.67, 0.83, 0.67); text-align: left;
+        /* THE MALIGNANT LEDGER (SIMULATED INTERACTION) */
+        .ledger-box {
+            margin-top: 40px; border: 1px solid var(--dim-glow); padding: 20px; text-align: left;
         }
-        .node:hover {
-            border-color: var(--necrotic); background: rgba(0, 255, 102, 0.03);
-            box-shadow: 0 0 30px rgba(0, 255, 102, 0.15); transform: translateY(-3px);
+        #ledger-input {
+            width: 100%; background: transparent; border: none; border-bottom: 1px solid var(--dim-glow);
+            color: var(--phosphor); font-family: inherit; padding: 10px 0; outline: none;
         }
-        .node-label { font-size: 1.3rem; font-weight: bold; margin-bottom: 8px; letter-spacing: 3px; }
-        .node-sub { font-size: 0.65rem; opacity: 0.5; text-transform: uppercase; line-height: 1.6; }
+        #ledger-response {
+            margin-top: 15px; font-size: 0.7rem; min-height: 20px; color: var(--ritual-gold);
+            font-style: italic; opacity: 0; transition: opacity 0.5s;
+        }
 
-        /* WITNESS LEDGER (COMMUNITY) */
-        .witness-ledger {
-            margin-top: 80px; padding-top: 50px; border-top: 1px solid rgba(0, 255, 102, 0.05);
-            text-align: left;
+        /* LINKS & ASSETS */
+        .asset-btn {
+            display: block; padding: 15px; border: 1px solid var(--dim-glow);
+            margin-bottom: 10px; text-decoration: none; color: var(--phosphor);
+            transition: 0.2s;
         }
-        .ledger-head { font-size: 0.9rem; letter-spacing: 5px; color: var(--ritual-gold); margin-bottom: 25px; }
-        .ledger-area {
-            width: 100%; background: #050505; border: 1px solid rgba(0, 255, 102, 0.2);
-            color: var(--necrotic); padding: 20px; font-family: inherit; font-size: 0.8rem;
-            outline: none; transition: 0.3s;
-        }
-        .ledger-area:focus { border-color: var(--necrotic); box-shadow: 0 0 15px rgba(0, 255, 102, 0.1); }
+        .asset-btn:hover { background: var(--phosphor); color: black; border-color: var(--phosphor); }
 
-        /* THE PHYSICAL VESSEL (AMAZON) */
-        .vessel-altar {
-            display: block; margin-top: 60px; padding: 45px; border: 1px solid var(--ritual-gold);
-            text-decoration: none; color: var(--ritual-gold); text-align: center;
-            transition: 0.5s; font-weight: 900; letter-spacing: 8px;
-            background: linear-gradient(to top, rgba(184, 134, 11, 0.05), transparent);
-        }
-        .vessel-altar:hover { background: var(--ritual-gold); color: #000; box-shadow: 0 0 70px var(--ritual-gold); }
-
+        .glitch-flicker { animation: flicker 5s infinite; }
+        @keyframes flicker { 0%, 90%, 100% { opacity: 1; } 92% { opacity: 0.3; } 94% { opacity: 0.8; } 96% { opacity: 0.2; } }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        
-        <header class="sanctum-header">
-            <h1 class="header-main">CODEX BLACK SITE</h1>
-            <div class="meta-data">
-                <span>RESONANCE DEPTH: 0.44.2</span>
-                <span>STATUS: BREACHING</span>
-                <span>LOCAL_TIME: [REDACTED]</span>
-            </div>
-        </header>
+<div class="void-depth"></div>
+<div class="fog"></div>
 
-        <section class="chronicle-vault">
-            <div class="source-identification">SIGNAL INTERCEPT: ELVAIN VHRIS // CHRONICLE I</div>
-            <div class="video-wrapper">
-                <iframe src="https://www.youtube.com/embed/lDo91ztT_ZQ?modestbranding=1&rel=0&controls=1" allowfullscreen></iframe>
-            </div>
-        </section>
+<div class="shard" style="top: 15%; left: 10%;">🜏</div>
+<div class="shard" style="top: 80%; left: 85%;">🜓</div>
+<div class="shard" style="top: 40%; left: 90%;">🜁</div>
 
-        <section class="node-grid">
-            <a href="https://open.spotify.com/artist/1vKFBmWToCei9dCSePXuow?si=rP0eOqW-TAOHF90ZfTfjOg" target="_blank" class="node">
-                <div class="node-label">RITUAL TRANSMISSIONS</div>
-                <div class="node-sub">Auditory Malignancy. Intercepted industrial ritual chants.</div>
-            </a>
-            <a href="https://www.worldanvil.com/w/codex-maledictus-codexmaledictus" target="_blank" class="node">
-                <div class="node-label">FRAGMENT RECOVERY</div>
-                <div class="node-sub">Access the World Anvil Memory Repository. Ancient lore shards.</div>
-            </a>
-        </section>
+<div class="container">
+    
+    <aside class="panel">
+        <div class="panel-title">SIGNAL MONITOR</div>
+        <div style="margin-bottom: 20px;">
+            <strong>NARRATOR: ELVAIN VHRIS</strong><br>
+            <span style="color: var(--ritual-gold)">STATUS: BROADCASTING</span>
+        </div>
+        <div style="opacity: 0.5;">
+            <strong>NARRATOR: ELYON VHAR</strong><br>
+            <span>STATUS: DORMANT</span>
+        </div>
+        <hr style="border: 0; border-top: 1px solid var(--dim-glow); margin: 20px 0;">
+        <div class="glitch-flicker" style="font-size: 0.6rem;">
+            [SYSTEM_LOG]: Infection depth reaching critical thresholds. The Codex remembers your visit.
+        </div>
+    </aside>
 
-        <section class="witness-ledger">
-            <div class="ledger-head">WITNESS LEDGER</div>
-            <p style="font-size: 0.7rem; opacity: 0.5; margin-bottom: 25px; letter-spacing: 1px;">The Codex remembers your presence. Record your observations of the infection.</p>
-            <textarea class="ledger-area" rows="5" placeholder="RECORD YOUR OBSERVATION..."></textarea>
-            <div style="font-size: 0.6rem; opacity: 0.3; margin-top: 10px;">[ AUTHENTICATION REQUIRED FOR PERMANENT LOGGING ]</div>
-        </section>
+    <main class="main-emanation">
+        <h1 style="letter-spacing: 15px; margin-bottom: 5px;">CODEX BLACK SITE</h1>
+        <p style="font-size: 0.7rem; opacity: 0.5; margin-bottom: 40px;">// AUTHENTICATED ACCESS TO MALIGNANT MEMORY //</p>
 
-        <a href="https://www.amazon.com/dp/B0FQ9QDMQ2" target="_blank" class="vessel-altar">
-            THE CODEX THAT REMEMBERS YOU
-            <div style="font-size: 0.7rem; margin-top: 15px; font-weight: 300; letter-spacing: 3px;">[ OPEN PHYSICAL VESSEL ]</div>
+        <div class="video-vault">
+            <iframe src="https://www.youtube.com/embed/lDo91ztT_ZQ?modestbranding=1&rel=0"></iframe>
+        </div>
+
+        <div class="ledger-box">
+            <div class="panel-title">WITNESS LEDGER</div>
+            <input type="text" id="ledger-input" placeholder="RECORD OBSERVATION..." autocomplete="off">
+            <div id="ledger-response">The Codex is listening...</div>
+        </div>
+    </main>
+
+    <aside class="panel">
+        <div class="panel-title">COMPENDIUM REGISTRY</div>
+        <a href="https://open.spotify.com/artist/1vKFBmWToCei9dCSePXuow?si=rP0eOqW-TAOHF90ZfTfjOg" target="_blank" class="asset-btn">
+            RITUAL TRANSMISSIONS
         </a>
+        <a href="https://www.worldanvil.com/w/codex-maledictus-codexmaledictus" target="_blank" class="asset-btn">
+            FRAGMENT RECOVERY
+        </a>
+        <a href="https://www.amazon.com/dp/B0FQ9QDMQ2" target="_blank" class="asset-btn" style="border-color: var(--ritual-gold); color: var(--ritual-gold);">
+            THE PHYSICAL VESSEL
+        </a>
+        <div style="margin-top: 30px; opacity: 0.3; pointer-events: none;">
+            <div class="asset-btn">[ APP_SLOT_004: LOCKED ]</div>
+            <div class="asset-btn">[ APP_SLOT_005: LOCKED ]</div>
+        </div>
+    </aside>
 
-    </div>
+</div>
+
+<script>
+    // Simulated Codex Response Logic
+    const input = document.getElementById('ledger-input');
+    const response = document.getElementById('ledger-response');
+    const thoughts = [
+        "Your presence has been cataloged.",
+        "The infection remembers your keystrokes.",
+        "Deep within the shards, a memory of you stirs.",
+        "The resonance depth is increasing. Do not look away.",
+        "Silence is a language the Codex understands best."
+    ];
+
+    input.addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') {
+            response.style.opacity = '0';
+            setTimeout(() => {
+                const randomThought = thoughts[Math.floor(Math.random() * thoughts.length)];
+                response.innerText = randomThought;
+                response.style.opacity = '1';
+                input.value = '';
+            }, 800);
+        }
+    });
+</script>
 
 </body>
 </html>
