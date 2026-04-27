@@ -3,127 +3,177 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TERMINAL // CODEX BLACK SITE</title>
+    <title>CODEX MALEDICTUS // BLACK SITE</title>
     <style>
         :root {
-            --glow: #00ff41;
-            --dim-glow: #003b00;
-            --bg: #050505;
+            --phosphor: #00ff66;
+            --deep-glow: #004d1a;
+            --void: #020202;
+            --gold-corrupt: #b8860b;
         }
 
         body, html {
-            margin: 0; padding: 0; background: var(--bg);
-            color: var(--glow); font-family: 'Courier New', monospace;
-            overflow-x: hidden; height: 100vh;
+            margin: 0; padding: 0; background: var(--void);
+            color: var(--phosphor); font-family: 'Courier New', monospace;
+            overflow-x: hidden; scroll-behavior: smooth;
         }
 
-        /* THE CRT CURVATURE EFFECT */
-        .crt-overlay {
+        /* THE VOID PARALLAX BACKGROUND */
+        .void-background {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle, rgba(18, 16, 16, 0) 40%, rgba(0, 0, 0, 0.9) 100%);
-            pointer-events: none; z-index: 10;
+            background: radial-gradient(circle at center, #0a0a0a 0%, #000 100%);
+            z-index: -2;
         }
 
-        .scanlines {
+        .dust-embers {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%);
-            background-size: 100% 3px; z-index: 11; pointer-events: none; opacity: 0.3;
+            background-image: radial-gradient(rgba(0, 255, 102, 0.05) 1px, transparent 1px);
+            background-size: 50px 50px; animation: float 20s linear infinite;
+            z-index: -1; opacity: 0.4;
         }
 
-        /* ROTATING ESOTERIC GEOMETRY */
-        .occult-sigil {
+        @keyframes float { from { transform: translateY(0); } to { transform: translateY(-1000px); } }
+
+        /* FLOATING ROTATING SIGIL */
+        .arcane-sigil {
             position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            font-size: 70vw; color: rgba(0, 255, 65, 0.04); z-index: 0;
-            animation: rotate 180s linear infinite; pointer-events: none;
+            width: 80vw; height: 80vw; border: 1px solid rgba(0, 255, 102, 0.03);
+            border-radius: 50%; animation: rotateSigil 180s linear infinite;
+            z-index: -1; display: flex; align-items: center; justify-content: center;
         }
-        @keyframes rotate { from { transform: translate(-50%, -50%) rotate(0deg); } to { transform: translate(-50%, -50%) rotate(360deg); } }
+        .arcane-sigil::before { content: "🜏"; font-size: 40vw; opacity: 0.05; }
+        @keyframes rotateSigil { from { transform: translate(-50%, -50%) rotate(0deg); } to { transform: translate(-50%, -50%) rotate(360deg); } }
 
-        .container {
-            position: relative; z-index: 5; max-width: 850px; margin: 0 auto;
-            padding: 60px 20px; text-align: center; filter: drop-shadow(0 0 5px var(--dim-glow));
-        }
-
-        /* INTERACTIVE TERMINAL HEADER */
-        .header { margin-bottom: 40px; border-bottom: 1px solid var(--dim-glow); padding-bottom: 20px; }
-        .glitch {
-            font-size: 2.5rem; font-weight: bold; text-transform: uppercase;
-            letter-spacing: 8px; animation: flicker 0.15s infinite;
-        }
-        @keyframes flicker {
-            0% { opacity: 0.9; } 50% { opacity: 1; } 100% { opacity: 0.8; }
+        /* MAIN CONTAINER */
+        .sanctum-container {
+            max-width: 950px; margin: 0 auto; padding: 80px 20px; position: relative;
         }
 
-        /* VIDEO CONTAINMENT FIELD */
-        .containment-unit {
-            border: 1px solid var(--glow); background: rgba(0, 20, 0, 0.5);
-            padding: 15px; box-shadow: 0 0 30px var(--dim-glow); margin-bottom: 40px;
+        /* HEADER: THE GLITCHING GRIMOIRE */
+        .header-title {
+            text-align: center; font-size: 3rem; font-weight: 900; letter-spacing: 12px;
+            text-shadow: 0 0 20px var(--phosphor); animation: glitchPulse 4s infinite;
+            margin-bottom: 5px; color: var(--phosphor);
         }
-        .status-bar { font-size: 0.7rem; text-align: left; margin-bottom: 10px; display: flex; justify-content: space-between; }
-        .video-wrapper { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border: 1px solid var(--dim-glow); }
-        .video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; filter: brightness(0.8) sepia(0.2) hue-rotate(80deg); }
+        .header-sub { text-align: center; font-size: 0.7rem; letter-spacing: 4px; opacity: 0.6; margin-bottom: 60px; }
 
-        /* INTERACTIVE PORTALS */
-        .portals { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        .node {
-            border: 1px solid var(--dim-glow); padding: 25px; text-decoration: none;
-            color: var(--glow); transition: all 0.2s; position: relative;
+        @keyframes glitchPulse {
+            0% { transform: skew(0deg); opacity: 1; }
+            1% { transform: skew(10deg); opacity: 0.8; }
+            2% { transform: skew(-5deg); opacity: 1; }
+            100% { transform: skew(0deg); }
         }
-        .node:hover {
-            background: var(--glow); color: black; box-shadow: 0 0 20px var(--glow);
-            transform: scale(1.02); cursor: pointer;
-        }
-        .node-title { font-weight: bold; font-size: 1.1rem; margin-bottom: 5px; }
-        .node-desc { font-size: 0.7rem; opacity: 0.8; }
 
-        /* THE BOOK ALTAR */
-        .physical-vessel {
-            display: block; margin-top: 30px; border: 2px solid var(--glow);
-            padding: 30px; text-decoration: none; color: var(--glow);
-            font-size: 1.4rem; font-weight: bold; letter-spacing: 5px;
-            box-shadow: 0 0 40px var(--dim-glow); transition: 0.4s;
+        /* THE SCRYING MIRROR (YOUTUBE) */
+        .scrying-mirror {
+            background: rgba(0, 15, 5, 0.9); border: 2px solid var(--phosphor);
+            padding: 20px; box-shadow: 0 0 50px var(--deep-glow);
+            position: relative; margin-bottom: 80px;
         }
-        .physical-vessel:hover { background: #111; border-color: #fff; text-shadow: 0 0 10px #fff; }
+        .scrying-mirror::before {
+            content: "[ ACTIVE EMANATION ]"; position: absolute; top: -12px; left: 20px;
+            background: var(--void); padding: 0 10px; font-size: 0.8rem; font-weight: bold;
+        }
+        .video-box { position: relative; padding-bottom: 56.25%; height: 0; border: 1px solid var(--deep-glow); }
+        .video-box iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; filter: contrast(1.1) brightness(0.9); }
+
+        /* RELIC NAVIGATION GRID */
+        .relic-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 50px; }
+        .relic-card {
+            background: rgba(5, 5, 5, 0.8); border: 1px solid var(--deep-glow);
+            padding: 30px; text-decoration: none; color: var(--phosphor);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative; overflow: hidden; text-align: left;
+        }
+        .relic-card:hover {
+            border-color: var(--phosphor); box-shadow: 0 0 25px var(--deep-glow);
+            transform: translateY(-5px); background: rgba(0, 255, 102, 0.05);
+        }
+        .relic-card::after {
+            content: ">>"; position: absolute; right: 20px; bottom: 20px; opacity: 0.2;
+        }
+        .relic-name { font-size: 1.2rem; font-weight: bold; margin-bottom: 10px; letter-spacing: 2px; }
+        .relic-desc { font-size: 0.7rem; opacity: 0.6; line-height: 1.5; }
+
+        /* THE COMPENDIUM DIRECTORY (FUTURE PROOFING) */
+        .compendium-log {
+            border-top: 1px solid var(--deep-glow); padding-top: 40px; margin-top: 60px;
+            text-align: left;
+        }
+        .log-title { font-size: 1rem; letter-spacing: 3px; margin-bottom: 25px; color: var(--gold-corrupt); }
+        .log-entry {
+            display: flex; justify-content: space-between; padding: 15px 0;
+            border-bottom: 1px solid rgba(0, 255, 102, 0.05); text-decoration: none; color: var(--phosphor);
+            transition: 0.2s; font-size: 0.8rem;
+        }
+        .log-entry:hover { background: rgba(0, 255, 102, 0.03); padding-left: 10px; color: #fff; }
+
+        /* THE PHYSICAL VESSEL (AMAZON) */
+        .vessel-altar {
+            display: block; margin-top: 40px; border: 1px solid var(--gold-corrupt);
+            padding: 40px; text-decoration: none; color: var(--gold-corrupt);
+            text-align: center; transition: 0.5s; position: relative;
+            background: linear-gradient(to bottom, transparent, rgba(184, 134, 11, 0.05));
+        }
+        .vessel-altar:hover {
+            background: var(--gold-corrupt); color: #000; box-shadow: 0 0 60px var(--gold-corrupt);
+        }
+        .vessel-title { font-size: 1.8rem; font-weight: 900; letter-spacing: 6px; }
 
     </style>
 </head>
 <body>
 
-<div class="crt-overlay"></div>
-<div class="scanlines"></div>
-<div class="occult-sigil">🜏</div>
+    <div class="void-background"></div>
+    <div class="dust-embers"></div>
+    <div class="arcane-sigil"></div>
 
-<div class="container">
-    <div class="header">
-        <div class="glitch">CODEX BLACK SITE</div>
-        <div style="font-size: 0.8rem; letter-spacing: 3px; margin-top: 10px;">[BREACH DETECTED] // RITUAL SIGNAL ACTIVE</div>
-    </div>
+    <div class="sanctum-container">
+        
+        <header>
+            <h1 class="header-title">CODEX BLACK SITE</h1>
+            <p class="header-sub">[ AUTHENTICATION SUCCESS ] // ACCESSING MALIGNANT MEMORY</p>
+        </header>
 
-    <div class="containment-unit">
-        <div class="status-bar">
-            <span>FILE: CHRONICLE_01.MP4</span>
-            <span>STATUS: EMANATING</span>
-        </div>
-        <div class="video-wrapper">
-            <iframe src="https://www.youtube.com/embed/lDo91ztT_ZQ?autoplay=0&controls=1&modestbranding=1" allowfullscreen></iframe>
-        </div>
-    </div>
+        <section class="scrying-mirror">
+            <div class="video-box">
+                <iframe src="https://www.youtube.com/embed/lDo91ztT_ZQ?autoplay=0&modestbranding=1&rel=0" allowfullscreen></iframe>
+            </div>
+        </section>
 
-    <div class="portals">
-        <a href="https://open.spotify.com/artist/1vKFBmWToCei9dCSePXuow?si=rP0eOqW-TAOHF90ZfTfjOg" target="_blank" class="node">
-            <div class="node-title">RITUAL CHANTS</div>
-            <div class="node-desc">Active Spotify Intercepts</div>
+        <section class="relic-grid">
+            <a href="https://open.spotify.com/artist/1vKFBmWToCei9dCSePXuow?si=rP0eOqW-TAOHF90ZfTfjOg" target="_blank" class="relic-card">
+                <div class="relic-name">RITUAL CHANTS</div>
+                <div class="relic-desc">Industrial horror frequency intercepts. Auditory digital contamination for the uninitiated.</div>
+            </a>
+            <a href="https://www.worldanvil.com/w/codex-maledictus-codexmaledictus" target="_blank" class="relic-card">
+                <div class="relic-name">FRAGMENT RECOVERY</div>
+                <div class="relic-desc">Deep archive access. Recovered documents detailing the pre-human language of the Void.</div>
+            </a>
+        </section>
+
+        <section class="compendium-log">
+            <div class="log-title">INTERCEPTED COMPENDIUM LOGS</div>
+            <a href="#" class="log-entry">
+                <span>LOG_001: INITIAL BREACH</span>
+                <span style="opacity: 0.4;">[ ACTIVE ]</span>
+            </a>
+            <a href="#" class="log-entry" style="opacity: 0.3; pointer-events: none;">
+                <span>LOG_002: FACTION WEB</span>
+                <span>[ ENCRYPTED ]</span>
+            </a>
+            <a href="#" class="log-entry" style="opacity: 0.3; pointer-events: none;">
+                <span>LOG_003: DECRYPTION ENGINE</span>
+                <span>[ ENCRYPTED ]</span>
+            </a>
+        </section>
+
+        <a href="https://www.amazon.com/dp/B0FQ9QDMQ2" target="_blank" class="vessel-altar">
+            <div class="vessel-title">THE CODEX THAT REMEMBERS YOU</div>
+            <div style="font-size: 0.7rem; margin-top: 10px;">[ OPEN THE PHYSICAL VESSEL ]</div>
         </a>
-        <a href="https://www.worldanvil.com/w/codex-maledictus-codexmaledictus" target="_blank" class="node">
-            <div class="node-title">FRAGMENT RECOVERY</div>
-            <div class="node-desc">World Anvil Lore Access</div>
-        </a>
-    </div>
 
-    <a href="https://www.amazon.com/dp/B0FQ9QDMQ2" target="_blank" class="physical-vessel">
-        THE CODEX THAT REMEMBERS YOU
-        <div style="font-size: 0.6rem; margin-top: 5px; font-weight: normal; letter-spacing: 2px;">[OPEN PHYSICAL VESSEL]</div>
-    </a>
-</div>
+    </div>
 
 </body>
 </html>
