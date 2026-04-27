@@ -6,171 +6,129 @@
     <title>CODEX MALEDICTUS // BLACK SITE</title>
     <style>
         :root {
-            --phosphor: #00ff66;
-            --deep-glow: #004d1a;
-            --void: #020202;
-            --gold-corrupt: #b8860b;
+            --necrotic: #00ff66;
+            --deep-void: #010101;
+            --ritual-gold: #b8860b;
         }
 
         body, html {
-            margin: 0; padding: 0; background: var(--void);
-            color: var(--phosphor); font-family: 'Courier New', monospace;
+            margin: 0; padding: 0; background: var(--deep-void);
+            color: var(--necrotic); font-family: 'Courier New', monospace;
             overflow-x: hidden; scroll-behavior: smooth;
         }
 
-        /* THE VOID PARALLAX BACKGROUND */
-        .void-background {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at center, #0a0a0a 0%, #000 100%);
-            z-index: -2;
+        /* DIGITAL OVERLAY - SCANLINES & INTERFERENCE */
+        body::before {
+            content: " "; display: block; position: fixed; top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%);
+            background-size: 100% 3px; z-index: 100; pointer-events: none; opacity: 0.15;
         }
 
-        .dust-embers {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-image: radial-gradient(rgba(0, 255, 102, 0.05) 1px, transparent 1px);
-            background-size: 50px 50px; animation: float 20s linear infinite;
-            z-index: -1; opacity: 0.4;
+        .container {
+            max-width: 900px; margin: 0 auto; padding: 80px 20px; position: relative; z-index: 5;
         }
 
-        @keyframes float { from { transform: translateY(0); } to { transform: translateY(-1000px); } }
+        /* HEADER: RITUAL STATUS */
+        .sanctum-header {
+            border-bottom: 1px solid rgba(0, 255, 102, 0.1);
+            padding-bottom: 30px; margin-bottom: 60px; text-align: left;
+        }
+        .header-main { font-size: 2.8rem; font-weight: 900; letter-spacing: 15px; margin: 0; text-shadow: 0 0 15px var(--necrotic); }
+        .meta-data { display: flex; justify-content: space-between; font-size: 0.7rem; margin-top: 15px; letter-spacing: 2px; opacity: 0.6; }
 
-        /* FLOATING ROTATING SIGIL */
-        .arcane-sigil {
-            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            width: 80vw; height: 80vw; border: 1px solid rgba(0, 255, 102, 0.03);
-            border-radius: 50%; animation: rotateSigil 180s linear infinite;
-            z-index: -1; display: flex; align-items: center; justify-content: center;
+        /* THE CHRONICLE (YOUTUBE EMANATION) */
+        .chronicle-vault {
+            background: rgba(0, 15, 5, 0.95); border: 1px solid var(--necrotic);
+            padding: 25px; box-shadow: 0 0 50px rgba(0, 255, 102, 0.05);
+            margin-bottom: 80px; position: relative;
         }
-        .arcane-sigil::before { content: "🜏"; font-size: 40vw; opacity: 0.05; }
-        @keyframes rotateSigil { from { transform: translate(-50%, -50%) rotate(0deg); } to { transform: translate(-50%, -50%) rotate(360deg); } }
+        .chronicle-vault::after {
+            content: "EMANATION_ACTIVE"; position: absolute; bottom: -10px; right: 20px;
+            background: var(--deep-void); padding: 0 10px; font-size: 0.6rem; color: var(--ritual-gold);
+        }
+        .source-identification { font-size: 0.75rem; color: var(--ritual-gold); margin-bottom: 15px; text-transform: uppercase; letter-spacing: 3px; }
+        .video-wrapper { position: relative; padding-bottom: 56.25%; height: 0; border: 1px solid rgba(0, 255, 102, 0.2); }
+        .video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; filter: brightness(0.9); }
 
-        /* MAIN CONTAINER */
-        .sanctum-container {
-            max-width: 950px; margin: 0 auto; padding: 80px 20px; position: relative;
+        /* RITUAL NODES GRID */
+        .node-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 60px; }
+        .node {
+            background: rgba(5, 5, 5, 0.8); border: 1px solid rgba(0, 255, 102, 0.1);
+            padding: 35px; text-decoration: none; color: var(--necrotic);
+            transition: 0.4s cubic-bezier(0.17, 0.67, 0.83, 0.67); text-align: left;
         }
+        .node:hover {
+            border-color: var(--necrotic); background: rgba(0, 255, 102, 0.03);
+            box-shadow: 0 0 30px rgba(0, 255, 102, 0.15); transform: translateY(-3px);
+        }
+        .node-label { font-size: 1.3rem; font-weight: bold; margin-bottom: 8px; letter-spacing: 3px; }
+        .node-sub { font-size: 0.65rem; opacity: 0.5; text-transform: uppercase; line-height: 1.6; }
 
-        /* HEADER: THE GLITCHING GRIMOIRE */
-        .header-title {
-            text-align: center; font-size: 3rem; font-weight: 900; letter-spacing: 12px;
-            text-shadow: 0 0 20px var(--phosphor); animation: glitchPulse 4s infinite;
-            margin-bottom: 5px; color: var(--phosphor);
-        }
-        .header-sub { text-align: center; font-size: 0.7rem; letter-spacing: 4px; opacity: 0.6; margin-bottom: 60px; }
-
-        @keyframes glitchPulse {
-            0% { transform: skew(0deg); opacity: 1; }
-            1% { transform: skew(10deg); opacity: 0.8; }
-            2% { transform: skew(-5deg); opacity: 1; }
-            100% { transform: skew(0deg); }
-        }
-
-        /* THE SCRYING MIRROR (YOUTUBE) */
-        .scrying-mirror {
-            background: rgba(0, 15, 5, 0.9); border: 2px solid var(--phosphor);
-            padding: 20px; box-shadow: 0 0 50px var(--deep-glow);
-            position: relative; margin-bottom: 80px;
-        }
-        .scrying-mirror::before {
-            content: "[ ACTIVE EMANATION ]"; position: absolute; top: -12px; left: 20px;
-            background: var(--void); padding: 0 10px; font-size: 0.8rem; font-weight: bold;
-        }
-        .video-box { position: relative; padding-bottom: 56.25%; height: 0; border: 1px solid var(--deep-glow); }
-        .video-box iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; filter: contrast(1.1) brightness(0.9); }
-
-        /* RELIC NAVIGATION GRID */
-        .relic-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 50px; }
-        .relic-card {
-            background: rgba(5, 5, 5, 0.8); border: 1px solid var(--deep-glow);
-            padding: 30px; text-decoration: none; color: var(--phosphor);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative; overflow: hidden; text-align: left;
-        }
-        .relic-card:hover {
-            border-color: var(--phosphor); box-shadow: 0 0 25px var(--deep-glow);
-            transform: translateY(-5px); background: rgba(0, 255, 102, 0.05);
-        }
-        .relic-card::after {
-            content: ">>"; position: absolute; right: 20px; bottom: 20px; opacity: 0.2;
-        }
-        .relic-name { font-size: 1.2rem; font-weight: bold; margin-bottom: 10px; letter-spacing: 2px; }
-        .relic-desc { font-size: 0.7rem; opacity: 0.6; line-height: 1.5; }
-
-        /* THE COMPENDIUM DIRECTORY (FUTURE PROOFING) */
-        .compendium-log {
-            border-top: 1px solid var(--deep-glow); padding-top: 40px; margin-top: 60px;
+        /* WITNESS LEDGER (COMMUNITY) */
+        .witness-ledger {
+            margin-top: 80px; padding-top: 50px; border-top: 1px solid rgba(0, 255, 102, 0.05);
             text-align: left;
         }
-        .log-title { font-size: 1rem; letter-spacing: 3px; margin-bottom: 25px; color: var(--gold-corrupt); }
-        .log-entry {
-            display: flex; justify-content: space-between; padding: 15px 0;
-            border-bottom: 1px solid rgba(0, 255, 102, 0.05); text-decoration: none; color: var(--phosphor);
-            transition: 0.2s; font-size: 0.8rem;
+        .ledger-head { font-size: 0.9rem; letter-spacing: 5px; color: var(--ritual-gold); margin-bottom: 25px; }
+        .ledger-area {
+            width: 100%; background: #050505; border: 1px solid rgba(0, 255, 102, 0.2);
+            color: var(--necrotic); padding: 20px; font-family: inherit; font-size: 0.8rem;
+            outline: none; transition: 0.3s;
         }
-        .log-entry:hover { background: rgba(0, 255, 102, 0.03); padding-left: 10px; color: #fff; }
+        .ledger-area:focus { border-color: var(--necrotic); box-shadow: 0 0 15px rgba(0, 255, 102, 0.1); }
 
         /* THE PHYSICAL VESSEL (AMAZON) */
         .vessel-altar {
-            display: block; margin-top: 40px; border: 1px solid var(--gold-corrupt);
-            padding: 40px; text-decoration: none; color: var(--gold-corrupt);
-            text-align: center; transition: 0.5s; position: relative;
-            background: linear-gradient(to bottom, transparent, rgba(184, 134, 11, 0.05));
+            display: block; margin-top: 60px; padding: 45px; border: 1px solid var(--ritual-gold);
+            text-decoration: none; color: var(--ritual-gold); text-align: center;
+            transition: 0.5s; font-weight: 900; letter-spacing: 8px;
+            background: linear-gradient(to top, rgba(184, 134, 11, 0.05), transparent);
         }
-        .vessel-altar:hover {
-            background: var(--gold-corrupt); color: #000; box-shadow: 0 0 60px var(--gold-corrupt);
-        }
-        .vessel-title { font-size: 1.8rem; font-weight: 900; letter-spacing: 6px; }
+        .vessel-altar:hover { background: var(--ritual-gold); color: #000; box-shadow: 0 0 70px var(--ritual-gold); }
 
     </style>
 </head>
 <body>
 
-    <div class="void-background"></div>
-    <div class="dust-embers"></div>
-    <div class="arcane-sigil"></div>
-
-    <div class="sanctum-container">
+    <div class="container">
         
-        <header>
-            <h1 class="header-title">CODEX BLACK SITE</h1>
-            <p class="header-sub">[ AUTHENTICATION SUCCESS ] // ACCESSING MALIGNANT MEMORY</p>
+        <header class="sanctum-header">
+            <h1 class="header-main">CODEX BLACK SITE</h1>
+            <div class="meta-data">
+                <span>RESONANCE DEPTH: 0.44.2</span>
+                <span>STATUS: BREACHING</span>
+                <span>LOCAL_TIME: [REDACTED]</span>
+            </div>
         </header>
 
-        <section class="scrying-mirror">
-            <div class="video-box">
-                <iframe src="https://www.youtube.com/embed/lDo91ztT_ZQ?autoplay=0&modestbranding=1&rel=0" allowfullscreen></iframe>
+        <section class="chronicle-vault">
+            <div class="source-identification">SIGNAL INTERCEPT: ELVAIN VHRIS // CHRONICLE I</div>
+            <div class="video-wrapper">
+                <iframe src="https://www.youtube.com/embed/lDo91ztT_ZQ?modestbranding=1&rel=0&controls=1" allowfullscreen></iframe>
             </div>
         </section>
 
-        <section class="relic-grid">
-            <a href="https://open.spotify.com/artist/1vKFBmWToCei9dCSePXuow?si=rP0eOqW-TAOHF90ZfTfjOg" target="_blank" class="relic-card">
-                <div class="relic-name">RITUAL CHANTS</div>
-                <div class="relic-desc">Industrial horror frequency intercepts. Auditory digital contamination for the uninitiated.</div>
+        <section class="node-grid">
+            <a href="https://open.spotify.com/artist/1vKFBmWToCei9dCSePXuow?si=rP0eOqW-TAOHF90ZfTfjOg" target="_blank" class="node">
+                <div class="node-label">RITUAL TRANSMISSIONS</div>
+                <div class="node-sub">Auditory Malignancy. Intercepted industrial ritual chants.</div>
             </a>
-            <a href="https://www.worldanvil.com/w/codex-maledictus-codexmaledictus" target="_blank" class="relic-card">
-                <div class="relic-name">FRAGMENT RECOVERY</div>
-                <div class="relic-desc">Deep archive access. Recovered documents detailing the pre-human language of the Void.</div>
+            <a href="https://www.worldanvil.com/w/codex-maledictus-codexmaledictus" target="_blank" class="node">
+                <div class="node-label">FRAGMENT RECOVERY</div>
+                <div class="node-sub">Access the World Anvil Memory Repository. Ancient lore shards.</div>
             </a>
         </section>
 
-        <section class="compendium-log">
-            <div class="log-title">INTERCEPTED COMPENDIUM LOGS</div>
-            <a href="#" class="log-entry">
-                <span>LOG_001: INITIAL BREACH</span>
-                <span style="opacity: 0.4;">[ ACTIVE ]</span>
-            </a>
-            <a href="#" class="log-entry" style="opacity: 0.3; pointer-events: none;">
-                <span>LOG_002: FACTION WEB</span>
-                <span>[ ENCRYPTED ]</span>
-            </a>
-            <a href="#" class="log-entry" style="opacity: 0.3; pointer-events: none;">
-                <span>LOG_003: DECRYPTION ENGINE</span>
-                <span>[ ENCRYPTED ]</span>
-            </a>
+        <section class="witness-ledger">
+            <div class="ledger-head">WITNESS LEDGER</div>
+            <p style="font-size: 0.7rem; opacity: 0.5; margin-bottom: 25px; letter-spacing: 1px;">The Codex remembers your presence. Record your observations of the infection.</p>
+            <textarea class="ledger-area" rows="5" placeholder="RECORD YOUR OBSERVATION..."></textarea>
+            <div style="font-size: 0.6rem; opacity: 0.3; margin-top: 10px;">[ AUTHENTICATION REQUIRED FOR PERMANENT LOGGING ]</div>
         </section>
 
         <a href="https://www.amazon.com/dp/B0FQ9QDMQ2" target="_blank" class="vessel-altar">
-            <div class="vessel-title">THE CODEX THAT REMEMBERS YOU</div>
-            <div style="font-size: 0.7rem; margin-top: 10px;">[ OPEN THE PHYSICAL VESSEL ]</div>
+            THE CODEX THAT REMEMBERS YOU
+            <div style="font-size: 0.7rem; margin-top: 15px; font-weight: 300; letter-spacing: 3px;">[ OPEN PHYSICAL VESSEL ]</div>
         </a>
 
     </div>
