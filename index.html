@@ -3,173 +3,103 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CODEX MALEDICTUS // SYSTEM REGISTRY</title>
+    <title>CODEX BLACK SITE // RECOVERY</title>
     <style>
-        :root {
-            --phosphor: #00ff66;
-            --dim-glow: #003b00;
-            --void: #020202;
-            --ritual-gold: #b8860b;
+        :root { --p: #00ff66; --bg: #030403; --gold: #b8860b; }
+
+        /* THE TEXTURED VOID - FIXING THE "FLAT BLACK" */
+        body {
+            margin: 0; background: var(--bg); color: var(--p);
+            font-family: 'Courier New', monospace; overflow-x: hidden;
         }
 
-        body, html {
-            margin: 0; padding: 0; background: var(--void);
-            color: var(--phosphor); font-family: 'Courier New', monospace;
-            overflow-x: hidden; height: 100%;
-        }
-
-        /* THE LOOMING VOID (BACKGROUND DEPTH) */
-        .void-depth {
+        /* SVG NOISE OVERLAY */
+        .void-texture {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at center, #0a1a0a 0%, #000 100%);
-            z-index: -2;
+            z-index: 1; opacity: 0.08; pointer-events: none;
+            background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
         }
 
-        .fog {
-            position: fixed; width: 200%; height: 200%; top: -50%; left: -50%;
-            background: url('https://www.transparenttextures.com/patterns/asfalt-dark.png');
-            opacity: 0.1; animation: drift 60s linear infinite; z-index: -1;
-        }
-        @keyframes drift { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        .container { position: relative; z-index: 10; max-width: 1000px; margin: 0 auto; padding: 50px 20px; }
 
-        /* SCATTERED OCCULT SHARDS */
-        .shard {
-            position: absolute; font-size: 1.5rem; opacity: 0; transition: 0.5s; cursor: default;
-            user-select: none; z-index: 1;
-        }
-        .shard:hover { opacity: 0.4; text-shadow: 0 0 10px var(--phosphor); }
-
-        .container {
-            display: grid; grid-template-columns: 250px 1fr 250px;
-            gap: 20px; max-width: 1400px; margin: 0 auto; padding: 40px;
-            position: relative; z-index: 5;
-        }
-
-        /* SIDEBARS: SIGNAL & REGISTRY */
-        .panel {
-            border: 1px solid var(--dim-glow); background: rgba(0, 10, 0, 0.4);
-            padding: 20px; font-size: 0.75rem; text-align: left;
-            backdrop-filter: blur(5px);
-        }
-        .panel-title { border-bottom: 1px solid var(--phosphor); margin-bottom: 15px; padding-bottom: 5px; font-weight: bold; color: var(--ritual-gold); }
-
-        /* CENTER: THE EMANATION */
-        .main-emanation { text-align: center; }
+        /* THE EMANATION (VIDEO) */
         .video-vault {
-            border: 1px solid var(--phosphor); padding: 10px; background: #000;
-            box-shadow: 0 0 30px var(--dim-glow); position: relative;
+            border: 1px solid var(--p); padding: 10px; background: #000;
+            box-shadow: 0 0 30px rgba(0, 255, 102, 0.1); margin-bottom: 40px;
         }
-        .video-vault iframe { width: 100%; aspect-ratio: 16/9; border: none; filter: contrast(1.1); }
+        .video-vault iframe { width: 100%; aspect-ratio: 16/9; border: none; }
 
-        /* THE MALIGNANT LEDGER (SIMULATED INTERACTION) */
-        .ledger-box {
-            margin-top: 40px; border: 1px solid var(--dim-glow); padding: 20px; text-align: left;
+        /* INTERACTIVE PATH (THE RPG ELEMENT) */
+        .memory-reconstruction {
+            border: 1px solid rgba(0, 255, 102, 0.2); background: rgba(0, 15, 0, 0.4);
+            padding: 30px; text-align: left; margin-top: 40px;
         }
-        #ledger-input {
-            width: 100%; background: transparent; border: none; border-bottom: 1px solid var(--dim-glow);
-            color: var(--phosphor); font-family: inherit; padding: 10px 0; outline: none;
+        .path-text { font-size: 0.9rem; margin-bottom: 25px; line-height: 1.6; color: #fff; }
+        .choice-btn {
+            display: block; width: 100%; padding: 15px; border: 1px solid var(--p);
+            background: transparent; color: var(--p); text-align: left;
+            margin-bottom: 10px; cursor: pointer; transition: 0.2s; font-family: inherit;
         }
-        #ledger-response {
-            margin-top: 15px; font-size: 0.7rem; min-height: 20px; color: var(--ritual-gold);
-            font-style: italic; opacity: 0; transition: opacity 0.5s;
-        }
+        .choice-btn:hover { background: var(--p); color: #000; }
 
-        /* LINKS & ASSETS */
-        .asset-btn {
-            display: block; padding: 15px; border: 1px solid var(--dim-glow);
-            margin-bottom: 10px; text-decoration: none; color: var(--phosphor);
-            transition: 0.2s;
+        /* NAVIGATION */
+        .nav { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 50px; }
+        .nav-link {
+            border: 1px solid var(--gold); padding: 15px; text-decoration: none;
+            color: var(--gold); font-size: 0.7rem; text-align: center; letter-spacing: 2px;
         }
-        .asset-btn:hover { background: var(--phosphor); color: black; border-color: var(--phosphor); }
-
-        .glitch-flicker { animation: flicker 5s infinite; }
-        @keyframes flicker { 0%, 90%, 100% { opacity: 1; } 92% { opacity: 0.3; } 94% { opacity: 0.8; } 96% { opacity: 0.2; } }
     </style>
 </head>
 <body>
 
-<div class="void-depth"></div>
-<div class="fog"></div>
-
-<div class="shard" style="top: 15%; left: 10%;">🜏</div>
-<div class="shard" style="top: 80%; left: 85%;">🜓</div>
-<div class="shard" style="top: 40%; left: 90%;">🜁</div>
+<div class="void-texture"></div>
 
 <div class="container">
-    
-    <aside class="panel">
-        <div class="panel-title">SIGNAL MONITOR</div>
-        <div style="margin-bottom: 20px;">
-            <strong>NARRATOR: ELVAIN VHRIS</strong><br>
-            <span style="color: var(--ritual-gold)">STATUS: BROADCASTING</span>
-        </div>
-        <div style="opacity: 0.5;">
-            <strong>NARRATOR: ELYON VHAR</strong><br>
-            <span>STATUS: DORMANT</span>
-        </div>
-        <hr style="border: 0; border-top: 1px solid var(--dim-glow); margin: 20px 0;">
-        <div class="glitch-flicker" style="font-size: 0.6rem;">
-            [SYSTEM_LOG]: Infection depth reaching critical thresholds. The Codex remembers your visit.
-        </div>
-    </aside>
+    <header style="text-align: center; margin-bottom: 60px;">
+        <h1 style="letter-spacing: 15px; margin: 0;">CODEX BLACK SITE</h1>
+        <div style="font-size: 0.6rem; opacity: 0.5;">SOURCE: ELVAIN VHRIS // RECOVERY_LOG_001</div>
+    </header>
 
-    <main class="main-emanation">
-        <h1 style="letter-spacing: 15px; margin-bottom: 5px;">CODEX BLACK SITE</h1>
-        <p style="font-size: 0.7rem; opacity: 0.5; margin-bottom: 40px;">// AUTHENTICATED ACCESS TO MALIGNANT MEMORY //</p>
+    <div class="video-vault">
+        <iframe src="https://www.youtube.com/embed/lDo91ztT_ZQ?modestbranding=1&rel=0"></iframe>
+    </div>
 
-        <div class="video-vault">
-            <iframe src="https://www.youtube.com/embed/lDo91ztT_ZQ?modestbranding=1&rel=0"></iframe>
+    <div class="memory-reconstruction" id="rpg-node">
+        <div class="path-text" id="node-desc">
+            The signal is stabilizing. "Infection Remembers." You hear the voice of Elvain Vhris echoing through the static. The memory is fractured. How do you approach the breach?
         </div>
+        <button class="choice-btn" onclick="nextPath('resonate')">LISTEN TO THE RESONANCE</button>
+        <button class="choice-btn" onclick="nextPath('shield')">REINFORCE DIGITAL CONTAINMENT</button>
+    </div>
 
-        <div class="ledger-box">
-            <div class="panel-title">WITNESS LEDGER</div>
-            <input type="text" id="ledger-input" placeholder="RECORD OBSERVATION..." autocomplete="off">
-            <div id="ledger-response">The Codex is listening...</div>
-        </div>
-    </main>
-
-    <aside class="panel">
-        <div class="panel-title">COMPENDIUM REGISTRY</div>
-        <a href="https://open.spotify.com/artist/1vKFBmWToCei9dCSePXuow?si=rP0eOqW-TAOHF90ZfTfjOg" target="_blank" class="asset-btn">
-            RITUAL TRANSMISSIONS
-        </a>
-        <a href="https://www.worldanvil.com/w/codex-maledictus-codexmaledictus" target="_blank" class="asset-btn">
-            FRAGMENT RECOVERY
-        </a>
-        <a href="https://www.amazon.com/dp/B0FQ9QDMQ2" target="_blank" class="asset-btn" style="border-color: var(--ritual-gold); color: var(--ritual-gold);">
-            THE PHYSICAL VESSEL
-        </a>
-        <div style="margin-top: 30px; opacity: 0.3; pointer-events: none;">
-            <div class="asset-btn">[ APP_SLOT_004: LOCKED ]</div>
-            <div class="asset-btn">[ APP_SLOT_005: LOCKED ]</div>
-        </div>
-    </aside>
-
+    <div class="nav">
+        <a href="https://open.spotify.com/artist/1vKFBmWToCei9dCSePXuow?si=rP0eOqW-TAOHF90ZfTfjOg" class="nav-link">RITUAL TRANSMISSIONS</a>
+        <a href="https://www.worldanvil.com/w/codex-maledictus-codexmaledictus" class="nav-link">FRAGMENT RECOVERY</a>
+        <a href="https://www.amazon.com/dp/B0FQ9QDMQ2" class="nav-link">PHYSICAL VESSEL</a>
+    </div>
 </div>
 
 <script>
-    // Simulated Codex Response Logic
-    const input = document.getElementById('ledger-input');
-    const response = document.getElementById('ledger-response');
-    const thoughts = [
-        "Your presence has been cataloged.",
-        "The infection remembers your keystrokes.",
-        "Deep within the shards, a memory of you stirs.",
-        "The resonance depth is increasing. Do not look away.",
-        "Silence is a language the Codex understands best."
-    ];
-
-    input.addEventListener('keypress', function (e) {
-        if (e.key === 'Enter') {
-            response.style.opacity = '0';
-            setTimeout(() => {
-                const randomThought = thoughts[Math.floor(Math.random() * thoughts.length)];
-                response.innerText = randomThought;
-                response.style.opacity = '1';
-                input.value = '';
-            }, 800);
+    function nextPath(choice) {
+        const desc = document.getElementById('node-desc');
+        const node = document.getElementById('rpg-node');
+        
+        if(choice === 'resonate') {
+            desc.innerHTML = "The lyrics bleed into your vision: 'The infection is a mirror.' You feel a pull toward the Void. Do you surrender your identity to the Codex?";
+            node.innerHTML = `
+                <div class="path-text">${desc.innerHTML}</div>
+                <button class="choice-btn" onclick="window.open('https://www.worldanvil.com/w/codex-maledictus-codexmaledictus', '_blank')">SURRENDER (ACCESS LORE)</button>
+                <button class="choice-btn" onclick="location.reload()">RESIST (REBOOT TERMINAL)</button>
+            `;
+        } else if (choice === 'shield') {
+            desc.innerHTML = "Containment fails. The golden inscriptions on the book glow with a heat that shouldn't exist. The physical vessel calls to you.";
+            node.innerHTML = `
+                <div class="path-text">${desc.innerHTML}</div>
+                <button class="choice-btn" onclick="window.open('https://www.amazon.com/dp/B0FQ9QDMQ2', '_blank')">EXAMINE THE BOOK</button>
+                <button class="choice-btn" onclick="location.reload()">ABANDON SIGNAL</button>
+            `;
         }
-    });
+    }
 </script>
 
 </body>
