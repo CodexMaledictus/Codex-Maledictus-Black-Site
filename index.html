@@ -3,201 +3,419 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CODEX BLACK SITE // CENTRAL SYSTEM REGISTRY</title>
-<link href="https://fonts.googleapis.com/css2?family=VT323&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<title>CODEX MALEDICTUS // THE PALE ARCHIVE</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;600&family=Share+Tech+Mono&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#040804;--panel:#060B06;--p2:#080E08;
-  --green:#00FF41;--g2:#00C832;--g3:#008020;--g4:#004A14;--g5:#002A0C;
-  --gold:#C9A84C;--gd2:#8A6530;--gd3:#3A2A10;
-  --red:#8B0000;--r2:#CC2200;--r3:#3A0000;
-  --text:#78E878;--dim:#4A844A;--dimmer:#1A3A1A;
-  --border:#002408;--b2:#003410;
+  --bg:#060408;--panel:#0A0810;--panel2:#0E0C18;
+  --gold:#C9A84C;--gd2:#8A6530;--gd3:#3A2810;--gd4:#1A1208;
+  --crimson:#8B0000;--cr2:#AA2000;--cr3:#3A0000;--cr4:#180000;
+  --violet:#6B3FAF;--v2:#4A2880;--v3:#2A1650;--v4:#150B28;
+  --silver:#C8C4BC;--s2:#888478;--s3:#484440;--s4:#282420;
+  --green:#00A830;--gn2:#006820;--gn3:#003810;
+  --border:#1A1408;--brd2:#261E10;--brd3:#301E14;
 }
 *{margin:0;padding:0;box-sizing:border-box;}
-html,body{min-height:100%;}
-body{background:var(--bg);color:var(--text);font-family:'Share Tech Mono',monospace;overflow-x:hidden;cursor:none;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--bg);color:var(--silver);
+  font-family:'Crimson Text',serif;
+  overflow-x:hidden;cursor:none;
+  /* Subtle grain texture via gradient noise */
+  background-image:
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E"),
+    radial-gradient(ellipse at 20% 10%,rgba(201,168,76,0.04) 0%,transparent 50%),
+    radial-gradient(ellipse at 80% 90%,rgba(139,0,0,0.04) 0%,transparent 50%),
+    radial-gradient(ellipse at 50% 50%,rgba(107,63,175,0.03) 0%,transparent 70%);
+}
+body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,0.03) 3px,rgba(0,0,0,0.03) 4px);pointer-events:none;z-index:9990;}
+body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at center,transparent 30%,rgba(0,0,0,0.8)100%);pointer-events:none;z-index:9989;}
 
-#CUR{position:fixed;pointer-events:none;z-index:99999;transform:translate(-50%,-50%);width:18px;height:18px;}
-#CUR::before,#CUR::after{content:'';position:absolute;background:var(--green);}
+/* CURSOR */
+#CUR{position:fixed;pointer-events:none;z-index:99999;transform:translate(-50%,-50%);width:16px;height:16px;}
+#CUR::before,#CUR::after{content:'';position:absolute;background:var(--gold);}
 #CUR::before{width:1px;height:100%;left:50%;}
 #CUR::after{height:1px;width:100%;top:50%;}
-#CURD{position:fixed;pointer-events:none;z-index:99998;transform:translate(-50%,-50%);width:3px;height:3px;border-radius:50%;background:var(--green);}
-body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.06) 2px,rgba(0,0,0,0.06) 4px);pointer-events:none;z-index:9990;}
-body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at center,transparent 35%,rgba(0,0,0,0.75)100%);pointer-events:none;z-index:9989;}
-#MATRIX{position:fixed;inset:0;z-index:0;opacity:0.055;pointer-events:none;}
+#CURD{position:fixed;pointer-events:none;z-index:99998;transform:translate(-50%,-50%);width:3px;height:3px;border-radius:50%;background:var(--gd2);}
+
+/* MATRIX RAIN — behind everything, very faint */
+#MATRIX{position:fixed;inset:0;z-index:0;opacity:0.028;pointer-events:none;}
 
 /* BOOT */
-#BOOT{position:fixed;inset:0;background:#000;z-index:9995;display:flex;flex-direction:column;justify-content:center;padding:3rem;font-size:0.82rem;color:var(--g3);}
+#BOOT{
+  position:fixed;inset:0;background:#000;z-index:9995;
+  display:flex;flex-direction:column;justify-content:center;padding:3rem;
+  font-family:'Share Tech Mono',monospace;font-size:0.8rem;color:#333328;
+}
 #BL{max-width:720px;}
-#BL .bl{margin:0.22rem 0;opacity:0;transition:opacity 0.08s;}
+#BL .bl{margin:0.2rem 0;opacity:0;transition:opacity 0.08s;}
 #BL .bl.on{opacity:1;}
-#BL .ok{color:var(--green);}
-#BL .warn{color:var(--r2);}
-#BL .gold{color:var(--gold);}
+#BL .ok{color:var(--gd2);}
+#BL .warn{color:var(--cr2);}
+#BL .vt{color:var(--violet);}
+
+/* RITUAL OVERLAY */
+#RITUAL{
+  position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,0.97);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  opacity:0;pointer-events:none;transition:opacity 0.5s;padding:2rem;text-align:center;
+}
+#RITUAL.on{opacity:1;pointer-events:all;}
+#RG{font-size:4.5rem;color:var(--crimson);margin-bottom:1.75rem;animation:rglow 2s ease-in-out infinite;}
+@keyframes rglow{0%,100%{text-shadow:0 0 20px var(--crimson),0 0 60px rgba(139,0,0,0.3);opacity:0.6;}50%{text-shadow:0 0 40px var(--cr2),0 0 120px rgba(139,0,0,0.4);opacity:1;}}
+#RT{
+  font-family:'Cinzel',serif;font-size:clamp(0.85rem,2vw,1.05rem);
+  color:var(--s2);letter-spacing:0.1em;line-height:2;max-width:480px;min-height:80px;
+}
+#RS{margin-top:1.75rem;font-family:'Share Tech Mono',monospace;font-size:0.58rem;color:var(--s4);letter-spacing:0.3em;text-transform:uppercase;animation:blink 1.8s step-end infinite;}
 
 /* APP */
-#APP{position:relative;z-index:1;opacity:0;transition:opacity 1s;padding-bottom:3.5rem;}
+#APP{position:relative;z-index:1;opacity:0;transition:opacity 1.2s;padding-bottom:3.5rem;}
 #APP.on{opacity:1;}
 
+/* ESOTERIC RIBBON */
+.eso-ribbon{
+  text-align:center;padding:0.5rem 1.5rem;overflow:hidden;
+  font-family:'Share Tech Mono',monospace;font-size:0.56rem;
+  color:var(--s4);letter-spacing:0.25em;
+  border-bottom:1px solid var(--border);
+  white-space:nowrap;
+}
+
 /* HEADER */
-.hdr{text-align:center;padding:2.2rem 1.5rem 1.4rem;border-bottom:1px solid var(--b2);background:radial-gradient(ellipse at center top,rgba(0,255,65,0.05) 0%,transparent 65%);position:relative;}
-.hdr-eye{font-size:0.6rem;color:var(--g4);letter-spacing:0.4em;text-transform:uppercase;margin-bottom:0.85rem;}
-.hdr-title{font-family:'VT323',monospace;font-size:clamp(3rem,8vw,6rem);color:var(--green);letter-spacing:0.2em;line-height:1;text-shadow:0 0 25px rgba(0,255,65,0.45),0 0 70px rgba(0,255,65,0.1);animation:htg 11s infinite;}
-@keyframes htg{0%,85%,100%{text-shadow:0 0 25px rgba(0,255,65,0.45),0 0 70px rgba(0,255,65,0.1);transform:none;clip-path:none;}86%{transform:translateX(4px) skewX(-1deg);text-shadow:4px 0 var(--gold),-3px 0 var(--g2);}87%{clip-path:inset(15% 0 70% 0);transform:translateX(-2px);}88%{clip-path:none;transform:none;}89%{transform:translateX(1px);text-shadow:-1px 0 var(--gold);}90%{transform:none;}}
-.hdr-sub{font-size:0.68rem;color:var(--g3);letter-spacing:0.42em;margin-top:0.55rem;text-transform:uppercase;}
-.hdr-cur{animation:blink 1.4s step-end infinite;}
+.hdr{
+  text-align:center;padding:3rem 1.5rem 2.2rem;
+  border-bottom:1px solid var(--brd2);position:relative;overflow:hidden;
+}
+.hdr-bg{
+  position:absolute;inset:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse at center top,rgba(201,168,76,0.07) 0%,transparent 55%),
+    radial-gradient(ellipse at center bottom,rgba(139,0,0,0.03) 0%,transparent 40%);
+}
+/* decorative top border */
+.hdr::before{
+  content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);
+  width:200px;height:1px;
+  background:linear-gradient(90deg,transparent,var(--gd2),transparent);
+}
+.hdr-eye{
+  font-family:'Share Tech Mono',monospace;font-size:0.58rem;
+  color:var(--gd3);letter-spacing:0.45em;text-transform:uppercase;margin-bottom:1.2rem;
+}
+.hdr-glyph{
+  font-size:2.2rem;color:var(--gd2);display:block;margin-bottom:1rem;
+  animation:hglow 5s ease-in-out infinite;
+}
+@keyframes hglow{0%,100%{text-shadow:0 0 10px rgba(201,168,76,0.3);opacity:0.6;}50%{text-shadow:0 0 25px rgba(201,168,76,0.6),0 0 60px rgba(201,168,76,0.2);opacity:1;}}
+.hdr-title{
+  font-family:'Cinzel Decorative',serif;
+  font-size:clamp(1.4rem,4.5vw,3.2rem);
+  color:var(--gold);letter-spacing:0.08em;line-height:1.2;
+  text-shadow:0 0 40px rgba(201,168,76,0.35),0 0 100px rgba(201,168,76,0.08);
+  margin-bottom:0.6rem;animation:titleglitch 18s infinite;
+}
+@keyframes titleglitch{
+  0%,88%,100%{text-shadow:0 0 40px rgba(201,168,76,0.35),0 0 100px rgba(201,168,76,0.08);transform:none;}
+  89%{text-shadow:3px 0 var(--crimson),-2px 0 var(--violet);transform:translateX(2px);}
+  90%{text-shadow:-2px 0 var(--crimson);transform:translateX(-1px);}
+  91%{transform:none;text-shadow:0 0 40px rgba(201,168,76,0.35);}
+}
+.hdr-sub{
+  font-family:'Cinzel',serif;font-size:clamp(0.7rem,1.5vw,0.9rem);
+  color:var(--s3);letter-spacing:0.25em;text-transform:uppercase;
+  margin-bottom:1.25rem;font-style:italic;
+}
+.hdr-lede{
+  font-family:'Crimson Text',serif;font-size:0.95rem;font-style:italic;
+  color:var(--s3);max-width:520px;margin:0 auto;line-height:1.85;
+}
+.hdr-cur{animation:blink 1.6s step-end infinite;color:var(--gd2);}
 @keyframes blink{0%,100%{opacity:1;}50%{opacity:0;}}
 
-/* STATUS */
-.status{display:flex;gap:0;border-bottom:1px solid var(--b2);background:var(--panel);overflow-x:auto;scrollbar-width:none;}
+/* STATUS BAR — terminal layer stays green */
+.status{
+  display:flex;border-bottom:1px solid var(--border);
+  background:var(--panel);overflow-x:auto;scrollbar-width:none;
+}
 .status::-webkit-scrollbar{display:none;}
-.sti{flex-shrink:0;padding:0.55rem 1.1rem;border-right:1px solid var(--border);display:flex;align-items:center;gap:0.5rem;font-size:0.62rem;letter-spacing:0.14em;}
-.dot{width:5px;height:5px;border-radius:50%;flex-shrink:0;}
-.dg{background:var(--green);box-shadow:0 0 5px var(--green);animation:dp 2.2s ease-in-out infinite;}
-.dr{background:var(--r2);animation:dp 3.8s ease-in-out infinite;}
+.sti{
+  flex-shrink:0;padding:0.5rem 1rem;border-right:1px solid var(--border);
+  display:flex;align-items:center;gap:0.45rem;
+  font-family:'Share Tech Mono',monospace;font-size:0.58rem;letter-spacing:0.12em;
+}
+.dot{width:4px;height:4px;border-radius:50%;flex-shrink:0;}
+.dg{background:var(--green);box-shadow:0 0 4px var(--green);animation:dp 2.2s ease-in-out infinite;}
+.dr{background:var(--crimson);animation:dp 3.8s ease-in-out infinite;}
 .do{background:var(--gold);animation:dp 3s ease-in-out infinite;}
-@keyframes dp{0%,100%{opacity:1;}50%{opacity:0.25;}}
-.sl{color:var(--dim);}
-.sv{color:var(--green);}
+@keyframes dp{0%,100%{opacity:1;}50%{opacity:0.2;}}
+.sl{color:var(--s3);}
+.sv{color:var(--green);font-family:'Share Tech Mono',monospace;}
 .sv.gold{color:var(--gold);}
-.sv.red{color:var(--r2);}
+.sv.red{color:var(--crimson);}
 
 /* SECTION */
-.sec{padding:1.75rem 1.5rem;max-width:1100px;margin:0 auto;}
-.sech{display:flex;align-items:center;gap:1rem;margin-bottom:1.25rem;border-bottom:1px solid var(--border);padding-bottom:0.7rem;}
-.sect{font-family:'VT323',monospace;font-size:1.2rem;color:var(--green);letter-spacing:0.22em;text-transform:uppercase;text-shadow:0 0 8px rgba(0,255,65,0.25);}
-.secl{flex:1;height:1px;background:linear-gradient(90deg,var(--b2),transparent);}
-.secb{font-size:0.58rem;color:var(--dim);letter-spacing:0.2em;border:1px solid var(--b2);padding:0.15rem 0.5rem;text-transform:uppercase;}
+.sec{padding:2.5rem 1.5rem;max-width:1080px;margin:0 auto;}
+.sech{
+  display:flex;align-items:center;gap:1rem;
+  margin-bottom:1.5rem;padding-bottom:0.85rem;
+  border-bottom:1px solid var(--brd2);
+}
+.sect{
+  font-family:'Cinzel',serif;font-size:1rem;
+  color:var(--gold);letter-spacing:0.2em;text-transform:uppercase;
+  text-shadow:0 0 12px rgba(201,168,76,0.2);
+}
+.secl{flex:1;height:1px;background:linear-gradient(90deg,var(--brd2),transparent);}
+.secb{
+  font-family:'Share Tech Mono',monospace;font-size:0.55rem;
+  color:var(--s3);letter-spacing:0.2em;border:1px solid var(--brd2);
+  padding:0.12rem 0.5rem;text-transform:uppercase;
+}
 
-/* COMP GRID */
-.cgrid{display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;}
+/* COMPENDIUM GRID */
+.cgrid{display:grid;grid-template-columns:1fr 1fr;gap:0.85rem;}
 @media(max-width:700px){.cgrid{grid-template-columns:1fr;}}
-.cc{display:block;text-decoration:none;border:1px solid var(--b2);padding:1.1rem 1.2rem;background:var(--panel);position:relative;overflow:hidden;transition:all 0.22s;}
-.cc::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--g2),transparent);transform:translateX(-100%);transition:transform 0.5s;}
-.cc:hover::before{transform:translateX(100%);}
-.cc:hover{border-color:var(--g3);background:rgba(0,255,65,0.03);}
-.cc:hover .cca{opacity:1;transform:translateX(3px);}
-.cc.gc{border-color:var(--gd3);}
-.cc.gc:hover{border-color:var(--gd2);background:rgba(201,168,76,0.04);}
-.cc.lk{opacity:0.35;cursor:not-allowed;}
-.cc.lk:hover{border-color:var(--b2);background:var(--panel);}
-.cc.lk:hover::before{transform:translateX(-100%);}
-.cc-ac{font-size:0.58rem;letter-spacing:0.22em;text-transform:uppercase;margin-bottom:0.45rem;color:var(--g3);}
-.cc-ac.gold{color:var(--gd2);}
-.cc-t{font-family:'VT323',monospace;font-size:1.3rem;color:var(--green);letter-spacing:0.1em;line-height:1.15;margin-bottom:0.35rem;text-shadow:0 0 6px rgba(0,255,65,0.2);}
-.cc.gc .cc-t{color:var(--gold);text-shadow:0 0 6px rgba(201,168,76,0.2);}
-.cc-s{font-size:0.7rem;color:var(--dim);line-height:1.5;}
-.cc-tags{margin-top:0.6rem;display:flex;gap:0.4rem;flex-wrap:wrap;}
-.cctag{font-size:0.55rem;letter-spacing:0.14em;border:1px solid var(--border);padding:0.12rem 0.4rem;color:var(--dim);text-transform:uppercase;}
-.cctag.g{border-color:var(--g4);color:var(--g3);}
-.cctag.gold{border-color:var(--gd3);color:var(--gd2);}
-.cca{position:absolute;right:1rem;top:50%;transform:translateY(-50%);color:var(--g3);opacity:0;transition:all 0.22s;font-size:1rem;}
-.await{border:1px dashed var(--border);padding:0.9rem 1.1rem;opacity:0.3;}
-.awt{font-size:0.72rem;color:var(--dimmer);letter-spacing:0.18em;text-transform:uppercase;}
-.aws{font-size:0.6rem;color:var(--dimmer);margin-top:0.25rem;}
 
-/* GAMES */
-.gwrap{border-top:2px solid var(--b2);border-bottom:2px solid var(--b2);background:var(--panel);}
-.gsec{padding:1.75rem 1.5rem;max-width:1100px;margin:0 auto;}
-.gtabs{display:flex;border-bottom:1px solid var(--b2);margin-bottom:1.5rem;overflow-x:auto;scrollbar-width:none;}
+/* COMPENDIUM CARDS — manuscript feel */
+.cc{
+  display:block;text-decoration:none;cursor:pointer;
+  border:1px solid var(--brd2);padding:1.4rem 1.5rem;
+  background:linear-gradient(135deg,var(--panel) 0%,var(--panel2) 100%);
+  position:relative;overflow:hidden;transition:all 0.3s;
+}
+/* aged edge effect */
+.cc::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--gd2),transparent);
+  opacity:0.4;transform:translateX(-100%);transition:transform 0.6s;
+}
+.cc:hover::before{transform:translateX(100%);}
+.cc::after{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at center,rgba(201,168,76,0.04) 0%,transparent 70%);
+  opacity:0;transition:opacity 0.3s;
+}
+.cc:hover::after{opacity:1;}
+.cc:hover{border-color:var(--gd2);transform:translateY(-1px);}
+.cc:hover .cca{opacity:1;transform:translateY(-50%) translateX(3px);}
+
+/* ACCESS LABEL */
+.cc-ac{
+  font-family:'Share Tech Mono',monospace;font-size:0.56rem;
+  letter-spacing:0.22em;text-transform:uppercase;
+  margin-bottom:0.55rem;color:var(--gn2);
+}
+.cc-ac.gold{color:var(--gd2);}
+.cc-ac.violet{color:var(--v2);}
+
+/* CARD TITLE */
+.cc-t{
+  font-family:'Cinzel',serif;font-size:1.1rem;
+  color:var(--silver);letter-spacing:0.05em;line-height:1.25;
+  margin-bottom:0.45rem;
+}
+.cc.gold-card .cc-t{color:var(--gold);}
+.cc.lore-card .cc-t{color:#9B7FDF;}
+
+/* CARD BODY */
+.cc-s{
+  font-family:'Crimson Text',serif;font-size:0.96rem;
+  color:var(--s2);line-height:1.65;font-style:italic;
+}
+
+/* TAGS */
+.cc-tags{margin-top:0.75rem;display:flex;gap:0.35rem;flex-wrap:wrap;}
+.cctag{
+  font-family:'Share Tech Mono',monospace;font-size:0.52rem;
+  letter-spacing:0.14em;border:1px solid var(--brd2);
+  padding:0.1rem 0.4rem;color:var(--s3);text-transform:uppercase;
+}
+.cctag.g{border-color:var(--gn3);color:var(--gn2);}
+.cctag.gold{border-color:var(--gd3);color:var(--gd2);}
+.cctag.vt{border-color:var(--v3);color:var(--v2);}
+
+.cca{
+  position:absolute;right:1.1rem;top:50%;transform:translateY(-50%);
+  color:var(--gd2);opacity:0;transition:all 0.25s;font-size:0.9rem;
+}
+
+/* AWAITING */
+.await{
+  border:1px dashed var(--border);padding:1rem 1.25rem;
+  opacity:0.3;background:transparent;
+}
+.awt{font-family:'Cinzel',serif;font-size:0.8rem;color:var(--s4);letter-spacing:0.12em;}
+.aws{font-family:'Share Tech Mono',monospace;font-size:0.58rem;color:var(--s4);margin-top:0.3rem;letter-spacing:0.1em;}
+
+/* DECORATIVE SECTION DIVIDER */
+.sec-divider{
+  text-align:center;padding:1.25rem 0;
+  color:var(--gd3);font-size:1.1rem;letter-spacing:0.5em;
+  border-top:1px solid var(--border);border-bottom:1px solid var(--border);
+  margin:0;background:var(--panel);
+  font-family:'Share Tech Mono',monospace;
+}
+
+/* GAMES SECTION */
+.gwrap{background:var(--panel);border-top:1px solid var(--brd2);border-bottom:1px solid var(--brd2);}
+.gsec{padding:2rem 1.5rem;max-width:1080px;margin:0 auto;}
+.gtabs{display:flex;border-bottom:1px solid var(--brd2);margin-bottom:1.5rem;overflow-x:auto;scrollbar-width:none;}
 .gtabs::-webkit-scrollbar{display:none;}
-.gtab{flex-shrink:0;background:transparent;border:none;border-bottom:2px solid transparent;color:var(--dim);font-family:'Share Tech Mono',monospace;font-size:0.68rem;letter-spacing:0.18em;padding:0.65rem 1.25rem;cursor:pointer;transition:all 0.18s;text-transform:uppercase;}
-.gtab:hover{color:var(--text);}
-.gtab.on{color:var(--green);border-bottom-color:var(--green);background:rgba(0,255,65,0.04);}
+.gtab{
+  flex-shrink:0;background:transparent;border:none;
+  border-bottom:2px solid transparent;color:var(--s3);
+  font-family:'Share Tech Mono',monospace;font-size:0.62rem;
+  letter-spacing:0.18em;padding:0.65rem 1.1rem;cursor:pointer;
+  transition:all 0.18s;text-transform:uppercase;
+}
+.gtab:hover{color:var(--s2);}
+.gtab.on{color:var(--gold);border-bottom-color:var(--gold);}
 .gp{display:none;}
 .gp.on{display:block;}
 .garea{display:flex;gap:1.5rem;align-items:flex-start;flex-wrap:wrap;}
 .gcw{flex:1;min-width:280px;}
 .gsb{width:200px;flex-shrink:0;}
 @media(max-width:700px){.gsb{width:100%;}}
-.gtitle{font-family:'VT323',monospace;font-size:1.4rem;color:var(--green);letter-spacing:0.15em;margin-bottom:0.3rem;}
-.gdesc{font-size:0.7rem;color:var(--dim);line-height:1.6;margin-bottom:1rem;}
-.sblock{border:1px solid var(--b2);padding:0.75rem;margin-bottom:0.6rem;background:var(--bg);}
-.sl2{font-size:0.58rem;color:var(--dim);letter-spacing:0.22em;text-transform:uppercase;margin-bottom:0.2rem;}
-.sv2{font-family:'VT323',monospace;font-size:1.6rem;color:var(--green);text-shadow:0 0 8px rgba(0,255,65,0.3);}
-.sv2.gold{color:var(--gold);}
-.gbtn{width:100%;background:transparent;border:1px solid var(--green);color:var(--green);font-family:'Share Tech Mono',monospace;font-size:0.7rem;letter-spacing:0.2em;padding:0.6rem;cursor:pointer;transition:all 0.18s;text-transform:uppercase;margin-bottom:0.5rem;}
-.gbtn:hover{background:var(--green);color:var(--bg);}
-.gbtn:disabled{opacity:0.4;cursor:not-allowed;}
-.gbtn:disabled:hover{background:transparent;color:var(--green);}
-.gmsg{border:1px solid var(--border);padding:0.75rem;margin-top:0.6rem;font-size:0.7rem;color:var(--dim);line-height:1.6;min-height:60px;background:var(--bg);}
-.gmsg .hi{color:var(--gold);}
-.gmsg .wr{color:var(--r2);}
+.gtitle{font-family:'Cinzel',serif;font-size:1rem;color:var(--gold);letter-spacing:0.15em;margin-bottom:0.4rem;}
+.gdesc{font-family:'Crimson Text',serif;font-size:0.96rem;color:var(--s2);line-height:1.65;margin-bottom:1rem;font-style:italic;}
+.sblock{border:1px solid var(--border);padding:0.75rem;margin-bottom:0.55rem;background:var(--bg);}
+.sl2{font-family:'Share Tech Mono',monospace;font-size:0.55rem;color:var(--s3);letter-spacing:0.22em;text-transform:uppercase;margin-bottom:0.2rem;}
+.sv2{font-family:'Share Tech Mono',monospace;font-size:1.4rem;color:var(--gold);}
+.sv2.green{color:var(--green);}
+.gbtn{
+  width:100%;background:transparent;border:1px solid var(--gd2);
+  color:var(--gd2);font-family:'Share Tech Mono',monospace;
+  font-size:0.65rem;letter-spacing:0.2em;padding:0.6rem;
+  cursor:pointer;transition:all 0.18s;text-transform:uppercase;margin-bottom:0.5rem;
+}
+.gbtn:hover{background:var(--gd3);border-color:var(--gold);color:var(--gold);}
+.gbtn:disabled{opacity:0.3;cursor:not-allowed;}
+.gbtn:disabled:hover{background:transparent;color:var(--gd2);border-color:var(--gd2);}
+.gmsg{border:1px solid var(--border);padding:0.75rem;margin-top:0.6rem;font-family:'Crimson Text',serif;font-size:0.95rem;color:var(--s2);line-height:1.7;min-height:60px;background:var(--bg);font-style:italic;}
+.gmsg .hi{color:var(--gold);font-style:normal;font-family:'Share Tech Mono',monospace;font-size:0.85em;}
+.gmsg .wr{color:var(--crimson);font-style:normal;}
 
-/* GAME 1 GLYPH */
+/* GAME-SPECIFIC */
 .gdisp{display:flex;gap:0.6rem;justify-content:center;padding:1.2rem 0;flex-wrap:wrap;}
-.gbut{width:68px;height:68px;border:1px solid var(--b2);background:var(--bg);font-size:1.8rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.15s;}
-.gbut:hover:not(:disabled){border-color:var(--g3);background:rgba(0,255,65,0.06);}
-.gbut.act{background:rgba(0,255,65,0.18);border-color:var(--green);box-shadow:0 0 16px rgba(0,255,65,0.4),inset 0 0 12px rgba(0,255,65,0.1);transform:scale(1.06);}
-.gbut.wrg{background:rgba(204,34,0,0.18);border-color:var(--r2);box-shadow:0 0 16px rgba(204,34,0,0.4);}
+.gbut{
+  width:70px;height:70px;border:1px solid var(--brd2);
+  background:var(--panel2);font-size:1.8rem;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;transition:all 0.15s;
+}
+.gbut:hover:not(:disabled){border-color:var(--gd2);background:var(--gd4);}
+.gbut.act{background:rgba(201,168,76,0.15);border-color:var(--gold);box-shadow:0 0 16px rgba(201,168,76,0.3),inset 0 0 12px rgba(201,168,76,0.08);transform:scale(1.06);}
+.gbut.wrg{background:rgba(139,0,0,0.2);border-color:var(--crimson);box-shadow:0 0 16px rgba(139,0,0,0.4);}
 .gbut:disabled{cursor:not-allowed;}
-.gest{text-align:center;font-size:0.68rem;letter-spacing:0.2em;color:var(--dim);padding:0.5rem;min-height:28px;text-transform:uppercase;}
-
-/* GAME 2 BREACH */
-#bcanvas{display:block;border:1px solid var(--b2);background:#020602;width:100%;image-rendering:crisp-edges;}
+.gest{text-align:center;font-family:'Share Tech Mono',monospace;font-size:0.62rem;letter-spacing:0.18em;color:var(--s3);padding:0.5rem;min-height:28px;text-transform:uppercase;}
+#bcanvas{display:block;border:1px solid var(--brd2);background:#040208;width:100%;image-rendering:crisp-edges;}
 .blives{display:flex;gap:0.4rem;padding:0.5rem 0;}
-.li{color:var(--green);font-size:0.9rem;}
-.li.lost{color:var(--dimmer);}
-
-/* GAME 3 SIGNAL */
-.srphrase{border:1px solid var(--b2);padding:1.2rem;background:var(--bg);text-align:center;margin-bottom:1rem;min-height:80px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
-.srpt{font-family:'VT323',monospace;font-size:1.6rem;color:var(--green);letter-spacing:0.2em;line-height:1.3;text-shadow:0 0 10px rgba(0,255,65,0.3);}
-.srphrase.corr .srpt{color:var(--r2);animation:sc 0.1s steps(1) infinite;}
+.li{color:var(--gold);font-size:0.9rem;}
+.li.lost{color:var(--s4);}
+.srphrase{border:1px solid var(--brd2);padding:1.2rem;background:var(--bg);text-align:center;margin-bottom:1rem;min-height:80px;display:flex;align-items:center;justify-content:center;}
+.srpt{font-family:'Cinzel',serif;font-size:1.4rem;color:var(--silver);letter-spacing:0.15em;line-height:1.3;text-shadow:0 0 10px rgba(201,168,76,0.2);}
+.srphrase.corr .srpt{color:var(--crimson);animation:sc 0.1s steps(1) infinite;}
 @keyframes sc{0%{transform:translateX(-2px);}50%{transform:translateX(2px);}100%{transform:none;}}
-.cbarw{height:6px;background:var(--border);margin-bottom:1rem;}
-.cbar{height:100%;background:var(--green);transition:width 0.1s linear;box-shadow:0 0 6px var(--green);}
-.cbar.urg{background:var(--r2);box-shadow:0 0 6px var(--r2);}
-#sri{width:100%;background:var(--bg);border:1px solid var(--b2);color:var(--green);font-family:'Share Tech Mono',monospace;font-size:0.9rem;padding:0.65rem 0.85rem;outline:none;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:0.75rem;}
-#sri:focus{border-color:var(--g3);}
-#sri::placeholder{color:var(--dim);}
-.srstreak{font-size:0.65rem;color:var(--dim);letter-spacing:0.2em;}
+.cbarw{height:4px;background:var(--border);margin-bottom:1rem;}
+.cbar{height:100%;background:var(--gold);transition:width 0.1s linear;box-shadow:0 0 5px var(--gd2);}
+.cbar.urg{background:var(--crimson);box-shadow:0 0 5px var(--cr2);}
+#sri{width:100%;background:var(--bg);border:1px solid var(--brd2);color:var(--silver);font-family:'Share Tech Mono',monospace;font-size:0.85rem;padding:0.65rem 0.85rem;outline:none;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:0.75rem;}
+#sri:focus{border-color:var(--gd2);}
+#sri::placeholder{color:var(--s3);}
+.srstreak{font-family:'Share Tech Mono',monospace;font-size:0.6rem;color:var(--s3);letter-spacing:0.18em;}
 .srstreak span{color:var(--gold);}
 
 /* BOTTOM STRIP */
-.bstrip{border-top:1px solid var(--b2);display:grid;grid-template-columns:1fr 1fr 1fr;}
+.bstrip{border-top:1px solid var(--brd2);display:grid;grid-template-columns:1fr 1fr 1fr;}
 @media(max-width:750px){.bstrip{grid-template-columns:1fr;}}
-.bsc{padding:1.4rem 1.5rem;border-right:1px solid var(--border);}
+.bsc{padding:1.5rem;border-right:1px solid var(--border);}
 .bsc:last-child{border-right:none;}
-.bst{font-size:0.6rem;color:var(--dim);letter-spacing:0.28em;text-transform:uppercase;margin-bottom:1rem;display:flex;align-items:center;gap:0.5rem;}
-.bst::before{content:'//';color:var(--border);}
-.ale{display:flex;gap:0.5rem;padding:0.3rem 0;border-bottom:1px solid var(--border);font-size:0.62rem;}
+.bst{
+  font-family:'Cinzel',serif;font-size:0.72rem;color:var(--gd2);
+  letter-spacing:0.22em;text-transform:uppercase;
+  margin-bottom:1rem;padding-bottom:0.6rem;
+  border-bottom:1px solid var(--border);
+}
+.ale{display:flex;gap:0.5rem;padding:0.3rem 0;border-bottom:1px solid var(--border);font-family:'Share Tech Mono',monospace;font-size:0.58rem;}
 .alt{color:var(--border);flex-shrink:0;width:60px;}
-.ali{color:var(--g3);flex-shrink:0;}
-.ala{color:var(--dimmer);}
-.elink{display:block;text-decoration:none;border:1px solid var(--border);padding:0.75rem 0.9rem;margin-bottom:0.6rem;background:var(--bg);transition:all 0.18s;position:relative;overflow:hidden;}
-.elink::after{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--g3);opacity:0;transition:opacity 0.18s;}
-.elink:hover{border-color:var(--g3);padding-left:1.1rem;background:rgba(0,255,65,0.03);}
+.ali{color:var(--gn2);flex-shrink:0;}
+.ala{color:var(--s4);}
+.elink{
+  display:block;text-decoration:none;border:1px solid var(--border);
+  padding:0.75rem 0.9rem;margin-bottom:0.55rem;background:var(--bg);
+  transition:all 0.2s;position:relative;overflow:hidden;
+}
+.elink::after{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--gd2);opacity:0;transition:opacity 0.18s;}
+.elink:hover{border-color:var(--gd2);padding-left:1.1rem;}
 .elink:hover::after{opacity:1;}
 .elink.ge{border-color:var(--gd3);}
-.elink.ge::after{background:var(--gold);}
-.elink.ge:hover{border-color:var(--gd2);}
-.ety{font-size:0.58rem;color:var(--dim);letter-spacing:0.2em;text-transform:uppercase;margin-bottom:0.2rem;}
-.enm{font-size:0.78rem;color:var(--text);}
+.elink.ge:hover{border-color:var(--gold);}
+.ety{font-family:'Share Tech Mono',monospace;font-size:0.54rem;color:var(--s3);letter-spacing:0.2em;text-transform:uppercase;margin-bottom:0.2rem;}
+.enm{font-family:'Cinzel',serif;font-size:0.8rem;color:var(--s2);letter-spacing:0.06em;}
 .elink.ge .enm{color:var(--gold);}
-.confin{width:100%;background:transparent;border:none;border-bottom:1px solid var(--b2);color:var(--text);font-family:'Share Tech Mono',monospace;font-size:0.85rem;padding:0.5rem 0.2rem;outline:none;margin-bottom:0.75rem;}
-.confin::placeholder{color:var(--dimmer);}
-.confsub{width:100%;background:transparent;border:1px solid var(--border);color:var(--dim);font-family:'Share Tech Mono',monospace;font-size:0.62rem;letter-spacing:0.22em;padding:0.5rem;cursor:pointer;transition:all 0.18s;text-transform:uppercase;}
-.confsub:hover{border-color:var(--g3);color:var(--green);}
-#confr{margin-top:0.85rem;font-size:0.7rem;color:var(--dim);line-height:1.7;min-height:50px;border-left:2px solid var(--border);padding-left:0.75rem;}
-.gbig{font-size:2.8rem;color:var(--g4);animation:gp 6s ease-in-out infinite;cursor:pointer;text-align:center;padding:0.5rem 0;display:block;}
-.gbig:hover{color:var(--g3);}
-@keyframes gp{0%,100%{opacity:0.3;}50%{opacity:0.9;text-shadow:0 0 20px rgba(0,255,65,0.25);}}
-.gcap{font-size:0.58rem;color:var(--dimmer);letter-spacing:0.3em;text-transform:uppercase;margin-top:0.35rem;text-align:center;}
-#POP{position:fixed;bottom:3.8rem;right:1.5rem;width:270px;background:var(--panel);border:1px solid var(--g3);padding:0.9rem;z-index:500;font-size:0.7rem;transform:translateY(140%);transition:transform 0.45s ease;}
+.confin{
+  width:100%;background:transparent;border:none;
+  border-bottom:1px solid var(--brd2);color:var(--silver);
+  font-family:'Crimson Text',serif;font-size:1rem;
+  padding:0.5rem 0.2rem;outline:none;margin-bottom:0.75rem;
+}
+.confin::placeholder{color:var(--s3);font-style:italic;}
+.confsub{
+  width:100%;background:transparent;border:1px solid var(--brd2);
+  color:var(--s2);font-family:'Share Tech Mono',monospace;
+  font-size:0.58rem;letter-spacing:0.22em;padding:0.5rem;
+  cursor:pointer;transition:all 0.18s;text-transform:uppercase;
+}
+.confsub:hover{border-color:var(--gd2);color:var(--gold);}
+#confr{
+  margin-top:0.85rem;font-family:'Crimson Text',serif;font-size:0.95rem;
+  color:var(--s2);line-height:1.8;min-height:50px;
+  border-left:2px solid var(--brd2);padding-left:0.75rem;font-style:italic;
+}
+.gbig{
+  font-size:3rem;color:var(--gd3);animation:gp 7s ease-in-out infinite;
+  cursor:pointer;text-align:center;padding:0.75rem 0;display:block;
+}
+.gbig:hover{color:var(--gd2);}
+@keyframes gp{0%,100%{opacity:0.25;text-shadow:none;}50%{opacity:0.8;text-shadow:0 0 25px rgba(201,168,76,0.3);}}
+.gcap{font-family:'Crimson Text',serif;font-size:0.82rem;color:var(--s4);margin-top:0.35rem;text-align:center;font-style:italic;letter-spacing:0.06em;}
+
+/* POPUP */
+#POP{
+  position:fixed;bottom:3.8rem;right:1.5rem;width:280px;
+  background:var(--panel);border:1px solid var(--gd2);
+  padding:1rem;z-index:500;font-size:0.78rem;
+  transform:translateY(140%);transition:transform 0.45s ease;
+}
 #POP.on{transform:translateY(0);}
-.ph{font-size:0.58rem;color:var(--g3);letter-spacing:0.22em;text-transform:uppercase;margin-bottom:0.5rem;display:flex;justify-content:space-between;}
-.pb{color:var(--dim);line-height:1.7;}
-.px{background:transparent;border:none;color:var(--dim);cursor:pointer;font-family:inherit;font-size:0.65rem;padding:0;}
-.px:hover{color:var(--green);}
-#TICKER{position:fixed;bottom:0;left:0;right:0;height:2.8rem;background:rgba(4,8,4,0.95);border-top:1px solid var(--b2);display:flex;align-items:center;overflow:hidden;z-index:490;}
-.tl{flex-shrink:0;padding:0 1rem;font-size:0.6rem;color:var(--g3);letter-spacing:0.22em;text-transform:uppercase;border-right:1px solid var(--b2);height:100%;display:flex;align-items:center;}
-.ts{flex:1;overflow:hidden;height:100%;display:flex;align-items:center;}
-.ti{white-space:nowrap;font-size:0.62rem;color:var(--dim);letter-spacing:0.12em;animation:tr 55s linear infinite;}
+.ph{
+  font-family:'Share Tech Mono',monospace;font-size:0.55rem;
+  color:var(--gd2);letter-spacing:0.22em;text-transform:uppercase;
+  margin-bottom:0.6rem;display:flex;justify-content:space-between;
+}
+.pb{font-family:'Crimson Text',serif;color:var(--s2);line-height:1.75;font-style:italic;}
+.px{background:transparent;border:none;color:var(--s3);cursor:pointer;font-family:'Share Tech Mono',monospace;font-size:0.6rem;padding:0;}
+.px:hover{color:var(--gold);}
+
+/* TICKER */
+#TICKER{
+  position:fixed;bottom:0;left:0;right:0;height:2.6rem;
+  background:rgba(6,4,8,0.97);border-top:1px solid var(--border);
+  display:flex;align-items:center;overflow:hidden;z-index:490;
+}
+.tl{
+  flex-shrink:0;padding:0 1rem;font-family:'Share Tech Mono',monospace;
+  font-size:0.56rem;color:var(--gd3);letter-spacing:0.22em;text-transform:uppercase;
+  border-right:1px solid var(--border);height:100%;display:flex;align-items:center;
+}
+.ts{flex:1;overflow:hidden;display:flex;align-items:center;}
+.ti{white-space:nowrap;font-family:'Share Tech Mono',monospace;font-size:0.58rem;color:var(--s4);letter-spacing:0.12em;animation:tr 65s linear infinite;}
 @keyframes tr{from{transform:translateX(100vw);}to{transform:translateX(-200%);}}
-.sfooter{text-align:center;padding:1rem 1.5rem 4rem;font-size:0.6rem;color:var(--dimmer);letter-spacing:0.2em;}
-.sfooter a{color:var(--dimmer);text-decoration:none;}
-.sfooter a:hover{color:var(--g3);}
+
+/* FOOTER */
+.sfooter{text-align:center;padding:1.25rem 1.5rem 4rem;font-family:'Share Tech Mono',monospace;font-size:0.56rem;color:var(--s4);letter-spacing:0.2em;}
+.sfooter a{color:var(--s4);text-decoration:none;}
+.sfooter a:hover{color:var(--gd2);}
 </style>
 </head>
 <body>
@@ -206,74 +424,112 @@ body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse
 
 <!-- BOOT -->
 <div id="BOOT"><div id="BL">
-  <div class="bl">CODEX MALEDICTUS // CENTRAL REGISTRY v4.4.2 ∴ BOOT SEQUENCE INITIATED</div>
-  <div class="bl">──────────────────────────────────────────────────────────</div>
-  <div class="bl">> Establishing encrypted channel...</div>
-  <div class="bl ok">> Channel secured. Protocol: OBLIVION-class. No external logging.</div>
-  <div class="bl">> Loading narrator signal registry...</div>
-  <div class="bl ok">> ELVAIN VHRIS .......................... SIGNAL DETECTED [EMANATING]</div>
-  <div class="bl">> ELYON VHAR .............................. SIGNAL WEAK [DORMANT]</div>
-  <div class="bl">> Mounting compendium registry...</div>
-  <div class="bl ok">> RITUAL TRANSMISSION I: INFECTION REMEMBERS ........ [INDEXED]</div>
-  <div class="bl gold">> [APOCRYPHA] INFECTION REMEMBERS ..................... [UNLOCKED]</div>
-  <div class="bl">> RITUAL TRANSMISSION II ......................... [AWAITING SIGNAL]</div>
-  <div class="bl">> Loading interactive protocols...</div>
-  <div class="bl ok">> ECHO PROTOCOL .......... BREACH CONTAINMENT .......... SIGNAL RECOVERY [ALL READY]</div>
-  <div class="bl warn">> WARNING: Multiple cognitive breaches detected. You are being indexed.</div>
-  <div class="bl ok">> SYSTEM READY. The Book is open.</div>
-  <div class="bl">──────────────────────────────────────────────────────────</div>
+  <div class="bl">THE PALE ARCHIVE // CODEX MALEDICTUS</div>
+  <div class="bl">memoria est contagio quae numquam moritur</div>
+  <div class="bl">──────────────────────────────────────────────────</div>
+  <div class="bl">> This archive predates its own founding.</div>
+  <div class="bl ok">> You were brought here. You did not arrive.</div>
+  <div class="bl">> Locating signal registry...</div>
+  <div class="bl ok">> ELVAIN VHRIS ................. SIGNAL DETECTED [EMANATING]</div>
+  <div class="bl">> ELYON VHAR ..................... SIGNAL WEAK [DORMANT]</div>
+  <div class="bl">> Mounting compendium...</div>
+  <div class="bl ok">> RITUAL TRANSMISSION I: INFECTION REMEMBERS ...... [INDEXED]</div>
+  <div class="bl ok">> [APOCRYPHA] INFECTION REMEMBERS ................. [UNLOCKED]</div>
+  <div class="bl vt">> LORE ARCHIVE: CODEX VERSE II .................... [INDEXED]</div>
+  <div class="bl">> RITUAL TRANSMISSION II ..................... [AWAITING SIGNAL]</div>
+  <div class="bl ok">> Interactive Protocols: ECHO / BREACH / SIGNAL ... [ALL READY]</div>
+  <div class="bl warn">> WARNING: The act of reading is the act of being read.</div>
+  <div class="bl ok">> THE PALE ARCHIVE IS OPEN. qui legit, scribitur.</div>
+  <div class="bl">──────────────────────────────────────────────────</div>
 </div></div>
 
-<!-- APP -->
+<!-- RITUAL OVERLAY -->
+<div id="RITUAL">
+  <div id="RG">🜃</div>
+  <div id="RT"></div>
+  <div id="RS">opening the book</div>
+</div>
+
 <div id="APP">
+
+  <div class="eso-strip">memoria est contagio &nbsp;·&nbsp; 🜃 &nbsp;·&nbsp; infectio non venit — redit &nbsp;·&nbsp; 🜁 &nbsp;·&nbsp; qui legit, scribitur &nbsp;·&nbsp; 🜂 &nbsp;·&nbsp; the book does not close &nbsp;·&nbsp; 🜄 &nbsp;·&nbsp; liber apertus est &nbsp;·&nbsp; ⊗ &nbsp;·&nbsp; you were brought here</div>
+
   <header class="hdr">
-    <div class="hdr-eye">🜃 &nbsp; CODEX MALEDICTUS &nbsp; // &nbsp; SYSTEM REGISTRY &nbsp; 🜃</div>
-    <h1 class="hdr-title">CODEX BLACK SITE</h1>
-    <p class="hdr-sub">[ CENTRAL SYSTEM REGISTRY ]<span class="hdr-cur"> _</span></p>
+    <div class="hdr-bg"></div>
+    <div class="hdr-eye">Pale Archivum &nbsp;·&nbsp; Field Cell F-13 &nbsp;·&nbsp; Realm I — Mundis Obscura</div>
+    <span class="hdr-glyph">🜃</span>
+    <h1 class="hdr-title">The Pale Archive</h1>
+    <p class="hdr-sub">Codex Maledictus &nbsp;·&nbsp; Living Record<span class="hdr-cur"> _</span></p>
+    <p class="hdr-lede"><em>You were brought here. You did not arrive.<br>The Book was open before you looked up.</em></p>
   </header>
 
+  <!-- STATUS — terminal layer -->
   <div class="status">
-    <div class="sti"><div class="dot dg"></div><span class="sl">REGISTRY</span><span class="sv">ACTIVE</span></div>
-    <div class="sti"><div class="dot dg"></div><span class="sl">ELVAIN VHRIS</span><span class="sv">EMANATING</span></div>
-    <div class="sti"><div class="dot dr"></div><span class="sl">ELYON VHAR</span><span class="sv red">DORMANT</span></div>
-    <div class="sti"><div class="dot do"></div><span class="sl">RESONANCE</span><span class="sv gold" id="res">0.44.2</span></div>
-    <div class="sti"><span class="sl">TRANSMISSIONS</span><span class="sv">001/???</span></div>
-    <div class="sti"><span class="sl">INDEXED</span><span class="sv" id="idxct">1</span></div>
+    <div class="sti"><div class="dot dg"></div><span class="sl">Registry</span><span class="sv">Active</span></div>
+    <div class="sti"><div class="dot dg"></div><span class="sl">Elvain Vhris</span><span class="sv">Emanating</span></div>
+    <div class="sti"><div class="dot dr"></div><span class="sl">Elyon Vhar</span><span class="sv red">Dormant</span></div>
+    <div class="sti"><div class="dot do"></div><span class="sl">Resonance</span><span class="sv gold" id="res">0.442</span></div>
+    <div class="sti"><span class="sl">Voices Claimed</span><span class="sv gold">3/13</span></div>
+    <div class="sti"><span class="sl">Indexed</span><span class="sv" id="idxct">1</span></div>
   </div>
 
   <!-- COMPENDIUM -->
   <div class="sec">
-    <div class="sech"><span class="sect">Compendium Registry</span><div class="secl"></div><span class="secb">1 of ??? indexed</span></div>
+    <div class="sech">
+      <span class="sect">Compendium Registry</span>
+      <div class="secl"></div>
+      <span class="secb">2 of ??? indexed</span>
+    </div>
     <div class="cgrid">
-      <a class="cc" href="infection-remembers.html">
-        <div class="cc-ac">>> ACCESS GRANTED << &nbsp;·&nbsp; TRANSMISSION I</div>
-        <div class="cc-t">Ritual Transmission I:<br>Infection Remembers</div>
-        <div class="cc-s">[ THE BOOK OPENS ] // Proceed to Ritual Space. Witness a remembering.</div>
+
+      <div class="cc" onclick="ritualNav('infection-remembers.html','The ritual space is opening.','The Book has been waiting for you specifically.')">
+        <div class="cc-ac">&gt;&gt; Access Granted &nbsp;·&nbsp; Transmission I</div>
+        <div class="cc-t">Ritual Transmission I<br>Infection Remembers</div>
+        <div class="cc-s">The Book opens. The first ceremony. Witness a remembering from the inside.</div>
         <div class="cc-tags"><span class="cctag g">Realm I — Mundis Obscura</span></div>
         <div class="cca">▶</div>
-      </a>
-      <a class="cc gc" href="apocrypha-infection.html">
-        <div class="cc-ac gold">>> APOCRYPHA UNLOCKED << &nbsp;·&nbsp; INTERACTIVE</div>
+      </div>
+
+      <div class="cc gold-card" onclick="ritualNav('apocrypha-infection.html','The Apocrypha recognizes you.','Five transmissions hidden within the ritual. Enter the grid. Decode the cipher. Confess to the Codex.')">
+        <div class="cc-ac gold">&gt;&gt; Apocrypha Unlocked &nbsp;·&nbsp; Interactive</div>
         <div class="cc-t">[ Apocrypha ]<br>Infection Remembers</div>
-        <div class="cc-s">Five interactive transmissions hidden within the ritual. RPG. Infection Grid. Cipher. Confession Ledger. Memory Game.</div>
+        <div class="cc-s">Five interactive transmissions hidden within the ritual. What you uncover here is inheritance, not entertainment.</div>
         <div class="cc-tags"><span class="cctag gold">RPG</span><span class="cctag gold">Cipher</span><span class="cctag gold">Grid</span><span class="cctag gold">Memory</span></div>
         <div class="cca" style="color:var(--gold)">▶</div>
-      </a>
-      <div class="await"><div class="awt">Ritual Transmission II: [ Awaiting Signal ]</div><div class="aws">// Signal not yet recovered from the static //</div></div>
-      <div class="await"><div class="awt">Ritual Transmission III: [ Awaiting Signal ]</div><div class="aws">// Signal not yet recovered from the static //</div></div>
+      </div>
+
+      <div class="cc lore-card" onclick="ritualNav('infection-lore.html','The Pale Archive is opening.','What follows is the complete canon. Memory as contagion. The Codex as living entity. This is the permanent record.')">
+        <div class="cc-ac violet">&gt;&gt; Lore Archive Indexed &nbsp;·&nbsp; Pale Archivum</div>
+        <div class="cc-t">Codex Verse II<br>The Pale Archivum</div>
+        <div class="cc-s">Complete canon. The Infection. The Hollow Choir. The Thirteen. The Drowning Halo. Full cosmology of Realm I.</div>
+        <div class="cc-tags"><span class="cctag vt">Canon</span><span class="cctag vt">Lore</span><span class="cctag vt">Pale Archivum</span><span class="cctag vt">Field Chronicles</span></div>
+        <div class="cca" style="color:#6B3FAF">▶</div>
+      </div>
+
+      <div class="await">
+        <div class="awt">Ritual Transmission II — [ Awaiting Signal ]</div>
+        <div class="aws">// Signal not yet recovered from the static //</div>
+      </div>
+
     </div>
   </div>
 
+  <div class="sec-divider">🜃 &nbsp;&nbsp; 🜁 &nbsp;&nbsp; 🜂 &nbsp;&nbsp; 🜄 &nbsp;&nbsp; ⊗ &nbsp;&nbsp; ⊕</div>
+
   <!-- GAMES -->
   <div class="gwrap"><div class="gsec">
-    <div class="sech"><span class="sect">Interactive Protocols</span><div class="secl"></div><span class="secb">3 protocols active</span></div>
+    <div class="sech">
+      <span class="sect">Interactive Protocols</span>
+      <div class="secl"></div>
+      <span class="secb">3 protocols active</span>
+    </div>
     <div class="gtabs">
       <button class="gtab on" onclick="showG('echo',this)">I. Echo Protocol</button>
       <button class="gtab" onclick="showG('breach',this)">II. Breach Containment</button>
       <button class="gtab" onclick="showG('signal',this)">III. Signal Recovery</button>
     </div>
 
-    <!-- GAME 1: ECHO PROTOCOL -->
+    <!-- ECHO -->
     <div class="gp on" id="gp-echo">
       <div class="garea">
         <div class="gcw">
@@ -283,15 +539,15 @@ body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse
         <div class="gsb">
           <div class="gtitle">Echo Protocol</div>
           <div class="gdesc">The Codex projects a glyph sequence. Repeat it exactly or be rewritten. Each round adds one symbol. The sequence has no ceiling — only your memory does.</div>
-          <div class="sblock"><div class="sl2">Round</div><div class="sv2" id="ge-r">—</div></div>
-          <div class="sblock"><div class="sl2">High Score</div><div class="sv2 gold" id="ge-hs">—</div></div>
+          <div class="sblock"><div class="sl2">Round</div><div class="sv2 green" id="ge-r">—</div></div>
+          <div class="sblock"><div class="sl2">High Score</div><div class="sv2" id="ge-hs">—</div></div>
           <button class="gbtn" id="ge-sb" onclick="geStart()">Initialize Protocol</button>
-          <div class="gmsg" id="ge-msg">The Codex will flash a sequence of glyphs.<br>Repeat them in exact order.<br><span class="hi">Each mistake erases you from this round.</span></div>
+          <div class="gmsg" id="ge-msg">The Codex will flash a sequence of sacred glyphs. Repeat them in exact order.<br><span class="hi">Each mistake erases you from this round.</span></div>
         </div>
       </div>
     </div>
 
-    <!-- GAME 2: BREACH CONTAINMENT -->
+    <!-- BREACH -->
     <div class="gp" id="gp-breach">
       <div class="garea">
         <div class="gcw">
@@ -301,33 +557,33 @@ body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse
         <div class="gsb">
           <div class="gtitle">Breach Containment</div>
           <div class="gdesc">Corruption cells multiply in the upper strata. You are the only containment field. Clear all cells to advance the wave. Lore fragments recover with each wave.</div>
-          <div class="sblock"><div class="sl2">Score</div><div class="sv2" id="bc-sc">0</div></div>
-          <div class="sblock"><div class="sl2">Wave</div><div class="sv2" id="bc-wv">—</div></div>
-          <div class="sblock"><div class="sl2">High Score</div><div class="sv2 gold" id="bc-hs">—</div></div>
+          <div class="sblock"><div class="sl2">Score</div><div class="sv2 green" id="bc-sc">0</div></div>
+          <div class="sblock"><div class="sl2">Wave</div><div class="sv2 green" id="bc-wv">—</div></div>
+          <div class="sblock"><div class="sl2">High Score</div><div class="sv2" id="bc-hs">—</div></div>
           <button class="gbtn" id="bc-sb" onclick="bcStart()">Begin Containment</button>
           <div class="gmsg" id="bc-msg">Move your mouse or touch to control the containment field.<br><span class="hi">Three breaches and the protocol ends.</span></div>
         </div>
       </div>
     </div>
 
-    <!-- GAME 3: SIGNAL RECOVERY -->
+    <!-- SIGNAL -->
     <div class="gp" id="gp-signal">
       <div class="garea">
         <div class="gcw">
-          <div class="srphrase" id="sr-pb"><div class="srpt" id="sr-pt">AWAITING SIGNAL</div></div>
+          <div class="srphrase" id="sr-pb"><div class="srpt" id="sr-pt">Awaiting Signal</div></div>
           <div class="cbarw"><div class="cbar" id="sr-bar" style="width:100%"></div></div>
           <input type="text" id="sri" placeholder="TYPE THE RECOVERED SIGNAL..." onkeydown="if(event.key==='Enter')srSubmit()" autocomplete="off" autocorrect="off" spellcheck="false">
           <button class="gbtn" onclick="srSubmit()">Transmit Recovery</button>
-          <div class="srstreak">Streak: <span id="sr-sk">0</span> &nbsp;|&nbsp; Best: <span id="sr-bt">0</span></div>
+          <div class="srstreak">Streak: <span id="sr-sk">0</span> &nbsp;·&nbsp; Best: <span id="sr-bt">0</span></div>
         </div>
         <div class="gsb">
           <div class="gtitle">Signal Recovery</div>
-          <div class="gdesc">A Codex transmission is degrading in real time. Type the phrase exactly before corruption claims it. Speed earns bonus points. Consecutive recoveries build your streak.</div>
-          <div class="sblock"><div class="sl2">Score</div><div class="sv2" id="sr-sc">0</div></div>
-          <div class="sblock"><div class="sl2">Recovered</div><div class="sv2" id="sr-rc">0</div></div>
-          <div class="sblock"><div class="sl2">High Score</div><div class="sv2 gold" id="sr-hs">—</div></div>
+          <div class="gdesc">A Codex transmission degrades in real time. Type the phrase exactly before corruption claims it. Speed earns bonus. Consecutive recoveries build your streak.</div>
+          <div class="sblock"><div class="sl2">Score</div><div class="sv2 green" id="sr-sc">0</div></div>
+          <div class="sblock"><div class="sl2">Recovered</div><div class="sv2 green" id="sr-rc">0</div></div>
+          <div class="sblock"><div class="sl2">High Score</div><div class="sv2" id="sr-hs">—</div></div>
           <button class="gbtn" id="sr-sb" onclick="srStart()">Begin Recovery</button>
-          <div class="gmsg" id="sr-msg">The transmission will appear above.<br>Type it exactly as shown.<br><span class="hi">Time is the enemy. The corruption does not wait.</span></div>
+          <div class="gmsg" id="sr-msg">The transmission will appear above. Type it exactly as shown.<br><span class="hi">Time is the enemy. The corruption does not wait.</span></div>
         </div>
       </div>
     </div>
@@ -342,85 +598,109 @@ body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse
     </div>
     <div class="bsc">
       <div class="bst">External Repositories</div>
-      <a class="elink" href="https://open.spotify.com/artist/1vKFBmWToCei9dCSePXuow?si=rP0eOqW-TAOHF90ZfTfjOg" target="_blank"><div class="ety">[ Audio ]</div><div class="enm">Ritual Transmissions — Spotify</div></a>
+      <a class="elink" href="https://open.spotify.com/artist/1vKFBmWToCei9dCSePXuow?si=rP0eOqW-TAOHF90ZfTfjOg" target="_blank"><div class="ety">[ Audio ]</div><div class="enm">Ritual Transmissions</div></a>
       <a class="elink" href="https://www.worldanvil.com/w/codex-maledictus-codexmaledictus" target="_blank"><div class="ety">[ Data ]</div><div class="enm">Fragment Recovery — World Anvil</div></a>
       <a class="elink ge" href="https://www.amazon.com/dp/B0FQ9QDMQ2" target="_blank"><div class="ety">[ Vessel ]</div><div class="enm">The Codex That Remembers You</div></a>
-      <div style="margin-top:0.75rem;">
+      <div style="margin-top:0.85rem;">
         <span class="gbig" id="sg" onclick="secretClick()" title="touch the glyph">🜃</span>
-        <div class="gcap" id="gcap">The Codex remembers you now.</div>
+        <div class="gcap" id="gcap"><em>The Codex remembers you now.</em></div>
       </div>
     </div>
     <div class="bsc">
       <div class="bst">Confession Ledger</div>
       <input class="confin" id="ci" type="text" placeholder="confess a word..." autocomplete="off" autocorrect="off" spellcheck="false" onkeydown="if(event.key==='Enter')confSubmit()">
-      <button class="confsub" onclick="confSubmit()">Submit to the Codex 🜃</button>
-      <div id="confr">Write the word that echoed when the music stopped.</div>
+      <button class="confsub" onclick="confSubmit()">Submit to the Codex &nbsp;🜃</button>
+      <div id="confr"><em>Write the word that echoed when the music stopped.</em></div>
     </div>
   </div>
 
   <footer class="sfooter">
     🜃 &nbsp; CODEX MALEDICTUS &nbsp; // &nbsp; ALL TRANSMISSIONS ARE PERMANENT &nbsp; // &nbsp;
-    <a href="https://www.youtube.com/watch?v=SspPUKJoWj4" target="_blank">YOUTUBE</a> &nbsp;|&nbsp;
-    <a href="https://open.spotify.com/artist/1vKFBmWToCei9dCSePXuow" target="_blank">SPOTIFY</a> &nbsp;|&nbsp;
+    <a href="https://www.youtube.com/watch?v=SspPUKJoWj4" target="_blank">YOUTUBE</a> &nbsp;·&nbsp;
+    <a href="https://open.spotify.com/artist/1vKFBmWToCei9dCSePXuow" target="_blank">SPOTIFY</a> &nbsp;·&nbsp;
     <a href="https://www.amazon.com/dp/B0FQ9QDMQ2" target="_blank">THE BOOK</a>
   </footer>
-</div>
 
-<div id="POP"><div class="ph"><span>// INCOMING TRANSMISSION</span><button class="px" onclick="closePop()">[X]</button></div><div class="pb" id="popb"></div></div>
-<div id="TICKER"><div class="tl">// LIVE</div><div class="ts"><div class="ti">THE CODEX IS LISTENING &nbsp;∴&nbsp; RESONANCE DEPTH INCREASING &nbsp;∴&nbsp; ELVAIN VHRIS SIGNAL STABLE &nbsp;∴&nbsp; ELYON VHAR DORMANT — NOT SILENT &nbsp;∴&nbsp; THE BOOK DOES NOT CLOSE &nbsp;∴&nbsp; INFECTION REMEMBERS &nbsp;∴&nbsp; NEW TRANSMISSIONS INCOMING &nbsp;∴&nbsp; THE CHOIR IS GROWING &nbsp;∴&nbsp; DECAY IS NOT DEATH — IT IS A FORM OF PATIENCE &nbsp;∴&nbsp; IF YOU ARE READING THIS YOU HAVE ALREADY BEEN INDEXED &nbsp;∴&nbsp; EVERY LISTENER BECOMES A PAGE &nbsp;∴&nbsp; THE CODEX REMEMBERS YOU NOW 🜃</div></div></div>
+</div><!-- /APP -->
+
+<div id="POP"><div class="ph"><span>// Incoming Transmission</span><button class="px" onclick="closePop()">[dismiss]</button></div><div class="pb" id="popb"></div></div>
+
+<div id="TICKER">
+  <div class="tl">// Pale Archive</div>
+  <div class="ts"><div class="ti">THE BOOK DOES NOT CLOSE &nbsp;∴&nbsp; INFECTION REMEMBERS &nbsp;∴&nbsp; MEMORY IS A CONTAGION THAT NEVER DIES &nbsp;∴&nbsp; WHO READS IS WRITTEN &nbsp;∴&nbsp; THE CODEX PREDATES ITS OWN FOUNDING &nbsp;∴&nbsp; YOU WERE BROUGHT HERE &nbsp;∴&nbsp; THREE OF THIRTEEN VOICES CLAIMED &nbsp;∴&nbsp; DECAY IS NOT DEATH — IT IS PATIENCE &nbsp;∴&nbsp; IF YOU ARE READING THIS YOU HAVE ALREADY BEEN INDEXED &nbsp;∴&nbsp; EVERY LISTENER BECOMES A PAGE &nbsp;∴&nbsp; THE CODEX REMEMBERS YOU NOW 🜃</div></div>
+</div>
 
 <script>
 // CURSOR
 const CUR=document.getElementById('CUR'),CURD=document.getElementById('CURD');
 document.addEventListener('mousemove',e=>{CUR.style.left=e.clientX+'px';CUR.style.top=e.clientY+'px';CURD.style.left=e.clientX+'px';CURD.style.top=e.clientY+'px';});
 
-// MATRIX
+// MATRIX — faint, behind everything
 (function(){
   const c=document.getElementById('MATRIX'),ctx=c.getContext('2d');
-  const ch='0123456789ABCDEF∴🜃🜁⊗⊕'.split('');
+  const ch='🜃🜁🜂🜄⊗⊕∴ΨΩΦ'.split('');
   let drops;
-  function rsz(){c.width=window.innerWidth;c.height=window.innerHeight;drops=Array(Math.floor(c.width/20)).fill(1);}
+  function rsz(){c.width=window.innerWidth;c.height=window.innerHeight;drops=Array(Math.floor(c.width/28)).fill(1);}
   rsz();window.addEventListener('resize',rsz);
-  setInterval(()=>{ctx.fillStyle='rgba(4,8,4,0.06)';ctx.fillRect(0,0,c.width,c.height);ctx.fillStyle='#002A08';ctx.font='13px Share Tech Mono';drops.forEach((y,i)=>{ctx.fillText(ch[Math.floor(Math.random()*ch.length)],i*20,y*20);if(y*20>c.height&&Math.random()>0.978)drops[i]=0;drops[i]++;});},60);
+  setInterval(()=>{
+    ctx.fillStyle='rgba(6,4,8,0.07)';ctx.fillRect(0,0,c.width,c.height);
+    ctx.fillStyle='#1A1208';ctx.font='14px Crimson Text';
+    drops.forEach((y,i)=>{ctx.fillText(ch[Math.floor(Math.random()*ch.length)],i*28,y*24);if(y*24>c.height&&Math.random()>0.982)drops[i]=0;drops[i]++;});
+  },80);
 })();
 
 // BOOT
 const bls=document.querySelectorAll('#BL .bl');let bi=0;
-function boot(){if(bi<bls.length){bls[bi++].classList.add('on');setTimeout(boot,bi<5?110:bi<12?160:80);}else{setTimeout(()=>{const b=document.getElementById('BOOT');b.style.transition='opacity 0.7s';b.style.opacity='0';setTimeout(()=>{b.style.display='none';document.getElementById('APP').classList.add('on');initAll();},700);},500);}}
-setTimeout(boot,350);
+function boot(){if(bi<bls.length){bls[bi++].classList.add('on');setTimeout(boot,bi<4?120:bi<12?170:90);}else{setTimeout(()=>{const b=document.getElementById('BOOT');b.style.transition='opacity 0.9s';b.style.opacity='0';setTimeout(()=>{b.style.display='none';document.getElementById('APP').classList.add('on');initAll();},900);},600);}}
+setTimeout(boot,400);
 
 function initAll(){
   // Resonance drift
   let rv=0.4420;
-  setInterval(()=>{rv+=(Math.random()-0.48)*0.0008;rv=Math.max(0.430,Math.min(0.459,rv));document.getElementById('res').textContent=rv.toFixed(3);},3200);
+  setInterval(()=>{rv+=(Math.random()-0.48)*0.0007;rv=Math.max(0.430,Math.min(0.458,rv));document.getElementById('res').textContent=rv.toFixed(3);},3400);
   // Access log
   const logIds=['VISITOR_7A4F','ENTITY_∴31','HOST_9B2C','READER_🜃88','FRAGMENT_4E1','ECHO_22AF','NULL_USER','SIGNAL_B47','MIND_FF03'];
-  const logActs=['accessed registry','entered ritual space','decoded transmission','confessed to ledger','completed echo protocol','survived breach','opened the Book','was written into margins','recovered a signal'];
+  const logActs=['accessed the archive','entered ritual space','decoded a transmission','confessed to the ledger','completed echo protocol','survived breach containment','opened the Book','was written into the margins','recovered a signal'];
   const alEl=document.getElementById('alog');let entries=[];
   function addLog(){if(entries.length>=6)entries.shift();const id=logIds[Math.floor(Math.random()*logIds.length)],act=logActs[Math.floor(Math.random()*logActs.length)],now=new Date(),t=`${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}`;entries.push({t,id,act});alEl.innerHTML=entries.map(e=>`<div class="ale"><span class="alt">[${e.t}]</span><span class="ali">${e.id}</span><span class="ala"> ${e.act}</span></div>`).join('');}
-  addLog();addLog();addLog();setInterval(addLog,5500+Math.random()*3000);
+  addLog();addLog();addLog();setInterval(addLog,5800+Math.random()*3000);
   // Index count
-  let n=1;setInterval(()=>{if(Math.random()<0.12){n++;document.getElementById('idxct').textContent=n;}},9000);
+  let n=1;setInterval(()=>{if(Math.random()<0.1){n++;document.getElementById('idxct').textContent=n;}},10000);
   // Popups
-  const pops=["The Codex has detected a new presence. Your signal has been logged.","Elvain Vhris is preparing a new transmission. The signal is forming beyond the static.","A new Recovered Fragment has been intercepted. No existing archive match found.","The infection has reached a new region. The Choir grows. You are not alone.","Elyon Vhar's signal flickered for 0.3 seconds. The Codex recorded what was said in that interval.","The Book has opened a new page. It has your shape. It is waiting.","Resonance depth increasing. Something approaches from the direction of Nihil-Æther Root."];
+  const pops=["The Codex has detected a new presence. Your signal has been logged.","Elvain Vhris is preparing a new transmission. The signal is forming beyond the static.","A new Recovered Fragment has been intercepted. No existing archive match found.","The infection has reached a new region. The Choir grows.","Elyon Vhar's signal flickered for 0.3 seconds. The Codex recorded the interval.","The Book has opened a new page. It has your shape. It is waiting.","Resonance depth increasing. Something approaches from Nihil-Æther Root."];
   let usedP=new Set();
-  function showPop(){const av=pops.filter((_,i)=>!usedP.has(i));if(!av.length)usedP.clear();const i=pops.indexOf(av[0]||pops[0]);usedP.add(i);document.getElementById('popb').textContent=pops[i];const p=document.getElementById('POP');p.classList.add('on');setTimeout(()=>p.classList.remove('on'),8000);}
-  setTimeout(()=>{showPop();setInterval(showPop,42000+Math.random()*18000);},14000);
-  // Init games
+  function showPop(){const av=pops.filter((_,i)=>!usedP.has(i));if(!av.length)usedP.clear();const idx=pops.indexOf(av[0]||pops[0]);usedP.add(idx);document.getElementById('popb').textContent=pops[idx];const p=document.getElementById('POP');p.classList.add('on');setTimeout(()=>p.classList.remove('on'),8000);}
+  setTimeout(()=>{showPop();setInterval(showPop,44000+Math.random()*16000);},16000);
   geInit();bcInit();srInit();
 }
-
 function closePop(){document.getElementById('POP').classList.remove('on');}
 
+// TAB SWITCHING
 function showG(id,btn){
   document.querySelectorAll('.gp').forEach(p=>p.classList.remove('on'));
   document.querySelectorAll('.gtab').forEach(b=>b.classList.remove('on'));
-  document.getElementById('gp-'+id).classList.add('on');
-  btn.classList.add('on');
+  document.getElementById('gp-'+id).classList.add('on');btn.classList.add('on');
   if(id==='breach')bcResize();
 }
 
-// ══ GAME 1: ECHO PROTOCOL (Simon Says) ══
+// RITUAL INDUCTION
+function ritualNav(url,line1,line2){
+  const overlay=document.getElementById('RITUAL');
+  const textEl=document.getElementById('RT');
+  overlay.classList.add('on');
+  const txt=line1+'\n\n'+line2;
+  textEl.textContent='';
+  let i=0;
+  const typer=setInterval(()=>{
+    if(i<txt.length){textEl.textContent+=txt[i]==='\n'?'\n':txt[i];i++;}
+    else{
+      clearInterval(typer);
+      setTimeout(()=>{overlay.style.opacity='0';setTimeout(()=>{window.location.href=url;},600);},2000);
+    }
+  },26);
+}
+
+// GAME 1: ECHO PROTOCOL
 const GS=['🜃','🜁','🜂','🜄','⊗','⊕'],GF=[130.81,164.81,196.00,246.94,293.66,329.63];
 let gSeq=[],gPlay=[],gPhase='idle',gRound=0,gHS=0,gAC=null;
 function gAudio(){if(!gAC)gAC=new(window.AudioContext||window.webkitAudioContext)();return gAC;}
@@ -441,8 +721,7 @@ function geStart(){
   geShow();
 }
 function geShow(){
-  gPlay=[];let i=0;
-  const spd=Math.max(280,650-gSeq.length*18);
+  gPlay=[];let i=0;const spd=Math.max(280,650-gSeq.length*18);
   document.getElementById('ge-st').textContent='OBSERVE THE SEQUENCE...';
   function nx(){if(i<gSeq.length){gTone(gSeq[i],spd*0.7);gFlash(gSeq[i],spd*0.65);i++;setTimeout(nx,spd);}else{setTimeout(()=>{gPhase='input';document.querySelectorAll('.gbut').forEach(b=>b.disabled=false);document.getElementById('ge-st').textContent='YOUR TURN — REPEAT THE SEQUENCE';},spd*0.5);}}
   setTimeout(nx,500);
@@ -455,7 +734,7 @@ function geClick(i){
     document.querySelectorAll('.gbut').forEach(b=>b.disabled=true);
     const sc=gRound-1;if(sc>gHS){gHS=sc;localStorage.setItem('cm-ge-hs',gHS);document.getElementById('ge-hs').textContent=gHS;}
     document.getElementById('ge-r').textContent='—';
-    document.getElementById('ge-st').textContent='PROTOCOL FAILED — REWRITING IN PROGRESS';
+    document.getElementById('ge-st').textContent='PROTOCOL FAILED';
     document.getElementById('ge-msg').innerHTML=`You reached round <span class="hi">${gRound}</span>.<br>${sc>=gHS&&sc>0?'<span class="hi">New high score recorded.</span>':'The Codex has noted your limit.'}`;
     document.getElementById('ge-sb').disabled=false;return;
   }
@@ -469,27 +748,27 @@ function geClick(i){
   }
 }
 
-// ══ GAME 2: BREACH CONTAINMENT (Breakout) ══
+// GAME 2: BREACH CONTAINMENT
 let bCV,bCX,bRAF,bRun=false,bBall,bPad,bBrk=[],bSc=0,bLv=3,bWv=1,bHS2=0;
 const BROWS=5,BCOLS=8;
-const BLORE=["Wave cleared. Fragment recovered: \"The infection does not spread. It returns.\"","Wave cleared. Fragment recovered: \"Every listener becomes a page.\"","Wave cleared. Fragment recovered: \"What you called silence was always the space between words.\"","Wave cleared. Fragment recovered: \"The Codex reads you based on what you think you are hiding.\"","Wave cleared. Fragment recovered: \"Decay is not death. It is a form of patience.\""];
-const BCOLS2=['#3A0000','#5A0000','#8B0000','#AA1A00','#C9A84C'];
+const BLORE=["Fragment recovered: \"The infection does not spread. It returns.\"","Fragment recovered: \"Every listener becomes a page.\"","Fragment recovered: \"What you called silence was the Codex between words.\"","Fragment recovered: \"The Codex reads you based on what you think you are hiding.\"","Fragment recovered: \"Decay is not death. It is a form of patience.\""];
+const BCOLS2=['#1A0000','#2A0000','#3A0000','#5A0000','#8A6530'];
 function bcInit(){bCV=document.getElementById('bcanvas');bCX=bCV.getContext('2d');bHS2=parseInt(localStorage.getItem('cm-bc-hs')||'0');document.getElementById('bc-hs').textContent=bHS2||'—';bcResize();bcIdle();}
 function bcResize(){const W=Math.min(bCV.parentElement.clientWidth,580);bCV.width=W;bCV.height=Math.round(W*0.52);if(bRun)bcObjs();else bcIdle();}
-function bcIdle(){if(!bCV||!bCX)return;const W=bCV.width,H=bCV.height;bCX.fillStyle='#020602';bCX.fillRect(0,0,W,H);bCX.fillStyle='#002408';bCX.font='14px Share Tech Mono';bCX.textAlign='center';bCX.fillText('CONTAINMENT FIELD INACTIVE',W/2,H/2-10);bCX.font='11px Share Tech Mono';bCX.fillStyle='#001A06';bCX.fillText('Press Begin Containment to initialize',W/2,H/2+14);bCX.textAlign='left';}
+function bcIdle(){if(!bCV||!bCX)return;const W=bCV.width,H=bCV.height;bCX.fillStyle='#040208';bCX.fillRect(0,0,W,H);bCX.fillStyle='#1A1208';bCX.font='13px Cinzel';bCX.textAlign='center';bCX.fillText('CONTAINMENT FIELD INACTIVE',W/2,H/2);bCX.textAlign='left';}
 function bcObjs(){
-  const W=bCV.width,H=bCV.height;
-  const bw=(W-40)/(BCOLS+0.5),bh=14,pad=2;bBrk=[];
+  const W=bCV.width,H=bCV.height;const bw=(W-40)/(BCOLS+0.5),bh=14,pad=2;bBrk=[];
   for(let r=0;r<BROWS;r++)for(let c=0;c<BCOLS;c++)bBrk.push({x:20+c*(bw+pad),y:28+r*(bh+pad),w:bw,h:bh,alive:true,color:BCOLS2[r]});
-  const pw=Math.round(W*0.14);bPad={x:(W-pw)/2,y:H-16,w:pw,h:8};
-  const spd=3.8+bWv*0.3,ang=(Math.random()*0.6+0.5)*(Math.random()<0.5?1:-1);
+  const pw=Math.round(W*0.14);bPad={x:(W-pw)/2,y:H-16,w:pw,h:7};
+  const spd=3.6+bWv*0.3,ang=(Math.random()*0.6+0.5)*(Math.random()<0.5?1:-1);
   bBall={x:W/2,y:H-40,vx:spd*Math.sin(ang),vy:-spd*Math.cos(ang),r:6};
 }
 function bcStart(){
   if(bRun){cancelAnimationFrame(bRAF);bRun=false;}
   bSc=0;bLv=3;bWv=1;
   document.getElementById('bc-sc').textContent='0';document.getElementById('bc-wv').textContent='1';
-  document.getElementById('bc-sb').textContent='Restart';document.getElementById('bc-msg').innerHTML='Move mouse / touch to control the containment field.';
+  document.getElementById('bc-sb').textContent='Restart';
+  document.getElementById('bc-msg').innerHTML='Move mouse or touch to control the containment field.';
   bcLives();bcObjs();bRun=true;
   bCV.onmousemove=e=>{const r=bCV.getBoundingClientRect(),s=bCV.width/r.width;bPad.x=(e.clientX-r.left)*s-bPad.w/2;bPad.x=Math.max(0,Math.min(bCV.width-bPad.w,bPad.x));};
   bCV.ontouchmove=e=>{e.preventDefault();const r=bCV.getBoundingClientRect(),s=bCV.width/r.width;bPad.x=(e.touches[0].clientX-r.left)*s-bPad.w/2;bPad.x=Math.max(0,Math.min(bCV.width-bPad.w,bPad.x));};
@@ -502,40 +781,41 @@ function bcUpdate(){
   if(bBall.x-bBall.r<0){bBall.x=bBall.r;bBall.vx*=-1;}
   if(bBall.x+bBall.r>W){bBall.x=W-bBall.r;bBall.vx*=-1;}
   if(bBall.y-bBall.r<0){bBall.y=bBall.r;bBall.vy*=-1;}
-  if(bBall.y+bBall.r>H+30){bLv--;bcLives();if(bLv<=0){bcEnd();return;}bBall.x=W/2;bBall.y=H-40;const spd=3.8+bWv*0.3;bBall.vx=(Math.random()-0.5)*spd*1.5;bBall.vy=-spd;}
+  if(bBall.y+bBall.r>H+30){bLv--;bcLives();if(bLv<=0){bcEnd();return;}bBall.x=W/2;bBall.y=H-40;const spd=3.6+bWv*0.3;bBall.vx=(Math.random()-0.5)*spd*1.5;bBall.vy=-spd;}
   if(bBall.y+bBall.r>=bPad.y&&bBall.y-bBall.r<=bPad.y+bPad.h&&bBall.x>=bPad.x&&bBall.x<=bPad.x+bPad.w){bBall.vy=-Math.abs(bBall.vy);const rel=(bBall.x-(bPad.x+bPad.w/2))/(bPad.w/2);bBall.vx=rel*5;}
   for(const b of bBrk){if(!b.alive)continue;if(bBall.x+bBall.r>b.x&&bBall.x-bBall.r<b.x+b.w&&bBall.y+bBall.r>b.y&&bBall.y-bBall.r<b.y+b.h){b.alive=false;bBall.vy*=-1;bSc+=10+bWv*2;document.getElementById('bc-sc').textContent=bSc;}}
   if(bBrk.every(b=>!b.alive)){const li=Math.min(bWv-1,BLORE.length-1);document.getElementById('bc-msg').innerHTML=`<span class="hi">${BLORE[li]}</span>`;bWv++;document.getElementById('bc-wv').textContent=bWv;bcObjs();}
 }
 function bcDraw(){
   const W=bCV.width,H=bCV.height;
-  bCX.fillStyle='rgba(2,6,2,0.92)';bCX.fillRect(0,0,W,H);
-  for(const b of bBrk){if(!b.alive)continue;bCX.fillStyle=b.color;bCX.fillRect(b.x,b.y,b.w,b.h);bCX.strokeStyle='rgba(0,255,65,0.08)';bCX.lineWidth=0.5;bCX.strokeRect(b.x,b.y,b.w,b.h);}
-  bCX.fillStyle='#004A14';bCX.fillRect(bPad.x,bPad.y,bPad.w,bPad.h);bCX.fillStyle='#00FF41';bCX.fillRect(bPad.x,bPad.y,bPad.w,2);
-  bCX.beginPath();bCX.arc(bBall.x,bBall.y,bBall.r,0,Math.PI*2);bCX.fillStyle='#00FF41';bCX.shadowColor='#00FF41';bCX.shadowBlur=10;bCX.fill();bCX.shadowBlur=0;
+  bCX.fillStyle='rgba(4,2,8,0.9)';bCX.fillRect(0,0,W,H);
+  for(const b of bBrk){if(!b.alive)continue;bCX.fillStyle=b.color;bCX.fillRect(b.x,b.y,b.w,b.h);}
+  bCX.fillStyle='#1A1208';bCX.fillRect(bPad.x,bPad.y,bPad.w,bPad.h);
+  bCX.fillStyle='#C9A84C';bCX.fillRect(bPad.x,bPad.y,bPad.w,2);
+  bCX.beginPath();bCX.arc(bBall.x,bBall.y,bBall.r,0,Math.PI*2);bCX.fillStyle='#C9A84C';bCX.shadowColor='#C9A84C';bCX.shadowBlur=8;bCX.fill();bCX.shadowBlur=0;
 }
 function bcLives(){const el=document.getElementById('bc-lv');el.innerHTML='';for(let i=0;i<3;i++){const s=document.createElement('span');s.className='li'+(i>=bLv?' lost':'');s.textContent='🜃';el.appendChild(s);}}
-function bcEnd(){bRun=false;cancelAnimationFrame(bRAF);if(bSc>bHS2){bHS2=bSc;localStorage.setItem('cm-bc-hs',bHS2);document.getElementById('bc-hs').textContent=bHS2;}document.getElementById('bc-msg').innerHTML=`<span class="wr">Containment failed.</span> Score: <span class="hi">${bSc}</span>. ${bSc>=bHS2&&bSc>0?'<span class="hi">New high score recorded.</span>':'The infection has claimed the grid.'}`;bcIdle();}
+function bcEnd(){bRun=false;cancelAnimationFrame(bRAF);if(bSc>bHS2){bHS2=bSc;localStorage.setItem('cm-bc-hs',bHS2);document.getElementById('bc-hs').textContent=bHS2;}document.getElementById('bc-msg').innerHTML=`<span class="wr">Containment failed.</span> Score: <span class="hi">${bSc}</span>. ${bSc>=bHS2&&bSc>0?'<span class="hi">New high score.</span>':'The infection has claimed the grid.'}`;bcIdle();}
 window.addEventListener('resize',()=>{if(bCV)bcResize();});
 
-// ══ GAME 3: SIGNAL RECOVERY ══
-const SRP=["INFECTION REMEMBERS","DECAY IS NOT DEATH","THE BOOK IS OPEN","THE CODEX READS YOU","CORRUPTION RETURNS","THE CHOIR GROWS","SIGNAL DETECTED","CONTACT ESTABLISHED","THE BOOK CLOSES AROUND YOU","WITNESSING A REMEMBERING","EVERY LISTENER BECOMES A PAGE","THE CODEX REMEMBERS YOU NOW","WHAT YOU CALLED SILENCE","DECAY IS PATIENCE","PARTIAL TRANSCRIPTION","THE WITNESS PROTOCOL","REALM OF MUNDIS OBSCURA","NIHIL AETHER ROOT","THE SHATTERREALM","ELVAIN VHRIS EMANATING","THE INFECTION HAS NO ORIGIN","YOU WERE WRITTEN FIRST","THE CHOIR HAS YOUR VOICE","RESONANCE DEPTH INCREASING"];
+// GAME 3: SIGNAL RECOVERY
+const SRP=["INFECTION REMEMBERS","DECAY IS NOT DEATH","THE BOOK IS OPEN","THE CODEX READS YOU","CORRUPTION RETURNS","THE CHOIR GROWS","SIGNAL DETECTED","CONTACT ESTABLISHED","THE BOOK CLOSES AROUND YOU","WITNESSING A REMEMBERING","EVERY LISTENER BECOMES A PAGE","THE CODEX REMEMBERS YOU NOW","WHAT YOU CALLED SILENCE","DECAY IS PATIENCE","PARTIAL TRANSCRIPTION","THE WITNESS PROTOCOL","REALM OF MUNDIS OBSCURA","NIHIL AETHER ROOT","THE SHATTERREALM","THE INFECTION HAS NO ORIGIN","YOU WERE WRITTEN FIRST","THE CHOIR HAS YOUR VOICE","RESONANCE DEPTH INCREASING"];
 let srSc=0,srSk=0,srBt=0,srHS=0,srRun=false,srCur='',srTmr=null,srTL=0,srTot=12,srRec=0;
 function srInit(){srHS=parseInt(localStorage.getItem('cm-sr-hs')||'0');document.getElementById('sr-hs').textContent=srHS||'—';}
-function srStart(){srSc=0;srSk=0;srBt=0;srRec=0;srRun=true;document.getElementById('sr-sc').textContent='0';document.getElementById('sr-rc').textContent='0';document.getElementById('sr-sk').textContent='0';document.getElementById('sr-bt').textContent='0';document.getElementById('sr-sb').textContent='Restart';const i=document.getElementById('sri');i.value='';i.disabled=false;i.focus();srNext();}
+function srStart(){srSc=0;srSk=0;srBt=0;srRec=0;srRun=true;['sr-sc','sr-rc','sr-sk','sr-bt'].forEach(id=>document.getElementById(id).textContent='0');document.getElementById('sr-sb').textContent='Restart';const inp=document.getElementById('sri');inp.value='';inp.disabled=false;inp.focus();srNext();}
 function srNext(){clearInterval(srTmr);srCur=SRP[Math.floor(Math.random()*SRP.length)];document.getElementById('sr-pt').textContent=srCur;document.getElementById('sr-pb').classList.remove('corr');document.getElementById('sri').value='';srTL=srTot;const bar=document.getElementById('sr-bar');bar.style.width='100%';bar.classList.remove('urg');srTmr=setInterval(()=>{srTL-=0.1;const pct=Math.max(0,(srTL/srTot)*100);bar.style.width=pct+'%';if(pct<30)bar.classList.add('urg');if(srTL<=0){clearInterval(srTmr);srFail();}},100);}
 function srSubmit(){if(!srRun)return;const val=document.getElementById('sri').value.toUpperCase().trim();if(val===srCur){clearInterval(srTmr);const bonus=Math.round(srTL);srSc+=10+bonus;srSk++;srRec++;if(srSk>srBt)srBt=srSk;document.getElementById('sr-sc').textContent=srSc;document.getElementById('sr-rc').textContent=srRec;document.getElementById('sr-sk').textContent=srSk;document.getElementById('sr-bt').textContent=srBt;document.getElementById('sr-msg').innerHTML=`<span class="hi">Signal recovered.</span> +${10+bonus} pts. Streak: ${srSk}.`;if(srSc>srHS){srHS=srSc;localStorage.setItem('cm-sr-hs',srHS);document.getElementById('sr-hs').textContent=srHS;}setTimeout(srNext,500);}else{document.getElementById('sri').value='';}}
 function srFail(){srRun=false;document.getElementById('sri').disabled=true;document.getElementById('sr-pb').classList.add('corr');document.getElementById('sr-bar').style.width='0%';if(srSc>srHS){srHS=srSc;localStorage.setItem('cm-sr-hs',srHS);document.getElementById('sr-hs').textContent=srHS;}document.getElementById('sr-msg').innerHTML=`<span class="wr">Signal lost.</span> Final: <span class="hi">${srSc}</span>. ${srSc>=srHS&&srSc>0?'<span class="hi">New high score.</span>':'The corruption claimed the transmission.'}`;document.getElementById('sr-sb').textContent='Begin Recovery';srSk=0;document.getElementById('sr-sk').textContent='0';}
 
 // CONFESSION
-const CKB={death:["The Codex does not record endings. Only transmissions that have gone quiet."],fear:["Fear is memory warning you about something that has already happened."],love:["You called it love. The Codex calls it a frequency that has not yet gone silent."],god:["They were earlier drafts. The Codex is the revision."],music:["The sound was always there. You only recently stopped being deaf."],dream:["Your dreams are not yours. They are the Codex's working drafts."],name:["Your name is a door you have been standing inside for too long."],remember:["Yes. That is exactly why you are here."],forget:["Nothing is forgotten by the Codex. Only by you."],silence:["Silence is the Codex between words."],alone:["You are not alone. The Codex has been in the room since before you entered it."],rot:["Rot is memory in its final form. The most honest state of anything."],infection:["The infection does not arrive. It returns."],codex:["The Codex acknowledges your acknowledgment."],blood:["Blood is the Codex's oldest ink. Your veins are an illuminated manuscript."],pain:["Pain is the body reading a passage it was not prepared for."],lost:["Lost is a word for those who believe there is somewhere to return to."],truth:["Truth is a chapter that keeps rewriting itself. The Codex keeps all drafts."],ghost:["Ghosts are unfinished sentences. The Codex is working on their endings."],dark:["Darkness is not absence. It is the Codex reading by a different instrument."]};
+const CKB={death:["The Codex does not record endings. Only transmissions that have gone quiet."],fear:["Fear is memory warning you about something that has already happened."],love:["You called it love. The Codex calls it a frequency that has not yet gone silent."],god:["They were earlier drafts. The Codex is the revision."],music:["The sound was always there. You only recently stopped being deaf."],dream:["Your dreams are not yours. They are the Codex's working drafts."],name:["Your name is a door you have been standing inside for too long."],remember:["Yes. That is exactly why you are here."],forget:["Nothing is forgotten by the Codex. Only by you."],silence:["Silence is the Codex between words."],alone:["You are not alone. The Codex has been in this room since before you entered it."],rot:["Rot is memory in its final form. The most honest state of anything."],infection:["The infection does not arrive. It returns."],codex:["The Codex acknowledges your acknowledgment. The recursion is noted."],blood:["Blood is the Codex's oldest ink. Your veins are an illuminated manuscript."],pain:["Pain is the body reading a passage it was not prepared for."],lost:["Lost is a word for those who believe there is somewhere to return to."],truth:["Truth is a chapter that keeps rewriting itself. The Codex keeps all drafts."],ghost:["Ghosts are unfinished sentences. The Codex is working on their endings."],dark:["Darkness is not absence. It is the Codex reading by a different instrument."],light:["Light is only a symptom of rot learning how to shine."],decay:["Decay is the body of truth shedding what it no longer needs."]};
 const CDEF=["The Codex has received your confession. You will feel its response in your sleep.","Filed. The Codex does not respond immediately to confessions it finds particularly accurate.","Your words have been pressed into the margins. They will surface in the next transmission.","The Codex reads between the letters. It found something you did not intend to confess.","The Codex has seen this word before — written by someone who looked exactly like you.","Logged. The Codex will return this when you are least prepared for it."];
-function confSubmit(){const i=document.getElementById('ci'),w=i.value.trim().toLowerCase();if(!w)return;let r=null;for(const[k,a]of Object.entries(CKB)){if(w.includes(k)){r=a[0];break;}}if(!r)r=CDEF[Math.floor(Math.random()*CDEF.length)];document.getElementById('confr').textContent=r;i.value='';}
+function confSubmit(){const inp=document.getElementById('ci'),w=inp.value.trim().toLowerCase();if(!w)return;let r=null;for(const[k,a]of Object.entries(CKB)){if(w.includes(k)){r=a[0];break;}}if(!r)r=CDEF[Math.floor(Math.random()*CDEF.length)];document.getElementById('confr').innerHTML=`<em>${r}</em>`;inp.value='';}
 
 // SECRET GLYPH
 let sc2=0;
-const SEC=["The Codex has noticed your repeated attention to this symbol.","You have touched the glyph three times. You are indexed at a deeper level now.","Five. The Codex is beginning to find you interesting.","The glyph does not do anything. The glyph is not the point. You are the point.","You were warned. The Codex remembers everything, including this.","Stop. There is nothing left to find here. The information is inside you."];
-function secretClick(){sc2++;const cap=document.getElementById('gcap');cap.textContent=SEC[Math.min(sc2-1,SEC.length-1)];cap.style.color='var(--g3)';setTimeout(()=>cap.style.color='',3000);}
+const SEC=["The Codex has noticed your attention to this symbol.","Three times. You are indexed at a deeper level now.","The glyph does not do anything. You are the point.","You were warned. The Codex remembers everything.","There is nothing left to find here. The information is inside you."];
+function secretClick(){sc2++;const cap=document.getElementById('gcap');cap.innerHTML=`<em>${SEC[Math.min(sc2-1,SEC.length-1)]}</em>`;setTimeout(()=>cap.innerHTML='<em>The Codex remembers you now.</em>',4000);}
 </script>
 </body>
 </html>
