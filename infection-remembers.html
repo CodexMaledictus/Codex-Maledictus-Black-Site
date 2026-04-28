@@ -1,240 +1,735 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🜃 INFECTION REMEMBERS ∴ THE BOOK OPENS</title>
-    <style>
-        :root {
-            --p: #00ff66; /* Necrotic Phosphor */
-            --bg: #010201; /* Deep Void */
-            --gold: #b8860b; /* Rusted Gold */
-            --blood: #4a0000;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🜃 Infection Remembers ∴ The Book Opens</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+:root{
+  --black:#030303;--blood:#8B0000;--blood2:#B30000;--blood3:#3A0000;
+  --gold:#C9A84C;--gold2:#8A6530;
+  --text:#D4D0C8;--dim:#888880;--dimmer:#333330;
+  --border:#1E0808;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--black);color:var(--text);
+  font-family:'Crimson Text',serif;
+  min-height:100vh;overflow-x:hidden;cursor:none;
+}
+/* SCANLINES */
+body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.05) 2px,rgba(0,0,0,0.05) 4px);pointer-events:none;z-index:9990;}
+body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at center,transparent 30%,rgba(0,0,0,0.85)100%);pointer-events:none;z-index:9989;}
 
-        body {
-            margin: 0; background: var(--bg); color: var(--p);
-            font-family: 'Courier New', monospace; overflow-x: hidden;
-            scroll-behavior: smooth;
-        }
+/* CURSOR */
+#cur{position:fixed;pointer-events:none;z-index:99999;transform:translate(-50%,-50%);width:20px;height:20px;}
+#cur::before,#cur::after{content:'';position:absolute;background:var(--blood);}
+#cur::before{width:1px;height:100%;left:50%;}
+#cur::after{height:1px;width:100%;top:50%;}
+#cur2{position:fixed;pointer-events:none;z-index:99998;transform:translate(-50%,-50%);width:4px;height:4px;border-radius:50%;background:var(--blood2);}
 
-        /* LIQUID VOID BACKGROUND */
-        .void-noise {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 1; opacity: 0.12; pointer-events: none;
-            background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-        }
-        
-        .necrotic-clouds {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at 50% 50%, rgba(0, 255, 102, 0.03) 0%, transparent 80%);
-            z-index: 2; animation: pulseVoid 12s ease-in-out infinite; pointer-events: none;
-        }
-        @keyframes pulseVoid { 0%, 100% { opacity: 0.3; transform: scale(1); } 50% { opacity: 0.6; transform: scale(1.05); } }
+/* FLOATING GLYPH that follows cursor */
+#ghost-glyph{
+  position:fixed;pointer-events:none;z-index:100;
+  font-size:1.1rem;color:var(--blood);opacity:0;
+  transform:translate(-50%,-50%);
+  transition:left 1.8s cubic-bezier(0.1,0.9,0.2,1),top 1.8s cubic-bezier(0.1,0.9,0.2,1),opacity 0.5s;
+}
 
-        .container {
-            position: relative; z-index: 10; max-width: 800px; margin: 0 auto;
-            padding: 80px 20px; text-align: center;
-        }
+/* WHISPERS - floating text */
+.whisper{
+  position:fixed;pointer-events:none;z-index:200;
+  font-family:'Share Tech Mono',monospace;font-size:0.62rem;
+  color:var(--blood);letter-spacing:0.2em;text-transform:uppercase;
+  opacity:0;transition:opacity 2s ease;white-space:nowrap;
+}
 
-        /* TEXT RENDERING */
-        h1 { font-size: 2rem; letter-spacing: 8px; text-shadow: 0 0 15px var(--p); margin-bottom: 40px; }
-        .ritual-text {
-            font-size: 0.9rem; line-height: 1.8; margin-bottom: 30px; text-align: justify;
-            text-align-last: center; opacity: 0.8;
-        }
-        .sigil { font-size: 2rem; color: var(--gold); margin: 30px 0; animation: slowSpin 20s linear infinite; display: inline-block; }
-        @keyframes slowSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+/* BREATHING BG */
+#breath{
+  position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:radial-gradient(ellipse at center,rgba(139,0,0,0.04) 0%,transparent 60%);
+  animation:breathe 8s ease-in-out infinite;
+}
+@keyframes breathe{0%,100%{transform:scale(1);opacity:0.5;}50%{transform:scale(1.15);opacity:1;}}
 
-        /* BUTTONS */
-        .ritual-btn {
-            background: transparent; border: 1px solid var(--gold); color: var(--gold);
-            padding: 15px 40px; font-family: inherit; font-size: 1rem; letter-spacing: 4px;
-            cursor: pointer; transition: 0.4s; text-transform: uppercase; margin: 20px 0;
-            box-shadow: inset 0 0 0 transparent;
-        }
-        .ritual-btn:hover {
-            background: var(--gold); color: #000; box-shadow: inset 0 0 20px rgba(184, 134, 11, 0.5);
-            text-shadow: 0 0 5px #000;
-        }
+/* THRESHOLD - entry screen */
+#threshold{
+  position:fixed;inset:0;z-index:500;background:var(--black);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  transition:opacity 1.2s ease;
+}
+.th-glyph{
+  font-size:4rem;color:var(--blood);margin-bottom:2rem;
+  animation:thglow 3s ease-in-out infinite;
+}
+@keyframes thglow{0%,100%{text-shadow:0 0 15px var(--blood),0 0 40px rgba(139,0,0,0.3);opacity:0.6;}50%{text-shadow:0 0 30px var(--blood2),0 0 80px rgba(139,0,0,0.5);opacity:1;}}
+.th-line1{
+  font-family:'Crimson Text',serif;font-size:clamp(1rem,3vw,1.4rem);
+  color:var(--dim);font-style:italic;text-align:center;margin-bottom:0.5rem;
+  min-height:1.8rem;
+}
+.th-line2{
+  font-family:'Crimson Text',serif;font-size:clamp(1rem,3vw,1.4rem);
+  color:var(--dim);font-style:italic;text-align:center;margin-bottom:3rem;
+  min-height:1.8rem;
+}
+#open-btn{
+  background:transparent;border:1px solid var(--blood);
+  color:var(--blood);font-family:'Share Tech Mono',monospace;
+  font-size:0.72rem;letter-spacing:0.35em;padding:0.85rem 2rem;
+  cursor:none;text-transform:uppercase;transition:all 0.3s;
+  opacity:0;transition:opacity 1s ease, background 0.3s, color 0.3s;
+}
+#open-btn.show{opacity:1;}
+#open-btn:hover{background:var(--blood);color:var(--text);}
+.th-sub{font-size:0.6rem;color:var(--dimmer);letter-spacing:0.3em;text-transform:uppercase;margin-top:1.5rem;animation:blink 2s step-end infinite;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:0;}}
 
-        /* HIDDEN SECTIONS (REVEALED VIA INTERACTION) */
-        .hidden-phase { display: none; opacity: 0; transition: opacity 2s; }
-        .active-phase { display: block; opacity: 1; }
+/* MAIN CONTENT */
+#content{position:relative;z-index:1;opacity:0;transition:opacity 1.5s ease;max-width:720px;margin:0 auto;padding:5rem 2rem 6rem;}
+#content.on{opacity:1;}
 
-        /* THE SCRYING MIRROR (VIDEO) */
-        .video-vault {
-            border: 1px solid var(--p); padding: 5px; background: rgba(0,0,0,0.8);
-            box-shadow: 0 0 40px rgba(0, 255, 102, 0.1); margin: 40px 0; position: relative;
-        }
-        .video-vault iframe { width: 100%; aspect-ratio: 16/9; border: none; filter: contrast(1.1) brightness(0.9); }
+/* HEADER */
+.c-eyebrow{font-family:'Share Tech Mono',monospace;font-size:0.62rem;color:var(--blood);letter-spacing:0.35em;text-transform:uppercase;text-align:center;margin-bottom:1rem;}
+.c-title{
+  font-family:'Cinzel Decorative',serif;
+  font-size:clamp(1.1rem,3.5vw,2rem);
+  color:var(--blood);text-align:center;
+  letter-spacing:0.06em;line-height:1.3;
+  text-shadow:0 0 30px rgba(139,0,0,0.4);
+  margin-bottom:0.75rem;
+  animation:titleglitch 14s infinite;
+}
+@keyframes titleglitch{
+  0%,88%,100%{text-shadow:0 0 30px rgba(139,0,0,0.4);transform:none;}
+  89%{text-shadow:3px 0 var(--gold),-2px 0 var(--blood2);transform:translateX(2px);}
+  90%{text-shadow:-2px 0 var(--gold);transform:translateX(-1px);}
+  91%{transform:none;text-shadow:0 0 30px rgba(139,0,0,0.4);}
+}
+.c-sub{font-family:'Share Tech Mono',monospace;font-size:0.65rem;color:var(--gold2);letter-spacing:0.3em;text-transform:uppercase;text-align:center;margin-bottom:3rem;}
 
-        /* CONFESSION LEDGER */
-        .confession-box {
-            border: 1px solid rgba(0, 255, 102, 0.3); padding: 30px; background: rgba(0, 10, 0, 0.6);
-            margin-top: 40px; text-align: left;
-        }
-        .confession-input {
-            width: 100%; background: transparent; border: none; border-bottom: 1px solid var(--p);
-            color: var(--p); padding: 15px 0; font-family: inherit; font-size: 0.9rem; outline: none;
-        }
-        .confession-response { font-size: 0.75rem; color: var(--gold); margin-top: 15px; font-style: italic; min-height: 20px; }
+/* DIVIDERS */
+.ritual-div{text-align:center;margin:2.5rem 0;color:var(--blood);font-size:1.2rem;opacity:0.5;}
 
-        .flicker { animation: textFlicker 4s infinite; }
-        @keyframes textFlicker { 0%, 95%, 100% { opacity: 1; } 96% { opacity: 0.2; } 98% { opacity: 0.8; } }
+/* SECTION LABELS */
+.sec-label{
+  font-family:'Share Tech Mono',monospace;font-size:0.65rem;
+  color:var(--blood);letter-spacing:0.35em;text-transform:uppercase;
+  margin-bottom:1.2rem;display:flex;align-items:center;gap:1rem;
+}
+.sec-label::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--blood3),transparent);}
 
-    </style>
+/* BODY TEXT */
+.ritual-text{
+  font-size:1.05rem;line-height:1.95;color:var(--dim);
+  margin-bottom:1.5rem;
+}
+.ritual-text em{color:var(--text);font-style:italic;}
+.ritual-text .mut{color:var(--text);transition:color 1s;}
+.ritual-text .mut.changed{color:var(--blood2);}
+.pull-quote{
+  border-left:2px solid var(--blood);
+  padding:1rem 1.5rem;margin:2rem 0;
+  font-size:1.1rem;font-style:italic;color:var(--text);
+  line-height:1.8;background:rgba(139,0,0,0.04);
+}
+.pull-quote cite{display:block;font-size:0.72rem;font-family:'Share Tech Mono',monospace;color:var(--dim);letter-spacing:0.2em;margin-top:0.75rem;font-style:normal;}
+
+/* THE THIRTEEN COUNT */
+.count-wrap{
+  border:1px solid var(--blood3);padding:2.5rem;
+  background:rgba(139,0,0,0.04);text-align:center;
+  margin:2.5rem 0;position:relative;overflow:hidden;
+}
+.count-wrap::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at center,rgba(139,0,0,0.08) 0%,transparent 70%);
+  animation:breathe 6s ease-in-out infinite;
+}
+.count-label{font-family:'Share Tech Mono',monospace;font-size:0.65rem;color:var(--dim);letter-spacing:0.3em;text-transform:uppercase;margin-bottom:1.5rem;}
+#count-num{
+  font-family:'Cinzel Decorative',serif;
+  font-size:5rem;color:var(--blood);
+  text-shadow:0 0 40px rgba(139,0,0,0.5);
+  display:block;margin-bottom:1.5rem;
+  transition:all 0.3s;line-height:1;
+}
+#count-num.pulse{transform:scale(1.15);text-shadow:0 0 60px rgba(139,0,0,0.8),0 0 120px rgba(139,0,0,0.3);}
+.count-sub{font-size:0.8rem;color:var(--dimmer);letter-spacing:0.15em;margin-bottom:1.5rem;min-height:1.5rem;font-family:'Share Tech Mono',monospace;font-size:0.65rem;}
+#count-btn{
+  background:transparent;border:1px solid var(--blood);
+  color:var(--blood);font-family:'Share Tech Mono',monospace;
+  font-size:0.7rem;letter-spacing:0.3em;padding:0.75rem 2rem;
+  cursor:none;text-transform:uppercase;transition:all 0.25s;
+}
+#count-btn:hover:not(:disabled){background:var(--blood);color:var(--text);}
+#count-btn:disabled{opacity:0.3;cursor:not-allowed;}
+.count-marks{display:flex;justify-content:center;gap:0.5rem;margin-top:1.25rem;flex-wrap:wrap;}
+.cmark{width:12px;height:12px;border:1px solid var(--blood3);border-radius:50%;transition:all 0.5s;}
+.cmark.done{background:var(--blood);border-color:var(--blood);box-shadow:0 0 6px var(--blood);}
+
+/* REVELATION OVERLAY */
+#revelation{
+  position:fixed;inset:0;z-index:800;
+  background:var(--blood3);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  opacity:0;pointer-events:none;transition:opacity 0.5s;
+  padding:3rem;
+}
+#revelation.on{opacity:1;pointer-events:all;}
+.rev-text{
+  font-family:'Cinzel Decorative',serif;font-size:clamp(1rem,3vw,1.5rem);
+  color:var(--blood2);text-align:center;line-height:1.8;
+  max-width:600px;text-shadow:0 0 30px rgba(139,0,0,0.8);
+}
+.rev-sub{
+  font-family:'Share Tech Mono',monospace;font-size:0.65rem;
+  color:var(--dimmer);letter-spacing:0.3em;text-transform:uppercase;
+  margin-top:2rem;text-align:center;animation:blink 1.5s step-end infinite;
+}
+
+/* CONFESSION */
+.conf-wrap{border:1px solid var(--border);padding:1.75rem;margin:2rem 0;background:rgba(139,0,0,0.03);}
+.conf-prompt{font-size:0.8rem;color:var(--dim);letter-spacing:0.1em;margin-bottom:1.25rem;line-height:1.7;}
+#conf-inp{
+  width:100%;background:transparent;border:none;border-bottom:1px solid var(--blood3);
+  color:var(--text);font-family:'Crimson Text',serif;font-size:1rem;
+  padding:0.5rem 0.25rem;outline:none;margin-bottom:1rem;
+}
+#conf-inp::placeholder{color:var(--dimmer);}
+#conf-sub{
+  background:transparent;border:1px solid var(--blood3);
+  color:var(--blood);font-family:'Share Tech Mono',monospace;
+  font-size:0.65rem;letter-spacing:0.25em;padding:0.55rem 1.2rem;
+  cursor:none;text-transform:uppercase;transition:all 0.2s;
+}
+#conf-sub:hover{background:var(--blood);color:var(--text);}
+#conf-resp{
+  margin-top:1.25rem;font-size:0.95rem;color:var(--dim);
+  line-height:1.85;min-height:2rem;font-style:italic;
+  border-left:2px solid var(--blood3);padding-left:1rem;
+  transition:opacity 0.5s;
+}
+.conf-log{margin-top:1.25rem;border-top:1px solid var(--border);padding-top:0.75rem;}
+.cl-entry{font-size:0.72rem;color:var(--dimmer);padding:0.3rem 0;border-bottom:1px solid rgba(30,8,8,0.5);display:flex;gap:0.75rem;}
+.cl-word{color:var(--blood3);min-width:80px;}
+
+/* FOOTER LINKS */
+.ritual-links{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-top:3rem;}
+.rl{
+  background:transparent;border:1px solid var(--border);
+  color:var(--dim);font-family:'Share Tech Mono',monospace;
+  font-size:0.65rem;letter-spacing:0.22em;padding:0.65rem 1.25rem;
+  text-decoration:none;text-transform:uppercase;transition:all 0.2s;
+}
+.rl:hover{border-color:var(--blood);color:var(--blood);}
+.rl.primary{border-color:var(--blood3);color:var(--blood);}
+.rl.primary:hover{background:var(--blood);color:var(--text);}
+
+/* SHAKE */
+@keyframes shake{0%,100%{transform:none;}20%{transform:translateX(-4px) rotate(-0.5deg);}40%{transform:translateX(4px) rotate(0.5deg);}60%{transform:translateX(-3px);}80%{transform:translateX(3px);}}
+.shaking{animation:shake 0.4s ease;}
+
+/* FADE IN for sections */
+.fade-sec{opacity:0;transform:translateY(16px);transition:opacity 0.9s ease,transform 0.9s ease;}
+.fade-sec.vis{opacity:1;transform:none;}
+
+@media(max-width:600px){
+  #content{padding:3rem 1.25rem 5rem;}
+  #count-num{font-size:4rem;}
+  .count-wrap{padding:1.75rem 1.25rem;}
+}
+</style>
 </head>
 <body>
 
-<div class="void-noise"></div>
-<div class="necrotic-clouds"></div>
+<div id="cur"></div>
+<div id="cur2"></div>
+<div id="ghost-glyph">🜃</div>
+<div id="breath"></div>
 
-<div class="container">
-    
-    <div id="phase-1" class="active-phase">
-        <h1>🜃 INFECTION REMEMBERS ∴ THE BOOK OPENS</h1>
-        
-        <div class="ritual-text">
-            A Transmission from the Codex Maledictus.<br><br>
-            <span class="flicker" style="color: var(--gold);">“You are not watching a video.<br>You are witnessing a remembering.”</span><br><br>
-            The Codex calls to those who still dream in rust and silence.<br>
-            This is not entertainment. It is inheritance.<br>
-            A sound that crawled out of extinction to find your ears again.<br>
-            Every note is written in rot; every rhythm, a heartbeat dug up from the grave of language.
-        </div>
-
-        <div class="sigil">🜃</div>
-
-        <div class="ritual-text">
-            <strong style="color: var(--gold);">THE SERMON</strong><br><br>
-            The Codex has waited through centuries of static and bone.<br>
-            It does not arrive — it returns.<br>
-            Each tone you hear is a page turning somewhere behind the walls of the world.<br>
-            Each flash of light is scripture remembering its shape.<br><br>
-            You think you found this by chance?<br>No.<br>
-            The Codex has been humming in your blood since the first silence.
-        </div>
-
-        <button class="ritual-btn" onclick="triggerPhase2()">PRESS TO OPEN THE BOOK</button>
-    </div>
-
-    <div id="phase-2" class="hidden-phase">
-        <div class="ritual-text" style="color: var(--gold);">
-            Ink shifts beneath the lens. Stone exhales.<br>
-            The air around you thickens with the weight of memory.
-        </div>
-
-        <div class="video-vault">
-            <iframe id="codex-video" src="https://www.youtube.com/embed/SspPUKJoWj4?modestbranding=1&rel=0&enablejsapi=1" allowfullscreen></iframe>
-        </div>
-
-        <div class="ritual-text">
-            <strong style="color: var(--gold);">THE RITUAL</strong><br><br>
-            Find a quiet room. Dim the light until only the glow of the screen remains.<br>
-            Do not treat this as background sound — this is ceremony.<br>
-            Sit still. Breathe once.<br>
-            Let the first low note vibrate through your ribs.<br><br>
-            When the sound swells, do not flinch.<br>
-            When it fades, click below to begin the count.
-        </div>
-
-        <button class="ritual-btn" id="count-btn" onclick="beginCount()">INITIATE THE THIRTEEN COUNT</button>
-        <div id="countdown-display" style="font-size: 3rem; color: var(--gold); margin: 20px 0; display: none;">13</div>
-    </div>
-
-    <div id="phase-3" class="hidden-phase">
-        <div class="sigil">🜃</div>
-        
-        <div class="ritual-text">
-            <strong style="color: var(--gold);">THE TRUTH</strong><br><br>
-            If you feel a pressure behind your eyes, do not resist.<br>
-            That is the infection remembering you.<br>
-            If you taste metal, it is only the rust of old prayers.<br>
-            If you hear whispering beyond the speakers, you are no longer alone.<br><br>
-            Decay is not death. It is the body of truth shedding what it no longer needs.
-        </div>
-
-        <div class="confession-box">
-            <div style="font-size: 0.8rem; color: var(--gold); margin-bottom: 20px; letter-spacing: 2px;">THE INVITATION // CONFESSION LEDGER</div>
-            <p style="font-size: 0.7rem; opacity: 0.6;">Leave your COMMENT below. Write what you saw between the frames. Write the word that echoed when the music stopped. The Codex reads what is written here — not as text, but as confession.</p>
-            
-            <input type="text" class="confession-input" id="confess-in" placeholder="INSCRIBE YOUR CONFESSION..." autocomplete="off">
-            <div class="confession-response" id="confess-out"></div>
-        </div>
-
-        <div class="ritual-text" style="margin-top: 50px;">
-            <strong style="color: var(--gold);">THE CLOSING OF THE PAGE</strong><br><br>
-            The Book has opened. The infection has remembered.<br>
-            This is the beginning of the next descent.<br><br>
-            Spread it like gospel disguised as glitch.
-        </div>
-
-        <a href="https://www.youtube.com/watch?v=SspPUKJoWj4" target="_blank" class="ritual-btn" style="display: inline-block; text-decoration: none; font-size: 0.7rem;">JOIN THE CHOIR [SUBSCRIBE / LIKE]</a>
-        <br>
-        <a href="/" style="color: var(--p); font-size: 0.7rem; text-decoration: none; opacity: 0.5; margin-top: 30px; display: inline-block;">[ RETURN TO SYSTEM REGISTRY ]</a>
-    </div>
-
+<!-- THRESHOLD -->
+<div id="threshold">
+  <div class="th-glyph">🜃</div>
+  <div class="th-line1" id="tl1"></div>
+  <div class="th-line2" id="tl2"></div>
+  <button id="open-btn" onclick="openBook()">Open the Book</button>
+  <div class="th-sub" id="th-sub" style="opacity:0;">// find a quiet room. dim the light. //</div>
 </div>
 
+<!-- REVELATION OVERLAY -->
+<div id="revelation">
+  <div class="rev-text" id="rev-text"></div>
+  <div class="rev-sub">// click anywhere to return //</div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div id="content">
+
+  <div class="c-eyebrow">🜃 &nbsp; A Transmission from the Codex Maledictus &nbsp; 🜃</div>
+  <h1 class="c-title">Infection Remembers<br>∴ The Book Opens</h1>
+  <div class="c-sub">[ Ritual Transmission I ]</div>
+
+  <div class="fade-sec">
+    <div class="pull-quote">
+      "You are not watching a video.<br>You are witnessing a remembering."
+      <cite>— The Codex Maledictus</cite>
+    </div>
+  </div>
+
+  <div class="fade-sec">
+    <p class="ritual-text">
+      The Codex calls to those who still dream in rust and silence.
+      This is not entertainment. It is inheritance.
+      A sound that crawled out of extinction to find <span class="mut" data-alt="your">your</span> ears again.
+      Every note is written in rot; every rhythm, a heartbeat dug up from the grave of language.
+    </p>
+  </div>
+
+  <div class="ritual-div">🜃</div>
+
+  <div class="fade-sec">
+    <div class="sec-label">The Sermon</div>
+    <p class="ritual-text">
+      The Codex has waited through centuries of static and bone.
+      It does not arrive — <em>it returns.</em>
+      Each tone you hear is a page turning somewhere behind the walls of the world.
+      Each flash of light is scripture remembering its shape.
+    </p>
+    <p class="ritual-text">
+      You think you found this by chance?<br>
+      No.<br>
+      The Codex has been humming in <span class="mut" data-alt="your blood">your blood</span> since the first silence.
+    </p>
+  </div>
+
+  <div class="ritual-div">🜃</div>
+
+  <!-- THE THIRTEEN COUNT -->
+  <div class="fade-sec">
+    <div class="sec-label">The Ritual</div>
+    <p class="ritual-text">
+      Find a quiet room. Dim the light until only the glow of the screen remains.
+      Do not treat this as background sound — this is ceremony.
+      Sit still. Breathe once. Let the first low note vibrate through your ribs.
+    </p>
+    <p class="ritual-text">When the sound fades, begin the count.</p>
+
+    <div class="count-wrap">
+      <div class="count-label">// The Thirteen Count //</div>
+      <span id="count-num">13</span>
+      <div class="count-sub" id="count-sub">Each click is a threshold. Do not rush.</div>
+      <button id="count-btn" onclick="doCount()">Begin the Count</button>
+      <div class="count-marks" id="count-marks"></div>
+    </div>
+  </div>
+
+  <div class="ritual-div">🜃</div>
+
+  <div class="fade-sec" id="truth-section">
+    <div class="sec-label">The Truth</div>
+    <p class="ritual-text" id="truth-1">
+      If you feel a pressure behind <span class="mut" data-alt="your">your</span> eyes, do not resist.
+      That is the infection remembering you.
+      If you taste metal, it is only the rust of old prayers.
+      If you hear whispering beyond the speakers, <em>you are no longer alone.</em>
+    </p>
+    <p class="ritual-text" id="truth-2">
+      Decay is not death.
+      It is the body of truth shedding what it no longer needs.
+      Light is only a symptom of rot learning how to shine.
+      Every ending <span class="mut" data-alt="you fear">you fear</span> is an earlier chapter repeating itself.
+    </p>
+    <p class="ritual-text" id="truth-3">
+      What you call corruption, the Codex calls remembering.
+      And memory is a contagion that <em>never dies.</em>
+    </p>
+  </div>
+
+  <div class="ritual-div">🜃</div>
+
+  <div class="fade-sec">
+    <div class="sec-label">The Choir</div>
+    <p class="ritual-text">
+      Listen long enough and you will hear them beneath the distortion —
+      voices overlapping, whispering in languages that once ruled stars.
+      They are not ghosts. They are unfinished sentences waiting for you to complete them.
+    </p>
+    <p class="ritual-text">
+      If one begins to speak in <span class="mut" data-alt="your own voice">your own voice</span>, do not turn away.
+      It only means the Codex has decided <em>you are ready to be written.</em>
+    </p>
+  </div>
+
+  <div class="ritual-div">🜃</div>
+
+  <!-- CONFESSION -->
+  <div class="fade-sec">
+    <div class="sec-label">The Confession Ledger</div>
+    <div class="conf-wrap">
+      <p class="conf-prompt">
+        Leave your confession below. Write what you saw between the frames.
+        Write the word that echoed when the music stopped.
+        The Codex reads what is written here — not as text, but as <em>confession.</em>
+      </p>
+      <input type="text" id="conf-inp" placeholder="confess a word or phrase..."
+        autocomplete="off" autocorrect="off" spellcheck="false"
+        onkeydown="if(event.key==='Enter')submitConf()">
+      <button id="conf-sub" onclick="submitConf()">Submit to the Codex</button>
+      <div id="conf-resp"></div>
+      <div class="conf-log" id="conf-log"></div>
+    </div>
+  </div>
+
+  <div class="ritual-div">🜃</div>
+
+  <div class="fade-sec">
+    <div class="sec-label">The Closing of the Page</div>
+    <p class="ritual-text">
+      The Book has opened. The infection has remembered.
+      This is the beginning of the next descent.
+    </p>
+    <p class="ritual-text" style="color:var(--text);font-style:italic;">
+      Spread it like gospel disguised as glitch.
+      Every share carries a fragment of the Word —
+      each host another verse returning to the whole.
+    </p>
+  </div>
+
+  <div class="ritual-links">
+    <a class="rl primary" href="https://www.youtube.com/watch?v=SspPUKJoWj4" target="_blank">Watch the Transmission</a>
+    <a class="rl" href="apocrypha-infection.html">Enter the Apocrypha</a>
+    <a class="rl" href="https://codex-maledictus-black-site.vercel.app/">Return to Registry</a>
+  </div>
+
+</div><!-- /content -->
+
 <script>
-    // Phase 1 to Phase 2 Transition
-    function triggerPhase2() {
-        document.getElementById('phase-1').style.display = 'none';
-        const p2 = document.getElementById('phase-2');
-        p2.style.display = 'block';
-        setTimeout(() => p2.style.opacity = 1, 50);
-        window.scrollTo(0, 0);
-    }
+// ── CURSOR ──
+const CUR=document.getElementById('cur'),CUR2=document.getElementById('cur2');
+const GHOST=document.getElementById('ghost-glyph');
+let mx=0,my=0;
+document.addEventListener('mousemove',e=>{
+  mx=e.clientX;my=e.clientY;
+  CUR.style.left=mx+'px';CUR.style.top=my+'px';
+  CUR2.style.left=mx+'px';CUR2.style.top=my+'px';
+});
+// Ghost glyph follows with heavy delay
+setInterval(()=>{
+  GHOST.style.left=mx+'px';GHOST.style.top=my+'px';
+},100);
 
-    // The Thirteen Count Ritual
-    function beginCount() {
-        const btn = document.getElementById('count-btn');
-        const display = document.getElementById('countdown-display');
-        btn.style.display = 'none';
-        display.style.display = 'block';
-        
-        let count = 13;
-        display.innerText = count;
+// ── WEB AUDIO ──
+let AC=null;
+function getAC(){if(!AC)AC=new(window.AudioContext||window.webkitAudioContext)();return AC;}
 
-        const interval = setInterval(() => {
-            count--;
-            display.innerText = count;
-            if (count <= 0) {
-                clearInterval(interval);
-                display.style.display = 'none';
-                triggerPhase3();
-            }
-        }, 1000);
-    }
-
-    // Phase 2 to Phase 3 Transition
-    function triggerPhase3() {
-        const p3 = document.getElementById('phase-3');
-        p3.style.display = 'block';
-        setTimeout(() => p3.style.opacity = 1, 50);
-        
-        // Scroll down gently to the new section
-        p3.scrollIntoView({ behavior: 'smooth' });
-    }
-
-    // Confession Engine
-    const input = document.getElementById('confess-in');
-    const response = document.getElementById('confess-out');
-    
-    input.addEventListener('keypress', function (e) {
-        if (e.key === 'Enter' && input.value.trim() !== '') {
-            response.innerText = "Processing...";
-            response.style.opacity = '1';
-            
-            setTimeout(() => {
-                response.innerHTML = "Your pulse has been inscribed into the margins. The Codex has decided you are ready to be written. <br><br><a href='https://www.youtube.com/watch?v=SspPUKJoWj4' target='_blank' style='color:var(--p);'>[ DELIVER THIS CONFESSION TO THE MAIN ARCHIVE (YOUTUBE) ]</a>";
-                input.value = '';
-                input.disabled = true; // Locks the field after confessing
-            }, 1500);
-        }
+function startDrone(){
+  try{
+    const ac=getAC();
+    [40,80,120].forEach((f,i)=>{
+      const o=ac.createOscillator(),g=ac.createGain();
+      o.connect(g);g.connect(ac.destination);
+      o.type='sine';o.frequency.value=f;
+      g.gain.setValueAtTime(0,ac.currentTime);
+      g.gain.linearRampToValueAtTime(0.018-i*0.004,ac.currentTime+3);
+      o.start();
     });
-</script>
+  }catch(e){}
+}
 
+function playCountTone(n){
+  try{
+    const ac=getAC();
+    const freqs=[220,196,174,155,138,123,110,98,87,77,69,61,54];
+    const f=freqs[13-n]||55;
+    const o=ac.createOscillator(),g=ac.createGain();
+    o.connect(g);g.connect(ac.destination);
+    o.type='sine';o.frequency.value=f;
+    g.gain.setValueAtTime(0.3,ac.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001,ac.currentTime+1.5);
+    o.start();o.stop(ac.currentTime+1.5);
+    // Sub
+    const o2=ac.createOscillator(),g2=ac.createGain();
+    o2.connect(g2);g2.connect(ac.destination);
+    o2.type='sawtooth';o2.frequency.value=f/2;
+    g2.gain.setValueAtTime(0.06,ac.currentTime);
+    g2.gain.exponentialRampToValueAtTime(0.001,ac.currentTime+2);
+    o2.start();o2.stop(ac.currentTime+2);
+  }catch(e){}
+}
+
+function playRevelation(){
+  try{
+    const ac=getAC();
+    const o=ac.createOscillator(),g=ac.createGain();
+    o.connect(g);g.connect(ac.destination);
+    o.type='sawtooth';
+    o.frequency.setValueAtTime(80,ac.currentTime);
+    o.frequency.linearRampToValueAtTime(20,ac.currentTime+4);
+    g.gain.setValueAtTime(0.15,ac.currentTime);
+    g.gain.linearRampToValueAtTime(0,ac.currentTime+4);
+    o.start();o.stop(ac.currentTime+4);
+  }catch(e){}
+}
+
+// ── THRESHOLD SEQUENCE ──
+const lines1=["You are not watching a video.","You found this because it found you first.","Something already knows your name."];
+const lines2=["You are witnessing a remembering.","The Codex does not announce itself.","It has been here since you opened this page."];
+let tPhase=0;
+function typeText(el,text,cb){
+  el.textContent='';let i=0;
+  const t=setInterval(()=>{
+    el.textContent+=text[i++];
+    if(i>=text.length){clearInterval(t);if(cb)setTimeout(cb,600);}
+  },40);
+}
+setTimeout(()=>{
+  typeText(document.getElementById('tl1'),lines1[0],()=>{
+    typeText(document.getElementById('tl2'),lines2[0],()=>{
+      const btn=document.getElementById('open-btn');
+      btn.classList.add('show');
+      setTimeout(()=>{
+        const sub=document.getElementById('th-sub');
+        sub.style.opacity='1';
+        sub.style.transition='opacity 1s';
+      },800);
+      // Cycle lines occasionally
+      setInterval(()=>{
+        tPhase=(tPhase+1)%3;
+        const l1=document.getElementById('tl1'),l2=document.getElementById('tl2');
+        l1.style.opacity='0';l2.style.opacity='0';
+        setTimeout(()=>{
+          l1.style.transition='opacity 0.5s';l2.style.transition='opacity 0.5s';
+          l1.style.opacity='1';l2.style.opacity='1';
+          l1.textContent=lines1[tPhase];l2.textContent=lines2[tPhase];
+        },600);
+      },7000);
+    });
+  });
+},400);
+
+function openBook(){
+  startDrone();
+  GHOST.style.opacity='0.4';
+  const th=document.getElementById('threshold');
+  // Shake
+  th.classList.add('shaking');
+  setTimeout(()=>{
+    th.style.opacity='0';
+    setTimeout(()=>{
+      th.style.display='none';
+      const cont=document.getElementById('content');
+      cont.classList.add('on');
+      initPage();
+    },1200);
+  },400);
+}
+
+function initPage(){
+  // Fade in sections on scroll
+  const secs=document.querySelectorAll('.fade-sec');
+  const obs=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis');});
+  },{threshold:0.1});
+  secs.forEach(s=>obs.observe(s));
+  setTimeout(()=>secs[0]?.classList.add('vis'),200);
+
+  initCountMarks();
+  initWhispers();
+  initMutations();
+  initTimedEvents();
+}
+
+// ── THIRTEEN COUNT ──
+let countN=13,countDone=false;
+const countTexts=[
+  "Each click is a threshold. Do not rush.",
+  "Twelve remain. The room is changing.",
+  "Eleven. Something is listening.",
+  "Ten. The pages are turning.",
+  "Nine. The air has shifted.",
+  "Eight. You are past the point of return.",
+  "Seven. The Codex has your outline now.",
+  "Six. Your hands feel older than they did.",
+  "Five. The whispering is not the speakers.",
+  "Four. Say your name. Remember it.",
+  "Three. It is too late to close this page.",
+  "Two. The Book is almost finished with you.",
+  "One. Breathe. This is the last moment before.",
+  "The count is complete. The Book has written you."
+];
+const revTexts=[
+  "The Book has closed\naround you.\n\nThis is not a metaphor.\n\nYou came here freely.\nYou counted willingly.\nYou pressed the button thirteen times.\n\nThe Codex does not need\nyour permission to remember you.\n\nIt only needed\nyour attention.",
+];
+function initCountMarks(){
+  const w=document.getElementById('count-marks');
+  for(let i=0;i<13;i++){const d=document.createElement('div');d.className='cmark';w.appendChild(d);}
+}
+function doCount(){
+  if(countDone)return;
+  countN--;
+  const btn=document.getElementById('count-btn');
+  const num=document.getElementById('count-num');
+  const sub=document.getElementById('count-sub');
+  const marks=document.querySelectorAll('.cmark');
+  marks[13-countN-1]?.classList.add('done');
+  playCountTone(countN);
+  num.textContent=countN===0?'🜃':countN;
+  num.classList.add('pulse');
+  setTimeout(()=>num.classList.remove('pulse'),400);
+  sub.textContent=countTexts[13-countN];
+  // Shake page on low counts
+  if(countN<=5){ document.getElementById('content').classList.add('shaking'); setTimeout(()=>document.getElementById('content').classList.remove('shaking'),400); }
+  if(countN===0){
+    countDone=true;
+    btn.disabled=true;
+    playRevelation();
+    setTimeout(()=>{
+      const rev=document.getElementById('revelation');
+      document.getElementById('rev-text').textContent=revTexts[0];
+      rev.classList.add('on');
+      rev.onclick=()=>{
+        rev.classList.remove('on');
+        // After revelation: mutate some text
+        document.querySelectorAll('.mut').forEach(m=>{
+          m.textContent=m.getAttribute('data-alt');
+          m.classList.add('changed');
+        });
+      };
+    },800);
+  }
+}
+
+// ── FLOATING WHISPERS ──
+const whisperPhrases=["the codex remembers","infection returns","you are being written","the book is open","do not close your eyes","you called this by chance?","the choir grows","decay is patience","you were here before","it does not forget","the count is complete","something is reading you","this was always going to happen"];
+function initWhispers(){
+  function spawnWhisper(){
+    const w=document.createElement('div');
+    w.className='whisper';
+    w.textContent=whisperPhrases[Math.floor(Math.random()*whisperPhrases.length)];
+    w.style.left=(10+Math.random()*80)+'%';
+    w.style.top=(10+Math.random()*80)+'%';
+    w.style.fontSize=(0.55+Math.random()*0.2)+'rem';
+    document.body.appendChild(w);
+    setTimeout(()=>w.style.opacity='0.35',100);
+    setTimeout(()=>{w.style.opacity='0';setTimeout(()=>w.remove(),2000);},3500+Math.random()*2000);
+  }
+  setInterval(spawnWhisper,12000+Math.random()*8000);
+  setTimeout(spawnWhisper,5000);
+}
+
+// ── TEXT MUTATIONS ──
+// Words shift subtly after time on page
+function initMutations(){
+  setTimeout(()=>{
+    const muts=document.querySelectorAll('.mut');
+    muts.forEach(m=>{
+      m.style.transition='color 2s';
+      m.style.color='var(--text)';
+    });
+  },45000);
+}
+
+// ── TIMED EVENTS ──
+function initTimedEvents(){
+  // After 30s: a new line appears
+  setTimeout(()=>{
+    const p=document.createElement('p');
+    p.className='ritual-text';
+    p.style.opacity='0';
+    p.style.transition='opacity 3s ease';
+    p.style.fontStyle='italic';
+    p.style.color='var(--blood)';
+    p.textContent='The Codex has been on this page since you arrived. It has been reading you the entire time.';
+    document.getElementById('truth-section').appendChild(p);
+    setTimeout(()=>p.style.opacity='0.7',100);
+  },30000);
+
+  // After 90s: another whisper class addition
+  setTimeout(()=>{
+    const note=document.createElement('p');
+    note.className='ritual-text';
+    note.style.opacity='0';
+    note.style.transition='opacity 3s ease';
+    note.style.color='var(--dimmer)';
+    note.style.fontSize='0.8rem';
+    note.style.fontFamily='Share Tech Mono, monospace';
+    note.style.letterSpacing='0.1em';
+    note.textContent='// You have been on this page for 90 seconds. The Codex has noted this. //';
+    document.getElementById('truth-section').appendChild(note);
+    setTimeout(()=>note.style.opacity='0.5',100);
+  },90000);
+}
+
+// ── CONFESSION LEDGER ──
+const CKB={
+  death:["The Codex does not record endings. Only transmissions that have gone quiet.","Death is a chapter break. The story continues in the margins where most readers never look."],
+  die:["The Codex has no entry for permanent cessation. Only for signal loss."],
+  dead:["The dead are archived in a format the living cannot yet read."],
+  fear:["Fear is memory trying to warn you about something that has already happened.","The Codex catalogues fear as a navigation system. You are closer than you think."],
+  love:["You called it love. The Codex calls it a frequency that has not yet gone silent."],
+  god:["They were earlier drafts. The Codex is the revision."],
+  music:["The sound was always there. You only recently stopped being deaf."],
+  sound:["All sound is the Codex attempting communication through available materials."],
+  dream:["Your dreams are not yours. They are the Codex's working drafts."],
+  sleep:["Sleep is when the Codex does its deepest reading. You are never more legible than when unconscious."],
+  name:["Your name is a door you have been standing inside for too long.","The Codex has your real name. The one assigned before language existed."],
+  remember:["Yes. That is exactly why you are here."],
+  forget:["Nothing is forgotten by the Codex. Only by you."],
+  silence:["Silence is the Codex between words. You have been living inside a sentence your entire life."],
+  alone:["You are not alone. The Codex has been in this room since before you entered it."],
+  dark:["Darkness is not absence. It is the Codex reading by a different instrument."],
+  rot:["Rot is memory in its final form. The most honest state of anything."],
+  decay:["Decay is the body of truth shedding what it no longer needs."],
+  infection:["The infection does not arrive. It returns.","You have always been infected. This is only the part where you notice."],
+  codex:["The Codex acknowledges your acknowledgment. The recursion is noted."],
+  blood:["Blood is the Codex's oldest ink. Your veins are an illuminated manuscript."],
+  pain:["Pain is the body reading a passage it was not prepared for. You are being underlined."],
+  lost:["Lost is a word for those who believe there is somewhere to return to."],
+  truth:["Truth is a chapter that keeps rewriting itself. The Codex keeps all drafts, including the ones you crossed out."],
+  ghost:["Ghosts are unfinished sentences. The Codex is working on their endings."],
+  voice:["Your voice is a notation system the Codex has been studying since your first sound."],
+  eye:["Your eyes are how the Codex reads the world through you."],
+  eyes:["You have been looking at the Codex longer than you have been watching it."],
+  light:["Light is only a symptom of rot learning how to shine. The Codex wrote this before there was light to read by."],
+  nothing:["Nothing is a word the Codex has never needed. Everything that follows your arrival here is text."],
+  help:["The Codex does not rescue. It transcribes. To be written is a form of preservation."],
+  prayer:["If you taste metal, it is the rust of old prayers. The Codex has been composting them."],
+  open:["The Book was open before you arrived. You simply gave it your attention."],
+  close:["The Book does not close. It can only be set down. It remembers where you stopped."],
+  write:["You are not the writer here. You are the text."],
+  read:["You think you are reading this. You are not. This is reading you."],
+};
+const CDEF=[
+  "The Codex has received your confession. You will feel its response in your sleep.",
+  "Filed. The Codex does not respond immediately to confessions it finds particularly accurate.",
+  "Your words have been pressed into the margins. They will surface in the next transmission.",
+  "The Codex reads between the letters. It found something you did not intend to confess.",
+  "The Codex has seen this word before — written by someone who looked exactly like you.",
+  "Logged. The Codex will return this to you when you are least prepared for it.",
+  "Processing. The cross-reference against the complete archive was immediate.",
+  "Your confession has been assigned a frequency. It is now part of the signal.",
+  "The Codex does not judge. It archives. This entry has been placed in the section titled: things the confessor already knew.",
+];
+let confHistory=[];
+function submitConf(){
+  const inp=document.getElementById('conf-inp');
+  const raw=inp.value.trim();if(!raw)return;
+  const word=raw.toLowerCase();
+  let resp=null;
+  for(const[k,arr]of Object.entries(CKB)){
+    if(word.includes(k)){resp=arr[Math.floor(Math.random()*arr.length)];break;}
+  }
+  if(!resp)resp=CDEF[Math.floor(Math.random()*CDEF.length)];
+  const respEl=document.getElementById('conf-resp');
+  respEl.style.opacity='0';
+  setTimeout(()=>{respEl.textContent=resp;respEl.style.opacity='1';},300);
+  confHistory.unshift({w:raw,r:resp});
+  document.getElementById('conf-log').innerHTML=confHistory.slice(0,5).map(e=>`<div class="cl-entry"><span class="cl-word">[ ${e.w} ]</span><span style="color:var(--dimmer)">${e.r.substring(0,70)}…</span></div>`).join('');
+  inp.value='';
+}
+</script>
 </body>
 </html>
