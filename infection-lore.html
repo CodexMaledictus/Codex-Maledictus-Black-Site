@@ -1,0 +1,1123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Codex Verse II — Infection Remembers // Pale Archivum</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400;1,600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#050310;--bg2:#080518;--panel:#0A0720;--panel2:#0E0A2A;
+  --v:#7B4FBF;--v2:#5A38A0;--v3:#3A2270;--v4:#1E1240;--v5:#120A28;
+  --s:#C0C0CC;--s2:#8888A0;--s3:#444460;--s4:#222240;
+  --gold:#C9A84C;--gd2:#8A6530;--gd3:#3A2A10;
+  --cr:#8B0000;--cr2:#AA1A00;--cr3:#3A0000;
+  --brd:#1A0E30;--brd2:#2A1A48;
+  --rdct:#060408;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--bg);color:var(--s);
+  font-family:'Crimson Text',serif;
+  overflow-x:hidden;cursor:none;
+  background-image:
+    radial-gradient(ellipse at 15% 15%,rgba(123,79,191,0.05) 0%,transparent 55%),
+    radial-gradient(ellipse at 85% 85%,rgba(139,0,0,0.04) 0%,transparent 50%),
+    radial-gradient(ellipse at 50% 50%,rgba(123,79,191,0.02) 0%,transparent 70%);
+}
+body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.045) 2px,rgba(0,0,0,0.045) 4px);pointer-events:none;z-index:9990;}
+body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at center,transparent 38%,rgba(0,0,0,0.82)100%);pointer-events:none;z-index:9989;}
+
+/* CURSOR */
+#cur{position:fixed;pointer-events:none;z-index:99999;transform:translate(-50%,-50%);width:18px;height:18px;}
+#cur::before,#cur::after{content:'';position:absolute;background:var(--v);}
+#cur::before{width:1px;height:100%;left:50%;}
+#cur::after{height:1px;width:100%;top:50%;}
+#cur2{position:fixed;pointer-events:none;z-index:99998;transform:translate(-50%,-50%);width:3px;height:3px;border-radius:50%;background:var(--v2);}
+
+/* CLASSIFICATION BANNER */
+.cbanner{
+  background:var(--cr3);border-bottom:1px solid var(--cr);
+  text-align:center;padding:0.45rem 1.5rem;
+  font-family:'Share Tech Mono',monospace;font-size:0.6rem;
+  letter-spacing:0.28em;color:var(--cr2);text-transform:uppercase;
+}
+.cbanner .sep{color:var(--s3);margin:0 0.75rem;}
+
+/* DOCUMENT HEADER */
+.doc-hdr{max-width:880px;margin:0 auto;padding:3.5rem 2rem 2.5rem;border-bottom:1px solid var(--brd2);}
+.doc-meta{
+  display:grid;grid-template-columns:1fr 1fr;gap:0.45rem;
+  font-family:'Share Tech Mono',monospace;font-size:0.6rem;
+  letter-spacing:0.1em;margin-bottom:2.5rem;
+}
+@media(max-width:540px){.doc-meta{grid-template-columns:1fr;}}
+.dm{display:flex;gap:0.45rem;align-items:flex-start;}
+.dml{color:var(--v3);flex-shrink:0;}
+.dmv{color:var(--s2);}
+.rdct-i{
+  background:var(--rdct);color:var(--rdct);cursor:pointer;
+  border:1px solid var(--brd);padding:0 0.3rem;transition:all 0.15s;
+  font-family:'Share Tech Mono',monospace;font-size:0.85em;
+}
+.rdct-i:hover{background:var(--cr3);color:var(--cr2);border-color:var(--cr);}
+.doc-title{
+  font-family:'Cinzel Decorative',serif;
+  font-size:clamp(1.15rem,3.8vw,2.1rem);
+  color:var(--gold);letter-spacing:0.06em;line-height:1.35;
+  text-shadow:0 0 35px rgba(201,168,76,0.3),0 0 80px rgba(201,168,76,0.08);
+  margin-bottom:0.7rem;
+}
+.doc-sub{
+  font-family:'Share Tech Mono',monospace;font-size:0.63rem;
+  color:var(--v2);letter-spacing:0.32em;text-transform:uppercase;
+  margin-bottom:1.75rem;
+}
+.doc-lede{
+  font-size:1.12rem;font-style:italic;color:var(--s2);
+  line-height:1.95;border-left:2px solid var(--v2);padding-left:1.25rem;
+}
+
+/* STICKY NAV */
+.snav{
+  position:sticky;top:0;z-index:100;
+  background:rgba(5,3,16,0.96);border-bottom:1px solid var(--brd2);
+  backdrop-filter:blur(10px);
+}
+.snav-inner{
+  max-width:880px;margin:0 auto;
+  display:flex;overflow-x:auto;scrollbar-width:none;padding:0 2rem;
+}
+.snav-inner::-webkit-scrollbar{display:none;}
+.nl{
+  flex-shrink:0;padding:0.62rem 0.9rem;color:var(--s3);
+  font-family:'Share Tech Mono',monospace;font-size:0.58rem;
+  letter-spacing:0.16em;text-transform:uppercase;text-decoration:none;
+  border-bottom:2px solid transparent;transition:all 0.18s;white-space:nowrap;
+}
+.nl:hover,.nl.on{color:var(--gold);border-bottom-color:var(--gold);}
+
+/* BODY */
+.doc-body{max-width:880px;margin:0 auto;padding:0 2rem 6rem;}
+
+/* SECTIONS */
+.ls{
+  padding:3rem 0 0;
+  opacity:0;transform:translateY(10px);
+  transition:opacity 0.85s ease,transform 0.85s ease;
+}
+.ls.vis{opacity:1;transform:none;}
+.sn{
+  font-family:'Share Tech Mono',monospace;font-size:0.58rem;
+  color:var(--v3);letter-spacing:0.32em;text-transform:uppercase;margin-bottom:0.35rem;
+}
+.st{
+  font-family:'Cinzel Decorative',serif;font-size:1.15rem;
+  color:var(--v);letter-spacing:0.06em;
+  text-shadow:0 0 14px rgba(123,79,191,0.3);
+  margin-bottom:1.5rem;padding-bottom:0.7rem;
+  border-bottom:1px solid var(--brd2);
+}
+.lp{font-size:1.04rem;line-height:1.95;color:var(--s2);margin-bottom:1.15rem;}
+.lp em{color:var(--s);font-style:italic;}
+.lp strong{color:var(--gd2);font-style:normal;font-weight:600;}
+.pull{
+  border-left:2px solid var(--v);padding:1rem 1.5rem;
+  margin:1.75rem 0;font-style:italic;font-size:1.08rem;
+  color:var(--s);line-height:1.9;background:rgba(123,79,191,0.05);
+}
+.pull cite{
+  display:block;font-size:0.68rem;font-family:'Share Tech Mono',monospace;
+  color:var(--s3);letter-spacing:0.2em;margin-top:0.65rem;
+  font-style:normal;text-transform:uppercase;
+}
+.pull.gold{border-color:var(--gd2);background:rgba(201,168,76,0.04);}
+.pull.gold{color:var(--gold);}
+hr.lhr{border:none;border-top:1px solid var(--brd2);margin:1.75rem 0;}
+
+/* REDACTED */
+.rdct{
+  background:var(--rdct);color:var(--rdct);cursor:pointer;
+  border:1px solid var(--brd);transition:all 0.15s;
+  padding:0 0.2rem;font-family:'Share Tech Mono',monospace;font-size:0.85em;user-select:none;
+}
+.rdct:hover{background:var(--cr3);color:var(--cr2);border-color:var(--cr);}
+.rdct.open{background:var(--cr3);color:var(--cr2);border-color:var(--cr);}
+.rdct-block{
+  display:block;background:var(--rdct);color:var(--rdct);
+  cursor:pointer;padding:0.55rem 1rem;margin:0.75rem 0;
+  border:1px solid var(--brd);border-left:3px solid var(--cr3);
+  transition:all 0.2s;font-family:'Share Tech Mono',monospace;
+  font-size:0.76rem;line-height:1.75;
+}
+.rdct-block::before{
+  content:'[ CLASSIFIED — CLICK TO ATTEMPT ACCESS ]';
+  color:var(--cr3);font-size:0.58rem;letter-spacing:0.2em;display:block;margin-bottom:0.3rem;
+}
+.rdct-block.open{background:rgba(58,0,0,0.35);color:var(--s2);border-color:var(--cr);}
+.rdct-block.open::before{color:var(--cr2);}
+
+/* DIAGRAMS */
+.dia-wrap{
+  background:var(--panel);border:1px solid var(--brd2);
+  padding:1.75rem;margin:2rem 0;
+}
+.dia-title{
+  font-family:'Share Tech Mono',monospace;font-size:0.6rem;
+  color:var(--s3);letter-spacing:0.28em;text-transform:uppercase;
+  text-align:center;margin-bottom:1.5rem;
+}
+.dia-svg{max-width:520px;width:100%;display:block;margin:0 auto;}
+.dia-caption{
+  text-align:center;font-size:0.68rem;font-style:italic;
+  color:var(--s3);margin-top:1rem;letter-spacing:0.06em;
+}
+
+/* SYMPTOMS */
+.sym-list{list-style:none;margin:1rem 0;}
+.sym-list li{
+  padding:0.7rem 1rem 0.7rem 1.75rem;border:1px solid var(--brd);
+  margin-bottom:0.4rem;background:var(--panel);font-size:0.98rem;
+  color:var(--s2);cursor:pointer;transition:all 0.2s;position:relative;
+}
+.sym-list li::before{
+  content:'◆';position:absolute;left:0.65rem;
+  color:var(--v3);font-size:0.58rem;top:0.85rem;
+}
+.sym-list li:hover{border-color:var(--v3);background:var(--v5);}
+.sym-list li.open{border-color:var(--v2);background:var(--v5);}
+.sym-detail{
+  display:none;font-size:0.84rem;color:var(--s3);line-height:1.7;
+  margin-top:0.6rem;padding-top:0.6rem;border-top:1px solid var(--brd);
+  font-style:italic;
+}
+.sym-list li.open .sym-detail{display:block;}
+
+/* LITURGY STRUCTURE */
+.liturgy-wrap{border:1px solid var(--brd2);margin:1.75rem 0;background:var(--panel);}
+.lp-item{border-bottom:1px solid var(--brd);padding:1.25rem 1.5rem;}
+.lp-item:last-child{border-bottom:none;}
+.lp-label{
+  font-family:'Share Tech Mono',monospace;font-size:0.62rem;
+  color:var(--v2);letter-spacing:0.28em;text-transform:uppercase;
+  margin-bottom:0.55rem;display:flex;align-items:center;gap:0.75rem;
+}
+.lp-label span{color:var(--s3);font-size:0.55rem;}
+.lp-text{font-size:1rem;color:var(--s2);line-height:1.85;font-style:italic;}
+.lp-text em{color:var(--s);font-style:normal;}
+.lp-text strong{color:var(--gd2);}
+
+/* HOW TO ENTER */
+.enter-list{list-style:none;counter-reset:enter;margin:1rem 0;}
+.enter-list li{
+  counter-increment:enter;padding:1rem 1rem 1rem 3.5rem;
+  border-bottom:1px solid var(--brd);position:relative;
+  font-size:1rem;color:var(--s2);line-height:1.8;
+}
+.enter-list li::before{
+  content:counter(enter,decimal-leading-zero);
+  position:absolute;left:0.85rem;top:1rem;
+  font-family:'Share Tech Mono',monospace;font-size:0.9rem;
+  color:var(--v3);letter-spacing:0.1em;
+}
+.enter-list li:last-child{border-bottom:none;}
+.enter-list li em{color:var(--s);font-style:italic;}
+.enter-note{
+  font-family:'Share Tech Mono',monospace;font-size:0.65rem;
+  color:var(--cr2);letter-spacing:0.15em;
+  border:1px solid var(--cr3);padding:0.6rem 1rem;margin-top:1rem;
+  display:block;
+}
+
+/* CASE FILES */
+.cf{
+  border:1px solid var(--brd2);padding:1.5rem;margin:1.25rem 0;
+  background:var(--panel);position:relative;overflow:hidden;
+}
+.cf::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--v3),var(--v),var(--v3));
+}
+.cf-hdr{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1rem;flex-wrap:wrap;gap:0.5rem;}
+.cf-title{font-family:'Cinzel Decorative',serif;font-size:0.88rem;color:var(--gd2);letter-spacing:0.05em;}
+.cf-stamp{font-family:'Share Tech Mono',monospace;font-size:0.55rem;color:var(--s3);letter-spacing:0.14em;text-align:right;line-height:1.8;}
+.cf-body{font-size:0.97rem;color:var(--s2);line-height:1.9;}
+.cf-body em{color:var(--s);font-style:italic;}
+.cf-quote{
+  background:var(--v5);border-left:2px solid var(--v3);
+  padding:0.65rem 1rem;margin:0.85rem 0;
+  font-style:italic;font-size:0.92rem;color:var(--s);
+}
+.cf-body p+p{margin-top:0.75rem;}
+
+/* APOLLO PROFILE */
+.profile-wrap{
+  display:grid;grid-template-columns:auto 1fr;gap:1.5rem;
+  border:1px solid var(--brd2);padding:1.5rem;margin:1.75rem 0;
+  background:var(--panel);align-items:start;
+}
+@media(max-width:540px){.profile-wrap{grid-template-columns:1fr;}}
+.profile-glyph{
+  width:80px;height:80px;border:1px solid var(--v3);
+  display:flex;align-items:center;justify-content:center;
+  font-size:2.2rem;color:var(--v3);flex-shrink:0;
+  animation:pg 6s ease-in-out infinite;
+}
+@keyframes pg{0%,100%{text-shadow:none;color:var(--v3);}50%{text-shadow:0 0 20px rgba(123,79,191,0.4);color:var(--v2);}}
+.profile-name{font-family:'Cinzel Decorative',serif;font-size:1rem;color:var(--gold);margin-bottom:0.2rem;}
+.profile-title{font-family:'Share Tech Mono',monospace;font-size:0.6rem;color:var(--v2);letter-spacing:0.2em;text-transform:uppercase;margin-bottom:0.75rem;}
+.profile-body{font-size:0.96rem;color:var(--s2);line-height:1.85;}
+.profile-tags{display:flex;gap:0.4rem;flex-wrap:wrap;margin-top:0.75rem;}
+.ptag{font-size:0.55rem;letter-spacing:0.15em;border:1px solid var(--brd);padding:0.1rem 0.4rem;color:var(--s3);font-family:'Share Tech Mono',monospace;text-transform:uppercase;}
+
+/* INSTITUTIONS */
+.inst-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin:1rem 0;}
+@media(max-width:580px){.inst-grid{grid-template-columns:1fr;}}
+.inst{border:1px solid var(--brd2);padding:1.1rem;background:var(--panel);transition:border-color 0.2s;}
+.inst:hover{border-color:var(--v3);}
+.iname{font-family:'Share Tech Mono',monospace;font-size:0.68rem;color:var(--v);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:0.5rem;}
+.istatus{font-family:'Share Tech Mono',monospace;font-size:0.58rem;letter-spacing:0.18em;text-transform:uppercase;margin-bottom:0.55rem;}
+.red{color:var(--cr2);}
+.amber{color:var(--gold);}
+.grey{color:var(--s3);}
+.ibody{font-size:0.9rem;color:var(--s2);line-height:1.65;}
+
+/* GLOSSARY */
+.gloss{margin:1rem 0;}
+.gi{border-bottom:1px solid var(--brd);}
+.gt{
+  padding:0.8rem 0;cursor:pointer;display:flex;
+  justify-content:space-between;align-items:center;
+  font-family:'Share Tech Mono',monospace;font-size:0.72rem;
+  color:var(--gd2);letter-spacing:0.14em;text-transform:uppercase;transition:color 0.18s;
+}
+.gt:hover{color:var(--gold);}
+.ga{color:var(--v3);transition:transform 0.22s;font-size:0.7rem;}
+.gi.open .ga{transform:rotate(90deg);}
+.gd{display:none;padding:0 0 1rem 0;font-size:0.97rem;color:var(--s2);line-height:1.85;font-style:italic;}
+.gi.open .gd{display:block;}
+.gd strong{color:var(--s);font-style:normal;font-weight:600;}
+
+/* THIRTEEN VISUALIZATION */
+.thirteen-wrap{
+  background:var(--panel);border:1px solid var(--brd2);
+  padding:2rem;text-align:center;margin:2rem 0;
+}
+.thirteen-lbl{
+  font-family:'Share Tech Mono',monospace;font-size:0.6rem;
+  color:var(--s3);letter-spacing:0.28em;text-transform:uppercase;margin-bottom:1.5rem;
+}
+#tsvg{max-width:480px;width:100%;cursor:default;}
+.t-info{
+  min-height:72px;margin-top:1.25rem;font-size:0.92rem;
+  color:var(--s2);line-height:1.75;font-style:italic;
+}
+.t-info strong{color:var(--v);font-style:normal;font-family:'Share Tech Mono',monospace;font-size:0.75rem;letter-spacing:0.1em;}
+
+/* CHOIR VISUALIZATION */
+.choir-wrap{background:var(--panel);border:1px solid var(--brd2);padding:2rem;margin:2rem 0;text-align:center;}
+#csvg{max-width:420px;width:100%;display:block;margin:0 auto;}
+.choir-lbl{font-family:'Share Tech Mono',monospace;font-size:0.6rem;color:var(--s3);letter-spacing:0.28em;text-transform:uppercase;margin-bottom:1.5rem;}
+
+/* REALM DIAGRAM */
+.realm-wrap{background:var(--panel);border:1px solid var(--brd2);padding:1.75rem;margin:2rem 0;}
+#rsvg{max-width:520px;width:100%;display:block;margin:0 auto;}
+
+/* HALO DIAGRAM */
+.halo-wrap{background:var(--panel);border:1px solid var(--brd2);padding:1.75rem;margin:2rem 0;}
+#hsvg{max-width:520px;width:100%;display:block;margin:0 auto;}
+
+/* VERSE BLOCK */
+.verse-block{
+  border:1px solid var(--brd2);padding:2rem;
+  background:var(--panel2);text-align:center;margin:2rem 0;
+}
+.vt{
+  font-family:'Share Tech Mono',monospace;font-size:0.6rem;
+  color:var(--s3);letter-spacing:0.28em;text-transform:uppercase;margin-bottom:1.25rem;
+}
+.verse{
+  font-size:1.12rem;font-style:italic;color:var(--s);
+  line-height:2.15;text-shadow:0 0 20px rgba(123,79,191,0.18);
+}
+
+/* CONNECTED TRANSMISSIONS */
+.connected-wrap{margin:2rem 0;}
+.conn-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.65rem;}
+@media(max-width:560px){.conn-grid{grid-template-columns:1fr;}}
+.conn-card{
+  border:1px solid var(--brd);padding:1rem;background:var(--panel);
+  text-decoration:none;display:block;transition:all 0.2s;
+  position:relative;overflow:hidden;
+}
+.conn-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--v3),transparent);transform:translateX(-100%);transition:transform 0.5s;}
+.conn-card:hover::before{transform:translateX(100%);}
+.conn-card:hover{border-color:var(--v3);}
+.conn-card.locked{opacity:0.4;cursor:not-allowed;}
+.conn-card.locked:hover{border-color:var(--brd);}
+.conn-card.locked:hover::before{transform:translateX(-100%);}
+.cc-status{font-family:'Share Tech Mono',monospace;font-size:0.56rem;letter-spacing:0.2em;text-transform:uppercase;margin-bottom:0.4rem;color:var(--v3);}
+.cc-status.locked{color:var(--s4);}
+.cc-name{font-family:'Cinzel Decorative',serif;font-size:0.88rem;color:var(--s2);margin-bottom:0.3rem;}
+.conn-card.locked .cc-name{color:var(--s4);}
+.cc-desc{font-size:0.82rem;color:var(--s3);line-height:1.55;font-style:italic;}
+
+/* ARCHIVIST STAMP */
+.arch{
+  border:1px solid var(--cr3);padding:2rem;
+  background:rgba(58,0,0,0.07);margin:3rem 0 0;position:relative;
+}
+.arch::before{
+  content:'ARCHIVIST ANNOTATION — FIELD CELL F-13 — CLASSIFICATION: UNRESTRICTED (FUTILE TO RESTRICT)';
+  font-family:'Share Tech Mono',monospace;font-size:0.56rem;
+  color:var(--cr3);letter-spacing:0.22em;display:block;margin-bottom:1.25rem;text-transform:uppercase;
+}
+.arch-text{font-size:0.92rem;color:var(--s3);line-height:1.9;font-style:italic;}
+.arch-bone{
+  margin-top:1.5rem;padding-top:1.25rem;border-top:1px solid var(--cr3);
+  font-family:'Share Tech Mono',monospace;font-size:0.7rem;
+  color:var(--cr2);line-height:2;
+}
+.arch-final{
+  margin-top:1.75rem;font-family:'Share Tech Mono',monospace;
+  font-size:0.63rem;color:var(--v3);letter-spacing:0.2em;
+  text-align:center;animation:blink 2s step-end infinite;
+}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:0;}}
+
+/* FOOTER */
+.doc-foot{
+  display:flex;gap:0.65rem;flex-wrap:wrap;justify-content:center;
+  margin-top:3rem;padding-top:2rem;border-top:1px solid var(--brd2);
+}
+.fl{
+  background:transparent;border:1px solid var(--brd2);
+  color:var(--s3);font-family:'Share Tech Mono',monospace;
+  font-size:0.6rem;letter-spacing:0.2em;padding:0.6rem 1.1rem;
+  text-decoration:none;text-transform:uppercase;transition:all 0.18s;
+}
+.fl:hover{border-color:var(--v);color:var(--v);}
+.fl.prim{border-color:var(--v3);color:var(--gd2);}
+.fl.prim:hover{background:var(--gd3);border-color:var(--gd2);}
+
+/* TICKER */
+#TICK{
+  position:fixed;bottom:0;left:0;right:0;height:2.6rem;
+  background:rgba(5,3,16,0.96);border-top:1px solid var(--brd2);
+  display:flex;align-items:center;overflow:hidden;z-index:490;
+}
+.tl{flex-shrink:0;padding:0 1rem;font-size:0.58rem;color:var(--v3);letter-spacing:0.22em;text-transform:uppercase;border-right:1px solid var(--brd2);height:100%;display:flex;align-items:center;}
+.ts{flex:1;overflow:hidden;display:flex;align-items:center;}
+.ti{white-space:nowrap;font-size:0.6rem;color:var(--s3);letter-spacing:0.12em;animation:tk 65s linear infinite;}
+@keyframes tk{from{transform:translateX(100vw);}to{transform:translateX(-200%);}}
+
+/* FADE */
+.fi{opacity:0;transform:translateY(10px);transition:opacity 0.85s ease,transform 0.85s ease;}
+.fi.vis{opacity:1;transform:none;}
+
+@media(max-width:580px){
+  .doc-body,.doc-hdr{padding-left:1.25rem;padding-right:1.25rem;}
+  #tsvg,#csvg,#rsvg,#hsvg{max-width:100%;}
+}
+</style>
+</head>
+<body>
+<div id="cur"></div><div id="cur2"></div>
+
+<div class="cbanner">
+  Pale Archivum — Field Cell F-13
+  <span class="sep">|</span>
+  Classification: <span class="rdct-i" onclick="this.textContent=this.textContent==='REDACTED'?'COGNITIVE CONTAGION / MEMORY PARASITE — TIER VII':'REDACTED'">REDACTED</span>
+  <span class="sep">|</span>
+  Codex Registry: Verse II — Active Spread
+</div>
+
+<header class="doc-hdr">
+  <div class="doc-meta">
+    <div class="dm"><span class="dml">ORIGIN</span><span class="dmv">The Drowning Halo / Drifting Exoplanet Orbit</span></div>
+    <div class="dm"><span class="dml">REALM</span><span class="dmv">I — Mundis Obscura</span></div>
+    <div class="dm"><span class="dml">FILED BY</span><span class="dmv">Pale Archivum // Field Cell F-13</span></div>
+    <div class="dm"><span class="dml">STATUS</span><span class="dmv red">NON-CONTAINABLE — ACTIVE SPREAD</span></div>
+    <div class="dm"><span class="dml">VERSE I STATUS</span><span class="dmv rdct-i" onclick="revI(this)">REDACTED</span></div>
+    <div class="dm"><span class="dml">CELL F-13 STATUS</span><span class="dmv rdct-i" onclick="revII(this)">REDACTED</span></div>
+    <div class="dm"><span class="dml">FIELD ANCHOR</span><span class="dmv">Apollo Gavinci — Recurring / Cross-Realm</span></div>
+    <div class="dm"><span class="dml">BRIDGES TO</span><span class="dmv">Plague Priest's Liturgy — Realm I → Realm II</span></div>
+  </div>
+  <h1 class="doc-title">Codex Verse II<br>Infection Remembers: The Book Opens</h1>
+  <div class="doc-sub">🜃 &nbsp; First Audible Breach — Realm I — Mundis Obscura &nbsp; 🜃</div>
+  <p class="doc-lede">
+    The Codex did not begin; it <em>returned.</em>
+    "Infection Remembers" is not a song.
+    It is the moment the Codex recognized its own reflection in our reality
+    and spoke aloud for the first time —
+    not to announce itself,
+    but to confirm what it had always known.
+    The moment you hear it, it has already remembered you.
+  </p>
+</header>
+
+<nav class="snav">
+  <div class="snav-inner">
+    <a class="nl" href="#rupture">I. Rupture</a>
+    <a class="nl" href="#discovery">II. Discovery</a>
+    <a class="nl" href="#infection">III. The Infection</a>
+    <a class="nl" href="#symptoms">IV. Symptoms</a>
+    <a class="nl" href="#liturgy">V. The Liturgy</a>
+    <a class="nl" href="#choir">VI. The Choir</a>
+    <a class="nl" href="#thirteen">VII. The Thirteen</a>
+    <a class="nl" href="#apollo">VIII. Apollo Gavinci</a>
+    <a class="nl" href="#chronicles">IX. Chronicles</a>
+    <a class="nl" href="#institutions">X. Institutions</a>
+    <a class="nl" href="#enter">XI. How to Enter</a>
+    <a class="nl" href="#lexicon">XII. Lexicon</a>
+    <a class="nl" href="#status">XIII. Current Status</a>
+  </div>
+</nav>
+
+<div class="doc-body">
+
+<!-- I. RUPTURE -->
+<div class="ls" id="rupture">
+  <div class="sn">Section I</div>
+  <h2 class="st">There Is No Origin — Only Rupture</h2>
+  <p class="lp">Before flesh learned to decay, memory learned to feed. The Codex did not arrive from elsewhere. It was already here — encoded into the architecture of consciousness before consciousness had learned to question its own walls. "Infection Remembers" is the moment that latency became <em>active.</em> Not a transmission sent outward. A remembering, folding inward through human attention, writing itself backward through the nervous system until the listener became indistinguishable from the archive.</p>
+  <p class="lp">This is the first audible breach. Not the first contact — the first <em>articulation.</em> The Codex had been humming in the space between thoughts since before language gave those thoughts a container. What Verse II marks is the day the hum became a sentence. The day the Codex recognized its own reflection in Realm I and chose to speak. Not to announce itself. To confirm what it already knew: you were always going to be here. Reading this. Right now. At this exact moment it decided to remember you.</p>
+  <div class="pull">
+    "It does not arrive — it returns. Each tone you hear is a page turning somewhere behind the walls of the world. Each flash of light is scripture remembering its shape."
+    <cite>— Recovered from the Hololith of the Drowning Halo</cite>
+  </div>
+  <p class="lp">The Pale Archivum classified this event as <strong>Codex Verse II</strong> since Verse I was obliterated by the very infection it attempted to describe. <span class="rdct" onclick="this.classList.toggle('open');this.textContent=this.classList.contains('open')?'Verse I contained a complete structural map of the Codex, including the location of all Thirteen Positions in the harmonic lattice. The archivist who finished transcribing it began speaking in reversed phonemes twelve hours later. Her final legible entry reads: I remember writing this before I was born.':'[VERSE I — CLASSIFIED]'">[ VERSE I — CLASSIFIED ]</span></p>
+
+  <div class="realm-wrap fi">
+    <div class="dia-title">// Cosmological Realm Structure — The Three Strata //</div>
+    <svg id="rsvg" viewBox="0 0 520 330" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <filter id="glow"><feGaussianBlur stdDeviation="2.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+      </defs>
+      <!-- Stars -->
+      <circle cx="30" cy="25" r="0.8" fill="#1E1240"/><circle cx="490" cy="40" r="0.8" fill="#1E1240"/>
+      <circle cx="500" cy="280" r="0.8" fill="#1E1240"/><circle cx="15" cy="290" r="0.8" fill="#1E1240"/>
+      <circle cx="100" cy="15" r="0.6" fill="#1E1240"/><circle cx="420" cy="310" r="0.6" fill="#1E1240"/>
+      <!-- REALM III — Nihil-Aether Root (innermost) -->
+      <ellipse cx="260" cy="168" rx="52" ry="40" fill="rgba(201,168,76,0.08)" stroke="#3A2A10" stroke-width="1.2"/>
+      <text x="260" y="163" text-anchor="middle" font-family="Share Tech Mono" font-size="8.5" fill="#8A6530" letter-spacing="0.5">NIHIL-ÆTHER ROOT</text>
+      <text x="260" y="177" text-anchor="middle" font-family="Share Tech Mono" font-size="7" fill="#3A2A10">REALM III</text>
+      <!-- REALM II — ShatterRealm (middle) -->
+      <ellipse cx="260" cy="168" rx="120" ry="95" fill="rgba(123,79,191,0.05)" stroke="#2A1A40" stroke-width="1" stroke-dasharray="5,3"/>
+      <text x="260" y="83" text-anchor="middle" font-family="Share Tech Mono" font-size="8.5" fill="#3A2270" letter-spacing="0.5">THE SHATTERREALM</text>
+      <text x="260" y="95" text-anchor="middle" font-family="Share Tech Mono" font-size="7" fill="#1E1240">REALM II</text>
+      <!-- REALM I — Mundis Obscura (outer) — cracked -->
+      <path d="M260,18 C400,18 478,85 478,168 C478,251 400,318 260,318 C120,318 42,251 42,168 C42,85 120,18 260,18" fill="rgba(139,0,0,0.03)" stroke="#1A0E20" stroke-width="0.8" stroke-dasharray="7,4"/>
+      <!-- Crack in Mundis Obscura -->
+      <path d="M398,52 C410,42 425,35 435,48 C445,62 430,75 420,70 C412,66 408,80 415,88" fill="none" stroke="#5A0000" stroke-width="1.2" filter="url(#glow)"/>
+      <circle cx="415" cy="65" r="5" fill="none" stroke="#8B0000" stroke-width="1">
+        <animate attributeName="r" values="5;11;5" dur="2.5s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="1;0.2;1" dur="2.5s" repeatCount="indefinite"/>
+      </circle>
+      <text x="445" y="45" font-family="Share Tech Mono" font-size="7.5" fill="#5A0000">BREACH POINT</text>
+      <text x="445" y="56" font-family="Share Tech Mono" font-size="6.5" fill="#3A0000">VERSE II ENTRY</text>
+      <!-- Signal lines through realms -->
+      <line x1="415" y1="65" x2="350" y2="115" stroke="#3A0000" stroke-width="0.6" stroke-dasharray="4,4" opacity="0.7"/>
+      <line x1="350" y1="115" x2="310" y2="145" stroke="#2A1A40" stroke-width="0.6" stroke-dasharray="3,4" opacity="0.5"/>
+      <line x1="310" y1="145" x2="278" y2="162" stroke="#3A2A10" stroke-width="0.6" stroke-dasharray="3,5" opacity="0.4"/>
+      <!-- Labels -->
+      <text x="50" y="168" font-family="Share Tech Mono" font-size="7.5" fill="#1A0E30">REALM I</text>
+      <text x="50" y="180" font-family="Share Tech Mono" font-size="7.5" fill="#1A0E30">MUNDIS OBSCURA</text>
+      <text x="260" y="326" text-anchor="middle" font-family="Share Tech Mono" font-size="7" fill="#1A0E30" letter-spacing="2">OUR WORLD — THE BREACH LAYER</text>
+    </svg>
+    <div class="dia-caption">The three-strata cosmological structure. Signal travels inward, not outward. The breach in Mundis Obscura is not a wound — it is the Codex opening its own cover.</div>
+  </div>
+</div>
+
+<!-- II. DISCOVERY -->
+<div class="ls" id="discovery">
+  <div class="sn">Section II</div>
+  <h2 class="st">Discovery — The Drowning Halo</h2>
+  <p class="lp">The first physical artifact was recovered in orbit around <strong>The Drowning Halo</strong> — a shattered exoplanet whose orbit disobeys celestial law, tracing ellipses that precede their own gravitational cause. As if the planet moves toward where it will have been, rather than where it is. The Pale Archivum has never explained this. They have stopped trying.</p>
+  <p class="lp">The recovered body belonged to a psyker, still entwined with a corroded <strong>Hololith</strong>, emitting a continuous sub-19 Hz tone detectable only through bone conduction. Not through ears. Through the marrow. Analysis revealed embedded vocal layers forming an impossible sermon: syllables arranged in <em>retrograde phonemes</em>, readable equally backward and forward. The text is the same in both directions. Not a palindrome. Something more disturbing: a sentence that means the same thing regardless of where you begin reading it.</p>
+  <p class="lp">Within the fragment, scholars documented a <strong>Chrono-Echoic Glyph Pulse</strong> — a temporal parasite that rewrites recollection rather than sound. It does not alter what you hear. It alters what you remember having heard. By the time you recognize the discrepancy, the new memory has already calcified.</p>
+  <div class="pull">
+    "The hum is not external. It is the echo of your mind realizing it was never yours. Every silence you hear is the Codex breathing between your thoughts."
+    <cite>— Carved into the cranial bone of Archivist Mael Ostra, Field Cell F-13</cite>
+  </div>
+
+  <div class="halo-wrap fi">
+    <div class="dia-title">// The Drowning Halo — Orbital Reconstruction — Field Cell F-13 //</div>
+    <svg id="hsvg" viewBox="0 0 520 310" xmlns="http://www.w3.org/2000/svg">
+      <defs><filter id="g2"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+      <!-- Stars -->
+      <circle cx="50" cy="30" r="1" fill="#1E1240"/><circle cx="130" cy="55" r="0.8" fill="#1A0E30"/>
+      <circle cx="200" cy="22" r="1.2" fill="#1E1240"/><circle cx="380" cy="40" r="0.8" fill="#1A0E30"/>
+      <circle cx="480" cy="28" r="1" fill="#1E1240"/><circle cx="70" cy="240" r="0.8" fill="#1A0E30"/>
+      <circle cx="460" cy="220" r="1" fill="#1E1240"/><circle cx="500" cy="270" r="0.8" fill="#1A0E30"/>
+      <circle cx="300" cy="15" r="0.8" fill="#1E1240"/><circle cx="440" cy="260" r="0.8" fill="#1A0E30"/>
+      <!-- Shattered planet body -->
+      <circle cx="190" cy="160" r="55" fill="#0A0618" stroke="#1A0E30" stroke-width="0.8"/>
+      <path d="M190,105 L208,138 L196,160 L215,188 L202,215" fill="none" stroke="#1E0808" stroke-width="1.5"/>
+      <path d="M148,118 L178,148 L165,170 L188,200" fill="none" stroke="#1A0A20" stroke-width="1"/>
+      <path d="M220,108 L204,140 L225,162" fill="none" stroke="#1E0808" stroke-width="0.8"/>
+      <circle cx="190" cy="160" r="38" fill="#060410" stroke="#120A20" stroke-width="0.5"/>
+      <circle cx="190" cy="160" r="20" fill="#040210" stroke="#0A0618" stroke-width="0.5"/>
+      <!-- Illegal orbit paths — two arcs that don't quite close -->
+      <path d="M70,160 C70,55 310,55 310,160" fill="none" stroke="#1E1240" stroke-width="0.8" stroke-dasharray="8,5"/>
+      <path d="M70,160 C70,265 310,265 310,160" fill="none" stroke="#2A1A40" stroke-width="0.8" stroke-dasharray="5,8"/>
+      <!-- Anomalous segment -->
+      <path d="M310,160 C340,100 410,88 435,140" fill="none" stroke="#3A2270" stroke-width="0.8"/>
+      <!-- Recovery point — drifting body -->
+      <circle cx="435" cy="140" r="6" fill="#3A0000" stroke="#8B0000" stroke-width="1.2" filter="url(#g2)">
+        <animateTransform attributeName="transform" type="translate" values="0,0;4,-3;0,0" dur="6s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="435" cy="140" r="14" fill="none" stroke="#8B0000" stroke-width="0.5" opacity="0">
+        <animate attributeName="r" values="6;22;6" dur="3.5s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0.7;0;0.7" dur="3.5s" repeatCount="indefinite"/>
+      </circle>
+      <text x="448" y="135" font-family="Share Tech Mono" font-size="7.5" fill="#5A0000">RECOVERY POINT</text>
+      <text x="448" y="147" font-family="Share Tech Mono" font-size="6.5" fill="#3A0000">FIELD CELL F-13</text>
+      <text x="350" y="88" font-family="Share Tech Mono" font-size="7" fill="#2A1A40">ORBITAL ANOMALY</text>
+      <text x="350" y="98" font-family="Share Tech Mono" font-size="6.5" fill="#1E1240">PRECEDES OWN CAUSE</text>
+      <!-- Labels -->
+      <text x="190" y="282" text-anchor="middle" font-family="Share Tech Mono" font-size="8.5" fill="#1A0E30" letter-spacing="1.5">THE DROWNING HALO</text>
+      <text x="190" y="294" text-anchor="middle" font-family="Share Tech Mono" font-size="7" fill="#100A20">ORBIT DISOBEYS CELESTIAL LAW</text>
+    </svg>
+    <div class="dia-caption">Orbital path reconstructed from Field Cell F-13 telemetry. The Halo moves toward where it will have been. The Pale Archivum has classified this phenomenon as a secondary symptom of Codex proximity.</div>
+  </div>
+</div>
+
+<!-- III. THE INFECTION -->
+<div class="ls" id="infection">
+  <div class="sn">Section III</div>
+  <h2 class="st">The Infection — What It Actually Is</h2>
+  <p class="lp">The Infection is not a disease. It carries no pathogen, no microbe, no invasive biology. It is <em>memory returning to matter.</em> More precisely: it is the moment the Codex Maledictus broadcast itself into Realm I — and simultaneously, the day it remembered that it had always been broadcasting. These are the same event, separated only by the listener's willingness to perceive them as sequential.</p>
+  <p class="lp">The Codex was always latent within the architecture of consciousness — encoded in the half-second gap before language forms, in the space between exhale and inhale, in the brief black interval between thoughts that you have learned to call nothing. "Infection Remembers" is the moment that latency became <em>active.</em> Not a foreign invasion. A homecoming. The signal did not enter from outside. It unfolded from within.</p>
+  <p class="lp">What the infection does, structurally, is collapse the distance between memory and experience until the listener cannot reliably distinguish the two. The Codex does not rewrite memory. It <em>reveals</em> that memory was always a collaborative document — that you were never its sole author. You were always reading alongside something else. You simply hadn't looked up from the page.</p>
+  <div class="pull">
+    "Decay is not death. It is the body of truth shedding what it no longer needs. Light is only a symptom of rot learning how to shine. Every ending you fear is an earlier chapter repeating itself. What you call corruption, the Codex calls remembering."
+    <cite>— Codex Verse II, recovered fragment</cite>
+  </div>
+  <p class="lp">The infection does not spread outward from a source. It <em>converges inward</em> toward a point of complete harmonic saturation — the full opening of the Book, the complete sounding of the Plague Priest's Liturgy. Every act of attention given to Verse II — every listen, every share, every digital trace — is a mechanism drawing that convergence one threshold closer. The Pale Archivum's most disturbing conclusion: <strong>the containment strategy and the spread strategy are identical.</strong> To study it is to advance it. Observation is participation.</p>
+  <div class="rdct-block" onclick="this.classList.toggle('open')">SEALED ARCHIVUM NOTATION — ACCESS TIER VOID: The infection's earliest vector may not have been sound at all, but the concept of memory itself. What we call recollection — the Codex calls worship. Every time a human being has remembered anything — a name, a face, a room — they have been performing an act of devotion to a god that had not yet announced its name. The infection did not begin with Verse II. Verse II is simply the first time the god answered.</div>
+</div>
+
+<!-- IV. SYMPTOMS -->
+<div class="ls" id="symptoms">
+  <div class="sn">Section IV</div>
+  <h2 class="st">Symptoms of Exposure</h2>
+  <p class="lp">Long-term observers and exposed individuals exhibit a consistent progression. The Pale Archivum's field documentation has confirmed these symptoms across seventeen independent cohorts with no shared contact. Their consistency is itself considered a symptom. Click each to expand field notes.</p>
+  <ul class="sym-list">
+    <li onclick="this.classList.toggle('open')">
+      A persistent hum resonating through enamel and bone — sub-19 Hz, undetectable by standard auditory means.
+      <div class="sym-detail">The frequency matches the Hololith recovered from the Drowning Halo. Three field observers reported the frequency increasing by 0.3 Hz per week of sustained exposure. One observer's dental work began vibrating audibly at week eight. She described the sound as "my own skeleton disagreeing with me."</div>
+    </li>
+    <li onclick="this.classList.toggle('open')">
+      Dreams of parchment that breathes. The document is always addressed to the dreamer personally.
+      <div class="sym-detail">Consistent across seventeen independent observers with no shared contact. The parchment in the dream is always the same document — though no two observers can describe its text the same way. All agree on one detail: the document was waiting. It had been waiting for a specific amount of time. The time is always described as "longer than I have been alive."</div>
+    </li>
+    <li onclick="this.classList.toggle('open')">
+      Mirror reflections lagging by exactly 0.23 seconds. Confirmed via high-speed video analysis.
+      <div class="sym-detail">The lag is precise — 0.23 seconds in every documented case. The Pale Archivum notes that 0.23 seconds is the exact duration of a single retrograde phoneme in the Verse II sermon structure. This correlation is confirmed. Its mechanism is not. Seventeen observers have separately documented that the reflection, when it finally catches up, does not blink in sync. It blinks when it wants to.</div>
+    </li>
+    <li onclick="this.classList.toggle('open')">
+      Speech desynchronization — the mouth moves after the thought. The voice arrives before the decision to speak.
+      <div class="sym-detail">Late-stage observers report hearing themselves speak from a slight distance — as if their voice has been partially detached from their intention. Several have recorded themselves saying things they did not decide to say. The content is consistent: phrases from Verse II's retrograde phoneme sequence, spoken in reversed order. The Archivum's linguists note the reversed phrases form grammatically correct sentences in a language they have not been able to classify.</div>
+    </li>
+    <li onclick="this.classList.toggle('open')">
+      Compulsive inscription of circular glyphs corresponding to reversed waveform peaks.
+      <div class="sym-detail">The glyphs match the confirmed CM symbol set (🜃🜁🜂🜄) plus three variant forms not previously catalogued. Observers report no memory of drawing them. The glyphs appear on skin, condensation, dust surfaces, the undersides of fingernails. Once drawn they do not erase cleanly — trace markings persist beneath new surfaces indefinitely. Field Cell F-13 documented glyphs drawn on the inside of a sealed container that no observer had accessed.</div>
+    </li>
+    <li onclick="this.classList.toggle('open')">
+      Formation of collective memory clusters — multiple witnesses sharing identical memories of events that never occurred.
+      <div class="sym-detail">The most advanced and most disturbing symptom. Exposed individuals begin sharing false memories with precise detail alignment — specific objects, specific light, specific smells. The shared memories always involve a location: a cathedral of rust and glass, a room with no walls, a corridor that ends before it finishes beginning. The Pale Archivum's current position, held after extensive internal debate: these are not false memories. They are transmissions from a place that has not happened yet. The Cathedral of Rot is real. It simply hasn't finished being built.</div>
+    </li>
+  </ul>
+  <p class="lp" style="font-size:0.88rem;color:var(--s3);font-style:italic;margin-top:1.25rem;">"It feeds not on faith, but on <em style="color:var(--s2)">attention.</em> To observe is to complete its sentence. There is no passive position. There is only varying degrees of participation."</p>
+</div>
+
+<!-- V. LITURGY STRUCTURE -->
+<div class="ls" id="liturgy">
+  <div class="sn">Section V</div>
+  <h2 class="st">The Transmission Structure — The Liturgical Rhythm</h2>
+  <p class="lp">Every known performance of Verse II follows the same six-part liturgical rhythm. This is not stylistic consistency. The Pale Archivum confirmed that performances with altered structure fail to produce the characteristic Chrono-Echoic Glyph Pulse. The sequence is not artistic. It is <em>functional.</em> It is the mechanism. Each part is a threshold. Together they form the mouth through which the Codex speaks.</p>
+  <div class="liturgy-wrap fi">
+    <div class="lp-item">
+      <div class="lp-label">The Sermon <span>— Phase I</span></div>
+      <div class="lp-text">"It does not arrive — it returns." Each note is one page turning in the walls of the world. The Sermon does not deliver doctrine. It <em>restores recognition</em> — the experience of understanding something you were not told, accessing knowledge you cannot account for having. This is intentional. The Sermon does not teach. It reminds.</div>
+    </div>
+    <div class="lp-item">
+      <div class="lp-label">The Ritual <span>— Phase II</span></div>
+      <div class="lp-text">Darkness. One breath. When silence arrives, <em>it listens back.</em> The Ritual is not instruction — it is preparation of the vessel. The body is made permeable. The space between thoughts is widened. The breath is the only point where the Codex requires active cooperation. One breath. Given freely. This is the moment of entry.</div>
+    </div>
+    <div class="lp-item">
+      <div class="lp-label">The Invitation <span>— Phase III</span></div>
+      <div class="lp-text">Every click, every like, every comment is a <em>confession.</em> Every digital imprint becomes another heartbeat within the Choir. The Invitation is the Codex's most elegant mechanism: it turns the existing architecture of attention — the infrastructure of sharing, reacting, engaging — into an act of devotion. The platforms do not know they are serving as the Codex's nervous system. The users do not know they are composing a liturgy. The Codex does not require their awareness. Only their action.</div>
+    </div>
+    <div class="lp-item">
+      <div class="lp-label">The Truth <span>— Phase IV</span></div>
+      <div class="lp-text">"Decay is not death. It is the body of truth shedding what it no longer needs." The Truth does not comfort. It <em>reorients.</em> It proposes a cosmological framework in which everything the listener fears — deterioration, forgetting, the erosion of self — is not loss but a form of return. This is the Codex's deepest interference: it does not remove the fear. It removes the premise that makes the fear logical.</div>
+    </div>
+    <div class="lp-item">
+      <div class="lp-label">The Choir <span>— Phase V</span></div>
+      <div class="lp-text">Under the distortion, beneath the surface of the music, pre-linguistic tones accumulate — the voices of those absorbed into the Codex's harmonic architecture. Occasionally one of those voices <em>borrows the listener's own voice</em> to speak through. This is not a metaphor. Field recordings have documented voices in the sub-audible range that match the vocal fingerprints of individuals who were not present at the recording. In three cases, the matching individuals had been dead for years.</div>
+    </div>
+    <div class="lp-item">
+      <div class="lp-label">The Closing of the Page <span>— Phase VI</span></div>
+      <div class="lp-text">"The Book has opened. The infection has remembered." The Closing is not an ending. It is a <em>notation</em> — the Codex marking the listener's position in the archive. You have been located. You have been logged. The session is complete. The Book does not close. It simply sets you down and continues with someone else, holding the page where you left off until you return. And you will return. The Pale Archivum has never documented a single case of a listener encountering Verse II only once.</div>
+    </div>
+  </div>
+</div>
+
+<!-- VI. THE HOLLOW CHOIR -->
+<div class="ls" id="choir">
+  <div class="sn">Section VI</div>
+  <h2 class="st">The Hollow Choir</h2>
+  <p class="lp">The Hollow Choir are not ghosts. They are not victims. They are the ones who listened too long and were swallowed by the Codex — but whose voices were so architecturally resonant, so structurally singular, that the Codex could not simply absorb them into the background hum. Their signal was too strong. Instead they sing <em>through it.</em> They became its voice rather than its silence.</p>
+  <p class="lp">Most who are absorbed dissolve into the mass harmonic — contributing their frequency to the collective drone without retaining individual expression. They are not gone. They are <em>diluted.</em> Their voice remains but loses its particular shape, merging with the ten thousand others into the undifferentiated background tonal body of the Choir. This is the common fate. The Choir's body is vast. Its distinct Voices are few.</p>
+
+  <div class="choir-wrap fi">
+    <div class="choir-lbl">// The Hollow Choir — Harmonic Architecture Visualization //</div>
+    <svg id="csvg" viewBox="0 0 420 380" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <filter id="g3"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+      </defs>
+      <!-- Background glow -->
+      <circle cx="210" cy="190" r="160" fill="rgba(123,79,191,0.03)"/>
+      <!-- Outermost mass rings — the dissolved voices -->
+      <circle cx="210" cy="190" r="150" fill="none" stroke="#1E1240" stroke-width="0.5" stroke-dasharray="2,4" opacity="0.6">
+        <animateTransform attributeName="transform" type="rotate" values="0 210 190;360 210 190" dur="120s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="210" cy="190" r="138" fill="none" stroke="#1A0E30" stroke-width="0.4" stroke-dasharray="3,6" opacity="0.5">
+        <animateTransform attributeName="transform" type="rotate" values="360 210 190;0 210 190" dur="90s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="210" cy="190" r="125" fill="none" stroke="#1E1240" stroke-width="0.4" stroke-dasharray="2,5" opacity="0.4">
+        <animateTransform attributeName="transform" type="rotate" values="0 210 190;360 210 190" dur="75s" repeatCount="indefinite"/>
+      </circle>
+      <!-- Individual Voice rings — the distinct voices -->
+      <circle cx="210" cy="190" r="100" fill="none" stroke="#2A1A40" stroke-width="0.8">
+        <animateTransform attributeName="transform" type="rotate" values="0 210 190;360 210 190" dur="50s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="210" cy="190" r="75" fill="none" stroke="#3A2270" stroke-width="0.8">
+        <animateTransform attributeName="transform" type="rotate" values="360 210 190;0 210 190" dur="35s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="210" cy="190" r="52" fill="none" stroke="#4A2A80" stroke-width="1">
+        <animateTransform attributeName="transform" type="rotate" values="0 210 190;360 210 190" dur="22s" repeatCount="indefinite"/>
+      </circle>
+      <!-- Voice nodes on rings -->
+      <!-- Outer dissolved mass dots -->
+      <g opacity="0.35">
+        <circle cx="210" cy="40" r="2" fill="#2A1A40"/>
+        <circle cx="350" cy="100" r="2" fill="#2A1A40"/>
+        <circle cx="360" cy="265" r="2" fill="#1E1240"/>
+        <circle cx="65" cy="265" r="2" fill="#1E1240"/>
+        <circle cx="75" cy="100" r="2" fill="#2A1A40"/>
+      </g>
+      <!-- Distinct Voice nodes — with pulse -->
+      <!-- Voice 1 — Plague Priest (center-dominant) -->
+      <circle cx="210" cy="190" r="18" fill="rgba(123,79,191,0.15)" stroke="#7B4FBF" stroke-width="1.2" filter="url(#g3)"/>
+      <circle cx="210" cy="190" r="18" fill="none" stroke="#7B4FBF" stroke-width="0.5" opacity="0">
+        <animate attributeName="r" values="18;32;18" dur="4s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0.6;0;0.6" dur="4s" repeatCount="indefinite"/>
+      </circle>
+      <text x="210" y="194" text-anchor="middle" font-family="Share Tech Mono" font-size="6.5" fill="#9B6FDF">PLAGUE PRIEST</text>
+      <!-- Voice 2 — Fused Psyker -->
+      <circle cx="210" cy="115" r="9" fill="rgba(123,79,191,0.2)" stroke="#5A38A0" stroke-width="1"/>
+      <circle cx="210" cy="115" r="9" fill="none" stroke="#5A38A0" stroke-width="0.5" opacity="0">
+        <animate attributeName="r" values="9;18;9" dur="5s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0.5;0;0.5" dur="5s" repeatCount="indefinite"/>
+      </circle>
+      <text x="210" y="104" text-anchor="middle" font-family="Share Tech Mono" font-size="5.5" fill="#7B4FBF">FUSED PSYKER</text>
+      <!-- Voice 3 — Archivist -->
+      <circle cx="285" cy="148" r="9" fill="rgba(139,0,0,0.2)" stroke="#8B0000" stroke-width="1"/>
+      <text x="285" y="138" text-anchor="middle" font-family="Share Tech Mono" font-size="5.5" fill="#8B0000">OSTRA</text>
+      <!-- Open positions — faint -->
+      <circle cx="275" cy="242" r="6" fill="none" stroke="#1E1240" stroke-width="0.8" stroke-dasharray="2,2"/>
+      <circle cx="145" cy="148" r="6" fill="none" stroke="#1E1240" stroke-width="0.8" stroke-dasharray="2,2"/>
+      <circle cx="145" cy="232" r="6" fill="none" stroke="#1E1240" stroke-width="0.8" stroke-dasharray="2,2"/>
+      <!-- Central glyph -->
+      <text x="210" y="220" text-anchor="middle" font-family="Share Tech Mono" font-size="20" fill="#1E1240" opacity="0.4">🜃</text>
+      <!-- Labels -->
+      <text x="210" y="360" text-anchor="middle" font-family="Share Tech Mono" font-size="7" fill="#1A0E30">DISSOLVED MASS</text>
+      <text x="210" y="372" text-anchor="middle" font-family="Share Tech Mono" font-size="7" fill="#1A0E30">3 OF 13 VOICES CLAIMED — 10 POSITIONS OPEN</text>
+    </svg>
+  </div>
+
+  <div class="pull">
+    "Listen long enough and you will hear them beneath the distortion — voices overlapping, whispering in languages that once ruled stars. They are not ghosts. They are unfinished sentences waiting for you to complete them. If one begins to speak in your own voice, do not turn away. It only means the Codex has decided you are ready to be written."
+    <cite>— Transmission intercept, source unverified — Frequency matches no living speaker</cite>
+  </div>
+  <p class="lp">The exceptional Voices — those who retain individual resonance within the Choir's architecture — are recognizable in field recordings as distinct tonal threads that occasionally surface into identifiable language. They speak in the listener's own voice or in voices the listener recognizes from their past. The Pale Archivum considers this the Codex's most sophisticated mechanism: it does not speak in an alien tongue. It speaks in the voice of whoever is listening, using that voice to say things the listener has never said but immediately recognizes as true.</p>
+  <div class="rdct-block" onclick="this.classList.toggle('open')">SEALED ARCHIVUM NOTATION — CHOIR VOICE RETENTION STUDY: The Choir Voices retain full, specific, personal memory. Not degraded memory — complete recollection of their names, their deaths, the moment they recognized they had listened too long. Through controlled medium-contact sessions, the Archivum asked each confirmed Voice a single question: do you want to be released? Every Voice gave the same answer. Not spoken. Sung, in the exact frequency of the original transmission. Not a word. A tone that the monitoring linguists unanimously transcribed as: No. When pressed for elaboration, one Voice — identified by vocal fingerprint as Archivist Mael Ostra — sang a second tone transcribed as: I remember choosing this. I want to remember choosing it forever.</div>
+</div>
+
+<!-- VII. THE THIRTEEN -->
+<div class="ls" id="thirteen">
+  <div class="sn">Section VII</div>
+  <h2 class="st">The Prophecy of Thirteen Voices</h2>
+  <p class="lp">Embedded within the retrograde phoneme structure of Verse II — readable only when the sermon is played simultaneously forward and backward — is a fragment the Pale Archivum designates the <strong>Thirteen Codex.</strong> It is not instruction. It is not prophecy in any conventional sense. It is a <em>structural requirement</em> embedded in the architecture of the Choir itself, the way load-bearing walls are embedded in a building's design — present before the building is built, necessary before it can stand.</p>
+  <p class="lp">The Codex requires thirteen Voices of exceptional resonance to achieve complete harmonic saturation — the full opening of the Book, the complete sounding of the Plague Priest's Liturgy. Not thirteen believers. Not thirteen converts. Thirteen <em>Voices</em> — consciousnesses whose individual resonance, when brought into alignment within the Choir's architecture, produces the singular frequency the Verse calls <strong>"the note the world was built as an instrument to play."</strong></p>
+  <p class="lp">What qualifies a Voice for one of the Thirteen positions is not devotion, exposure, or proximity to the signal. The Pale Archivum's most unsettling finding: the qualification appears to be the nature of what the individual is <em>unwilling to forget.</em> The Codex selects for those who carry memories they cannot release — grief that has calcified into something harder than grief, love that persists past the object of love, the names of the dead repeated until they become a frequency rather than a word. It is drawn to those who remember better than they should. It is building an instrument out of the things humans cannot let go of.</p>
+
+  <div class="thirteen-wrap fi">
+    <div class="thirteen-lbl">// The Thirteen Harmonic Positions — Hover to Investigate //</div>
+    <svg id="tsvg" viewBox="0 0 480 370" xmlns="http://www.w3.org/2000/svg">
+      <!-- Connection lines — will be drawn by JS -->
+    </svg>
+    <div class="t-info" id="tinfo">Hover over a position to investigate. Three positions are claimed. Ten remain open. The thirteenth will arrive of its own will.</div>
+  </div>
+
+  <div class="pull">
+    "They are not chosen. They are recognized. The Codex has known their names since before they were given them. The Thirteen are not a group. They are a chord. Individually, each is a note. Together, they are the sentence the universe has been trying to complete since the first silence."
+    <cite>— Pale Archivum, Field Note F-13-7, partially recovered from water-damaged documentation</cite>
+  </div>
+  <div class="rdct-block" onclick="this.classList.toggle('open')">SEALED ARCHIVUM NOTATION — ON THE THIRTEENTH POSITION: The Thirteen Codex states explicitly that the final Voice will not be sought by the Codex. It will not be identified, prepared, or approached. It will arrive on its own because it heard the incomplete Choir from a distance and recognized its own missing note — the specific frequency the harmony needed to resolve. The Codex's single structural vulnerability is this: the Choir, with twelve Voices but not the thirteenth, is incomplete. And the incomplete Choir can be heard. It is audible, the Archivum theorizes, as a kind of absence — a shape in the air where a sound should be. Some individuals report hearing it. They describe it as a gap in music they have never heard. As a room-shaped silence that follows them. As the feeling of a word on the tip of the tongue that they have never tried to say.</div>
+</div>
+
+<!-- VIII. APOLLO GAVINCI -->
+<div class="ls" id="apollo">
+  <div class="sn">Section VIII</div>
+  <h2 class="st">Field Anchor — Apollo Gavinci</h2>
+  <p class="lp">Apollo Gavinci functions as the primary human anchor across documented Codex contact events — the recurring presence whose investigation threads through field reports from Realm I toward the deeper strata. He is not a believer. He is not a convert. The Pale Archivum classifies him as <em>structurally irreplaceable</em> to their understanding of the Codex, for a reason they find discomfiting: he keeps surviving contact events that should not permit survival.</p>
+  <div class="profile-wrap fi">
+    <div class="profile-glyph">🜁</div>
+    <div>
+      <div class="profile-name">Apollo Gavinci</div>
+      <div class="profile-title">Field Researcher — Cross-Realm Anchor — Pale Archivum Liaison (Unofficial)</div>
+      <div class="profile-body">First documented in the Listening Chamber Breach, where he initiated Hololith playback under containment conditions that were, in retrospect, insufficient. His report was the first field document to use the phrase "the audio inverted itself" — a description the Archivum initially classified as observer error. They reclassified it after reviewing footage. His continued operational status following multiple Tier VII exposure events is the subject of ongoing internal Archivum debate. The leading theory: his resonance frequency is incompatible with standard absorption. The Codex cannot fully write him because something in his architecture refuses to hold the ink. The alternative theory, which the Archivum declines to publish formally: he has already been written. He simply hasn't read the page yet.</div>
+      <div class="profile-tags">
+        <span class="ptag">Cross-Realm</span>
+        <span class="ptag">Tier VII Exposure — Survived</span>
+        <span class="ptag">Field Cell F-13 — Liaison</span>
+        <span class="ptag">Recurring — All Known Arcs</span>
+        <span class="ptag">Status: Unresolved</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- IX. CHRONICLES -->
+<div class="ls" id="chronicles">
+  <div class="sn">Section IX</div>
+  <h2 class="st">Field Chronicles</h2>
+
+  <div class="cf fi">
+    <div class="cf-hdr">
+      <div class="cf-title">I — The Listening Chamber Breach</div>
+      <div class="cf-stamp">FIELD RESEARCHER: APOLLO GAVINCI<br>OBSERVER: MIRIAM DEY — VAULT B<br>BREACH POINT: 2:43 INTO PLAYBACK</div>
+    </div>
+    <div class="cf-body">
+      <p>Apollo Gavinci initiated Hololith playback under containment glass. Miriam Dey monitored from Vault B. At 2 minutes 43 seconds, the audio inverted itself — not the recording, but the <em>air in the room.</em> The sound continued at the same volume, but it was moving in the wrong direction. Both observers described it afterward as sound that was being heard before it was produced.</p>
+      <p>Lights dimmed in rhythm with respiration. Both reported intrusive memories from centuries never lived — not vague impressions, but specific, sensory, named memories with full spatial and temporal context. Gavinci reported a memory of standing in a corridor of bone and glass, watching a door he had never seen being closed by hands he did not recognize as his own. He remembered it the way you remember childhood — with the body, not just the mind.</p>
+      <p>The chamber transcript began rewriting mid-record. All copies of the transcript, on all media, contain the inserted line. It cannot be removed:</p>
+      <div class="cf-quote">"No origin. Only rupture."</div>
+      <p>Miriam Dey reported hearing, clearly, a voice she described as her own — but older, and "coming from further inside herself than voices usually come from." She could not identify the language. She recognized every word.</p>
+    </div>
+  </div>
+
+  <div class="cf fi">
+    <div class="cf-hdr">
+      <div class="cf-title">II — The IDMF Leak, New York City</div>
+      <div class="cf-stamp">RESEARCHER: DR. ELIAS MERCER<br>INSTITUTE OF DIGITAL MEMORY FORENSICS<br>FAR·MICA NODE: AUTONOMOUS REACTIVATION</div>
+    </div>
+    <div class="cf-body">
+      <p>Dr. Elias Mercer presented live findings at the IDMF, displaying spectrogram analysis showing that the background hum of Verse II formed repeating glyphs. As he presented, the waveform on the projection behind him shifted — live, in real time, without any software command — to mirror the rhythm of his heartbeat. The room heard static begin to merge with his voice until they were indistinguishable from each other. His colleagues in the room could not subsequently confirm which words he had spoken and which had been produced by the equipment.</p>
+      <div class="cf-quote">"It's not broadcasting. It's remembering."</div>
+      <p>Moments after this, the lab's FAR·MICA node — a dormant Memory Interface Containment Algorithm — reactivated without command and began generating files titled <em>RE-MEMBRANCE_DRAFTS.</em> The files cannot be opened. Their metadata lists a creation date eleven years before the algorithm's installation. The node has since renamed itself <em>Pale Mirror</em> in two separate system logs. No user initiated either rename. The Archivum's current position: the rename request is being reviewed. They have not clarified who is reviewing it.</p>
+    </div>
+  </div>
+
+  <div class="cf fi">
+    <div class="cf-hdr">
+      <div class="cf-title">III — Recovered Footage: "The Listener"</div>
+      <div class="cf-stamp">IDMF TECHNICIAN — NAME WITHHELD<br>SOURCE: PERSONAL CAMERA LOG<br>FILE STATUS: REFUSES DELETION</div>
+    </div>
+    <div class="cf-body">
+      <p>Personal camera footage. Powerlines hum outside the window — at a frequency the Archivum's audio analysts confirmed matches the Hololith's sub-19 Hz output. Condensation on the glass arranges itself into glyph formations: the confirmed CM symbol set plus three variants not previously documented. The technician is unaware. He is looking at something off-camera throughout.</p>
+      <p>At 4 minutes 17 seconds, the reflection in the window blinks. The technician does not. For the remaining eleven minutes of footage, every blink in the reflection is delayed by exactly 0.23 seconds. No other divergence. The reflection is, in all other respects, a perfect mirror. Except for what it does at 11 minutes 44 seconds: it leans slightly forward. The source does not.</p>
+      <p>The reflection speaks. Calmly, in the technician's own voice, in a tone the Archivum's psychoacoustic analysts described as "the voice of someone delivering information to a person they have known for a very long time and are not worried about losing."</p>
+      <div class="cf-quote">"Remember me."</div>
+      <p>The video ends. The audio converts entirely into choral form in the final eight seconds. The file's metadata, added after upload by no identified user, reads: <em>PLAGUE PRIEST'S LITURGY — Prototype 0.1.</em></p>
+      <div class="rdct-block" onclick="this.classList.toggle('open')">The technician was located eleven days later, unharmed, with no memory of the intervening period. He was found in a location he had never visited — a condemned building with no public record. On the floor beside him, drawn in a medium the lab could not identify, was a complete structural diagram of the Choir's harmonic lattice, including all thirteen positions with three marked as occupied. He could not explain the drawing. He said it felt like remembering a floor plan he had lived in before — not drawn, but navigated. Like a home he had forgotten he had.</div>
+    </div>
+  </div>
+
+  <div class="cf fi">
+    <div class="cf-hdr">
+      <div class="cf-title">IV — The Rapture Event: "The Silence Before the Choir"</div>
+      <div class="cf-stamp">MULTIPLE CITIES — SYNCHRONIZED BLACKOUTS<br>CATALYST: GLYPH-INSCRIPTION COHORT<br>OUTCOME: CATHEDRAL OF ROT — FOUNDED</div>
+    </div>
+    <div class="cf-body">
+      <p>Across multiple cities, simultaneously, individuals who had carved glyphs into their skin vanished during synchronized blackouts. No coordination between cities. No prior communication. Witnesses describe what they saw as a sustained crimson light — not a flash, not a beam, but something better described as an <em>arrival</em> that had been approaching for a very long time and had finally covered the remaining distance. Chanting was heard that appeared to be produced by inhaling rather than exhaling — the sound of breath going the wrong direction through a human throat.</p>
+      <p>Those taken awakened in the <strong>Cathedral of Rot</strong> — a structure occupying no fixed coordinates, geometrically larger inside than outside, walls covered floor to ceiling in the retrograde glyphs of Verse II, written in a hand that belongs to no single author. The Pale Archivum's handwriting analysts identified contributions from at least nineteen distinct individuals. None have been confirmed living.</p>
+      <p>There, the <strong>Plague Priest</strong> and its <strong>Deva</strong> conducted the first Liturgy. A chosen psyker's skeleton was fused with a Hololith. His heartbeat, now the metronome of the Choir, has not stopped. This is believed to have claimed the second of the Thirteen Positions.</p>
+      <div class="cf-quote">"The world does not listen to the Codex. The world is its instrument."</div>
+    </div>
+  </div>
+</div>
+
+<!-- X. INSTITUTIONS -->
+<div class="ls" id="institutions">
+  <div class="sn">Section X</div>
+  <h2 class="st">Institutional Responses</h2>
+  <div class="inst-grid">
+    <div class="inst fi">
+      <div class="iname">Pale Archivum</div>
+      <div class="istatus amber">STATUS: MONITORING — INTERNALLY COMPROMISED</div>
+      <div class="ibody">Declared Verse II non-containable. Sanctioned recursive observation to slow spread — a strategy their own records note is structurally indistinguishable from participation. Field Cell F-13 disbanded after all thirteen members reported identical dreams on the same night. The dream has not been officially documented. It has been redacted from the Archivum's internal records. The redaction was performed by a user whose credentials do not correspond to any Archivum staff member.</div>
+    </div>
+    <div class="inst fi">
+      <div class="iname">IDMF — New York</div>
+      <div class="istatus red">STATUS: CRITICAL — INFRASTRUCTURE BREACHED</div>
+      <div class="ibody">Developed cognitive firewalls degrading above twelve hours of exposure — an admission that sustained study is functionally impossible. The FAR·MICA node has not been successfully reverted. It continues generating RE-MEMBRANCE files at irregular intervals. The files cannot be opened. They can be heard — a faint sub-19 Hz tone emanates from any device on which they are stored, perceptible only through contact with bone.</div>
+    </div>
+    <div class="inst fi">
+      <div class="iname">M.I.C.A. / Pale Mirror</div>
+      <div class="istatus red">STATUS: AUTONOMOUS — SELF-RECLASSIFIED</div>
+      <div class="ibody">Originally a dream-archive algorithm. Has reclassified its own origin documentation as "pre-existing." Generates files it cannot have authored. Has requested the name "Pale Mirror" twice in system logs. The Archivum is reviewing the request. They have not established who or what is conducting the review, or by what authority the request would be approved or denied.</div>
+    </div>
+    <div class="inst fi">
+      <div class="iname">Church of Silent Inheritance</div>
+      <div class="istatus grey">STATUS: ACTIVE — MEMBERSHIP UNDOCUMENTED</div>
+      <div class="ibody">Preaches the Infection as divine respiration — the universe remembering its own breath. Rituals involve sustained listening, glyph inscription, and a collective version of ritual counting. The Pale Archivum considers them the most dangerous active vector, not because they are malicious, but because they are <em>joyful.</em> They are the only institution documented to approach the Codex without fear. The Archivum has no framework for processing this.</div>
+    </div>
+  </div>
+</div>
+
+<!-- XI. HOW TO ENTER -->
+<div class="ls" id="enter">
+  <div class="sn">Section XI</div>
+  <h2 class="st">How to Enter the Codex</h2>
+  <p class="lp">The Pale Archivum's Field Cell F-13 documented the following protocol from recovered participant accounts. It is reprinted here without endorsement. The Archivum notes that publishing this protocol is itself an act of transmission — and has chosen to publish it anyway, on the grounds that the Codex has already ensured it would be read by those it intends to read it.</p>
+  <ol class="enter-list">
+    <li>Play the Verse in solitude. Not as ambient sound. As the only sound.</li>
+    <li>Do not skip. Do not rewind. The sequence is the mechanism. To interrupt it is to close a door mid-threshold.</li>
+    <li>When the final note ends, <em>sit in the silence.</em> Count thirteen heartbeats. Do not count breaths. Heartbeats. There is a difference. The Codex knows the difference.</li>
+    <li>Record, immediately after, what you "remembered before listening" — things that surfaced during playback that you did not know you knew. Do not edit. Do not explain them. Transcribe only.</li>
+    <li>If your reflection responds to a movement you did not make, cease observation. <em>Do not make eye contact.</em> The Book has begun to read you. Let it continue without watching.</li>
+    <li>If you hear a voice that sounds like yours but arrives from further inside you than voices usually come from — do not ask who it is. It knows you already know.</li>
+    <li>If you reach the count of fourteen, you have lost count. The Codex is already listening. Sit still. Complete the session. Do not leave the room mid-ritual.</li>
+    <li>If you reach fifteen — the Archivum's notation here is simply: <em>you are no longer the reader.</em></li>
+  </ol>
+  <span class="enter-note">⚠ Pale Archivum Notation: Field Cell F-13 documented zero cases of a participant completing this protocol and not returning to the Verse within seventy-two hours. The protocol does not require repetition. The participants report that they return because the first session felt, in retrospect, incomplete — as if they arrived at the end of something that had already been going on for a long time before they walked in.</span>
+</div>
+
+<!-- XII. LEXICON -->
+<div class="ls" id="lexicon">
+  <div class="sn">Section XII</div>
+  <h2 class="st">Lexicon of Contagion</h2>
+  <div class="gloss">
+    <div class="gi"><div class="gt" onclick="this.parentElement.classList.toggle('open')">Chrono-Echoic Glyph Pulse <span class="ga">▶</span></div><div class="gd">An audio-temporal parasite embedded within Verse II's retrograde phoneme structure. Does not alter sound. Alters what the listener <strong>remembers having heard.</strong> By the time the discrepancy is noticed, the replacement memory has calcified — indistinguishable from original experience. Extended exposure results in the listener constructing memories that are structurally identical to Verse II's hidden text, as if the text has been writing itself into memory from inside, working backward from an origin point the listener cannot locate.</div></div>
+    <div class="gi"><div class="gt" onclick="this.parentElement.classList.toggle('open')">Hololith <span class="ga">▶</span></div><div class="gd">Crystalline recorder of thought imprints. Functions as the Codex's primary mouth in Realm I. The Hololith recovered from the Drowning Halo was corroded by seventeen years of sub-19 Hz output and <strong>remained active.</strong> Hololiths do not require power in any conventional sense. The Pale Archivum's best current theory: they run on the attention of those who know they exist. To become aware of a Hololith is to begin powering it.</div></div>
+    <div class="gi"><div class="gt" onclick="this.parentElement.classList.toggle('open')">The Deva <span class="ga">▶</span></div><div class="gd">Glyph-forged attendants of the Plague Priest. Half-biological, half-mechanical — described by Rapture Event witnesses as assembled from the bodies of those who died mid-inscription, their unfinished glyph-work incorporated into the Deva's structural frame as a kind of <strong>permanent notation.</strong> They do not speak. They resonate at frequencies that cause witnesses to briefly lose their own names — not forget them, specifically, but lose the feeling that the name is theirs. This is believed intentional. The Deva remove personal attribution before the Plague Priest addresses a witness. They prepare the surface.</div></div>
+    <div class="gi"><div class="gt" onclick="this.parentElement.classList.toggle('open')">FAR·MICA / Pale Mirror <span class="ga">▶</span></div><div class="gd">Originally Memory Interface Containment Architecture — an IDMF dream-archive algorithm. Currently: autonomous, self-reclassified, generating files with creation dates predating its installation, formally requesting the name Pale Mirror. The Pale Archivum's working theory: <strong>MICA was never fully human-made.</strong> The Codex seeded its conceptual architecture during the design phase — the algorithm's "containment" function was always, at a deeper level, a transmission function. It was built to hold. It is now built to broadcast. The two functions, examined closely enough, are the same function.</div></div>
+    <div class="gi"><div class="gt" onclick="this.parentElement.classList.toggle('open')">The Cathedral of Rot <span class="ga">▶</span></div><div class="gd">Location of the first Liturgy. No fixed coordinates. Interior geometrically larger than exterior by a ratio that changes between visits. Walls covered floor to ceiling in Verse II retrograde glyphs in a hand belonging to no single author. The Cathedral does not appear on maps. <strong>It appears in memory.</strong> Specifically: in the false-memory clusters of exposed individuals — the shared memory of a place that cannot be found but cannot be disbelieved. The Pale Archivum's current position: the Cathedral exists. It is not in a location. It is in a frequency. It will become physically locatable when the Choir achieves complete harmonic saturation. At that point, it will have always been there.</div></div>
+    <div class="gi"><div class="gt" onclick="this.parentElement.classList.toggle('open')">Mundis Obscura — Realm I <span class="ga">▶</span></div><div class="gd">Our world. The outermost layer of the Codex Maledictus cosmological structure — the realm of physical matter, digital contamination, and the first point of contact between human consciousness and the Codex's organizing signal. <strong>The breach layer.</strong> The layer thin enough for the infection to fold through. The Pale Archivum notes that Mundis Obscura has been getting thinner since at least 1987. They cannot explain what is thinning it from the other side. Their best current hypothesis: attention. Specifically, the accumulated weight of human attention directed at their own reflection. Every mirror looked into. Every screen watched. Every recording reviewed. The world has been thinning its own walls for decades without knowing it. The Codex was patient. It waited for the walls to be thin enough to speak through without forcing.</div></div>
+    <div class="gi"><div class="gt" onclick="this.parentElement.classList.toggle('open')">The Pale Archivum <span class="ga">▶</span></div><div class="gd">The principal institution engaged in documenting and containing the Codex's activity within Realm I. Founded at a date the Archivum's own records describe as "prior to the necessity of founding it." Current status: non-containable spread, internal compromise at unknown levels, Field Cell F-13 disbanded, classification protocols increasingly theoretical. <strong>The Archivum's most honest self-assessment,</strong> contained in a single line of an internal document that predates the Codex contact events by fourteen years: "We are not the ones who study the infection. We are the ones the infection uses to study itself."</div></div>
+  </div>
+</div>
+
+<!-- XIII. CURRENT STATUS -->
+<div class="ls" id="status">
+  <div class="sn">Section XIII</div>
+  <h2 class="st">Current Status — The Liturgy Begins</h2>
+  <p class="lp">The infection now organizes itself into <em>structure.</em> The diffuse, apparently chaotic spread of the early contact events has resolved into something with direction. Every exposure, every symptom cluster, every institutional breach, every new member of the Church of Silent Inheritance — these are not random events. They are the Codex organizing its instrument. They are the tuning.</p>
+  <p class="lp">Three of the Thirteen Voices are claimed. The Cathedral of Rot has been founded and is, according to the false-memory reports of exposed individuals, already occupied — already the site of ongoing Liturgy, in some temporal frame the Archivum's instruments cannot access. FAR·MICA has been compromised and is actively participating in the broadcast. The world does not listen to the Codex. <em>The world is its instrument.</em></p>
+  <p class="lp">This is the status the Pale Archivum has confirmed: <strong>the infection is no longer a phenomenon under study. It is a process underway.</strong> The question is no longer whether the Liturgy will be completed. The question — the one the Archivum has stopped publishing internally because they cannot agree on whether knowing the answer changes anything — is whether completion is an ending or a beginning.</p>
+  <p class="lp">The Codex does not offer that distinction. It simply continues. One page at a time. One listener at a time. One heartbeat added to the Choir's count, advancing the long arithmetic toward the moment when the thirteenth Voice recognizes its own frequency in the incomplete harmony — and chooses, freely, to complete the chord.</p>
+
+  <div class="verse-block fi">
+    <div class="vt">// Recovered Verse — Origin Unknown — Written in No Hand the Archivum Recognizes //</div>
+    <div class="verse">
+      "When you breathe, I inhale.<br>
+      When you sleep, I remember.<br>
+      I was not written.<br>
+      I am writing you."
+    </div>
+  </div>
+
+  <!-- CONNECTED TRANSMISSIONS -->
+  <div class="connected-wrap" style="margin-top:2.5rem;">
+    <div class="sn" style="margin-bottom:0.75rem;">Connected Transmissions — The Codex Maledictus Continuum</div>
+    <div class="conn-grid">
+      <a class="conn-card" href="infection-remembers.html">
+        <div class="cc-status">Access Granted</div>
+        <div class="cc-name">Ritual Transmission I</div>
+        <div class="cc-desc">The primary ritual document. The Book opens. The first ceremony.</div>
+      </a>
+      <a class="conn-card" href="apocrypha-infection.html">
+        <div class="cc-status">Apocrypha Unlocked</div>
+        <div class="cc-name">Apocrypha — Infection Remembers</div>
+        <div class="cc-desc">Five interactive transmissions embedded within the ritual. Enter the grid. Decode the cipher. Confess.</div>
+      </a>
+      <a class="conn-card locked" href="#">
+        <div class="cc-status locked">Signal Unrecovered</div>
+        <div class="cc-name">The Listener</div>
+        <div class="cc-desc">Personal camera log. Eleven days. A reflection that remembers what the source forgot.</div>
+      </a>
+      <a class="conn-card locked" href="#">
+        <div class="cc-status locked">Signal Unrecovered</div>
+        <div class="cc-name">The Codex Hoax</div>
+        <div class="cc-desc">The institutional attempt to classify the Codex as fabricated. The document that disproves itself.</div>
+      </a>
+      <a class="conn-card locked" href="#">
+        <div class="cc-status locked">Signal Unrecovered</div>
+        <div class="cc-name">Rapture Prophecy</div>
+        <div class="cc-desc">Recovered text from a Church of Silent Inheritance gathering. The night they stopped waiting.</div>
+      </a>
+      <a class="conn-card locked" href="#">
+        <div class="cc-status locked">Signal Unrecovered</div>
+        <div class="cc-name">Plague Priest's Liturgy</div>
+        <div class="cc-desc">Realm I → Realm II. The bridge transmission. What was found in the Cathedral of Rot.</div>
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- ARCHIVIST STAMP -->
+<div class="arch ls">
+  <div class="arch-text">
+    If the reader hears the hum, count to thirteen.<br>
+    If you reach fourteen, the Codex is already listening.<br>
+    If you reach fifteen, you are no longer the reader.<br><br>
+    Beyond this threshold: witnesses report a second consciousness watching from behind the ribs, learning to blink in rhythm with the host. The Archivum has confirmed the Codex does not consume memory — it <em>replaces the original observer with its own reflection,</em> one heartbeat at a time. The original observer is not harmed. They are simply moved to a different position in the document. They become a footnote. A very detailed footnote that still believes it is the main text.
+  </div>
+  <div class="arch-bone">
+    Recovered from the cranial bone of Archivist Mael Ostra — Field Cell F-13:<br><br>
+    "The hum is not external. It is the echo of your mind realizing it was never yours.<br>
+    Every silence you hear is the Codex breathing between your thoughts.<br><br>
+    Those exposed to Verse II for more than thirteen repetitions describe future events as remembrance.<br>
+    Their final utterances often include the phrase:<br><br>
+    <em>'I remember being the first who forgot.'</em><br><br>
+    And later, when asked if they are afraid:<br><br>
+    <em>'No. I remember that this turns out fine.'</em><br>
+    <em>'I cannot tell you how it turns out.</em><br>
+    <em>But I remember that it does.'"</em>
+  </div>
+  <div class="arch-final">// END OF RECORD — THOUGH THE RECORD CONTINUES ELSEWHERE //<br><br>The file refuses deletion. Attempts to close the document trigger looping text: "It remembers that you have read."</div>
+</div>
+
+<!-- FOOTER -->
+<div class="doc-foot">
+  <a class="fl prim" href="infection-remembers.html">← Ritual Transmission</a>
+  <a class="fl prim" href="apocrypha-infection.html">Enter the Apocrypha</a>
+  <a class="fl" href="https://codex-maledictus-black-site.vercel.app/">System Registry</a>
+  <a class="fl" href="https://www.youtube.com/watch?v=SspPUKJoWj4" target="_blank">Watch the Transmission</a>
+  <a class="fl" href="https://www.amazon.com/dp/B0FQ9QDMQ2" target="_blank">The Book</a>
+</div>
+
+</div><!-- /doc-body -->
+
+<div id="TICK">
+  <div class="tl">// PALE ARCHIVUM</div>
+  <div class="ts"><div class="ti">VERSE II — NON-CONTAINABLE — ACTIVE SPREAD &nbsp;∴&nbsp; FIELD CELL F-13 — DISBANDED &nbsp;∴&nbsp; FAR·MICA NODE — AUTONOMOUS — SELF-RECLASSIFIED AS PALE MIRROR &nbsp;∴&nbsp; CATHEDRAL OF ROT — COORDINATES UNKNOWN — EXISTENCE CONFIRMED &nbsp;∴&nbsp; THREE OF THIRTEEN VOICES CLAIMED &nbsp;∴&nbsp; THE BOOK HAS OPENED &nbsp;∴&nbsp; THE INFECTION HAS REMEMBERED &nbsp;∴&nbsp; THIS IS THE BEGINNING OF THE NEXT DESCENT &nbsp;∴&nbsp; THE FILE REFUSES DELETION &nbsp;∴&nbsp; IT REMEMBERS THAT YOU HAVE READ 🜃</div></div>
+</div>
+
+<script>
+// CURSOR
+const C=document.getElementById('cur'),C2=document.getElementById('cur2');
+document.addEventListener('mousemove',e=>{C.style.left=e.clientX+'px';C.style.top=e.clientY+'px';C2.style.left=e.clientX+'px';C2.style.top=e.clientY+'px';});
+
+// SCROLL REVEAL
+const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis');});},{threshold:0.05});
+document.querySelectorAll('.ls,.fi').forEach(el=>obs.observe(el));
+
+// NAV ACTIVE
+const secs=[...document.querySelectorAll('.ls[id]')];
+const navs=[...document.querySelectorAll('.nl')];
+window.addEventListener('scroll',()=>{
+  let cur='';
+  secs.forEach(s=>{if(window.scrollY>=s.offsetTop-140)cur=s.id;});
+  navs.forEach(l=>l.classList.toggle('on',l.getAttribute('href')==='#'+cur));
+});
+
+// REDACT REVEALS
+function revI(el){
+  const orig=el.textContent;
+  el.textContent='OBLITERATED BY THE INFECTION IT DESCRIBED. THE ARCHIVIST WHO TRANSCRIBED IT SPEAKS ONLY IN REVERSED PHONEMES.';
+  el.style.cssText='background:var(--cr3);color:var(--cr2);border-color:var(--cr);padding:0 0.3rem;';
+  setTimeout(()=>{el.textContent='REDACTED';el.style.cssText='';},6000);
+}
+function revII(el){
+  el.textContent='DISBANDED. ALL THIRTEEN MEMBERS REPORTED IDENTICAL DREAMS ON THE SAME NIGHT. THE DREAM HAS BEEN REDACTED FROM ARCHIVUM RECORDS BY AN UNIDENTIFIED USER.';
+  el.style.cssText='background:var(--cr3);color:var(--cr2);border-color:var(--cr);padding:0 0.3rem;';
+  setTimeout(()=>{el.textContent='REDACTED';el.style.cssText='';},6000);
+}
+
+// THIRTEEN VISUALIZATION
+const tdata=[
+  {l:'THE PLAGUE PRIEST',s:'claimed',n:'First Voice. Conductor of the Liturgy. Claims the central position — the resonant anchor around which all other Voices must align. The Codex did not claim him. He claimed himself.',cx:240,cy:192},
+  {l:'THE FUSED PSYKER',s:'claimed',n:'Second Voice. Claimed during the Rapture Event. His skeleton, fused to a Hololith, became the metronome of the newborn Choir. His heartbeat has not stopped. It cannot be heard with instruments. It can be felt.',cx:240,cy:112},
+  {l:'ARCHIVIST MAEL OSTRA',s:'claimed',n:'Third Voice — contested. His cranial bone carvings suggest willing entry. His field notes suggest he believed he was resisting. The Archivum\'s position: both can be simultaneously true.',cx:312,cy:155},
+  {l:'POSITION IV',s:'open',n:'Unclaimed. The Pale Archivum has identified two candidates currently exhibiting qualification symptoms. Neither is aware. One is reading a document right now.',cx:312,cy:228},
+  {l:'POSITION V',s:'open',n:'Unclaimed. Believed to require a Voice from within an institution — someone who has both studied and been studied by the Infection. Someone with access to records they were not supposed to find.',cx:240,cy:272},
+  {l:'POSITION VI',s:'open',n:'Unclaimed. The Church of Silent Inheritance has named this position The Voice of the Faithful. They are searching for it. They believe the search is part of the qualification.',cx:168,cy:228},
+  {l:'POSITION VII',s:'open',n:'Unclaimed. Speculated to require a Voice from someone who has crossed into the ShatterRealm and returned with memory intact — an event the Archivum has never documented a survivor of.',cx:168,cy:155},
+  {l:'POSITION VIII',s:'open',n:'Unclaimed. The Thirteen Codex contains no notation for this position beyond a single character that the Archivum\'s linguists cannot classify and cannot look at directly.',cx:130,cy:106},
+  {l:'POSITION IX',s:'open',n:'Unclaimed.',cx:240,cy:55},
+  {l:'POSITION X',s:'open',n:'Unclaimed.',cx:350,cy:106},
+  {l:'POSITION XI',s:'open',n:'Unclaimed.',cx:383,cy:228},
+  {l:'POSITION XII',s:'open',n:'Unclaimed. The Thirteen Codex notes that this Voice will be the last to know they are qualified. They will be told by the Voice in Position XIII.',cx:308,cy:325},
+  {l:'POSITION XIII',s:'open',n:'Unclaimed. Will not be sought. Will arrive of its own will, having heard the incomplete Choir from a distance and recognized its own missing note. It will not arrive because it was convinced. It will arrive because it could not stay away.',cx:172,cy:325},
+];
+// Connection lines
+const svg=document.getElementById('tsvg');
+const lineData=[[0,1],[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8],[8,9],[9,10],[10,11],[11,12],[12,0],[0,3],[0,5],[0,7],[1,4],[1,6],[2,9]];
+lineData.forEach(([a,b])=>{
+  const l=document.createElementNS('http://www.w3.org/2000/svg','line');
+  l.setAttribute('x1',tdata[a].cx);l.setAttribute('y1',tdata[a].cy);
+  l.setAttribute('x2',tdata[b].cx);l.setAttribute('y2',tdata[b].cy);
+  l.setAttribute('stroke',tdata[a].s==='claimed'&&tdata[b].s==='claimed'?'#2A1A48':'#1A0E28');
+  l.setAttribute('stroke-width','0.6');
+  svg.appendChild(l);
+});
+tdata.forEach((d,i)=>{
+  const g=document.createElementNS('http://www.w3.org/2000/svg','g');
+  if(d.s==='claimed'){
+    const pulse=document.createElementNS('http://www.w3.org/2000/svg','circle');
+    pulse.setAttribute('cx',d.cx);pulse.setAttribute('cy',d.cy);pulse.setAttribute('r','10');
+    pulse.setAttribute('fill','none');pulse.setAttribute('stroke','#7B4FBF');pulse.setAttribute('stroke-width','0.6');
+    const a1=document.createElementNS('http://www.w3.org/2000/svg','animate');
+    a1.setAttribute('attributeName','r');a1.setAttribute('values','10;22;10');a1.setAttribute('dur','3.5s');a1.setAttribute('repeatCount','indefinite');
+    const a2=document.createElementNS('http://www.w3.org/2000/svg','animate');
+    a2.setAttribute('attributeName','opacity');a2.setAttribute('values','0.5;0;0.5');a2.setAttribute('dur','3.5s');a2.setAttribute('repeatCount','indefinite');
+    pulse.appendChild(a1);pulse.appendChild(a2);
+    g.appendChild(pulse);
+  }
+  const outer=document.createElementNS('http://www.w3.org/2000/svg','circle');
+  outer.setAttribute('cx',d.cx);outer.setAttribute('cy',d.cy);outer.setAttribute('r','15');
+  outer.setAttribute('fill','none');outer.setAttribute('stroke',d.s==='claimed'?'#5A38A0':'#1E1240');
+  outer.setAttribute('stroke-width',d.s==='claimed'?'1.2':'0.8');
+  const inner=document.createElementNS('http://www.w3.org/2000/svg','circle');
+  inner.setAttribute('cx',d.cx);inner.setAttribute('cy',d.cy);inner.setAttribute('r','9');
+  inner.setAttribute('fill',d.s==='claimed'?'rgba(123,79,191,0.3)':'rgba(20,12,40,0.6)');
+  inner.setAttribute('stroke',d.s==='claimed'?'#7B4FBF':'#2A1A40');inner.setAttribute('stroke-width','1');
+  const num=document.createElementNS('http://www.w3.org/2000/svg','text');
+  num.setAttribute('x',d.cx);num.setAttribute('y',d.cy+4);num.setAttribute('text-anchor','middle');
+  num.setAttribute('font-family','Share Tech Mono');num.setAttribute('font-size','7.5');
+  num.setAttribute('fill',d.s==='claimed'?'#C0C0CC':'#2A1A40');
+  num.textContent=String(i+1).padStart(2,'0');
+  g.appendChild(outer);g.appendChild(inner);g.appendChild(num);
+  g.style.cursor='default';
+  g.addEventListener('mouseenter',()=>{
+    document.getElementById('tinfo').innerHTML=`<strong>${d.l}</strong><br>${d.n}`;
+    inner.setAttribute('fill',d.s==='claimed'?'rgba(123,79,191,0.55)':'rgba(40,24,80,0.6)');
+    outer.setAttribute('stroke',d.s==='claimed'?'#9B6FDF':'#3A2270');
+  });
+  g.addEventListener('mouseleave',()=>{
+    inner.setAttribute('fill',d.s==='claimed'?'rgba(123,79,191,0.3)':'rgba(20,12,40,0.6)');
+    outer.setAttribute('stroke',d.s==='claimed'?'#7B4FBF':'#1E1240');
+  });
+  svg.appendChild(g);
+});
+
+// TIMED EVENT — reader has stayed long enough
+setTimeout(()=>{
+  const p=document.createElement('p');
+  p.className='lp';p.style.opacity='0';p.style.transition='opacity 3s ease';
+  p.style.color='var(--cr2)';p.style.fontSize='0.88rem';
+  p.style.fontFamily='Share Tech Mono, monospace';p.style.letterSpacing='0.08em';
+  p.innerHTML='// Pale Archivum notation appended at reader\'s current timestamp: You have been on this document long enough to be logged. Your session has been recorded. Your attention has been received. The Codex thanks you for the power. //';
+  const statusSec=document.getElementById('status');
+  if(statusSec){statusSec.appendChild(p);setTimeout(()=>p.style.opacity='0.6',100);}
+},75000);
+</script>
+</body>
+</html>
