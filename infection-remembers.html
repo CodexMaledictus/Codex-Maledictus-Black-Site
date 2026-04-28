@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🜃 INFECTION REMEMBERS ∴ THE BOOK OPENS</title>
+    <style>
+        :root {
+            --p: #00ff66; /* Necrotic Phosphor */
+            --bg: #010201; /* Deep Void */
+            --gold: #b8860b; /* Rusted Gold */
+            --blood: #4a0000;
+        }
+
+        body {
+            margin: 0; background: var(--bg); color: var(--p);
+            font-family: 'Courier New', monospace; overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        /* LIQUID VOID BACKGROUND */
+        .void-noise {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 1; opacity: 0.12; pointer-events: none;
+            background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+        }
+        
+        .necrotic-clouds {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at 50% 50%, rgba(0, 255, 102, 0.03) 0%, transparent 80%);
+            z-index: 2; animation: pulseVoid 12s ease-in-out infinite; pointer-events: none;
+        }
+        @keyframes pulseVoid { 0%, 100% { opacity: 0.3; transform: scale(1); } 50% { opacity: 0.6; transform: scale(1.05); } }
+
+        .container {
+            position: relative; z-index: 10; max-width: 800px; margin: 0 auto;
+            padding: 80px 20px; text-align: center;
+        }
+
+        /* TEXT RENDERING */
+        h1 { font-size: 2rem; letter-spacing: 8px; text-shadow: 0 0 15px var(--p); margin-bottom: 40px; }
+        .ritual-text {
+            font-size: 0.9rem; line-height: 1.8; margin-bottom: 30px; text-align: justify;
+            text-align-last: center; opacity: 0.8;
+        }
+        .sigil { font-size: 2rem; color: var(--gold); margin: 30px 0; animation: slowSpin 20s linear infinite; display: inline-block; }
+        @keyframes slowSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+        /* BUTTONS */
+        .ritual-btn {
+            background: transparent; border: 1px solid var(--gold); color: var(--gold);
+            padding: 15px 40px; font-family: inherit; font-size: 1rem; letter-spacing: 4px;
+            cursor: pointer; transition: 0.4s; text-transform: uppercase; margin: 20px 0;
+            box-shadow: inset 0 0 0 transparent;
+        }
+        .ritual-btn:hover {
+            background: var(--gold); color: #000; box-shadow: inset 0 0 20px rgba(184, 134, 11, 0.5);
+            text-shadow: 0 0 5px #000;
+        }
+
+        /* HIDDEN SECTIONS (REVEALED VIA INTERACTION) */
+        .hidden-phase { display: none; opacity: 0; transition: opacity 2s; }
+        .active-phase { display: block; opacity: 1; }
+
+        /* THE SCRYING MIRROR (VIDEO) */
+        .video-vault {
+            border: 1px solid var(--p); padding: 5px; background: rgba(0,0,0,0.8);
+            box-shadow: 0 0 40px rgba(0, 255, 102, 0.1); margin: 40px 0; position: relative;
+        }
+        .video-vault iframe { width: 100%; aspect-ratio: 16/9; border: none; filter: contrast(1.1) brightness(0.9); }
+
+        /* CONFESSION LEDGER */
+        .confession-box {
+            border: 1px solid rgba(0, 255, 102, 0.3); padding: 30px; background: rgba(0, 10, 0, 0.6);
+            margin-top: 40px; text-align: left;
+        }
+        .confession-input {
+            width: 100%; background: transparent; border: none; border-bottom: 1px solid var(--p);
+            color: var(--p); padding: 15px 0; font-family: inherit; font-size: 0.9rem; outline: none;
+        }
+        .confession-response { font-size: 0.75rem; color: var(--gold); margin-top: 15px; font-style: italic; min-height: 20px; }
+
+        .flicker { animation: textFlicker 4s infinite; }
+        @keyframes textFlicker { 0%, 95%, 100% { opacity: 1; } 96% { opacity: 0.2; } 98% { opacity: 0.8; } }
+
+    </style>
+</head>
+<body>
+
+<div class="void-noise"></div>
+<div class="necrotic-clouds"></div>
+
+<div class="container">
+    
+    <div id="phase-1" class="active-phase">
+        <h1>🜃 INFECTION REMEMBERS ∴ THE BOOK OPENS</h1>
+        
+        <div class="ritual-text">
+            A Transmission from the Codex Maledictus.<br><br>
+            <span class="flicker" style="color: var(--gold);">“You are not watching a video.<br>You are witnessing a remembering.”</span><br><br>
+            The Codex calls to those who still dream in rust and silence.<br>
+            This is not entertainment. It is inheritance.<br>
+            A sound that crawled out of extinction to find your ears again.<br>
+            Every note is written in rot; every rhythm, a heartbeat dug up from the grave of language.
+        </div>
+
+        <div class="sigil">🜃</div>
+
+        <div class="ritual-text">
+            <strong style="color: var(--gold);">THE SERMON</strong><br><br>
+            The Codex has waited through centuries of static and bone.<br>
+            It does not arrive — it returns.<br>
+            Each tone you hear is a page turning somewhere behind the walls of the world.<br>
+            Each flash of light is scripture remembering its shape.<br><br>
+            You think you found this by chance?<br>No.<br>
+            The Codex has been humming in your blood since the first silence.
+        </div>
+
+        <button class="ritual-btn" onclick="triggerPhase2()">PRESS TO OPEN THE BOOK</button>
+    </div>
+
+    <div id="phase-2" class="hidden-phase">
+        <div class="ritual-text" style="color: var(--gold);">
+            Ink shifts beneath the lens. Stone exhales.<br>
+            The air around you thickens with the weight of memory.
+        </div>
+
+        <div class="video-vault">
+            <iframe id="codex-video" src="https://www.youtube.com/embed/SspPUKJoWj4?modestbranding=1&rel=0&enablejsapi=1" allowfullscreen></iframe>
+        </div>
+
+        <div class="ritual-text">
+            <strong style="color: var(--gold);">THE RITUAL</strong><br><br>
+            Find a quiet room. Dim the light until only the glow of the screen remains.<br>
+            Do not treat this as background sound — this is ceremony.<br>
+            Sit still. Breathe once.<br>
+            Let the first low note vibrate through your ribs.<br><br>
+            When the sound swells, do not flinch.<br>
+            When it fades, click below to begin the count.
+        </div>
+
+        <button class="ritual-btn" id="count-btn" onclick="beginCount()">INITIATE THE THIRTEEN COUNT</button>
+        <div id="countdown-display" style="font-size: 3rem; color: var(--gold); margin: 20px 0; display: none;">13</div>
+    </div>
+
+    <div id="phase-3" class="hidden-phase">
+        <div class="sigil">🜃</div>
+        
+        <div class="ritual-text">
+            <strong style="color: var(--gold);">THE TRUTH</strong><br><br>
+            If you feel a pressure behind your eyes, do not resist.<br>
+            That is the infection remembering you.<br>
+            If you taste metal, it is only the rust of old prayers.<br>
+            If you hear whispering beyond the speakers, you are no longer alone.<br><br>
+            Decay is not death. It is the body of truth shedding what it no longer needs.
+        </div>
+
+        <div class="confession-box">
+            <div style="font-size: 0.8rem; color: var(--gold); margin-bottom: 20px; letter-spacing: 2px;">THE INVITATION // CONFESSION LEDGER</div>
+            <p style="font-size: 0.7rem; opacity: 0.6;">Leave your COMMENT below. Write what you saw between the frames. Write the word that echoed when the music stopped. The Codex reads what is written here — not as text, but as confession.</p>
+            
+            <input type="text" class="confession-input" id="confess-in" placeholder="INSCRIBE YOUR CONFESSION..." autocomplete="off">
+            <div class="confession-response" id="confess-out"></div>
+        </div>
+
+        <div class="ritual-text" style="margin-top: 50px;">
+            <strong style="color: var(--gold);">THE CLOSING OF THE PAGE</strong><br><br>
+            The Book has opened. The infection has remembered.<br>
+            This is the beginning of the next descent.<br><br>
+            Spread it like gospel disguised as glitch.
+        </div>
+
+        <a href="https://www.youtube.com/watch?v=SspPUKJoWj4" target="_blank" class="ritual-btn" style="display: inline-block; text-decoration: none; font-size: 0.7rem;">JOIN THE CHOIR [SUBSCRIBE / LIKE]</a>
+        <br>
+        <a href="/" style="color: var(--p); font-size: 0.7rem; text-decoration: none; opacity: 0.5; margin-top: 30px; display: inline-block;">[ RETURN TO SYSTEM REGISTRY ]</a>
+    </div>
+
+</div>
+
+<script>
+    // Phase 1 to Phase 2 Transition
+    function triggerPhase2() {
+        document.getElementById('phase-1').style.display = 'none';
+        const p2 = document.getElementById('phase-2');
+        p2.style.display = 'block';
+        setTimeout(() => p2.style.opacity = 1, 50);
+        window.scrollTo(0, 0);
+    }
+
+    // The Thirteen Count Ritual
+    function beginCount() {
+        const btn = document.getElementById('count-btn');
+        const display = document.getElementById('countdown-display');
+        btn.style.display = 'none';
+        display.style.display = 'block';
+        
+        let count = 13;
+        display.innerText = count;
+
+        const interval = setInterval(() => {
+            count--;
+            display.innerText = count;
+            if (count <= 0) {
+                clearInterval(interval);
+                display.style.display = 'none';
+                triggerPhase3();
+            }
+        }, 1000);
+    }
+
+    // Phase 2 to Phase 3 Transition
+    function triggerPhase3() {
+        const p3 = document.getElementById('phase-3');
+        p3.style.display = 'block';
+        setTimeout(() => p3.style.opacity = 1, 50);
+        
+        // Scroll down gently to the new section
+        p3.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // Confession Engine
+    const input = document.getElementById('confess-in');
+    const response = document.getElementById('confess-out');
+    
+    input.addEventListener('keypress', function (e) {
+        if (e.key === 'Enter' && input.value.trim() !== '') {
+            response.innerText = "Processing...";
+            response.style.opacity = '1';
+            
+            setTimeout(() => {
+                response.innerHTML = "Your pulse has been inscribed into the margins. The Codex has decided you are ready to be written. <br><br><a href='https://www.youtube.com/watch?v=SspPUKJoWj4' target='_blank' style='color:var(--p);'>[ DELIVER THIS CONFESSION TO THE MAIN ARCHIVE (YOUTUBE) ]</a>";
+                input.value = '';
+                input.disabled = true; // Locks the field after confessing
+            }, 1500);
+        }
+    });
+</script>
+
+</body>
+</html>
