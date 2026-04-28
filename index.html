@@ -3,127 +3,147 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CODEX BLACK SITE // MEMORY RECOVERY</title>
+    <title>CODEX MALEDICTUS // SYSTEM REGISTRY</title>
     <style>
-        :root { --p: #00ff66; --bg: #010201; --gold: #b8860b; --blood: #660000; }
-
-        body {
-            margin: 0; background: var(--bg); color: var(--p);
-            font-family: 'Courier New', monospace; overflow-x: hidden;
-        }
-
-        /* DEPTH FIX: THE NECROTIC VOID */
-        .void-noise {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 1; opacity: 0.12; pointer-events: none;
-            background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+        :root { --p: #00ff66; --dim: #003b00; --bg: #010201; --gold: #b8860b; }
+        
+        body { 
+            margin: 0; background: var(--bg); color: var(--p); 
+            font-family: 'Courier New', monospace; overflow-x: hidden; 
+            height: 100vh; display: flex; flex-direction: column;
         }
         
-        .necrotic-clouds {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at 50% 50%, rgba(0, 255, 102, 0.05) 0%, transparent 70%);
-            z-index: 2; animation: pulseVoid 10s ease-in-out infinite; pointer-events: none;
+        /* LIQUID VOID BACKGROUND */
+        .void-noise { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            z-index: -2; opacity: 0.12; pointer-events: none;
+            background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); 
         }
-        @keyframes pulseVoid { 0%, 100% { opacity: 0.3; transform: scale(1); } 50% { opacity: 0.6; transform: scale(1.1); } }
-
-        .container { position: relative; z-index: 10; max-width: 900px; margin: 0 auto; padding: 60px 20px; }
-
-        /* VIDEO EMANATION */
-        .video-vault {
-            border: 1px solid var(--p); padding: 10px; background: #000;
-            box-shadow: 0 0 40px rgba(0, 255, 102, 0.1); margin-bottom: 50px;
+        .necrotic-clouds { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: radial-gradient(circle at 50% 50%, rgba(0, 255, 102, 0.04) 0%, transparent 70%); 
+            z-index: -1; animation: pulseVoid 12s ease-in-out infinite; pointer-events: none;
         }
-        .video-vault iframe { width: 100%; aspect-ratio: 16/9; border: none; filter: sepia(0.2) contrast(1.1); }
-
-        /* THE RPG INTERFACE */
-        .rpg-terminal {
-            border: 1px solid rgba(0, 255, 102, 0.3); background: rgba(0, 5, 0, 0.8);
-            padding: 35px; text-align: left; position: relative;
+        @keyframes pulseVoid { 
+            0%, 100% { opacity: 0.3; transform: scale(1); } 
+            50% { opacity: 0.6; transform: scale(1.05); } 
         }
-        .rpg-header { font-size: 0.7rem; color: var(--gold); border-bottom: 1px solid var(--gold); padding-bottom: 10px; margin-bottom: 20px; letter-spacing: 2px; }
-        .rpg-text { font-size: 0.95rem; line-height: 1.7; margin-bottom: 30px; min-height: 100px; }
         
-        .choice-list { display: flex; flex-direction: column; gap: 15px; }
-        .choice-btn {
-            background: transparent; border: 1px solid var(--p); color: var(--p);
-            padding: 15px; text-align: left; cursor: pointer; font-family: inherit;
-            transition: 0.2s; position: relative; overflow: hidden;
+        /* LAYOUT ARCHITECTURE */
+        .container { 
+            max-width: 1200px; margin: 0 auto; padding: 60px 20px; 
+            flex-grow: 1; width: 100%; box-sizing: border-box; position: relative; z-index: 5;
         }
-        .choice-btn:hover { background: var(--p); color: #000; font-weight: bold; }
-        .choice-btn:active { background: #fff; }
-
-        /* THE ENDINGS */
-        .ending-erasure { color: #555 !important; text-shadow: none !important; }
-        .ending-corruption { color: var(--p) !important; animation: shake 0.2s infinite; }
-        @keyframes shake { 0% { transform: translate(0,0); } 25% { transform: translate(2px, -2px); } 50% { transform: translate(-2px, 2px); } 100% { transform: translate(0,0); } }
-
-        /* NAV */
-        .nav-footer { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-top: 60px; }
-        .nav-btn {
-            border: 1px solid var(--gold); padding: 15px; text-decoration: none;
-            color: var(--gold); font-size: 0.7rem; text-align: center; letter-spacing: 2px;
+        header { 
+            text-align: center; margin-bottom: 60px; border-bottom: 1px solid var(--dim); 
+            padding-bottom: 30px;
+        }
+        h1 { font-size: 3rem; letter-spacing: 15px; margin: 0; text-shadow: 0 0 15px var(--p); }
+        
+        .registry-grid { display: grid; grid-template-columns: 1fr 2fr 1fr; gap: 30px; }
+        @media (max-width: 900px) { .registry-grid { grid-template-columns: 1fr; } }
+        
+        .panel { 
+            background: rgba(0, 5, 0, 0.6); border: 1px solid var(--dim); 
+            padding: 25px; backdrop-filter: blur(5px); 
+        }
+        .panel-title { 
+            color: var(--gold); border-bottom: 1px solid var(--gold); 
+            padding-bottom: 10px; margin-bottom: 20px; font-weight: bold; 
+            font-size: 0.9rem; letter-spacing: 3px;
+        }
+        
+        /* THE CORE COMPENDIUM LOGS */
+        .main-log { 
+            display: block; border: 1px solid var(--p); padding: 30px; 
+            text-decoration: none; color: var(--p); transition: 0.3s; 
+            background: rgba(0,20,0,0.3); position: relative; overflow: hidden; 
+        }
+        .main-log:hover { 
+            background: var(--p); color: #000; box-shadow: 0 0 30px rgba(0, 255, 102, 0.2); 
+            transform: translateY(-2px);
+        }
+        .main-log::before { 
+            content: ">> ACCESS GRANTED <<"; position: absolute; top: 10px; right: 10px; 
+            font-size: 0.6rem; opacity: 0.5; 
+        }
+        
+        /* EXTERNAL ASSET LINKS */
+        .asset-link { 
+            display: block; padding: 15px; border: 1px solid var(--dim); color: var(--p); 
+            text-decoration: none; margin-bottom: 10px; transition: 0.2s; 
+            font-size: 0.8rem; letter-spacing: 1px;
+        }
+        .asset-link:hover { border-color: var(--p); background: rgba(0, 255, 102, 0.1); padding-left: 20px; }
+        
+        .asset-gold { border-color: var(--gold); color: var(--gold); }
+        .asset-gold:hover { 
+            border-color: var(--gold); background: rgba(184, 134, 11, 0.1); 
+            color: var(--gold); padding-left: 20px;
+        }
+        
+        /* SIGNAL STATUS BAR */
+        .status-line { 
+            font-size: 0.75rem; margin-bottom: 15px; display: flex; 
+            justify-content: space-between; border-bottom: 1px dotted var(--dim); 
+            padding-bottom: 5px;
         }
     </style>
 </head>
 <body>
-
-<div class="void-noise"></div>
-<div class="necrotic-clouds"></div>
-
-<div class="container">
-    <header style="text-align: center; margin-bottom: 50px;">
-        <h1 style="letter-spacing: 12px; margin: 0; text-shadow: 0 0 10px var(--p);">CODEX BLACK SITE</h1>
-        <div style="font-size: 0.7rem; opacity: 0.6; margin-top: 10px;">SIGNAL CAPTURE // CHRONICLE I: INFECTION REMEMBERS</div>
-    </header>
-
-    <div class="video-vault">
-        <iframe src="https://www.youtube.com/embed/lDo91ztT_ZQ?modestbranding=1&rel=0&controls=1"></iframe>
-    </div>
-
-    <div class="rpg-terminal" id="terminal">
-        <div class="rpg-header">RECOVERY_PROTOCOL_v.01 // SOURCE: ELVAIN VHRIS</div>
-        <div class="rpg-text" id="rpg-text">
-            The broadcast is bleeding through. Elvain Vhris speaks of an infection that remembers. The words "Ritual Transmission" loop in the background static. You feel a heavy weight in your chest. How do you proceed?
-        </div>
-        <div class="choice-list" id="choices">
-            <button class="choice-btn" onclick="node(1)">Decode the narrator's lyrics.</button>
-            <button class="choice-btn" onclick="node(2)">Seal the terminal and walk away.</button>
-        </div>
-    </div>
-
-    <div class="nav-footer">
-        <a href="https://open.spotify.com/artist/1vKFBmWToCei9dCSePXuow?si=rP0eOqW-TAOHF90ZfTfjOg" class="nav-link nav-btn">RITUAL TRANSMISSIONS</a>
-        <a href="https://www.worldanvil.com/w/codex-maledictus-codexmaledictus" class="nav-link nav-btn">FRAGMENT RECOVERY</a>
-        <a href="https://www.amazon.com/dp/B0FQ9QDMQ2" class="nav-link nav-btn">PHYSICAL VESSEL</a>
-    </div>
-</div>
-
-<script>
-    const text = document.getElementById('rpg-text');
-    const choices = document.getElementById('choices');
-
-    function node(id) {
-        if (id === 1) { // DECODE LYRICS
-            text.innerHTML = "You isolate the frequency. The lyrics aren't just words; they are coordinates for your own mind. 'The mirror is a doorway.' You see your own reflection in the monitor, but it's smiling while you are screaming. What do you do?";
-            choices.innerHTML = `
-                <button class="choice-btn" onclick="node(3)">Smash the monitor.</button>
-                <button class="choice-btn" onclick="node(4)">Step through the mirror.</button>
-            `;
-        } else if (id === 2) { // WALK AWAY
-            text.innerHTML = "You turn off the monitor. You leave the room. But as you walk down the hall, you realize the shadows are moving in sync with the 'Ritual Transmissions'. You try to speak, but your voice is now Elvain Vhris'. You were never in control.";
-            choices.innerHTML = `<button class="choice-btn" onclick="node(5)">ACCEPT THE INEVITABLE</button>`;
-        } else if (id === 3) { // SMASH MONITOR (Ending 1)
-            text.innerHTML = "<span class='ending-corruption'>Glass shards embed themselves in your skin, but they don't bleed blood. They bleed green phosphor. Your nerves are being replaced by copper wiring. You are the new hardware for the Codex. Transmission complete.</span>";
-            choices.innerHTML = `<button class="choice-btn" onclick="location.reload()">REBOOT SYSTEM</button>`;
-        } else if (id === 4) { // STEP THROUGH (Ending 2)
-            text.innerHTML = "<span class='ending-erasure'>There is no other side. There is only the static. Your identity has been successfully deleted from the local reality. You are now a nameless fragment in the World Anvil archives.</span>";
-            choices.innerHTML = `<button class="choice-btn" onclick="location.reload()">RECOVER DATA</button>`;
-        } else if (id === 5) { // ACCEPT (Ending 3)
-            text.innerHTML = "<span style='color: var(--gold)'>The infection doesn't want your death; it wants your memory. You feel your 11 years of history being rewritten by Elyon Vhar. You wake up in a different life, holding a book you've never seen before. The Codex remembers you.</span>";
-            choices.innerHTML = `<button class="choice-btn" onclick="window.open('https://www.amazon.com/dp/B0FQ9QDMQ2', '_blank')">OPEN THE BOOK</button>`;
-        }
-    }
-</script>
-
-</body>
-</html>
+    
+    <div class="void-noise"></div>
+    <div class="necrotic-clouds"></div>
+    
+    <div class="container">
+        <header>
+            <h1>CODEX BLACK SITE</h1>
+            <div style="font-size: 0.8rem; opacity: 0.6; margin-top: 15px; letter-spacing: 5px;">[ CENTRAL SYSTEM REGISTRY ]</div>
+        </header>
+        
+        <div class="registry-grid">
+            
+            <div class="panel">
+                <div class="panel-title">ACTIVE SIGNALS</div>
+                <div class="status-line">
+                    <span>NARRATOR: ELVAIN VHRIS</span> 
+                    <span style="color: var(--gold);">[EMANATING]</span>
+                </div>
+                <div class="status-line" style="opacity: 0.4;">
+                    <span>NARRATOR: ELYON VHAR</span> 
+                    <span>[DORMANT]</span>
+                </div>
+                <div class="status-line">
+                    <span>RESONANCE DEPTH</span> 
+                    <span>0.44.2</span>
+                </div>
+                
+                <div style="margin-top: 30px; font-size: 0.65rem; opacity: 0.5; line-height: 1.6;">
+                    WARNING: Multiple cognitive breaches detected. The Codex remembers your keystrokes.
+                </div>
+            </div>
+            
+            <div class="panel" style="border-color: var(--p);">
+                <div class="panel-title" style="color: var(--p); border-color: var(--p);">COMPENDIUM REGISTRY</div>
+                
+                <a href="infection-remembers.html" class="main-log">
+                    <div style="font-size: 1.3rem; font-weight: bold; margin-bottom: 10px; letter-spacing: 2px;">LOG_001: INFECTION REMEMBERS</div>
+                    <div style="font-size: 0.8rem; opacity: 0.8;">[ THE BOOK OPENS ] // Proceed to Ritual Space</div>
+                </a>
+                
+                <div style="margin-top: 20px;">
+                    <div class="asset-link" style="opacity: 0.3; pointer-events: none; border-style: dashed;">LOG_002: [ ENCRYPTED - AWAITING SIGNAL ]</div>
+                    <div class="asset-link" style="opacity: 0.3; pointer-events: none; border-style: dashed;">LOG_003: [ ENCRYPTED - AWAITING SIGNAL ]</div>
+                </div>
+            </div>
+            
+            <div class="panel">
+                <div class="panel-title">EXTERNAL REPOSITORIES</div>
+                <a href="https://open.spotify.com/artist/1vKFBmWToCei9dCSePXuow?si=rP0eOqW-TAOHF90ZfTfjOg" target="_blank" class="asset-link">
+                    [AUDIO] RITUAL TRANSMISSIONS
+                </a>
+                <a href="https://www.worldanvil.com/w/codex-maledictus-codexmaledictus" target="_blank" class="asset-link">
+                    [DATA] FRAGMENT RECOVERY
+                </a>
+                <a href="https://www.amazon.com/dp/B0FQ9QDMQ2" target="_blank" class="asset-link asset-gold" style="margin-top: 30px;">
+                    [VESSEL] THE CODEX THAT REMEM
