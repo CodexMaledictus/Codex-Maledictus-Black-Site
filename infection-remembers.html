@@ -162,7 +162,8 @@ body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse
   background:transparent;border:1px solid var(--blood);
   color:var(--blood);font-family:'Share Tech Mono',monospace;
   font-size:0.7rem;letter-spacing:0.3em;padding:0.75rem 2rem;
-  cursor:none;text-transform:uppercase;transition:all 0.25s;
+  cursor:pointer;text-transform:uppercase;transition:all 0.25s;
+  pointer-events:all;position:relative;z-index:10;
 }
 #count-btn:hover:not(:disabled){background:var(--blood);color:var(--text);}
 #count-btn:disabled{opacity:0.3;cursor:not-allowed;}
@@ -235,6 +236,7 @@ body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse
 /* FADE IN for sections */
 .fade-sec{opacity:0;transform:translateY(16px);transition:opacity 0.9s ease,transform 0.9s ease;}
 .fade-sec.vis{opacity:1;transform:none;}
+.count-wrap *{pointer-events:all;}
 
 @media(max-width:600px){
   #content{padding:3rem 1.25rem 5rem;}
@@ -528,13 +530,16 @@ function openBook(){
 }
 
 function initPage(){
-  // Fade in sections on scroll
   const secs=document.querySelectorAll('.fade-sec');
   const obs=new IntersectionObserver(entries=>{
     entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis');});
-  },{threshold:0.1});
+  },{threshold:0.05});
   secs.forEach(s=>obs.observe(s));
+  // Force first sections visible immediately
   setTimeout(()=>secs[0]?.classList.add('vis'),200);
+  setTimeout(()=>secs[1]?.classList.add('vis'),400);
+  // Failsafe: make everything visible after 2s regardless
+  setTimeout(()=>secs.forEach(s=>s.classList.add('vis')),2000);
 
   initCountMarks();
   initWhispers();
