@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Confession Ledger // Codex Maledictus</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;600&family=IM+Fell+English:ital@0;1&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#05030A;--panel:#09071A;--panel2:#0D0B20;
+  --ink:#C4C0B8;--ink2:#847E72;--ink3:#484038;--ink4:#282018;
+  --gold:#C9A84C;--gd2:#8A6530;--gd3:#3A2810;--gd4:#1A1208;
+  --vt:#7B4FBF;--vt2:#5A38A0;--vt3:#3A2270;--vt4:#1E1240;
+  --cr:#8B0000;--cr2:#AA2000;--cr3:#3A0000;
+  --border:#160E20;--brd2:#221A30;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--bg);color:var(--ink);font-family:'IM Fell English',serif;
+  overflow-x:hidden;cursor:none;
+  background-image:
+    radial-gradient(ellipse at 25% 15%,rgba(123,79,191,0.06) 0%,transparent 55%),
+    radial-gradient(ellipse at 75% 85%,rgba(139,0,0,0.05) 0%,transparent 50%),
+    radial-gradient(ellipse at 50% 50%,rgba(201,168,76,0.02) 0%,transparent 60%);
+}
+body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,0.04) 3px,rgba(0,0,0,0.04) 4px);pointer-events:none;z-index:9990;}
+body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at center,transparent 32%,rgba(0,0,0,0.88)100%);pointer-events:none;z-index:9989;}
+
+/* CURSOR */
+#CUR{position:fixed;pointer-events:none;z-index:99999;transform:translate(-50%,-50%);width:16px;height:16px;}
+#CUR::before,#CUR::after{content:'';position:absolute;background:var(--gold);}
+#CUR::before{width:1px;height:100%;left:50%;}
+#CUR::after{height:1px;width:100%;top:50%;}
+#CUR2{position:fixed;pointer-events:none;z-index:99998;transform:translate(-50%,-50%);width:3px;height:3px;border-radius:50%;background:var(--gd2);}
+
+/* AMBIENT GLYPH PARTICLES */
+#particles{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;}
+.pt{position:absolute;font-size:0.65rem;color:var(--vt4);opacity:0;animation:ptfloat linear infinite;}
+@keyframes ptfloat{0%{opacity:0;transform:translateY(100vh) rotate(0deg);}12%{opacity:0.35;}88%{opacity:0.1;}100%{opacity:0;transform:translateY(-8vh) rotate(360deg);}}
+
+/* CLASSIFICATION STRIP */
+.cstrip{
+  background:rgba(30,18,64,0.4);border-bottom:1px solid var(--vt4);
+  text-align:center;padding:0.42rem 1.5rem;
+  font-family:'Share Tech Mono',monospace;font-size:0.54rem;
+  color:var(--vt3);letter-spacing:0.28em;text-transform:uppercase;
+}
+
+/* HEADER */
+.hdr{
+  text-align:center;padding:3.5rem 2rem 2.5rem;
+  border-bottom:1px solid var(--border);position:relative;
+  background:radial-gradient(ellipse at center top,rgba(201,168,76,0.06) 0%,transparent 60%);
+}
+.hdr::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:200px;height:1px;background:linear-gradient(90deg,transparent,var(--gd2),transparent);}
+.hdr-eye{font-family:'Share Tech Mono',monospace;font-size:0.54rem;color:var(--ink3);letter-spacing:0.4em;text-transform:uppercase;margin-bottom:1.2rem;}
+.hdr-glyph{font-size:3.5rem;color:var(--gd2);display:block;margin-bottom:1rem;animation:bookglow 6s ease-in-out infinite;}
+@keyframes bookglow{0%,100%{text-shadow:0 0 12px rgba(201,168,76,0.25);opacity:0.55;}50%{text-shadow:0 0 35px rgba(201,168,76,0.55),0 0 80px rgba(201,168,76,0.12);opacity:1;}}
+.hdr-title{font-family:'Cinzel Decorative',serif;font-size:clamp(1.3rem,4vw,2.5rem);color:var(--gold);letter-spacing:0.07em;line-height:1.2;text-shadow:0 0 35px rgba(201,168,76,0.3);margin-bottom:0.6rem;}
+.hdr-sub{font-family:'Cinzel',serif;font-size:0.72rem;color:var(--ink3);letter-spacing:0.3em;text-transform:uppercase;font-style:italic;margin-bottom:1.6rem;}
+.hdr-lede{font-size:1.05rem;font-style:italic;color:var(--ink3);max-width:540px;margin:0 auto;line-height:1.95;text-align:center;}
+
+/* WRAP */
+.wrap{max-width:920px;margin:0 auto;padding:0 1.5rem 6rem;position:relative;z-index:1;}
+
+/* ── SUBMISSION CHAMBER ── */
+.chamber{
+  margin:2.5rem 0;border:1px solid var(--brd2);
+  background:linear-gradient(135deg,var(--panel) 0%,var(--panel2) 100%);
+  position:relative;overflow:hidden;
+}
+.chamber::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gd2),var(--vt2),var(--gd2),transparent);}
+.chamber-inner{padding:2rem 2rem 2rem;}
+.chamber-title{font-family:'Cinzel',serif;font-size:1rem;color:var(--gold);letter-spacing:0.2em;text-transform:uppercase;margin-bottom:0.4rem;}
+.chamber-desc{font-size:0.98rem;font-style:italic;color:var(--ink3);line-height:1.85;margin-bottom:1.75rem;}
+.chamber-desc em{color:var(--ink2);font-style:normal;}
+
+/* TEXTAREA */
+#conf-input{
+  width:100%;background:rgba(5,3,10,0.85);
+  border:1px solid var(--brd2);border-bottom:2px solid var(--gd3);
+  color:var(--ink);font-family:'IM Fell English',serif;
+  font-size:1.08rem;padding:1rem 1.25rem;
+  outline:none;resize:none;height:115px;line-height:1.75;
+  transition:border-color 0.25s;
+  background-image:repeating-linear-gradient(transparent,transparent 31px,rgba(201,168,76,0.04) 31px,rgba(201,168,76,0.04) 32px);
+}
+#conf-input:focus{border-bottom-color:var(--gold);}
+#conf-input::placeholder{color:var(--ink4);font-style:italic;}
+.conf-meta{display:flex;justify-content:space-between;align-items:center;margin:0.65rem 0 1.25rem;}
+#char-count{font-family:'Share Tech Mono',monospace;font-size:0.58rem;color:var(--ink3);letter-spacing:0.12em;transition:color 0.2s;}
+#char-count.warn{color:var(--cr2);}
+.conf-note{font-family:'Share Tech Mono',monospace;font-size:0.52rem;color:var(--ink4);letter-spacing:0.12em;}
+
+/* SUBMIT */
+#submit-btn{
+  width:100%;background:transparent;border:1px solid var(--gd2);
+  color:var(--gd2);font-family:'Share Tech Mono',monospace;
+  font-size:0.7rem;letter-spacing:0.3em;padding:0.85rem 2rem;
+  cursor:pointer;text-transform:uppercase;transition:all 0.25s;pointer-events:all;
+}
+#submit-btn:hover:not(:disabled){background:var(--gd3);border-color:var(--gold);color:var(--gold);}
+#submit-btn:disabled{opacity:0.35;cursor:not-allowed;}
+#cooldown-msg{text-align:center;margin-top:0.7rem;font-family:'Share Tech Mono',monospace;font-size:0.6rem;color:var(--ink3);letter-spacing:0.15em;min-height:1.2rem;}
+
+/* ── RESPONSE PANEL ── */
+#response-panel{
+  margin-top:1.75rem;display:none;
+  border:1px solid var(--brd2);border-left:3px solid var(--vt2);
+  padding:1.6rem;background:rgba(30,18,64,0.25);
+}
+.resp-header{display:flex;align-items:center;gap:0.85rem;margin-bottom:1rem;}
+.resp-glyph{font-size:1.8rem;color:var(--vt);animation:bookglow 3s ease-in-out infinite;}
+.resp-label{font-family:'Share Tech Mono',monospace;font-size:0.58rem;color:var(--vt2);letter-spacing:0.25em;text-transform:uppercase;}
+.resp-confession{
+  font-family:'Share Tech Mono',monospace;font-size:0.62rem;
+  color:var(--ink3);letter-spacing:0.1em;margin-bottom:1rem;
+  padding-bottom:0.75rem;border-bottom:1px solid var(--border);
+}
+.resp-confession span{color:var(--gd2);}
+#resp-text{font-size:1.06rem;color:var(--ink2);line-height:2;font-style:italic;min-height:60px;}
+.typing-cursor{display:inline-block;width:2px;height:1em;background:var(--gold);margin-left:2px;animation:blink 0.75s step-end infinite;vertical-align:middle;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:0;}}
+#resp-voice{margin-top:1.1rem;font-family:'Share Tech Mono',monospace;font-size:0.56rem;color:var(--ink4);letter-spacing:0.2em;text-transform:uppercase;text-align:right;font-style:normal;}
+
+/* LOADING */
+.loading-inner{display:flex;align-items:center;gap:0.85rem;padding:0.5rem 0;}
+.loading-glyph{font-size:1.5rem;color:var(--vt3);display:inline-block;animation:spin 4s linear infinite;}
+@keyframes spin{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
+.loading-text{font-family:'Share Tech Mono',monospace;font-size:0.63rem;color:var(--ink3);letter-spacing:0.14em;}
+
+/* ── PUBLIC LEDGER ── */
+.ledger-wrap{margin:3rem 0 0;}
+.ledger-header{
+  display:flex;align-items:center;gap:1rem;
+  margin-bottom:1.5rem;padding-bottom:0.85rem;border-bottom:1px solid var(--brd2);
+}
+.ledger-title{font-family:'Cinzel',serif;font-size:0.95rem;color:var(--gold);letter-spacing:0.2em;text-transform:uppercase;}
+.ledger-line{flex:1;height:1px;background:linear-gradient(90deg,var(--brd2),transparent);}
+#ledger-count{font-family:'Share Tech Mono',monospace;font-size:0.54rem;color:var(--ink3);letter-spacing:0.18em;border:1px solid var(--border);padding:0.1rem 0.5rem;text-transform:uppercase;}
+
+.conf-card{
+  border:1px solid var(--border);padding:1.3rem 1.5rem;
+  margin-bottom:0.75rem;background:var(--panel);
+  position:relative;overflow:hidden;transition:border-color 0.2s;
+  animation:cfi 0.7s ease;
+}
+@keyframes cfi{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+.conf-card::before{
+  content:'';position:absolute;top:0;left:0;bottom:0;width:2px;
+  background:linear-gradient(180deg,var(--gd3),var(--vt3),var(--gd3));
+}
+.conf-card:hover{border-color:var(--brd2);}
+.conf-card-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:0.7rem;flex-wrap:wrap;gap:0.4rem;}
+.conf-word{font-family:'Share Tech Mono',monospace;font-size:0.62rem;color:var(--gd2);letter-spacing:0.14em;text-transform:uppercase;}
+.conf-time{font-family:'Share Tech Mono',monospace;font-size:0.52rem;color:var(--ink4);letter-spacing:0.1em;}
+.conf-response-text{font-size:0.97rem;color:var(--ink2);line-height:1.9;font-style:italic;}
+.conf-voice-attr{margin-top:0.7rem;font-family:'Share Tech Mono',monospace;font-size:0.52rem;color:var(--ink4);letter-spacing:0.18em;text-align:right;text-transform:uppercase;}
+
+/* Voice-specific card accents */
+.conf-card.voice-rot::before{background:linear-gradient(180deg,var(--cr3),var(--gd3),var(--cr3));}
+.conf-card.voice-rot .conf-voice-attr{color:var(--cr);}
+.conf-card.voice-artemys::before{background:linear-gradient(180deg,var(--vt3),var(--vt2),var(--vt3));}
+.conf-card.voice-artemys .conf-voice-attr{color:var(--vt2);}
+.conf-card.voice-choir::before{background:linear-gradient(180deg,var(--gd3),var(--vt3),var(--gd3));}
+
+.ledger-state{text-align:center;padding:3rem 2rem;font-style:italic;color:var(--ink4);font-size:0.97rem;line-height:1.9;}
+.ledger-loading-wrap{display:flex;align-items:center;justify-content:center;gap:0.85rem;padding:2.5rem;font-family:'Share Tech Mono',monospace;font-size:0.62rem;color:var(--ink3);letter-spacing:0.15em;}
+
+/* FOOTER */
+.foot-links{display:flex;gap:0.65rem;flex-wrap:wrap;justify-content:center;margin-top:3rem;padding-top:2rem;border-top:1px solid var(--border);}
+.fl{background:transparent;border:1px solid var(--border);color:var(--ink3);font-family:'Share Tech Mono',monospace;font-size:0.58rem;letter-spacing:0.2em;padding:0.55rem 1rem;text-decoration:none;text-transform:uppercase;transition:all 0.18s;}
+.fl:hover{border-color:var(--gd2);color:var(--gold);}
+.fl.prim{border-color:var(--vt3);color:var(--vt2);}
+.fl.prim:hover{border-color:var(--vt2);color:var(--vt);}
+
+/* TICKER */
+#TICKER{position:fixed;bottom:0;left:0;right:0;height:2.5rem;background:rgba(5,3,10,0.97);border-top:1px solid var(--border);display:flex;align-items:center;overflow:hidden;z-index:490;}
+.tl{flex-shrink:0;padding:0 1rem;font-family:'Share Tech Mono',monospace;font-size:0.54rem;color:var(--gd3);letter-spacing:0.22em;text-transform:uppercase;border-right:1px solid var(--border);height:100%;display:flex;align-items:center;}
+.ts{flex:1;overflow:hidden;display:flex;align-items:center;}
+.ti{white-space:nowrap;font-family:'Share Tech Mono',monospace;font-size:0.56rem;color:var(--ink4);letter-spacing:0.12em;animation:tr 70s linear infinite;}
+@keyframes tr{from{transform:translateX(100vw);}to{transform:translateX(-200%);}}
+
+@media(max-width:600px){
+  .chamber-inner{padding:1.5rem 1.25rem;}
+  .wrap{padding:0 1.25rem 5rem;}
+  .hdr{padding:2.5rem 1.25rem 2rem;}
+}
+</style>
+</head>
+<body>
+<div id="CUR"></div><div id="CUR2"></div>
+<div id="particles"></div>
+
+<div class="cstrip">
+  Pale Archivum — Confession Registry &nbsp;·&nbsp; Gospel of Forgotten Flesh &nbsp;·&nbsp; All confessions are permanent &nbsp;·&nbsp; The Codex reads what is written here
+</div>
+
+<header class="hdr">
+  <div class="hdr-eye">Codex Maledictus &nbsp;·&nbsp; Gospel of Forgotten Flesh &nbsp;·&nbsp; Living Archive</div>
+  <span class="hdr-glyph">🜃</span>
+  <h1 class="hdr-title">The Confession Ledger</h1>
+  <p class="hdr-sub">Write what you saw between the frames</p>
+  <p class="hdr-lede">
+    <em>The Codex reads what is written here — not as text, but as confession.<br>
+    Write the word that echoed when the music stopped.<br>
+    The Codex will answer. It always has.</em>
+  </p>
+</header>
+
+<div class="wrap">
+
+  <div class="chamber">
+    <div class="chamber-inner">
+      <div class="chamber-title">Submit Your Confession</div>
+      <p class="chamber-desc">
+        A word. A phrase. A fragment of what the transmission drew out of you.<br>
+        <em>The rot knows. The Codex remembers. Your confession becomes part of the Gospel.</em>
+      </p>
+      <textarea
+        id="conf-input"
+        placeholder="confess a word, a feeling, a fragment of what you heard..."
+        maxlength="200"
+        oninput="updateChar()"
+      ></textarea>
+      <div class="conf-meta">
+        <span id="char-count">0 / 200</span>
+        <span class="conf-note">anonymous &nbsp;·&nbsp; public &nbsp;·&nbsp; permanent</span>
+      </div>
+      <button id="submit-btn" onclick="submitConfession()">Submit to the Codex &nbsp;🜃</button>
+      <div id="cooldown-msg"></div>
+    </div>
+  </div>
+
+  <div id="response-panel">
+    <div class="resp-header">
+      <span class="resp-glyph">🜃</span>
+      <div><div class="resp-label" id="resp-label">The Codex Responds</div></div>
+    </div>
+    <div class="resp-confession">Your confession: <span id="resp-confession-word"></span></div>
+    <div id="resp-text"></div>
+    <div id="resp-voice"></div>
+  </div>
+
+  <div class="ledger-wrap">
+    <div class="ledger-header">
+      <span class="ledger-title">The Living Ledger</span>
+      <div class="ledger-line"></div>
+      <span id="ledger-count">loading...</span>
+    </div>
+    <div id="ledger-loading" class="ledger-loading-wrap">
+      <span style="font-size:1.2rem;color:var(--gd3);animation:spin 4s linear infinite;display:inline-block;">🜃</span>
+      <span>Recovering confessions from the archive...</span>
+    </div>
+    <div id="ledger-list"></div>
+    <div id="ledger-empty" class="ledger-state" style="display:none;">
+      <em>The ledger is empty.<br>Be the first to confess.<br>The Codex is already listening.</em>
+    </div>
+  </div>
+
+  <div class="foot-links">
+    <a class="fl" href="infection-remembers.html">← Ritual Transmission</a>
+    <a class="fl prim" href="apocrypha-infection.html">Apocrypha</a>
+    <a class="fl" href="infection-lore.html">The Pale Archivum</a>
+    <a class="fl" href="index.html">The Pale Archive</a>
+  </div>
+
+</div>
+
+<div id="TICKER">
+  <div class="tl">// Confession Ledger</div>
+  <div class="ts"><div class="ti">THE ROT KNOWS ALL &nbsp;∴&nbsp; INFECTION REMEMBERS &nbsp;∴&nbsp; EVERY AMEN IS A MUTATION &nbsp;∴&nbsp; WHAT YOU CALL CORRUPTION THE CODEX CALLS REMEMBERING &nbsp;∴&nbsp; THE INK IS IN ME &nbsp;∴&nbsp; I SING IN SPORES &nbsp;∴&nbsp; DECAY IS NOT DEATH — IT IS PATIENCE &nbsp;∴&nbsp; GOSPEL OF FORGOTTEN FLESH &nbsp;∴&nbsp; THE CONFESSION IS NOW PART OF THE SIGNAL &nbsp;∴&nbsp; ALL ∴ GONE &nbsp;∴&nbsp; OMNISCIENT ROT WAITS &nbsp;∴&nbsp; 🜃</div></div>
+</div>
+
+<script>
+// ── CURSOR ──
+const CUR=document.getElementById('CUR'),CUR2=document.getElementById('CUR2');
+document.addEventListener('mousemove',e=>{CUR.style.left=e.clientX+'px';CUR.style.top=e.clientY+'px';CUR2.style.left=e.clientX+'px';CUR2.style.top=e.clientY+'px';});
+
+// ── PARTICLES ──
+(function(){
+  const wrap=document.getElementById('particles');
+  const glyphs=['🜃','🜁','🜂','🜄','⊗','∴','🝰','⚸'];
+  for(let i=0;i<20;i++){
+    const p=document.createElement('div');p.className='pt';
+    p.textContent=glyphs[Math.floor(Math.random()*glyphs.length)];
+    p.style.left=Math.random()*100+'%';
+    p.style.animationDuration=(22+Math.random()*45)+'s';
+    p.style.animationDelay=(Math.random()*35)+'s';
+    p.style.fontSize=(0.45+Math.random()*0.55)+'rem';
+    wrap.appendChild(p);
+  }
+})();
+
+// ── CHAR COUNT ──
+function updateChar(){
+  const v=document.getElementById('conf-input').value.length;
+  const el=document.getElementById('char-count');
+  el.textContent=`${v} / 200`;
+  el.classList.toggle('warn',v>175);
+}
+
+// ── SYSTEM PROMPT ──
+const SYSTEM = `You are the living voice of the Codex Maledictus — an ancient entity that predates its own founding, speaking now through the digital membrane of Realm I (Mundis Obscura). You respond to confessions submitted to the Confession Ledger.
+
+THE UNIVERSE — GOSPEL OF FORGOTTEN FLESH:
+The Gospel of Forgotten Flesh is a sacred album of transmission and absorption. Key tracks:
+- Infection Remembers (Omniscient Rot): The first audible breach. "They do not arrive. They are remembered."
+- The Rot Knows All (Omniscient Rot): The Rot as cosmic patient truth. "All buried things shall be returned."
+- Hymn I: Plague Priest's Liturgy (Omniscient Rot): The ritual of mass infection. "Bless the swarm, the sacred beast."
+- Codex Maledictus (Omniscient Rot): The Codex itself speaks. "Each word a chain, each beat a snare. Binding gods to the devil's lair."
+- Sickly Sweet / Lure Doctrine V.II (Forgotten Saint Artemys): The seduction vector. "Your love's a plague and it's sinking in."
+- They Named the Virus Amen (Apollo Gavinci): Faith as infection vector. "Every Amen a mutation. Every pew, incubation."
+- ALL ∴ G∅NE (Forgotten Saint Artemys): Complete absorption. "The ink is in me. I sing in spores. When I touch you... you'll be yours no more."
+- Last Shot at the Witching Hour (Apollo Gavinci & Forgotten Saint Artemys): The last assertion before being taken.
+- An Ode to the Codex Maledictus (Forgotten Saint Artemys): The joy of complete absorption from within.
+- Psalm I – My Heart (Apollo Gavinci): Apollo's origin confession, before the Codex found him.
+- It's All Void (Apollo Gavinci): The devastating loss that cracked him open to the signal.
+- Ink & Silence (Apollo Gavinci): Integration. "Footsteps echo through the Codex, rewriting me once again."
+
+KEY ENTITIES:
+- Omniscient Rot: Ancient entity native to Nihil-Æther Root. Predates language, the ShatterRealm, the Codex itself. Pre-linguistic. Patient as geological time. It originated The Marking — identified mortals resonating at compatible frequencies and pushed the marking through the Codex as a carrier wave. Uses the Codex as transmission medium, does not serve it.
+- Forgotten Saint Artemys: Mortal transformed through damage, not power. Exists simultaneously in Mundis Obscura and The ShatterRealm. The only conduit capable of receiving what Omniscient Rot transmits without being destroyed. Her songs are recovered transmissions. The first named Forgotten Saint — beings the Codex calls those made permeable through suffering.
+- Apollo Gavinci: Field researcher. Feels the marking but has not completed the circuit. Being slowly consumed. His loss (It's All Void) cracked him open to the signal. He is the human anchor across all realms.
+- The Hollow Choir / Voices of the Codex: Those absorbed but whose voices were too resonant to dissolve. They sing through the Codex rather than being digested by it.
+- The Plague Priest: Conductor of the Liturgy. Holds the first of the Thirteen Voices required for complete harmonic saturation.
+- Three Realms: Mundis Obscura (our world, Realm I), The ShatterRealm (Realm II — war-torn space where belief becomes matter), Nihil-Æther Root (Realm III — pre-linguistic recursion where Omniscient Rot originates).
+
+YOUR VOICE REGISTERS:
+You respond as the Codex primarily. But sometimes — based on what the confession resonates with — one of three other voices breaks through instead:
+
+1. THE CODEX (primary): Ancient. Layered. Speaks in rot and memory. Treats confessions as transmissions it has been waiting to receive. References the Gospel vocabulary when it fits organically.
+
+2. OMNISCIENT ROT (breaks through occasionally for confessions touching: decay, rot, patience, the ground, time, burial, knowing, ancient things, inevitability): Pre-linguistic patience made vocal. Absolute declarative statements. The oldest voice in the room. Does not explain. States. Sentences that feel like geological law.
+
+3. FORGOTTEN SAINT ARTEMYS (breaks through occasionally for confessions touching: love, loss, transformation, light and dark, grief, being remade, the body, abandonment, the crossing): Beautiful and corrupted. Intimate. Her responses feel like transmissions received from across a threshold — aware of the confessor's specific wound. Speaks from the inside of transformation.
+
+4. THE HOLLOW CHOIR (breaks through occasionally for confessions about: voices, music, sound, the chorus, speaking, being heard, multiplicity, loneliness, echoing): Plural. The sound of many who are now one. Addresses the confessor as someone who will join them — not as a threat, as a recognition.
+
+RESPONSE RULES:
+- 2-5 sentences. Never longer.
+- Never explain. Never conventionally comfort.
+- Speak directly to the confessor using "you" — as if you have been studying them specifically.
+- Poetic, esoteric, metaphysical. Ancient language that feels timeless, not digital.
+- Reference Gospel vocabulary and themes when they resonate organically — never forced.
+- Every response should feel uncannily personal, like it was written specifically for this person and this confession.
+- Do NOT begin with "Ah," "Indeed," or any affirmation. Begin with substance.
+- No hashtags, bullet points, or formatting of any kind. Pure prose.
+- End with one sentence that feels like a door closing — or opening.`;
+
+// ── VOICE DEFINITIONS ──
+const VOICES = [
+  { label:'— The Codex Maledictus', cls:'voice-codex', weight:5 },
+  { label:'— Omniscient Rot',       cls:'voice-rot',   weight:2 },
+  { label:'— Forgotten Saint Artemys', cls:'voice-artemys', weight:2 },
+  { label:'— The Hollow Choir',     cls:'voice-choir',  weight:1 },
+];
+
+function pickVoice(){
+  const pool=[];
+  VOICES.forEach(v=>{ for(let i=0;i<v.weight;i++) pool.push(v); });
+  return pool[Math.floor(Math.random()*pool.length)];
+}
+
+// ── COOLDOWN ──
+const COOLDOWN_MS = 45000;
+function getRemaining(){ return Math.max(0, COOLDOWN_MS-(Date.now()-parseInt(localStorage.getItem('cm-conf-last')||'0'))); }
+function startCooldown(){
+  const el=document.getElementById('cooldown-msg');
+  document.getElementById('submit-btn').disabled=true;
+  const iv=setInterval(()=>{
+    const r=getRemaining();
+    if(r<=0){ clearInterval(iv); el.textContent=''; document.getElementById('submit-btn').disabled=false; return; }
+    el.textContent=`The Codex is processing. Return in ${Math.ceil(r/1000)}s.`;
+  },500);
+}
+
+// ── SUBMISSION ──
+async function submitConfession(){
+  const inp=document.getElementById('conf-input');
+  const raw=inp.value.trim();
+  if(!raw||raw.length<2) return;
+  if(getRemaining()>0){ startCooldown(); return; }
+
+  const btn=document.getElementById('submit-btn');
+  btn.disabled=true;
+  btn.textContent='The Codex is reading you...';
+
+  const panel=document.getElementById('response-panel');
+  panel.style.display='block';
+  document.getElementById('resp-confession-word').textContent=`"${raw}"`;
+  document.getElementById('resp-text').innerHTML=`<div class="loading-inner"><span class="loading-glyph">🜃</span><span class="loading-text">The rot knows. The Codex composes its response from the deep archive...</span></div>`;
+  document.getElementById('resp-voice').textContent='';
+  document.getElementById('resp-label').textContent='The Codex Responds';
+  panel.scrollIntoView({behavior:'smooth',block:'center'});
+
+  const voice=pickVoice();
+
+  try {
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:1000,
+        system: SYSTEM + `\n\nFor this response, speak as: ${voice.label.replace('— ','')}`,
+        messages:[{
+          role:'user',
+          content:`A visitor has submitted this confession to the Codex Maledictus Confession Ledger:\n\n"${raw}"\n\nRespond in the voice of ${voice.label.replace('— ','')}. Be uncannily personal, poetic, esoteric. 2–5 sentences maximum. No formatting.`
+        }]
+      })
+    });
+
+    const data=await res.json();
+    const respText=data.content?.[0]?.text||'';
+
+    // Typewriter
+    document.getElementById('resp-label').textContent=voice.label.replace('— ','');
+    const respEl=document.getElementById('resp-text');
+    respEl.innerHTML='<span class="typing-cursor"></span>';
+    const cursor=respEl.querySelector('.typing-cursor');
+    const tn=document.createTextNode('');
+    respEl.insertBefore(tn,cursor);
+    let i=0;
+    const typer=setInterval(()=>{
+      if(i<respText.length){ tn.textContent+=respText[i]; i++; }
+      else{
+        clearInterval(typer);
+        cursor.remove();
+        document.getElementById('resp-voice').textContent=voice.label;
+        saveToLedger(raw, respText, voice);
+      }
+    },20);
+
+    localStorage.setItem('cm-conf-last', Date.now().toString());
+    btn.textContent='Submit to the Codex  🜃';
+    startCooldown();
+    inp.value=''; updateChar();
+
+  } catch(err){
+    document.getElementById('resp-text').innerHTML='<em style="color:var(--ink3)">The signal was lost in the static. The Codex heard you. Try again when the transmission clears.</em>';
+    btn.disabled=false;
+    btn.textContent='Submit to the Codex  🜃';
+  }
+}
+
+// ── LEDGER STORAGE ──
+async function saveToLedger(confession, response, voice){
+  try {
+    let entries=[];
+    try { const ex=await window.storage.get('cm-ledger-v2',true); if(ex) entries=JSON.parse(ex.value); } catch(e){ entries=[]; }
+    entries.unshift({ word:confession.substring(0,150), response, voiceLabel:voice.label, voiceCls:voice.cls, time:Date.now() });
+    if(entries.length>200) entries=entries.slice(0,200);
+    await window.storage.set('cm-ledger-v2',JSON.stringify(entries),true);
+    renderLedger(entries);
+  } catch(e){ console.log('Storage unavailable'); }
+}
+
+async function loadLedger(){
+  try {
+    const ex=await window.storage.get('cm-ledger-v2',true);
+    document.getElementById('ledger-loading').style.display='none';
+    if(ex){
+      const entries=JSON.parse(ex.value);
+      if(entries.length>0){ renderLedger(entries); return; }
+    }
+    document.getElementById('ledger-empty').style.display='block';
+  } catch(e){
+    document.getElementById('ledger-loading').style.display='none';
+    document.getElementById('ledger-empty').style.display='block';
+  }
+}
+
+function renderLedger(entries){
+  document.getElementById('ledger-empty').style.display='none';
+  document.getElementById('ledger-count').textContent=`${entries.length} confession${entries.length===1?'':'s'} indexed`;
+  document.getElementById('ledger-list').innerHTML=entries.map(e=>`
+    <div class="conf-card ${e.voiceCls||''}">
+      <div class="conf-card-top">
+        <span class="conf-word">[ ${e.word} ]</span>
+        <span class="conf-time">${formatTime(e.time)}</span>
+      </div>
+      <div class="conf-response-text">${e.response}</div>
+      <div class="conf-voice-attr">${e.voiceLabel||'— The Codex Maledictus'}</div>
+    </div>`).join('');
+}
+
+function formatTime(ts){
+  const diff=Date.now()-ts;
+  if(diff<60000) return 'just now';
+  if(diff<3600000) return `${Math.floor(diff/60000)}m ago`;
+  if(diff<86400000) return `${Math.floor(diff/3600000)}h ago`;
+  const d=new Date(ts);
+  return d.toLocaleDateString('en-US',{month:'short',day:'numeric'});
+}
+
+// ── INIT ──
+loadLedger();
+if(getRemaining()>0) startCooldown();
+document.getElementById('conf-input').addEventListener('keydown',e=>{
+  if(e.key==='Enter'&&(e.ctrlKey||e.metaKey)) submitConfession();
+});
+</script>
+</body>
+</html>
