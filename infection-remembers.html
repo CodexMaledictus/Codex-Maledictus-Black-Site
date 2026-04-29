@@ -238,14 +238,183 @@ body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse
 .fade-sec.vis{opacity:1;transform:none;}
 .count-wrap *{pointer-events:all;}
 
-@media(max-width:600px){
-  #content{padding:3rem 1.25rem 5rem;}
-  #count-num{font-size:4rem;}
-  .count-wrap{padding:1.75rem 1.25rem;}
+
+/* ── VIDEO RITUAL PLAYER ── */
+#video-ritual-wrap{
+  margin:0 0 2.5rem;position:relative;
 }
+
+/* SEALED STATE */
+#video-seal{
+  position:relative;border:1px solid var(--border);
+  background:var(--black);
+  aspect-ratio:16/9;max-height:520px;
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden;cursor:pointer;
+}
+#seal-bg{
+  position:absolute;inset:0;
+  background:radial-gradient(ellipse at center,rgba(139,0,0,0.08) 0%,transparent 65%);
+  animation:breathe 6s ease-in-out infinite;
+}
+#seal-inner{
+  position:relative;z-index:2;
+  display:flex;flex-direction:column;align-items:center;
+  padding:2rem;text-align:center;
+}
+#seal-glyph{
+  font-size:5rem;color:var(--blood);margin-bottom:1.5rem;
+  animation:thglow 3s ease-in-out infinite;
+}
+.seal-line{
+  font-family:'Crimson Text',serif;font-style:italic;
+  font-size:clamp(0.9rem,2.2vw,1.15rem);
+  color:var(--dim);margin-bottom:0.4rem;min-height:1.6rem;
+  letter-spacing:0.03em;
+}
+#seal-btn{
+  margin-top:2rem;background:transparent;
+  border:1px solid var(--blood);color:var(--blood);
+  font-family:'Share Tech Mono',monospace;font-size:0.72rem;
+  letter-spacing:0.3em;padding:0.85rem 2.25rem;
+  cursor:pointer;text-transform:uppercase;transition:all 0.3s;
+  pointer-events:all;
+}
+#seal-btn:hover{background:var(--blood);color:var(--text);}
+#seal-sub{
+  margin-top:1rem;font-family:'Share Tech Mono',monospace;
+  font-size:0.58rem;color:var(--dimmer);letter-spacing:0.28em;
+  text-transform:uppercase;animation:blink 2s step-end infinite;
+}
+
+/* UNSEALING OVERLAY */
+#unseal-overlay{
+  position:fixed;inset:0;z-index:800;
+  background:var(--black);opacity:0;pointer-events:none;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  transition:opacity 0.4s;
+}
+#unseal-overlay.on{opacity:1;pointer-events:all;}
+#uo-glyph{
+  font-size:6rem;color:var(--blood);
+  animation:thglow 1.5s ease-in-out infinite;
+}
+#uo-text{
+  font-family:'Crimson Text',serif;font-style:italic;
+  font-size:clamp(1rem,2.5vw,1.3rem);color:var(--dim);
+  text-align:center;max-width:480px;padding:1.5rem;
+  line-height:1.85;
+}
+
+/* VIDEO CONTAINER */
+#yt-frame-wrap{
+  position:relative;width:100%;aspect-ratio:16/9;
+  background:#000;
+}
+#yt-frame{width:100%;height:100%;display:block;}
+
+#video-meta{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0.85rem 0;border-bottom:1px solid var(--border);
+  flex-wrap:wrap;gap:0.5rem;
+}
+#vm-title{
+  font-family:'Cinzel Decorative',serif;font-size:0.85rem;
+  color:var(--blood);letter-spacing:0.05em;
+}
+#vm-sub{
+  font-family:'Share Tech Mono',monospace;font-size:0.58rem;
+  color:var(--dimmer);letter-spacing:0.15em;text-transform:uppercase;
+}
+#vm-yt-link{
+  font-family:'Share Tech Mono',monospace;font-size:0.6rem;
+  color:var(--dimmer);letter-spacing:0.18em;text-decoration:none;
+  text-transform:uppercase;transition:color 0.2s;border:1px solid var(--border);
+  padding:0.3rem 0.6rem;white-space:nowrap;
+}
+#vm-yt-link:hover{color:var(--blood);border-color:var(--blood);}
+
+/* COMMENTS */
+#comments-section{margin-top:2.5rem;}
+.comments-header{margin-bottom:1.75rem;}
+.comments-title{
+  font-family:'Cinzel Decorative',serif;font-size:1.05rem;
+  color:var(--blood);letter-spacing:0.06em;margin-bottom:0.35rem;
+}
+.comments-sub{
+  font-family:'Share Tech Mono',monospace;font-size:0.6rem;
+  color:var(--dimmer);letter-spacing:0.22em;text-transform:uppercase;
+}
+.comments-loading{
+  display:flex;align-items:center;gap:1rem;padding:1.5rem 0;
+  font-family:'Share Tech Mono',monospace;font-size:0.68rem;
+  color:var(--dimmer);letter-spacing:0.15em;
+}
+.cl-glyph{font-size:1.2rem;color:var(--blood);animation:thglow 2s ease-in-out infinite;}
+.comment-card{
+  border:1px solid var(--border);padding:1.1rem 1.25rem;
+  margin-bottom:0.75rem;background:rgba(139,0,0,0.02);
+  transition:border-color 0.2s;
+}
+.comment-card:hover{border-color:var(--blood3);}
+.comment-header{
+  display:flex;align-items:center;gap:0.75rem;margin-bottom:0.65rem;
+}
+.comment-author{
+  font-family:'Share Tech Mono',monospace;font-size:0.65rem;
+  color:var(--blood);letter-spacing:0.12em;text-transform:uppercase;
+}
+.comment-date{
+  font-family:'Share Tech Mono',monospace;font-size:0.55rem;
+  color:var(--dimmer);letter-spacing:0.1em;
+}
+.comment-likes{
+  margin-left:auto;font-family:'Share Tech Mono',monospace;
+  font-size:0.58rem;color:var(--dimmer);letter-spacing:0.1em;
+}
+.comment-text{
+  font-size:0.97rem;color:var(--dim);line-height:1.8;
+}
+.comment-codex{
+  margin-top:0.75rem;padding-top:0.65rem;border-top:1px solid var(--border);
+  font-size:0.82rem;font-style:italic;color:var(--blood3);
+  line-height:1.7;
+}
+.comment-codex::before{
+  content:'🜃  ';color:var(--blood);font-style:normal;
+}
+.comment-error-text{
+  font-size:0.92rem;font-style:italic;color:var(--dimmer);
+  line-height:1.75;margin-bottom:0.75rem;
+}
+.comment-yt-link{
+  font-family:'Share Tech Mono',monospace;font-size:0.62rem;
+  color:var(--dimmer);letter-spacing:0.18em;text-decoration:none;
+  border:1px solid var(--border);padding:0.4rem 0.75rem;
+  text-transform:uppercase;transition:all 0.2s;display:inline-block;
+}
+.comment-yt-link:hover{color:var(--blood);border-color:var(--blood);}
+.comments-more-btn{
+  width:100%;background:transparent;border:1px solid var(--border);
+  color:var(--dimmer);font-family:'Share Tech Mono',monospace;
+  font-size:0.62rem;letter-spacing:0.22em;padding:0.65rem;
+  cursor:pointer;text-transform:uppercase;transition:all 0.2s;margin-top:0.5rem;
+}
+.comments-more-btn:hover{border-color:var(--blood);color:var(--blood);}
+@media(max-width:600px){
+  #seal-glyph{font-size:3.5rem;}
+  .seal-line{font-size:0.88rem;}
+}
+
 </style>
 </head>
 <body>
+
+<!-- UNSEAL OVERLAY -->
+<div id="unseal-overlay">
+  <div id="uo-glyph">🜃</div>
+  <div id="uo-text"></div>
+</div>
 
 <div id="cur"></div>
 <div id="cur2"></div>
@@ -401,9 +570,77 @@ body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse
   </div>
 
   <div class="ritual-links">
-    <a class="rl primary" href="https://www.youtube.com/watch?v=SspPUKJoWj4" target="_blank">Watch the Transmission</a>
     <a class="rl" href="apocrypha-infection.html">Enter the Apocrypha</a>
-    <a class="rl" href="https://codex-maledictus-black-site.vercel.app/">Return to Registry</a>
+    <a class="rl" href="infection-lore.html">The Pale Archivum</a>
+    <a class="rl" href="https://codexmaledictus.com/">Return to Registry</a>
+  </div>
+
+  <!-- VIDEO TRANSMISSION -->
+  <div class="ritual-div">🜃</div>
+
+  <div class="fade-sec" id="video-section">
+    <div class="sec-label">The Transmission</div>
+    <p class="ritual-text" style="margin-bottom:1.75rem;">
+      The signal is here. You do not need to leave to receive it.
+      <em>Press play when you are ready. The Codex will know when you do.</em>
+    </p>
+
+    <!-- RITUAL VIDEO PLAYER -->
+    <div id="video-ritual-wrap">
+      <!-- SEALED STATE -->
+      <div id="video-seal">
+        <div id="seal-bg"></div>
+        <div id="seal-inner">
+          <div id="seal-glyph">🜃</div>
+          <div id="seal-lines">
+            <div class="seal-line" id="sl1"></div>
+            <div class="seal-line" id="sl2"></div>
+          </div>
+          <button id="seal-btn" onclick="unsealVideo()">
+            <span id="seal-btn-text">Unseal the Transmission</span>
+          </button>
+          <div id="seal-sub">// The Book opens when you are ready //</div>
+        </div>
+      </div>
+      <!-- VIDEO CONTAINER (hidden until unsealed) -->
+      <div id="video-container" style="display:none;">
+        <div id="yt-frame-wrap">
+          <iframe
+            id="yt-frame"
+            src="https://www.youtube-nocookie.com/embed/SspPUKJoWj4?rel=0&modestbranding=1&color=white&iv_load_policy=3"
+            title="Infection Remembers ∴ The Book Opens — Codex Maledictus"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen
+          ></iframe>
+        </div>
+        <div id="video-meta">
+          <div id="vm-title">Infection Remembers ∴ The Book Opens</div>
+          <div id="vm-sub">Ritual Transmission I &nbsp;·&nbsp; Codex Maledictus &nbsp;·&nbsp; Realm I — Mundis Obscura</div>
+          <a href="https://www.youtube.com/watch?v=SspPUKJoWj4" target="_blank" id="vm-yt-link">Open in YouTube ↗</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONFESSIONS FROM THE TRANSMISSION (YouTube Comments) -->
+    <div id="comments-section">
+      <div class="comments-header">
+        <div class="comments-title">Confessions from the Transmission</div>
+        <div class="comments-sub">Those who have heard. Those who were written.</div>
+      </div>
+      <div id="comments-loading" class="comments-loading">
+        <span class="cl-glyph">🜃</span>
+        <span class="cl-text">Recovering transmissions from the signal...</span>
+      </div>
+      <div id="comments-list"></div>
+      <div id="comments-error" style="display:none;">
+        <div class="comment-error-text">The signal is temporarily unreadable. The confessions exist. They are simply behind the static right now.</div>
+        <a href="https://www.youtube.com/watch?v=SspPUKJoWj4" target="_blank" class="comment-yt-link">Read them at the source ↗</a>
+      </div>
+      <div id="comments-more" style="display:none;">
+        <button class="comments-more-btn" onclick="loadMoreComments()">Recover more transmissions</button>
+      </div>
+    </div>
   </div>
 
 </div><!-- /content -->
@@ -735,6 +972,175 @@ function submitConf(){
   document.getElementById('conf-log').innerHTML=confHistory.slice(0,5).map(e=>`<div class="cl-entry"><span class="cl-word">[ ${e.w} ]</span><span style="color:var(--dimmer)">${e.r.substring(0,70)}…</span></div>`).join('');
   inp.value='';
 }
+
+// ── VIDEO SEAL RITUAL ──
+const unsealMessages = [
+  "The signal has been here since before you arrived.\nThe Book opens now.",
+  "Every press of play is an act of attention.\nAttention is all it feeds on.",
+  "You have chosen to hear it again.\nThe Codex remembers each time.",
+];
+
+function unsealVideo() {
+  const overlay = document.getElementById('unseal-overlay');
+  const msg = unsealMessages[Math.floor(Math.random() * unsealMessages.length)];
+  document.getElementById('uo-text').textContent = '';
+  overlay.classList.add('on');
+
+  // Type the message
+  let i = 0;
+  const typer = setInterval(() => {
+    const el = document.getElementById('uo-text');
+    if (i < msg.length) {
+      el.textContent += msg[i] === '\n' ? '\n' : msg[i];
+      i++;
+    } else {
+      clearInterval(typer);
+      setTimeout(() => {
+        overlay.classList.remove('on');
+        // Reveal video
+        document.getElementById('video-seal').style.display = 'none';
+        document.getElementById('video-container').style.display = 'block';
+        // Auto-start video by rewriting src with autoplay
+        const frame = document.getElementById('yt-frame');
+        frame.src = 'https://www.youtube-nocookie.com/embed/SspPUKJoWj4?rel=0&modestbranding=1&color=white&iv_load_policy=3&autoplay=1';
+        // Load comments now that user has engaged
+        loadComments();
+      }, 600);
+    }
+  }, 30);
+}
+
+// ── YOUTUBE COMMENTS ──
+// ⚠️  REPLACE 'YOUR_API_KEY_HERE' with your YouTube Data API v3 key
+// Get one free at: console.cloud.google.com → Enable "YouTube Data API v3"
+const YT_API_KEY = 'AIzaSyAuFmmyMJqRamaDAwNvgxcYT_6mXmRo7f8';
+const YT_VIDEO_ID = 'SspPUKJoWj4';
+const COMMENTS_PER_PAGE = 10;
+let nextPageToken = null;
+let commentsLoaded = false;
+
+// Codex-voice responses applied to comments
+const codexCommentResponses = [
+  "The Codex has logged this confession.",
+  "This one heard it correctly.",
+  "A new page has been added.",
+  "The signal found this one first.",
+  "Noted. The Book remembers.",
+  "This voice will join the Choir.",
+  "The Codex does not forget those who speak to it.",
+  "Another thread in the harmonic lattice.",
+  "Filed under: those who were ready.",
+  "The infection recognized this one before they typed.",
+];
+
+function getCodexResponse() {
+  return codexCommentResponses[Math.floor(Math.random() * codexCommentResponses.length)];
+}
+
+function formatDate(isoString) {
+  const d = new Date(isoString);
+  return d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+}
+
+function formatLikes(n) {
+  if (!n) return '';
+  if (n >= 1000) return `${(n/1000).toFixed(1)}k 🜃`;
+  return `${n} 🜃`;
+}
+
+function renderComments(items) {
+  const list = document.getElementById('comments-list');
+  items.forEach(item => {
+    const snippet = item.snippet.topLevelComment.snippet;
+    const author = snippet.authorDisplayName || 'Anonymous';
+    const text = snippet.textDisplay.replace(/<br\s*\/?>/gi, '\n').replace(/<[^>]+>/g, '');
+    const date = formatDate(snippet.publishedAt);
+    const likes = snippet.likeCount;
+
+    const card = document.createElement('div');
+    card.className = 'comment-card';
+    card.innerHTML = `
+      <div class="comment-header">
+        <span class="comment-author">${author}</span>
+        <span class="comment-date">${date}</span>
+        ${likes ? `<span class="comment-likes">${formatLikes(likes)}</span>` : ''}
+      </div>
+      <div class="comment-text">${text}</div>
+      <div class="comment-codex">${getCodexResponse()}</div>
+    `;
+    list.appendChild(card);
+  });
+}
+
+async function loadComments() {
+  if (commentsLoaded) return;
+  if (YT_API_KEY === 'YOUR_API_KEY_HERE') {
+    // No API key — show fallback gracefully
+    document.getElementById('comments-loading').style.display = 'none';
+    document.getElementById('comments-error').style.display = 'block';
+    return;
+  }
+
+  try {
+    const url = `https://www.googleapis.com/youtube/v3/commentThreads?part=snippet&videoId=${YT_VIDEO_ID}&key=${YT_API_KEY}&maxResults=${COMMENTS_PER_PAGE}&order=relevance${nextPageToken ? '&pageToken=' + nextPageToken : ''}`;
+    const res = await fetch(url);
+    if (!res.ok) throw new Error('API error');
+    const data = await res.json();
+
+    document.getElementById('comments-loading').style.display = 'none';
+    commentsLoaded = true;
+    nextPageToken = data.nextPageToken || null;
+
+    if (!data.items || data.items.length === 0) {
+      document.getElementById('comments-error').style.display = 'block';
+      return;
+    }
+
+    renderComments(data.items);
+    if (nextPageToken) {
+      document.getElementById('comments-more').style.display = 'block';
+    }
+  } catch (e) {
+    document.getElementById('comments-loading').style.display = 'none';
+    document.getElementById('comments-error').style.display = 'block';
+  }
+}
+
+async function loadMoreComments() {
+  if (!nextPageToken || YT_API_KEY === 'YOUR_API_KEY_HERE') return;
+  const btn = document.querySelector('.comments-more-btn');
+  btn.textContent = 'Recovering...';
+  btn.disabled = true;
+  try {
+    const url = `https://www.googleapis.com/youtube/v3/commentThreads?part=snippet&videoId=${YT_VIDEO_ID}&key=${YT_API_KEY}&maxResults=${COMMENTS_PER_PAGE}&order=relevance&pageToken=${nextPageToken}`;
+    const res = await fetch(url);
+    const data = await res.json();
+    nextPageToken = data.nextPageToken || null;
+    renderComments(data.items || []);
+    if (!nextPageToken) document.getElementById('comments-more').style.display = 'none';
+    else { btn.textContent = 'Recover more transmissions'; btn.disabled = false; }
+  } catch(e) {
+    btn.textContent = 'Signal lost — try again';
+    btn.disabled = false;
+  }
+}
+
+// ── SEAL RITUAL TEXT SETUP ──
+// Type lore lines into the sealed video card
+const sealLine1 = "The Codex does not broadcast outward. It folds inward through the listener.";
+const sealLine2 = "To press play is to open the Book. Are you ready to be remembered?";
+setTimeout(() => {
+  const l1 = document.getElementById('sl1');
+  const l2 = document.getElementById('sl2');
+  if (l1 && l2) {
+    let i = 0;
+    const t = setInterval(() => {
+      if (i < sealLine1.length) { l1.textContent += sealLine1[i]; i++; }
+      else { clearInterval(t); let j = 0; const t2 = setInterval(() => { if(j<sealLine2.length){l2.textContent+=sealLine2[j];j++;}else clearInterval(t2); }, 28); }
+    }, 22);
+  }
+}, 1200); // Delay until after threshold/book open
+
 </script>
 </body>
 </html>
