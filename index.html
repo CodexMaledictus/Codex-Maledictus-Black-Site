@@ -327,34 +327,35 @@ body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse
 .gmsg .hi{color:var(--gold);font-style:normal;font-family:'Share Tech Mono',monospace;font-size:0.85em;}
 .gmsg .wr{color:var(--crimson);font-style:normal;}
 
-/* GAME-SPECIFIC */
-.gdisp{display:flex;gap:0.6rem;justify-content:center;padding:1.2rem 0;flex-wrap:wrap;}
-.gbut{
-  width:70px;height:70px;border:1px solid var(--brd2);
-  background:var(--panel2);font-size:1.8rem;cursor:pointer;
-  display:flex;align-items:center;justify-content:center;transition:all 0.15s;
+/* ── GAME: RESONANCE CALIBRATION ── */
+#res-canvas{display:block;width:100%;border:1px solid var(--brd2);background:#040208;cursor:pointer;pointer-events:all;}
+.res-meter-wrap{display:flex;align-items:center;gap:0.75rem;margin:0.6rem 0;}
+.res-meter-label{font-family:'Share Tech Mono',monospace;font-size:0.55rem;color:var(--ink3);letter-spacing:0.15em;text-transform:uppercase;width:72px;flex-shrink:0;}
+.res-meter-track{flex:1;height:6px;background:var(--border);position:relative;overflow:hidden;}
+.res-meter-fill{height:100%;background:var(--gold);transition:width 0.25s;box-shadow:0 0 6px rgba(201,168,76,0.4);}
+.res-meter-fill.low{background:var(--cr);}
+.res-status-line{text-align:center;font-family:'Share Tech Mono',monospace;font-size:0.62rem;color:var(--ink3);letter-spacing:0.18em;padding:0.4rem;min-height:1.4rem;text-transform:uppercase;}
+/* ── GAME: PALE MIRROR ── */
+#mirror-wrap{margin-bottom:0.6rem;}
+#mirror-spread{height:4px;background:var(--border);margin-bottom:0.6rem;}
+#mirror-spread-fill{height:100%;background:var(--cr);width:0%;transition:width 0.4s;}
+#mirror-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;}
+.mc{
+  aspect-ratio:1;border:1px solid var(--border);background:var(--panel);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1rem;cursor:pointer;transition:all 0.12s;user-select:none;
 }
-.gbut:hover:not(:disabled){border-color:var(--gd2);background:var(--gd4);}
-.gbut.act{background:rgba(201,168,76,0.15);border-color:var(--gold);box-shadow:0 0 16px rgba(201,168,76,0.3),inset 0 0 12px rgba(201,168,76,0.08);transform:scale(1.06);}
-.gbut.wrg{background:rgba(139,0,0,0.2);border-color:var(--crimson);box-shadow:0 0 16px rgba(139,0,0,0.4);}
-.gbut:disabled{cursor:not-allowed;}
-.gest{text-align:center;font-family:'Share Tech Mono',monospace;font-size:0.62rem;letter-spacing:0.18em;color:var(--s3);padding:0.5rem;min-height:28px;text-transform:uppercase;}
-#bcanvas{display:block;border:1px solid var(--brd2);background:#040208;width:100%;image-rendering:crisp-edges;}
-.blives{display:flex;gap:0.4rem;padding:0.5rem 0;}
-.li{color:var(--gold);font-size:0.9rem;}
-.li.lost{color:var(--s4);}
-.srphrase{border:1px solid var(--brd2);padding:1.2rem;background:var(--bg);text-align:center;margin-bottom:1rem;min-height:80px;display:flex;align-items:center;justify-content:center;}
-.srpt{font-family:'Cinzel',serif;font-size:1.4rem;color:var(--silver);letter-spacing:0.15em;line-height:1.3;text-shadow:0 0 10px rgba(201,168,76,0.2);}
-.srphrase.corr .srpt{color:var(--crimson);animation:sc 0.1s steps(1) infinite;}
-@keyframes sc{0%{transform:translateX(-2px);}50%{transform:translateX(2px);}100%{transform:none;}}
-.cbarw{height:4px;background:var(--border);margin-bottom:1rem;}
-.cbar{height:100%;background:var(--gold);transition:width 0.1s linear;box-shadow:0 0 5px var(--gd2);}
-.cbar.urg{background:var(--crimson);box-shadow:0 0 5px var(--cr2);}
-#sri{width:100%;background:var(--bg);border:1px solid var(--brd2);color:var(--silver);font-family:'Share Tech Mono',monospace;font-size:0.85rem;padding:0.65rem 0.85rem;outline:none;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:0.75rem;}
-#sri:focus{border-color:var(--gd2);}
-#sri::placeholder{color:var(--s3);}
-.srstreak{font-family:'Share Tech Mono',monospace;font-size:0.6rem;color:var(--s3);letter-spacing:0.18em;}
-.srstreak span{color:var(--gold);}
+.mc:hover:not(.cor):not(.ctr){border-color:var(--brd2);background:var(--panel2);}
+.mc.ctr{cursor:default;border-color:var(--gd2);background:rgba(201,168,76,0.05);}
+.mc.ctr span{color:var(--gold);animation:bookglow 3s ease-in-out infinite;}
+.mc.cor{background:rgba(139,0,0,0.2);border-color:var(--cr);cursor:pointer;animation:corr-pulse 0.7s ease-in-out infinite;}
+@keyframes corr-pulse{0%,100%{border-color:var(--cr);}50%{border-color:var(--cr2);box-shadow:0 0 6px rgba(139,0,0,0.4);}}
+.mc.cor span{color:var(--cr2);}
+/* ── GAME: INSCRIPTION ── */
+#ins-canvas{display:block;width:100%;border:1px solid var(--brd2);background:#040208;cursor:crosshair;touch-action:none;}
+.ins-phase{text-align:center;font-family:'Share Tech Mono',monospace;font-size:0.62rem;color:var(--gold);letter-spacing:0.2em;padding:0.4rem;min-height:1.4rem;text-transform:uppercase;}
+.ins-row{display:flex;gap:0.5rem;margin-top:0.5rem;}
+.ins-row .gbtn{flex:1;}
 
 /* BOTTOM STRIP */
 .bstrip{border-top:1px solid var(--brd2);display:grid;grid-template-columns:1fr 1fr 1fr;}
@@ -584,66 +585,76 @@ body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse
       <span class="secb">3 protocols active</span>
     </div>
     <div class="gtabs">
-      <button class="gtab on" onclick="showG('echo',this)">I. Echo Protocol</button>
-      <button class="gtab" onclick="showG('breach',this)">II. Breach Containment</button>
-      <button class="gtab" onclick="showG('signal',this)">III. Signal Recovery</button>
+      <button class="gtab on" onclick="showG('res',this)">I. Resonance Calibration</button>
+      <button class="gtab" onclick="showG('mirror',this)">II. The Pale Mirror</button>
+      <button class="gtab" onclick="showG('ins',this)">III. The Inscription</button>
     </div>
 
-    <!-- ECHO -->
-    <div class="gp on" id="gp-echo">
+    <!-- RESONANCE CALIBRATION -->
+    <div class="gp on" id="gp-res">
       <div class="garea">
         <div class="gcw">
-          <div class="gdisp" id="ge-g"></div>
-          <div class="gest" id="ge-st">Press Initialize to begin the Echo Protocol</div>
+          <canvas id="res-canvas" height="160"></canvas>
+          <div class="res-meter-wrap">
+            <span class="res-meter-label">Resonance</span>
+            <div class="res-meter-track"><div class="res-meter-fill" id="res-fill" style="width:0%"></div></div>
+            <span style="font-family:'Share Tech Mono',monospace;font-size:0.58rem;color:var(--gold)" id="res-pct">0%</span>
+          </div>
+          <div class="res-status-line" id="res-status">Click the wave exactly at the target</div>
+          <div class="gmsg" id="res-lore" style="min-height:36px;"></div>
         </div>
         <div class="gsb">
-          <div class="gtitle">Echo Protocol</div>
-          <div class="gdesc">The Codex projects a glyph sequence. Repeat it exactly or be rewritten. Each round adds one symbol. The sequence has no ceiling — only your memory does.</div>
-          <div class="sblock"><div class="sl2">Round</div><div class="sv2 green" id="ge-r">—</div></div>
-          <div class="sblock"><div class="sl2">High Score</div><div class="sv2" id="ge-hs">—</div></div>
-          <button class="gbtn" id="ge-sb" onclick="geStart()">Initialize Protocol</button>
-          <div class="gmsg" id="ge-msg">The Codex will flash a sequence of sacred glyphs. Repeat them in exact order.<br><span class="hi">Each mistake erases you from this round.</span></div>
+          <div class="gtitle">Resonance Calibration</div>
+          <div class="gdesc">A frequency pulses between realms. Click when the wave crests the target line. Each precise hit tunes you closer to the Codex. Each mistiming corrupts the signal.</div>
+          <div class="sblock"><div class="sl2">Resonance</div><div class="sv2" id="res-score">0%</div></div>
+          <div class="sblock"><div class="sl2">High Score</div><div class="sv2" id="res-hs">—</div></div>
+          <button class="gbtn" id="res-btn" onclick="resToggle()">Begin Calibration</button>
+          <div class="gmsg">Click when the wave peak aligns with the gold line.<br><span class="hi">Precision builds resonance. Mistiming corrupts it.</span></div>
         </div>
       </div>
     </div>
 
-    <!-- BREACH -->
-    <div class="gp" id="gp-breach">
+    <!-- PALE MIRROR -->
+    <div class="gp" id="gp-mirror">
       <div class="garea">
         <div class="gcw">
-          <canvas id="bcanvas"></canvas>
-          <div class="blives" id="bc-lv"></div>
+          <div id="mirror-wrap">
+            <div id="mirror-spread"><div id="mirror-spread-fill"></div></div>
+            <div id="mirror-grid"></div>
+          </div>
+          <div class="gmsg" id="mir-lore" style="min-height:36px;margin-top:0.5rem;"></div>
         </div>
         <div class="gsb">
-          <div class="gtitle">Breach Containment</div>
-          <div class="gdesc">Corruption cells multiply in the upper strata. You are the only containment field. Clear all cells to advance the wave. Lore fragments recover with each wave.</div>
-          <div class="sblock"><div class="sl2">Score</div><div class="sv2 green" id="bc-sc">0</div></div>
-          <div class="sblock"><div class="sl2">Wave</div><div class="sv2 green" id="bc-wv">—</div></div>
-          <div class="sblock"><div class="sl2">High Score</div><div class="sv2" id="bc-hs">—</div></div>
-          <button class="gbtn" id="bc-sb" onclick="bcStart()">Begin Containment</button>
-          <div class="gmsg" id="bc-msg">Move your mouse or touch to control the containment field.<br><span class="hi">Three breaches and the protocol ends.</span></div>
+          <div class="gtitle">The Pale Mirror</div>
+          <div class="gdesc">Corruption spreads inward from the edges. Click corrupted cells to purify them. If the rot reaches the Codex glyph at the center — the session ends.</div>
+          <div class="sblock"><div class="sl2">Purified</div><div class="sv2" id="mir-sc">0</div></div>
+          <div class="sblock"><div class="sl2">Wave</div><div class="sv2" id="mir-wv">—</div></div>
+          <div class="sblock"><div class="sl2">High Score</div><div class="sv2" id="mir-hs">—</div></div>
+          <button class="gbtn" id="mir-btn" onclick="mirStart()">Begin Purification</button>
+          <div class="gmsg" id="mir-msg">Click <span class="wr">corrupted</span> cells to purify them.<br><span class="hi">Do not let the rot reach the center glyph.</span></div>
         </div>
       </div>
     </div>
 
-    <!-- SIGNAL -->
-    <div class="gp" id="gp-signal">
+    <!-- INSCRIPTION -->
+    <div class="gp" id="gp-ins">
       <div class="garea">
         <div class="gcw">
-          <div class="srphrase" id="sr-pb"><div class="srpt" id="sr-pt">Awaiting Signal</div></div>
-          <div class="cbarw"><div class="cbar" id="sr-bar" style="width:100%"></div></div>
-          <input type="text" id="sri" placeholder="TYPE THE RECOVERED SIGNAL..." onkeydown="if(event.key==='Enter')srSubmit()" autocomplete="off" autocorrect="off" spellcheck="false">
-          <button class="gbtn" onclick="srSubmit()">Transmit Recovery</button>
-          <div class="srstreak">Streak: <span id="sr-sk">0</span> &nbsp;·&nbsp; Best: <span id="sr-bt">0</span></div>
+          <canvas id="ins-canvas" height="260"></canvas>
+          <div class="ins-phase" id="ins-phase">Press Begin to receive the first glyph</div>
+          <div class="ins-row">
+            <button class="gbtn" id="ins-submit" onclick="insSubmit()" disabled>Submit Inscription</button>
+            <button class="gbtn" id="ins-clear" onclick="insClear()" disabled>Clear</button>
+          </div>
         </div>
         <div class="gsb">
-          <div class="gtitle">Signal Recovery</div>
-          <div class="gdesc">A Codex transmission degrades in real time. Type the phrase exactly before corruption claims it. Speed earns bonus. Consecutive recoveries build your streak.</div>
-          <div class="sblock"><div class="sl2">Score</div><div class="sv2 green" id="sr-sc">0</div></div>
-          <div class="sblock"><div class="sl2">Recovered</div><div class="sv2 green" id="sr-rc">0</div></div>
-          <div class="sblock"><div class="sl2">High Score</div><div class="sv2" id="sr-hs">—</div></div>
-          <button class="gbtn" id="sr-sb" onclick="srStart()">Begin Recovery</button>
-          <div class="gmsg" id="sr-msg">The transmission will appear above. Type it exactly as shown.<br><span class="hi">Time is the enemy. The corruption does not wait.</span></div>
+          <div class="gtitle">The Inscription</div>
+          <div class="gdesc">A sacred glyph appears for three seconds — then vanishes. Recreate it from memory by clicking the nodes in sequence. Each completed inscription earns deeper access.</div>
+          <div class="sblock"><div class="sl2">Inscribed</div><div class="sv2" id="ins-sc">0</div></div>
+          <div class="sblock"><div class="sl2">Streak</div><div class="sv2" id="ins-sk">0</div></div>
+          <div class="sblock"><div class="sl2">High Score</div><div class="sv2" id="ins-hs">—</div></div>
+          <button class="gbtn" id="ins-btn" onclick="insStart()">Begin Inscription</button>
+          <div class="gmsg" id="ins-msg">Study the glyph carefully.<br><span class="hi">Three seconds. The Codex does not repeat itself.</span></div>
         </div>
       </div>
     </div>
@@ -731,7 +742,7 @@ function initAll(){
   let usedP=new Set();
   function showPop(){const av=pops.filter((_,i)=>!usedP.has(i));if(!av.length)usedP.clear();const idx=pops.indexOf(av[0]||pops[0]);usedP.add(idx);document.getElementById('popb').textContent=pops[idx];const p=document.getElementById('POP');p.classList.add('on');setTimeout(()=>p.classList.remove('on'),8000);}
   setTimeout(()=>{showPop();setInterval(showPop,44000+Math.random()*16000);},16000);
-  geInit();bcInit();srInit();
+  resInit();mirInit();insInit();
 }
 function closePop(){document.getElementById('POP').classList.remove('on');}
 
@@ -740,7 +751,6 @@ function showG(id,btn){
   document.querySelectorAll('.gp').forEach(p=>p.classList.remove('on'));
   document.querySelectorAll('.gtab').forEach(b=>b.classList.remove('on'));
   document.getElementById('gp-'+id).classList.add('on');btn.classList.add('on');
-  if(id==='breach')bcResize();
 }
 
 // RITUAL INDUCTION
@@ -762,117 +772,380 @@ function ritualNav(url,line1,line2){
   },26);
 }
 
-// GAME 1: ECHO PROTOCOL
-const GS=['🜃','🜁','🜂','🜄','⊗','⊕'],GF=[130.81,164.81,196.00,246.94,293.66,329.63];
-let gSeq=[],gPlay=[],gPhase='idle',gRound=0,gHS=0,gAC=null;
-function gAudio(){if(!gAC)gAC=new(window.AudioContext||window.webkitAudioContext)();return gAC;}
-function gTone(i,d=280){try{const ac=gAudio(),o=ac.createOscillator(),g=ac.createGain();o.connect(g);g.connect(ac.destination);o.type='sine';o.frequency.value=GF[i];g.gain.setValueAtTime(0.25,ac.currentTime);g.gain.exponentialRampToValueAtTime(0.001,ac.currentTime+d/1000);o.start();o.stop(ac.currentTime+d/1000);}catch(e){}}
-function gFlash(i,d=350,cls='act'){const b=document.querySelectorAll('.gbut')[i];b.classList.add(cls);setTimeout(()=>b.classList.remove(cls),d);}
-function geInit(){
-  const w=document.getElementById('ge-g');w.innerHTML='';
-  GS.forEach((s,i)=>{const b=document.createElement('button');b.className='gbut';b.textContent=s;b.disabled=true;b.onclick=()=>geClick(i);w.appendChild(b);});
-  gHS=parseInt(localStorage.getItem('cm-ge-hs')||'0');
-  document.getElementById('ge-hs').textContent=gHS||'—';
+// ══ GAME 1: RESONANCE CALIBRATION ══
+let resCV,resCX,resRAF,resRunning=false,resPhase=0,resSpeed=0.025;
+let resResonance=0,resHS=0,resLastResult=null,resLoreShown=new Set();
+const RES_LORE=[
+  {at:33,text:'Fragment unlocked: "The infection does not spread. It returns."'},
+  {at:66,text:'Fragment unlocked: "What you called silence was always the space between words."'},
+  {at:100,text:'Full resonance: "The Codex has been humming in your blood since the first silence. Now it speaks aloud."'}
+];
+let resAC=null;
+function resAudio(hit,res){
+  try{if(!resAC)resAC=new(window.AudioContext||window.webkitAudioContext)();
+  const o=resAC.createOscillator(),g=resAC.createGain();o.connect(g);g.connect(resAC.destination);
+  o.type=hit?'sine':'sawtooth';o.frequency.value=hit?200+res*3:160;
+  g.gain.setValueAtTime(0.12,resAC.currentTime);g.gain.exponentialRampToValueAtTime(0.001,resAC.currentTime+0.35);
+  o.start();o.stop(resAC.currentTime+0.35);}catch(e){}
 }
-function geStart(){
-  gSeq=[Math.floor(Math.random()*6)];gPlay=[];gRound=1;gPhase='showing';
-  document.getElementById('ge-sb').disabled=true;
-  document.querySelectorAll('.gbut').forEach(b=>b.disabled=true);
-  document.getElementById('ge-r').textContent=gRound;
-  document.getElementById('ge-msg').innerHTML='Watch the sequence.';
-  geShow();
+function resInit(){
+  resCV=document.getElementById('res-canvas');resCX=resCV.getContext('2d');
+  resHS=parseInt(localStorage.getItem('cm-res-hs')||'0');
+  document.getElementById('res-hs').textContent=resHS?resHS+'%':'—';
+  const rsz=()=>{const w=Math.min(resCV.parentElement.clientWidth,580);resCV.width=w;resCV.height=160;if(!resRunning)resDrawIdle();};
+  rsz();window.addEventListener('resize',rsz);
+  resDrawIdle();
+  resCV.addEventListener('click',resClick);
+  resCV.addEventListener('touchend',e=>{e.preventDefault();resClick();},{passive:false});
 }
-function geShow(){
-  gPlay=[];let i=0;const spd=Math.max(280,650-gSeq.length*18);
-  document.getElementById('ge-st').textContent='OBSERVE THE SEQUENCE...';
-  function nx(){if(i<gSeq.length){gTone(gSeq[i],spd*0.7);gFlash(gSeq[i],spd*0.65);i++;setTimeout(nx,spd);}else{setTimeout(()=>{gPhase='input';document.querySelectorAll('.gbut').forEach(b=>b.disabled=false);document.getElementById('ge-st').textContent='YOUR TURN — REPEAT THE SEQUENCE';},spd*0.5);}}
-  setTimeout(nx,500);
+function resDrawIdle(){
+  if(!resCV||!resCX)return;
+  const W=resCV.width,H=resCV.height;
+  resCX.fillStyle='#040208';resCX.fillRect(0,0,W,H);
+  resCX.fillStyle='#1A1208';resCX.font='12px Share Tech Mono';
+  resCX.textAlign='center';resCX.fillText('FREQUENCY INACTIVE — PRESS BEGIN',W/2,H/2);
+  resCX.textAlign='left';
 }
-function geClick(i){
-  if(gPhase!=='input')return;
-  gTone(i,200);gPlay.push(i);const pos=gPlay.length-1;
-  if(gPlay[pos]!==gSeq[pos]){
-    gFlash(i,600,'wrg');gPhase='gameover';
-    document.querySelectorAll('.gbut').forEach(b=>b.disabled=true);
-    const sc=gRound-1;if(sc>gHS){gHS=sc;localStorage.setItem('cm-ge-hs',gHS);document.getElementById('ge-hs').textContent=gHS;}
-    document.getElementById('ge-r').textContent='—';
-    document.getElementById('ge-st').textContent='PROTOCOL FAILED';
-    document.getElementById('ge-msg').innerHTML=`You reached round <span class="hi">${gRound}</span>.<br>${sc>=gHS&&sc>0?'<span class="hi">New high score recorded.</span>':'The Codex has noted your limit.'}`;
-    document.getElementById('ge-sb').disabled=false;return;
+function resToggle(){
+  if(resRunning){resStop();return;}
+  resRunning=true;resPhase=0;resResonance=0;resSpeed=0.025;
+  resLoreShown=new Set();resLastResult=null;
+  document.getElementById('res-btn').textContent='Stop';
+  document.getElementById('res-fill').style.width='0%';
+  document.getElementById('res-fill').classList.remove('low');
+  document.getElementById('res-pct').textContent='0%';
+  document.getElementById('res-score').textContent='0%';
+  document.getElementById('res-lore').textContent='';
+  resLoop();
+}
+function resStop(){
+  resRunning=false;cancelAnimationFrame(resRAF);
+  document.getElementById('res-btn').textContent='Begin Calibration';
+  if(resResonance>resHS){resHS=Math.round(resResonance);localStorage.setItem('cm-res-hs',resHS);document.getElementById('res-hs').textContent=resHS+'%';}
+  resDrawIdle();
+}
+function resLoop(){
+  if(!resRunning)return;
+  resPhase+=resSpeed;
+  resDraw();
+  resRAF=requestAnimationFrame(resLoop);
+}
+function resDraw(){
+  const W=resCV.width,H=resCV.height,cx=resCX;
+  cx.fillStyle='rgba(4,2,8,0.88)';cx.fillRect(0,0,W,H);
+  // Target zone
+  const zW=W*0.07;
+  cx.fillStyle='rgba(201,168,76,0.07)';cx.fillRect(W/2-zW/2,0,zW,H);
+  cx.strokeStyle='rgba(201,168,76,0.4)';cx.lineWidth=1;cx.setLineDash([3,4]);
+  cx.beginPath();cx.moveTo(W/2,0);cx.lineTo(W/2,H);cx.stroke();cx.setLineDash([]);
+  cx.fillStyle='rgba(201,168,76,0.5)';cx.font='9px Share Tech Mono';
+  cx.textAlign='center';cx.fillText('TARGET',W/2,10);cx.textAlign='left';
+  // Wave color based on last result
+  const wc=resLastResult==='hit'?'#C9A84C':resLastResult==='miss'?'#8B0000':'#5A4820';
+  cx.strokeStyle=wc;cx.lineWidth=2;cx.shadowColor=wc;cx.shadowBlur=resLastResult==='hit'?10:4;
+  cx.beginPath();
+  const amp=H*0.34;
+  for(let x=0;x<=W;x+=2){
+    const y=H/2+Math.sin(x/W*Math.PI*6+resPhase)*amp;
+    x===0?cx.moveTo(x,y):cx.lineTo(x,y);
   }
-  if(gPlay.length===gSeq.length){
-    gPhase='waiting';document.querySelectorAll('.gbut').forEach(b=>b.disabled=true);
-    document.getElementById('ge-st').textContent='SEQUENCE CONFIRMED — ADVANCING...';
-    gRound++;gSeq.push(Math.floor(Math.random()*6));
-    document.getElementById('ge-r').textContent=gRound;
-    document.getElementById('ge-msg').innerHTML=`Round <span class="hi">${gRound}</span>. Sequence length: <span class="hi">${gSeq.length}</span>.`;
-    setTimeout(()=>{gPhase='showing';geShow();},900);
+  cx.stroke();cx.shadowBlur=0;
+  // Peak dot at center
+  const centerVal=Math.sin(Math.PI*3+resPhase); // value at x=W/2
+  const dotY=H/2+centerVal*amp;
+  cx.beginPath();cx.arc(W/2,dotY,5,0,Math.PI*2);
+  cx.fillStyle=Math.abs(centerVal)>0.7?'#C9A84C':'#3A2810';
+  cx.shadowColor='#C9A84C';cx.shadowBlur=Math.abs(centerVal)>0.7?12:0;
+  cx.fill();cx.shadowBlur=0;
+}
+function resClick(){
+  if(!resRunning)return;
+  const centerVal=Math.sin(Math.PI*3+resPhase);
+  const hit=Math.abs(centerVal)>0.65;
+  resLastResult=hit?'hit':'miss';
+  if(hit){
+    const precision=(Math.abs(centerVal)-0.65)/0.35;
+    resResonance=Math.min(100,resResonance+precision*9+2);
+    resSpeed=Math.min(0.065,resSpeed+0.0012);
+    document.getElementById('res-status').textContent='CALIBRATED ✦';
+    resAudio(true,resResonance);
+  } else {
+    resResonance=Math.max(0,resResonance-5);
+    document.getElementById('res-status').textContent='SIGNAL CORRUPTED ✗';
+    resAudio(false,resResonance);
   }
+  const pct=Math.round(resResonance);
+  document.getElementById('res-fill').style.width=pct+'%';
+  document.getElementById('res-fill').classList.toggle('low',pct<15&&pct>0);
+  document.getElementById('res-pct').textContent=pct+'%';
+  document.getElementById('res-score').textContent=pct+'%';
+  RES_LORE.forEach(l=>{
+    if(pct>=l.at&&!resLoreShown.has(l.at)){
+      resLoreShown.add(l.at);
+      document.getElementById('res-lore').innerHTML=`<span class="hi">${l.text}</span>`;
+      if(l.at===100)setTimeout(resStop,1800);
+    }
+  });
+  setTimeout(()=>{resLastResult=null;},350);
 }
 
-// GAME 2: BREACH CONTAINMENT
-let bCV,bCX,bRAF,bRun=false,bBall,bPad,bBrk=[],bSc=0,bLv=3,bWv=1,bHS2=0;
-const BROWS=5,BCOLS=8;
-const BLORE=["Fragment recovered: \"The infection does not spread. It returns.\"","Fragment recovered: \"Every listener becomes a page.\"","Fragment recovered: \"What you called silence was the Codex between words.\"","Fragment recovered: \"The Codex reads you based on what you think you are hiding.\"","Fragment recovered: \"Decay is not death. It is a form of patience.\""];
-const BCOLS2=['#1A0000','#2A0000','#3A0000','#5A0000','#8A6530'];
-function bcInit(){bCV=document.getElementById('bcanvas');bCX=bCV.getContext('2d');bHS2=parseInt(localStorage.getItem('cm-bc-hs')||'0');document.getElementById('bc-hs').textContent=bHS2||'—';bcResize();bcIdle();}
-function bcResize(){const W=Math.min(bCV.parentElement.clientWidth,580);bCV.width=W;bCV.height=Math.round(W*0.52);if(bRun)bcObjs();else bcIdle();}
-function bcIdle(){if(!bCV||!bCX)return;const W=bCV.width,H=bCV.height;bCX.fillStyle='#040208';bCX.fillRect(0,0,W,H);bCX.fillStyle='#1A1208';bCX.font='13px Cinzel';bCX.textAlign='center';bCX.fillText('CONTAINMENT FIELD INACTIVE',W/2,H/2);bCX.textAlign='left';}
-function bcObjs(){
-  const W=bCV.width,H=bCV.height;const bw=(W-40)/(BCOLS+0.5),bh=14,pad=2;bBrk=[];
-  for(let r=0;r<BROWS;r++)for(let c=0;c<BCOLS;c++)bBrk.push({x:20+c*(bw+pad),y:28+r*(bh+pad),w:bw,h:bh,alive:true,color:BCOLS2[r]});
-  const pw=Math.round(W*0.14);bPad={x:(W-pw)/2,y:H-16,w:pw,h:7};
-  const spd=3.6+bWv*0.3,ang=(Math.random()*0.6+0.5)*(Math.random()<0.5?1:-1);
-  bBall={x:W/2,y:H-40,vx:spd*Math.sin(ang),vy:-spd*Math.cos(ang),r:6};
+// ══ GAME 2: THE PALE MIRROR ══
+const MIR_GLYPHS=['🜃','🜁','🜂','🜄','⊗','⊕','∴'];
+const MIR_LORE=[
+  '"The infection does not arrive. It returns."',
+  '"Every listener becomes a page."',
+  '"Decay is not death — it is the body of truth shedding what it no longer needs."',
+  '"The Choir grows. The rot knows. The Codex remembers."',
+  '"What you call corruption, the Codex calls remembering."'
+];
+let mirGrid=[],mirRunning=false,mirSc=0,mirWv=1,mirHS=0,mirTimer=null,mirInterval=null;
+const MIR_SIZE=5,MIR_CENTER=Math.floor(5*5/2); // cell 12 in 5x5
+function mirInit(){
+  mirHS=parseInt(localStorage.getItem('cm-mir-hs')||'0');
+  document.getElementById('mir-hs').textContent=mirHS||'—';
 }
-function bcStart(){
-  if(bRun){cancelAnimationFrame(bRAF);bRun=false;}
-  bSc=0;bLv=3;bWv=1;
-  document.getElementById('bc-sc').textContent='0';document.getElementById('bc-wv').textContent='1';
-  document.getElementById('bc-sb').textContent='Restart';
-  document.getElementById('bc-msg').innerHTML='Move mouse or touch to control the containment field.';
-  bcLives();bcObjs();bRun=true;
-  bCV.onmousemove=e=>{const r=bCV.getBoundingClientRect(),s=bCV.width/r.width;bPad.x=(e.clientX-r.left)*s-bPad.w/2;bPad.x=Math.max(0,Math.min(bCV.width-bPad.w,bPad.x));};
-  bCV.ontouchmove=e=>{e.preventDefault();const r=bCV.getBoundingClientRect(),s=bCV.width/r.width;bPad.x=(e.touches[0].clientX-r.left)*s-bPad.w/2;bPad.x=Math.max(0,Math.min(bCV.width-bPad.w,bPad.x));};
-  function loop(){if(!bRun)return;bcUpdate();bcDraw();bRAF=requestAnimationFrame(loop);}
-  loop();
+function mirBuild(){
+  const el=document.getElementById('mirror-grid');el.innerHTML='';
+  mirGrid=[];
+  for(let i=0;i<MIR_SIZE*MIR_SIZE;i++){
+    const cell=document.createElement('div');cell.className='mc';
+    const sp=document.createElement('span');
+    if(i===MIR_CENTER){cell.classList.add('ctr');sp.textContent='🜃';}
+    else{sp.textContent=MIR_GLYPHS[Math.floor(Math.random()*MIR_GLYPHS.length)];}
+    cell.appendChild(sp);
+    cell.addEventListener('click',()=>mirPurify(i));
+    el.appendChild(cell);
+    mirGrid.push({el:cell,cor:false,center:i===MIR_CENTER});
+  }
 }
-function bcUpdate(){
-  const W=bCV.width,H=bCV.height;
-  bBall.x+=bBall.vx;bBall.y+=bBall.vy;
-  if(bBall.x-bBall.r<0){bBall.x=bBall.r;bBall.vx*=-1;}
-  if(bBall.x+bBall.r>W){bBall.x=W-bBall.r;bBall.vx*=-1;}
-  if(bBall.y-bBall.r<0){bBall.y=bBall.r;bBall.vy*=-1;}
-  if(bBall.y+bBall.r>H+30){bLv--;bcLives();if(bLv<=0){bcEnd();return;}bBall.x=W/2;bBall.y=H-40;const spd=3.6+bWv*0.3;bBall.vx=(Math.random()-0.5)*spd*1.5;bBall.vy=-spd;}
-  if(bBall.y+bBall.r>=bPad.y&&bBall.y-bBall.r<=bPad.y+bPad.h&&bBall.x>=bPad.x&&bBall.x<=bPad.x+bPad.w){bBall.vy=-Math.abs(bBall.vy);const rel=(bBall.x-(bPad.x+bPad.w/2))/(bPad.w/2);bBall.vx=rel*5;}
-  for(const b of bBrk){if(!b.alive)continue;if(bBall.x+bBall.r>b.x&&bBall.x-bBall.r<b.x+b.w&&bBall.y+bBall.r>b.y&&bBall.y-bBall.r<b.y+b.h){b.alive=false;bBall.vy*=-1;bSc+=10+bWv*2;document.getElementById('bc-sc').textContent=bSc;}}
-  if(bBrk.every(b=>!b.alive)){const li=Math.min(bWv-1,BLORE.length-1);document.getElementById('bc-msg').innerHTML=`<span class="hi">${BLORE[li]}</span>`;bWv++;document.getElementById('bc-wv').textContent=bWv;bcObjs();}
+function mirStart(){
+  if(mirRunning){mirStop();return;}
+  mirSc=0;mirWv=1;mirRunning=true;
+  document.getElementById('mir-sc').textContent='0';
+  document.getElementById('mir-wv').textContent='1';
+  document.getElementById('mir-btn').textContent='Stop';
+  document.getElementById('mir-lore').textContent='';
+  document.getElementById('mir-msg').innerHTML='Click <span class="wr">corrupted</span> cells to purify them.<br><span class="hi">Do not let the rot reach the center glyph.</span>';
+  mirBuild();
+  mirSchedule();
 }
-function bcDraw(){
-  const W=bCV.width,H=bCV.height;
-  bCX.fillStyle='rgba(4,2,8,0.9)';bCX.fillRect(0,0,W,H);
-  for(const b of bBrk){if(!b.alive)continue;bCX.fillStyle=b.color;bCX.fillRect(b.x,b.y,b.w,b.h);}
-  bCX.fillStyle='#1A1208';bCX.fillRect(bPad.x,bPad.y,bPad.w,bPad.h);
-  bCX.fillStyle='#C9A84C';bCX.fillRect(bPad.x,bPad.y,bPad.w,2);
-  bCX.beginPath();bCX.arc(bBall.x,bBall.y,bBall.r,0,Math.PI*2);bCX.fillStyle='#C9A84C';bCX.shadowColor='#C9A84C';bCX.shadowBlur=8;bCX.fill();bCX.shadowBlur=0;
+function mirStop(){
+  mirRunning=false;clearTimeout(mirTimer);clearInterval(mirInterval);
+  document.getElementById('mir-btn').textContent='Begin Purification';
+  document.getElementById('mir-spread-fill').style.width='0%';
+  if(mirSc>mirHS){mirHS=mirSc;localStorage.setItem('cm-mir-hs',mirHS);document.getElementById('mir-hs').textContent=mirHS;}
 }
-function bcLives(){const el=document.getElementById('bc-lv');el.innerHTML='';for(let i=0;i<3;i++){const s=document.createElement('span');s.className='li'+(i>=bLv?' lost':'');s.textContent='🜃';el.appendChild(s);}}
-function bcEnd(){bRun=false;cancelAnimationFrame(bRAF);if(bSc>bHS2){bHS2=bSc;localStorage.setItem('cm-bc-hs',bHS2);document.getElementById('bc-hs').textContent=bHS2;}document.getElementById('bc-msg').innerHTML=`<span class="wr">Containment failed.</span> Score: <span class="hi">${bSc}</span>. ${bSc>=bHS2&&bSc>0?'<span class="hi">New high score.</span>':'The infection has claimed the grid.'}`;bcIdle();}
-window.addEventListener('resize',()=>{if(bCV)bcResize();});
+function mirSchedule(){
+  clearInterval(mirInterval);
+  const delay=Math.max(900,2200-mirWv*180);
+  mirInterval=setInterval(mirSpread,delay);
+}
+function mirSpread(){
+  if(!mirRunning)return;
+  // Pick a non-corrupted, non-center edge cell or adjacent to existing corruption
+  const candidates=[];
+  mirGrid.forEach((c,i)=>{
+    if(c.center||c.cor)return;
+    const r=Math.floor(i/MIR_SIZE),col=i%MIR_SIZE;
+    const isEdge=r===0||r===MIR_SIZE-1||col===0||col===MIR_SIZE-1;
+    const nearCor=mirGrid.some((_,j)=>{
+      if(!mirGrid[j].cor)return false;
+      const dr=Math.abs(Math.floor(j/MIR_SIZE)-r),dc=Math.abs(j%MIR_SIZE-col);
+      return dr+dc===1;
+    });
+    if(isEdge||nearCor)candidates.push(i);
+  });
+  if(candidates.length===0)return;
+  const idx=candidates[Math.floor(Math.random()*candidates.length)];
+  mirCorrupt(idx);
+  // Update spread bar
+  const corCount=mirGrid.filter(c=>c.cor).length;
+  const total=MIR_SIZE*MIR_SIZE-1;
+  document.getElementById('mirror-spread-fill').style.width=(corCount/total*100)+'%';
+  // Check if center is adjacent to corruption — end game
+  const cr=Math.floor(MIR_CENTER/MIR_SIZE),cc=MIR_CENTER%MIR_SIZE;
+  const centerReached=mirGrid.some((c,i)=>{
+    if(!c.cor)return false;
+    const dr=Math.abs(Math.floor(i/MIR_SIZE)-cr),dc=Math.abs(i%MIR_SIZE-cc);
+    return dr===0&&dc===0; // corruption IS center
+  });
+  // Direct center corruption check
+  if(mirGrid[MIR_CENTER].cor)mirEnd();
+}
+function mirCorrupt(i){
+  mirGrid[i].cor=true;mirGrid[i].el.classList.add('cor');
+  mirGrid[i].el.querySelector('span').textContent='✗';
+}
+function mirPurify(i){
+  if(!mirRunning||!mirGrid[i].cor||mirGrid[i].center)return;
+  mirGrid[i].cor=false;mirGrid[i].el.classList.remove('cor');
+  mirGrid[i].el.querySelector('span').textContent=MIR_GLYPHS[Math.floor(Math.random()*MIR_GLYPHS.length)];
+  mirSc++;document.getElementById('mir-sc').textContent=mirSc;
+  const corCount=mirGrid.filter(c=>c.cor).length;
+  if(corCount===0){
+    const li=Math.min(mirWv-1,MIR_LORE.length-1);
+    document.getElementById('mir-lore').innerHTML=`<span class="hi">Wave ${mirWv} purified. ${MIR_LORE[li]}</span>`;
+    mirWv++;document.getElementById('mir-wv').textContent=mirWv;
+    mirBuild();mirSchedule();
+  }
+  document.getElementById('mirror-spread-fill').style.width=(corCount/24*100)+'%';
+}
+function mirEnd(){
+  mirRunning=false;clearInterval(mirInterval);
+  if(mirSc>mirHS){mirHS=mirSc;localStorage.setItem('cm-mir-hs',mirHS);document.getElementById('mir-hs').textContent=mirHS;}
+  document.getElementById('mir-msg').innerHTML=`<span class="wr">The rot reached the center.</span> Purified: <span class="hi">${mirSc}</span> cells. ${mirSc>=mirHS&&mirSc>0?'<span class="hi">New high score.</span>':'The Codex absorbed what you could not protect.'}`;
+  document.getElementById('mir-btn').textContent='Begin Purification';
+  mirGrid.forEach(c=>{if(c.center)c.el.querySelector('span').style.color='var(--cr)';});
+}
 
-// GAME 3: SIGNAL RECOVERY
-const SRP=["INFECTION REMEMBERS","DECAY IS NOT DEATH","THE BOOK IS OPEN","THE CODEX READS YOU","CORRUPTION RETURNS","THE CHOIR GROWS","SIGNAL DETECTED","CONTACT ESTABLISHED","THE BOOK CLOSES AROUND YOU","WITNESSING A REMEMBERING","EVERY LISTENER BECOMES A PAGE","THE CODEX REMEMBERS YOU NOW","WHAT YOU CALLED SILENCE","DECAY IS PATIENCE","PARTIAL TRANSCRIPTION","THE WITNESS PROTOCOL","REALM OF MUNDIS OBSCURA","NIHIL AETHER ROOT","THE SHATTERREALM","THE INFECTION HAS NO ORIGIN","YOU WERE WRITTEN FIRST","THE CHOIR HAS YOUR VOICE","RESONANCE DEPTH INCREASING"];
-let srSc=0,srSk=0,srBt=0,srHS=0,srRun=false,srCur='',srTmr=null,srTL=0,srTot=12,srRec=0;
-function srInit(){srHS=parseInt(localStorage.getItem('cm-sr-hs')||'0');document.getElementById('sr-hs').textContent=srHS||'—';}
-function srStart(){srSc=0;srSk=0;srBt=0;srRec=0;srRun=true;['sr-sc','sr-rc','sr-sk','sr-bt'].forEach(id=>document.getElementById(id).textContent='0');document.getElementById('sr-sb').textContent='Restart';const inp=document.getElementById('sri');inp.value='';inp.disabled=false;inp.focus();srNext();}
-function srNext(){clearInterval(srTmr);srCur=SRP[Math.floor(Math.random()*SRP.length)];document.getElementById('sr-pt').textContent=srCur;document.getElementById('sr-pb').classList.remove('corr');document.getElementById('sri').value='';srTL=srTot;const bar=document.getElementById('sr-bar');bar.style.width='100%';bar.classList.remove('urg');srTmr=setInterval(()=>{srTL-=0.1;const pct=Math.max(0,(srTL/srTot)*100);bar.style.width=pct+'%';if(pct<30)bar.classList.add('urg');if(srTL<=0){clearInterval(srTmr);srFail();}},100);}
-function srSubmit(){if(!srRun)return;const val=document.getElementById('sri').value.toUpperCase().trim();if(val===srCur){clearInterval(srTmr);const bonus=Math.round(srTL);srSc+=10+bonus;srSk++;srRec++;if(srSk>srBt)srBt=srSk;document.getElementById('sr-sc').textContent=srSc;document.getElementById('sr-rc').textContent=srRec;document.getElementById('sr-sk').textContent=srSk;document.getElementById('sr-bt').textContent=srBt;document.getElementById('sr-msg').innerHTML=`<span class="hi">Signal recovered.</span> +${10+bonus} pts. Streak: ${srSk}.`;if(srSc>srHS){srHS=srSc;localStorage.setItem('cm-sr-hs',srHS);document.getElementById('sr-hs').textContent=srHS;}setTimeout(srNext,500);}else{document.getElementById('sri').value='';}}
-function srFail(){srRun=false;document.getElementById('sri').disabled=true;document.getElementById('sr-pb').classList.add('corr');document.getElementById('sr-bar').style.width='0%';if(srSc>srHS){srHS=srSc;localStorage.setItem('cm-sr-hs',srHS);document.getElementById('sr-hs').textContent=srHS;}document.getElementById('sr-msg').innerHTML=`<span class="wr">Signal lost.</span> Final: <span class="hi">${srSc}</span>. ${srSc>=srHS&&srSc>0?'<span class="hi">New high score.</span>':'The corruption claimed the transmission.'}`;document.getElementById('sr-sb').textContent='Begin Recovery';srSk=0;document.getElementById('sr-sk').textContent='0';}
+// ══ GAME 3: THE INSCRIPTION ══
+let insCV,insCX,insNodes=[],insTarget=[],insPlayer=[],insPhase='idle',insSc=0,insSk=0,insHS=0;
+// Node layout: 3x3 grid of 9 nodes + center
+const INS_NODE_LAYOUT=[
+  [0.2,0.2],[0.5,0.2],[0.8,0.2],
+  [0.2,0.5],[0.5,0.5],[0.8,0.5],
+  [0.2,0.8],[0.5,0.8],[0.8,0.8],
+];
+// Predefined glyphs as sequences of node index pairs to connect
+const INS_GLYPHS=[
+  {name:'The Scar',segs:[[0,4],[4,8]]},
+  {name:'The Rupture',segs:[[0,8],[2,6]]},
+  {name:'The Covenant',segs:[[0,2],[2,8],[8,6],[6,0]]},
+  {name:'The Choir',segs:[[1,4],[4,7],[3,5]]},
+  {name:'The Threshold',segs:[[0,6],[6,8],[8,2],[2,0],[0,4],[4,8]]},
+  {name:'The Hollow',segs:[[0,1],[1,2],[2,5],[5,8],[8,7],[7,6],[6,3],[3,0]]},
+  {name:'The Infection',segs:[[0,4],[4,2],[2,6],[6,4],[4,8]]},
+  {name:'The Pale Mark',segs:[[1,3],[3,7],[7,5],[5,1],[0,8],[2,6]]},
+  {name:'The Thirteen',segs:[[0,2],[2,8],[8,6],[6,0],[1,7],[3,5]]},
+  {name:'The Omen',segs:[[0,4],[4,6],[6,2],[2,4],[4,8],[8,0]]},
+];
+let insCurrentGlyph=null,insShowTimer=null;
+function insInit(){
+  insCV=document.getElementById('ins-canvas');insCX=insCV.getContext('2d');
+  insHS=parseInt(localStorage.getItem('cm-ins-hs')||'0');
+  document.getElementById('ins-hs').textContent=insHS||'—';
+  const rsz=()=>{const w=Math.min(insCV.parentElement.clientWidth,480);insCV.width=w;insCV.height=Math.round(w*0.75);insCalcNodes();if(insPhase==='idle')insDrawIdle();};
+  rsz();window.addEventListener('resize',rsz);
+  insCV.addEventListener('click',insHandleClick);
+  insCV.addEventListener('touchend',e=>{e.preventDefault();const r=insCV.getBoundingClientRect();const touch=e.changedTouches[0];insHandleClick({clientX:touch.clientX,clientY:touch.clientY});},{passive:false});
+  insDrawIdle();
+}
+function insCalcNodes(){
+  const W=insCV.width,H=insCV.height;
+  insNodes=INS_NODE_LAYOUT.map(([x,y])=>({x:W*x,y:H*y}));
+}
+function insDrawIdle(){
+  if(!insCV||!insCX)return;
+  const W=insCV.width,H=insCV.height,cx=insCX;
+  cx.fillStyle='#040208';cx.fillRect(0,0,W,H);
+  insCalcNodes();insNodes.forEach((n,i)=>{
+    cx.beginPath();cx.arc(n.x,n.y,8,0,Math.PI*2);
+    cx.fillStyle='#1A1208';cx.fill();
+    cx.strokeStyle='#261A10';cx.lineWidth=1;cx.stroke();
+  });
+  cx.fillStyle='#1A1208';cx.font='11px Share Tech Mono';cx.textAlign='center';
+  cx.fillText('AWAITING INSCRIPTION',W/2,H/2+40);cx.textAlign='left';
+}
+function insStart(){
+  insPhase='showing';insSc=insSc;insPlayer=[];
+  document.getElementById('ins-submit').disabled=true;
+  document.getElementById('ins-clear').disabled=true;
+  document.getElementById('ins-btn').textContent='Next Glyph';
+  insCurrentGlyph=INS_GLYPHS[Math.floor(Math.random()*INS_GLYPHS.length)];
+  insTarget=insCurrentGlyph.segs.slice();
+  document.getElementById('ins-phase').textContent=`MEMORIZE: ${insCurrentGlyph.name.toUpperCase()} — 3 seconds`;
+  insDrawGlyph(insTarget,'show');
+  clearTimeout(insShowTimer);
+  insShowTimer=setTimeout(()=>{
+    insPhase='input';insPlayer=[];
+    document.getElementById('ins-phase').textContent='NOW INSCRIBE FROM MEMORY';
+    document.getElementById('ins-clear').disabled=false;
+    insDrawGlyph([],'input');
+  },3000);
+}
+function insDrawGlyph(segs,mode){
+  const W=insCV.width,H=insCV.height,cx=insCX;
+  cx.fillStyle='#040208';cx.fillRect(0,0,W,H);
+  // Draw connections
+  segs.forEach(([a,b])=>{
+    cx.beginPath();cx.moveTo(insNodes[a].x,insNodes[a].y);cx.lineTo(insNodes[b].x,insNodes[b].y);
+    if(mode==='show'){cx.strokeStyle='#C9A84C';cx.lineWidth=2;cx.shadowColor='#C9A84C';cx.shadowBlur=8;}
+    else if(mode==='input'){cx.strokeStyle='#5A38A0';cx.lineWidth=2;cx.shadowColor='#5A38A0';cx.shadowBlur=6;}
+    else if(mode==='correct'){cx.strokeStyle='#C9A84C';cx.lineWidth=2.5;cx.shadowColor='#C9A84C';cx.shadowBlur=12;}
+    else{cx.strokeStyle='#8B0000';cx.lineWidth=2;cx.shadowColor='#8B0000';cx.shadowBlur=6;}
+    cx.stroke();cx.shadowBlur=0;
+  });
+  // Draw nodes
+  insNodes.forEach((n,i)=>{
+    const sel=insPlayer.some(p=>p===i);
+    cx.beginPath();cx.arc(n.x,n.y,sel?10:8,0,Math.PI*2);
+    cx.fillStyle=mode==='show'?'#3A2810':sel?'#5A38A0':'#1A1208';
+    cx.fill();
+    cx.strokeStyle=mode==='show'?'#8A6530':sel?'#7B4FBF':'#261A10';
+    cx.lineWidth=1.5;cx.stroke();
+    if(mode==='show'||mode==='correct'){
+      cx.fillStyle='#C9A84C';cx.font='9px Share Tech Mono';cx.textAlign='center';
+      cx.fillText(i,n.x,n.y+3);cx.textAlign='left';
+    }
+  });
+}
+function insHandleClick(e){
+  if(insPhase!=='input')return;
+  const r=insCV.getBoundingClientRect();
+  const scale=insCV.width/r.width;
+  const mx=(e.clientX-r.left)*scale,my=(e.clientY-r.top)*scale;
+  // Find closest node within radius
+  let closest=-1,minD=999;
+  insNodes.forEach((n,i)=>{
+    const d=Math.hypot(n.x-mx,n.y-my);
+    if(d<30&&d<minD){minD=d;closest=i;}
+  });
+  if(closest===-1)return;
+  if(insPlayer[insPlayer.length-1]===closest)return; // same node twice
+  insPlayer.push(closest);
+  // Build drawn segments from player clicks
+  const drawnSegs=[];
+  for(let i=0;i<insPlayer.length-1;i++)drawnSegs.push([insPlayer[i],insPlayer[i+1]]);
+  insDrawGlyph(drawnSegs,'input');
+  if(insPlayer.length>=2)document.getElementById('ins-submit').disabled=false;
+}
+function insClear(){
+  if(insPhase!=='input')return;
+  insPlayer=[];document.getElementById('ins-submit').disabled=true;insDrawGlyph([],'input');
+}
+function insSubmit(){
+  if(insPhase!=='input')return;
+  insPhase='checking';
+  // Build drawn segments
+  const drawnSegs=[];
+  for(let i=0;i<insPlayer.length-1;i++)drawnSegs.push([insPlayer[i],insPlayer[i+1]]);
+  // Check: every target segment must appear in drawn (either direction)
+  const segMatch=(a,b,segs)=>segs.some(([x,y])=>(x===a&&y===b)||(x===b&&y===a));
+  const allMatch=insTarget.every(([a,b])=>segMatch(a,b,drawnSegs));
+  const noExtra=drawnSegs.every(([a,b])=>segMatch(a,b,insTarget));
+  const correct=allMatch&&noExtra;
+  if(correct){
+    insSc++;insSk++;
+    document.getElementById('ins-sc').textContent=insSc;
+    document.getElementById('ins-sk').textContent=insSk;
+    if(insSc>insHS){insHS=insSc;localStorage.setItem('cm-ins-hs',insHS);document.getElementById('ins-hs').textContent=insHS;}
+    document.getElementById('ins-msg').innerHTML=`<span class="hi">Inscription confirmed: ${insCurrentGlyph.name}.</span><br>The glyph has been received.`;
+    insDrawGlyph(drawnSegs,'correct');
+  } else {
+    insSk=0;document.getElementById('ins-sk').textContent='0';
+    document.getElementById('ins-msg').innerHTML=`<span class="wr">Incorrect inscription.</span> The glyph has rejected you.<br>The Codex will show you again.`;
+    insDrawGlyph(drawnSegs,'wrong');
+    // Show correct briefly
+    setTimeout(()=>{insDrawGlyph(insTarget,'show');},1200);
+  }
+  document.getElementById('ins-submit').disabled=true;
+  document.getElementById('ins-clear').disabled=true;
+  document.getElementById('ins-phase').textContent=correct?'INSCRIPTION ACCEPTED':'INSCRIPTION REJECTED';
+  setTimeout(()=>{insPhase='idle';insStart();},2200);
+}
 
 // CONFESSION — navigate to full ledger
 function goConfess(){
-  const word=document.getElementById('ci').value.trim();
-  // Navigate via ritual overlay
   ritualNav('confession-ledger.html','The Confession Ledger is open.','Write what the transmission drew out of you. The Codex will answer. It always has.');
 }
 
