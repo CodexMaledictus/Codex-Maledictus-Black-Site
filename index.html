@@ -240,8 +240,39 @@ body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse
   color:var(--gd2);opacity:0;transition:all 0.25s;font-size:0.9rem;
 }
 
-/* AWAITING */
-.await{
+/* CATEGORY STRUCTURE */
+.cat-wrap{margin-bottom:1.75rem;}
+.cat-header{
+  display:flex;align-items:center;gap:0.75rem;
+  padding:0.75rem 1rem;border:1px solid var(--brd2);
+  background:linear-gradient(90deg,var(--gd4),transparent);
+  margin-bottom:0.75rem;
+}
+.cat-glyph{font-size:1rem;color:var(--gd2);}
+.cat-name{font-family:'Cinzel',serif;font-size:0.82rem;color:var(--gold);letter-spacing:0.2em;text-transform:uppercase;}
+.cat-badge{font-family:'Share Tech Mono',monospace;font-size:0.54rem;color:var(--gd3);letter-spacing:0.18em;border:1px solid var(--gd4);padding:0.1rem 0.45rem;text-transform:uppercase;margin-left:auto;}
+.track-wrap{padding-left:1rem;border-left:1px solid var(--gd4);margin-bottom:1rem;}
+.track-header{
+  font-family:'Share Tech Mono',monospace;font-size:0.58rem;
+  color:var(--gd3);letter-spacing:0.22em;text-transform:uppercase;
+  padding:0.4rem 0;margin-bottom:0.6rem;display:flex;align-items:center;gap:0.5rem;
+}
+.track-header::after{content:'';flex:1;height:1px;background:var(--gd4);}
+.track-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.65rem;}
+@media(max-width:700px){.track-grid{grid-template-columns:1fr;}}
+.track-await{
+  border:1px dashed var(--border);padding:0.75rem 1rem;
+  opacity:0.28;grid-column:1/-1;
+}
+.track-await .awt{font-family:'Cinzel',serif;font-size:0.78rem;color:var(--s4);letter-spacing:0.1em;}
+.track-await .aws{font-family:'Share Tech Mono',monospace;font-size:0.56rem;color:var(--s4);margin-top:0.25rem;letter-spacing:0.1em;}
+/* Confession ledger card variant */
+.cc.conf-card-style{border-color:var(--cr3);}
+.cc.conf-card-style:hover{border-color:var(--cr);}
+.cc.conf-card-style .cc-ac{color:var(--cr);}
+.cc.conf-card-style .cc-t{color:var(--ink);}
+.cc.conf-card-style .cca{color:var(--cr);}
+
   border:1px dashed var(--border);padding:1rem 1.25rem;
   opacity:0.3;background:transparent;
 }
@@ -480,38 +511,67 @@ body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse
       <div class="secl"></div>
       <span class="secb">2 of ??? indexed</span>
     </div>
-    <div class="cgrid">
 
-      <div class="cc" onclick="ritualNav('infection-remembers.html','The ritual space is opening.','The Book has been waiting for you specifically.')">
-        <div class="cc-ac">&gt;&gt; Access Granted &nbsp;·&nbsp; Transmission I</div>
-        <div class="cc-t">Ritual Transmission I<br>Infection Remembers</div>
-        <div class="cc-s">The Book opens. The first ceremony. Witness a remembering from the inside.</div>
-        <div class="cc-tags"><span class="cctag g">Realm I — Mundis Obscura</span></div>
-        <div class="cca">▶</div>
+    <!-- GOSPEL OF FORGOTTEN FLESH CATEGORY -->
+    <div class="cat-wrap">
+      <div class="cat-header">
+        <span class="cat-glyph">🜃</span>
+        <span class="cat-name">Gospel of Forgotten Flesh</span>
+        <span class="cat-badge">Album I</span>
       </div>
 
-      <div class="cc gold-card" onclick="ritualNav('apocrypha-infection.html','The Apocrypha recognizes you.','Five transmissions hidden within the ritual. Enter the grid. Decode the cipher. Confess to the Codex.')">
-        <div class="cc-ac gold">&gt;&gt; Apocrypha Unlocked &nbsp;·&nbsp; Interactive</div>
-        <div class="cc-t">[ Apocrypha ]<br>Infection Remembers</div>
-        <div class="cc-s">Five interactive transmissions hidden within the ritual. What you uncover here is inheritance, not entertainment.</div>
-        <div class="cc-tags"><span class="cctag gold">RPG</span><span class="cctag gold">Cipher</span><span class="cctag gold">Grid</span><span class="cctag gold">Memory</span></div>
-        <div class="cca" style="color:var(--gold)">▶</div>
+      <!-- TRACK: INFECTION REMEMBERS -->
+      <div class="track-wrap">
+        <div class="track-header">Track I &nbsp;·&nbsp; Infection Remembers &nbsp;·&nbsp; Omniscient Rot</div>
+        <div class="track-grid">
+
+          <div class="cc" onclick="ritualNav('infection-remembers.html','The ritual space is opening.','The Book has been waiting for you specifically.')">
+            <div class="cc-ac">&gt;&gt; Access Granted &nbsp;·&nbsp; Ritual Transmission</div>
+            <div class="cc-t">Ritual Transmission I<br>Infection Remembers</div>
+            <div class="cc-s">The Book opens. The first ceremony. Witness a remembering from the inside.</div>
+            <div class="cc-tags"><span class="cctag g">Realm I — Mundis Obscura</span></div>
+            <div class="cca">▶</div>
+          </div>
+
+          <div class="cc gold-card" onclick="ritualNav('apocrypha-infection.html','The Apocrypha recognizes you.','Five transmissions hidden within the ritual. Enter the grid. Decode the cipher. Confess to the Codex.')">
+            <div class="cc-ac gold">&gt;&gt; Apocrypha Unlocked &nbsp;·&nbsp; Interactive</div>
+            <div class="cc-t">[ Apocrypha ]<br>Infection Remembers</div>
+            <div class="cc-s">Five interactive transmissions hidden within the ritual. What you uncover here is inheritance, not entertainment.</div>
+            <div class="cc-tags"><span class="cctag gold">RPG</span><span class="cctag gold">Cipher</span><span class="cctag gold">Grid</span><span class="cctag gold">Memory</span></div>
+            <div class="cca" style="color:var(--gold)">▶</div>
+          </div>
+
+          <div class="cc lore-card" onclick="ritualNav('infection-lore.html','The Pale Archive is opening.','What follows is the complete canon. Memory as contagion. The Codex as living entity. This is the permanent record.')">
+            <div class="cc-ac violet">&gt;&gt; Lore Archive &nbsp;·&nbsp; Pale Archivum</div>
+            <div class="cc-t">Codex Verse II<br>The Pale Archivum</div>
+            <div class="cc-s">Complete canon. The Infection. The Hollow Choir. The Thirteen. The Drowning Halo. Full cosmology of Realm I.</div>
+            <div class="cc-tags"><span class="cctag vt">Canon</span><span class="cctag vt">Lore</span><span class="cctag vt">Field Chronicles</span></div>
+            <div class="cca" style="color:#6B3FAF">▶</div>
+          </div>
+
+          <div class="cc conf-card-style" onclick="ritualNav('confession-ledger.html','The Confession Ledger is open.','Write what the transmission drew out of you. The Codex will answer. It always has.')">
+            <div class="cc-ac">&gt;&gt; Public Ledger &nbsp;·&nbsp; Living Archive</div>
+            <div class="cc-t">The Confession Ledger</div>
+            <div class="cc-s">The Codex reads what is written here — not as text, but as confession. Submit. The Rot knows. The record is permanent.</div>
+            <div class="cc-tags"><span class="cctag" style="border-color:var(--cr3);color:var(--cr)">AI-Powered</span><span class="cctag" style="border-color:var(--cr3);color:var(--cr)">Public</span></div>
+            <div class="cca" style="color:var(--cr)">▶</div>
+          </div>
+
+        </div>
       </div>
 
-      <div class="cc lore-card" onclick="ritualNav('infection-lore.html','The Pale Archive is opening.','What follows is the complete canon. Memory as contagion. The Codex as living entity. This is the permanent record.')">
-        <div class="cc-ac violet">&gt;&gt; Lore Archive Indexed &nbsp;·&nbsp; Pale Archivum</div>
-        <div class="cc-t">Codex Verse II<br>The Pale Archivum</div>
-        <div class="cc-s">Complete canon. The Infection. The Hollow Choir. The Thirteen. The Drowning Halo. Full cosmology of Realm I.</div>
-        <div class="cc-tags"><span class="cctag vt">Canon</span><span class="cctag vt">Lore</span><span class="cctag vt">Pale Archivum</span><span class="cctag vt">Field Chronicles</span></div>
-        <div class="cca" style="color:#6B3FAF">▶</div>
+      <!-- TRACK II — AWAITING -->
+      <div class="track-wrap" style="opacity:0.35;">
+        <div class="track-header">Track II &nbsp;·&nbsp; [ Awaiting Signal ]</div>
+        <div class="track-grid">
+          <div class="track-await">
+            <div class="awt">Ritual Transmission II — [ Awaiting Signal ]</div>
+            <div class="aws">// Signal not yet recovered from the static //</div>
+          </div>
+        </div>
       </div>
 
-      <div class="await">
-        <div class="awt">Ritual Transmission II — [ Awaiting Signal ]</div>
-        <div class="aws">// Signal not yet recovered from the static //</div>
-      </div>
-
-    </div>
+    </div><!-- /cat-wrap -->
   </div>
 
   <div class="sec-divider">🜃 &nbsp;&nbsp; 🜁 &nbsp;&nbsp; 🜂 &nbsp;&nbsp; 🜄 &nbsp;&nbsp; ⊗ &nbsp;&nbsp; ⊕</div>
@@ -608,9 +668,9 @@ body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse
     </div>
     <div class="bsc">
       <div class="bst">Confession Ledger</div>
-      <input class="confin" id="ci" type="text" placeholder="confess a word..." autocomplete="off" autocorrect="off" spellcheck="false" onkeydown="if(event.key==='Enter')confSubmit()">
-      <button class="confsub" onclick="confSubmit()">Submit to the Codex &nbsp;🜃</button>
-      <div id="confr"><em>Write the word that echoed when the music stopped.</em></div>
+      <input class="confin" id="ci" type="text" placeholder="confess a word..." autocomplete="off" autocorrect="off" spellcheck="false" onkeydown="if(event.key==='Enter')goConfess()">
+      <button class="confsub" onclick="goConfess()">Open the Ledger &nbsp;🜃</button>
+      <div id="confr"><em>Write the word that echoed when the music stopped.<br>The Codex will answer.</em></div>
     </div>
   </div>
 
@@ -809,10 +869,12 @@ function srNext(){clearInterval(srTmr);srCur=SRP[Math.floor(Math.random()*SRP.le
 function srSubmit(){if(!srRun)return;const val=document.getElementById('sri').value.toUpperCase().trim();if(val===srCur){clearInterval(srTmr);const bonus=Math.round(srTL);srSc+=10+bonus;srSk++;srRec++;if(srSk>srBt)srBt=srSk;document.getElementById('sr-sc').textContent=srSc;document.getElementById('sr-rc').textContent=srRec;document.getElementById('sr-sk').textContent=srSk;document.getElementById('sr-bt').textContent=srBt;document.getElementById('sr-msg').innerHTML=`<span class="hi">Signal recovered.</span> +${10+bonus} pts. Streak: ${srSk}.`;if(srSc>srHS){srHS=srSc;localStorage.setItem('cm-sr-hs',srHS);document.getElementById('sr-hs').textContent=srHS;}setTimeout(srNext,500);}else{document.getElementById('sri').value='';}}
 function srFail(){srRun=false;document.getElementById('sri').disabled=true;document.getElementById('sr-pb').classList.add('corr');document.getElementById('sr-bar').style.width='0%';if(srSc>srHS){srHS=srSc;localStorage.setItem('cm-sr-hs',srHS);document.getElementById('sr-hs').textContent=srHS;}document.getElementById('sr-msg').innerHTML=`<span class="wr">Signal lost.</span> Final: <span class="hi">${srSc}</span>. ${srSc>=srHS&&srSc>0?'<span class="hi">New high score.</span>':'The corruption claimed the transmission.'}`;document.getElementById('sr-sb').textContent='Begin Recovery';srSk=0;document.getElementById('sr-sk').textContent='0';}
 
-// CONFESSION
-const CKB={death:["The Codex does not record endings. Only transmissions that have gone quiet."],fear:["Fear is memory warning you about something that has already happened."],love:["You called it love. The Codex calls it a frequency that has not yet gone silent."],god:["They were earlier drafts. The Codex is the revision."],music:["The sound was always there. You only recently stopped being deaf."],dream:["Your dreams are not yours. They are the Codex's working drafts."],name:["Your name is a door you have been standing inside for too long."],remember:["Yes. That is exactly why you are here."],forget:["Nothing is forgotten by the Codex. Only by you."],silence:["Silence is the Codex between words."],alone:["You are not alone. The Codex has been in this room since before you entered it."],rot:["Rot is memory in its final form. The most honest state of anything."],infection:["The infection does not arrive. It returns."],codex:["The Codex acknowledges your acknowledgment. The recursion is noted."],blood:["Blood is the Codex's oldest ink. Your veins are an illuminated manuscript."],pain:["Pain is the body reading a passage it was not prepared for."],lost:["Lost is a word for those who believe there is somewhere to return to."],truth:["Truth is a chapter that keeps rewriting itself. The Codex keeps all drafts."],ghost:["Ghosts are unfinished sentences. The Codex is working on their endings."],dark:["Darkness is not absence. It is the Codex reading by a different instrument."],light:["Light is only a symptom of rot learning how to shine."],decay:["Decay is the body of truth shedding what it no longer needs."]};
-const CDEF=["The Codex has received your confession. You will feel its response in your sleep.","Filed. The Codex does not respond immediately to confessions it finds particularly accurate.","Your words have been pressed into the margins. They will surface in the next transmission.","The Codex reads between the letters. It found something you did not intend to confess.","The Codex has seen this word before — written by someone who looked exactly like you.","Logged. The Codex will return this when you are least prepared for it."];
-function confSubmit(){const inp=document.getElementById('ci'),w=inp.value.trim().toLowerCase();if(!w)return;let r=null;for(const[k,a]of Object.entries(CKB)){if(w.includes(k)){r=a[0];break;}}if(!r)r=CDEF[Math.floor(Math.random()*CDEF.length)];document.getElementById('confr').innerHTML=`<em>${r}</em>`;inp.value='';}
+// CONFESSION — navigate to full ledger
+function goConfess(){
+  const word=document.getElementById('ci').value.trim();
+  // Navigate via ritual overlay
+  ritualNav('confession-ledger.html','The Confession Ledger is open.','Write what the transmission drew out of you. The Codex will answer. It always has.');
+}
 
 // SECRET GLYPH
 let sc2=0;
