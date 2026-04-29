@@ -687,6 +687,7 @@ function showG(id,btn){
 function ritualNav(url,line1,line2){
   const overlay=document.getElementById('RITUAL');
   const textEl=document.getElementById('RT');
+  overlay.style.transition='opacity 0.4s';
   overlay.classList.add('on');
   const txt=line1+'\n\n'+line2;
   textEl.textContent='';
@@ -695,7 +696,8 @@ function ritualNav(url,line1,line2){
     if(i<txt.length){textEl.textContent+=txt[i]==='\n'?'\n':txt[i];i++;}
     else{
       clearInterval(typer);
-      setTimeout(()=>{overlay.style.opacity='0';setTimeout(()=>{window.location.href=url;},600);},2000);
+      // Stay dark — navigate without fading out so there's no flash
+      setTimeout(()=>{ window.location.href=url; },2200);
     }
   },26);
 }
