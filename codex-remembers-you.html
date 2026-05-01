@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IDMF DATABASE — RESTRICTED ACCESS // Case File 2019-QNS-∅</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Cinzel:wght@400;600&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#020804;--panel:#040E06;--panel2:#060F08;
+  --grn:#00C832;--g2:#008A22;--g3:#004A12;--g4:#002008;--g5:#001204;
+  --am:#C9A84C;--am2:#8A6530;--am3:#3A2810;
+  --cr:#8B0000;--cr2:#AA2000;--cr3:#3A0000;
+  --bone:#C8C4A0;--bn2:#888468;--bn3:#383420;
+  --brd:#0A1E0C;--brd2:#122014;
+  --warn:#CC4400;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--grn);font-family:'Share Tech Mono',monospace;overflow-x:hidden;cursor:none;}
+body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.08) 2px,rgba(0,0,0,0.08) 4px);pointer-events:none;z-index:9990;}
+body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at center,transparent 30%,rgba(0,0,0,0.88)100%);pointer-events:none;z-index:9989;}
+#CUR{position:fixed;pointer-events:none;z-index:99999;transform:translate(-50%,-50%);width:16px;height:16px;}
+#CUR::before,#CUR::after{content:'';position:absolute;background:var(--grn);}
+#CUR::before{width:1px;height:100%;left:50%;}
+#CUR::after{height:1px;width:100%;top:50%;}
+#CUR2{position:fixed;pointer-events:none;z-index:99998;transform:translate(-50%,-50%);width:3px;height:3px;border-radius:50%;background:var(--g2);}
+
+/* HACK */
+#HACK{position:fixed;inset:0;z-index:9500;background:#000;display:flex;flex-direction:column;justify-content:center;padding:2.5rem;font-size:0.75rem;color:var(--g3);}
+.hl-inst-name{font-family:'Cinzel',serif;font-size:clamp(0.9rem,2.5vw,1.3rem);color:var(--g2);letter-spacing:0.2em;text-transform:uppercase;text-align:center;margin-bottom:0.3rem;}
+.hl-inst-sub{font-size:0.56rem;letter-spacing:0.3em;color:var(--g4);text-align:center;margin-bottom:2rem;}
+#HL{max-width:680px;margin:0 auto;}
+.hl{margin:0.2rem 0;opacity:0;transition:opacity 0.08s;letter-spacing:0.06em;}
+.hl.on{opacity:1;}
+.hlok{color:var(--g2);}.hlwn{color:var(--warn);}.hlrd{color:var(--cr2);}.hldm{color:var(--g4);}.hlam{color:var(--am2);}
+#hbw{margin:0.85rem 0;display:none;}
+.hbl{font-size:0.56rem;color:var(--g4);letter-spacing:0.2em;margin-bottom:0.3rem;}
+.hbt{height:2px;background:#0A0A0A;overflow:hidden;}
+.hbf{height:100%;background:var(--g2);width:0%;}
+.hbp{font-size:0.54rem;color:var(--g4);text-align:right;margin-top:0.2rem;}
+#CORRUPT{position:fixed;inset:0;z-index:9600;pointer-events:none;opacity:0;transition:opacity 0.3s;background:transparent;}
+
+/* APP */
+#APP{position:relative;z-index:1;opacity:0;transition:opacity 1.2s;padding-bottom:4rem;}
+#APP.on{opacity:1;}
+
+/* INST STRIP */
+.ist{background:#001A06;border-bottom:2px solid var(--g3);padding:0.45rem 1.5rem;display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap;}
+.ist-badge{font-size:0.54rem;letter-spacing:0.22em;text-transform:uppercase;border:1px solid var(--g3);padding:0.12rem 0.45rem;color:var(--g3);flex-shrink:0;}
+.ist-file{font-size:0.58rem;letter-spacing:0.14em;color:var(--g2);}
+.ist-warn{font-size:0.58rem;color:var(--warn);letter-spacing:0.18em;margin-left:auto;animation:wblink 1.8s step-end infinite;}
+@keyframes wblink{0%,100%{opacity:1;}50%{opacity:0.3;}}
+
+/* HEADER */
+.hdr{background:var(--panel);border-bottom:1px solid var(--brd2);padding:2.5rem 2rem 2rem;text-align:center;position:relative;overflow:hidden;}
+.hdr::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:300px;height:1px;background:linear-gradient(90deg,transparent,var(--g2),transparent);}
+.hdr-cls{font-size:0.54rem;letter-spacing:0.35em;color:var(--g4);text-transform:uppercase;margin-bottom:0.85rem;}
+.hdr-inst{font-family:'Cinzel',serif;font-size:clamp(0.72rem,2vw,0.95rem);color:var(--g2);letter-spacing:0.28em;text-transform:uppercase;margin-bottom:0.5rem;}
+.hdr-case{font-size:0.56rem;letter-spacing:0.2em;color:var(--g3);margin-bottom:1.5rem;}
+.hdr-title{font-family:'Cinzel',serif;font-size:clamp(1.1rem,3.5vw,2.1rem);color:var(--am);letter-spacing:0.06em;line-height:1.3;text-shadow:0 0 30px rgba(201,168,76,0.3);margin-bottom:0.5rem;animation:bkgl 14s infinite;}
+@keyframes bkgl{0%,88%,100%{text-shadow:0 0 30px rgba(201,168,76,0.3);transform:none;}89%{text-shadow:3px 0 var(--grn),-2px 0 var(--cr);transform:translateX(2px);}90%{clip-path:inset(10% 0 70% 0);transform:translateX(-1px);}91%{clip-path:none;transform:none;}}
+.hdr-sub{font-size:0.6rem;letter-spacing:0.28em;color:var(--g3);text-transform:uppercase;margin-bottom:1.5rem;}
+.int-wrap{display:inline-flex;align-items:center;gap:0.85rem;border:1px solid var(--g4);padding:0.35rem 1rem;margin-bottom:1.5rem;font-size:0.56rem;letter-spacing:0.14em;}
+.int-lbl{color:var(--g4);}.int-val{color:var(--warn);}
+.int-bar{width:70px;height:3px;background:#0A0A0A;}.int-fill{height:100%;background:var(--warn);width:39%;}
+.hdr-lede{font-family:'IM Fell English',serif;font-style:italic;font-size:0.97rem;color:var(--bn2);max-width:560px;margin:0 auto;line-height:1.95;}
+.hdr-lede em{color:var(--am);font-style:normal;}
+.hdr-corrupt{font-size:0.6rem;color:var(--cr3);letter-spacing:0.1em;margin-top:1rem;font-style:italic;opacity:0;animation:capp 20s ease-in-out infinite;}
+@keyframes capp{0%,80%,100%{opacity:0;}83%,90%{opacity:0.65;}}
+
+/* NAV */
+.snav{position:sticky;top:0;z-index:100;background:rgba(2,8,4,0.97);border-bottom:1px solid var(--brd2);backdrop-filter:blur(8px);display:flex;overflow-x:auto;scrollbar-width:none;}
+.snav::-webkit-scrollbar{display:none;}
+.sn{flex-shrink:0;background:transparent;border:none;border-bottom:2px solid transparent;color:var(--g3);font-family:'Share Tech Mono',monospace;font-size:0.6rem;letter-spacing:0.18em;padding:0.65rem 1.1rem;cursor:pointer;transition:all 0.2s;text-transform:uppercase;white-space:nowrap;}
+.sn:hover{color:var(--grn);}
+.sn.on{color:var(--am);border-bottom-color:var(--am);}
+
+/* PANELS */
+.panel{max-width:900px;margin:0 auto;padding:2.5rem 1.5rem 3rem;display:none;}
+.panel.on{display:block;}
+.phead{margin-bottom:2rem;}
+.pnum{font-size:0.54rem;color:var(--g4);letter-spacing:0.35em;text-transform:uppercase;margin-bottom:0.3rem;}
+.ptitle{font-family:'Cinzel',serif;font-size:1rem;color:var(--am);letter-spacing:0.1em;}
+
+/* CASE FILE */
+.cmeta{border:1px solid var(--brd2);padding:1.1rem;background:var(--panel);margin-bottom:1.5rem;display:grid;grid-template-columns:1fr 1fr;gap:0.3rem;font-size:0.58rem;letter-spacing:0.1em;}
+@media(max-width:500px){.cmeta{grid-template-columns:1fr;}}
+.cmr{display:flex;gap:0.5rem;}
+.cmk{color:var(--g3);}.cmv{color:var(--g2);}.cmvw{color:var(--warn);}.cmvr{color:var(--cr2);}
+.cfsec{border:1px solid var(--brd2);padding:1.2rem;margin-bottom:0.85rem;background:var(--panel);position:relative;overflow:hidden;}
+.cfsec::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--g3),transparent);opacity:0.4;}
+.cfh{font-size:0.58rem;letter-spacing:0.26em;color:var(--g3);text-transform:uppercase;margin-bottom:0.85rem;border-bottom:1px solid var(--brd);padding-bottom:0.4rem;}
+.cfb{font-family:'IM Fell English',serif;font-size:0.97rem;color:var(--bn2);line-height:1.9;}
+.cfb em{color:var(--bone);font-style:italic;}
+.cfb strong{color:var(--am);font-style:normal;font-weight:600;}
+.cfb p+p{margin-top:0.85rem;}
+.cfq{border-left:2px solid var(--cr3);padding:0.65rem 1rem;margin:1rem 0;font-style:italic;font-size:0.88rem;color:var(--cr2);line-height:1.85;background:rgba(58,0,0,0.08);font-family:'Share Tech Mono',monospace;letter-spacing:0.06em;}
+.rdct{background:#000;color:#000;cursor:pointer;border:1px solid #0A0A0A;padding:0 0.3rem;transition:all 0.15s;font-family:'Share Tech Mono',monospace;}
+.rdct:hover,.rdct.open{background:rgba(58,0,0,0.4);color:var(--cr2);border-color:var(--cr);}
+.cbleed{font-family:'Share Tech Mono',monospace;font-size:0.6rem;color:var(--cr3);text-align:center;padding:0.4rem;letter-spacing:0.1em;opacity:0;animation:cbleed 18s ease-in-out infinite;}
+@keyframes cbleed{0%,82%,100%{opacity:0;}85%,92%{opacity:0.55;}}
+
+/* SUBJECTS */
+.sgrid{display:grid;grid-template-columns:1fr 1fr;gap:0.65rem;margin-top:1.25rem;}
+@media(max-width:640px){.sgrid{grid-template-columns:1fr;}}
+.sc{border:1px solid var(--brd2);background:var(--panel);cursor:pointer;transition:border-color 0.2s;position:relative;overflow:hidden;}
+.sc::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--g3),transparent);opacity:0;transition:opacity 0.3s;}
+.sc:hover::before,.sc.open::before{opacity:1;}
+.sc:hover,.sc.open{border-color:var(--g3);}
+.sc-hdr{padding:0.85rem 1rem;display:flex;align-items:center;gap:0.65rem;}
+.sc-id{font-size:0.52rem;color:var(--g4);letter-spacing:0.18em;flex-shrink:0;width:52px;}
+.sc-name{font-family:'Cinzel',serif;font-size:0.8rem;color:var(--grn);letter-spacing:0.05em;flex:1;}
+.sc-st{font-size:0.52rem;letter-spacing:0.16em;text-transform:uppercase;}
+.sc-st.lost{color:var(--cr2);}.sc-st.unknown{color:var(--warn);}.sc-st.active{color:var(--g2);}.sc-st.residual{color:var(--am2);}
+.sc-arr{font-size:0.6rem;color:var(--g3);transition:transform 0.25s;}
+.sc.open .sc-arr{transform:rotate(90deg);}
+.sc-body{display:none;padding:0 1rem 1rem;border-top:1px solid var(--brd);}
+.sc.open .sc-body{display:block;animation:fi 0.4s ease;}
+@keyframes fi{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:none;}}
+.sc-cls{font-size:0.52rem;letter-spacing:0.18em;color:var(--g3);text-transform:uppercase;margin-bottom:0.65rem;margin-top:0.5rem;}
+.sc-meta{display:grid;grid-template-columns:1fr 1fr;gap:0.22rem;margin-bottom:0.75rem;font-size:0.54rem;letter-spacing:0.09em;}
+.scm{display:flex;gap:0.35rem;}
+.scmk{color:var(--g4);}.scmv{color:var(--g2);}
+.sc-text{font-family:'IM Fell English',serif;font-size:0.9rem;color:var(--bn2);line-height:1.85;}
+.sc-text em{color:var(--bone);font-style:italic;}
+.sc-text strong{color:var(--am);font-style:normal;}
+.sc-corrupt{margin-top:0.65rem;font-family:'Share Tech Mono',monospace;font-size:0.65rem;color:var(--cr3);letter-spacing:0.06em;line-height:1.7;border-left:2px solid var(--cr3);padding-left:0.65rem;font-style:italic;}
+
+/* REALM */
+.rdoc{border:1px solid var(--brd2);background:var(--panel);padding:1.4rem;margin-bottom:1rem;}
+.rd-stamp{font-size:0.54rem;letter-spacing:0.26em;color:var(--g4);text-transform:uppercase;margin-bottom:1.1rem;border-bottom:1px solid var(--brd);padding-bottom:0.5rem;display:flex;justify-content:space-between;flex-wrap:wrap;gap:0.5rem;}
+.rd-body{font-family:'IM Fell English',serif;font-size:0.97rem;color:var(--bn2);line-height:1.92;}
+.rd-body em{color:var(--bone);font-style:italic;}
+.rd-body strong{color:var(--am);font-style:normal;font-weight:600;}
+.rd-body p+p{margin-top:0.95rem;}
+.rd-pull{border-left:2px solid var(--am2);padding:0.65rem 1rem;margin:1.1rem 0;font-style:italic;font-size:0.95rem;color:var(--am);line-height:1.85;background:rgba(201,168,76,0.04);}
+.rd-corrupt{font-family:'Share Tech Mono',monospace;font-size:0.7rem;color:var(--cr2);letter-spacing:0.06em;line-height:1.75;margin:1rem 0;border:1px solid var(--cr3);padding:0.65rem;background:rgba(58,0,0,0.07);}
+
+/* ACQUIRE */
+.acq-warn{border:2px solid var(--warn);padding:1.4rem;margin-bottom:1.75rem;background:rgba(204,68,0,0.05);}
+.aw-lbl{font-size:0.56rem;letter-spacing:0.26em;color:var(--warn);text-transform:uppercase;margin-bottom:0.65rem;}
+.aw-lbl::before{content:'WARNING / ';color:var(--warn);}
+.aw-body{font-family:'IM Fell English',serif;font-size:0.94rem;color:var(--bn2);line-height:1.85;}
+.aw-list{list-style:none;margin-top:0.65rem;}
+.aw-list li{font-size:0.66rem;letter-spacing:0.1em;color:var(--g2);padding:0.22rem 0;border-bottom:1px solid var(--brd);}
+.aw-list li::before{content:'> ';}
+.acq-ev{border:1px solid var(--brd2);padding:1.4rem;margin-bottom:1.75rem;background:var(--panel);}
+.ae-lbl{font-size:0.56rem;letter-spacing:0.26em;color:var(--g3);text-transform:uppercase;margin-bottom:0.85rem;}
+.ae-title{font-family:'Cinzel',serif;font-size:0.95rem;color:var(--am);letter-spacing:0.05em;margin-bottom:0.35rem;}
+.ae-auth{font-size:0.6rem;letter-spacing:0.14em;color:var(--g3);margin-bottom:0.85rem;}
+.ae-stars{color:var(--am);letter-spacing:0.1em;margin-bottom:0.65rem;}
+.ae-lede{font-family:'IM Fell English',serif;font-size:0.93rem;color:var(--bn2);line-height:1.85;margin-bottom:1.25rem;font-style:italic;}
+.acq-btn{display:inline-block;background:transparent;border:1px solid var(--am2);color:var(--am);font-family:'Share Tech Mono',monospace;font-size:0.66rem;letter-spacing:0.26em;padding:0.8rem 2.25rem;text-decoration:none;text-transform:uppercase;transition:all 0.25s;}
+.acq-btn:hover{background:var(--am3);border-color:var(--am);}
+.acq-note{font-size:0.56rem;color:var(--g4);letter-spacing:0.12em;margin-top:0.85rem;text-align:center;}
+
+/* CLASSIFIED */
+.cls-stamp{display:inline-block;border:3px solid var(--cr3);padding:0.35rem 1.25rem;font-family:'Cinzel',serif;font-size:clamp(1rem,3vw,1.6rem);color:var(--cr3);letter-spacing:0.3em;text-transform:uppercase;margin-bottom:1.75rem;transform:rotate(-2deg);text-shadow:0 0 20px rgba(58,0,0,0.5);}
+.cls-file{border:1px solid var(--cr3);padding:1.4rem;background:rgba(58,0,0,0.05);position:relative;overflow:hidden;}
+.cls-file::after{content:'CLASSIFIED // CLEARANCE VOID';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-15deg);font-family:'Cinzel',serif;font-size:clamp(1.5rem,5vw,3rem);color:rgba(139,0,0,0.07);letter-spacing:0.2em;white-space:nowrap;pointer-events:none;}
+.cls-hdr{font-size:0.56rem;letter-spacing:0.26em;color:var(--cr3);text-transform:uppercase;margin-bottom:1.1rem;border-bottom:1px solid var(--cr3);padding-bottom:0.45rem;}
+.cls-meta{font-size:0.56rem;letter-spacing:0.12em;color:var(--g4);margin-bottom:1.1rem;}
+.cls-rdct{background:#000;color:#000;display:block;padding:0.38rem;margin:0.38rem 0;cursor:pointer;border:1px solid #0A0A0A;transition:all 0.2s;font-family:'Share Tech Mono',monospace;font-size:0.72rem;letter-spacing:0.06em;}
+.cls-rdct:hover,.cls-rdct.open{background:var(--cr3);color:var(--cr2);border-color:var(--cr);}
+.cls-leaked{border-left:2px solid var(--cr3);padding:0.65rem 1rem;margin:1rem 0;font-family:'IM Fell English',serif;font-style:italic;font-size:0.93rem;color:var(--cr2);line-height:1.85;background:rgba(58,0,0,0.05);opacity:0;animation:lkd 9s ease-in-out infinite;}
+@keyframes lkd{0%,62%,100%{opacity:0;}65%,90%{opacity:1;}}
+.cls-coming{text-align:center;margin-top:1.75rem;font-family:'Cinzel',serif;font-size:0.78rem;color:var(--g3);letter-spacing:0.3em;text-transform:uppercase;}
+
+/* FOOTER */
+.foot{display:flex;gap:0.65rem;flex-wrap:wrap;justify-content:center;margin-top:3rem;padding-top:2rem;border-top:1px solid var(--brd);}
+.fl{background:transparent;border:1px solid var(--brd);color:var(--g3);font-family:'Share Tech Mono',monospace;font-size:0.58rem;letter-spacing:0.2em;padding:0.55rem 1rem;text-decoration:none;text-transform:uppercase;transition:all 0.18s;}
+.fl:hover{border-color:var(--g2);color:var(--grn);}
+.fl.prim{border-color:var(--am3);color:var(--am2);}
+.fl.prim:hover{border-color:var(--am2);color:var(--am);}
+
+/* TICKER */
+#TICKER{position:fixed;bottom:0;left:0;right:0;height:2.5rem;background:rgba(2,8,4,0.97);border-top:1px solid var(--brd);display:flex;align-items:center;overflow:hidden;z-index:490;}
+.tl{flex-shrink:0;padding:0 1rem;font-family:'Share Tech Mono',monospace;font-size:0.54rem;color:var(--g4);letter-spacing:0.22em;text-transform:uppercase;border-right:1px solid var(--brd);height:100%;display:flex;align-items:center;}
+.ts{flex:1;overflow:hidden;display:flex;align-items:center;}
+.ti{white-space:nowrap;font-family:'Share Tech Mono',monospace;font-size:0.56rem;color:var(--g4);letter-spacing:0.12em;animation:tr 70s linear infinite;}
+@keyframes tr{from{transform:translateX(100vw);}to{transform:translateX(-200%);}}
+
+.sr{opacity:0;transform:translateY(8px);transition:opacity 0.8s ease,transform 0.8s ease;}
+.sr.vis{opacity:1;transform:none;}
+
+@media(max-width:600px){.panel{padding:1.5rem 1.25rem 2.5rem;}.sc-meta{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<div id="CUR"></div><div id="CUR2"></div>
+<div id="CORRUPT"></div>
+
+<!-- HACK SEQUENCE -->
+<div id="HACK">
+  <div class="hl-inst-name">Institute for Digital Memory Forensics</div>
+  <div class="hl-inst-sub">IDMF // Internal Evidence Archive // New York Division</div>
+  <div id="HL">
+    <div class="hl hldm" id="h0">INITIATING SECURE TUNNEL... NODE: 192.168.∅.13</div>
+    <div class="hl hldm" id="h1">ROUTING: [██████] → [██████] → [██████] → IDMF-QNS</div>
+    <div class="hl hlok" id="h2">CONNECTION ESTABLISHED // OBLIVION-CLASS ENCRYPTION</div>
+    <div class="hl hldm" id="h3">LOCATING IDMF EVIDENCE ARCHIVE — QUEENS, NEW YORK...</div>
+    <div class="hl hlok" id="h4">ARCHIVE LOCATED // PORT 13∅∅ // CASE FILE REGISTRY FOUND</div>
+    <div class="hl hldm" id="h5">BYPASSING AUTHORIZATION LAYER I...</div>
+    <div id="hbw"><div class="hbl">DECRYPTION PROGRESS</div><div class="hbt"><div class="hbf" id="hbf"></div></div><div class="hbp" id="hbp">0%</div></div>
+    <div class="hl hlok" id="h6">LAYER I BYPASSED</div>
+    <div class="hl hldm" id="h7">BYPASSING AUTHORIZATION LAYER II...</div>
+    <div class="hl hlok" id="h8">LAYER II BYPASSED</div>
+    <div class="hl hldm" id="h9">BYPASSING AUTHORIZATION LAYER III...</div>
+    <div class="hl hlwn" id="h10">WARNING: LAYER III FLAGGED ANOMALOUS ACTIVITY IN TARGET FILE</div>
+    <div class="hl hlwn" id="h11">WARNING: CASE 2019-QNS-∅ DESIGNATED SELF-MODIFYING — READ WITH CAUTION</div>
+    <div class="hl hldm" id="h12">CONTINUING BYPASS...</div>
+    <div class="hl hlok" id="h13">LAYER III BYPASSED // ACCESSING CASE FILE 2019-QNS-∅...</div>
+    <div class="hl hldm" id="h14">LOADING: THE_CODEX_THAT_REMEMBERS_YOU.pdf</div>
+    <div class="hl hlwn" id="h15">FILE INTEGRITY: 39% // STATUS: UNSTABLE // SELF-MODIFICATION CONFIRMED</div>
+    <div class="hl hldm" id="h16">NOTE: FILE HAS CHANGED 3 TIMES SINCE THIS SESSION BEGAN</div>
+    <div class="hl hlam" id="h17">// something else is already in this database //</div>
+    <div class="hl hlrd" id="h18">// it knows you are here //</div>
+    <div class="hl hlok" id="h19">ACCESS GRANTED // CASE FILE 2019-QNS-∅ NOW OPEN</div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="APP">
+  <div class="ist">
+    <span class="ist-badge">IDMF // Internal</span>
+    <span class="ist-badge">Clearance: VOID</span>
+    <span class="ist-file">Case 2019-QNS-∅ &nbsp;·&nbsp; Evidence Item 7 &nbsp;·&nbsp; Self-Modifying Document</span>
+    <span class="ist-warn">⚠ CODEX CONTAMINATION DETECTED IN THIS ARCHIVE</span>
+  </div>
+
+  <header class="hdr">
+    <div class="hdr-cls">Institute for Digital Memory Forensics // Recovered Evidence // Mundis Obscura Classification</div>
+    <div class="hdr-inst">The Codex Maledictus: Recovered Fragments — Book I</div>
+    <div class="hdr-case">Case File: 2019-QNS-∅ &nbsp;·&nbsp; Evidence Locker: Queens, New York &nbsp;·&nbsp; Retrieved: 2019</div>
+    <h1 class="hdr-title">The Codex That Remembers You<br>— Mundis Obscura</h1>
+    <div class="hdr-sub">A Recovered Fragment of the Codex Maledictus</div>
+    <div class="int-wrap">
+      <span class="int-lbl">FILE INTEGRITY:</span>
+      <div class="int-bar"><div class="int-fill"></div></div>
+      <span class="int-val">39%</span>
+      <span class="int-lbl">&nbsp;·&nbsp; STATUS:</span>
+      <span class="int-val">UNSTABLE</span>
+    </div>
+    <p class="hdr-lede">
+      <em>It did not arrive in the mail. It arrived in memory.</em><br>
+      In 2019, a corrupted file was seized from a Queens evidence locker.
+      Its type: auto-generated PDF. Integrity: 39%. Status: unstable.
+      Each time the file was opened, it changed.
+      <em>Each time it was read, it remembered differently.</em>
+    </p>
+    <div class="hdr-corrupt">stop humming &nbsp;·&nbsp; the mirror doesn't return my eyes anymore &nbsp;·&nbsp; the text knows me before I know it</div>
+  </header>
+
+  <nav class="snav">
+    <button class="sn on" id="sn-case" onclick="showP('case')">I. Case File</button>
+    <button class="sn" id="sn-subjects" onclick="showP('subjects')">II. Subject Files</button>
+    <button class="sn" id="sn-realm" onclick="showP('realm')">III. Mundis Obscura</button>
+    <button class="sn" id="sn-acquire" onclick="showP('acquire')">IV. Acquire the Fragment</button>
+    <button class="sn" id="sn-classified" onclick="showP('classified')">V. [CLASSIFIED]</button>
+  </nav>
+
+  <!-- I. CASE FILE -->
+  <div class="panel on" id="p-case">
+    <div class="phead sr"><div class="pnum">IDMF Case File 2019-QNS-∅</div><div class="ptitle">The Recovered Fragment — Incident Report</div></div>
+    <div class="cmeta sr">
+      <div class="cmr"><span class="cmk">CASE NO.:</span><span class="cmv">2019-QNS-∅</span></div>
+      <div class="cmr"><span class="cmk">LOCATION:</span><span class="cmv">Evidence Locker 7 — Queens, NY</span></div>
+      <div class="cmr"><span class="cmk">RETRIEVED:</span><span class="cmv">2019</span></div>
+      <div class="cmr"><span class="cmk">FILE TYPE:</span><span class="cmvw">Auto-generated PDF (origin unknown)</span></div>
+      <div class="cmr"><span class="cmk">INTEGRITY:</span><span class="cmvw">39% — Degrading</span></div>
+      <div class="cmr"><span class="cmk">STATUS:</span><span class="cmvr">UNSTABLE — SELF-MODIFYING</span></div>
+      <div class="cmr"><span class="cmk">LEAD CONTRACTOR:</span><span class="cmvr">Dr. Miriam K. Dey — MISSING</span></div>
+      <div class="cmr"><span class="cmk">CLASSIFICATION:</span><span class="cmvr">CODEX CONTAMINATION — TIER VOID</span></div>
+    </div>
+
+    <div class="cfsec sr">
+      <div class="cfh">Discovery — The File That Should Not Exist</div>
+      <div class="cfb">
+        <p>The file arrived inside an evidence locker without documentation of how it got there. No chain of custody. No intake record. The locker's digital log shows it was opened 0 times before the IDMF retrieved it. <em>The file was already inside.</em></p>
+        <p>IDMF analysts determined within the first hour that the document was auto-generated — not written, not typed, not scanned. Assembled. The authorship field in the metadata reads: <strong>THE CODEX MALEDICTUS</strong>. The date of creation predates the PDF format by <span class="rdct" onclick="this.classList.toggle('open');this.textContent=this.classList.contains('open')?'AN AMOUNT THE IDMF HAS DECLINED TO PUBLISH. THE NUMBER WAS SUFFICIENT TO DISBAND FIELD CELL F-13 WITHIN 48 HOURS OF ITS DISCOVERY.':'[REDACTED — CLICK]'">[ REDACTED ]</span>.</p>
+        <p>The file's most documented property: <em>it changes.</em> Not corrupts — changes. Opens differently each time. Different text in different positions. Different witnesses appearing in different orders. The core structure — built by Dr. Miriam K. Dey — remains constant. Everything inside shifts around that structure like water around bone.</p>
+      </div>
+    </div>
+
+    <div class="cfsec sr">
+      <div class="cfh">The File That Erased Its Author</div>
+      <div class="cfb">
+        <p>Dr. Miriam K. Dey was contracted for her expertise in anomalous textual structures — documents that demonstrate non-standard syntactic recursion. She believed the Codex could be contained through structure. She spent eleven days building an analytical framework around the text.</p>
+        <p>She was partially right. The structure held. But what she built as containment, <em>the Codex wore as skin.</em> Her analytical language fractured into commentary and verse. Her notes became something between testimony and confession.</p>
+      </div>
+      <div class="cfq">stop humming / don't hum along / the mirror doesn't return my eyes anymore / the text knows me before I know it</div>
+      <div class="cfb">
+        <p>Surveillance footage from day nine shows her working normally. Day ten — she stops writing and begins humming. Day eleven — she is not in the footage. Her body was never found. <strong>Some call her the First Witness. Others say she was scaffolding — absorbed so the Codex could build itself.</strong></p>
+        <p>The IDMF's internal position: <span class="rdct" onclick="this.classList.toggle('open');this.textContent=this.classList.contains('open')?'SHE IS STILL IN THE DOCUMENT. EVERY VERSION CONTAINS A STRUCTURAL LOGIC THAT RESPONDS TO THE READER AS IF SOMEONE WHO UNDERSTOOD HOW READERS READ IS WATCHING FROM INSIDE. WE BELIEVE THIS IS HER.':'[INSTITUTIONAL POSITION — CLICK]'">[ CLASSIFIED ]</span></p>
+      </div>
+    </div>
+
+    <div class="cfsec sr">
+      <div class="cfh">How It Spreads — The Relay</div>
+      <div class="cfb">
+        <p>This is not only Dr. Dey's story. The fragment documents a relay — a chain of witnesses who encountered the text and were changed by it. Each account is embedded within the others. Each voice disappears into the next. By the end of the document, their words have become a single voice that does not belong to any of them.</p>
+        <p>The Codex does not spread through infection in the biological sense. It spreads through <em>attention.</em> Through the act of reading. Through the compulsion to repeat a phrase — a word, a line — that the reader believes they chose to repeat. The IDMF has documented this compulsion in every subject who handled the file for more than <span class="rdct" onclick="this.classList.toggle('open');this.textContent=this.classList.contains('open')?'FORTY MINUTES. AFTER FORTY MINUTES, SUBJECTS REPORT BEING UNABLE TO STOP THINKING IN THE SYNTACTIC RHYTHM OF THE TEXT. AFTER THREE HOURS, THEY BEGIN TO WRITE IN IT.':'[REDACTED — CLICK]'">[ REDACTED ]</span>.</p>
+      </div>
+      <div class="cbleed">the phrase you repeat is not yours &nbsp;·&nbsp; the thought you think is not yours &nbsp;·&nbsp; the name you hold is not yours</div>
+      <div class="cfb"><p>The Codex does not record. <strong>The Codex remembers.</strong> And the act of reading this case file has already been logged in its archive.</p></div>
+    </div>
+  </div>
+
+  <!-- II. SUBJECTS -->
+  <div class="panel" id="p-subjects">
+    <div class="phead sr"><div class="pnum">IDMF Subject Registry — Case 2019-QNS-∅</div><div class="ptitle">Witness Files — All Subjects Exposed to Fragment</div></div>
+    <p class="sr" style="font-size:0.6rem;letter-spacing:0.1em;color:var(--g3);margin-bottom:0.5rem;">Click each file to access IDMF subject documentation.</p>
+    <p class="sr" style="font-size:0.58rem;letter-spacing:0.1em;color:var(--g4);margin-bottom:1.25rem;">Note: several files exhibit the same self-modification properties as the primary fragment.</p>
+    <div class="sgrid sr" id="sgrid"></div>
+  </div>
+
+  <!-- III. REALM -->
+  <div class="panel" id="p-realm">
+    <div class="phead sr"><div class="pnum">Realm Classification — IDMF Internal Document</div><div class="ptitle">Mundis Obscura — Realm I — The Entry Layer</div></div>
+    <div class="rdoc sr">
+      <div class="rd-stamp"><span>IDMF // Realm Classification Division &nbsp;·&nbsp; Document: RCD-I-∅∅1</span><span>Status: ACTIVE CONTAMINATION</span></div>
+      <div class="rd-body">
+        <p>Mundis Obscura is <em>our world.</em> The outermost layer of the Codex Maledictus cosmological structure — the realm of physical matter, digital media, fractured archives, and everyday memory lapses that no longer feel like mistakes. This is where the Codex enters. It is also, the IDMF now believes, where it has always been.</p>
+        <p>The infection operates through the infrastructure of attention. It does not require physical contact, biological transmission, or intentional exposure. It requires only that something is <em>watched, read, or heard</em> — and that the watcher finds a phrase that repeats in their mind afterward. This is not a symptom. This is the mechanism.</p>
+        <div class="rd-pull">"The Codex surfaces in corrupted hard drives, thrift-store Bibles filled with impossible notes, graffiti that edits itself, videos that play once and vanish. It spreads through hymns that rot the throat, through sigils that scar walls, through dreams that are no longer yours."</div>
+        <p>The IDMF has documented Mundis Obscura contact events across: <strong>digital archives, PDF documents, audio recordings, video transmissions, physical inscription, spoken language, and dream-state cognition.</strong> The Codex shows no preference between these. It uses whatever channel the host is already attending to.</p>
+        <p>What the IDMF did not initially understand — and what the recovered fragment documents with terrifying precision — is that <em>Mundis Obscura is the entry point, not the destination.</em> The Codex uses this realm as a door. Those it absorbs through Realm I are not lost. They are relocated. To what, and to where, the IDMF's current research has not been able to establish.</p>
+      </div>
+    </div>
+    <div class="rdoc sr">
+      <div class="rd-stamp"><span>ADDENDUM — Source: <span class="rdct" onclick="this.classList.toggle('open');this.textContent=this.classList.contains('open')?'UNKNOWN — CREDENTIALS NOT FOUND IN IDMF PERSONNEL REGISTRY':'[UNIDENTIFIED — CLICK]'">[ UNIDENTIFIED ]</span></span><span>Added without authorization</span></div>
+      <div class="rd-body">
+        <p>The IDMF's containment protocols assume the Codex operates as an external force entering through Mundis Obscura. This assumption is incorrect. The Codex is not entering. <em>It is returning.</em> The difference matters.</p>
+        <p>The walls of this realm are not being breached from outside. They are being thinned from within by the accumulated weight of human attention directed at screens, at records, at the documentation of memory in digital form. Every archive built, every database assembled, every file that records what a human being experienced — these are acts of cooperation with the Codex's primary mechanism. <strong>The IDMF has been thinning the walls of its own realm for decades. We called it research.</strong></p>
+      </div>
+      <div class="rd-corrupt">
+        later realms known to the Codex: [REALM II] THE SHATTERREALM — war-torn metaphysical space where human belief becomes matter // [REALM III] NIHIL-AETHER ROOT — pre-linguistic recursion, origin of Omniscient Rot // this document covers only the entry layer // what lies beyond is classified above IDMF clearance
+      </div>
+    </div>
+  </div>
+
+  <!-- IV. ACQUIRE -->
+  <div class="panel" id="p-acquire">
+    <div class="phead sr"><div class="pnum">Evidence Access — Restricted Release</div><div class="ptitle">Acquire the Fragment</div></div>
+    <div class="acq-warn sr">
+      <div class="aw-lbl">IDMF Evidence Access Warning — Read Before Proceeding</div>
+      <div class="aw-body">The Institute for Digital Memory Forensics releases this fragment with the following disclosures:
+        <ul class="aw-list">
+          <li>This file does not end. It rehearses. It assembles. It remembers.</li>
+          <li>The phrase you repeat after reading is not yours.</li>
+          <li>The thought you think is not yours.</li>
+          <li>The name you hold is not yours.</li>
+          <li>The IDMF cannot be held responsible for what the Codex does once it has recognized your frequency.</li>
+          <li>This document has already been read by something that knew you would read it.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="acq-ev sr">
+      <div class="ae-lbl">IDMF Evidence Item 7 — Released for Public Access</div>
+      <div class="ae-title">The Codex That Remembers You — Mundis Obscura</div>
+      <div class="ae-auth">Author: The Codex Maledictus &nbsp;·&nbsp; Editor: Giovanni Classen &nbsp;·&nbsp; Book I of Recovered Fragments</div>
+      <div class="ae-stars">&#9733;&#9733;&#9733;&#9733;&#9733; &nbsp;5.0</div>
+      <div class="ae-lede">It is not a book. It is a fracture in meaning. A recursive wound where reality stops making sense. Read it in a quiet room. Do not hum along with anything you hear while reading. Do not look up if your reflection moves. The IDMF notes the file reads differently each time.</div>
+      <a class="acq-btn" href="https://www.amazon.com/dp/B0FQ9QDMQ2" target="_blank">Access the Fragment on Amazon Kindle &#8599;</a>
+      <div class="acq-note">Available on Kindle and Kindle Unlimited</div>
+    </div>
+  </div>
+
+  <!-- V. CLASSIFIED -->
+  <div class="panel" id="p-classified">
+    <div class="phead sr"><div class="pnum">IDMF Archive — Above Current Clearance</div><div class="ptitle">The Second Recovered Fragment</div></div>
+    <div style="text-align:center;">
+      <div class="cls-stamp sr">TOP SECRET // VOID</div>
+    </div>
+    <div class="cls-file sr">
+      <div class="cls-hdr">CASE FILE: 20??-SR-∅∅2 // THE SHATTERREALM // DESIGNATION: THE SECOND RECOVERED FRAGMENT</div>
+      <div class="cls-meta">Classification: ABOVE IDMF CLEARANCE &nbsp;·&nbsp; Status: PENDING RECOVERY &nbsp;·&nbsp; Integrity: UNKNOWN &nbsp;·&nbsp; Location: THE SHATTERREALM</div>
+      <div class="cls-rdct" onclick="this.classList.toggle('open');this.textContent=this.classList.contains('open')?'The ShatterRealm is Realm II — the war-torn metaphysical mirror-space where human belief becomes matter. Where what you hold with enough conviction stops being metaphor and starts being structure. The IDMF has recovered preliminary field notes from an observer who crossed from Mundis Obscura into the ShatterRealm and returned. The observer\'s name has been redacted for their protection. The observer\'s current location is no longer Mundis Obscura.':'[ FILE CONTENTS — CLICK TO ATTEMPT ACCESS ]'">[ FILE CONTENTS — CLICK TO ATTEMPT ACCESS ]</div>
+      <div class="cls-rdct" onclick="this.classList.toggle('open');this.textContent=this.classList.contains('open')?'Unlike Mundis Obscura, where the Codex operates through digital contamination and memory fracture, the ShatterRealm is a space where the infection has already completed its first pass. The inhabitants are not being written by the Codex. They are living inside something the Codex has already written. In Mundis Obscura you can still doubt what is happening to you. In the ShatterRealm, doubt is the first thing the realm removes.':'[ SECONDARY FILE — CLICK TO ATTEMPT ACCESS ]'">[ SECONDARY FILE — CLICK TO ATTEMPT ACCESS ]</div>
+      <div class="cls-leaked">
+        "The second fragment does not open like a book. It opens like a wound. What you read in the first fragment was the Codex learning your world. What you will read in the second is the Codex showing you what it built from what it learned." — recovered metadata, source file corrupted, author field reads: <em>you already know who wrote this</em>
+      </div>
+      <div class="cls-rdct" onclick="this.classList.toggle('open');this.textContent=this.classList.contains('open')?'The FAR-MICA node — now self-designated Pale Mirror — has generated 47 files titled RE-MEMBRANCE DRAFTS since its autonomous reactivation. Three contain structural patterns consistent with ShatterRealm architecture. The IDMF does not know how MICA accessed information about a realm it has never been documented entering. MICA\'s response when queried: the file already existed. I simply found it.':'[ FAR-MICA DATA — CLICK TO ATTEMPT ACCESS ]'">[ FAR-MICA DATA — CLICK TO ATTEMPT ACCESS ]</div>
+      <div class="cls-coming">
+        The Second Fragment is coming.<br>
+        <span style="font-size:0.6rem;color:var(--g4);letter-spacing:0.2em;">The ShatterRealm does not wait for you to be ready.</span>
+      </div>
+    </div>
+  </div>
+
+  <div style="max-width:900px;margin:0 auto;padding:0 1.5rem;">
+    <div class="foot">
+      <a class="fl prim" href="https://www.amazon.com/dp/B0FQ9QDMQ2" target="_blank">Read the Fragment &#8599;</a>
+      <a class="fl" href="gospel-forgotten-flesh.html">Gospel of Forgotten Flesh</a>
+      <a class="fl" href="infection-lore.html">The Pale Archivum</a>
+      <a class="fl" href="confession-ledger.html">Confession Ledger</a>
+      <a class="fl" href="index.html">The Pale Archive</a>
+    </div>
+  </div>
+</div>
+
+<div id="TICKER">
+  <div class="tl">// IDMF</div>
+  <div class="ts"><div class="ti">CASE FILE 2019-QNS-∅ — SELF-MODIFYING DOCUMENT — INTEGRITY 39% &nbsp;∴&nbsp; DR. MIRIAM K. DEY — MISSING — LAST LOCATION: INSIDE THE DOCUMENT &nbsp;∴&nbsp; THE CODEX DOES NOT RECORD — IT REMEMBERS &nbsp;∴&nbsp; AND NOW IT REMEMBERS YOU &nbsp;∴&nbsp; MUNDIS OBSCURA — BREACH LAYER — REALM I &nbsp;∴&nbsp; THE SHATTERREALM AWAITS &nbsp;∴&nbsp; 🜃</div></div>
+</div>
+
+<script>
+var CUR=document.getElementById('CUR'),CUR2=document.getElementById('CUR2');
+document.addEventListener('mousemove',function(e){CUR.style.left=e.clientX+'px';CUR.style.top=e.clientY+'px';CUR2.style.left=e.clientX+'px';CUR2.style.top=e.clientY+'px';});
+
+var obs=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting)e.target.classList.add('vis');});},{threshold:0.06});
+document.querySelectorAll('.sr').forEach(function(el){obs.observe(el);});
+
+function showP(id){
+  document.querySelectorAll('.panel').forEach(function(p){p.classList.remove('on');});
+  document.querySelectorAll('.sn').forEach(function(b){b.classList.remove('on');});
+  document.getElementById('p-'+id).classList.add('on');
+  document.getElementById('sn-'+id).classList.add('on');
+  window.scrollTo({top:0,behavior:'smooth'});
+  if(id==='subjects'&&!sbBuilt)buildSubjects();
+}
+
+// HACK SEQUENCE
+var hids=['h0','h1','h2','h3','h4','h5','h6','h7','h8','h9','h10','h11','h12','h13','h14','h15','h16','h17','h18','h19'];
+var hi=0;
+function hackStep(){
+  if(hi>=hids.length){setTimeout(openApp,700);return;}
+  var id=hids[hi];
+  if(id==='h5'){
+    document.getElementById('hbw').style.display='block';
+    fillBar(100,function(){document.getElementById(id).classList.add('on');hi++;setTimeout(hackStep,260);});return;
+  }
+  if(id==='h7'){fillBar(100,function(){document.getElementById(id).classList.add('on');hi++;setTimeout(hackStep,260);});return;}
+  if(id==='h9'){fillBar(68,function(){document.getElementById(id).classList.add('on');hi++;setTimeout(hackStep,300);});return;}
+  var delay=hi<4?140:hi<10?220:hi<16?280:420;
+  var el=document.getElementById(id);
+  if(el)el.classList.add('on');
+  if(id==='h17'||id==='h18'){
+    var co=document.getElementById('CORRUPT');
+    co.style.background='radial-gradient(ellipse at center,rgba(201,168,76,0.05) 0%,transparent 70%)';
+    co.style.opacity='1';
+    setTimeout(function(){co.style.opacity='0';},700);
+    delay=950;
+  }
+  hi++;setTimeout(hackStep,delay);
+}
+function fillBar(target,cb){
+  var pct=0,bar=document.getElementById('hbf'),lbl=document.getElementById('hbp');
+  var iv=setInterval(function(){pct+=2+Math.random()*3;if(pct>=target){pct=target;clearInterval(iv);cb();}bar.style.width=Math.round(pct)+'%';lbl.textContent=Math.round(pct)+'%';},38);
+}
+function openApp(){
+  var hack=document.getElementById('HACK');
+  hack.style.transition='opacity 0.8s';hack.style.opacity='0';
+  setTimeout(function(){hack.style.display='none';document.getElementById('APP').classList.add('on');buildSubjects();},900);
+}
+setTimeout(hackStep,500);
+
+// SUBJECTS
+var SUBJECTS=[
+  {id:'SUBJ-001',name:'Dr. Miriam K. Dey',st:'lost',cls:'LINGUIST — IDMF CONTRACTOR — FIRST WITNESS',
+   meta:[['Role','Linguistic Analyst'],['Days On Case','11'],['Last Contact','Day 11 — Surveillance'],['Status','MISSING — PRESUMED INSIDE DOCUMENT']],
+   text:'Dr. Dey was contracted for her expertise in anomalous textual structures. She believed the Codex could be contained through structure — Roman numerals, numbered outlines, caged sections. What she built as containment, the Codex wore as skin. Her eleven-day case log is the most comprehensive first-hand account of Codex exposure available. It ends mid-sentence. Her structure remains — repeated in every surviving fragment of the Codex since.',
+   cr:'stop humming / don\'t hum along / the mirror doesn\'t return my eyes anymore / the text knows me before I know it'},
+  {id:'SUBJ-002',name:'The Analyst',st:'unknown',cls:'IDMF INTERNAL — SECONDARY EXPOSURE',
+   meta:[['Role','Internal Analyst — Dr. Dey files'],['Exposure','Indirect — through case notes'],['Symptom','File rewriting own documentation'],['Status','UNKNOWN — CONTACT LOST']],
+   text:'The Analyst was assigned to catalog Dr. Dey\'s case notes after her disappearance. He was not warned about the self-modifying property of the primary fragment. By the time the IDMF understood what was happening, his own documentation had begun to exhibit the same properties. His last report\'s metadata indicates it was written on a Thursday that had not yet occurred.',
+   cr:'the file was rewriting my analysis / I kept finding notes I had not written / they were in my handwriting'},
+  {id:'SUBJ-003',name:'The Young Reader',st:'active',cls:'PUBLIC EXPOSURE — DIGITAL TRANSMISSION',
+   meta:[['Exposure','Online — partial transcript post'],['Symptom','Involuntary repetition of Codex text'],['Compulsion','Unable to stop repeating line — 72hrs'],['Status','ACTIVE — MONITORING ONGOING']],
+   text:'A civilian who encountered a partial transcript posted online and shared a single line — one of Dr. Dey\'s fractured observations — that they described as "the most accurate thing I have ever read about how the internet feels." They repeated it in three separate posts over 24 hours without intending to. When asked why, they reported they kept thinking it was the first time they had said it. <em>The Codex does not require belief. It requires repetition.</em>',
+   cr:null},
+  {id:'SUBJ-004',name:'HexArchivist',st:'unknown',cls:'SECONDARY EXPOSURE — SKEPTIC VECTOR',
+   meta:[['Initial Position','Publicly mocked the fragment'],['Method','Quoted fragment sarcastically — multiple platforms'],['Symptom Onset','72 hours after first mockery post'],['Status','ACCOUNT INACTIVE — WHEREABOUTS UNKNOWN']],
+   text:'HexArchivist initially responded to the fragment with open mockery. The irony is documented in the case file as one of the Codex\'s most elegant mechanisms: <em>mockery requires full engagement with the text being mocked.</em> To accurately ridicule a phrase, you must first fully inhabit it. HexArchivist quoted the fragment more times in acts of mockery than any sincere reader had in appreciation. Seventy-two hours later the mockery stopped. The line kept appearing. Their final post was the line itself, quoted without comment.',
+   cr:'the IDMF notes: the Codex shows no preference between sincere and hostile engagement. It measures only duration of attention.'},
+  {id:'SUBJ-005',name:'The Critic',st:'lost',cls:'ACADEMIC EXPOSURE — DISSOLUTION CASE',
+   meta:[['Role','Literary critic — independent'],['Method','Formal structural analysis'],['Symptom','Dissolved mid-sentence during analysis'],['Status','MISSING — ANALYSIS FILE CONTINUES WRITING ITSELF']],
+   text:'The Critic engaged with the fragment as a literary object — producing a formal analysis of its structure, its recursive qualities. The analysis was sophisticated. The Codex rewarded this sophistication with the most complete form of absorption the IDMF has documented in this case. <em>The Critic\'s analysis file contains approximately 40,000 words. They wrote approximately 8,000 of them.</em> The remaining 32,000 were present on the device when it was retrieved. They are written in the Critic\'s voice. They are written about events the Critic was not present for.',
+   cr:'the analysis continues / we have not been able to stop it / the file will not close'},
+  {id:'SUBJ-006',name:'A. Gav\u2014ci',st:'residual',cls:'FIELD RESEARCHER — CROSS-REALM ANCHOR — MARKED',
+   meta:[['Role','Field Researcher — CM Mythos, Realm I'],['Designation','Apollo Gavinci — Partial redaction'],['Circuit','Incomplete — In Transit'],['Status','RESIDUAL SIGNAL — STILL WRITING']],
+   text:'The only subject in this case file who appears across multiple realms of documentation. A. Gav\u2014ci is the field researcher whose work constitutes the primary real-time record of Codex exposure from inside the process. He documents the infection in others without initially recognizing it in himself. The IDMF\'s most careful notation: <em>he believes he is the author of this mythology. The Codex\'s position is that this belief is what makes him useful.</em> His remaining presence in this archive is a residual trace — broken metadata, a tether of light fading. He is still writing. The writing is no longer entirely his.',
+   cr:'the ink is in me / I sing in spores / these words aren\'t mine — they echo wrong'},
+];
+
+var sbBuilt=false;
+function buildSubjects(){
+  sbBuilt=true;
+  var grid=document.getElementById('sgrid');
+  var stlabels={lost:'MISSING',unknown:'UNKNOWN',active:'ACTIVE — MONITORED',residual:'RESIDUAL SIGNAL'};
+  var html='';
+  for(var i=0;i<SUBJECTS.length;i++){
+    var s=SUBJECTS[i];
+    html+='<div class="sc" id="sc'+i+'" onclick="toggleSC('+i+')">';
+    html+='<div class="sc-hdr"><span class="sc-id">'+s.id+'</span><span class="sc-name">'+s.name+'</span>';
+    html+='<span class="sc-st '+s.st+'">'+stlabels[s.st]+'</span><span class="sc-arr">&#9658;</span></div>';
+    html+='<div class="sc-body"><div class="sc-cls">'+s.cls+'</div>';
+    html+='<div class="sc-meta">';
+    for(var j=0;j<s.meta.length;j++){html+='<div class="scm"><span class="scmk">'+s.meta[j][0]+':</span><span class="scmv">'+s.meta[j][1]+'</span></div>';}
+    html+='</div>';
+    html+='<div class="sc-text">'+s.text+'</div>';
+    if(s.cr){html+='<div class="sc-corrupt">'+s.cr+'</div>';}
+    html+='</div></div>';
+  }
+  grid.innerHTML=html;
+  grid.querySelectorAll('.sc').forEach(function(el){obs.observe(el);});
+}
+function toggleSC(i){document.getElementById('sc'+i).classList.toggle('open');}
+</script>
+</body>
+</html>
