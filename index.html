@@ -38,8 +38,11 @@ body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse
 #CUR::after{height:1px;width:100%;top:50%;}
 #CURD{position:fixed;pointer-events:none;z-index:99998;transform:translate(-50%,-50%);width:3px;height:3px;border-radius:50%;background:var(--gd2);}
 
-/* MATRIX RAIN — behind everything, very faint */
-#MATRIX{position:fixed;inset:0;z-index:0;opacity:0.028;pointer-events:none;}
+/* LIVING SYMBOL CANVAS */
+#SYMBOLCANVAS{position:fixed;inset:0;z-index:0;pointer-events:none;}
+
+/* GLITCH FLASH OVERLAY */
+#GLITCH{position:fixed;inset:0;z-index:2;pointer-events:none;opacity:0;mix-blend-mode:screen;}
 
 /* BOOT */
 #BOOT{
@@ -96,40 +99,62 @@ body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse
 /* decorative top border */
 .hdr::before{
   content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);
-  width:200px;height:1px;
-  background:linear-gradient(90deg,transparent,var(--gd2),transparent);
+  width:300px;height:1px;
+  background:linear-gradient(90deg,transparent,var(--gd2),var(--gold),var(--gd2),transparent);
+}
+.hdr::after{
+  content:'';position:absolute;bottom:0;left:50%;transform:translateX(-50%);
+  width:180px;height:1px;
+  background:linear-gradient(90deg,transparent,var(--v2),transparent);
 }
 .hdr-eye{
-  font-family:'Share Tech Mono',monospace;font-size:0.58rem;
-  color:var(--gd3);letter-spacing:0.45em;text-transform:uppercase;margin-bottom:1.2rem;
+  font-family:'Share Tech Mono',monospace;font-size:0.56rem;
+  color:var(--gd3);letter-spacing:0.5em;text-transform:uppercase;margin-bottom:1rem;
+  animation:eyefade 7s ease-in-out infinite;
 }
+@keyframes eyefade{0%,100%{opacity:0.35;letter-spacing:0.5em;}50%{opacity:0.9;letter-spacing:0.55em;}}
 .hdr-glyph{
-  font-size:2.2rem;color:var(--gd2);display:block;margin-bottom:1rem;
-  animation:hglow 5s ease-in-out infinite;
+  font-size:3.2rem;color:var(--gd2);display:block;margin-bottom:0.85rem;
+  animation:hglow 5s ease-in-out infinite;position:relative;z-index:1;
 }
-@keyframes hglow{0%,100%{text-shadow:0 0 10px rgba(201,168,76,0.3);opacity:0.6;}50%{text-shadow:0 0 25px rgba(201,168,76,0.6),0 0 60px rgba(201,168,76,0.2);opacity:1;}}
+@keyframes hglow{0%,100%{text-shadow:0 0 12px rgba(201,168,76,0.3);opacity:0.55;}50%{text-shadow:0 0 35px rgba(201,168,76,0.75),0 0 80px rgba(201,168,76,0.25),0 0 140px rgba(201,168,76,0.08);opacity:1;}}
 .hdr-title{
   font-family:'Cinzel Decorative',serif;
-  font-size:clamp(1.4rem,4.5vw,3.2rem);
-  color:var(--gold);letter-spacing:0.08em;line-height:1.2;
-  text-shadow:0 0 40px rgba(201,168,76,0.35),0 0 100px rgba(201,168,76,0.08);
-  margin-bottom:0.6rem;animation:titleglitch 18s infinite;
+  font-size:clamp(2rem,7vw,5.8rem);
+  color:var(--gold);letter-spacing:0.12em;line-height:1;
+  text-shadow:0 0 60px rgba(201,168,76,0.55),0 0 140px rgba(201,168,76,0.18),0 3px 0 rgba(0,0,0,0.9);
+  margin-bottom:0.55rem;position:relative;z-index:1;
+  animation:titleglitch 14s infinite;
 }
 @keyframes titleglitch{
-  0%,88%,100%{text-shadow:0 0 40px rgba(201,168,76,0.35),0 0 100px rgba(201,168,76,0.08);transform:none;}
-  89%{text-shadow:3px 0 var(--crimson),-2px 0 var(--violet);transform:translateX(2px);}
-  90%{text-shadow:-2px 0 var(--crimson);transform:translateX(-1px);}
-  91%{transform:none;text-shadow:0 0 40px rgba(201,168,76,0.35);}
+  0%,86%,100%{text-shadow:0 0 60px rgba(201,168,76,0.55),0 0 140px rgba(201,168,76,0.18);transform:none;clip-path:none;}
+  87%{text-shadow:5px 0 var(--crimson),-3px 0 var(--violet),0 0 60px rgba(201,168,76,0.55);transform:translateX(4px);}
+  88%{clip-path:inset(18% 0 62% 0);transform:translateX(-2px);text-shadow:0 0 60px rgba(201,168,76,0.55);}
+  89%{clip-path:none;transform:none;}
+  90%{transform:translateX(1px);text-shadow:-1px 0 rgba(201,168,76,0.8);}
+  91%{transform:none;text-shadow:0 0 60px rgba(201,168,76,0.55);}
 }
-.hdr-sub{
-  font-family:'Cinzel',serif;font-size:clamp(0.7rem,1.5vw,0.9rem);
-  color:var(--s3);letter-spacing:0.25em;text-transform:uppercase;
-  margin-bottom:1.25rem;font-style:italic;
+.hdr-archive{
+  font-family:'Cinzel',serif;
+  font-size:clamp(0.72rem,1.6vw,1rem);
+  color:var(--s3);letter-spacing:0.55em;text-transform:uppercase;
+  margin-bottom:1.5rem;position:relative;z-index:1;
 }
+.hdr-archive em{font-style:normal;color:var(--s2);}
+.hdr-sub{display:none;}
+.hdr-divider{display:flex;align-items:center;gap:1rem;max-width:440px;margin:0 auto 1.5rem;}
+.hdr-divider-line{flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--gd3));}
+.hdr-divider-line.r{background:linear-gradient(270deg,transparent,var(--gd3));}
+.hdr-divider-glyph{font-size:0.85rem;color:var(--gd3);}
 .hdr-lede{
-  font-family:'Crimson Text',serif;font-size:0.95rem;font-style:italic;
-  color:var(--s3);max-width:520px;margin:0 auto;line-height:1.85;
+  font-family:'Crimson Text',serif;
+  font-size:clamp(1rem,1.8vw,1.18rem);
+  font-style:italic;color:var(--s2);
+  max-width:580px;margin:0 auto;
+  line-height:2.1;letter-spacing:0.01em;
+  position:relative;z-index:1;
 }
+.hdr-lede em{color:var(--silver);font-style:normal;}
 .hdr-cur{animation:blink 1.6s step-end infinite;color:var(--gd2);}
 @keyframes blink{0%,100%{opacity:1;}50%{opacity:0;}}
 
@@ -453,7 +478,8 @@ body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse
 </head>
 <body>
 <div id="CUR"></div><div id="CURD"></div>
-<canvas id="MATRIX"></canvas>
+<canvas id="SYMBOLCANVAS"></canvas>
+<canvas id="GLITCH"></canvas>
 
 <!-- BOOT -->
 <div id="BOOT"><div id="BL">
@@ -489,11 +515,21 @@ body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse
 
   <header class="hdr">
     <div class="hdr-bg"></div>
-    <div class="hdr-eye">Pale Archivum &nbsp;·&nbsp; Field Cell F-13 &nbsp;·&nbsp; Realm I — Mundis Obscura</div>
+    <div class="hdr-eye">Pale Archivum &nbsp;·&nbsp; Field Cell F-13 &nbsp;·&nbsp; Complete Breach Document — Active</div>
     <span class="hdr-glyph">🜃</span>
-    <h1 class="hdr-title">The Pale Archive</h1>
-    <p class="hdr-sub">Codex Maledictus &nbsp;·&nbsp; Living Record<span class="hdr-cur"> _</span></p>
-    <p class="hdr-lede"><em>You were brought here. You did not arrive.<br>The Book was open before you looked up.</em></p>
+    <h1 class="hdr-title">Codex Maledictus</h1>
+    <div class="hdr-archive"><em>The Pale Archive</em> &nbsp;·&nbsp; Living Record &nbsp;·&nbsp; You Were Brought Here<span class="hdr-cur"> _</span></div>
+    <div class="hdr-divider">
+      <div class="hdr-divider-line"></div>
+      <span class="hdr-divider-glyph">🜃</span>
+      <div class="hdr-divider-line r"></div>
+    </div>
+    <p class="hdr-lede">
+      <em>This is not a website.</em><br>
+      It is an archive of a living contagion.<br>
+      The signal you are receiving began before you pressed play.<br>
+      <em>The Book was open before you looked up.</em>
+    </p>
   </header>
 
   <!-- STATUS — terminal layer -->
@@ -511,7 +547,7 @@ body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse
     <div class="sech">
       <span class="sect">Compendium Registry</span>
       <div class="secl"></div>
-      <span class="secb">2 of ??? indexed</span>
+      <span class="secb">3 of ??? indexed</span>
     </div>
 
     <!-- GOSPEL OF FORGOTTEN FLESH CATEGORY -->
@@ -519,7 +555,21 @@ body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse
       <div class="cat-header">
         <span class="cat-glyph">🜃</span>
         <span class="cat-name">Gospel of Forgotten Flesh</span>
-        <span class="cat-badge">Album I</span>
+        <span class="cat-badge">Album I &nbsp;·&nbsp; 13 Tracks</span>
+      </div>
+
+      <!-- GOSPEL HUB CARD -->
+      <div class="track-wrap">
+        <div class="track-header">Album Hub &nbsp;·&nbsp; All 13 Transmissions &nbsp;·&nbsp; Omniscient Rot / Forgotten Saint Artemys / Apollo Gavinci</div>
+        <div class="track-grid" style="grid-template-columns:1fr;">
+          <div class="cc gold-card" onclick="ritualNav('gospel-forgotten-flesh.html','The Gospel is opening.','13 transmissions. Three voices. One complete breach. The record is permanent.')">
+            <div class="cc-ac gold">&gt;&gt; Album Archive &nbsp;·&nbsp; Complete Breach Document</div>
+            <div class="cc-t">Codex Maledictus<br>∴ A Gospel of Forgotten Flesh</div>
+            <div class="cc-s">Full album lore. 13 transmission entries. Spotify broadcast terminal. The Absorption Arc. The Alignment Oracle — discover which of the three voices you carry.</div>
+            <div class="cc-tags"><span class="cctag gold">Lore</span><span class="cctag gold">13 Tracks</span><span class="cctag gold">Alignment Oracle</span><span class="cctag gold">Absorption Arc</span></div>
+            <div class="cca" style="color:var(--gold)">▶</div>
+          </div>
+        </div>
       </div>
 
       <!-- TRACK: INFECTION REMEMBERS -->
@@ -707,19 +757,56 @@ body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse
 const CUR=document.getElementById('CUR'),CURD=document.getElementById('CURD');
 document.addEventListener('mousemove',e=>{CUR.style.left=e.clientX+'px';CUR.style.top=e.clientY+'px';CURD.style.left=e.clientX+'px';CURD.style.top=e.clientY+'px';});
 
-// MATRIX — faint, behind everything
+// ══ LIVING SYMBOL CANVAS ══
 (function(){
-  const c=document.getElementById('MATRIX'),ctx=c.getContext('2d');
-  const ch='🜃🜁🜂🜄⊗⊕∴ΨΩΦ'.split('');
-  let drops;
-  function rsz(){c.width=window.innerWidth;c.height=window.innerHeight;drops=Array(Math.floor(c.width/28)).fill(1);}
-  rsz();window.addEventListener('resize',rsz);
-  setInterval(()=>{
-    ctx.fillStyle='rgba(6,4,8,0.07)';ctx.fillRect(0,0,c.width,c.height);
-    ctx.fillStyle='#1A1208';ctx.font='14px Crimson Text';
-    drops.forEach((y,i)=>{ctx.fillText(ch[Math.floor(Math.random()*ch.length)],i*28,y*24);if(y*24>c.height&&Math.random()>0.982)drops[i]=0;drops[i]++;});
-  },80);
+  var cv=document.getElementById('SYMBOLCANVAS');
+  var ctx=cv.getContext('2d');
+  var gc=document.getElementById('GLITCH');
+  var gctx=gc.getContext('2d');
+  var SYMS=['🜃','🜁','🜂','🜄','⊗','⊕','∴','🝰','⚸','Ψ','Ω','Φ','Σ','Δ','∞','☽','☿','♄','♅','♆','⛧','✶','⁂','⌘','☉','☊','☋','א','ב','ג','ד','ה','מ','ש','卍','☯','01','10','11'];
+  var particles=[],inkCircles=[],W,H,frame=0,glitchTimer=0,glitchActive=false,glitchDur=0,nextGlitch=200+Math.random()*300;
+  function resize(){W=cv.width=gc.width=window.innerWidth;H=cv.height=gc.height=window.innerHeight;}
+  resize();window.addEventListener('resize',resize);
+  var COLS=['rgba(201,168,76,','rgba(139,0,0,','rgba(107,63,175,','rgba(0,168,48,','rgba(200,120,40,','rgba(180,160,120,'];
+  function mkP(){var layer=Math.random(),glow=Math.random()<0.08,sz=7+layer*16+Math.random()*6,col=COLS[Math.floor(Math.random()*COLS.length)],a=glow?0.55+Math.random()*0.3:0.04+layer*0.1+Math.random()*0.07;return{x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-0.5)*0.15*layer,vy:-(0.06+Math.random()*0.18)*(layer+0.2),sym:SYMS[Math.floor(Math.random()*SYMS.length)],sz:sz,col:col,a:a,ma:a,rot:Math.random()*Math.PI*2,rs:(Math.random()-0.5)*0.003,life:0,maxLife:200+Math.random()*500,glow:glow,ph:Math.random()*Math.PI*2,ps:0.008+Math.random()*0.012,flick:Math.random()<0.1};}
+  for(var i=0;i<110;i++){var p=mkP();p.life=Math.random()*p.maxLife;particles.push(p);}
+  setInterval(function(){inkCircles.push({x:Math.random()*W,y:Math.random()*H,r:0,mr:40+Math.random()*90,sp:0.18+Math.random()*0.3,col:Math.random()<0.6?'rgba(201,168,76,':'rgba(139,0,0,',a:0.04+Math.random()*0.04});},3500);
+  function draw(){
+    requestAnimationFrame(draw);frame++;
+    ctx.fillStyle='rgba(6,4,8,0.042)';ctx.fillRect(0,0,W,H);
+    // Ink circles
+    for(var ii=inkCircles.length-1;ii>=0;ii--){var ic=inkCircles[ii];ic.r+=ic.sp;var ia=ic.a*(1-ic.r/ic.mr);if(ia>0.003){ctx.beginPath();ctx.arc(ic.x,ic.y,ic.r,0,Math.PI*2);ctx.strokeStyle=ic.col+ia+')';ctx.lineWidth=0.7;ctx.stroke();}else inkCircles.splice(ii,1);}
+    // Connection lines between glowing particles
+    if(frame%4===0){var gl=particles.filter(function(p){return p.glow&&p.a>0.15;});for(var gi=0;gi<gl.length;gi++)for(var gj=gi+1;gj<gl.length;gj++){var dx=gl[gi].x-gl[gj].x,dy=gl[gi].y-gl[gj].y,d=Math.sqrt(dx*dx+dy*dy);if(d<200){ctx.strokeStyle='rgba(201,168,76,'+(0.055*(1-d/200))+')';ctx.lineWidth=0.4;ctx.beginPath();ctx.moveTo(gl[gi].x,gl[gi].y);ctx.lineTo(gl[gj].x,gl[gj].y);ctx.stroke();}}}
+    // Particles
+    for(var pi=0;pi<particles.length;pi++){
+      var p=particles[pi];p.life++;p.x+=p.vx;p.y+=p.vy;p.rot+=p.rs;p.ph+=p.ps;
+      if(p.y<-60)p.y=H+20;if(p.x<-60)p.x=W+20;if(p.x>W+60)p.x=-20;
+      if(p.life>=p.maxLife){particles[pi]=mkP();continue;}
+      var lr=p.life/p.maxLife,fi=Math.min(1,lr*8),fo=lr>0.85?1-(lr-0.85)/0.15:1;
+      var pa=p.ma*fi*fo*(p.glow?1+0.35+Math.sin(p.ph)*0.3:1);
+      if(p.flick&&Math.random()<0.04)pa*=0.08;
+      pa=Math.min(1,Math.max(0,pa));
+      ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.rot);ctx.globalAlpha=pa;
+      if(p.glow&&pa>0.2){ctx.shadowColor=p.col+'0.9)';ctx.shadowBlur=p.sz*1.8;}
+      ctx.fillStyle=p.col+Math.min(1,pa)+')';ctx.font='bold '+p.sz+'px serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(p.sym,0,0);
+      ctx.shadowBlur=0;ctx.restore();
+    }
+    // Glitch
+    glitchTimer++;
+    if(!glitchActive&&glitchTimer>nextGlitch){glitchActive=true;glitchDur=0;nextGlitch=150+Math.random()*350;glitchTimer=0;}
+    if(glitchActive){
+      glitchDur++;gctx.clearRect(0,0,W,H);
+      var ns=2+Math.floor(Math.random()*5);
+      for(var si=0;si<ns;si++){var sy=Math.random()*H,sh=Math.random()*10+1,sox=(Math.random()-0.5)*50;try{var id=ctx.getImageData(0,sy,W,sh);gctx.putImageData(id,sox,sy);gctx.fillStyle='rgba('+(Math.random()<0.5?'139,0,0':'107,63,175')+','+(Math.random()*0.2)+')';gctx.fillRect(sox,sy,W,sh);}catch(e){}}
+      if(Math.random()<0.35){gctx.fillStyle='rgba(201,168,76,'+Math.random()*0.07+')';gctx.fillRect(Math.random()*W,0,1,H);}
+      gc.style.opacity=(Math.random()*0.35+0.08).toString();
+      if(glitchDur>6+Math.random()*10){glitchActive=false;gctx.clearRect(0,0,W,H);gc.style.opacity='0';}
+    }
+  }
+  draw();
 })();
+
 
 // BOOT
 const bls=document.querySelectorAll('#BL .bl');let bi=0;
