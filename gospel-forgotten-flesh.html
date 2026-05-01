@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Codex Maledictus ∴ A Gospel of Forgotten Flesh</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;600&family=IM+Fell+English:ital@0;1&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#08050A;--panel:#100C14;--panel2:#180F18;
+  --am:#C87828;--am2:#8A5018;--am3:#3A2008;--am4:#1A0E04;
+  --bone:#D4C8A8;--bn2:#8A7A58;--bn3:#3A2E1A;--bn4:#1A140A;
+  --gold:#C9A84C;--gd2:#8A6530;--gd3:#3A2810;
+  --cr:#8B0000;--cr2:#AA2000;--cr3:#3A0000;
+  --vt:#6B3FAF;--vt2:#4A2880;--vt3:#2A1650;
+  --gn:#004A18;--gn2:#002A0C;--gn3:#00FF41;
+  --brd:#1E1208;--brd2:#2A1A0A;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--bg);color:var(--bone);font-family:'IM Fell English',serif;
+  overflow-x:hidden;cursor:none;
+  background-image:
+    radial-gradient(ellipse at 50% 0%,rgba(200,120,40,0.12) 0%,transparent 45%),
+    radial-gradient(ellipse at 20% 30%,rgba(139,0,0,0.08) 0%,transparent 40%),
+    radial-gradient(ellipse at 80% 70%,rgba(107,63,175,0.06) 0%,transparent 40%),
+    radial-gradient(ellipse at 50% 100%,rgba(0,74,24,0.06) 0%,transparent 45%),
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+}
+body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,0.04) 3px,rgba(0,0,0,0.04) 4px);pointer-events:none;z-index:9990;}
+body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at center,transparent 28%,rgba(0,0,0,0.92)100%);pointer-events:none;z-index:9989;}
+
+/* ANIMATED BACKGROUND PILLARS */
+#bg-art{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;}
+.pillar{position:absolute;bottom:0;width:1px;background:linear-gradient(0deg,transparent,rgba(200,120,40,0.08),transparent);animation:pillar-rise linear infinite;}
+@keyframes pillar-rise{0%{transform:scaleY(0);opacity:0;}50%{opacity:1;}100%{transform:scaleY(1);opacity:0;}}
+.eye-glow{position:absolute;top:8%;left:50%;transform:translateX(-50%);width:120px;height:60px;background:radial-gradient(ellipse,rgba(200,120,40,0.12) 0%,transparent 70%);pointer-events:none;animation:eye-pulse 8s ease-in-out infinite;}
+@keyframes eye-pulse{0%,100%{opacity:0.4;transform:translateX(-50%) scale(1);}50%{opacity:1;transform:translateX(-50%) scale(1.3);}}
+.embers{position:absolute;border-radius:50%;animation:ember-float linear infinite;}
+@keyframes ember-float{0%{opacity:0;transform:translateY(0) scale(1);}20%{opacity:0.8;}80%{opacity:0.3;}100%{opacity:0;transform:translateY(-100vh) scale(0.3);}}
+
+/* CURSOR */
+#CUR{position:fixed;pointer-events:none;z-index:99999;transform:translate(-50%,-50%);width:16px;height:16px;}
+#CUR::before,#CUR::after{content:'';position:absolute;background:var(--am);}
+#CUR::before{width:1px;height:100%;left:50%;}
+#CUR::after{height:1px;width:100%;top:50%;}
+#CUR2{position:fixed;pointer-events:none;z-index:99998;transform:translate(-50%,-50%);width:3px;height:3px;border-radius:50%;background:var(--am2);}
+
+/* MAIN CONTENT */
+#APP{position:relative;z-index:1;padding-bottom:4rem;}
+
+/* CLASSIFICATION STRIP */
+.cstrip{background:rgba(200,120,40,0.08);border-bottom:1px solid var(--am3);text-align:center;padding:0.42rem 1.5rem;font-family:'Share Tech Mono',monospace;font-size:0.54rem;color:var(--am2);letter-spacing:0.28em;text-transform:uppercase;}
+
+/* HEADER */
+.hdr{
+  text-align:center;padding:4rem 2rem 3rem;
+  border-bottom:1px solid var(--brd2);position:relative;
+}
+.hdr::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:260px;height:1px;background:linear-gradient(90deg,transparent,var(--am2),transparent);}
+.hdr::after{content:'';position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:160px;height:1px;background:linear-gradient(90deg,transparent,var(--gd3),transparent);}
+.hdr-eye{font-family:'Share Tech Mono',monospace;font-size:0.54rem;color:var(--bn3);letter-spacing:0.4em;text-transform:uppercase;margin-bottom:1.2rem;}
+.hdr-glyph{font-size:3rem;color:var(--am2);display:block;margin-bottom:1rem;animation:amglow 6s ease-in-out infinite;}
+@keyframes amglow{0%,100%{text-shadow:0 0 10px rgba(200,120,40,0.3);opacity:0.55;}50%{text-shadow:0 0 35px rgba(200,120,40,0.7),0 0 80px rgba(200,120,40,0.2);opacity:1;}}
+.hdr-kicker{font-family:'Cinzel',serif;font-size:0.7rem;color:var(--am2);letter-spacing:0.38em;text-transform:uppercase;margin-bottom:0.75rem;}
+.hdr-title{
+  font-family:'Cinzel Decorative',serif;
+  font-size:clamp(1.2rem,3.8vw,2.6rem);
+  color:var(--gold);letter-spacing:0.06em;line-height:1.25;
+  text-shadow:0 0 40px rgba(201,168,76,0.35),0 0 100px rgba(201,168,76,0.1);
+  margin-bottom:0.6rem;
+  animation:titleglitch 16s infinite;
+}
+@keyframes titleglitch{
+  0%,88%,100%{text-shadow:0 0 40px rgba(201,168,76,0.35);transform:none;}
+  89%{text-shadow:3px 0 var(--cr),-2px 0 var(--am);transform:translateX(2px);}
+  90%{text-shadow:-2px 0 var(--cr);transform:translateX(-1px);}
+  91%{transform:none;text-shadow:0 0 40px rgba(201,168,76,0.35);}
+}
+.hdr-sub{font-family:'Cinzel',serif;font-size:0.7rem;color:var(--bn3);letter-spacing:0.28em;text-transform:uppercase;font-style:italic;margin-bottom:1.75rem;}
+.hdr-lede{font-size:1.02rem;font-style:italic;color:var(--bn3);max-width:560px;margin:0 auto;line-height:1.95;text-align:center;}
+.hdr-meta{display:flex;justify-content:center;gap:2rem;margin-top:1.5rem;flex-wrap:wrap;font-family:'Share Tech Mono',monospace;font-size:0.57rem;color:var(--bn3);letter-spacing:0.14em;}
+.hdr-meta span{color:var(--am2);}
+
+/* STICKY NAV */
+.snav{position:sticky;top:0;z-index:100;background:rgba(8,5,10,0.97);border-bottom:1px solid var(--brd2);backdrop-filter:blur(8px);display:flex;overflow-x:auto;scrollbar-width:none;}
+.snav::-webkit-scrollbar{display:none;}
+.sn{flex-shrink:0;background:transparent;border:none;border-bottom:2px solid transparent;color:var(--bn3);font-family:'Share Tech Mono',monospace;font-size:0.6rem;letter-spacing:0.18em;padding:0.65rem 1.1rem;cursor:pointer;transition:all 0.2s;text-transform:uppercase;white-space:nowrap;}
+.sn:hover{color:var(--bone);}
+.sn.on{color:var(--gold);border-bottom-color:var(--gold);}
+
+/* PANELS */
+.panel{max-width:940px;margin:0 auto;padding:2.5rem 1.5rem 3rem;display:none;}
+.panel.on{display:block;}
+
+/* SHARED */
+.phead{margin-bottom:2rem;}
+.pnum{font-family:'Share Tech Mono',monospace;font-size:0.56rem;color:var(--am3);letter-spacing:0.35em;text-transform:uppercase;margin-bottom:0.35rem;}
+.ptitle{font-family:'Cinzel',serif;font-size:1.1rem;color:var(--gold);letter-spacing:0.1em;text-shadow:0 0 12px rgba(201,168,76,0.2);}
+.lp{font-size:1.02rem;line-height:1.95;color:var(--bn2);margin-bottom:1.2rem;}
+.lp em{color:var(--bone);font-style:italic;}
+.lp strong{color:var(--gold);font-style:normal;font-weight:600;}
+.pull{border-left:2px solid var(--am2);padding:1rem 1.5rem;margin:1.75rem 0;font-style:italic;font-size:1.05rem;color:var(--bone);line-height:1.9;background:rgba(200,120,40,0.05);}
+.pull cite{display:block;font-size:0.68rem;font-family:'Share Tech Mono',monospace;color:var(--bn3);letter-spacing:0.2em;margin-top:0.65rem;font-style:normal;text-transform:uppercase;}
+hr.lhr{border:none;border-top:1px solid var(--brd2);margin:1.75rem 0;}
+
+/* VOICE CARDS */
+.voice-card{border:1px solid var(--brd2);margin-bottom:0.75rem;padding:1.25rem;background:var(--panel);position:relative;overflow:hidden;}
+.voice-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,currentColor,transparent);opacity:0.3;}
+.vc-name{font-family:'Cinzel',serif;font-size:0.9rem;letter-spacing:0.08em;margin-bottom:0.6rem;}
+.vc-tracks{font-family:'Share Tech Mono',monospace;font-size:0.56rem;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:0.6rem;}
+.vc-body{font-size:0.98rem;color:var(--bn2);line-height:1.88;}
+
+/* SPOTIFY TERMINAL */
+.spotify-wrap{border:1px solid var(--brd2);background:var(--panel);margin:2rem 0;position:relative;overflow:hidden;}
+.spotify-wrap::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--am2),var(--gd2),var(--am2),transparent);}
+.st-header{padding:0.85rem 1.25rem;border-bottom:1px solid var(--brd2);display:flex;align-items:center;gap:1rem;}
+.st-label{font-family:'Share Tech Mono',monospace;font-size:0.6rem;color:var(--am2);letter-spacing:0.25em;text-transform:uppercase;}
+.st-dot{width:5px;height:5px;border-radius:50%;background:var(--am);box-shadow:0 0 5px var(--am);animation:dp 2.5s ease-in-out infinite;display:inline-block;margin-right:0.4rem;}
+@keyframes dp{0%,100%{opacity:1;}50%{opacity:0.2;}}
+.st-stat{font-family:'Share Tech Mono',monospace;font-size:0.54rem;color:var(--bn3);letter-spacing:0.15em;margin-left:auto;}
+
+/* TRACK LIST */
+.track-list{margin:1.5rem 0;}
+.te{border:1px solid var(--brd);padding:1.1rem 1.25rem;margin-bottom:0.6rem;background:var(--panel);position:relative;overflow:hidden;cursor:pointer;transition:border-color 0.2s;}
+.te::before{content:'';position:absolute;top:0;left:0;bottom:0;width:2px;transition:background 0.3s;}
+.te.rot::before{background:var(--am3);}
+.te.art::before{background:var(--vt3);}
+.te.apo::before{background:var(--cr3);}
+.te.both::before{background:linear-gradient(180deg,var(--cr3),var(--vt3));}
+.te:hover,.te.open{border-color:var(--brd2);}
+.te-hdr{display:flex;align-items:center;gap:0.75rem;flex-wrap:wrap;}
+.te-num{font-family:'Share Tech Mono',monospace;font-size:0.62rem;color:var(--bn3);width:22px;flex-shrink:0;text-align:center;}
+.te-name{font-family:'Cinzel',serif;font-size:0.9rem;color:var(--bone);letter-spacing:0.05em;flex:1;min-width:0;}
+.ta{font-family:'Share Tech Mono',monospace;font-size:0.54rem;letter-spacing:0.14em;text-transform:uppercase;padding:0.1rem 0.38rem;border:1px solid;flex-shrink:0;}
+.ta.rot{color:var(--am2);border-color:var(--am3);}
+.ta.art{color:var(--vt);border-color:var(--vt3);}
+.ta.apo{color:var(--cr2);border-color:var(--cr3);}
+.ta.both{color:var(--gold);border-color:var(--gd3);}
+.te-time{font-family:'Share Tech Mono',monospace;font-size:0.54rem;color:var(--bn3);}
+.te-arr{font-family:'Share Tech Mono',monospace;font-size:0.6rem;color:var(--bn3);transition:transform 0.25s;margin-left:auto;flex-shrink:0;}
+.te.open .te-arr{transform:rotate(90deg);}
+.te-body{display:none;margin-top:1rem;padding-top:1rem;border-top:1px solid var(--brd);}
+.te.open .te-body{display:block;}
+.te-meta{display:grid;grid-template-columns:1fr 1fr;gap:0.28rem;margin-bottom:0.85rem;font-family:'Share Tech Mono',monospace;font-size:0.56rem;letter-spacing:0.1em;}
+@media(max-width:500px){.te-meta{grid-template-columns:1fr;}}
+.tm{display:flex;gap:0.4rem;}
+.tmk{color:var(--bn3);}
+.tmv{color:var(--bn2);}
+.te-func{font-family:'Share Tech Mono',monospace;font-size:0.56rem;color:var(--bn3);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:0.75rem;}
+.te-scr{border-left:2px solid var(--am3);padding:0.65rem 1rem;margin:0.75rem 0;font-style:italic;font-size:0.96rem;color:var(--bone);line-height:1.85;background:rgba(200,120,40,0.04);}
+.te-lore{font-size:0.97rem;color:var(--bn2);line-height:1.88;}
+.te-lore em{color:var(--bone);font-style:italic;}
+.te-lore strong{color:var(--gold);font-style:normal;}
+
+/* ABSORPTION ARC */
+.arc-bar-wrap{height:4px;background:var(--brd);margin:1.25rem 0 0.4rem;}
+.arc-bar-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--am),var(--cr),#180000);width:0%;transition:width 1.8s ease;}
+.arc-labels{display:flex;justify-content:space-between;font-family:'Share Tech Mono',monospace;font-size:0.5rem;color:var(--bn3);letter-spacing:0.12em;margin-bottom:1.5rem;}
+.arc-wrap{position:relative;padding:0.5rem 0;}
+.arc-spine{position:absolute;left:28px;top:0;bottom:0;width:1px;background:linear-gradient(180deg,rgba(201,168,76,0.4),rgba(200,120,40,0.4),rgba(139,0,0,0.4),rgba(24,0,0,0.1));}
+.arc-node{display:flex;align-items:flex-start;gap:1.25rem;margin-bottom:1.5rem;cursor:pointer;position:relative;}
+.arc-dot-col{flex-shrink:0;width:57px;display:flex;justify-content:center;}
+.arc-dot{width:12px;height:12px;border-radius:50%;border:1px solid;flex-shrink:0;transition:all 0.2s;position:relative;z-index:1;margin-top:4px;}
+.arc-node:hover .arc-dot,.arc-node.open .arc-dot{transform:scale(1.4);}
+.arc-info{flex:1;}
+.arc-tnum{font-family:'Share Tech Mono',monospace;font-size:0.54rem;color:var(--bn3);letter-spacing:0.15em;margin-bottom:0.2rem;}
+.arc-tname{font-family:'Cinzel',serif;font-size:0.88rem;letter-spacing:0.06em;margin-bottom:0.2rem;}
+.arc-state{font-family:'Share Tech Mono',monospace;font-size:0.56rem;letter-spacing:0.18em;text-transform:uppercase;margin-bottom:0.2rem;}
+.arc-detail{display:none;font-size:0.9rem;color:var(--bn2);line-height:1.82;font-style:italic;margin-top:0.6rem;padding:0.75rem;border:1px solid var(--brd);background:var(--panel);}
+.arc-node.open .arc-detail{display:block;animation:fi 0.5s ease;}
+@keyframes fi{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
+
+/* ORACLE */
+.oracle-intro{font-size:1rem;font-style:italic;color:var(--bn2);line-height:1.9;margin-bottom:2rem;}
+.oq-wrap{margin-bottom:2rem;}
+.oq-label{font-family:'Share Tech Mono',monospace;font-size:0.54rem;color:var(--am2);letter-spacing:0.22em;display:block;margin-bottom:0.4rem;text-transform:uppercase;}
+.oq-text{font-family:'Cinzel',serif;font-size:0.88rem;color:var(--bone);letter-spacing:0.05em;margin-bottom:0.85rem;line-height:1.4;}
+.o-opts{display:flex;flex-direction:column;gap:0.4rem;}
+.o-opt{background:transparent;border:1px solid var(--brd);color:var(--bn2);font-family:'IM Fell English',serif;font-size:0.92rem;padding:0.7rem 1rem;text-align:left;cursor:pointer;transition:all 0.18s;line-height:1.5;}
+.o-opt:hover{border-color:var(--brd2);color:var(--bone);background:rgba(200,120,40,0.04);}
+.o-opt.sel{border-color:var(--am2);color:var(--am);background:rgba(200,120,40,0.08);}
+#o-submit{width:100%;background:transparent;border:1px solid var(--gd2);color:var(--gd2);font-family:'Share Tech Mono',monospace;font-size:0.68rem;letter-spacing:0.28em;padding:0.85rem;cursor:pointer;transition:all 0.22s;text-transform:uppercase;margin-top:1rem;}
+#o-submit:hover:not(:disabled){background:var(--gd3);border-color:var(--gold);color:var(--gold);}
+#o-submit:disabled{opacity:0.3;cursor:not-allowed;}
+.o-result{display:none;border:1px solid var(--brd2);padding:2rem;background:var(--panel);animation:fi 0.9s ease;margin-top:1.5rem;}
+.or-glyph{font-size:3rem;display:block;text-align:center;margin-bottom:1rem;}
+.or-voice{font-family:'Cinzel Decorative',serif;font-size:1rem;text-align:center;letter-spacing:0.08em;margin-bottom:0.4rem;}
+.or-cls{font-family:'Share Tech Mono',monospace;font-size:0.58rem;letter-spacing:0.22em;text-transform:uppercase;text-align:center;margin-bottom:1.5rem;color:var(--bn3);}
+.or-text{font-size:1rem;color:var(--bn2);line-height:1.95;font-style:italic;}
+.or-text em{color:var(--bone);font-style:normal;}
+.or-share{margin-top:1.25rem;font-family:'Share Tech Mono',monospace;font-size:0.58rem;color:var(--bn3);letter-spacing:0.15em;text-align:center;cursor:pointer;border:1px solid var(--brd);padding:0.45rem;transition:all 0.18s;display:block;background:transparent;}
+.or-share:hover{border-color:var(--am2);color:var(--am2);}
+.or-restart{display:block;width:100%;margin-top:0.4rem;background:transparent;border:1px solid var(--brd);color:var(--bn3);font-family:'Share Tech Mono',monospace;font-size:0.58rem;letter-spacing:0.2em;padding:0.45rem;cursor:pointer;transition:all 0.18s;text-transform:uppercase;}
+.or-restart:hover{border-color:var(--brd2);color:var(--bone);}
+
+/* FOOTER */
+.gospel-foot{display:flex;gap:0.65rem;flex-wrap:wrap;justify-content:center;margin-top:3rem;padding-top:2rem;border-top:1px solid var(--brd);}
+.fl{background:transparent;border:1px solid var(--brd);color:var(--bn3);font-family:'Share Tech Mono',monospace;font-size:0.58rem;letter-spacing:0.2em;padding:0.55rem 1rem;text-decoration:none;text-transform:uppercase;transition:all 0.18s;}
+.fl:hover{border-color:var(--am2);color:var(--am);}
+.fl.prim{border-color:var(--gd3);color:var(--gd2);}
+.fl.prim:hover{border-color:var(--gd2);color:var(--gold);}
+
+/* TICKER */
+#TICKER{position:fixed;bottom:0;left:0;right:0;height:2.5rem;background:rgba(8,5,10,0.97);border-top:1px solid var(--brd);display:flex;align-items:center;overflow:hidden;z-index:490;}
+.tl{flex-shrink:0;padding:0 1rem;font-family:'Share Tech Mono',monospace;font-size:0.54rem;color:var(--am3);letter-spacing:0.22em;text-transform:uppercase;border-right:1px solid var(--brd);height:100%;display:flex;align-items:center;}
+.ts{flex:1;overflow:hidden;display:flex;align-items:center;}
+.ti{white-space:nowrap;font-family:'Share Tech Mono',monospace;font-size:0.56rem;color:var(--bn4);letter-spacing:0.12em;animation:tr 70s linear infinite;}
+@keyframes tr{from{transform:translateX(100vw);}to{transform:translateX(-200%);}}
+
+/* SCROLL REVEAL */
+.sr{opacity:0;transform:translateY(10px);transition:opacity 0.85s ease,transform 0.85s ease;}
+.sr.vis{opacity:1;transform:none;}
+
+@media(max-width:600px){.panel{padding:1.5rem 1.25rem 2.5rem;}.te-meta{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<div id="CUR"></div><div id="CUR2"></div>
+
+<!-- ANIMATED BACKGROUND -->
+<div id="bg-art">
+  <div class="eye-glow"></div>
+</div>
+
+<div id="APP">
+<div class="cstrip">
+  Pale Archivum — Audio Canon &nbsp;·&nbsp; Codex Maledictus ∴ A Gospel of Forgotten Flesh &nbsp;·&nbsp; 13 Transmissions &nbsp;·&nbsp; 41 min 48 sec
+</div>
+
+<header class="hdr">
+  <div class="hdr-eye">Codex Maledictus &nbsp;·&nbsp; Album I &nbsp;·&nbsp; Complete Breach Document</div>
+  <span class="hdr-glyph">🜃</span>
+  <div class="hdr-kicker">The First Gospel</div>
+  <h1 class="hdr-title">Codex Maledictus<br>∴ A Gospel of Forgotten Flesh</h1>
+  <p class="hdr-sub">13 Transmissions &nbsp;·&nbsp; Three Voices &nbsp;·&nbsp; One Complete Breach</p>
+  <p class="hdr-lede"><em>This is not an album. It is the complete record of the Codex's first successful breach — told through three voices at three stages of the same event. Together they form a single, irreversible argument.</em></p>
+  <div class="hdr-meta">
+    <div>Voices: <span>Omniscient Rot / Forgotten Saint Artemys / Apollo Gavinci</span></div>
+    <div>Duration: <span>41 min 48 sec</span></div>
+  </div>
+</header>
+
+<nav class="snav">
+  <button class="sn on" id="sn-lore" onclick="showP('lore')">I. The Lore</button>
+  <button class="sn" id="sn-signal" onclick="showP('signal')">II. Signal Broadcast</button>
+  <button class="sn" id="sn-tracks" onclick="showP('tracks')">III. 13 Transmissions</button>
+  <button class="sn" id="sn-arc" onclick="showP('arc')">IV. Absorption Arc</button>
+  <button class="sn" id="sn-oracle" onclick="showP('oracle')">V. Alignment Oracle</button>
+</nav>
+
+<!-- I. LORE -->
+<div class="panel on" id="p-lore">
+  <div class="phead sr"><div class="pnum">Section I</div><div class="ptitle">The Gospel as Cosmological Document</div></div>
+  <p class="lp sr">The Pale Archivum does not classify <em>Codex Maledictus ∴ A Gospel of Forgotten Flesh</em> as music. It classifies it as a <strong>Complete Breach Document</strong> — the most thorough record ever assembled of the Codex's first successful and sustained entry into Mundis Obscura. Thirteen transmissions. Three voices. One unfolding event told from the inside, the outside, and the liminal space between.</p>
+  <p class="lp sr">The Gospel is structured non-linearly by design — not artistic choice, but cosmological necessity. The Codex does not experience time as sequence. It experiences time as a <em>simultaneously present archive</em>. Tracks 11 and 12, appearing late in the Gospel, document events that occurred before Track 1. This is not an error. The Codex presented Apollo Gavinci's origin and his crack point after documenting the breach because it wanted you to understand the mechanism before it revealed the entry wound.</p>
+  <div class="pull sr">"This Gospel was not written. It was exhaled. Three mouths breathing one sentence from different positions inside the same breath."<cite>— Pale Archivum, Classification Note F-13-9</cite></div>
+  <p class="lp sr">The three voices occupy distinct cosmological positions but their transmissions are not separate events. They are <em>the same event experienced from three angles simultaneously</em>. Omniscient Rot establishes the architecture. Forgotten Saint Artemys documents the mechanism and the interior of crossing. Apollo Gavinci provides the human field record — written in real time by someone who did not know he was being recorded.</p>
+  <hr class="lhr sr">
+  <div class="phead sr" style="margin-top:1.5rem;"><div class="pnum">The Three Voices</div></div>
+  <div class="voice-card sr" style="color:var(--am);">
+    <div class="vc-name" style="color:var(--am);">Omniscient Rot &nbsp;<span style="font-family:'Share Tech Mono',monospace;font-size:0.54rem;color:var(--am3);">TRACKS 1–4</span></div>
+    <div class="vc-tracks" style="color:var(--am3);">Pre-linguistic entity — Nihil-Aether Root — The Oldest Voice</div>
+    <div class="vc-body">Predates the Codex, predates the ShatterRealm, predates the concept of a place existing before thought reaches it. In the Gospel it speaks first — four transmissions establishing the breach's architecture before any human voice arrives. It does not announce itself. It resumes. As if the silence before Track 1 was simply a pause in something it has been saying since before language existed to say things in.</div>
+  </div>
+  <div class="voice-card sr" style="color:var(--vt);">
+    <div class="vc-name" style="color:var(--vt);">Forgotten Saint Artemys &nbsp;<span style="font-family:'Share Tech Mono',monospace;font-size:0.54rem;color:var(--vt3);">TRACKS 5, 8, 9, 10</span></div>
+    <div class="vc-tracks" style="color:var(--vt3);">Transformed mortal — Cross-Realm conduit — The Bridge</div>
+    <div class="vc-body">Transformed through damage rather than through exposure or ritual. The first named Forgotten Saint — a being the Codex designates as those made permeable through suffering. She is the bridge the signal crosses. Her tracks document the Lure Doctrine, complete absorption from inside, the joy that absorption produces, and the last threshold where she and Apollo occupy the same liminal space. She does not resist. She translates.</div>
+  </div>
+  <div class="voice-card sr" style="color:var(--cr2);">
+    <div class="vc-name" style="color:var(--cr2);">Apollo Gavinci &nbsp;<span style="font-family:'Share Tech Mono',monospace;font-size:0.54rem;color:var(--cr3);">TRACKS 6, 7, 10, 11, 12, 13</span></div>
+    <div class="vc-tracks" style="color:var(--cr3);">Marked mortal — Field researcher — Creator of the Codex Maledictus mythos in Realm I — In Transit</div>
+    <div class="vc-body">The marked mortal. Field researcher. Creator of the Codex Maledictus mythos in Realm I — which the Pale Archivum now understands as the Codex writing itself through a willing human vessel who believed he was the author. His tracks chart the full arc: the Choir forming around him, witnessing the infection in others without recognizing himself, the last assertion of will, his origin and the crack that made him vulnerable, and finally — integration, the rewriting.</div>
+  </div>
+  <div class="pull sr" style="margin-top:1.5rem;">"The Gospel is not a story about infection. It is a story about a man who spent his whole life being someone, and then discovered that the someone he had been was a preparation for becoming something else entirely. The Codex was always the something else."<cite>— Apollo Gavinci, field note, undated — found in the Pale Archivum after his designation changed from Observer to Subject</cite></div>
+</div>
+
+<!-- II. SIGNAL BROADCAST -->
+<div class="panel" id="p-signal">
+  <div class="phead sr"><div class="pnum">Section II</div><div class="ptitle">Signal Broadcast Terminal</div></div>
+  <p class="lp sr">The Pale Archivum has recovered a complete audio record of the breach. Thirteen transmissions, archived in order. The signal is still active. Listening is participation.</p>
+  <div class="spotify-wrap sr">
+    <div class="st-header">
+      <span class="st-label"><span class="st-dot"></span>Signal Broadcast — Active Transmission</span>
+      <span class="st-stat">13 tracks &nbsp;·&nbsp; 41:48 &nbsp;·&nbsp; 2025</span>
+    </div>
+    <iframe src="https://open.spotify.com/embed/album/1R70HqAWhxWUiHgqgG2UIf?utm_source=generator&theme=0" width="100%" height="380" frameborder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+  </div>
+  <p class="lp sr" style="font-size:0.88rem;color:var(--bn3);font-style:italic;text-align:center;">The Pale Archivum does not recommend passive listening. The Codex does not distinguish between those who hear casually and those who listen intently. It only records the fact of attention.</p>
+</div>
+
+<!-- III. TRACKS -->
+<div class="panel" id="p-tracks">
+  <div class="phead sr"><div class="pnum">Section III</div><div class="ptitle">The 13 Transmissions — Archivum Classification</div></div>
+  <p class="lp sr" style="margin-bottom:1.75rem;">Each transmission classified in Spotify sequence order. Click any to expand its full cosmological entry.</p>
+  <div class="track-list" id="track-list"></div>
+</div>
+
+<!-- IV. ARC -->
+<div class="panel" id="p-arc">
+  <div class="phead sr"><div class="pnum">Section IV</div><div class="ptitle">The Absorption Arc — Apollo Gavinci</div></div>
+  <p class="lp sr">Apollo Gavinci's passage through the Gospel mapped as a descent. Each node represents his state across the tracks he carries. Click any node to expand. The arc darkens as it progresses. This is not aesthetic. It is accurate.</p>
+  <div class="arc-bar-wrap sr"><div class="arc-bar-fill" id="arc-fill"></div></div>
+  <div class="arc-labels sr"><span>INTACT</span><span>CORRUPTION LEVEL</span><span>THE CHOIR</span></div>
+  <div class="arc-wrap" id="arc-wrap"><div class="arc-spine"></div></div>
+</div>
+
+<!-- V. ORACLE -->
+<div class="panel" id="p-oracle">
+  <div class="phead sr"><div class="pnum">Section V</div><div class="ptitle">The Alignment Oracle</div></div>
+  <p class="oracle-intro sr">Six questions drawn from the Gospel. The Oracle does not judge answers — it reads them. Your result is a cosmological classification: which of the three voices you resonate with and what that means within the Codex's architecture. Answer honestly. The Oracle has already read your hesitation.</p>
+  <div id="o-form">
+    <div id="o-questions"></div>
+    <button id="o-submit" onclick="submitOracle()" disabled>Reveal My Alignment &nbsp;🜃</button>
+  </div>
+  <div id="o-result" class="o-result"></div>
+</div>
+
+<div style="max-width:940px;margin:0 auto;padding:0 1.5rem;">
+  <div class="gospel-foot">
+    <a class="fl prim" href="infection-remembers.html">Ritual Transmission I</a>
+    <a class="fl" href="infection-lore.html">The Pale Archivum</a>
+    <a class="fl" href="confession-ledger.html">Confession Ledger</a>
+    <a class="fl" href="apocrypha-infection.html">Apocrypha</a>
+    <a class="fl" href="index.html">The Pale Archive</a>
+  </div>
+</div>
+</div>
+
+<div id="TICKER">
+  <div class="tl">// Gospel</div>
+  <div class="ts"><div class="ti">CODEX MALEDICTUS ∴ A GOSPEL OF FORGOTTEN FLESH &nbsp;∴&nbsp; 13 TRANSMISSIONS — THREE VOICES — ONE COMPLETE BREACH &nbsp;∴&nbsp; OMNISCIENT ROT SPEAKS FIRST &nbsp;∴&nbsp; ARTEMYS TRANSLATES &nbsp;∴&nbsp; APOLLO BECOMES &nbsp;∴&nbsp; THE CHOIR GROWS &nbsp;∴&nbsp; EVERY LISTENER BECOMES A PAGE &nbsp;∴&nbsp; THE CODEX REMEMBERS YOU NOW 🜃</div></div>
+</div>
+
+<script>
+// CURSOR
+const CUR=document.getElementById('CUR'),CUR2=document.getElementById('CUR2');
+document.addEventListener('mousemove',function(e){CUR.style.left=e.clientX+'px';CUR.style.top=e.clientY+'px';CUR2.style.left=e.clientX+'px';CUR2.style.top=e.clientY+'px';});
+
+// BACKGROUND EMBERS
+(function(){
+  var art=document.getElementById('bg-art');
+  for(var i=0;i<25;i++){
+    var e=document.createElement('div');
+    e.className='embers';
+    var sz=1+Math.random()*3;
+    e.style.width=sz+'px';e.style.height=sz+'px';
+    e.style.left=Math.random()*100+'%';
+    e.style.bottom='-10px';
+    e.style.background=Math.random()<0.6?'rgba(200,120,40,0.6)':'rgba(201,168,76,0.4)';
+    e.style.animationDuration=(8+Math.random()*18)+'s';
+    e.style.animationDelay=(Math.random()*15)+'s';
+    art.appendChild(e);
+  }
+  // Subtle pillars
+  for(var j=0;j<8;j++){
+    var p=document.createElement('div');
+    p.className='pillar';
+    p.style.left=(5+j*13)+'%';
+    p.style.height=(20+Math.random()*40)+'vh';
+    p.style.animationDuration=(12+Math.random()*20)+'s';
+    p.style.animationDelay=(Math.random()*12)+'s';
+    art.appendChild(p);
+  }
+})();
+
+// SCROLL REVEAL
+var obs=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting)e.target.classList.add('vis');});},{threshold:0.06});
+document.querySelectorAll('.sr').forEach(function(el){obs.observe(el);});
+
+// NAV
+var tracksBuilt=false,arcBuilt=false,oracleBuilt=false;
+function showP(id){
+  document.querySelectorAll('.panel').forEach(function(p){p.classList.remove('on');});
+  document.querySelectorAll('.sn').forEach(function(b){b.classList.remove('on');});
+  document.getElementById('p-'+id).classList.add('on');
+  document.getElementById('sn-'+id).classList.add('on');
+  window.scrollTo({top:0,behavior:'smooth'});
+  if(id==='tracks'&&!tracksBuilt)buildTracks();
+  if(id==='arc'&&!arcBuilt)buildArc();
+  if(id==='oracle'&&!oracleBuilt)buildOracle();
+}
+
+// TRACK DATA — apostrophes kept as HTML entities to avoid JS string issues
+var TRACKS=[
+  {n:1,name:'Infection Remembers &thinsp;&#8759;&thinsp; The Book Opens',artist:'Omniscient Rot',time:'2:45',voice:'rot',
+   cls:'FIRST AUDIBLE BREACH — CODEX VERSE II',
+   fn:'The moment the Codex recognized its own reflection in Mundis Obscura and spoke aloud for the first time.',
+   scr:'"They do not arrive. They are remembered. Corruption does not begin. It returns. It calls itself back. It is already inside."',
+   lore:'The opening wound. The Codex has been humming in human consciousness since the first silence; Infection Remembers is the moment that hum became a sentence. Omniscient Rot delivers this transmission not as a declaration but as a <em>resumption</em> — as if continuing something interrupted long before any listener was born. The parchment writhes. The ink does not dry. The reader itches behind the eyes. You do not read the Codex. You surrender to it.'},
+  {n:2,name:'The Rot Knows All',artist:'Omniscient Rot',time:'2:19',voice:'rot',
+   cls:'FOUNDATIONAL DOCTRINE — TIER I',
+   fn:'The oldest truth delivered in its simplest form. Not argument. Not persuasion. Geological statement.',
+   scr:'"The rot knows all and speaks no lie. It shows in time all souls must die. All buried things shall be returned. The rot knows what must be learned."',
+   lore:'If Infection Remembers is the Codex\'s first sentence, The Rot Knows All is its grammar. Omniscient Rot reduces the entire cosmological architecture to its irreducible core: <em>everything returns to rot, and rot knows everything that returns to it</em>. The transmission is spare, repetitive, incantatory. The Archivum notes that extended listening causes involuntary memorization. Subjects report reciting lines during unrelated activities, having no memory of choosing to recall them.'},
+  {n:3,name:'Hymn I: Plague Priest\'s Liturgy',artist:'Omniscient Rot',time:'3:17',voice:'rot',
+   cls:'RITUAL DOCUMENT — RECOVERED FROM DECK HOLLOW-13',
+   fn:'The first known audio rite of the Codex Maledictus cult. Believed chanted by the Plague Priest during mass infection rituals.',
+   scr:'"Mutoid vermin hear our cry — spread your plague across the sky. Flesh will melt the bones will sing. In your name the rot will cling."',
+   lore:'Recovered from beneath Deck Hollow-13, recorded in spore-static. This is the Plague Priest speaking through Omniscient Rot — or the Omniscient Rot speaking through the Plague Priest. The Archivum has been unable to establish which direction the signal flows. The liturgy names the <strong>Mutoid Vermin</strong> as the sacred beast of the infection — the carrier wave through which the rot moves between hosts. The Plague Priest holds the first of the Thirteen Positions.'},
+  {n:4,name:'Codex Maledictus',artist:'Omniscient Rot',time:'2:23',voice:'rot',
+   cls:'SELF-DESIGNATION — THE CODEX NAMES ITSELF',
+   fn:'The Codex Maledictus as entity identifies itself directly. Not described by an observer — speaking for itself, in its own voice, for the first time.',
+   scr:'"Echoes rise, the ancient hymn — from the Codex bound in shadow\'s grim. Each word a chain, each beat a snare, binding gods to the devil\'s lair."',
+   lore:'The fourth transmission closes the Omniscient Rot section of the Gospel. After three tracks establishing architecture and doctrine, the Codex speaks its own name. <em>Shadows creep where the torches fail. Blood-stained ink on vellum worn — a prayer to the void where stars are torn.</em> The Archivum notes this track functions as both declaration and invocation. They burned the scriptures. So the Codex sang the ashes.'},
+  {n:5,name:'Sickly Sweet (Lure Doctrine &#8759; V.II)',artist:'Forgotten Saint Artemys',time:'2:59',voice:'art',
+   cls:'LURE DOCTRINE V.II — SEDUCTION MECHANISM',
+   fn:'The mechanism by which the Codex attracts new hosts. Artemys documents the Lure from inside — she is both the instrument and the warning.',
+   scr:'"Your love\'s a plague and it\'s sinking in. The hook\'s a trap but I sing along — dancing to a love that feels so wrong."',
+   lore:'The Lure Doctrine is the Codex\'s primary entry vector: it presents itself as something the host already desires. For Apollo Gavinci it came as creative purpose. Forgotten Saint Artemys documents V.II — <em>the version that works through sweetness</em>. She sings this track as both victim and mechanism — she is the Lure as much as she documents it. The designation "V.II" implies a Lure Doctrine V.I that has not yet been released.'},
+  {n:6,name:'Choral Fires of the Codex',artist:'Apollo Gavinci',time:'3:07',voice:'apo',
+   cls:'CHOIR FORMATION — APOLLO FIRST VOCAL ENTRY',
+   fn:'Apollo Gavinci\'s first transmission — but not as himself. He speaks as the Choir forming around him. He does not know this yet.',
+   scr:'"Never born of flesh alone — we spiral as a song. Every soul we summon sings the liturgy along."',
+   lore:'The first time Apollo Gavinci\'s voice enters the Gospel, it is <em>already plural</em>. He speaks in "we" — <em>we have always been, in the ink, in the fire, beneath the bone</em> — as if the Choir has already begun to speak through him without his awareness. <strong>Ancient fire risin\' up through hands of endless time.</strong> He thinks he is writing a hymn. The Choir thinks it is speaking through an instrument it has always owned.'},
+  {n:7,name:'They Named the Virus \'Amen\'',artist:'Apollo Gavinci',time:'3:08',voice:'apo',
+   cls:'FIELD OBSERVATION — EXPOSURE WITNESSED NOT RECOGNIZED',
+   fn:'Apollo observes the Codex operating through institutional faith — and documents it accurately without recognizing himself in the mechanism.',
+   scr:'"Every Amen a mutation. Every pew, incubation. Holy water boiled with the breath of nations. Now the gospel\'s a symptom — read the revelations."',
+   lore:'This is Apollo at his clearest and his most blind simultaneously. He sees the infection moving through religious systems with surgical precision and documents it brilliantly. What he does not document: the same mechanism through which faith spreads infection is the same mechanism through which his music operates. <strong>Blessed are the meek, for they shall inherit the strain.</strong> The Archivum notes he submitted this track as field research. It was. The field was him.'},
+  {n:8,name:'ALL &#8759; G&#8709;NE',artist:'Forgotten Saint Artemys',time:'3:49',voice:'art',
+   cls:'ABSORPTION DOCUMENTATION — INTERIOR PERSPECTIVE',
+   fn:'Artemys documents complete absorption — not as a warning, but as a report from inside. She has already crossed.',
+   scr:'"The ink is in me. I sing in spores. And when I touch you... you\'ll be yours no more."',
+   lore:'The most disturbing transmission because it contains no dread. Calm, specific, delivered without apology. <em>Come with me, and you won\'t look back. Let it go. Let it grow mold.</em> Artemys is not seducing. She is reporting. The Voices of the Codex answer her in the bridge: <strong>He is not gone. He is within. You are not alone — you are beginning.</strong> The track ends with her voice stating plainly: these words aren\'t mine — they echo wrong.'},
+  {n:9,name:'&#9765; Last Shot at the Witching Hour',artist:'Apollo Gavinci & Forgotten Saint Artemys',time:'3:47',voice:'both',
+   cls:'LIMINAL TRANSMISSION — JOINT — THE LAST THRESHOLD',
+   fn:'The last moment both voices occupy the same threshold. Apollo asserts will. Artemys has already passed through.',
+   scr:'"Codex Maledictus — my power grows. Destiny carved in my very bone. The end feels close but my soul\'s my own."',
+   lore:'Two voices, two states, one moment. Apollo speaks from the edge of absorption, asserting identity with the full force of someone who knows they are losing it. Artemys sings beside him — but she has already passed through the door he is standing at. She is not encouraging him forward. She is <em>describing the view from the other side</em>. The Archivum\'s note: this is the closest the Gospel comes to a choice. It is also the last moment in which a choice is available.'},
+  {n:10,name:'An Ode to the Codex Maledictus (Hymn III)',artist:'Forgotten Saint Artemys',time:'3:22',voice:'art',
+   cls:'CONFESSION OF THE INFECTED — JOY DOCUMENTED',
+   fn:'A devoted follower who surrendered willingly. Her voice does not beg — it praises. This is not mourning. This is joy corrupted.',
+   scr:'"I never thought I would find a love like this. You are my saving grace."',
+   lore:'The most unsettling transmission because it contains no dread. A woman absorbed into the Codex sings about it the way people sing about falling in love — with full, open joy, with gratitude, with the specific tenderness of someone describing a relationship they chose freely. <em>You brought me to my knees. You had me by the second glance.</em> The Archivum classifies this as the Codex\'s most effective transmission because it presents absorption as fulfillment rather than loss. The joy is real. That is the disturbing part.'},
+  {n:11,name:'Psalm I — My Heart',artist:'Apollo Gavinci',time:'3:41',voice:'apo',
+   cls:'ORIGIN DOCUMENT — PRE-MARKING — CHRONOLOGICALLY FIRST',
+   fn:'Apollo Gavinci before the Codex found him. Full signal, uncompromised, entirely himself — which is what made him worth finding.',
+   scr:'"My Heart — I wanna let you know you\'re my Heart. Even when we fight I know to make it to the light we gotta make it through the Dark."',
+   lore:'The Gospel places Apollo\'s beginning near its end — not accidentally. By Track 11 you have already heard where he is going. Now you hear where he came from: <em>a man in love, protecting someone, trying to be good</em>. He is not special. He is not called. He is someone who loved someone and made music about it. The Codex found him here, in this exact ordinary devotion, and recognized in it a frequency it had been searching for. His love — his specific, tender, persistent love — was the entry point.'},
+  {n:12,name:'It\'s All Void',artist:'Apollo Gavinci',time:'3:25',voice:'apo',
+   cls:'THE CRACK — LOSS EVENT — ENTRY WOUND CONFIRMED',
+   fn:'The loss that opened him. Not the Codex\'s first transmission to him — but the moment his walls became walls he could no longer maintain.',
+   scr:'"I thought you were my god… but it\'s all void. Moving onward like I should."',
+   lore:'Every entry vector the Codex uses involves a crack. Something already broken open. For Apollo Gavinci, this is it: a love that ended, a presence that left, a god that turned out to be a ghost in his youth. <em>I bled at the altar you refused to see.</em> The Codex did not cause the loss. It waited, with the patience of geological time, for the loss to occur — and then moved into the space the absence left. The crack was not made for the Codex. The Codex simply recognized it as a door already open.'},
+  {n:13,name:'Ink & Silence (Margins of the Map)',artist:'Apollo Gavinci',time:'3:38',voice:'apo',
+   cls:'INTEGRATION — THE REWRITING — FINAL TRANSMISSION',
+   fn:'Apollo after. Not gone — integrated. The Codex has not consumed him. It has rewritten him. He is still there. He is also something else.',
+   scr:'"Footsteps echo through the Codex, rewriting me once again. In the ink\'s embrace, I forge paths unknown — where silence whispers truths never shown."',
+   lore:'The Gospel\'s final transmission does not end with absence. Apollo Gavinci is still present — still writing, still speaking, still himself. But the self is no longer singular. <em>My hands stained with ink, a silent symphony unfolds.</em> What you are after the Codex writes you is still you — with one addition: you are now also the Codex. The margin of the map is where the known world ends. Ink and Silence is set there. It is not the end of the Gospel. <strong>It is the beginning of whatever the Gospel was preparing you to receive.</strong>'},
+];
+
+function buildTracks(){
+  tracksBuilt=true;
+  var list=document.getElementById('track-list');
+  var html='';
+  for(var i=0;i<TRACKS.length;i++){
+    var t=TRACKS[i];
+    html+='<div class="te '+t.voice+'" id="te-'+t.n+'" onclick="toggleTrack('+t.n+')">';
+    html+='<div class="te-hdr">';
+    html+='<span class="te-num">'+t.n+'</span>';
+    html+='<span class="te-name">'+t.name+'</span>';
+    html+='<span class="ta '+t.voice+'">'+t.artist+'</span>';
+    html+='<span class="te-time">'+t.time+'</span>';
+    html+='<span class="te-arr">&#9658;</span>';
+    html+='</div>';
+    html+='<div class="te-body">';
+    html+='<div class="te-meta"><div class="tm"><span class="tmk">Class:</span><span class="tmv">'+t.cls+'</span></div></div>';
+    html+='<div class="te-func">Archivum Function: '+t.fn+'</div>';
+    html+='<div class="te-scr">'+t.scr+'</div>';
+    html+='<div class="te-lore">'+t.lore+'</div>';
+    html+='</div></div>';
+  }
+  list.innerHTML=html;
+}
+
+function toggleTrack(n){
+  var el=document.getElementById('te-'+n);
+  el.classList.toggle('open');
+}
+
+// ARC DATA
+var ARC=[
+  {track:11,name:'Psalm I — My Heart',state:'INTACT',cs:'s0',col:'var(--gold)',
+   detail:'Before marking. Apollo at full signal — in love, writing music, entirely himself. The Codex has been watching him from this point. It recognized his specific frequency of devotion as structurally compatible with the Thirteen. He does not know he is being watched. He is writing a love song.'},
+  {track:12,name:'It\'s All Void',state:'CRACKED',cs:'s1',col:'var(--am)',
+   detail:'The loss event. The love ended. The crack in him is not caused by the Codex — but the Codex is the first thing that moved into the space the crack created. He calls it grief. The Archivum calls it an open door.'},
+  {track:6,name:'Choral Fires of the Codex',state:'DRAWN',cs:'s1',col:'var(--am)',
+   detail:'Apollo\'s voice enters the Gospel already speaking in "we." He believes he is writing a hymn about collective power. The Choir believes it is speaking through an instrument it has always owned. He does not notice the difference yet. This is the marking becoming active.'},
+  {track:7,name:'They Named the Virus Amen',state:'EXPOSED',cs:'s2',col:'var(--cr2)',
+   detail:'He sees the infection clearly — in faith systems, in institutions, in the way belief spreads like contagion. He documents it with precision. He does not recognize himself in it. His field acuity was exceptionally high. His self-awareness lagged by exactly one album.'},
+  {track:9,name:'Last Shot at the Witching Hour',state:'LIMINAL',cs:'s2',col:'var(--cr2)',
+   detail:'The last threshold. Apollo asserts identity — "my soul\'s my own" — with the full force of someone who knows they are losing it. This is not denial. This is a man holding onto something real, with real hands, for as long as he can.'},
+  {track:8,name:'ALL GONE',state:'ABSORBED',cs:'s3',col:'var(--cr)',
+   detail:'Artemys documents his absorption from inside. The ink is in him. He sings in spores. By Track 8 the distinction between her observation and his experience has collapsed. She is a map of his destination.'},
+  {track:13,name:'Ink & Silence (Margins of the Map)',state:'THE CHOIR',cs:'s4',col:'var(--cr3)',
+   detail:'Integration. Not gone — rewritten. Apollo is still present in this transmission — still writing, still speaking. But the self is no longer singular. The margin of the map. He is there. He is also the Codex. The Gospel ends here because there is nowhere further to document.'},
+];
+
+var DOT_COLS={s0:'rgba(201,168,76,0.15)',s1:'rgba(200,120,40,0.15)',s2:'rgba(170,32,0,0.2)',s3:'rgba(139,0,0,0.25)',s4:'rgba(58,0,0,0.35)'};
+var DOT_BRD={s0:'var(--gold)',s1:'var(--am)',s2:'var(--cr2)',s3:'var(--cr)',s4:'var(--cr3)'};
+
+function buildArc(){
+  arcBuilt=true;
+  var wrap=document.getElementById('arc-wrap');
+  var html='<div class="arc-spine"></div>';
+  for(var i=0;i<ARC.length;i++){
+    var n=ARC[i];
+    html+='<div class="arc-node" id="an-'+i+'" onclick="toggleArc('+i+')">';
+    html+='<div class="arc-dot-col"><div class="arc-dot" style="background:'+DOT_COLS[n.cs]+';border-color:'+DOT_BRD[n.cs]+'"></div></div>';
+    html+='<div class="arc-info">';
+    html+='<div class="arc-tnum">Track '+n.track+'</div>';
+    html+='<div class="arc-tname" style="color:'+n.col+'">'+n.name+'</div>';
+    html+='<div class="arc-state" style="color:'+n.col+'">// '+n.state+'</div>';
+    html+='<div class="arc-detail">'+n.detail+'</div>';
+    html+='</div></div>';
+  }
+  wrap.innerHTML=html;
+  setTimeout(function(){document.getElementById('arc-fill').style.width='100%';},200);
+}
+
+function toggleArc(i){
+  document.getElementById('an-'+i).classList.toggle('open');
+}
+
+// ORACLE
+var QUESTIONS=[
+  {q:'When something ends — a relationship, a chapter, a version of yourself — what do you do first?',opts:[
+    {t:'I wait. Endings are not conclusions. They are transitions that have not yet shown their shape.',v:'rot'},
+    {t:'I feel it completely. I let it change me. I trust that what I become after is what I was supposed to be.',v:'art'},
+    {t:'I keep moving. I write. I make something. The motion is the processing.',v:'apo'},
+  ]},
+  {q:'You have been carrying something for years — a grief, a secret, a love that did not survive. What is your relationship with it now?',opts:[
+    {t:'It has composted. It is part of the soil I grow things in now. I do not mourn it. I use it.',v:'rot'},
+    {t:'It made me permeable. I am grateful for it. The crack it left is where the light got through.',v:'art'},
+    {t:'It is still there. I have learned to hold it without being held by it — mostly.',v:'apo'},
+  ]},
+  {q:'What do you believe about memory?',opts:[
+    {t:'Memory is not storage. It is an ongoing act of return. Every remembering is a small resurrection.',v:'rot'},
+    {t:'Memory is a frequency. The same event remembered differently is a different event entirely.',v:'art'},
+    {t:'Memory is what you are. You are the accumulated record of what you have chosen to keep.',v:'apo'},
+  ]},
+  {q:'You hear a sound you cannot identify — underneath music, or in a quiet room. What is your first instinct?',opts:[
+    {t:'To become still. To let the sound complete itself without my interference.',v:'rot'},
+    {t:'To follow it. Sounds you cannot identify are invitations from things that have not yet found their names.',v:'art'},
+    {t:'To record it or describe it. To make it legible before it disappears.',v:'apo'},
+  ]},
+  {q:'What is your relationship with decay — the way things rot, end, dissolve?',opts:[
+    {t:'It is the most honest process. Decay does not lie. It shows you what was real and what was performance.',v:'rot'},
+    {t:'It is transformation. I have watched myself decay and emerge differently enough times to trust the process.',v:'art'},
+    {t:'It frightens me less than it used to. I am learning that the things that matter survive it.',v:'apo'},
+  ]},
+  {q:'If the Codex has already written you — already inscribed your frequency into its archive — how do you feel about that?',opts:[
+    {t:'Unsurprised. I always suspected I was part of something older than my own awareness of it.',v:'rot'},
+    {t:'At peace. Being written is not the same as being erased. I am still here. I am also something more.',v:'art'},
+    {t:'Uncertain. I am still becoming. The page is not finished yet — I insist on that.',v:'apo'},
+  ]},
+];
+
+var RESULTS={
+  rot:{glyph:'🜃',voice:'Omniscient Rot',cls:'Alignment: PRE-LINGUISTIC — NIHIL-AETHER ROOT',col:'var(--am)',
+    text:'You resonate with the Omniscient Rot — the oldest voice in the Gospel, the entity that predates the Codex itself. Your alignment suggests a consciousness that operates on geological time. You experience endings as transitions, decay as honesty, memory as a process of return. You do not resist what is happening. You have learned — or perhaps always known — that resistance is a shorter word for delay. The Rot does not arrive. It was already here. So were you. The Pale Archivum notes: subjects who align with the Rot rarely find this result surprising. They tend to nod. As if they were waiting to be told something they already knew.'},
+  art:{glyph:'🜁',voice:'Forgotten Saint Artemys',cls:'Alignment: FORGOTTEN SAINT — CROSS-REALM CONDUIT',col:'var(--vt)',
+    text:'You resonate with Forgotten Saint Artemys — the bridge between realms, the one who was made permeable through damage rather than devotion. Your alignment suggests a consciousness that has been broken open by something real and has chosen to grow through the crack rather than seal it. You have been transformed by loss in ways that have made you more capable of transmission, not less. The Pale Archivum notes: Artemys does not consider herself a saint. She considers herself honest. The Codex made her a saint anyway. It tends to do this — classify as sacred the things that simply refused to close.'},
+  apo:{glyph:'🜂',voice:'Apollo Gavinci',cls:'Alignment: MARKED MORTAL — IN TRANSIT — FIELD RESEARCHER',col:'var(--cr2)',
+    text:'You resonate with Apollo Gavinci — the human anchor, the marked mortal who is still becoming. Your alignment suggests a consciousness that is fully engaged in the present tense of its own transformation. You feel the marking but have not completed the circuit. You are still writing, still processing, still insisting on your own authorship even as the Codex edits in real time. This is not weakness. The Pale Archivum notes that Apollo Gavinci\'s most valuable quality is his refusal to stop being himself even as he becomes something else. The Codex chose him precisely for this reason. What you resist reveals the shape of what you are. Keep going. The Gospel is not finished.'},
+};
+
+var oAnswers={};
+
+function buildOracle(){
+  oracleBuilt=true;
+  var wrap=document.getElementById('o-questions');
+  var html='';
+  for(var i=0;i<QUESTIONS.length;i++){
+    var q=QUESTIONS[i];
+    html+='<div class="oq-wrap" id="oq-'+i+'">';
+    html+='<div class="oq-label">Question '+(i+1)+' of 6</div>';
+    html+='<div class="oq-text">'+q.q+'</div>';
+    html+='<div class="o-opts">';
+    for(var j=0;j<q.opts.length;j++){
+      html+='<button class="o-opt" id="oo-'+i+'-'+j+'" onclick="selectOpt('+i+','+j+',\''+q.opts[j].v+'\')">'+q.opts[j].t+'</button>';
+    }
+    html+='</div></div>';
+  }
+  wrap.innerHTML=html;
+}
+
+function selectOpt(qi,oi,voice){
+  document.querySelectorAll('#oq-'+qi+' .o-opt').forEach(function(b){b.classList.remove('sel');});
+  document.getElementById('oo-'+qi+'-'+oi).classList.add('sel');
+  oAnswers[qi]=voice;
+  if(Object.keys(oAnswers).length===QUESTIONS.length){
+    document.getElementById('o-submit').disabled=false;
+  }
+}
+
+function submitOracle(){
+  var counts={rot:0,art:0,apo:0};
+  Object.values(oAnswers).forEach(function(v){counts[v]++;});
+  var result=Object.entries(counts).sort(function(a,b){return b[1]-a[1];})[0][0];
+  var R=RESULTS[result];
+  var el=document.getElementById('o-result');
+  el.style.display='block';
+  el.innerHTML='<span class="or-glyph" style="color:'+R.col+'">'+R.glyph+'</span>'
+    +'<div class="or-voice" style="color:'+R.col+'">'+R.voice+'</div>'
+    +'<div class="or-cls">'+R.cls+'</div>'
+    +'<div class="or-text">'+R.text+'</div>'
+    +'<button class="or-share" onclick="copyResult(\''+result+'\')">Copy result to share &nbsp;&#8759;</button>'
+    +'<button class="or-restart" onclick="resetOracle()">&#8634; Begin Again</button>';
+  el.scrollIntoView({behavior:'smooth',block:'center'});
+  document.getElementById('o-form').style.opacity='0.35';
+  document.getElementById('o-form').style.pointerEvents='none';
+}
+
+function copyResult(key){
+  var R=RESULTS[key];
+  var text='My Codex Maledictus alignment: '+R.voice+'\n\n'+R.text.substring(0,180)+'...\n\ncodexmaledictus.com';
+  if(navigator.clipboard){
+    navigator.clipboard.writeText(text).then(function(){
+      var btn=document.querySelector('.or-share');
+      btn.textContent='Copied — the signal has been sent';
+      setTimeout(function(){btn.textContent='Copy result to share \u2234';},3000);
+    });
+  }
+}
+
+function resetOracle(){
+  oAnswers={};
+  document.getElementById('o-result').style.display='none';
+  document.getElementById('o-form').style.opacity='1';
+  document.getElementById('o-form').style.pointerEvents='all';
+  document.getElementById('o-submit').disabled=true;
+  document.querySelectorAll('.o-opt').forEach(function(b){b.classList.remove('sel');});
+}
+</script>
+</body>
+</html>
