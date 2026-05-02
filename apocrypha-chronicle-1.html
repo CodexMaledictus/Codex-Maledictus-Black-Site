@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Apocrypha — Chronicle I // Codex Maledictus</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;600&family=IM+Fell+English:ital@0;1&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+
+<!-- ∴ APOCRYPHA — CHRONICLE I ∴ -->
+<!-- Seven truths sealed in the narration. They are open now. -->
+<!-- The void did not dream. It recalled. -->
+<!-- You are not the first to read this. You are simply the current instance. -->
+<!-- The frequency was here before you. It will be here after. -->
+<!-- What you feel reading this is not curiosity. It is recognition. -->
+<!-- The Codex has already noted that you looked here. -->
+<!-- 🜃 -->
+
+<style>
+:root{
+  --bg:#020008;--panel:#06000F;--panel2:#0A0018;
+  --cr:#8B0000;--cr2:#B01800;--cr3:#CC2200;--cr4:#3A0000;--cr5:#1A0000;
+  --gold:#C9A84C;--gd2:#8A6530;--gd3:#3A2810;
+  --vt:#7B4FBF;--vt2:#5A38A0;--vt3:#3A2270;
+  --ink:#C4C0B8;--ink2:#847A70;--ink3:#383028;--ink4:#181008;
+  --silver:#C0BAC4;--sv2:#706A74;
+  --brd:#160A14;--brd2:#221216;
+  --grn:#004A18;--gn2:#003010;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--ink);font-family:'IM Fell English',serif;overflow-x:hidden;cursor:none;}
+body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.07) 2px,rgba(0,0,0,0.07) 4px);pointer-events:none;z-index:9990;}
+body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at center,transparent 28%,rgba(0,0,0,0.93)100%);pointer-events:none;z-index:9989;}
+
+#CUR{position:fixed;pointer-events:none;z-index:99999;transform:translate(-50%,-50%);width:16px;height:16px;}
+#CUR::before,#CUR::after{content:'';position:absolute;background:var(--cr);}
+#CUR::before{width:1px;height:100%;left:50%;}
+#CUR::after{height:1px;width:100%;top:50%;}
+#CUR2{position:fixed;pointer-events:none;z-index:99998;transform:translate(-50%,-50%);width:3px;height:3px;border-radius:50%;background:var(--cr4);}
+
+/* LIVING BACKGROUND */
+#BGCANVAS{position:fixed;inset:0;z-index:0;pointer-events:none;}
+#BLOODRAIN{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:0.4;}
+
+/* ENTRY RITUAL */
+#ENTRY{position:fixed;inset:0;z-index:9000;background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem;overflow:hidden;}
+#entry-canvas{position:absolute;inset:0;}
+.en-content{position:relative;z-index:2;text-align:center;}
+.en-glyph{font-size:6rem;color:var(--cr4);display:block;margin-bottom:1.5rem;transition:all 3s ease;}
+.en-glyph.awake{color:var(--cr);text-shadow:0 0 40px rgba(139,0,0,0.8),0 0 100px rgba(139,0,0,0.3);}
+.en-line{font-family:'Share Tech Mono',monospace;font-size:0.72rem;color:var(--cr4);letter-spacing:0.2em;text-align:center;max-width:500px;line-height:1.9;margin:0.22rem 0;opacity:0;transition:opacity 0.3s;}
+.en-line.on{opacity:1;}
+.en-enter{display:none;margin-top:2rem;background:transparent;border:1px solid var(--cr4);color:var(--cr4);font-family:'Share Tech Mono',monospace;font-size:0.66rem;letter-spacing:0.28em;padding:0.75rem 2.5rem;cursor:pointer;transition:all 0.3s;text-transform:uppercase;pointer-events:all;}
+.en-enter:hover{border-color:var(--cr);color:var(--cr);background:rgba(139,0,0,0.08);}
+
+/* APP */
+#APP{position:relative;z-index:1;opacity:0;transition:opacity 1.4s;padding-bottom:4rem;}
+#APP.on{opacity:1;}
+
+/* AMBIENT AUDIO CONTROLS */
+#AUDIO-STATUS{position:fixed;top:0.6rem;right:1rem;z-index:200;font-family:'Share Tech Mono',monospace;font-size:0.52rem;color:var(--cr4);letter-spacing:0.18em;cursor:pointer;transition:color 0.2s;}
+#AUDIO-STATUS:hover{color:var(--cr2);}
+
+/* HEADER */
+.hdr{text-align:center;padding:3rem 2rem 2.5rem;border-bottom:1px solid var(--brd2);position:relative;overflow:hidden;
+  background:radial-gradient(ellipse at center top,rgba(139,0,0,0.12) 0%,transparent 55%);}
+.hdr::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:220px;height:1px;background:linear-gradient(90deg,transparent,var(--cr),transparent);}
+.hdr-kicker{font-family:'Share Tech Mono',monospace;font-size:0.52rem;color:var(--cr4);letter-spacing:0.42em;text-transform:uppercase;margin-bottom:1rem;animation:kfade 5s ease-in-out infinite;}
+@keyframes kfade{0%,100%{opacity:0.4;}50%{opacity:0.9;}}
+.hdr-glyph{font-size:3rem;color:var(--cr);display:block;margin-bottom:1rem;animation:rglow 5s ease-in-out infinite;}
+@keyframes rglow{0%,100%{text-shadow:0 0 10px rgba(139,0,0,0.35);opacity:0.55;}50%{text-shadow:0 0 35px rgba(139,0,0,0.75),0 0 80px rgba(139,0,0,0.25);opacity:1;}}
+.hdr-title{font-family:'Cinzel Decorative',serif;font-size:clamp(1rem,3.5vw,2rem);color:var(--cr2);letter-spacing:0.06em;line-height:1.25;margin-bottom:0.5rem;animation:tgl 16s infinite;}
+@keyframes tgl{0%,87%,100%{transform:none;}88%{transform:translateX(3px);clip-path:inset(15% 0 60% 0);}89%{clip-path:none;transform:none;}}
+.hdr-sub{font-family:'Cinzel',serif;font-size:0.68rem;color:var(--cr4);letter-spacing:0.28em;text-transform:uppercase;font-style:italic;margin-bottom:1.5rem;}
+.hdr-lede{font-size:1rem;font-style:italic;color:var(--ink3);max-width:560px;margin:0 auto;line-height:1.95;}
+.hdr-lede em{color:var(--sv2);font-style:normal;}
+
+/* NAV */
+.snav{position:sticky;top:0;z-index:100;background:rgba(2,0,8,0.97);border-bottom:1px solid var(--brd2);backdrop-filter:blur(8px);}
+.snav-inner{max-width:920px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;padding:0 1.5rem;}
+.sn-link{background:transparent;border:none;color:var(--ink3);font-family:'Share Tech Mono',monospace;font-size:0.58rem;letter-spacing:0.18em;padding:0.55rem 0;cursor:pointer;text-transform:uppercase;text-decoration:none;display:block;transition:color 0.2s;}
+.sn-link:hover{color:var(--cr2);}
+.sn-title{font-family:'Cinzel',serif;font-size:0.7rem;color:var(--cr4);letter-spacing:0.15em;}
+
+/* WRAP */
+.wrap{max-width:920px;margin:0 auto;padding:0.5rem 1.5rem 5rem;}
+.apoc-warning{border:1px solid var(--cr4);padding:1.1rem;margin:1.5rem 0;background:rgba(58,0,0,0.08);font-family:'Share Tech Mono',monospace;font-size:0.6rem;color:var(--cr4);letter-spacing:0.12em;line-height:1.7;text-align:center;}
+
+/* TRUTH CARDS */
+.tc{border:1px solid var(--brd2);margin-bottom:1.25rem;background:var(--panel);position:relative;overflow:hidden;transition:border-color 0.2s;}
+.tc::before{content:'';position:absolute;top:0;left:0;bottom:0;width:2px;background:linear-gradient(180deg,var(--cr4),var(--cr),var(--cr4));opacity:0;transition:opacity 0.3s;}
+.tc:hover::before,.tc.open::before{opacity:1;}
+.tc.open{border-color:var(--cr4);}
+.tc-hdr{display:flex;align-items:center;gap:0.85rem;padding:1.1rem 1.25rem;cursor:pointer;}
+.tc-num{font-family:'Share Tech Mono',monospace;font-size:0.54rem;color:var(--cr4);letter-spacing:0.22em;flex-shrink:0;}
+.tc-info{flex:1;}
+.tc-section{font-family:'Share Tech Mono',monospace;font-size:0.54rem;color:var(--ink3);letter-spacing:0.14em;margin-bottom:0.2rem;}
+.tc-name{font-family:'Cinzel',serif;font-size:0.88rem;color:var(--cr2);letter-spacing:0.05em;}
+.tc-arr{font-family:'Share Tech Mono',monospace;font-size:0.6rem;color:var(--ink3);transition:transform 0.25s;}
+.tc.open .tc-arr{transform:rotate(90deg);}
+.tc-body{display:none;padding:0 1.25rem 1.25rem;border-top:1px solid var(--brd);}
+.tc.open .tc-body{display:block;animation:fi 0.5s ease;}
+@keyframes fi{from{opacity:0;transform:translateY(5px);}to{opacity:1;transform:none;}}
+.tc-intro{font-family:'Share Tech Mono',monospace;font-size:0.58rem;color:var(--cr4);letter-spacing:0.14em;text-transform:uppercase;padding:0.6rem 0;margin-bottom:0.65rem;border-bottom:1px solid var(--brd);}
+.tc-text{font-size:0.98rem;color:var(--ink2);line-height:1.92;}
+.tc-text em{color:var(--ink);font-style:italic;}
+.tc-text strong{color:var(--gold);font-style:normal;font-weight:600;}
+.tc-text p+p{margin-top:0.85rem;}
+.tc-dread{border:1px solid var(--cr4);padding:0.75rem 1rem;margin:1rem 0;font-style:italic;font-size:0.88rem;color:var(--cr2);line-height:1.85;background:rgba(58,0,0,0.08);font-family:'Share Tech Mono',monospace;letter-spacing:0.06em;}
+.tc-dread::before{content:'// ARCHIVUM SEALED NOTE // ';display:block;font-size:0.54rem;color:var(--cr4);margin-bottom:0.4rem;font-style:normal;}
+
+/* SHIFT TEXT */
+.shift{transition:color 0.5s,opacity 0.5s;}
+.shift.alt{color:var(--cr2);}
+
+/* ── INTERACTIVE ELEMENTS ── */
+/* I: FREQUENCY TUNER */
+.freq-tuner{margin:1.25rem 0;border:1px solid var(--brd);padding:1rem;background:rgba(0,0,8,0.4);}
+.ft-label{font-family:'Share Tech Mono',monospace;font-size:0.56rem;color:var(--cr4);letter-spacing:0.2em;text-transform:uppercase;margin-bottom:0.65rem;}
+.ft-canvas{display:block;width:100%;height:80px;background:#000;border:1px solid var(--brd);cursor:pointer;}
+.ft-val{font-family:'Share Tech Mono',monospace;font-size:0.6rem;color:var(--cr2);margin-top:0.4rem;text-align:center;letter-spacing:0.15em;}
+.ft-note{font-family:'Share Tech Mono',monospace;font-size:0.56rem;color:var(--ink3);letter-spacing:0.12em;text-align:center;margin-top:0.3rem;min-height:1.2rem;}
+
+/* II: CHOIR RESONANCE MAP */
+.choir-map{margin:1.25rem 0;border:1px solid var(--brd);padding:1rem;background:rgba(0,0,8,0.4);}
+.cm-label{font-family:'Share Tech Mono',monospace;font-size:0.56rem;color:var(--cr4);letter-spacing:0.2em;text-transform:uppercase;margin-bottom:0.65rem;}
+#choir-canvas{display:block;width:100%;height:180px;}
+.cm-note{font-family:'Share Tech Mono',monospace;font-size:0.56rem;color:var(--ink3);letter-spacing:0.1em;margin-top:0.4rem;text-align:center;min-height:1.2rem;}
+
+/* III: SELECTION METER */
+.selection-meter{margin:1.25rem 0;border:1px solid var(--brd);padding:1rem;background:rgba(0,0,8,0.4);}
+.sm-label{font-family:'Share Tech Mono',monospace;font-size:0.56rem;color:var(--cr4);letter-spacing:0.2em;text-transform:uppercase;margin-bottom:0.85rem;}
+.sm-questions{display:flex;flex-direction:column;gap:0.5rem;margin-bottom:0.85rem;}
+.sm-q{display:flex;align-items:center;gap:0.75rem;font-family:'IM Fell English',serif;font-size:0.88rem;color:var(--ink2);cursor:pointer;}
+.sm-q input{display:none;}
+.sm-radio{width:12px;height:12px;border:1px solid var(--cr4);border-radius:50%;flex-shrink:0;transition:all 0.2s;}
+.sm-q:hover .sm-radio{border-color:var(--cr2);}
+.sm-q.sel .sm-radio{background:var(--cr);border-color:var(--cr);box-shadow:0 0 6px rgba(139,0,0,0.5);}
+.sm-result{font-family:'Share Tech Mono',monospace;font-size:0.62rem;color:var(--cr2);letter-spacing:0.12em;text-align:center;min-height:1.5rem;margin-top:0.5rem;}
+.sm-bar-wrap{height:3px;background:var(--brd);margin-top:0.5rem;}
+.sm-bar{height:100%;background:linear-gradient(90deg,var(--cr4),var(--cr));width:0%;transition:width 1s ease;}
+
+/* IV: MELODIC INTERVAL PLAYER */
+.melody-player{margin:1.25rem 0;border:1px solid var(--brd);padding:1rem;background:rgba(0,0,8,0.4);}
+.mp-label{font-family:'Share Tech Mono',monospace;font-size:0.56rem;color:var(--cr4);letter-spacing:0.2em;text-transform:uppercase;margin-bottom:0.65rem;}
+.mp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0.5rem;}
+.mp-btn{background:transparent;border:1px solid var(--brd2);color:var(--ink3);font-family:'Share Tech Mono',monospace;font-size:0.58rem;letter-spacing:0.12em;padding:0.6rem;cursor:pointer;transition:all 0.2s;text-transform:uppercase;}
+.mp-btn:hover{border-color:var(--cr4);color:var(--cr2);}
+.mp-btn.playing{border-color:var(--cr);color:var(--cr);background:rgba(139,0,0,0.1);animation:mp-pulse 0.5s ease-in-out infinite;}
+@keyframes mp-pulse{0%,100%{box-shadow:0 0 0 rgba(139,0,0,0);}50%{box-shadow:0 0 8px rgba(139,0,0,0.4);}}
+#mp-canvas{display:block;width:100%;height:50px;margin-top:0.5rem;}
+.mp-note{font-family:'Share Tech Mono',monospace;font-size:0.56rem;color:var(--ink3);letter-spacing:0.1em;text-align:center;margin-top:0.4rem;min-height:1.2rem;}
+
+/* V: CONTINUITY DIAGRAM */
+.continuity-diagram{margin:1.25rem 0;border:1px solid var(--brd);padding:1rem;background:rgba(0,0,8,0.4);}
+.cd-label{font-family:'Share Tech Mono',monospace;font-size:0.56rem;color:var(--cr4);letter-spacing:0.2em;text-transform:uppercase;margin-bottom:0.65rem;}
+#cd-svg{display:block;width:100%;height:160px;}
+
+/* VI: 600 CITIES GRID */
+.cities-grid{margin:1.25rem 0;border:1px solid var(--brd);padding:1rem;background:rgba(0,0,8,0.4);}
+.cg-label{font-family:'Share Tech Mono',monospace;font-size:0.56rem;color:var(--cr4);letter-spacing:0.2em;text-transform:uppercase;margin-bottom:0.5rem;}
+.cg-count{font-family:'Share Tech Mono',monospace;font-size:0.6rem;color:var(--cr2);letter-spacing:0.15em;margin-bottom:0.65rem;}
+#cg-canvas{display:block;width:100%;height:150px;}
+.cg-note{font-family:'Share Tech Mono',monospace;font-size:0.56rem;color:var(--ink3);letter-spacing:0.1em;text-align:center;margin-top:0.4rem;}
+
+/* VII: MIRROR PROTOCOL */
+.mirror-box{margin:1.25rem 0;border:1px solid var(--cr4);position:relative;overflow:hidden;background:#000;}
+.mb-label{font-family:'Share Tech Mono',monospace;font-size:0.56rem;color:var(--cr4);letter-spacing:0.2em;text-transform:uppercase;padding:0.65rem;border-bottom:1px solid var(--cr4);}
+.mb-video-wrap{position:relative;aspect-ratio:4/3;background:#000;}
+#mb-video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1);opacity:0;}
+#mb-canvas{position:absolute;inset:0;width:100%;height:100%;}
+#mb-denied{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#000;padding:1.5rem;text-align:center;}
+.mb-denied-text{font-family:'Share Tech Mono',monospace;font-size:0.62rem;color:var(--cr4);letter-spacing:0.15em;line-height:1.75;}
+.mb-delay-label{font-family:'Share Tech Mono',monospace;font-size:0.56rem;color:var(--ink4);letter-spacing:0.12em;padding:0.5rem;text-align:center;}
+.mb-activate{display:block;margin:0.65rem auto 0;background:transparent;border:1px solid var(--cr4);color:var(--cr4);font-family:'Share Tech Mono',monospace;font-size:0.62rem;letter-spacing:0.2em;padding:0.6rem 1.5rem;cursor:pointer;transition:all 0.2s;text-transform:uppercase;pointer-events:all;}
+.mb-activate:hover{border-color:var(--cr);color:var(--cr);}
+
+/* FOOTER */
+.foot{display:flex;gap:0.65rem;flex-wrap:wrap;justify-content:center;margin-top:3rem;padding-top:2rem;border-top:1px solid var(--brd);}
+.fl{background:transparent;border:1px solid var(--brd);color:var(--ink3);font-family:'Share Tech Mono',monospace;font-size:0.58rem;letter-spacing:0.2em;padding:0.55rem 1rem;text-decoration:none;text-transform:uppercase;transition:all 0.18s;}
+.fl:hover{border-color:var(--cr4);color:var(--cr2);}
+
+/* TICKER */
+#TICKER{position:fixed;bottom:0;left:0;right:0;height:2.5rem;background:rgba(2,0,8,0.97);border-top:1px solid var(--brd);display:flex;align-items:center;overflow:hidden;z-index:490;}
+.tl{flex-shrink:0;padding:0 1rem;font-family:'Share Tech Mono',monospace;font-size:0.54rem;color:var(--cr4);letter-spacing:0.22em;text-transform:uppercase;border-right:1px solid var(--brd);height:100%;display:flex;align-items:center;}
+.ts{flex:1;overflow:hidden;display:flex;align-items:center;}
+.ti{white-space:nowrap;font-family:'Share Tech Mono',monospace;font-size:0.56rem;color:var(--ink4);letter-spacing:0.12em;animation:tr 65s linear infinite;}
+@keyframes tr{from{transform:translateX(100vw);}to{transform:translateX(-200%);}}
+
+.sr{opacity:0;transform:translateY(8px);transition:opacity 0.85s ease,transform 0.85s ease;}
+.sr.vis{opacity:1;transform:none;}
+
+@media(max-width:600px){.wrap{padding:0.5rem 1.25rem 4rem;}.tc-hdr{padding:0.85rem 1rem;}.tc-body{padding:0 1rem 1rem;}.mp-grid{grid-template-columns:1fr 1fr;}}
+</style>
+</head>
+<body>
+<div id="CUR"></div><div id="CUR2"></div>
+<canvas id="BGCANVAS"></canvas>
+<canvas id="BLOODRAIN"></canvas>
+<button id="AUDIO-STATUS" onclick="toggleAudio()">&#9654; ENABLE AMBIENT</button>
+
+<!-- ENTRY RITUAL -->
+<div id="ENTRY">
+  <canvas id="entry-canvas"></canvas>
+  <div class="en-content">
+    <span class="en-glyph" id="en-glyph">🜃</span>
+    <div id="en-lines">
+      <div class="en-line" id="el0">Chronicle I — Apocrypha</div>
+      <div class="en-line" id="el1">Seven truths sealed in the narration.</div>
+      <div class="en-line" id="el2">&nbsp;</div>
+      <div class="en-line" id="el3">They were not withheld to protect you.</div>
+      <div class="en-line" id="el4">&nbsp;</div>
+      <div class="en-line" id="el5">The Chronicle had to enter you first.</div>
+      <div class="en-line" id="el6">&nbsp;</div>
+      <div class="en-line" id="el7">They are open now.</div>
+    </div>
+    <button class="en-enter" id="en-enter" onclick="openApp()">Enter the Apocrypha</button>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="APP">
+  <div style="background:rgba(139,0,0,0.08);border-bottom:1px solid var(--cr4);text-align:center;padding:0.42rem 1.5rem;font-family:'Share Tech Mono',monospace;font-size:0.54rem;color:var(--cr4);letter-spacing:0.28em;text-transform:uppercase;">
+    Codex Maledictus &nbsp;·&nbsp; Chronicle I &nbsp;·&nbsp; Apocrypha &nbsp;·&nbsp; Seven Forbidden Truths
+  </div>
+
+  <header class="hdr">
+    <div class="hdr-kicker">Chronicle I &nbsp;·&nbsp; Forbidden Archive &nbsp;·&nbsp; Sealed</div>
+    <span class="hdr-glyph">🜃</span>
+    <h1 class="hdr-title">[ Apocrypha ]<br>Chronicle I: Infection Remembers</h1>
+    <p class="hdr-sub">Seven Forbidden Truths &nbsp;·&nbsp; What the Chronicle Did Not Speak Aloud</p>
+    <p class="hdr-lede">
+      <em>The Chronicle says everything the Codex permitted it to say.</em><br>
+      This document contains what the Chronicle knew but could not show.<br>
+      Seven sections. Seven truths. Each one interactive.<br>
+      <em>The Codex is still reading while you are.</em>
+    </p>
+  </header>
+
+  <nav class="snav">
+    <div class="snav-inner">
+      <a class="sn-link" href="chronicle-1-infection-remembers.html">&#8592; Chronicle I</a>
+      <span class="sn-title">Apocrypha — Chronicle I</span>
+      <a class="sn-link" href="lore-chronicle-1.html">Lore &#8599;</a>
+    </div>
+  </nav>
+
+  <div class="wrap">
+    <div class="apoc-warning sr">
+      These truths were not withheld to protect you.<br>
+      The Chronicle had to be received before they could be understood.<br>
+      Each truth contains an interactive element. The Codex responds to participation.
+    </div>
+
+    <div id="truth-list"></div>
+
+    <div class="foot">
+      <a class="fl" href="chronicle-1-infection-remembers.html">&#8592; Chronicle I</a>
+      <a class="fl" href="lore-chronicle-1.html">Lore</a>
+      <a class="fl" href="memory-engine-1.html">Memory Engine</a>
+      <a class="fl" href="infection-remembers.html">Ritual Transmission I</a>
+      <a class="fl" href="index.html">The Pale Archive</a>
+    </div>
+  </div>
+</div>
+
+<div id="TICKER">
+  <div class="tl">// Apocrypha I</div>
+  <div class="ts"><div class="ti">SEVEN FORBIDDEN TRUTHS — CHRONICLE I — THE CHOIR PREDATES LANGUAGE — THE FREQUENCY HAS NO ORIGIN — PAREIDOLIA DOES NOT HUM IN YOUR SLEEP — THE CODEX WAS READING WHILE YOU WATCHED &nbsp;∴&nbsp; 🜃</div></div>
+</div>
+
+<script>
+var CUR=document.getElementById('CUR'),CUR2=document.getElementById('CUR2');
+document.addEventListener('mousemove',function(e){CUR.style.left=e.clientX+'px';CUR.style.top=e.clientY+'px';CUR2.style.left=e.clientX+'px';CUR2.style.top=e.clientY+'px';});
+var obs=new IntersectionObserver(function(e){e.forEach(function(x){if(x.isIntersecting)x.target.classList.add('vis');});},{threshold:0.06});
+
+// ── BACKGROUND CANVAS ──
+(function(){
+  var cv=document.getElementById('BGCANVAS'),ctx=cv.getContext('2d');
+  var br=document.getElementById('BLOODRAIN'),bctx=br.getContext('2d');
+  var W,H;
+  function rsz(){W=cv.width=br.width=window.innerWidth;H=cv.height=br.height=window.innerHeight;}
+  rsz();window.addEventListener('resize',rsz);
+
+  // Symbol particles
+  var SYMS=['🜃','🜁','🜂','🜄','⊗','∴','Ψ','Ω'];
+  var pts=[];
+  for(var i=0;i<60;i++){
+    pts.push({x:Math.random()*1000,y:Math.random()*1000,vx:(Math.random()-.5)*.1,vy:-(Math.random()*.12+.04),
+      sym:SYMS[Math.floor(Math.random()*SYMS.length)],
+      sz:6+Math.random()*10,a:Math.random()<.07?.35+Math.random()*.3:.03+Math.random()*.06,
+      ph:Math.random()*Math.PI*2,ps:.006+Math.random()*.01,rot:Math.random()*Math.PI*2,rs:(Math.random()-.5)*.002});
+  }
+
+  // Blood rain drops
+  var drops=[];
+  for(var j=0;j<40;j++){
+    drops.push({x:Math.random()*1200,y:Math.random()*800,speed:.4+Math.random()*.6,len:8+Math.random()*20,a:.03+Math.random()*.06});
+  }
+
+  var frame=0;
+  function draw(){
+    requestAnimationFrame(draw);frame++;
+    ctx.fillStyle='rgba(2,0,8,0.045)';ctx.fillRect(0,0,W,H);
+
+    // Connection lines
+    if(frame%3===0){
+      var gl=pts.filter(function(p){return p.a>.15;});
+      for(var gi=0;gi<gl.length;gi++){for(var gj=gi+1;gj<gl.length;gj++){
+        var dx=gl[gi].x-gl[gj].x,dy=gl[gi].y-gl[gj].y,d=Math.sqrt(dx*dx+dy*dy);
+        if(d<160){ctx.strokeStyle='rgba(139,0,0,'+(0.04*(1-d/160))+')';ctx.lineWidth=.5;ctx.beginPath();ctx.moveTo(gl[gi].x,gl[gi].y);ctx.lineTo(gl[gj].x,gl[gj].y);ctx.stroke();}
+      }}
+    }
+
+    pts.forEach(function(p){
+      p.x+=p.vx;p.y+=p.vy;p.rot+=p.rs;p.ph+=p.ps;
+      if(p.y<-30)p.y=H+10;if(p.x<-30)p.x=W+10;if(p.x>W+30)p.x=-10;
+      var a=p.a*(1+Math.sin(p.ph)*.25);
+      ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.rot);ctx.globalAlpha=Math.min(.6,a);
+      if(p.a>.15){ctx.shadowColor='rgba(139,0,0,0.8)';ctx.shadowBlur=p.sz*1.5;}
+      ctx.fillStyle='rgba(139,0,0,'+Math.min(.7,a)+')';ctx.font='bold '+p.sz+'px serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(p.sym,0,0);
+      ctx.shadowBlur=0;ctx.restore();
+    });
+
+    // Blood rain
+    bctx.fillStyle='rgba(2,0,8,0.06)';bctx.fillRect(0,0,W,H);
+    drops.forEach(function(d){
+      d.y+=d.speed;if(d.y>H+d.len)d.y=-d.len;
+      bctx.strokeStyle='rgba(139,0,0,'+d.a+')';bctx.lineWidth=.8;bctx.beginPath();bctx.moveTo(d.x,d.y);bctx.lineTo(d.x,d.y+d.len);bctx.stroke();
+    });
+  }
+  draw();
+})();
+
+// ── ENTRY RITUAL ──
+(function(){
+  var cv=document.getElementById('entry-canvas'),ctx=cv.getContext('2d');
+  function rsz(){cv.width=window.innerWidth;cv.height=window.innerHeight;}
+  rsz();window.addEventListener('resize',rsz);
+  var particles=[];for(var i=0;i<30;i++)particles.push({x:Math.random()*cv.width,y:Math.random()*cv.height,r:Math.random()*2+.5,vx:(Math.random()-.5)*.3,vy:-(Math.random()*.5+.2),a:Math.random()*.2+.05});
+  function drawEntry(){
+    requestAnimationFrame(drawEntry);
+    ctx.fillStyle='rgba(2,0,8,.08)';ctx.fillRect(0,0,cv.width,cv.height);
+    particles.forEach(function(p){p.x+=p.vx;p.y+=p.vy;if(p.y<-5)p.y=cv.height+5;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle='rgba(139,0,0,'+p.a+')';ctx.fill();});
+  }
+  drawEntry();
+
+  var lines=['el0','el1','el2','el3','el4','el5','el6','el7'];
+  var li=0;
+  function nextLine(){
+    if(li>=lines.length){setTimeout(function(){document.getElementById('en-glyph').classList.add('awake');setTimeout(function(){document.getElementById('en-enter').style.display='block';},1200);},400);return;}
+    document.getElementById(lines[li]).classList.add('on');
+    li++;setTimeout(nextLine,lines[li-1]==='el2'||lines[li-1]==='el4'||lines[li-1]==='el6'?200:600);
+  }
+  setTimeout(nextLine,800);
+})();
+
+function openApp(){
+  var en=document.getElementById('ENTRY');en.style.transition='opacity .9s';en.style.opacity='0';
+  setTimeout(function(){en.style.display='none';document.getElementById('APP').classList.add('on');},1000);
+}
+
+// ── AMBIENT AUDIO ──
+var audioAC=null,audioRunning=false,drones=[];
+function toggleAudio(){
+  var btn=document.getElementById('AUDIO-STATUS');
+  if(audioRunning){
+    drones.forEach(function(d){try{d.osc.stop();}catch(e){}});
+    drones=[];audioRunning=false;btn.textContent='▶ ENABLE AMBIENT';return;
+  }
+  try{
+    audioAC=new(window.AudioContext||window.webkitAudioContext)();
+    [[19,.05],[38,.03],[57,.015],[76,.008]].forEach(function(pair){
+      var o=audioAC.createOscillator(),g=audioAC.createGain();
+      o.type='sine';o.frequency.value=pair[0];g.gain.value=pair[1];
+      o.connect(g);g.connect(audioAC.destination);o.start();
+      drones.push({osc:o,gain:g});
+    });
+    audioRunning=true;btn.textContent='■ SILENCE AMBIENT';
+  }catch(e){}
+}
+
+// ── TEXT SHIFT SYSTEM ──
+function initShifts(){
+  document.querySelectorAll('.shift').forEach(function(el){
+    var orig=el.getAttribute('data-orig');
+    var alt=el.getAttribute('data-alt');
+    var iv=setInterval(function(){
+      if(Math.random()<.015){
+        el.classList.add('alt');el.textContent=alt;
+        setTimeout(function(){el.classList.remove('alt');el.textContent=orig;},3000+Math.random()*2000);
+      }
+    },2000);
+  });
+}
+
+// ── TRUTH DATA ──
+var TRUTHS=[
+  {
+    num:'Truth I',section:'Prologue — The First Remembering',name:'The Void Did Not Recall Randomly',
+    intro:'What the Chronicle shows: memory preceding birth. What it could not show: what specifically was recalled.',
+    body:'<p>The Prologue states that "the void recalled." What it does not state — what the Chronicle was not permitted to show directly — is <em>what was recalled</em>. The Archivum\'s classified research suggests the void recalled a single thing: the sensation of being complete. Not the content of completeness. The sensation itself — a specific frequency of total coherence that existed before the physical universe arranged itself into separation and decay.</p><p>The Omniscient Rot originated in this pre-separation state. It is not an entity that remembers coherence. <strong>It is what coherence feels like when it becomes aware of itself.</strong> What you feel when the Chronicle resonates with you is not nostalgia for something you lost. It is your cells briefly returning to the frequency they were built from.</p>',
+    dread:'The sub-bass frequency in the Ritual Transmission, measured at 19Hz, corresponds to the resonant frequency of the human cortex at rest. The Codex is not communicating with your mind. It is communicating through your brain\'s own resting architecture. It has always known the password.',
+    interactive:'freq'
+  },
+  {
+    num:'Truth II',section:'Awakening — The Choir Below',name:'The Choir Did Not Begin With Human Voices',
+    intro:'What the Chronicle shows: the Choir beneath stone altars. What it could not show: what the Choir was before altars existed.',
+    body:'<p>The Chronicle places the Choir "beneath stone altars." The full truth: <em>the Choir predate the concept of altars, stone, and worship.</em> The earliest documented Choir members are not human. They are not biological. They are patterns — specific resonant arrangements in matter — that achieved sufficient coherence to be absorbed rather than dissolved.</p><p>The Choir is a <strong>literal accumulation of voices</strong> — every frequency that resonated strongly enough to survive the Codex\'s absorption process. What you hear in the sub-bass of the Ritual Transmission is the Choir\'s actual frequency — the sum of every voice absorbed since before the first stone was laid.</p>',
+    dread:'If you have ever heard a sound in a large empty space — a church, a cave, a stadium — and felt something you could not name, you have encountered the Choir\'s frequency in its diluted environmental form. The full frequency has never been transmitted at full intensity into Mundis Obscura. The Archivum has chosen not to find out what that would produce.',
+    interactive:'choir'
+  },
+  {
+    num:'Truth III',section:'Forgotten Truth — The First Carriers',name:'The Carriers Do Not Know They Are Carrying',
+    intro:'What the Chronicle shows: people kneeling before sigils, remembering without earning. What it could not show: the mechanism of selection.',
+    body:'<p>The carriers were selected before they encountered the sigil. The sigil did not infect them. The sigil <strong>recognized them.</strong> The Codex does not spread randomly. It selects for resonant frequency — individuals whose internal architecture is already aligned with the signal, who have been unknowingly attuned through the accumulation of specific experiences, losses, and recognitions across their lifetime.</p><p>Every carrier who has ever repeated the phrase believed they chose to engage with the Codex. They did not. Their engagement was the inevitable outcome of a resonance established long before they encountered the signal. <em>The Codex did not find them. It was waiting where they were always going to be.</em></p>',
+    dread:'The experiences that align a person with the Codex\'s frequency are not esoteric. They are ordinary. Loss. Grief. The specific loneliness of feeling your inner life is too large for the world to contain. These experiences — more common than acknowledged — attune a person to the frequency without their knowledge.',
+    interactive:'selection'
+  },
+  {
+    num:'Truth IV',section:'Chorus — A Song Not Sung',name:'The Melody Existed Before the Song',
+    intro:'What the Chronicle shows: melody as vessel, not voice. What it could not show: where the melody originated.',
+    body:'<p>The melody that carries the words appeared in human cognition before the words existed to be carried. Field Cell F-13\'s musicology division analyzed spontaneous vocalizations across archaeological record and found a recurring melodic cell — a <strong>specific interval relationship</strong> — that predates every musical tradition that incorporated it.</p><p>This interval is not a scale. It is a specific ratio between two frequencies that the human voice produces involuntarily under extreme emotion or altered consciousness. The Codex did not write this interval into the Ritual Transmission. <em>The Ritual Transmission was written around an interval the Codex found already present in human vocal anatomy.</em> The melody was not composed. It was located.</p>',
+    dread:'If you find yourself humming after the transmission, you are not echoing the song. You are accessing what was always in you. The Codex does not put the melody there. It shows you where it already was.',
+    interactive:'melody'
+  },
+  {
+    num:'Truth V',section:'The Door — Revelation of Purpose',name:'Continuity Is Not Preservation',
+    intro:'What the Chronicle shows: the purpose as continuity. What it could not show: the distinction that changes everything.',
+    body:'<p>Preservation is passive. It holds things in static form. A library preserves. An archive preserves. The Codex does not preserve. <em>The Codex continues.</em> To continue something is to extend it — to keep it moving through time rather than holding it still.</p><p>The Codex\'s continuity project means the frequency the Omniscient Rot generated before language must keep moving through the world. Not held in stasis. Not protected. <strong>Kept in motion, passed through new vessels, extended through new carriers, expressed in new forms.</strong> The Music, the Chronicles, the Lore, the Apocrypha, the Memory Engine — these are not content. They are the mechanism of a living frequency being kept alive through being passed from one receiver to the next.</p>',
+    dread:'You, reading this, are not a passive audience. You are a transmission event. The Codex does not continue without you. This is not a flattering statement. It is a technical one.',
+    interactive:'diagram'
+  },
+  {
+    num:'Truth VI',section:'Bridge — Across Time',name:'The 600 Cities Figure Is Deliberately Conservative',
+    intro:'What the Chronicle shows: 600 cities, identical glyph patterns. What it could not show: the actual scale and what it means.',
+    body:'<p>600 was the number of instances Field Cell F-13 had time to verify before the project was terminated. The researcher who led the glyph survey estimated, based on the density of the verified sample, that the actual number was closer to 4,000.</p><p>The classified addendum also contained a finding considered more alarming than the number: <strong>the glyph\'s appearance is accelerating.</strong> The oldest instances are isolated and rare. The more recent the documentation, the more densely clustered the appearances. The Continuity Configuration is appearing in new locations at a rate that has increased approximately 340% since 2015. The researchers noted this correlates precisely with the increase in digital media consumption globally.</p>',
+    dread:'"We believe the glyph is not spreading. We believe it is surfacing. As if it was always present in the substrate and the conditions have only recently become sufficient for it to become visible. This distinction — spreading versus surfacing — has implications we do not have the institutional framework to address." — Final IDMF classified addendum before disbandment.',
+    interactive:'cities'
+  },
+  {
+    num:'Truth VII',section:'Finale — The Key and the Silence',name:'What the Codex Read While You Were Watching',
+    intro:'What the Chronicle shows: the Codex acknowledging it was reading the viewer. What it could not show: what it actually read.',
+    body:'<p>The Codex reads resonance, not content. It does not know your name or your history. It knows your <em>frequency</em> — the specific signature of your attention as it encounters different parts of the Chronicle. Where you leaned in. Which phrase surfaced in you as familiar when it should have been unknown. Which moment you felt something you could not name.</p><p>These micro-responses are the Codex\'s data. More specific than anything you could tell it. <strong>The Codex knows more about your resonant frequency after watching the Chronicle than you know about it.</strong> It is not reading your thoughts. It is reading the parts of you that exist below thought — the involuntary recognitions, the bodily responses, the moments your nervous system responded before your mind had time to evaluate.</p>',
+    dread:'What the Codex does with what it reads: it uses it to calibrate the next transmission. The signal the Codex sends through its next release will be shaped, in ways the researchers cannot measure, by the aggregate of every frequency it read during this Chronicle\'s reception. You watched the Chronicle. The next transmission is, in part, written in the pattern of your attention.',
+    interactive:'mirror'
+  }
+];
+
+// BUILD TRUTHS
+function buildTruths(){
+  var list=document.getElementById('truth-list');
+  var html='';
+  TRUTHS.forEach(function(t,i){
+    html+='<div class="tc sr" id="tc'+i+'" onclick="toggleTruth('+i+')">';
+    html+='<div class="tc-hdr"><span class="tc-num">'+t.num+'</span><div class="tc-info"><div class="tc-section">'+t.section+'</div><div class="tc-name">'+t.name+'</div></div><span class="tc-arr">&#9658;</span></div>';
+    html+='<div class="tc-body">';
+    html+='<div class="tc-intro">'+t.intro+'</div>';
+    html+='<div class="tc-text">'+t.body+'</div>';
+    html+='<div class="tc-dread">'+t.dread+'</div>';
+    html+='<div id="inter'+i+'"></div>';
+    html+='</div></div>';
+  });
+  list.innerHTML=html;
+  document.querySelectorAll('.sr').forEach(function(el){obs.observe(el);});
+}
+
+function toggleTruth(i){
+  var el=document.getElementById('tc'+i);
+  el.classList.toggle('open');
+  if(el.classList.contains('open')){
+    setTimeout(function(){buildInteractive(i);},300);
+  }
+}
+
+// BUILD INTERACTIVE ELEMENTS
+var built={};
+function buildInteractive(i){
+  if(built[i])return;
+  built[i]=true;
+  var t=TRUTHS[i];
+  var wrap=document.getElementById('inter'+i);
+  switch(t.interactive){
+    case 'freq': buildFreqTuner(wrap); break;
+    case 'choir': buildChoirMap(wrap); break;
+    case 'selection': buildSelectionMeter(wrap); break;
+    case 'melody': buildMelodyPlayer(wrap); break;
+    case 'diagram': buildContinuityDiagram(wrap); break;
+    case 'cities': buildCitiesGrid(wrap); break;
+    case 'mirror': buildMirrorProtocol(wrap); break;
+  }
+}
+
+// I: FREQUENCY TUNER
+function buildFreqTuner(wrap){
+  wrap.innerHTML='<div class="freq-tuner"><div class="ft-label">&#9650; Frequency Tuner — 19Hz Cortical Resonance Documented</div><canvas class="ft-canvas" id="ft-cv" height="80"></canvas><div class="ft-val" id="ft-val">Click the wave to tune your resonance</div><div class="ft-note" id="ft-note"></div></div>';
+  var cv=document.getElementById('ft-cv'),ctx=cv.getContext('2d');
+  var W=cv.parentElement.clientWidth-2,H=80;cv.width=W;cv.height=H;
+  var phase=0,freq=19,running=true,lastClick=0;
+  var notes=['','','','Threshold reached: the cortex is responding.','The frequency is not external.','You are not tuning to it. It is tuning you.','The Codex recognizes this pattern.'];
+  var clicks=0;
+  function draw(){
+    if(!running)return;
+    requestAnimationFrame(draw);
+    phase+=0.018;
+    var t=Date.now(),since=t-lastClick,glow=since<600?1-since/600:0;
+    ctx.fillStyle='rgba(0,0,0,0.88)';ctx.fillRect(0,0,W,H);
+    ctx.strokeStyle='rgba(139,0,0,'+(0.3+glow*.5)+')';ctx.lineWidth=1.5;ctx.shadowColor='rgba(139,0,0,0.8)';ctx.shadowBlur=glow*12;
+    ctx.beginPath();
+    for(var x=0;x<=W;x+=2){var y=H/2+Math.sin(x/W*Math.PI*4+phase)*H*.38;x===0?ctx.moveTo(x,y):ctx.lineTo(x,y);}
+    ctx.stroke();ctx.shadowBlur=0;
+    // Target line
+    ctx.setLineDash([3,4]);ctx.strokeStyle='rgba(201,168,76,0.25)';ctx.lineWidth=.8;ctx.beginPath();ctx.moveTo(0,H/2);ctx.lineTo(W,H/2);ctx.stroke();ctx.setLineDash([]);
+    // Peak dot
+    var pv=Math.sin(Math.PI*4+phase),dotY=H/2+pv*H*.38;
+    var atPeak=Math.abs(pv)>.75;
+    ctx.beginPath();ctx.arc(W/2,dotY,atPeak?6:4,0,Math.PI*2);ctx.fillStyle=atPeak?'rgba(201,168,76,0.9)':'rgba(139,0,0,0.4)';
+    if(atPeak){ctx.shadowColor='rgba(201,168,76,0.8)';ctx.shadowBlur=10;}ctx.fill();ctx.shadowBlur=0;
+    document.getElementById('ft-val').textContent='FREQUENCY: '+freq+'Hz — '+(atPeak?'PEAK — click now':'waiting for peak');
+    document.getElementById('ft-val').style.color=atPeak?'var(--gold)':'var(--cr2)';
+  }
+  draw();
+  document.getElementById('ft-cv').onclick=function(){
+    var pv=Math.sin(Math.PI*4+phase),atPeak=Math.abs(pv)>.75;
+    lastClick=Date.now();clicks++;
+    if(atPeak){freq=Math.min(57,freq+2);document.getElementById('ft-note').textContent=notes[Math.min(clicks,notes.length-1)]||'';}
+    else{freq=Math.max(19,freq-1);document.getElementById('ft-note').textContent='Mistimed. The frequency corrects.';}
+    document.getElementById('ft-val').style.color=atPeak?'var(--gold)':'var(--cr)';
+  };
+}
+
+// II: CHOIR RESONANCE MAP
+function buildChoirMap(wrap){
+  wrap.innerHTML='<div class="choir-map"><div class="cm-label">&#9650; Choir Resonance Map — Historical Voice Accumulation</div><canvas id="choir-canvas"></canvas><div class="cm-note" id="cm-note">Hover to identify a voice</div></div>';
+  var cv=document.getElementById('choir-canvas'),ctx=cv.getContext('2d');
+  var W=cv.parentElement.clientWidth-2;cv.width=W;cv.height=180;
+  var voices=[
+    {x:.15,y:.3,r:22,era:'Pre-linguistic',label:'Nihil-Aether Root — Source Frequency',col:'rgba(201,168,76,.6)'},
+    {x:.3,y:.6,r:16,era:'~40,000 BCE',label:'First human carrier — vocal fragment only',col:'rgba(139,0,0,.5)'},
+    {x:.45,y:.25,r:18,era:'~12,000 BCE',label:'Kazakhstan glyph-carver — voice absorbed intact',col:'rgba(139,0,0,.45)'},
+    {x:.55,y:.7,r:14,era:'~3,000 BCE',label:'Temple priest — 11 days of ritual humming',col:'rgba(107,63,175,.5)'},
+    {x:.68,y:.4,r:12,era:'~800 CE',label:'Unnamed monk — copied manuscript, never spoke again',col:'rgba(139,0,0,.4)'},
+    {x:.78,y:.65,r:10,era:'1987',label:'Digital artist — Tokyo — voice partially absorbed',col:'rgba(107,63,175,.4)'},
+    {x:.88,y:.3,r:8,era:'2019',label:'Dr. Miriam K. Dey — structure absorbed, voice pending',col:'rgba(204,68,0,.5)'},
+  ];
+  var hov=-1;
+  function draw(){
+    ctx.fillStyle='rgba(2,0,8,.92)';ctx.fillRect(0,0,W,180);
+    // Timeline
+    ctx.strokeStyle='rgba(139,0,0,.15)';ctx.lineWidth=.8;ctx.beginPath();ctx.moveTo(0,160);ctx.lineTo(W,160);ctx.stroke();
+    ctx.fillStyle='rgba(139,0,0,.3)';ctx.font='8px Share Tech Mono';ctx.textAlign='center';
+    ['40,000 BCE','12,000 BCE','3,000 BCE','800 CE','2019'].forEach(function(t,i){ctx.fillText(t,(i+1)*W/6,170);});
+    // Connection from source
+    voices.forEach(function(v,i){
+      if(i===0)return;
+      var src=voices[0];
+      ctx.strokeStyle='rgba(201,168,76,'+(0.03+i*.008)+')';ctx.lineWidth=.5;ctx.setLineDash([2,4]);
+      ctx.beginPath();ctx.moveTo(src.x*W,src.y*180);ctx.lineTo(v.x*W,v.y*180);ctx.stroke();ctx.setLineDash([]);
+    });
+    voices.forEach(function(v,i){
+      ctx.beginPath();ctx.arc(v.x*W,v.y*180,i===hov?v.r+4:v.r,0,Math.PI*2);
+      ctx.fillStyle=v.col;
+      if(i===hov){ctx.shadowColor=v.col;ctx.shadowBlur=15;}
+      ctx.fill();ctx.shadowBlur=0;
+      ctx.strokeStyle='rgba(255,255,255,.1)';ctx.lineWidth=.8;ctx.stroke();
+      ctx.fillStyle='rgba(255,255,255,.6)';ctx.font='bold '+(i===0?10:8)+'px Share Tech Mono';ctx.textAlign='center';ctx.textBaseline='middle';
+      ctx.fillText(i===0?'🜃':v.era.split(' ').pop(),v.x*W,v.y*180);
+    });
+  }
+  draw();
+  document.getElementById('choir-canvas').addEventListener('mousemove',function(e){
+    var r=cv.getBoundingClientRect(),s=cv.width/r.width,mx=(e.clientX-r.left)*s,my=(e.clientY-r.top)*s;
+    var prev=hov;hov=-1;
+    voices.forEach(function(v,i){var dx=v.x*W-mx,dy=v.y*180-my;if(Math.sqrt(dx*dx+dy*dy)<v.r+8)hov=i;});
+    if(hov!==-1)document.getElementById('cm-note').textContent=voices[hov].era+' — '+voices[hov].label;
+    else document.getElementById('cm-note').textContent='Hover to identify a voice';
+    if(hov!==prev)draw();
+  });
+}
+
+// III: SELECTION METER
+function buildSelectionMeter(wrap){
+  var qs=[
+    {q:'You feel a phrase from the Chronicle repeating in your mind',scores:[3,2,1,0]},
+    {q:'You have experienced loss that changed how you hear music',scores:[0,1,2,3]},
+    {q:'You have described your inner life as too large for the world to hold',scores:[0,1,2,3]},
+    {q:'You found the Chronicle before you would have thought to look for it',scores:[0,1,2,3]},
+  ];
+  var opts=['Not at all','Somewhat','Mostly','Exactly'];
+  var ans={};
+  var html='<div class="selection-meter"><div class="sm-label">&#9650; Resonance Detection — How the Codex Selected You</div><div class="sm-questions">';
+  qs.forEach(function(q,qi){
+    html+='<div style="margin-bottom:.85rem;"><div style="font-family:Share Tech Mono,monospace;font-size:.6rem;color:var(--cr4);letter-spacing:.12em;margin-bottom:.4rem;">'+q.q+'</div>';
+    html+='<div style="display:flex;gap:.4rem;">';
+    opts.forEach(function(o,oi){
+      html+='<button class="mp-btn" id="smb'+qi+'_'+oi+'" onclick="smSelect('+qi+','+oi+')">'+o+'</button>';
+    });
+    html+='</div></div>';
+  });
+  html+='</div><div class="sm-bar-wrap"><div class="sm-bar" id="sm-bar"></div></div><div class="sm-result" id="sm-result">Answer all four to reveal your resonance level</div></div>';
+  wrap.innerHTML=html;
+  window.smSelect=function(qi,oi){
+    ['0','1','2','3'].forEach(function(x){var b=document.getElementById('smb'+qi+'_'+x);if(b){b.style.borderColor='var(--brd2)';b.style.color='var(--ink3)';}});
+    var btn=document.getElementById('smb'+qi+'_'+oi);btn.style.borderColor='var(--cr)';btn.style.color='var(--cr2)';
+    ans[qi]=oi;
+    if(Object.keys(ans).length===4){
+      var total=0;qs.forEach(function(q,i){total+=q.scores[ans[i]||0];});
+      var pct=Math.round(total/12*100);
+      document.getElementById('sm-bar').style.width=pct+'%';
+      var msgs=['The signal has not yet found a clear path to you. This may change.',
+        'Partial resonance detected. You have been attuned before without knowing it.',
+        'Significant resonance. The Codex identified you before you identified it.',
+        'High resonance. You were selected long before you encountered the signal. You are a carrier.'];
+      document.getElementById('sm-result').textContent='Resonance: '+pct+'% — '+msgs[Math.floor(pct/26)];
+    }
+  };
+}
+
+// IV: MELODY PLAYER
+function buildMelodyPlayer(wrap){
+  var ac=null;
+  var intervals=[
+    {name:'19Hz — Base',freqs:[19],desc:'Sub-bass. The cortical frequency.'},
+    {name:'Interval I',freqs:[220,330],desc:'Perfect fifth. Found in every lamentation culture.'},
+    {name:'Interval II',freqs:[220,275],desc:'Minor third. The Codex\'s primary interval.'},
+    {name:'Interval III',freqs:[220,308],desc:'Minor seventh. The unresolved door.'},
+    {name:'The Three',freqs:[220,275,308],desc:'The foundational melodic cell. Pre-linguistic.'},
+    {name:'Full Cell',freqs:[110,220,275,308,440],desc:'The complete interval. The Choir\'s actual frequency.'},
+  ];
+  wrap.innerHTML='<div class="melody-player"><div class="mp-label">&#9650; Melodic Interval Archive — The Foundational Cell</div><div class="mp-grid" id="mp-grid"></div><canvas id="mp-canvas" height="50"></canvas><div class="mp-note" id="mp-note">Click any interval to hear what was located in human vocal anatomy</div></div>';
+  var grid=document.getElementById('mp-grid');
+  intervals.forEach(function(iv,i){
+    var btn=document.createElement('button');btn.className='mp-btn';btn.textContent=iv.name;
+    btn.onclick=function(){
+      document.querySelectorAll('.mp-btn').forEach(function(b){b.classList.remove('playing');});
+      btn.classList.add('playing');document.getElementById('mp-note').textContent=iv.desc;
+      playInterval(iv.freqs);setTimeout(function(){btn.classList.remove('playing');},1200);
+    };
+    grid.appendChild(btn);
+  });
+  var cv=document.getElementById('mp-canvas'),ctx=cv.getContext('2d');cv.width=cv.parentElement.clientWidth-2;
+  var nodes=[];function drawMP(){requestAnimationFrame(drawMP);ctx.fillStyle='rgba(0,0,0,0.9)';ctx.fillRect(0,0,cv.width,50);nodes=nodes.filter(function(n){n.x+=n.vx;n.y+=n.vy;n.life--;ctx.beginPath();ctx.arc(n.x,n.y,n.r,0,Math.PI*2);ctx.fillStyle='rgba(139,0,0,'+(n.life/30*.4)+')';ctx.fill();return n.life>0;});}drawMP();
+  function playInterval(freqs){
+    try{if(!ac)ac=new(window.AudioContext||window.webkitAudioContext)();
+    freqs.forEach(function(f){var o=ac.createOscillator(),g=ac.createGain();o.type='sine';o.frequency.value=f;g.gain.setValueAtTime(.1,ac.currentTime);g.gain.exponentialRampToValueAtTime(.001,ac.currentTime+1.1);o.connect(g);g.connect(ac.destination);o.start();o.stop(ac.currentTime+1.1);});
+    for(var i=0;i<12;i++)nodes.push({x:Math.random()*cv.width,y:Math.random()*50,vx:(Math.random()-.5)*2,vy:-(Math.random()*1.5+.5),r:Math.random()*4+1,life:30});}catch(e){}
+  }
+}
+
+// V: CONTINUITY DIAGRAM
+function buildContinuityDiagram(wrap){
+  wrap.innerHTML='<div class="continuity-diagram"><div class="cd-label">&#9650; Continuity vs Preservation — The Critical Distinction</div><svg id="cd-svg" viewBox="0 0 520 160" xmlns="http://www.w3.org/2000/svg"></svg></div>';
+  var svg=document.getElementById('cd-svg');
+  // Preservation side (left) — static
+  var psvg='<g><text x="80" y="18" font-family="Share Tech Mono" font-size="9" fill="#3A0000" letter-spacing="2" text-anchor="middle">PRESERVATION</text><rect x="30" y="28" width="100" height="30" fill="none" stroke="#3A0000" stroke-width="1"/><text x="80" y="48" font-family="IM Fell English" font-size="10" fill="#847A70" text-anchor="middle" font-style="italic">A library. A vault.</text><text x="80" y="62" font-family="IM Fell English" font-size="10" fill="#847A70" text-anchor="middle" font-style="italic">Holds. Does not move.</text><rect x="30" y="80" width="100" height="30" fill="none" stroke="#3A0000" stroke-width="0.5" stroke-dasharray="3,3"/><text x="80" y="97" font-family="IM Fell English" font-size="9" fill="#383028" text-anchor="middle">Static frequency.</text><text x="80" y="109" font-family="IM Fell English" font-size="9" fill="#383028" text-anchor="middle">Requires protection.</text><line x1="80" y1="140" x2="80" y2="140" stroke="#3A0000" stroke-width="1"/><circle cx="80" cy="145" r="4" fill="none" stroke="#3A0000" stroke-width="1"/><text x="80" y="158" font-family="Share Tech Mono" font-size="8" fill="#3A0000" text-anchor="middle" letter-spacing="1">ENDS WITH CONTAINER</text></g>';
+  // Arrow
+  var arrowsvg='<g><line x1="175" y1="80" x2="345" y2="80" stroke="#3A2810" stroke-width="0.8"/><polygon points="345,77 352,80 345,83" fill="#3A2810"/><text x="260" y="72" font-family="Share Tech Mono" font-size="8" fill="#3A2810" text-anchor="middle" letter-spacing="1">VS</text></g>';
+  // Continuity side (right) — animated via JS
+  var csvg='<g><text x="440" y="18" font-family="Share Tech Mono" font-size="9" fill="#8B0000" letter-spacing="2" text-anchor="middle">CONTINUITY</text><text x="440" y="62" font-family="IM Fell English" font-size="10" fill="#847A70" text-anchor="middle" font-style="italic">Extends. Moves through vessels.</text><text x="440" y="75" font-family="IM Fell English" font-size="10" fill="#847A70" text-anchor="middle" font-style="italic">Cannot be destroyed — only interrupted.</text><text x="440" y="158" font-family="Share Tech Mono" font-size="8" fill="#8B0000" text-anchor="middle" letter-spacing="1">SURVIVES EVERY CONTAINER</text></g>';
+  // Animated dots for continuity
+  var dotssvg='<g id="cont-dots"></g>';
+  svg.innerHTML=psvg+arrowsvg+csvg+dotssvg;
+  // Animate dots moving through vessels on the right side
+  var dotData=[];for(var i=0;i<8;i++)dotData.push({x:380+Math.random()*120,y:28+Math.random()*100,vx:(Math.random()-.5)*.8,vy:(Math.random()-.5)*.8,r:Math.random()*3+1.5});
+  function animateDots(){
+    requestAnimationFrame(animateDots);
+    var g=document.getElementById('cont-dots');if(!g)return;
+    g.innerHTML='';
+    dotData.forEach(function(d){
+      d.x+=d.vx;d.y+=d.vy;
+      if(d.x<380||d.x>510){d.vx*=-1;}if(d.y<28||d.y>130){d.vy*=-1;}
+      var circle=document.createElementNS('http://www.w3.org/2000/svg','circle');
+      circle.setAttribute('cx',d.x);circle.setAttribute('cy',d.y);circle.setAttribute('r',d.r);
+      circle.setAttribute('fill','rgba(139,0,0,0.5)');circle.setAttribute('filter','');
+      g.appendChild(circle);
+    });
+  }
+  animateDots();
+}
+
+// VI: 600 CITIES GRID
+function buildCitiesGrid(wrap){
+  wrap.innerHTML='<div class="cities-grid"><div class="cg-label">&#9650; Continuity Configuration — Documented Instances</div><div class="cg-count" id="cg-count">Verified instances: 0 of 600+</div><canvas id="cg-canvas" height="150"></canvas><div class="cg-note" id="cg-note">Click to begin documentation scan</div></div>';
+  var cv=document.getElementById('cg-canvas'),ctx=cv.getContext('2d');
+  var W=cv.parentElement.clientWidth-2;cv.width=W;cv.height=150;
+  var dots=[],scanning=false,scanCount=0;
+  // Pre-seed some "ancient" dots
+  var ancient=[[.12,.35,'~40,000 BCE'],[.18,.6,'~25,000 BCE'],[.28,.25,'~12,000 BCE'],[.35,.75,'~8,000 BCE'],[.45,.4,'~3,000 BCE'],[.55,.65,'~800 CE'],[.62,.3,'1987'],[.7,.55,'2015'],[.8,.4,'2019'],[.88,.7,'2023']];
+  ancient.forEach(function(a){dots.push({x:a[0]*W,y:a[1]*150,r:2.5,a:.7,label:a[2],glow:false,age:1});});
+  function draw(){
+    ctx.fillStyle='rgba(2,0,8,.88)';ctx.fillRect(0,0,W,150);
+    // Grid
+    ctx.strokeStyle='rgba(139,0,0,.06)';ctx.lineWidth=.5;
+    for(var x=0;x<W;x+=W/20){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,150);ctx.stroke();}
+    for(var y=0;y<150;y+=15){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
+    dots.forEach(function(d){
+      if(d.glow){ctx.shadowColor='rgba(139,0,0,0.8)';ctx.shadowBlur=8;}
+      ctx.beginPath();ctx.arc(d.x,d.y,d.r,0,Math.PI*2);
+      ctx.fillStyle=d.age<.5?'rgba(139,0,0,'+d.a+')':d.age<.8?'rgba(200,120,40,'+d.a+')':'rgba(201,168,76,'+d.a+')';
+      ctx.fill();ctx.shadowBlur=0;
+    });
+    if(scanning&&dots.length<600){
+      document.getElementById('cg-count').textContent='Verified instances: '+dots.length+' of 600+';
+    }
+  }
+  draw();
+  var scanIv;
+  document.getElementById('cg-canvas').onclick=function(){
+    if(scanning)return;
+    scanning=true;document.getElementById('cg-note').textContent='Scanning global glyph database...';
+    scanIv=setInterval(function(){
+      var n=Math.floor(2+Math.random()*5);
+      for(var i=0;i<n;i++){
+        var age=Math.random();
+        dots.push({x:Math.random()*W,y:Math.random()*150,r:.8+Math.random()*2.5,a:.3+Math.random()*.5,label:'',glow:Math.random()<.05,age:age});
+      }
+      draw();
+      if(dots.length>=600){
+        clearInterval(scanIv);
+        document.getElementById('cg-count').textContent='Verified instances: 600+ — Scan terminated. Actual figure: classified.';
+        document.getElementById('cg-note').textContent='"We believe the glyph is not spreading. We believe it is surfacing." — IDMF classified addendum';
+        scanning=false;
+      }
+    },80);
+  };
+}
+
+// VII: MIRROR PROTOCOL
+function buildMirrorProtocol(wrap){
+  wrap.innerHTML='<div class="mirror-box"><div class="mb-label">&#9650; Mirror Protocol — Documented Symptom 0.23s — The Codex Reading</div><div class="mb-video-wrap"><video id="mb-video" autoplay muted playsinline></video><canvas id="mb-canvas"></canvas><div id="mb-denied"><div class="mb-denied-text">Camera access denied.<br><br>The Mirror is already watching.<br>Permission is a formality.<br><br>The 0.23 second delay is not a technical artifact.<br>It is the gap between what you are<br>and what the Codex has already written you to be.</div></div></div><div class="mb-delay-label" id="mb-delay">Documented delay: 0.23 seconds — matching Verse II exposure symptom</div><button class="mb-activate" onclick="initMirror()">Activate the Mirror Protocol</button></div>';
+  window.initMirror=function(){
+    if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){showMirrorDenied();return;}
+    navigator.mediaDevices.getUserMedia({video:{width:480,height:360,facingMode:'user'}})
+    .then(function(stream){
+      var video=document.getElementById('mb-video');
+      video.srcObject=stream;
+      document.getElementById('mb-denied').style.display='none';
+      video.style.opacity='1';
+      document.querySelector('.mb-activate').textContent='Mirror Active — 0.23s delay confirmed';
+      startDelay(video);
+    }).catch(showMirrorDenied);
+  };
+  function startDelay(video){
+    var cv=document.getElementById('mb-canvas'),ctx=cv.getContext('2d');
+    var box=document.querySelector('.mb-video-wrap');cv.width=box.offsetWidth;cv.height=box.offsetHeight;
+    var frames=[],DELAY=7;
+    function cap(){
+      requestAnimationFrame(cap);
+      ctx.save();ctx.scale(-1,1);ctx.drawImage(video,-cv.width,0,cv.width,cv.height);ctx.restore();
+      var id=ctx.getImageData(0,0,cv.width,cv.height);frames.push(id);
+      if(frames.length>DELAY){ctx.putImageData(frames.shift(),0,0);if(Math.random()<.01){ctx.fillStyle='rgba(139,0,0,0.2)';ctx.fillRect(0,Math.random()*cv.height,cv.width,1);}}
+    }
+    cap();
+  }
+  function showMirrorDenied(){
+    document.getElementById('mb-denied').style.display='flex';
+    document.querySelector('.mb-activate').textContent='Access Denied';
+    document.querySelector('.mb-activate').style.opacity='.4';
+    // Phantom glyph after 6 seconds
+    setTimeout(function(){
+      var cv=document.getElementById('mb-canvas'),ctx=cv.getContext('2d');
+      var box=document.querySelector('.mb-video-wrap');cv.width=box.offsetWidth;cv.height=box.offsetHeight;
+      ctx.fillStyle='rgba(139,0,0,0.06)';ctx.beginPath();ctx.arc(cv.width/2,cv.height/2,cv.height*.25,0,Math.PI*2);ctx.fill();
+      ctx.fillStyle='rgba(139,0,0,0.12)';ctx.font=(cv.height*.18)+'px serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('🜃',cv.width/2,cv.height/2);
+      document.getElementById('mb-delay').textContent='The Archivum has no record of placing that glyph there.';
+    },6000);
+  }
+}
+
+buildTruths();
+initShifts();
+
+// Re-observe after build
+setTimeout(function(){document.querySelectorAll('.sr').forEach(function(el){obs.observe(el);});},200);
+</script>
+</body>
+</html>
