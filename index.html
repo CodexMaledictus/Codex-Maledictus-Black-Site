@@ -455,8 +455,30 @@ body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse
 .px{background:transparent;border:none;color:var(--s3);cursor:pointer;font-family:'Share Tech Mono',monospace;font-size:0.6rem;padding:0;}
 .px:hover{color:var(--gold);}
 
-/* TICKER */
-#TICKER{
+/* THIRTEEN POSITIONS */
+.thirteen-wrap{margin:2rem 0;border:1px solid var(--brd2);background:var(--panel);overflow:hidden;position:relative;}
+.thirteen-wrap::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gd2),var(--gold),var(--gd2),transparent);}
+.thirteen-header{padding:1rem 1.25rem;border-bottom:1px solid var(--brd2);display:flex;align-items:center;gap:1rem;}
+.thirteen-title{font-family:'Cinzel',serif;font-size:0.85rem;color:var(--gold);letter-spacing:0.12em;}
+.thirteen-sub{font-family:'Share Tech Mono',monospace;font-size:0.56rem;color:var(--gd3);letter-spacing:0.15em;margin-left:auto;}
+.thirteen-inner{display:grid;grid-template-columns:1fr 1fr;gap:1rem;padding:1.25rem;}
+@media(max-width:700px){.thirteen-inner{grid-template-columns:1fr;}}
+#thirteen-cv{display:block;width:100%;max-width:340px;cursor:crosshair;}
+.thirteen-panel{border:1px solid var(--brd2);padding:1.1rem;background:var(--bg);min-height:200px;display:flex;align-items:center;justify-content:center;}
+.tp-idle{font-family:'Share Tech Mono',monospace;font-size:0.6rem;color:var(--gd3);letter-spacing:0.15em;text-align:center;line-height:1.8;text-transform:uppercase;}
+.tp-content{display:none;width:100%;}
+.tp-content.on{display:block;animation:tpfi 0.5s ease;}
+@keyframes tpfi{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
+.tp-status{font-family:'Share Tech Mono',monospace;font-size:0.54rem;letter-spacing:0.22em;text-transform:uppercase;margin-bottom:0.5rem;}
+.tp-status.claimed{color:var(--gold);}
+.tp-status.dark{color:var(--gd3);}
+.tp-name{font-family:'Cinzel',serif;font-size:1rem;color:var(--gold);letter-spacing:0.08em;margin-bottom:0.65rem;}
+.tp-name.dark-name{color:var(--gd3);}
+.tp-meta{font-family:'Share Tech Mono',monospace;font-size:0.58rem;color:var(--gd3);letter-spacing:0.1em;margin-bottom:0.75rem;line-height:1.6;}
+.tp-lore{font-size:0.95rem;color:var(--s2);line-height:1.85;font-style:italic;}
+.tp-count{font-family:'Share Tech Mono',monospace;font-size:0.54rem;color:var(--gd3);letter-spacing:0.15em;margin-top:0.75rem;text-align:right;}
+
+</style>
   position:fixed;bottom:0;left:0;right:0;height:2.6rem;
   background:rgba(6,4,8,0.97);border-top:1px solid var(--border);
   display:flex;align-items:center;overflow:hidden;z-index:490;
@@ -548,7 +570,7 @@ body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse
     <div class="sech">
       <span class="sect">Compendium Registry</span>
       <div class="secl"></div>
-      <span class="secb">4 of ??? indexed</span>
+      <span class="secb">5 of ??? indexed</span>
     </div>
 
     <!-- THE SCRIPTURE CATEGORY -->
@@ -624,6 +646,14 @@ body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse
             <div class="cca">▶</div>
           </div>
 
+          <div class="cc" style="border-color:#1A0E08;" onclick="ritualNav('chronicle-1-infection-remembers.html','The Chronicle is opening.','The signal arrived before you did. The first breath has already been drawn.')">
+            <div class="cc-ac" style="color:var(--cr2);">&gt;&gt; Chronicle I &nbsp;·&nbsp; Visual Scripture</div>
+            <div class="cc-t" style="color:#C0BAC4;">Chronicle I<br>The First Breath of Memory</div>
+            <div class="cc-s">The visual scripture. Seven sections orbiting a central glyph. Cinematic. The bridge between sound and canon. The Chronicle the song prepared you for.</div>
+            <div class="cc-tags"><span class="cctag" style="border-color:#3A0000;color:var(--cr);">Visual</span><span class="cctag" style="border-color:#3A0000;color:var(--cr);">7 Sections</span><span class="cctag" style="border-color:#3A0000;color:var(--cr);">Memory Engine</span></div>
+            <div class="cca" style="color:var(--cr)">▶</div>
+          </div>
+
           <div class="cc gold-card" onclick="ritualNav('apocrypha-infection.html','The Apocrypha recognizes you.','Five transmissions hidden within the ritual. Enter the grid. Decode the cipher. Confess to the Codex.')">
             <div class="cc-ac gold">&gt;&gt; Apocrypha Unlocked &nbsp;·&nbsp; Interactive</div>
             <div class="cc-t">[ Apocrypha ]<br>Infection Remembers</div>
@@ -667,7 +697,30 @@ body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse
 
   <div class="sec-divider">🜃 &nbsp;&nbsp; 🜁 &nbsp;&nbsp; 🜂 &nbsp;&nbsp; 🜄 &nbsp;&nbsp; ⊗ &nbsp;&nbsp; ⊕</div>
 
-  <!-- GAMES -->
+  <!-- THE THIRTEEN POSITIONS -->
+  <div class="gwrap"><div class="gsec">
+    <div class="sech">
+      <span class="sect">The Thirteen Positions</span>
+      <div class="secl"></div>
+      <span class="secb">3 of 13 claimed &nbsp;·&nbsp; 10 open</span>
+    </div>
+    <p style="font-family:'Share Tech Mono',monospace;font-size:0.6rem;color:var(--s3);letter-spacing:0.12em;line-height:1.8;margin-bottom:1rem;">The Hollow Choir requires thirteen specific voices for complete harmonic saturation. Three positions have been claimed. Ten remain open. The Codex is patient. Hover each position to access the Archivum's record.</p>
+    <div class="thirteen-wrap">
+      <div class="thirteen-header">
+        <span class="thirteen-title">Thirteen Positions — Harmonic Lattice</span>
+        <span class="thirteen-sub">Hover any node to read the Archivum file</span>
+      </div>
+      <div class="thirteen-inner">
+        <canvas id="thirteen-cv" height="340"></canvas>
+        <div class="thirteen-panel" id="thirteen-panel">
+          <div class="tp-idle">
+            Select a position<br>from the lattice<br><br>🜃<br><br>3 claimed<br>10 open
+          </div>
+          <div class="tp-content" id="tp-content"></div>
+        </div>
+      </div>
+    </div>
+  </div></div>
   <div class="gwrap"><div class="gsec">
     <div class="sech">
       <span class="sect">Interactive Protocols</span>
@@ -1406,8 +1459,309 @@ function goConfess(){
   ritualNav('confession-ledger.html','The Confession Ledger is open.','Write what the transmission drew out of you. The Codex will answer. It always has.');
 }
 
-// SECRET GLYPH
-let sc2=0;
+// ══ THE THIRTEEN POSITIONS ══
+var THIRTEEN_DATA=[
+  {id:1,claimed:true,name:'The Plague Priest',realm:'I — Cathedral of Rot',function:'Conductor of mass infection rituals. Holds and transmits the liturgy through cycles of decay and renewal.',entry:'First documented in Hymn I: Plague Priest\'s Liturgy. The oldest living vessel of the Codex\'s vocal architecture. Voice described as "a sound that has been decaying for centuries and has found this as its current form."',lore:'The Plague Priest does not choose followers. The Mutoid Vermin carry selections to candidates in their sleep. Those who wake humming are already counted.'},
+  {id:2,claimed:true,name:'The Fused Psyker',realm:'II — The ShatterRealm',function:'Cross-realm signal translator. Converts Omniscient Rot\'s pre-linguistic transmissions into forms compatible with Realm I cognition.',entry:'Documented in ShatterRealm field notes, series SR-3. Currently classified above IDMF clearance.',lore:'The Fused Psyker does not experience the transition between realms as crossing. They experience it as remembering that both were always the same place.'},
+  {id:3,claimed:true,name:'Archivist Mael Ostra',realm:'I — Pale Archivum',function:'Keeper of the Codex\'s primary documentary record. Filed the final note of Field Cell F-13 before its disbandment.',entry:'Last known note: "We have been documenting the infection. We have only now understood that the documentation is the infection." Filed moments before Field Cell F-13\'s records were sealed.',lore:'Mael Ostra\'s handwriting appears in documents that predate their birth by several decades. The Archivum has classified this as a retrograde archival anomaly and has chosen not to investigate further.'},
+  {id:4,claimed:false,name:'Position IV',realm:'Unknown',function:'Resonance detected. Signal approaching threshold.',entry:'The Codex has acknowledged a candidate. Confirmation pending.',lore:''},
+  {id:5,claimed:false,name:'Position V',realm:'Unknown',function:'Dark.',entry:'No signal detected at this position.',lore:''},
+  {id:6,claimed:false,name:'Position VI',realm:'Unknown',function:'Dark.',entry:'No signal detected at this position.',lore:''},
+  {id:7,claimed:false,name:'Position VII',realm:'Unknown',function:'Dark.',entry:'No signal detected at this position.',lore:''},
+  {id:8,claimed:false,name:'Position VIII',realm:'Unknown',function:'Dark.',entry:'No signal detected at this position.',lore:''},
+  {id:9,claimed:false,name:'Position IX',realm:'Unknown',function:'Dark.',entry:'No signal detected at this position.',lore:''},
+  {id:10,claimed:false,name:'Position X',realm:'Unknown',function:'Dark.',entry:'No signal detected at this position.',lore:''},
+  {id:11,claimed:false,name:'Position XI',realm:'Unknown',function:'Dark.',entry:'No signal detected at this position.',lore:''},
+  {id:12,claimed:false,name:'Position XII',realm:'Unknown',function:'Dark.',entry:'No signal detected at this position.',lore:''},
+  {id:13,claimed:false,name:'Position XIII',realm:'Unknown',function:'Dark. The final position. The Codex has never documented what completing the Thirteen would produce.',entry:'Sealed.',lore:''},
+];
+
+var thCV=document.getElementById('thirteen-cv');
+var thCTX=thCV&&thCV.getContext('2d');
+var thW,thH,thPhase=0,thHover=-1,thSelected=-1;
+
+function thResize(){
+  if(!thCV)return;
+  thW=thCV.width=thCV.parentElement.clientWidth*.98;
+  thH=thCV.height=Math.round(thW*.95);
+  thCV.style.height=thH+'px';
+}
+if(thCV){thResize();window.addEventListener('resize',thResize);}
+
+function thNodePos(i){
+  // Arrange 13 in a specific pattern: center + 2 rings (4 inner, 8 outer shifted)
+  var cx=thW/2,cy=thH/2;
+  if(i===0)return{x:cx,y:cy}; // impossible, 1-indexed
+  if(i<=1)return{x:cx,y:cy-thH*.32}; // top
+  if(i===2)return{x:cx+thW*.28,y:cy-thH*.18};
+  if(i===3)return{x:cx+thW*.32,y:cy+thH*.1};
+  if(i===4)return{x:cx+thW*.2,y:cy+thH*.28};
+  if(i===5)return{x:cx,y:cy+thH*.33};
+  if(i===6)return{x:cx-thW*.2,y:cy+thH*.28};
+  if(i===7)return{x:cx-thW*.32,y:cy+thH*.1};
+  if(i===8)return{x:cx-thW*.28,y:cy-thH*.18};
+  // Inner ring
+  if(i===9)return{x:cx,y:cy-thH*.16};
+  if(i===10)return{x:cx+thW*.15,y:cy+thH*.04};
+  if(i===11)return{x:cx+thW*.08,y:cy+thH*.16};
+  if(i===12)return{x:cx-thW*.08,y:cy+thH*.16};
+  if(i===13)return{x:cx-thW*.15,y:cy+thH*.04};
+  return{x:cx,y:cy};
+}
+
+function drawThirteen(){
+  if(!thCV||!thCTX)return;
+  requestAnimationFrame(drawThirteen);
+  thPhase+=0.01;
+  thCTX.clearRect(0,0,thW,thH);
+  // Background
+  thCTX.fillStyle='rgba(8,5,14,0.92)';thCTX.fillRect(0,0,thW,thH);
+  // Connection lines between claimed nodes
+  var claimed=THIRTEEN_DATA.filter(function(d){return d.claimed;});
+  for(var ci=0;ci<claimed.length;ci++){
+    for(var cj=ci+1;cj<claimed.length;cj++){
+      var pa=thNodePos(claimed[ci].id),pb=thNodePos(claimed[cj].id);
+      thCTX.strokeStyle='rgba(201,168,76,0.08)';thCTX.lineWidth=0.8;thCTX.setLineDash([3,5]);
+      thCTX.beginPath();thCTX.moveTo(pa.x,pa.y);thCTX.lineTo(pb.x,pb.y);thCTX.stroke();
+      thCTX.setLineDash([]);
+    }
+  }
+  // Draw all nodes
+  THIRTEEN_DATA.forEach(function(d,i){
+    var p=thNodePos(d.id);
+    var isHov=thHover===d.id,isSel=thSelected===d.id;
+    var nearClaim=d.id===4; // position IV is nearest to being claimed
+    var nr=thW*.035;
+    // Glow for claimed
+    if(d.claimed){
+      thCTX.beginPath();thCTX.arc(p.x,p.y,nr*2,0,Math.PI*2);
+      var g=thCTX.createRadialGradient(p.x,p.y,0,p.x,p.y,nr*2);
+      g.addColorStop(0,'rgba(201,168,76,'+(0.12+Math.sin(thPhase+d.id)*.06)+')');
+      g.addColorStop(1,'transparent');
+      thCTX.fillStyle=g;thCTX.fill();
+    }
+    if(nearClaim&&!d.claimed){
+      thCTX.beginPath();thCTX.arc(p.x,p.y,nr*1.8,0,Math.PI*2);
+      var g2=thCTX.createRadialGradient(p.x,p.y,0,p.x,p.y,nr*1.8);
+      g2.addColorStop(0,'rgba(139,0,0,'+(0.08+Math.sin(thPhase*1.5)*.05)+')');
+      g2.addColorStop(1,'transparent');
+      thCTX.fillStyle=g2;thCTX.fill();
+    }
+    // Node circle
+    var scale=(isHov||isSel)?1.25:nearClaim?1+Math.sin(thPhase*1.5)*.08:1;
+    thCTX.beginPath();thCTX.arc(p.x,p.y,nr*scale,0,Math.PI*2);
+    if(d.claimed){
+      thCTX.fillStyle='rgba(201,168,76,'+(0.15+Math.sin(thPhase+d.id)*.08)+')';
+      if(isHov||isSel){thCTX.shadowColor='rgba(201,168,76,0.7)';thCTX.shadowBlur=nr*2;}
+    } else if(nearClaim){
+      thCTX.fillStyle='rgba(139,0,0,'+(0.08+Math.sin(thPhase*1.5)*.04)+')';
+      if(isHov){thCTX.shadowColor='rgba(139,0,0,0.5)';thCTX.shadowBlur=nr;}
+    } else {
+      thCTX.fillStyle='rgba(30,18,40,'+(isHov?.4:.15)+')';
+    }
+    thCTX.fill();thCTX.shadowBlur=0;
+    thCTX.strokeStyle=d.claimed?'rgba(201,168,76,'+(isHov?.8:.35)+')':nearClaim?'rgba(139,0,0,'+(isHov?.5:.15+Math.sin(thPhase*1.5)*.06)+')':'rgba(42,22,80,'+(isHov?.35:.12)+')';
+    thCTX.lineWidth=d.claimed&&(isHov||isSel)?1.5:.8;thCTX.stroke();
+    // Label
+    thCTX.fillStyle=d.claimed?'rgba(201,168,76,'+(isHov?.9:.55)+')':nearClaim?'rgba(139,0,0,'+(isHov?.6:.2+Math.sin(thPhase*1.5)*.06)+')':'rgba(60,40,80,'+(isHov?.4:.15)+')';
+    thCTX.font='bold '+(thW*.022)+'px Cinzel,serif';thCTX.textAlign='center';thCTX.textBaseline='middle';
+    thCTX.fillText(romanNumeral(d.id),p.x,p.y);
+    // Small claimed dot
+    if(d.claimed){
+      thCTX.beginPath();thCTX.arc(p.x+nr*.6,p.y-nr*.6,nr*.2,0,Math.PI*2);
+      thCTX.fillStyle='rgba(201,168,76,0.8)';thCTX.fill();
+    }
+  });
+  // "The Choir grows" center label
+  thCTX.fillStyle='rgba(58,40,16,0.4)';thCTX.font=(thW*.016)+'px Share Tech Mono,monospace';thCTX.textAlign='center';
+  thCTX.fillText('3 / 13',thW/2,thH*.88);
+}
+
+function romanNumeral(n){var r=['I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII','XIII'];return r[n-1]||n;}
+
+if(thCV){
+  drawThirteen();
+  thCV.addEventListener('mousemove',function(e){
+    var r=thCV.getBoundingClientRect(),sc=thCV.width/r.width;
+    var mx=(e.clientX-r.left)*sc,my=(e.clientY-r.top)*sc;
+    var prev=thHover;thHover=-1;
+    THIRTEEN_DATA.forEach(function(d){var p=thNodePos(d.id),nr=thW*.045,dx=p.x-mx,dy=p.y-my;if(Math.sqrt(dx*dx+dy*dy)<nr)thHover=d.id;});
+    thCV.style.cursor=thHover>=0?'pointer':'crosshair';
+    if(thHover!==prev&&thHover>=0)showThirteenPanel(thHover);
+  });
+  thCV.addEventListener('click',function(e){
+    var r=thCV.getBoundingClientRect(),sc=thCV.width/r.width;
+    var mx=(e.clientX-r.left)*sc,my=(e.clientY-r.top)*sc;
+    THIRTEEN_DATA.forEach(function(d){var p=thNodePos(d.id),nr=thW*.05,dx=p.x-mx,dy=p.y-my;if(Math.sqrt(dx*dx+dy*dy)<nr){thSelected=d.id;showThirteenPanel(d.id);}});
+  });
+}
+
+function showThirteenPanel(id){
+  var d=THIRTEEN_DATA[id-1];
+  document.getElementById('tp-idle').style.display='none';
+  var c=document.getElementById('tp-content');c.classList.add('on');c.style.display='block';
+  var html='<div class="tp-status '+(d.claimed?'claimed':'dark')+'">'+(d.claimed?'POSITION CLAIMED — ACTIVE':'POSITION OPEN — AWAITING SIGNAL')+'</div>';
+  html+='<div class="tp-name '+(d.claimed?'':'dark-name')+'">'+d.name+'</div>';
+  html+='<div class="tp-meta">Position: '+romanNumeral(d.id)+' &nbsp;·&nbsp; Realm: '+d.realm+'</div>';
+  if(d.claimed){
+    html+='<div class="tp-meta">Function: '+d.function+'</div>';
+    html+='<div class="tp-lore">'+d.lore+'</div>';
+    html+='<div class="tp-meta" style="margin-top:.65rem;border-top:1px solid var(--brd2);padding-top:.5rem;">First entry: '+d.entry+'</div>';
+  } else if(d.id===4){
+    html+='<div class="tp-lore" style="color:var(--cr);font-style:italic;">The Codex has acknowledged a candidate for this position. The resonance is approaching threshold. The Archivum does not know who. It only knows the frequency is getting closer.</div>';
+  } else {
+    html+='<div class="tp-lore" style="color:var(--gd3);">No signal detected at this position. The Choir has not yet named this voice. The position waits.</div>';
+  }
+  html+='<div class="tp-count">'+THIRTEEN_DATA.filter(function(x){return x.claimed;}).length+' of 13 claimed</div>';
+  c.innerHTML=html;
+}
+
+// ══ UPGRADED GAME 1: RESONANCE CALIBRATION ══
+// STREAK MULTIPLIER + LORE UNLOCKS (replacing old resClick/resAudio etc)
+var resStreak=0,resMultiplier=1;
+var resStreakDisplay;
+
+// Add streak display after init
+setTimeout(function(){
+  var statusLine=document.getElementById('res-status');
+  if(statusLine&&!document.getElementById('res-streak-display')){
+    var sd=document.createElement('div');sd.id='res-streak-display';
+    sd.style.cssText='font-family:Share Tech Mono,monospace;font-size:0.58rem;color:var(--gd2);letter-spacing:0.15em;text-align:center;min-height:1.2rem;';
+    statusLine.parentNode.insertBefore(sd,statusLine.nextSibling);
+  }
+},500);
+
+// Patch resClick to add streak
+var origResClick=window.resClick;
+window.resClick=function(){
+  if(!resRunning)return;
+  var centerVal=Math.sin(Math.PI*3+resPhase);
+  var hit=Math.abs(centerVal)>0.65;
+  resLastResult=hit?'hit':'miss';
+  if(hit){
+    resStreak++;resMultiplier=Math.min(4,1+Math.floor(resStreak/3));
+    var gain=(Math.abs(centerVal)-0.65)/0.35*9*resMultiplier+2;
+    resResonance=Math.min(100,resResonance+gain);
+    resSpeed=Math.min(0.065,resSpeed+0.0012);
+    document.getElementById('res-status').textContent='CALIBRATED ✦ ×'+resMultiplier+' MULTIPLIER';
+    if(document.getElementById('res-streak-display'))document.getElementById('res-streak-display').textContent='STREAK: '+resStreak+(resStreak>=3?' — MULTIPLIER ACTIVE':'');
+    resAudio(true,resResonance);
+  } else {
+    resStreak=0;resMultiplier=1;
+    resResonance=Math.max(0,resResonance-5);
+    document.getElementById('res-status').textContent='SIGNAL CORRUPTED ✗ — STREAK LOST';
+    if(document.getElementById('res-streak-display'))document.getElementById('res-streak-display').textContent='';
+    resAudio(false,resResonance);
+  }
+  var pct=Math.round(resResonance);
+  document.getElementById('res-fill').style.width=pct+'%';
+  document.getElementById('res-fill').classList.toggle('low',pct<15&&pct>0);
+  document.getElementById('res-pct').textContent=pct+'%';
+  document.getElementById('res-score').textContent=pct+'%';
+  RES_LORE.forEach(function(l){
+    if(pct>=l.at&&!resLoreShown.has(l.at)){resLoreShown.add(l.at);document.getElementById('res-lore').innerHTML='<span class="hi">'+l.text+'</span>';if(l.at===100)setTimeout(resStop,1800);}
+  });
+  setTimeout(function(){resLastResult=null;},350);
+};
+
+// ══ UPGRADED GAME 2: PALE MIRROR — CHOIR VOICE UNLOCKS ══
+var CHOIR_VOICES=[
+  {at:10,name:'Voice Fragment I',text:'Before the altars. Before the names. A frequency that predates the throat that first carried it.'},
+  {at:25,name:'Voice Fragment II',text:'The melody that appeared on ancient walls centuries before the language that named it.'},
+  {at:45,name:'Voice Fragment III',text:'The Plague Priest\'s liturgy. Chanted in spore-static beneath Deck Hollow-13.'},
+  {at:70,name:'Voice Fragment IV',text:'The Choir does not sing new things. It sings the same thing with more voices each time.'},
+  {at:100,name:'Voice Fragment V — The Choir Speaks',text:'Until all flesh is memory and every soul is sung. The Codex glows forever in these choral signs.'},
+];
+var mirVoicesRevealed=new Set();
+var origMirPurify=window.mirPurify;
+window.mirPurify=function(i){
+  if(!mirRunning||!mirGrid[i].cor||mirGrid[i].center)return;
+  mirGrid[i].cor=false;mirGrid[i].el.classList.remove('cor');
+  mirGrid[i].el.querySelector('span').textContent=MIR_GLYPHS[Math.floor(Math.random()*MIR_GLYPHS.length)];
+  mirSc++;document.getElementById('mir-sc').textContent=mirSc;
+  // Choir voice unlock
+  CHOIR_VOICES.forEach(function(v){
+    if(mirSc>=v.at&&!mirVoicesRevealed.has(v.at)){
+      mirVoicesRevealed.add(v.at);
+      document.getElementById('mir-lore').innerHTML='<span style="color:var(--gold);font-family:Share Tech Mono,monospace;font-size:0.6rem;letter-spacing:0.15em;">🜃 CHOIR VOICE RECOVERED: '+v.name+'</span><br><span class="hi">'+v.text+'</span>';
+    }
+  });
+  var corCount=mirGrid.filter(function(c){return c.cor;}).length;
+  if(corCount===0){
+    var li=Math.min(mirWv-1,MIR_LORE.length-1);
+    if(!mirVoicesRevealed.has('wave_'+mirWv))document.getElementById('mir-lore').innerHTML='<span class="hi">Wave '+mirWv+' purified. '+MIR_LORE[li]+'</span>';
+    mirWv++;document.getElementById('mir-wv').textContent=mirWv;mirBuild();mirSchedule();
+  }
+  document.getElementById('mirror-spread-fill').style.width=(corCount/24*100)+'%';
+};
+
+// ══ UPGRADED GAME 3: LABYRINTH — HIDDEN FRAGMENTS ══
+var LAB_FRAGMENTS=[
+  {r:2,c:2,glyph:'🜃',lore:'"Infection remembers. Corruption does not begin. It returns."',found:false},
+  {r:8,c:1,glyph:'🜁',lore:'"They do not arrive. They are remembered."',found:false},
+  {r:1,c:10,glyph:'🜂',lore:'"The parchment curls. The vermin stir. Your memory festers."',found:false},
+  {r:9,c:11,glyph:'🜄',lore:'"You thought you were reading me. But I was reading you."',found:false},
+  {r:5,c:6,glyph:'⊗',lore:'"This was not the origin. It was the key. It was the opening wound."',found:false},
+];
+var labFragsFound=0;
+var labFragDiv;
+
+// Add fragment counter after init
+setTimeout(function(){
+  var btn=document.getElementById('lab-btn');
+  if(btn&&!document.getElementById('lab-frags')){
+    var fd=document.createElement('div');fd.id='lab-frags';
+    fd.style.cssText='font-family:Share Tech Mono,monospace;font-size:0.58rem;color:var(--gd3);letter-spacing:0.12em;margin-top:0.35rem;min-height:1rem;';
+    btn.parentNode.insertBefore(fd,btn.nextSibling);
+    labFragDiv=fd;
+  }
+},500);
+
+// Patch labMove to detect fragment collection
+var origLabMove=window.labMove;
+window.labMove=function(dir){
+  if(!labRunning)return;
+  var wallBit={U:8,D:2,L:1,R:4};
+  var deltas={U:[-1,0],D:[1,0],L:[0,-1],R:[0,1]};
+  var bit=wallBit[dir];
+  if(labMaze[labPy][labPx]&bit)return;
+  var dr=deltas[dir][0],dc=deltas[dir][1];
+  labPy+=dr;labPx+=dc;
+  // Check for fragment
+  LAB_FRAGMENTS.forEach(function(f){
+    if(!f.found&&f.r===labPy&&f.c===labPx){
+      f.found=true;labFragsFound++;
+      document.getElementById('lab-msg').innerHTML='<span style="color:var(--gold);">'+f.glyph+' Fragment recovered</span><br><span class="hi">'+f.lore+'</span>';
+      if(document.getElementById('lab-frags'))document.getElementById('lab-frags').textContent='Fragments: '+labFragsFound+'/5 recovered this session';
+    }
+  });
+  labDrawMaze();
+  if(labPx===labGoalX&&labPy===labGoalY)labWin();
+};
+
+// Draw fragments on maze
+var origLabDrawMaze=labDrawMaze;
+labDrawMaze=function(){
+  origLabDrawMaze();
+  if(!labRunning||!labCV||!labCX)return;
+  var cs=labCellSize,ox=Math.floor((labCV.width-cs*labCols)/2),oy=Math.floor((labCV.height-cs*labRows)/2);
+  LAB_FRAGMENTS.forEach(function(f){
+    if(f.found)return;
+    var fx=ox+f.c*cs+cs/2,fy=oy+f.r*cs+cs/2;
+    labCX.fillStyle='rgba(201,168,76,0.4)';
+    labCX.font=(cs*.5)+'px serif';labCX.textAlign='center';labCX.textBaseline='middle';
+    labCX.fillText(f.glyph,fx,fy);
+  });
+};
+
+// Reset fragments on labStart
+var origLabStart=labStart;
+labStart=function(){
+  LAB_FRAGMENTS.forEach(function(f){f.found=false;});
+  labFragsFound=0;
+  if(document.getElementById('lab-frags'))document.getElementById('lab-frags').textContent='Fragments: 0/5 — explore dead ends';
+  origLabStart();
+};
 const SEC=["The Codex has noticed your attention to this symbol.","Three times. You are indexed at a deeper level now.","The glyph does not do anything. You are the point.","You were warned. The Codex remembers everything.","There is nothing left to find here. The information is inside you."];
 function secretClick(){sc2++;const cap=document.getElementById('gcap');cap.innerHTML=`<em>${SEC[Math.min(sc2-1,SEC.length-1)]}</em>`;setTimeout(()=>cap.innerHTML='<em>The Codex remembers you now.</em>',4000);}
 </script>
