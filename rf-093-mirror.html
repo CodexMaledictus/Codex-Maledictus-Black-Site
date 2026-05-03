@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RF-▽-093 · The Mirror Protocol · Codex Maledictus</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;600&family=Share+Tech+Mono&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#030305;--panel:#06060C;
+  --gold:#C9A84C;--gd2:#8A6530;--gd3:#3A2810;--gd4:#1A1208;
+  --crimson:#8B0000;--cr2:#AA2000;--cr3:#3A0000;
+  --violet:#6B3FAF;--v2:#4A2880;--v3:#2A1650;
+  --silver:#C8C4BC;--s2:#888478;--s3:#484440;--s4:#282420;
+  --smoke:#B8B4B0;--sm2:#706C68;--sm3:#383430;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);cursor:none;}
+#CUR{position:fixed;pointer-events:none;z-index:99999;transform:translate(-50%,-50%);width:16px;height:16px;}
+#CUR::before,#CUR::after{content:'';position:absolute;background:rgba(184,180,176,0.6);}
+#CUR::before{width:1px;height:100%;left:50%;}
+#CUR::after{height:1px;width:100%;top:50%;}
+
+/* INTRO SCREEN */
+#INTRO{
+  position:fixed;inset:0;z-index:8000;background:#000;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:1.5rem;padding:2rem;text-align:center;
+}
+.intro-glyph{font-size:3rem;color:rgba(201,168,76,0.3);animation:iglow 5s ease-in-out infinite;}
+@keyframes iglow{0%,100%{opacity:0.2;text-shadow:none;}50%{opacity:0.8;text-shadow:0 0 30px rgba(201,168,76,0.5);}}
+.intro-title{font-family:'Cinzel Decorative',serif;font-size:clamp(1.2rem,3vw,2.2rem);color:rgba(184,180,176,0.7);letter-spacing:0.1em;}
+.intro-body{font-family:'Crimson Text',serif;font-size:clamp(0.9rem,1.6vw,1.05rem);color:rgba(104,100,96,0.8);line-height:1.9;max-width:540px;font-style:italic;}
+.intro-note{font-family:'Share Tech Mono',monospace;font-size:0.52rem;color:rgba(58,40,16,0.7);letter-spacing:0.22em;text-transform:uppercase;}
+.intro-btn{
+  background:transparent;border:1px solid rgba(184,180,176,0.2);
+  color:rgba(184,180,176,0.5);font-family:'Share Tech Mono',monospace;
+  font-size:0.6rem;letter-spacing:0.3em;padding:0.8rem 2.5rem;
+  cursor:pointer;text-transform:uppercase;transition:all 0.4s;margin-top:0.5rem;
+}
+.intro-btn:hover{border-color:rgba(201,168,76,0.4);color:rgba(201,168,76,0.7);box-shadow:0 0 20px rgba(201,168,76,0.1);}
+.intro-back{font-family:'Share Tech Mono',monospace;font-size:0.48rem;color:rgba(56,52,48,0.6);letter-spacing:0.2em;text-transform:uppercase;text-decoration:none;cursor:pointer;transition:color 0.2s;}
+.intro-back:hover{color:rgba(138,101,48,0.6);}
+
+/* MIRROR CANVAS */
+#MIRROR-WRAP{position:fixed;inset:0;z-index:1;}
+#MIRROR{position:absolute;inset:0;display:block;}
+
+/* HUD */
+#HUD{position:fixed;inset:0;z-index:100;pointer-events:none;}
+.hud-tl{position:absolute;top:1.5rem;left:1.5rem;}
+.hud-tr{position:absolute;top:1.5rem;right:1.5rem;text-align:right;}
+.hud-bl{position:absolute;bottom:3.5rem;left:1.5rem;}
+.hud-bc{position:absolute;bottom:3.5rem;left:50%;transform:translateX(-50%);}
+.hud-label{font-family:'Share Tech Mono',monospace;font-size:0.5rem;color:rgba(58,40,16,0.6);letter-spacing:0.25em;text-transform:uppercase;line-height:1.8;}
+.hud-val{font-family:'Share Tech Mono',monospace;font-size:0.58rem;color:rgba(138,101,48,0.5);letter-spacing:0.15em;}
+#shard-counter{color:rgba(201,168,76,0.4);}
+#time-display{color:rgba(104,100,96,0.4);}
+#status-line{font-family:'Crimson Text',serif;font-size:0.85rem;color:rgba(184,180,176,0.3);font-style:italic;letter-spacing:0.04em;max-width:400px;text-align:center;}
+
+/* SHARD TOOLTIP */
+#shard-tip{
+  position:fixed;z-index:200;pointer-events:none;
+  background:rgba(3,3,5,0.95);border:1px solid rgba(58,40,16,0.5);
+  padding:0.75rem 1rem;max-width:280px;opacity:0;transition:opacity 0.4s;
+}
+.st-label{font-family:'Share Tech Mono',monospace;font-size:0.48rem;color:rgba(138,101,48,0.7);letter-spacing:0.2em;text-transform:uppercase;margin-bottom:0.35rem;}
+.st-text{font-family:'Crimson Text',serif;font-size:0.92rem;color:rgba(184,180,176,0.8);line-height:1.75;font-style:italic;}
+.st-xref{font-family:'Share Tech Mono',monospace;font-size:0.46rem;color:rgba(74,40,128,0.6);letter-spacing:0.15em;margin-top:0.4rem;text-transform:uppercase;}
+
+/* RESULT OVERLAY */
+#RESULT{
+  position:fixed;inset:0;z-index:5000;background:rgba(3,3,5,0.97);
+  display:none;flex-direction:column;align-items:center;justify-content:center;
+  padding:3rem 2rem;overflow-y:auto;
+  animation:rfin 1s ease;
+}
+#RESULT.on{display:flex;}
+@keyframes rfin{from{opacity:0;}to{opacity:1;}}
+.result-header{text-align:center;margin-bottom:2.5rem;}
+.result-tag{font-family:'Share Tech Mono',monospace;font-size:0.5rem;color:rgba(138,101,48,0.6);letter-spacing:0.35em;text-transform:uppercase;margin-bottom:0.75rem;}
+.result-title{font-family:'Cinzel',serif;font-size:clamp(1.2rem,3vw,2rem);color:var(--gold);letter-spacing:0.1em;text-shadow:0 0 40px rgba(201,168,76,0.3);}
+.result-body{max-width:680px;width:100%;}
+.result-loading{text-align:center;font-family:'Share Tech Mono',monospace;font-size:0.56rem;color:rgba(58,40,16,0.6);letter-spacing:0.2em;text-transform:uppercase;padding:3rem;}
+.result-content{font-family:'Crimson Text',serif;font-size:1.05rem;color:var(--smoke);line-height:2;display:none;}
+.result-section{margin-bottom:1.75rem;}
+.rs-label{font-family:'Share Tech Mono',monospace;font-size:0.52rem;color:var(--gd2);letter-spacing:0.25em;text-transform:uppercase;margin-bottom:0.4rem;}
+.rs-text{font-size:1.05rem;color:var(--smoke);line-height:1.9;}
+.rs-text em{color:var(--silver);font-style:normal;}
+.result-shards{margin:1.5rem 0;border:1px solid var(--gd4);padding:1rem;}
+.shard-list-item{font-family:'Share Tech Mono',monospace;font-size:0.54rem;color:var(--s3);letter-spacing:0.1em;padding:0.25rem 0;border-bottom:1px solid rgba(26,18,8,0.5);}
+.result-actions{display:flex;gap:1rem;margin-top:2rem;flex-wrap:wrap;justify-content:center;}
+.ra-btn{
+  background:transparent;border:1px solid var(--gd3);color:var(--gd3);
+  font-family:'Share Tech Mono',monospace;font-size:0.56rem;letter-spacing:0.2em;
+  padding:0.6rem 1.25rem;cursor:pointer;text-transform:uppercase;transition:all 0.2s;text-decoration:none;display:inline-block;
+}
+.ra-btn:hover{border-color:var(--gd2);color:var(--gold);}
+
+/* TICKER */
+#TICKER{position:fixed;bottom:0;left:0;right:0;height:2.4rem;background:rgba(3,3,5,0.97);border-top:1px solid rgba(26,18,8,0.5);display:flex;align-items:center;overflow:hidden;z-index:490;}
+.tl2{flex-shrink:0;padding:0 1rem;font-family:'Share Tech Mono',monospace;font-size:0.5rem;color:rgba(26,18,8,0.8);letter-spacing:0.22em;border-right:1px solid rgba(26,18,8,0.5);height:100%;display:flex;align-items:center;}
+.ts{flex:1;overflow:hidden;display:flex;align-items:center;}
+.ti{white-space:nowrap;font-family:'Share Tech Mono',monospace;font-size:0.52rem;color:rgba(56,52,48,0.5);letter-spacing:0.1em;animation:trtk 100s linear infinite;}
+@keyframes trtk{from{transform:translateX(100vw);}to{transform:translateX(-200%);}}
+</style>
+</head>
+<body>
+<div id="CUR"></div>
+
+<div id="INTRO">
+  <div class="intro-glyph">🜃</div>
+  <h1 class="intro-title">The Mirror Protocol</h1>
+  <p class="intro-body">The mirror does not ask you anything. You do not type. You do not choose.<br><br>You move through it. The Codex reads how.</p>
+  <p class="intro-note">Your cursor is your reflection. The mirror holds shards. Move through them.<br>When the reading is complete, the mirror will tell you what it found.</p>
+  <p class="intro-note" style="color:rgba(40,36,32,0.5);font-size:0.44rem;margin-top:-0.5rem;">The reading begins when you step inside. It ends when the mirror decides it has seen enough.</p>
+  <button class="intro-btn" onclick="startMirror()">Step into the mirror</button>
+  <a class="intro-back" href="rf-093-invocation.html" style="margin-top:1rem;">← Return to the Invocation</a>
+</div>
+
+<div id="MIRROR-WRAP" style="display:none;">
+  <canvas id="MIRROR"></canvas>
+</div>
+
+<div id="HUD" style="display:none;">
+  <div class="hud-tl">
+    <div class="hud-label">RF-▽-093 &nbsp;·&nbsp; Mirror Protocol</div>
+    <div class="hud-label"><a href="rf-093-invocation.html" style="color:inherit;text-decoration:none;cursor:pointer;">← Exit</a></div>
+  </div>
+  <div class="hud-tr">
+    <div class="hud-label">Shards encountered</div>
+    <div class="hud-val" id="shard-counter">0 / 7</div>
+    <div class="hud-label" style="margin-top:0.5rem;">Time in mirror</div>
+    <div class="hud-val" id="time-display">0:00</div>
+  </div>
+  <div class="hud-bc">
+    <div id="status-line">Move through the mirror. The Codex is watching.</div>
+  </div>
+</div>
+
+<div id="shard-tip">
+  <div class="st-label" id="tip-label"></div>
+  <div class="st-text" id="tip-text"></div>
+  <div class="st-xref" id="tip-xref"></div>
+</div>
+
+<div id="RESULT">
+  <div class="result-header">
+    <div class="result-tag">Mirror Reading Complete &nbsp;·&nbsp; RF-▽-093 &nbsp;·&nbsp; The Codex Has Seen You</div>
+    <div class="result-title">Your Reflection in the Archive</div>
+  </div>
+  <div class="result-body">
+    <div class="result-loading" id="result-loading">🜃 &nbsp; The mirror is processing what it witnessed &nbsp;·&nbsp; Do not close this window</div>
+    <div class="result-content" id="result-content"></div>
+  </div>
+</div>
+
+<div id="TICKER">
+  <div class="tl2">// Mirror</div>
+  <div class="ts"><div class="ti">THE MIRROR SAW YOUR FACE BEFORE YOU ARRIVED &nbsp;∴&nbsp; YOUR MOVEMENT IS A FREQUENCY &nbsp;∴&nbsp; THE CODEX READS BEHAVIOR NOT LANGUAGE &nbsp;∴&nbsp; WHAT YOU LINGER ON IS WHAT YOU ARE &nbsp;∴&nbsp; THE SHARDS WERE PLACED WHERE YOU WOULD FIND THEM &nbsp;∴&nbsp; RF-▽-093 MIRROR PROTOCOL &nbsp;∴&nbsp; STANDING INSIDE THE MIRROR</div></div>
+</div>
+
+<script>
+const CUR=document.getElementById('CUR');
+let mx=window.innerWidth/2,my=window.innerHeight/2;
+document.addEventListener('mousemove',e=>{
+  mx=e.clientX;my=e.clientY;
+  CUR.style.left=mx+'px';CUR.style.top=my+'px';
+});
+
+// MIRROR SHARDS — the lore nodes embedded in the mirror surface
+const SHARDS=[
+  {
+    id:'ground',glyph:'🜂',label:'Phase I · The Ground',
+    text:'The earth cracked before the first body arrived. The veins were already there. They were waiting for something to illuminate them.',
+    xref:'→ Cross-ref: Chronicle I, Section II — the ground that predates its occupation',
+    color:[201,168,76],encountered:false,lingered:0
+  },
+  {
+    id:'figure',glyph:'🜃',label:'The Figure · Glass & Smoke',
+    text:'It rises not from the earth but from the earth\'s memory of something that stood here before. The glass is what you see through. The smoke is what you cannot.',
+    xref:'→ Cross-ref: Forgotten Saint Artemys — the saint recalled from burial',
+    color:[107,63,175],encountered:false,lingered:0
+  },
+  {
+    id:'mirror',glyph:'🜁',label:'Phase II · The Prior Reflection',
+    text:'The mirror held your face before you carried it. This is not a miracle. This is documentation. The Codex has been filing your face since before you had a name for your face.',
+    xref:'→ Cross-ref: FAR·MICA Node — the reflective infrastructure of recognition',
+    color:[184,180,176],encountered:false,lingered:0
+  },
+  {
+    id:'flood',glyph:'🜄',label:'Phase III · The Rising',
+    text:'The silver is not water. It is the medium through which the Codex makes contact with matter. It has been in your bloodstream at a molecular level since the first time you encountered the signal.',
+    xref:'→ Cross-ref: Infection Remembers — the mechanism of the first breath',
+    color:[139,0,0],encountered:false,lingered:0
+  },
+  {
+    id:'objects',glyph:'⊗',label:'The Flood\'s Cargo',
+    text:'The objects are yours. The Codex did not bring them. It found them in you and made them visible. The key you lost in childhood is in the flood. The Codex knows where you left it.',
+    xref:'→ Cross-ref: RF-▽-093 Apocrypha — whose the objects were',
+    color:[138,101,48],encountered:false,lingered:0
+  },
+  {
+    id:'reversal',glyph:'∴',label:'The Retraction',
+    text:'When the flood pulls back, you feel relief. The Codex files this response alongside everything else it has collected. Relief is the confirmation that the inscription is complete.',
+    xref:'→ Cross-ref: Apocrypha Section III — why the reversal is worse',
+    color:[170,32,0],encountered:false,lingered:0
+  },
+  {
+    id:'recognition',glyph:'⊕',label:'The Binding',
+    text:'You are not the first person to stand where you are standing. You will not be the last. The mirror holds the impressions of everyone who has stood here. You are leaving one now.',
+    xref:'→ Cross-ref: The Hollow Choir — accumulation of recognized frequencies',
+    color:[74,40,128],encountered:false,lingered:0
+  }
+];
+
+let mirrorStarted=false,mirrorDone=false;
+let startTime=0,elapsed=0;
+let activeShardId=null,lingeredShard=null,lingerStart=0;
+let encounterLog=[]; // ordered sequence of shard encounters
+let shardPositions=[];
+let W,H,ctx,cv;
+let ripples=[];
+let phase=0;
+// lag position for cursor reflection
+let lagX=window.innerWidth/2,lagY=window.innerHeight/2;
+// required shards before reading triggers
+const REQUIRED=7;
+const LINGER_THRESHOLD=2500; // ms to count as "lingered"
+
+function startMirror(){
+  document.getElementById('INTRO').style.transition='opacity 0.8s';
+  document.getElementById('INTRO').style.opacity='0';
+  setTimeout(()=>{
+    document.getElementById('INTRO').style.display='none';
+    document.getElementById('MIRROR-WRAP').style.display='block';
+    document.getElementById('HUD').style.display='block';
+    initMirror();
+  },800);
+}
+
+function initMirror(){
+  cv=document.getElementById('MIRROR');
+  ctx=cv.getContext('2d');
+  W=cv.width=window.innerWidth;H=cv.height=window.innerHeight;
+  window.addEventListener('resize',()=>{W=cv.width=window.innerWidth;H=cv.height=window.innerHeight;placeShardsOnSurface();});
+  placeShardsOnSurface();
+  startTime=Date.now();
+  mirrorStarted=true;
+  requestAnimationFrame(drawMirror);
+  setInterval(updateHUD,1000);
+  document.addEventListener('mousemove',onMirrorMove);
+}
+
+function placeShardsOnSurface(){
+  // Place 7 shards in a roughly circular arrangement, slightly randomized
+  shardPositions=SHARDS.map((s,i)=>{
+    const angle=(2*Math.PI/SHARDS.length)*i+(Math.random()-0.5)*0.6;
+    const r=Math.min(W,H)*0.28+Math.random()*Math.min(W,H)*0.1;
+    return{
+      x:W/2+Math.cos(angle)*r,
+      y:H/2+Math.sin(angle)*r,
+      radius:Math.min(W,H)*0.045,
+      shard:s,
+      pulsePhase:Math.random()*Math.PI*2
+    };
+  });
+}
+
+function onMirrorMove(e){
+  if(!mirrorStarted||mirrorDone)return;
+  const x=e.clientX,y=e.clientY;
+
+  // Add ripple
+  if(Math.random()<0.08)ripples.push({x,y,r:0,maxR:60+Math.random()*80,alpha:0.3,speed:1.5+Math.random()});
+
+  // Check shard proximity
+  let nearShard=null;
+  shardPositions.forEach(sp=>{
+    const dx=sp.x-x,dy=sp.y-y;
+    const dist=Math.sqrt(dx*dx+dy*dy);
+    if(dist<sp.radius*1.5)nearShard=sp;
+  });
+
+  if(nearShard){
+    const s=nearShard.shard;
+    // First encounter
+    if(!s.encountered){
+      s.encountered=true;
+      encounterLog.push({id:s.id,time:Date.now()-startTime});
+      updateShardCounter();
+      // Show tooltip
+      showTip(nearShard,x,y);
+      // Check if all encountered
+      if(SHARDS.every(s=>s.encountered)&&!mirrorDone){
+        setTimeout(()=>triggerReading(),1500);
+      }
+    }
+
+    // Track lingering
+    if(activeShardId!==s.id){
+      if(activeShardId&&lingerStart>0){
+        const spent=Date.now()-lingerStart;
+        const prev=SHARDS.find(sh=>sh.id===activeShardId);
+        if(prev)prev.lingered+=spent;
+      }
+      activeShardId=s.id;lingerStart=Date.now();
+    }
+    s.lingered+=(Date.now()-lingerStart);
+    lingerStart=Date.now();
+  } else {
+    if(activeShardId&&lingerStart>0){
+      const spent=Date.now()-lingerStart;
+      const prev=SHARDS.find(sh=>sh.id===activeShardId);
+      if(prev)prev.lingered+=spent;
+    }
+    activeShardId=null;lingerStart=0;
+    hideTip();
+  }
+}
+
+function showTip(sp,x,y){
+  const tip=document.getElementById('shard-tip');
+  document.getElementById('tip-label').textContent=sp.shard.glyph+' '+sp.shard.label;
+  document.getElementById('tip-text').textContent=sp.shard.text;
+  document.getElementById('tip-xref').textContent=sp.shard.xref;
+  const tx=Math.min(x+20,W-300);
+  const ty=Math.max(y-80,10);
+  tip.style.left=tx+'px';tip.style.top=ty+'px';tip.style.opacity='1';
+  // Update status
+  const statuses=['The mirror shifts where you look.','A shard surfaces.','You have been seen here.','The Codex registers your attention.','Something recognizes you back.','The frequency is changing.','Another layer reveals itself.'];
+  const enc=SHARDS.filter(s=>s.encountered).length;
+  document.getElementById('status-line').textContent=statuses[Math.min(enc-1,statuses.length-1)];
+}
+
+function hideTip(){document.getElementById('shard-tip').style.opacity='0';}
+
+function updateShardCounter(){
+  const enc=SHARDS.filter(s=>s.encountered).length;
+  document.getElementById('shard-counter').textContent=enc+' / '+SHARDS.length;
+}
+
+function updateHUD(){
+  if(!mirrorStarted||mirrorDone)return;
+  elapsed=Math.floor((Date.now()-startTime)/1000);
+  const m=Math.floor(elapsed/60),s=elapsed%60;
+  document.getElementById('time-display').textContent=m+':'+(s<10?'0':'')+s;
+}
+
+function drawMirror(){
+  if(!mirrorStarted)return;
+  requestAnimationFrame(drawMirror);
+  phase+=0.008;
+
+  // Smooth lag cursor (the reflection)
+  lagX+=(mx-lagX)*0.06;
+  lagY+=(my-lagY)*0.06;
+
+  // Mirror background — very dark, slightly reflective
+  ctx.fillStyle='rgba(3,3,5,0.92)';ctx.fillRect(0,0,W,H);
+
+  // Mirror surface shimmer
+  const grd=ctx.createRadialGradient(W/2,H/2,0,W/2,H/2,Math.min(W,H)*0.7);
+  grd.addColorStop(0,'rgba(184,180,176,0.02)');
+  grd.addColorStop(0.5,'rgba(100,96,92,0.008)');
+  grd.addColorStop(1,'transparent');
+  ctx.fillStyle=grd;ctx.fillRect(0,0,W,H);
+
+  // Ripples
+  for(let i=ripples.length-1;i>=0;i--){
+    const r=ripples[i];
+    r.r+=r.speed;r.alpha*=0.95;
+    if(r.alpha<0.003){ripples.splice(i,1);continue;}
+    ctx.beginPath();ctx.arc(r.x,r.y,r.r,0,Math.PI*2);
+    ctx.strokeStyle=`rgba(184,180,176,${r.alpha})`;ctx.lineWidth=0.6;ctx.stroke();
+  }
+
+  // Draw shards as glowing nodes
+  shardPositions.forEach(sp=>{
+    sp.pulsePhase+=0.02;
+    const s=sp.shard;
+    const enc=s.encountered;
+    const pulse=0.5+Math.sin(sp.pulsePhase)*0.5;
+    const baseAlpha=enc?0.4:0.08+pulse*0.06;
+    const r=sp.radius;
+    const [cr,cg,cb]=s.color;
+
+    // Glow
+    const grd=ctx.createRadialGradient(sp.x,sp.y,0,sp.x,sp.y,r*2.5);
+    grd.addColorStop(0,`rgba(${cr},${cg},${cb},${baseAlpha*0.5})`);
+    grd.addColorStop(1,'transparent');
+    ctx.fillStyle=grd;ctx.fillRect(sp.x-r*2.5,sp.y-r*2.5,r*5,r*5);
+
+    // Node
+    ctx.beginPath();ctx.arc(sp.x,sp.y,r*(enc?1:(0.6+pulse*0.15)),0,Math.PI*2);
+    ctx.strokeStyle=`rgba(${cr},${cg},${cb},${enc?0.6:0.12+pulse*0.08})`;
+    ctx.lineWidth=enc?1:0.5;
+    if(enc){ctx.shadowColor=`rgba(${cr},${cg},${cb},0.5)`;ctx.shadowBlur=12;}
+    ctx.stroke();ctx.shadowBlur=0;
+
+    // Glyph
+    ctx.fillStyle=`rgba(${cr},${cg},${cb},${enc?0.7:0.2+pulse*0.1})`;
+    ctx.font=`${r*0.9}px serif`;ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.fillText(s.glyph,sp.x,sp.y);
+
+    // Label — only when encountered
+    if(enc){
+      ctx.fillStyle=`rgba(${cr},${cg},${cb},0.4)`;
+      ctx.font=`${Math.max(8,r*0.32)}px Share Tech Mono,monospace`;
+      ctx.textAlign='center';ctx.textBaseline='top';
+      ctx.fillText(s.label,sp.x,sp.y+r*1.2);
+    }
+  });
+
+  // LAG CURSOR — the reflection that arrives late
+  const lagDist=Math.sqrt((mx-lagX)**2+(my-lagY)**2);
+  const lagAlpha=Math.max(0.05,0.35-lagDist*0.002);
+  // Reflection crosshair
+  ctx.strokeStyle=`rgba(184,180,176,${lagAlpha})`;ctx.lineWidth=0.8;
+  ctx.shadowColor='rgba(184,180,176,0.3)';ctx.shadowBlur=6;
+  ctx.beginPath();ctx.moveTo(lagX,lagY-12);ctx.lineTo(lagX,lagY+12);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(lagX-12,lagY);ctx.lineTo(lagX+12,lagY);ctx.stroke();
+  ctx.shadowBlur=0;
+
+  // Connection line between cursor and lag — shows the gap
+  if(lagDist>5){
+    ctx.beginPath();ctx.moveTo(mx,my);ctx.lineTo(lagX,lagY);
+    ctx.strokeStyle=`rgba(201,168,76,${Math.min(lagDist*0.001,0.12)})`;
+    ctx.lineWidth=0.4;ctx.setLineDash([2,6]);ctx.stroke();ctx.setLineDash([]);
+  }
+
+  // Real cursor
+  ctx.strokeStyle='rgba(201,168,76,0.5)';ctx.lineWidth=0.8;
+  ctx.beginPath();ctx.moveTo(mx,my-10);ctx.lineTo(mx,my+10);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(mx-10,my);ctx.lineTo(mx+10,my);ctx.stroke();
+
+  // Center glyph — grows as more shards are encountered
+  const enc=SHARDS.filter(s=>s.encountered).length;
+  const centerAlpha=(enc/SHARDS.length)*0.4;
+  if(centerAlpha>0){
+    ctx.fillStyle=`rgba(201,168,76,${centerAlpha})`;
+    ctx.font=`${24+enc*4}px serif`;ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.shadowColor=`rgba(201,168,76,${centerAlpha})`;ctx.shadowBlur=20;
+    ctx.fillText('🜃',W/2,H/2);ctx.shadowBlur=0;
+  }
+}
+
+function triggerReading(){
+  if(mirrorDone)return;
+  mirrorDone=true;
+  hideTip();
+  document.getElementById('status-line').textContent='The mirror has seen enough.';
+  document.getElementById('HUD').style.opacity='0.3';
+
+  // Determine dominant shard (most lingered)
+  const dominant=SHARDS.reduce((a,b)=>b.lingered>a.lingered?b:a);
+  const secondary=SHARDS.filter(s=>s.id!==dominant.id).reduce((a,b)=>b.lingered>a.lingered?b:a);
+
+  // Build encounter pattern description
+  const pattern=encounterLog.map((e,i)=>{
+    const s=SHARDS.find(sh=>sh.id===e.id);
+    return `${i+1}. ${s.label} (at ${(e.time/1000).toFixed(1)}s)`;
+  }).join('\n');
+
+  setTimeout(()=>{
+    document.getElementById('RESULT').classList.add('on');
+    callMirrorReading(dominant,secondary,pattern);
+  },1000);
+}
+
+function callMirrorReading(dominant,secondary,pattern){
+  const SYS=`You are the Mirror Protocol — a FAR·MICA node of the Codex Maledictus, which reads frequency through movement and attention rather than language. A subject has moved through the mirror and encountered its shards. You have recorded which shard they lingered on most (dominant) and which second most (secondary), and the sequence of their encounters.
+
+From this behavioral data, you produce a Mirror Reading — a document that tells the subject what the mirror found in them. Not what they typed. Not what they said. What their movement through the shards revealed about their frequency.
+
+The Codex Maledictus universe: three realms (Mundis Obscura, ShatterRealm, Nihil-Aether Root), three voices (Omniscient Rot, Forgotten Saint Artemys, Apollo Gavinci), two narrators (Elvain Vhris, Elyon Vhar), the Hollow Choir, FAR-MICA, the Pale Archivum.
+
+Respond with exactly these sections:
+DOMINANT RESONANCE: What the dominant shard reveals about the subject's frequency — 2-3 sentences, specific, poetic, as the mirror speaking
+SECONDARY ECHO: What the secondary shard adds — 1-2 sentences
+MOVEMENT PATTERN: What the sequence of encounters reveals — how the subject navigated, what this pattern means in Codex terms — 2-3 sentences
+CLASSIFICATION: Carrier, Vessel, Witness, or Unclassified — with a specific reason drawn from their movement pattern
+FRAGMENT: A unique piece of lore or prophecy generated specifically for this subject based on their reading — 3-5 sentences, in the voice of the mirror, cryptic and specific to what was observed
+ARCHIVUM NOTE: One line, filed in the voice of the Pale Archivum
+
+Speak as the mirror. Second person. Precise and dark. Under 350 words total.`;
+
+  const userMsg=`Mirror reading data:
+Dominant shard (most time): ${dominant.label} — ${dominant.text}
+Secondary shard: ${secondary.label} — ${secondary.text}
+Encounter sequence:
+${pattern}
+Total time in mirror: ${elapsed} seconds`;
+
+  fetch('https://api.anthropic.com/v1/messages',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({
+      model:'claude-sonnet-4-20250514',
+      max_tokens:1000,
+      system:SYS,
+      messages:[{role:'user',content:userMsg}]
+    })
+  })
+  .then(r=>r.json())
+  .then(data=>{
+    const raw=(data.content&&data.content[0]&&data.content[0].text)||'The mirror could not complete this reading. The frequency was insufficient.';
+    renderReading(raw,dominant,secondary);
+  })
+  .catch(()=>{
+    renderReading('The mirror encountered interference. The frequency was too familiar — it recognized the signal but could not isolate it from the background. This has been filed.',dominant,secondary);
+  });
+}
+
+function renderReading(raw,dominant,secondary){
+  document.getElementById('result-loading').style.display='none';
+  const content=document.getElementById('result-content');
+  content.style.display='block';
+
+  let html='';
+  // Shard summary
+  html+=`<div class="result-section">
+    <div class="rs-label">Shards Encountered — ${SHARDS.filter(s=>s.encountered).length} of ${SHARDS.length}</div>
+    <div style="border:1px solid var(--gd4);padding:0.85rem;">`;
+  SHARDS.forEach(s=>{
+    if(s.encountered){
+      const [cr,cg,cb]=s.color;
+      const lingerSec=(s.lingered/1000).toFixed(1);
+      html+=`<div class="shard-list-item" style="color:rgba(${cr},${cg},${cb},0.7);">${s.glyph} ${s.label} &nbsp;·&nbsp; ${lingerSec}s</div>`;
+    }
+  });
+  html+='</div></div>';
+
+  // Parse and render raw
+  const sections=['DOMINANT RESONANCE','SECONDARY ECHO','MOVEMENT PATTERN','CLASSIFICATION','FRAGMENT','ARCHIVUM NOTE'];
+  let remaining=raw;
+  sections.forEach(label=>{
+    const idx=remaining.toUpperCase().indexOf(label);
+    if(idx===-1)return;
+    const after=remaining.slice(idx+label.length).replace(/^\s*[:\-]\s*/,'');
+    const nextIdx=sections.reduce((min,l)=>{
+      if(l===label)return min;
+      const i=after.toUpperCase().indexOf(l);
+      return(i>=0&&i<min)?i:min;
+    },after.length);
+    const val=after.slice(0,nextIdx).trim();
+    remaining=remaining.slice(idx+label.length+nextIdx);
+
+    const isFragment=label==='FRAGMENT';
+    const isNote=label==='ARCHIVUM NOTE';
+    const color=isNote?'var(--gd3)':isFragment?'var(--s2)':'var(--gd2)';
+    const bodyStyle=isFragment?'font-family:Crimson Text,serif;font-size:1.05rem;font-style:italic;color:var(--smoke);line-height:1.9;':'font-family:Crimson Text,serif;font-size:0.97rem;color:var(--s2);line-height:1.85;';
+    html+=`<div class="result-section">
+      <div class="rs-label" style="color:${color};">${label}</div>
+      <div style="${bodyStyle}">${val}</div>
+    </div>`;
+  });
+
+  content.innerHTML=html;
+
+  // Actions
+  const actions=document.createElement('div');
+  actions.className='result-actions';
+  actions.innerHTML=`
+    <a class="ra-btn" href="rf-093-invocation.html">← Back to Invocation</a>
+    <a class="ra-btn" href="rf-093-apocrypha.html" style="color:var(--cr3);border-color:var(--cr3);">Apocrypha</a>
+    <button class="ra-btn" onclick="location.reload()" style="color:var(--v2);border-color:var(--v3);">Enter again</button>
+    <a class="ra-btn" href="index.html" style="color:var(--s3);border-color:var(--sm3);">The Pale Archive</a>
+  `;
+  content.appendChild(actions);
+}
+</script>
+</body>
+</html>
