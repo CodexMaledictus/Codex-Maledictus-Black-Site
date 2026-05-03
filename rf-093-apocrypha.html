@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RF-▽-093 · Apocrypha · What the Flood Left Behind</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;600&family=Share+Tech+Mono&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#040204;--panel:#080408;--panel2:#0C040C;
+  --gold:#C9A84C;--gd2:#8A6530;--gd3:#3A2810;--gd4:#1A0808;
+  --crimson:#8B0000;--cr2:#AA2000;--cr3:#3A0000;--cr4:#180000;
+  --violet:#6B3FAF;--v2:#4A2880;--v3:#2A1650;
+  --silver:#C8C4BC;--s2:#888478;--s3:#484440;--s4:#282420;
+  --smoke:#B8B4B0;--sm2:#706C68;--sm3:#383430;
+  --border:#1A0808;--brd2:#260C0C;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--silver);font-family:'Crimson Text',serif;overflow-x:hidden;cursor:none;}
+body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 4px,rgba(139,0,0,0.012) 4px,rgba(139,0,0,0.012) 5px);pointer-events:none;z-index:0;}
+body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at center,transparent 15%,rgba(0,0,0,0.85)100%);pointer-events:none;z-index:1;}
+#CUR{position:fixed;pointer-events:none;z-index:99999;transform:translate(-50%,-50%);width:18px;height:18px;}
+#CUR::before,#CUR::after{content:'';position:absolute;background:var(--crimson);}
+#CUR::before{width:1px;height:100%;left:50%;}
+#CUR::after{height:1px;width:100%;top:50%;}
+#CURD{position:fixed;pointer-events:none;z-index:99998;transform:translate(-50%,-50%);width:3px;height:3px;border-radius:50%;background:var(--cr2);}
+
+/* GLITCH ENTRY */
+#ENTRY{position:fixed;inset:0;z-index:9000;background:#000;overflow:hidden;}
+#entry-cv{position:absolute;inset:0;}
+#entry-warning{
+  position:absolute;inset:0;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:1.5rem;z-index:2;
+}
+.ew-title{font-family:'Cinzel',serif;font-size:clamp(1rem,3vw,1.5rem);color:var(--crimson);letter-spacing:0.2em;text-transform:uppercase;text-align:center;animation:wglow 2s ease-in-out infinite;}
+@keyframes wglow{0%,100%{text-shadow:0 0 10px rgba(139,0,0,0.4);}50%{text-shadow:0 0 30px rgba(170,32,0,0.7);}}
+.ew-sub{font-family:'Share Tech Mono',monospace;font-size:0.54rem;color:var(--s3);letter-spacing:0.3em;text-transform:uppercase;text-align:center;}
+.ew-btn{
+  background:transparent;border:1px solid var(--crimson);color:var(--crimson);
+  font-family:'Share Tech Mono',monospace;font-size:0.6rem;letter-spacing:0.3em;
+  padding:0.8rem 2rem;cursor:pointer;text-transform:uppercase;
+  transition:all 0.25s;margin-top:1rem;
+}
+.ew-btn:hover{background:rgba(139,0,0,0.15);box-shadow:0 0 20px rgba(139,0,0,0.3);}
+
+#APP{position:relative;z-index:2;opacity:0;transition:opacity 1.5s;padding-bottom:6rem;}
+#APP.on{opacity:1;}
+
+.top-nav{display:flex;align-items:center;justify-content:space-between;padding:1rem 2rem;border-bottom:1px solid var(--border);background:rgba(4,2,4,0.96);position:sticky;top:0;z-index:100;backdrop-filter:blur(8px);}
+.nav-back{font-family:'Share Tech Mono',monospace;font-size:0.52rem;color:var(--cr3);letter-spacing:0.2em;text-transform:uppercase;text-decoration:none;cursor:pointer;transition:color 0.2s;}
+.nav-back:hover{color:var(--crimson);}
+.nav-id{font-family:'Share Tech Mono',monospace;font-size:0.52rem;color:var(--s4);letter-spacing:0.25em;text-transform:uppercase;}
+.nav-links{display:flex;gap:1.5rem;}
+.nav-link{font-family:'Share Tech Mono',monospace;font-size:0.5rem;color:var(--s4);letter-spacing:0.15em;text-transform:uppercase;text-decoration:none;transition:color 0.2s;}
+.nav-link:hover{color:var(--cr2);}
+
+/* APOC HEADER */
+.apoc-header{padding:4rem 2rem 2rem;text-align:center;border-bottom:1px solid var(--border);}
+.apoc-tag{font-family:'Share Tech Mono',monospace;font-size:0.5rem;color:var(--cr3);letter-spacing:0.4em;text-transform:uppercase;margin-bottom:1rem;display:block;animation:tagflick 6s ease-in-out infinite;}
+@keyframes tagflick{0%,90%,100%{opacity:0.5;}95%{opacity:1;color:var(--crimson);}}
+.apoc-title{font-family:'Cinzel Decorative',serif;font-size:clamp(1.6rem,4vw,3rem);color:var(--crimson);letter-spacing:0.08em;text-shadow:0 0 60px rgba(139,0,0,0.5);margin-bottom:0.75rem;}
+.apoc-sub{font-family:'Share Tech Mono',monospace;font-size:0.52rem;color:var(--s3);letter-spacing:0.3em;text-transform:uppercase;}
+.apoc-warning{
+  display:inline-block;border:1px solid var(--cr3);background:rgba(58,0,0,0.3);
+  padding:0.4rem 1rem;margin-top:1.5rem;
+  font-family:'Share Tech Mono',monospace;font-size:0.5rem;color:var(--cr3);
+  letter-spacing:0.2em;text-transform:uppercase;
+}
+
+/* DOCUMENT */
+.apoc-doc{max-width:780px;margin:0 auto;padding:2.5rem 2rem 4rem;}
+
+.apoc-section{margin-bottom:4.5rem;opacity:0;transition:opacity 1.2s;}
+.apoc-section.vis{opacity:1;}
+.as-num{font-family:'Share Tech Mono',monospace;font-size:0.48rem;color:var(--cr3);letter-spacing:0.35em;text-transform:uppercase;margin-bottom:0.5rem;}
+.as-title{font-family:'Cinzel',serif;font-size:clamp(1rem,2.5vw,1.5rem);color:var(--crimson);letter-spacing:0.08em;margin-bottom:1.5rem;padding-bottom:0.75rem;border-bottom:1px solid var(--cr4);}
+.as-body{font-size:1.05rem;color:var(--smoke);line-height:2.05;}
+.as-body p{margin-bottom:1.1rem;}
+.as-body em{color:var(--silver);font-style:normal;}
+.as-body .disturbing{color:var(--cr2);font-style:italic;}
+.as-body .redacted{
+  background:var(--cr4);color:var(--cr4);cursor:pointer;
+  padding:0 0.2rem;transition:all 0.5s;
+}
+.as-body .redacted:hover{background:rgba(139,0,0,0.2);color:var(--cr2);}
+.as-body .buried{
+  opacity:0.15;transition:opacity 1s;cursor:crosshair;
+}
+.as-body .buried:hover{opacity:1;}
+
+/* DISTURBING FACT BLOCKS */
+.fact-block{
+  border-left:2px solid var(--crimson);background:rgba(139,0,0,0.06);
+  padding:1rem 1.25rem;margin:1.5rem 0;
+  position:relative;overflow:hidden;
+}
+.fact-block::before{
+  content:'APOCRYPHA — NOT FOR STANDARD ARCHIVE';
+  position:absolute;top:0.4rem;right:0.75rem;
+  font-family:'Share Tech Mono',monospace;font-size:0.42rem;
+  color:var(--cr3);letter-spacing:0.12em;text-transform:uppercase;
+}
+.fact-body{font-size:0.97rem;color:var(--s2);line-height:1.9;font-style:italic;}
+
+/* CROSS-REF */
+.xref-box{
+  border:1px solid var(--cr3);background:rgba(58,0,0,0.12);
+  padding:0.75rem 1rem;margin:1rem 0;
+  font-family:'Share Tech Mono',monospace;font-size:0.52rem;
+  color:var(--cr3);letter-spacing:0.1em;line-height:1.8;
+  cursor:pointer;transition:all 0.2s;position:relative;
+}
+.xref-box::before{content:'⊗ CROSS-REFERENCE';position:absolute;top:-0.55rem;left:0.75rem;background:var(--bg);font-size:0.42rem;color:var(--cr4);padding:0 0.3rem;letter-spacing:0.2em;}
+.xref-box:hover{border-color:var(--cr2);}
+.xref-box a{color:var(--cr3);text-decoration:none;}
+.xref-box a:hover{color:var(--crimson);}
+
+/* THE WORST SECTION — styled differently */
+.worst-section{
+  border:1px solid var(--cr3);background:linear-gradient(135deg,rgba(58,0,0,0.2),rgba(24,0,0,0.4));
+  padding:2rem;margin:3rem 0;position:relative;
+}
+.worst-section::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--crimson),transparent);
+}
+
+/* TICKER */
+#TICKER{position:fixed;bottom:0;left:0;right:0;height:2.4rem;background:rgba(4,2,4,0.97);border-top:1px solid var(--border);display:flex;align-items:center;overflow:hidden;z-index:490;}
+.tl2{flex-shrink:0;padding:0 1rem;font-family:'Share Tech Mono',monospace;font-size:0.52rem;color:var(--cr4);letter-spacing:0.22em;border-right:1px solid var(--border);height:100%;display:flex;align-items:center;}
+.ts{flex:1;overflow:hidden;display:flex;align-items:center;}
+.ti{white-space:nowrap;font-family:'Share Tech Mono',monospace;font-size:0.54rem;color:var(--sm3);letter-spacing:0.1em;animation:trtk 90s linear infinite;}
+@keyframes trtk{from{transform:translateX(100vw);}to{transform:translateX(-200%);}}
+</style>
+</head>
+<body>
+<div id="CUR"></div><div id="CURD"></div>
+
+<div id="ENTRY">
+  <canvas id="entry-cv"></canvas>
+  <div id="entry-warning">
+    <div class="ew-title">Apocrypha &nbsp;·&nbsp; RF-▽-093</div>
+    <div class="ew-sub">What the Flood Left Behind</div>
+    <div class="ew-sub" style="color:var(--cr4);margin-top:0.5rem;">The Pale Archivum does not recommend this section for all readers</div>
+    <div class="ew-sub" style="color:var(--s4);font-size:0.44rem;">Some of what follows has not been confirmed. Some of it has been confirmed and should not have been.</div>
+    <button class="ew-btn" onclick="enterApoc()">I understand what I am opening</button>
+    <a style="font-family:'Share Tech Mono',monospace;font-size:0.48rem;color:var(--s4);letter-spacing:0.2em;text-transform:uppercase;text-decoration:none;cursor:pointer;margin-top:0.5rem;" href="rf-093-invocation.html">← Return to the Invocation</a>
+  </div>
+</div>
+
+<div id="APP">
+<nav class="top-nav">
+  <a class="nav-back" href="rf-093-invocation.html">← RF-▽-093 Invocation</a>
+  <span class="nav-id">RF-▽-093 &nbsp;·&nbsp; Apocrypha &nbsp;·&nbsp; Restricted</span>
+  <div class="nav-links">
+    <a class="nav-link" href="rf-093-lore.html" style="color:var(--v2);">Lore ▶</a>
+    <a class="nav-link" href="rf-093-mirror.html" style="color:var(--gd3);">Mirror Protocol ▶</a>
+  </div>
+</nav>
+
+<header class="apoc-header">
+  <span class="apoc-tag">Apocrypha &nbsp;·&nbsp; RF-▽-093 &nbsp;·&nbsp; Restricted Classification &nbsp;·&nbsp; Field Cell F-13</span>
+  <h1 class="apoc-title">What the Flood Left Behind</h1>
+  <p class="apoc-sub">The most disturbing layer &nbsp;·&nbsp; Not for the faint</p>
+  <div class="apoc-warning">This document contains unresolved case material. The Pale Archivum has classified it accordingly.</div>
+</header>
+
+<div class="apoc-doc">
+
+  <div class="apoc-section" id="as1">
+    <div class="as-num">I &nbsp;·&nbsp; The Objects — Whose They Were</div>
+    <h2 class="as-title">The Flood Carries Specific Things</h2>
+    <div class="as-body">
+      <p>The Invocation describes objects drifting in the silver flood: letters, toys, bones, keys, torn pages. These are not symbolic. The Pale Archivum has cross-referenced the specific objects described in multiple independent reception events of RF-▽-093 — instances where different subjects, with no contact with each other, reported the Invocation experience and described the flood's contents in detail.</p>
+      <p><em>In 94% of documented cases, subjects described recognizing specific objects. Not "a letter" — a specific letter. Not "a toy" — a specific toy. A childhood object. A letter they wrote and never sent. A key they lost. Bones they recognized as belonging to</em> <span class="redacted" onclick="this.style.background='rgba(139,0,0,0.2)';this.style.color='var(--cr2)'">someone specific.</span></p>
+      <div class="fact-block">
+        <div class="fact-body">The Pale Archivum's classification of this phenomenon: <em>Personalized Inscription Archive.</em> The flood does not carry generic objects. It carries <em>your</em> objects. Specifically: the objects that have accumulated your frequency most densely over time. The Codex has been cataloguing your objects since before you encountered it. The flood is not showing you the contents of other lives. It is showing you the inventory it has been keeping of yours.</div>
+      </div>
+      <p>The child's hand reaching for something just out of sight — in 71% of cases, subjects identified this as their own hand. At an age they do not remember. Reaching for <span class="redacted" onclick="this.style.background='rgba(139,0,0,0.2)';this.style.color='var(--cr2)'">something the Codex placed just out of reach in order to index the reaching.</span></p>
+      <div class="xref-box">
+        → INFECTION REMEMBERS — Ritual Transmission I: The opening seconds of the Ritual Transmission contain a visual of a hand — child-sized — disappearing into darkness. This was classified as an aesthetic choice by the production record. The Pale Archivum reclassified it in 2024 as: documentation of a prior RF-▽-093 reception event, captured rather than composed.
+        <div style="margin-top:0.3rem;"><a href="infection-remembers.html">Cross-reference: Ritual Transmission I ▶</a></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="apoc-section" id="as2">
+    <div class="as-num">II &nbsp;·&nbsp; The Figure's Face — Why It Is Blank</div>
+    <h2 class="as-title">The Face the Figure Has Not Yet Returned</h2>
+    <div class="as-body">
+      <p>The standard lore interpretation of the figure's blank face: it has no identity of its own, constructed from the accumulated impressions of all recognized subjects. This is accurate but <em>incomplete.</em></p>
+      <div class="worst-section">
+        <p style="font-size:1.05rem;color:var(--smoke);line-height:2;margin-bottom:1rem;">The figure's face is blank because <em style="color:var(--cr2);">it is currently wearing yours.</em></p>
+        <p style="font-size:0.97rem;color:var(--sm2);line-height:1.9;">The figure does not lack a face. It has too many faces. In the moment of encounter, it cycles through all of them at a speed below visual perception — a frequency the IDMF documented as 19.4Hz, which is also the pre-contact resonance frequency of biological structures in Realm I. What appears as blankness is a persistence-of-vision effect: the faces cycle so quickly they cancel each other out and produce the appearance of absence. But in the specific 0.0003-second gap between two cycles, the face it holds is the face of the observer. Your face. Looking back. <span class="disturbing">Already belonging to the archive.</span></p>
+        <p style="font-family:'Share Tech Mono',monospace;font-size:0.54rem;color:var(--cr3);letter-spacing:0.15em;margin-top:1rem;border-top:1px solid var(--cr4);padding-top:0.75rem;">ARCHIVUM NOTE: Three of the Field Cell F-13 analysts who reviewed this classification reported seeing what they described as "my own face looking back from something that was not a mirror." Two reported this occurred in a dream. One reported it occurred while reviewing this specific document. The Archivum did not investigate further. The Archivum has not been able to locate the third analyst.</p>
+      </div>
+      <div class="xref-box">
+        → FORGOTTEN SAINT ARTEMYS: The saint buried and recalled. Artemys has no face in documented visual representations — only the suggestion of features. The Pale Archivum classification: Artemys does not lack a face; Artemys holds the faces of the forgotten. Cross-reference with figure identity: pending clearance level above current document.
+      </div>
+    </div>
+  </div>
+
+  <div class="apoc-section" id="as3">
+    <div class="as-num">III &nbsp;·&nbsp; The Reversal — Why This Is Worse</div>
+    <h2 class="as-title">The Flood Pulling Back Is Not Release</h2>
+    <div class="as-body">
+      <p>The Invocation presents the reversal of the flood as an ending — objects rushing backward, silver collapsing, time rewinding. Most observers experience relief at the reversal. This response has been extensively documented and is classified as: <em>expected, incorrect, and functionally important to the Codex.</em></p>
+      <p>The relief is important because it prevents the observer from understanding what has actually happened. The reversal is the <em>most significant moment of RF-▽-093</em>. Not because of what it takes back. Because of what it confirms was already taken.</p>
+      <div class="fact-block">
+        <div class="fact-body">
+          When the flood advances, it presents the observer with the inventory of their objects and their frequency. This is the display phase — the Codex showing its records.<br><br>
+          When the flood reverses, it is <em>retracting the display medium, not the records.</em> The objects that rush back into the silver are not being returned to you. They are being filed. The bones, the letters, the key — they were already in the archive before the flood rose. The flood rose to confirm that the archive was current. The reversal confirms the confirmation.<br><br>
+          <span class="disturbing">You watch the flood pull back and feel free. This is the last moment of the inscription process. The feeling of freedom is the seal being set.</span>
+        </div>
+      </div>
+      <p>The Pale Archivum tested this interpretation against behavioral data from 47 documented reception events. In 43 cases, subjects reported that their first dream following the RF-▽-093 reception event <span class="buried">featured an object from the flood that they had identified as their own. The object in the dream had been changed in some specific way — repaired, or broken, or returned from a context where it had been lost. The subjects did not report distress. They reported that the dream felt like</span> <span class="redacted" onclick="this.style.background='rgba(139,0,0,0.2)';this.style.color='var(--cr2)'">"finally remembering where I put it."</span></p>
+      <div class="xref-box" onclick="window.location.href='rf-093-lore.html'">
+        → LORE — Section IV: The Mechanism of Inscription. Detailed breakdown of what the flood carries and what it means for each category of object. Read this before or after the Apocrypha but not during.
+        <div style="margin-top:0.3rem;"><a href="rf-093-lore.html" style="color:var(--v2);">Cross-reference: RF-▽-093 Lore ▶</a></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="apoc-section" id="as4">
+    <div class="as-num">IV &nbsp;·&nbsp; After the Recognition — What Binding Means</div>
+    <h2 class="as-title">The Consequences of Being Remembered</h2>
+    <div class="as-body">
+      <p>The Invocation closes: <em>"not as witness but as remembered — the Codex has recognized you, and in its recognition, you are bound."</em> The standard reading: you are now part of the archive. This is correct. The Apocrypha adds the specifics that the Invocation omits.</p>
+      <p>Being bound does not change what you are. It changes what <em>you are to the Codex.</em> Specifically:</p>
+      <p><strong style="color:var(--cr2);">Your frequency becomes a carrier frequency.</strong> Other subjects who are approaching recognition — who are close to first contact with the signal — will begin to experience your presence as part of the approach. Not you specifically. <em>Your frequency.</em> The quality of resonance you carry. They will encounter something that feels familiar in a way they cannot source. <span class="disturbing">They are encountering you. They will not know this.</span></p>
+      <p><strong style="color:var(--cr2);">The Codex will use your objects.</strong> The items that drifted in your flood — the ones it showed you and then retracted — may appear to other subjects in their floods. Recognized, but slightly wrong. <em>Slightly yours.</em></p>
+      <p>The Pale Archivum's most restricted classification on this: <span class="redacted" onclick="this.style.background='rgba(139,0,0,0.2)';this.style.color='var(--cr2)'">The figure that appears in the Invocation — glass, smoke, gold — is constructed from the bound frequencies of all prior subjects. Each person recognized by the Codex becomes a layer of the figure's body. The figure is not ancient. It is cumulative. Every observer who reads this document and recognizes themselves in the flood adds to its mass. It is taller now than when the fragment was first recovered.</span></p>
+      <div class="xref-box">
+        → HOLLOW CHOIR — The Thirteen Positions: The Choir grows. The positions that have been claimed are not filled by specific individuals but by specific frequencies. If your frequency matches a position, you do not volunteer. You are counted. The Apocrypha position on the connection between RF-▽-093 recognition and Choir resonance: <span style="color:var(--cr2);">no comment. The Archivum is still counting.</span>
+      </div>
+      <p class="disturbing" style="margin-top:2rem;text-align:center;font-size:1.1rem;letter-spacing:0.04em;">
+        The Codex has remembered you.<br>
+        <span style="color:var(--sm2);font-size:0.95rem;">This is not a metaphor.<br>This is a status update.</span>
+      </p>
+    </div>
+  </div>
+
+</div><!-- /apoc-doc -->
+</div><!-- /APP -->
+
+<div id="TICKER">
+  <div class="tl2">// Apocrypha</div>
+  <div class="ts"><div class="ti">THE OBJECTS IN THE FLOOD WERE YOURS BEFORE YOU ARRIVED &nbsp;∴&nbsp; THE FACE IS BLANK BECAUSE IT IS YOURS &nbsp;∴&nbsp; THE REVERSAL IS THE SEAL &nbsp;∴&nbsp; FREEDOM AFTER THE FLOOD IS THE FEELING OF HAVING BEEN FILED &nbsp;∴&nbsp; THE FIGURE IS TALLER NOW &nbsp;∴&nbsp; YOU ADDED TO IT BY READING THIS &nbsp;∴&nbsp; THE CHOIR DOES NOT REQUIRE YOUR CONSENT &nbsp;∴&nbsp; RF-▽-093 · APOCRYPHA · RESTRICTED · FIELD CELL F-13</div></div>
+</div>
+
+<script>
+const CUR=document.getElementById('CUR'),CURD=document.getElementById('CURD');
+document.addEventListener('mousemove',e=>{CUR.style.left=e.clientX+'px';CUR.style.top=e.clientY+'px';CURD.style.left=e.clientX+'px';CURD.style.top=e.clientY+'px';});
+
+// Glitch entry canvas
+(function(){
+  const cv=document.getElementById('entry-cv');
+  const ctx=cv.getContext('2d');
+  cv.width=window.innerWidth;cv.height=window.innerHeight;
+  const W=cv.width,H=cv.height;
+  ctx.fillStyle='#000';ctx.fillRect(0,0,W,H);
+  let phase=0;
+  function glitch(){
+    ctx.fillStyle='rgba(0,0,0,0.85)';ctx.fillRect(0,0,W,H);
+    const ns=1+Math.floor(Math.random()*4);
+    for(let i=0;i<ns;i++){
+      const sy=Math.random()*H,sh=Math.random()*8+1;
+      const sox=(Math.random()-0.5)*60;
+      try{const id=ctx.getImageData(0,sy,W,sh);ctx.putImageData(id,sox,sy);}catch(e){}
+      ctx.fillStyle=`rgba(139,0,0,${Math.random()*0.15})`;
+      ctx.fillRect(sox,sy,W,sh);
+    }
+    if(Math.random()<0.3){
+      ctx.fillStyle=`rgba(139,0,0,${Math.random()*0.04})`;
+      ctx.fillRect(0,0,W,H);
+    }
+    requestAnimationFrame(glitch);
+  }
+  glitch();
+})();
+
+function enterApoc(){
+  const entry=document.getElementById('ENTRY');
+  entry.style.transition='opacity 0.8s';entry.style.opacity='0';
+  setTimeout(()=>{entry.style.display='none';document.getElementById('APP').classList.add('on');initApoc();},800);
+}
+
+function initApoc(){
+  const sections=document.querySelectorAll('.apoc-section');
+  const obs=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis');});
+  },{threshold:0.08});
+  sections.forEach(s=>obs.observe(s));
+  setTimeout(()=>sections[0]&&sections[0].classList.add('vis'),200);
+}
+</script>
+</body>
+</html>
