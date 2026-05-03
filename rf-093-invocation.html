@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RF-▽-093 · The First Memory That Remembers You · Codex Maledictus</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;600&family=Share+Tech+Mono&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#050407;--panel:#080610;--panel2:#0D0A18;
+  --gold:#C9A84C;--gd2:#8A6530;--gd3:#3A2810;--gd4:#1A1208;
+  --crimson:#8B0000;--cr2:#AA2000;--cr3:#3A0000;
+  --violet:#6B3FAF;--v2:#4A2880;--v3:#2A1650;
+  --silver:#C8C4BC;--s2:#888478;--s3:#484440;--s4:#282420;
+  --smoke:#B8B4B0;--sm2:#706C68;--sm3:#383430;
+  --border:#1A1408;--brd2:#261E10;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--bg);color:var(--silver);
+  font-family:'Crimson Text',serif;
+  overflow-x:hidden;cursor:none;
+  min-height:100vh;
+}
+body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at center,transparent 20%,rgba(0,0,0,0.75)100%);pointer-events:none;z-index:1;}
+
+/* CURSOR */
+#CUR{position:fixed;pointer-events:none;z-index:99999;transform:translate(-50%,-50%);width:20px;height:20px;}
+#CUR::before,#CUR::after{content:'';position:absolute;background:var(--gold);}
+#CUR::before{width:1px;height:100%;left:50%;}
+#CUR::after{height:1px;width:100%;top:50%;}
+#CURD{position:fixed;pointer-events:none;z-index:99998;transform:translate(-50%,-50%);width:4px;height:4px;border-radius:50%;background:var(--gold);opacity:0.4;}
+
+/* BACKGROUND CANVAS */
+#BG{position:fixed;inset:0;z-index:0;}
+
+/* ENTRY CRACK */
+#CRACK{
+  position:fixed;inset:0;z-index:9000;background:#000;
+  display:flex;align-items:center;justify-content:center;
+}
+#CRACK canvas{position:absolute;inset:0;}
+#crack-text{
+  position:relative;z-index:2;text-align:center;
+  font-family:'Share Tech Mono',monospace;font-size:0.56rem;
+  color:var(--gd3);letter-spacing:0.4em;text-transform:uppercase;
+  opacity:0;animation:ctext 3s 1.5s ease forwards;
+}
+@keyframes ctext{0%{opacity:0;}50%{opacity:0.7;}100%{opacity:0;}}
+
+/* APP */
+#APP{position:relative;z-index:2;opacity:0;transition:opacity 1.5s;padding-bottom:8rem;}
+#APP.on{opacity:1;}
+
+/* NAV */
+.top-nav{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:1rem 2rem;border-bottom:1px solid var(--border);
+  background:rgba(5,4,7,0.92);position:sticky;top:0;z-index:100;
+  backdrop-filter:blur(8px);
+}
+.nav-back{
+  font-family:'Share Tech Mono',monospace;font-size:0.54rem;
+  color:var(--gd3);letter-spacing:0.2em;text-transform:uppercase;
+  text-decoration:none;cursor:pointer;transition:color 0.2s;
+}
+.nav-back:hover{color:var(--gold);}
+.nav-id{
+  font-family:'Share Tech Mono',monospace;font-size:0.54rem;
+  color:var(--s4);letter-spacing:0.25em;text-transform:uppercase;
+}
+.nav-links{display:flex;gap:1.5rem;}
+.nav-link{
+  font-family:'Share Tech Mono',monospace;font-size:0.5rem;
+  color:var(--s4);letter-spacing:0.18em;text-transform:uppercase;
+  text-decoration:none;cursor:pointer;transition:color 0.2s;border-bottom:1px solid transparent;
+}
+.nav-link:hover{color:var(--gd2);border-bottom-color:var(--gd2);}
+.nav-link.deep{color:var(--v2);}
+.nav-link.deep:hover{color:var(--violet);}
+.nav-link.apoc{color:var(--cr3);}
+.nav-link.apoc:hover{color:var(--crimson);}
+
+/* HEADER */
+.rf-header{
+  text-align:center;padding:5rem 2rem 3rem;
+  position:relative;overflow:hidden;
+}
+.rf-num{
+  font-family:'Share Tech Mono',monospace;font-size:0.56rem;
+  color:var(--gd3);letter-spacing:0.5em;text-transform:uppercase;
+  margin-bottom:1.5rem;display:block;
+  animation:numglow 8s ease-in-out infinite;
+}
+@keyframes numglow{0%,100%{opacity:0.4;}50%{opacity:1;color:var(--gd2);}}
+.rf-title{
+  font-family:'Cinzel Decorative',serif;
+  font-size:clamp(1.8rem,5vw,4.5rem);
+  color:var(--gold);letter-spacing:0.08em;line-height:1.15;
+  text-shadow:0 0 80px rgba(201,168,76,0.4),0 0 200px rgba(201,168,76,0.12);
+  margin-bottom:1rem;
+  animation:titleglow 10s ease-in-out infinite;
+}
+@keyframes titleglow{0%,100%{text-shadow:0 0 80px rgba(201,168,76,0.4);}50%{text-shadow:0 0 120px rgba(201,168,76,0.65),0 0 300px rgba(201,168,76,0.18);}}
+.rf-sub{
+  font-family:'Cinzel',serif;font-size:clamp(0.75rem,1.5vw,0.95rem);
+  color:var(--sm2);letter-spacing:0.45em;text-transform:uppercase;
+  margin-bottom:3rem;
+}
+.rf-divider{
+  display:flex;align-items:center;gap:1.5rem;max-width:500px;margin:0 auto;
+}
+.rf-div-line{flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--gd3));}
+.rf-div-line.r{background:linear-gradient(270deg,transparent,var(--gd3));}
+.rf-div-glyph{font-size:1.2rem;color:var(--gd3);animation:gphglow 6s ease-in-out infinite;}
+@keyframes gphglow{0%,100%{opacity:0.3;text-shadow:none;}50%{opacity:0.9;text-shadow:0 0 20px rgba(201,168,76,0.5);}}
+
+/* RECOVERED FRAGMENT BADGE */
+.rf-badge{
+  display:inline-flex;align-items:center;gap:0.75rem;
+  border:1px solid var(--gd4);background:rgba(26,18,8,0.5);
+  padding:0.5rem 1.25rem;margin-bottom:2rem;
+  font-family:'Share Tech Mono',monospace;font-size:0.52rem;
+  color:var(--gd3);letter-spacing:0.22em;text-transform:uppercase;
+}
+.rf-badge-dot{width:5px;height:5px;border-radius:50%;background:var(--gold);box-shadow:0 0 6px var(--gold);animation:dp 2s ease-in-out infinite;}
+@keyframes dp{0%,100%{opacity:1;}50%{opacity:0.2;}}
+
+/* INTRO TEXT */
+.rf-intro{
+  max-width:680px;margin:2rem auto 0;
+  font-size:1.08rem;font-style:italic;color:var(--sm2);
+  line-height:2;text-align:center;
+  border-left:1px solid var(--gd4);border-right:1px solid var(--gd4);
+  padding:0 1.5rem;
+}
+
+/* PHASES */
+.phases{max-width:780px;margin:0 auto;padding:0 2rem;}
+.phase{
+  margin-bottom:5rem;opacity:0;transform:translateY(20px);
+  transition:opacity 1.2s,transform 1.2s;
+}
+.phase.visible{opacity:1;transform:none;}
+
+.phase-marker{
+  display:flex;align-items:center;gap:1rem;margin-bottom:2rem;
+}
+.phase-num{
+  font-family:'Share Tech Mono',monospace;font-size:0.5rem;
+  color:var(--gd3);letter-spacing:0.3em;text-transform:uppercase;
+  flex-shrink:0;
+}
+.phase-line{flex:1;height:1px;background:linear-gradient(90deg,var(--gd4),transparent);}
+.phase-glyph{font-size:1.5rem;color:var(--gd3);flex-shrink:0;}
+
+.phase-title{
+  font-family:'Cinzel',serif;font-size:clamp(1.2rem,2.5vw,1.85rem);
+  color:var(--gold);letter-spacing:0.08em;margin-bottom:1.5rem;
+  text-shadow:0 0 30px rgba(201,168,76,0.25);
+}
+
+.phase-body{
+  font-size:1.1rem;color:var(--smoke);line-height:2.1;
+}
+.phase-body p{margin-bottom:1.25rem;}
+.phase-body em{color:var(--silver);font-style:normal;}
+.phase-body .glow{color:var(--gold);font-style:italic;}
+.phase-body .crack{color:var(--sm2);font-style:italic;}
+
+/* EASTER EGGS — hidden cross-refs */
+.xref{
+  color:inherit;text-decoration:none;border-bottom:1px solid var(--gd4);
+  cursor:crosshair;transition:all 0.25s;position:relative;
+}
+.xref:hover{color:var(--gold);border-bottom-color:var(--gold);}
+.xref::after{
+  content:attr(data-ref);
+  position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);
+  background:var(--panel);border:1px solid var(--gd3);
+  font-family:'Share Tech Mono',monospace;font-size:0.5rem;
+  color:var(--gd2);letter-spacing:0.12em;padding:0.25rem 0.5rem;
+  white-space:nowrap;opacity:0;transition:opacity 0.2s;pointer-events:none;
+  text-transform:uppercase;
+}
+.xref:hover::after{opacity:1;}
+
+/* FIGURE SILHOUETTE */
+.figure-break{
+  text-align:center;padding:3rem 0;position:relative;
+}
+.figure-svg{
+  width:80px;height:160px;opacity:0.35;
+  filter:drop-shadow(0 0 12px rgba(201,168,76,0.3));
+  animation:figpulse 8s ease-in-out infinite;
+}
+@keyframes figpulse{0%,100%{opacity:0.2;filter:drop-shadow(0 0 8px rgba(201,168,76,0.2));}50%{opacity:0.5;filter:drop-shadow(0 0 25px rgba(201,168,76,0.5));}}
+
+/* CLOSING INSCRIPTION */
+.inscription{
+  max-width:620px;margin:4rem auto;
+  border:1px solid var(--gd4);padding:2rem 2.5rem;
+  background:rgba(26,18,8,0.3);text-align:center;
+  position:relative;overflow:hidden;
+}
+.inscription::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--gd2),var(--gold),var(--gd2),transparent);
+}
+.inscription-text{
+  font-family:'Cinzel',serif;font-size:1rem;color:var(--sm2);
+  letter-spacing:0.08em;line-height:1.85;
+}
+.inscription-text strong{color:var(--gold);font-weight:600;}
+
+/* DEEP DIVE NAV */
+.deep-nav{
+  max-width:780px;margin:4rem auto;padding:0 2rem;
+  display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;
+}
+.deep-card{
+  border:1px solid var(--brd2);padding:1.5rem 1.25rem;
+  cursor:pointer;transition:all 0.25s;text-decoration:none;
+  display:block;position:relative;overflow:hidden;
+}
+.deep-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--gd2),transparent);
+  opacity:0;transition:opacity 0.3s;
+}
+.deep-card:hover::before{opacity:1;}
+.deep-card:hover{transform:translateY(-3px);}
+.dc-lore{border-color:var(--v3);}
+.dc-lore:hover{border-color:var(--v2);}
+.dc-apoc{border-color:var(--cr3);}
+.dc-apoc:hover{border-color:var(--crimson);}
+.dc-mirror{border-color:var(--gd4);}
+.dc-mirror:hover{border-color:var(--gd2);}
+.dc-type{
+  font-family:'Share Tech Mono',monospace;font-size:0.48rem;
+  letter-spacing:0.25em;text-transform:uppercase;margin-bottom:0.5rem;
+}
+.dc-lore .dc-type{color:var(--v2);}
+.dc-apoc .dc-type{color:var(--cr2);}
+.dc-mirror .dc-type{color:var(--gd2);}
+.dc-name{font-family:'Cinzel',serif;font-size:0.9rem;margin-bottom:0.4rem;}
+.dc-lore .dc-name{color:var(--violet);}
+.dc-apoc .dc-name{color:var(--crimson);}
+.dc-mirror .dc-name{color:var(--gold);}
+.dc-desc{font-size:0.88rem;color:var(--s2);line-height:1.7;font-style:italic;}
+.dc-arr{font-size:0.8rem;margin-top:0.75rem;}
+.dc-lore .dc-arr{color:var(--v2);}
+.dc-apoc .dc-arr{color:var(--cr2);}
+.dc-mirror .dc-arr{color:var(--gd2);}
+@media(max-width:650px){.deep-nav{grid-template-columns:1fr;}}
+
+/* TICKER */
+#TICKER{position:fixed;bottom:0;left:0;right:0;height:2.4rem;background:rgba(5,4,7,0.97);border-top:1px solid var(--border);display:flex;align-items:center;overflow:hidden;z-index:490;}
+.tl{flex-shrink:0;padding:0 1rem;font-family:'Share Tech Mono',monospace;font-size:0.52rem;color:var(--gd4);letter-spacing:0.22em;border-right:1px solid var(--border);height:100%;display:flex;align-items:center;}
+.ts{flex:1;overflow:hidden;display:flex;align-items:center;}
+.ti{white-space:nowrap;font-family:'Share Tech Mono',monospace;font-size:0.54rem;color:var(--sm3);letter-spacing:0.1em;animation:trtk 80s linear infinite;}
+@keyframes trtk{from{transform:translateX(100vw);}to{transform:translateX(-200%);}}
+
+/* FOOTER */
+.rf-footer{
+  text-align:center;padding:2rem 2rem 5rem;
+  font-family:'Share Tech Mono',monospace;font-size:0.52rem;
+  color:var(--s4);letter-spacing:0.2em;
+}
+.rf-footer a{color:var(--s4);text-decoration:none;transition:color 0.2s;}
+.rf-footer a:hover{color:var(--gd2);}
+
+/* HIDDEN GLYPH — easter egg */
+.hidden-glyph{
+  opacity:0;transition:opacity 2s;color:var(--gd3);
+  font-size:0.65rem;cursor:crosshair;user-select:none;
+}
+.hidden-glyph:hover{opacity:1;}
+</style>
+</head>
+<body>
+<div id="CUR"></div><div id="CURD"></div>
+<canvas id="BG"></canvas>
+
+<!-- ENTRY CRACK -->
+<div id="CRACK">
+  <canvas id="crack-cv"></canvas>
+  <div id="crack-text">RECOVERED FRAGMENT RF-▽-093 &nbsp;·&nbsp; UNSEALING</div>
+</div>
+
+<div id="APP">
+<nav class="top-nav">
+  <a class="nav-back" href="index.html" onclick="return navBack()">← The Pale Archive</a>
+  <span class="nav-id">RF-▽-093 &nbsp;·&nbsp; Recovered Fragments &nbsp;·&nbsp; Invocation</span>
+  <div class="nav-links">
+    <a class="nav-link deep" href="rf-093-lore.html">Lore ▶</a>
+    <a class="nav-link apoc" href="rf-093-apocrypha.html">Apocrypha ▶</a>
+    <a class="nav-link" href="rf-093-mirror.html" style="color:var(--gd2);">Mirror Protocol ▶</a>
+  </div>
+</nav>
+
+<header class="rf-header">
+  <span class="rf-num">Recovered Fragment &nbsp;·&nbsp; RF-▽-093 &nbsp;·&nbsp; Mundis Obscura &nbsp;·&nbsp; Status: Active Breach</span>
+  <div class="rf-badge">
+    <span class="rf-badge-dot"></span>
+    Transmission Recovered &nbsp;·&nbsp; Field Cell F-13 &nbsp;·&nbsp; Archive Integrity: 61%
+  </div>
+  <h1 class="rf-title">The First Memory<br>That Remembers You</h1>
+  <div class="rf-sub">An Invocation in Three Phases</div>
+  <div class="rf-divider">
+    <div class="rf-div-line"></div>
+    <span class="rf-div-glyph">🜃</span>
+    <div class="rf-div-line r"></div>
+  </div>
+  <p class="rf-intro">
+    Another recovered fragment surfaces from the depths of the Codex Maledictus.<br><br>
+    This is not an ordinary recollection, not a simple act of remembering.
+    The Invocation you are about to witness unspools in three distinct phases —
+    a ritual sequence where <em style="color:var(--gold);">memory itself becomes something alive, something predatory,
+    something that does not wait for you to recall it&hellip; but instead recalls you.</em>
+  </p>
+</header>
+
+<div class="phases">
+
+  <!-- PHASE I -->
+  <div class="phase" id="phase1">
+    <div class="phase-marker">
+      <span class="phase-num">Phase I</span>
+      <div class="phase-line"></div>
+      <span class="phase-glyph">🜂</span>
+    </div>
+    <h2 class="phase-title">The Ground Awakens</h2>
+    <div class="phase-body">
+      <p>The journey begins upon a barren expanse of cracked earth, stretching endlessly beneath a gray, lifeless sky. Nothing moves, and yet <em>the silence hums.</em> <span class="xref" data-ref="→ Chronicle I: The First Breath of Memory — the hum preceded the signal">Thin golden veins of molten light begin crawling through the fractures in the ground</span>, pulsing like arteries beneath skin. They do not illuminate so much as they <span class="glow">insist upon existence</span>, as if the world itself is straining to breathe.</p>
+      <p>From those fractures, a figure begins to rise — not born, but <em>remembered.</em> A human silhouette half-formed, made of glass and smoke, flickering in and out of being, caught between presence and absence. The land does not create it; <span class="xref" data-ref="→ Infection Remembers: the ground recalls the shape before the body arrives">the land recalls it.</span></p>
+      <p class="crack">And if the ground remembers your shape before you step upon it, then <strong style="color:var(--silver);">whose memory do you inhabit?</strong></p>
+    </div>
+  </div>
+
+  <div class="figure-break">
+    <svg class="figure-svg" viewBox="0 0 80 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <filter id="figblur"><feGaussianBlur stdDeviation="1.5"/></filter>
+        <linearGradient id="figgrad" x1="40" y1="0" x2="40" y2="160" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="#C9A84C" stop-opacity="0.8"/>
+          <stop offset="60%" stop-color="#8A6530" stop-opacity="0.4"/>
+          <stop offset="100%" stop-color="#3A2810" stop-opacity="0"/>
+        </linearGradient>
+      </defs>
+      <!-- Head -->
+      <ellipse cx="40" cy="18" rx="12" ry="14" fill="url(#figgrad)" filter="url(#figblur)" opacity="0.7"/>
+      <!-- Body -->
+      <path d="M28 32 Q20 60 22 90 L40 95 L58 90 Q60 60 52 32 Z" fill="url(#figgrad)" filter="url(#figblur)" opacity="0.6"/>
+      <!-- Gold veins -->
+      <path d="M35 40 Q32 55 33 70" stroke="#C9A84C" stroke-width="0.5" opacity="0.4"/>
+      <path d="M45 42 Q48 57 46 72" stroke="#C9A84C" stroke-width="0.5" opacity="0.4"/>
+      <path d="M33 65 Q40 68 47 65" stroke="#C9A84C" stroke-width="0.5" opacity="0.3"/>
+      <!-- Legs -->
+      <path d="M32 90 Q28 120 30 155" stroke="url(#figgrad)" stroke-width="6" stroke-linecap="round" filter="url(#figblur)" opacity="0.5"/>
+      <path d="M48 90 Q52 120 50 155" stroke="url(#figgrad)" stroke-width="6" stroke-linecap="round" filter="url(#figblur)" opacity="0.5"/>
+      <!-- Arms -->
+      <path d="M28 38 Q10 55 8 75" stroke="url(#figgrad)" stroke-width="4" stroke-linecap="round" filter="url(#figblur)" opacity="0.4"/>
+      <path d="M52 38 Q70 55 72 75" stroke="url(#figgrad)" stroke-width="4" stroke-linecap="round" filter="url(#figblur)" opacity="0.4"/>
+    </svg>
+    <div class="hidden-glyph" title="🜃">🜃 &nbsp; the figure was documented once before &nbsp;·&nbsp; field cell F-13 &nbsp;·&nbsp; case 2019-QNS-∅</div>
+  </div>
+
+  <!-- PHASE II -->
+  <div class="phase" id="phase2">
+    <div class="phase-marker">
+      <span class="phase-num">Phase II</span>
+      <div class="phase-line"></div>
+      <span class="phase-glyph">🜁</span>
+    </div>
+    <h2 class="phase-title">The Mirror That Sees First</h2>
+    <div class="phase-body">
+      <p>The Invocation does not remain with the earth. You are carried into a void — vast, endless, without ceiling or floor. Suspended within it are mirrors, countless and pristine, each one gleaming sharper than steel. At first they reflect only the abyss, but soon they begin to flicker with strange fragments of memory not your own: a child's hand reaching for something just out of sight, a feather falling in slow descent before dissolving into ash, a mouth opening in silence as if to speak <span class="xref" data-ref="→ Apocrypha: Infection Remembers — the forbidden word that opened the breach">a forbidden word.</span></p>
+      <p>These memories are incomplete, unstable — and yet they feel like pieces of you, scattered across time.</p>
+      <p>One mirror, however, does something the others cannot. <span class="xref" data-ref="→ FAR·MICA / Pale Mirror — the mirror that measures before contact">It shows your reflection before you appear.</span> The mirror remembers your face before you step into its light. It breathes when you do not. It stares back not as imitation but as <span class="glow">origin.</span></p>
+      <p>In that instant, you realize you are no longer the possessor of memory; <em>you are the possession.</em> The reflection is the true memory, and you are its echo. From the mirrors, streams of liquid silver drip, pooling at your unseen feet, forming a reflective surface that spreads outward <span class="xref" data-ref="→ 600 cities — identical glyph instances — no shared cultural lineage">like mercury made sentient.</span> The Invocation deepens, and the chamber itself hums with recognition.</p>
+    </div>
+  </div>
+
+  <div class="figure-break">
+    <svg class="figure-svg" viewBox="0 0 80 160" fill="none" xmlns="http://www.w3.org/2000/svg" style="filter:drop-shadow(0 0 15px rgba(184,180,176,0.3));opacity:0.4;">
+      <defs>
+        <filter id="figblur2"><feGaussianBlur stdDeviation="2"/></filter>
+        <linearGradient id="figgrad2" x1="40" y1="0" x2="40" y2="160" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="#B8B4B0" stop-opacity="0.9"/>
+          <stop offset="100%" stop-color="#383430" stop-opacity="0"/>
+        </linearGradient>
+      </defs>
+      <ellipse cx="40" cy="18" rx="12" ry="14" fill="url(#figgrad2)" filter="url(#figblur2)"/>
+      <path d="M28 32 Q20 60 22 90 L40 95 L58 90 Q60 60 52 32 Z" fill="url(#figgrad2)" filter="url(#figblur2)" opacity="0.7"/>
+      <path d="M32 90 Q28 120 30 155" stroke="url(#figgrad2)" stroke-width="5" filter="url(#figblur2)"/>
+      <path d="M48 90 Q52 120 50 155" stroke="url(#figgrad2)" stroke-width="5" filter="url(#figblur2)"/>
+    </svg>
+  </div>
+
+  <!-- PHASE III -->
+  <div class="phase" id="phase3">
+    <div class="phase-marker">
+      <span class="phase-num">Phase III</span>
+      <div class="phase-line"></div>
+      <span class="phase-glyph">🜄</span>
+    </div>
+    <h2 class="phase-title">The Memory Floods</h2>
+    <div class="phase-body">
+      <p>From the pool of silver, <em>the flood rises.</em> It does not surge chaotically; it ascends with impossible smoothness, deliberate, as if memory itself has chosen to reveal its stored fragments. Within the rising current drift objects both mundane and horrifying, all rendered lifelike and precise: <span class="xref" data-ref="→ Lore: what these objects actually are — whose they were">letters crumpled and stained by forgotten tears, toys cracked and weathered, bones polished by years of unseen touch, keys without locks, torn pages whispering with ink that fades and returns.</span></p>
+      <p>These are not random artifacts. They are pieces of lives once lived — and perhaps lives that were yours.</p>
+      <p>At the center of this deluge stands the figure from the beginning, now fully formed. Its body is a union of glass, smoke, and golden veins of molten light coursing through its form like luminous arteries. <span class="xref" data-ref="→ Forgotten Saint Artemys — the saint buried and recalled — glass, smoke, and gold">Its presence is undeniable, and yet fragile</span>, as though it could vanish if the memory falters. Its face is blank, yet it tilts its head toward you with quiet recognition. The gesture is neither hostile nor welcoming; <span class="glow">it is inevitable</span>, the way the past tilts toward those who cannot escape it.</p>
+      <p>Then the flood <em>reverses.</em> Objects rush backward, silver collapses into itself, <span class="xref" data-ref="→ Apocrypha: why the reversal is worse than the flood">mirrors bend and shatter in silence.</span> Letters uncurl, bones knit themselves whole, time itself rewinds as if memory has decided to remember differently. You are left standing before the figure, not as witness but as <span class="glow">remembered</span> — the Codex has recognized you, and in its recognition, you are bound.</p>
+    </div>
+  </div>
+
+</div><!-- /phases -->
+
+<div class="inscription">
+  <p class="inscription-text">
+    This is not recollection.<br>
+    This is <strong>recognition.</strong><br><br>
+    <span style="color:var(--sm2);font-size:0.95rem;">The Codex has remembered you.</span>
+  </p>
+</div>
+
+<!-- DEEP DIVE NAVIGATION -->
+<div class="deep-nav">
+  <a class="deep-card dc-lore" href="rf-093-lore.html">
+    <div class="dc-type">Deep Archive &nbsp;·&nbsp; Lore</div>
+    <div class="dc-name">The Ground That Remembers</div>
+    <div class="dc-desc">Granular cosmology. Who is the figure. What the gold veins mean. Where this falls in the breach timeline.</div>
+    <div class="dc-arr">▶ Enter</div>
+  </a>
+  <a class="deep-card dc-apoc" href="rf-093-apocrypha.html">
+    <div class="dc-type">Deep Archive &nbsp;·&nbsp; Apocrypha</div>
+    <div class="dc-name">What the Flood Left Behind</div>
+    <div class="dc-desc">The objects in the flood. The blank face. Why the reversal is the most disturbing part. Not for the faint.</div>
+    <div class="dc-arr">▶ Enter if you must</div>
+  </a>
+  <a class="deep-card dc-mirror" href="rf-093-mirror.html">
+    <div class="dc-type">Unique &nbsp;·&nbsp; Interactive</div>
+    <div class="dc-name">The Mirror Protocol</div>
+    <div class="dc-desc">The mirror that sees you first. This is not a reading. The Codex will watch how you move through its shards.</div>
+    <div class="dc-arr">▶ Step into the mirror</div>
+  </a>
+</div>
+
+<footer class="rf-footer">
+  🜃 &nbsp; CODEX MALEDICTUS &nbsp;·&nbsp; RECOVERED FRAGMENTS &nbsp;·&nbsp; RF-▽-093 &nbsp;·&nbsp;
+  <a href="index.html">The Pale Archive</a> &nbsp;·&nbsp;
+  <a href="infection-lore.html">Pale Archivum</a> &nbsp;·&nbsp;
+  <a href="chronicle-1-infection-remembers.html">Chronicle I</a>
+</footer>
+</div><!-- /APP -->
+
+<div id="TICKER">
+  <div class="tl">// RF-▽-093</div>
+  <div class="ts"><div class="ti">THE GROUND REMEMBERS THE SHAPE BEFORE THE STEP &nbsp;∴&nbsp; THE MIRROR SAW YOUR FACE BEFORE YOU ARRIVED &nbsp;∴&nbsp; MEMORY IS NOT STORAGE — IT IS PREDATION &nbsp;∴&nbsp; THE FLOOD DOES NOT DESTROY — IT RECALLS &nbsp;∴&nbsp; YOU ARE NOT THE WITNESS &nbsp;∴&nbsp; YOU ARE THE WITNESSED &nbsp;∴&nbsp; RF-▽-093 &nbsp;∴&nbsp; ARCHIVE INTEGRITY: 61% AND FALLING &nbsp;∴&nbsp; THE FIGURE HAS NO FACE BECAUSE IT HAS YOURS</div></div>
+</div>
+
+<script>
+// CURSOR
+const CUR=document.getElementById('CUR'),CURD=document.getElementById('CURD');
+document.addEventListener('mousemove',e=>{CUR.style.left=e.clientX+'px';CUR.style.top=e.clientY+'px';CURD.style.left=e.clientX+'px';CURD.style.top=e.clientY+'px';});
+
+// BACKGROUND — cracked earth with gold veins
+(function(){
+  const cv=document.getElementById('BG');
+  const ctx=cv.getContext('2d');
+  let W,H,cracks=[],phase=0;
+
+  function resize(){W=cv.width=window.innerWidth;H=cv.height=window.innerHeight;generateCracks();}
+
+  function generateCracks(){
+    cracks=[];
+    const num=Math.floor(W*H/4000);
+    for(let i=0;i<num;i++){
+      const sx=Math.random()*W,sy=Math.random()*H;
+      const segs=[];
+      let x=sx,y=sy,angle=Math.random()*Math.PI*2;
+      const len=30+Math.random()*120;
+      for(let j=0;j<20;j++){
+        angle+=(Math.random()-0.5)*0.8;
+        const step=len/20;
+        x+=Math.cos(angle)*step;y+=Math.sin(angle)*step;
+        segs.push({x,y});
+        if(x<0||x>W||y<0||y>H)break;
+      }
+      const glow=Math.random()<0.15;
+      cracks.push({sx,sy,segs,glow,ph:Math.random()*Math.PI*2,spd:0.004+Math.random()*0.008});
+    }
+  }
+
+  function draw(){
+    requestAnimationFrame(draw);
+    phase+=0.005;
+    ctx.fillStyle='rgba(5,4,7,0.04)';ctx.fillRect(0,0,W,H);
+    cracks.forEach(c=>{
+      c.ph+=c.spd;
+      const pulse=0.5+Math.sin(c.ph)*0.5;
+      const alpha=c.glow?(0.08+pulse*0.25):(0.02+pulse*0.03);
+      ctx.beginPath();ctx.moveTo(c.sx,c.sy);
+      c.segs.forEach(s=>ctx.lineTo(s.x,s.y));
+      ctx.strokeStyle=c.glow?`rgba(201,168,76,${alpha})`:`rgba(58,40,16,${alpha*0.6})`;
+      ctx.lineWidth=c.glow?0.8:0.4;
+      if(c.glow){ctx.shadowColor='rgba(201,168,76,0.6)';ctx.shadowBlur=4;}
+      ctx.stroke();ctx.shadowBlur=0;
+    });
+  }
+
+  resize();window.addEventListener('resize',resize);
+  draw();
+})();
+
+// ENTRY CRACK
+(function(){
+  const cv=document.getElementById('crack-cv');
+  const ctx=cv.getContext('2d');
+  cv.width=window.innerWidth;cv.height=window.innerHeight;
+  const W=cv.width,H=cv.height;
+  ctx.fillStyle='#000';ctx.fillRect(0,0,W,H);
+
+  let prog=0,done=false;
+  const cx=W/2,cy=H/2;
+
+  function drawCrack(){
+    if(done)return;
+    prog+=0.018;
+    ctx.fillStyle='rgba(0,0,0,0.1)';ctx.fillRect(0,0,W,H);
+
+    // Main crack — vertical split
+    const maxLen=Math.max(W,H)*0.9;
+    const len=Math.min(prog*maxLen*2,maxLen);
+    const pts=[];
+    let x=cx,y=cy-len/2;
+    for(let i=0;i<40;i++){
+      x+=( Math.random()-0.5)*8;
+      y+=len/40;
+      pts.push({x,y});
+    }
+
+    // Glow
+    ctx.beginPath();ctx.moveTo(cx,cy-len/2);
+    pts.forEach(p=>ctx.lineTo(p.x,p.y));
+    ctx.strokeStyle=`rgba(201,168,76,${Math.min(prog*2,1)*0.6})`;
+    ctx.lineWidth=6;ctx.shadowColor='rgba(201,168,76,0.8)';ctx.shadowBlur=20;
+    ctx.stroke();
+
+    // Core
+    ctx.beginPath();ctx.moveTo(cx,cy-len/2);
+    pts.forEach(p=>ctx.lineTo(p.x,p.y));
+    ctx.strokeStyle=`rgba(255,240,180,${Math.min(prog*2,1)})`;
+    ctx.lineWidth=1;ctx.shadowBlur=0;ctx.stroke();
+
+    // Branch cracks
+    if(prog>0.3){
+      for(let b=0;b<3;b++){
+        const bi=Math.floor((b+1)*pts.length/4);
+        const bp=pts[bi];
+        if(!bp)continue;
+        const ba=Math.PI/4+(b*Math.PI/3)+(Math.random()-0.5)*0.5;
+        const bl=(prog-0.3)*200*(b===1?1.5:1);
+        ctx.beginPath();ctx.moveTo(bp.x,bp.y);
+        ctx.lineTo(bp.x+Math.cos(ba)*bl,bp.y+Math.sin(ba)*bl);
+        ctx.strokeStyle=`rgba(201,168,76,${(prog-0.3)*0.5})`;
+        ctx.lineWidth=0.6;ctx.shadowColor='rgba(201,168,76,0.4)';ctx.shadowBlur=8;
+        ctx.stroke();ctx.shadowBlur=0;
+      }
+    }
+
+    if(prog<1){requestAnimationFrame(drawCrack);}
+    else{
+      done=true;
+      setTimeout(()=>{
+        const cr=document.getElementById('CRACK');
+        cr.style.transition='opacity 1.2s';cr.style.opacity='0';
+        setTimeout(()=>{cr.style.display='none';document.getElementById('APP').classList.add('on');initPage();},1200);
+      },600);
+    }
+  }
+  setTimeout(drawCrack,300);
+})();
+
+function initPage(){
+  // Phase scroll reveal
+  const phases=document.querySelectorAll('.phase');
+  const obs=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');});
+  },{threshold:0.15});
+  phases.forEach(p=>obs.observe(p));
+  // Show first immediately
+  setTimeout(()=>phases[0]&&phases[0].classList.add('visible'),200);
+}
+
+function navBack(){
+  ritualNav('index.html','Returning to the Pale Archive.','The fragment remains in the record.');
+  return false;
+}
+
+function ritualNav(url,l1,l2){
+  document.getElementById('APP').style.opacity='0';
+  setTimeout(()=>window.location.href=url,800);
+}
+</script>
+</body>
+</html>
