@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Liturgy Decoder · Plague Priest · Codex Maledictus</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;600&family=Share+Tech+Mono&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#020402;--panel:#040804;--panel2:#060A06;
+  --bile:#4A6B2A;--bl2:#2E4418;--bl3:#182410;--bl4:#0A1206;
+  --bone:#C8C4A0;--bn2:#8A866A;--bn3:#4A4630;--bn4:#2A2618;
+  --rot:#8B4513;--rt2:#6B3010;--rt3:#3A1808;
+  --spore:#3A5A1A;
+  --crimson:#8B0000;--cr2:#AA2000;
+  --border:#1A240A;--brd2:#243014;
+  --pus:#6A8A2A;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{background:var(--bg);color:var(--bone);font-family:'Crimson Text',serif;overflow-x:hidden;cursor:none;min-height:100vh;}
+body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 4px,rgba(0,0,0,0.035) 4px,rgba(0,0,0,0.035) 5px);pointer-events:none;z-index:9990;}
+body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at center,transparent 18%,rgba(0,0,0,0.8)100%);pointer-events:none;z-index:9989;}
+#CUR{position:fixed;pointer-events:none;z-index:99999;transform:translate(-50%,-50%);width:18px;height:18px;}
+#CUR::before,#CUR::after{content:'';position:absolute;background:var(--bile);}
+#CUR::before{width:1px;height:100%;left:50%;}
+#CUR::after{height:1px;width:100%;top:50%;}
+#CURD{position:fixed;pointer-events:none;z-index:99998;transform:translate(-50%,-50%);width:3px;height:3px;border-radius:50%;background:var(--spore);}
+
+/* ENTRY */
+#ENTRY{position:fixed;inset:0;z-index:9000;background:#000;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1.2rem;text-align:center;padding:2rem;}
+#entry-cv{position:absolute;inset:0;}
+.et{font-family:'Cinzel',serif;font-size:clamp(0.9rem,2vw,1.2rem);color:rgba(74,107,42,0.6);letter-spacing:0.3em;text-transform:uppercase;position:relative;z-index:2;}
+.es{font-family:'Share Tech Mono',monospace;font-size:0.5rem;color:rgba(42,38,24,0.6);letter-spacing:0.28em;text-transform:uppercase;position:relative;z-index:2;max-width:460px;line-height:1.9;}
+
+#APP{position:relative;z-index:2;opacity:0;transition:opacity 1.2s;padding-bottom:6rem;}
+#APP.on{opacity:1;}
+
+.top-nav{display:flex;align-items:center;justify-content:space-between;padding:0.85rem 2rem;border-bottom:1px solid var(--border);background:rgba(2,4,2,0.96);position:sticky;top:0;z-index:100;backdrop-filter:blur(8px);}
+.nav-back{font-family:'Share Tech Mono',monospace;font-size:0.5rem;color:var(--bl2);letter-spacing:0.2em;text-transform:uppercase;text-decoration:none;transition:color 0.2s;}
+.nav-back:hover{color:var(--bile);}
+.nav-id{font-family:'Share Tech Mono',monospace;font-size:0.5rem;color:var(--bn4);letter-spacing:0.22em;text-transform:uppercase;}
+.nav-links{display:flex;gap:1.25rem;}
+.nav-link{font-family:'Share Tech Mono',monospace;font-size:0.46rem;color:var(--bn4);letter-spacing:0.15em;text-transform:uppercase;text-decoration:none;transition:color 0.2s;}
+.nav-link:hover{color:var(--bile);}
+
+/* DECODER HEADER */
+.dec-header{padding:3.5rem 2rem 2rem;text-align:center;border-bottom:1px solid var(--border);}
+.dec-tag{font-family:'Share Tech Mono',monospace;font-size:0.48rem;color:var(--bile);letter-spacing:0.4em;text-transform:uppercase;margin-bottom:0.75rem;display:block;}
+.dec-title{font-family:'Cinzel Decorative',serif;font-size:clamp(1.4rem,3.5vw,2.8rem);color:var(--bile);letter-spacing:0.07em;text-shadow:0 0 40px rgba(74,107,42,0.35);margin-bottom:0.5rem;}
+.dec-sub{font-family:'Share Tech Mono',monospace;font-size:0.5rem;color:var(--bn3);letter-spacing:0.28em;text-transform:uppercase;margin-bottom:1.25rem;}
+.dec-intro{font-size:0.97rem;color:var(--bn2);line-height:1.88;font-style:italic;max-width:620px;margin:0 auto;}
+
+/* PROGRESS BAR */
+.dec-progress{
+  background:rgba(2,4,2,0.95);border-bottom:1px solid var(--border);
+  padding:0.7rem 2rem;display:flex;align-items:center;gap:1rem;
+  position:sticky;top:50px;z-index:99;
+}
+.dec-prog-label{font-family:'Share Tech Mono',monospace;font-size:0.5rem;color:var(--bn3);letter-spacing:0.2em;text-transform:uppercase;flex-shrink:0;}
+.dec-prog-track{flex:1;height:4px;background:var(--bl4);overflow:hidden;}
+.dec-prog-fill{height:100%;background:var(--bile);width:0%;transition:width 0.6s;box-shadow:0 0 6px rgba(74,107,42,0.4);}
+.dec-prog-val{font-family:'Share Tech Mono',monospace;font-size:0.52rem;color:var(--bile);flex-shrink:0;min-width:40px;text-align:right;}
+
+/* DECODER SECTION */
+.dec-wrap{max-width:980px;margin:0 auto;padding:2.5rem 2rem;}
+.dec-section{margin-bottom:3.5rem;border:1px solid var(--brd2);background:var(--panel);overflow:hidden;position:relative;}
+.dec-section::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--bl2),transparent);opacity:0.5;}
+.ds-header{padding:0.85rem 1.25rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:0.75rem;background:rgba(10,18,6,0.5);}
+.ds-label{font-family:'Share Tech Mono',monospace;font-size:0.5rem;color:var(--bile);letter-spacing:0.25em;text-transform:uppercase;}
+.ds-status{font-family:'Share Tech Mono',monospace;font-size:0.46rem;letter-spacing:0.15em;text-transform:uppercase;margin-left:auto;padding:0.15rem 0.5rem;border:1px solid;}
+.ds-status.locked{color:var(--bn4);border-color:var(--bn4);}
+.ds-status.decoded{color:var(--bile);border-color:var(--bile);}
+.ds-body{display:grid;grid-template-columns:1fr 1fr;gap:0;}
+@media(max-width:700px){.ds-body{grid-template-columns:1fr;}}
+.ds-surface{padding:1.25rem 1.5rem;border-right:1px solid var(--border);}
+@media(max-width:700px){.ds-surface{border-right:none;border-bottom:1px solid var(--border);}}
+.ds-decoded{padding:1.25rem 1.5rem;background:rgba(10,18,6,0.3);position:relative;}
+
+.surface-label{font-family:'Share Tech Mono',monospace;font-size:0.46rem;color:var(--bn3);letter-spacing:0.22em;text-transform:uppercase;margin-bottom:0.85rem;}
+.hymn-line-d{
+  font-family:'Crimson Text',serif;font-size:1rem;
+  color:var(--bn2);line-height:2;padding:0.08rem 0;
+  cursor:pointer;transition:all 0.25s;position:relative;
+  padding-left:0.5rem;border-left:2px solid transparent;
+}
+.hymn-line-d:hover{color:var(--bone);border-left-color:var(--bile);}
+.hymn-line-d.chorus{color:var(--bile);}
+.hymn-line-d.revealed{color:var(--bone);border-left-color:var(--bile);}
+
+.decoded-label{font-family:'Share Tech Mono',monospace;font-size:0.46rem;color:var(--bile);letter-spacing:0.22em;text-transform:uppercase;margin-bottom:0.85rem;}
+.decoded-content{min-height:180px;display:flex;flex-direction:column;justify-content:center;}
+.decoded-idle{font-family:'Share Tech Mono',monospace;font-size:0.52rem;color:var(--bl2);letter-spacing:0.15em;text-transform:uppercase;text-align:center;padding:1.5rem;}
+.decoded-text{display:none;animation:dfin 0.5s ease;}
+@keyframes dfin{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
+.decoded-text.on{display:block;}
+.dt-line-label{font-family:'Share Tech Mono',monospace;font-size:0.48rem;color:var(--bile);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:0.4rem;}
+.dt-surface{font-family:'Crimson Text',serif;font-size:0.95rem;color:var(--bile);font-style:italic;margin-bottom:0.75rem;border-left:2px solid var(--bile);padding-left:0.6rem;}
+.dt-doctrine{font-size:1rem;color:var(--bone);line-height:1.88;margin-bottom:0.6rem;}
+.dt-classified{
+  background:#000;color:#000;cursor:pointer;
+  font-family:'Share Tech Mono',monospace;font-size:0.85em;
+  padding:0 0.2rem;transition:all 0.5s;
+}
+.dt-classified:hover{background:rgba(74,107,42,0.2);color:var(--bile);}
+.dt-xref{font-family:'Share Tech Mono',monospace;font-size:0.48rem;color:var(--bl2);letter-spacing:0.1em;border-top:1px solid var(--bl3);padding-top:0.5rem;margin-top:0.5rem;line-height:1.7;}
+.dt-xref a{color:var(--bl2);text-decoration:none;transition:color 0.2s;}
+.dt-xref a:hover{color:var(--bile);}
+
+/* COMPLETE STATE */
+.dec-complete{
+  display:none;text-align:center;padding:3rem 2rem;margin:2rem;
+  border:1px solid var(--bl2);background:rgba(10,18,6,0.5);
+  animation:dfin 1s ease;position:relative;overflow:hidden;
+}
+.dec-complete::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--bile),transparent);}
+.dec-complete.on{display:block;}
+.dc-glyph{font-size:2.5rem;color:var(--bile);margin-bottom:1rem;animation:sglow2 4s ease-in-out infinite;}
+@keyframes sglow2{0%,100%{opacity:0.4;text-shadow:none;}50%{opacity:1;text-shadow:0 0 20px rgba(74,107,42,0.5);}}
+.dc-title{font-family:'Cinzel',serif;font-size:1.2rem;color:var(--bile);letter-spacing:0.1em;margin-bottom:0.75rem;}
+.dc-body{font-size:1rem;color:var(--bn2);line-height:1.9;font-style:italic;max-width:580px;margin:0 auto;}
+
+#TICKER{position:fixed;bottom:0;left:0;right:0;height:2.4rem;background:rgba(2,4,2,0.97);border-top:1px solid var(--border);display:flex;align-items:center;overflow:hidden;z-index:490;}
+.tl2{flex-shrink:0;padding:0 1rem;font-family:'Share Tech Mono',monospace;font-size:0.5rem;color:var(--bl3);letter-spacing:0.22em;border-right:1px solid var(--border);height:100%;display:flex;align-items:center;}
+.ts{flex:1;overflow:hidden;display:flex;align-items:center;}
+.ti{white-space:nowrap;font-family:'Share Tech Mono',monospace;font-size:0.52rem;color:var(--bn4);letter-spacing:0.1em;animation:tr 90s linear infinite;}
+@keyframes tr{from{transform:translateX(100vw);}to{transform:translateX(-200%);}}
+</style>
+</head>
+<body>
+<div id="CUR"></div><div id="CURD"></div>
+
+<div id="ENTRY">
+  <canvas id="entry-cv"></canvas>
+  <div class="et">The Liturgy Decoder</div>
+  <div class="es">The hymn contains two texts. One for the congregation. One beneath it — the Plague Priest's actual instructions. You are about to read both simultaneously.</div>
+</div>
+
+<div id="APP">
+<nav class="top-nav">
+  <a class="nav-back" href="plague-priest-liturgy.html">← Hymn I Hub</a>
+  <span class="nav-id">Track III &nbsp;·&nbsp; Liturgy Decoder &nbsp;·&nbsp; Unique</span>
+  <div class="nav-links">
+    <a class="nav-link" href="plague-priest-lore.html" style="color:var(--bile);">Lore ▶</a>
+    <a class="nav-link" href="plague-priest-apocrypha.html" style="color:var(--rt2);">Apocrypha ▶</a>
+  </div>
+</nav>
+
+<header class="dec-header">
+  <span class="dec-tag">Track III &nbsp;·&nbsp; Unique Interactive &nbsp;·&nbsp; Liturgy Decoder</span>
+  <h1 class="dec-title">The Liturgy Decoder</h1>
+  <p class="dec-sub">Two Texts &nbsp;·&nbsp; One Hymn &nbsp;·&nbsp; Surface and Doctrine</p>
+  <p class="dec-intro">The Plague Priest's Liturgy was not written for the congregation. It was written <em>through</em> them — using their belief as a medium. The surface text is the prayer they learned to sing. Beneath each line is the Plague Priest's actual theological instruction, encoded in vibrational structure. Click any line to decode it.</p>
+</header>
+
+<div class="dec-progress">
+  <span class="dec-prog-label">Decoding</span>
+  <div class="dec-prog-track"><div class="dec-prog-fill" id="prog-fill"></div></div>
+  <span class="dec-prog-val" id="prog-val">0 / 22</span>
+</div>
+
+<div class="dec-wrap" id="dec-wrap"></div>
+
+<div class="dec-complete" id="dec-complete">
+  <div class="dc-glyph">☣</div>
+  <div class="dc-title">The Liturgy Has Been Decoded</div>
+  <div class="dc-body">You have read both texts simultaneously. The surface prayer and the doctrine beneath it. The Plague Priest embedded these instructions knowing that anyone who decoded them would have, in the process of decoding, performed a version of the rite. The act of understanding the Liturgy is itself a form of exposure. The Pale Archivum notes: <em>every analyst who completed a full decode reported hearing the Chorus in their sleep that night. All of them reported the same key.</em></div>
+  <div style="margin-top:1.5rem;display:flex;gap:0.85rem;justify-content:center;flex-wrap:wrap;">
+    <a style="font-family:'Share Tech Mono',monospace;font-size:0.52rem;color:var(--bile);letter-spacing:0.18em;text-transform:uppercase;text-decoration:none;border:1px solid var(--bl2);padding:0.5rem 1rem;transition:all 0.2s;" href="plague-priest-apocrypha.html" onmouseover="this.style.borderColor='var(--bile)'" onmouseout="this.style.borderColor='var(--bl2)'">Apocrypha ▶</a>
+    <a style="font-family:'Share Tech Mono',monospace;font-size:0.52rem;color:var(--bn3);letter-spacing:0.18em;text-transform:uppercase;text-decoration:none;border:1px solid var(--bn4);padding:0.5rem 1rem;transition:all 0.2s;" href="index.html" onmouseover="this.style.borderColor='var(--bn3)'" onmouseout="this.style.borderColor='var(--bn4)'">The Pale Archive ▶</a>
+  </div>
+</div>
+
+</div>
+
+<div id="TICKER">
+  <div class="tl2">// Decoder</div>
+  <div class="ts"><div class="ti">THE HYMN CONTAINS TWO TEXTS &nbsp;☣&nbsp; THE CHORUS IS A SUMMONING FREQUENCY &nbsp;☣&nbsp; "BLESS THE VERMIN IN THEIR FEAST" MEANS SOMETHING ELSE &nbsp;☣&nbsp; THE BRIDGE IS THE MOST RESTRICTED SECTION &nbsp;☣&nbsp; CLICK A LINE TO DECODE IT &nbsp;☣&nbsp; UNDERSTANDING THE LITURGY IS EXPOSURE TO IT &nbsp;☣&nbsp; THE BONES WILL SING</div></div>
+</div>
+
+<script>
+const CUR=document.getElementById('CUR'),CURD=document.getElementById('CURD');
+document.addEventListener('mousemove',e=>{CUR.style.left=e.clientX+'px';CUR.style.top=e.clientY+'px';CURD.style.left=e.clientX+'px';CURD.style.top=e.clientY+'px';});
+
+// DECODER DATA
+const SECTIONS=[
+  {
+    id:'verse1',label:'[ Verse I ]',
+    lines:[
+      {
+        text:'Shadows crawl where rot takes root',
+        doctrine:'The darkness does not arrive from outside. It emerges from within the flesh that has been made ready — "rot takes root" describes the Mutoid Vermin colonization of prepared soft tissue. The shadows are the visual artifact of spore-density in the air around Stage II carriers.',
+        xref:'→ Apocrypha Stage I-II: What colonization looks like from inside the carrier'
+      },
+      {
+        text:'Maggots writhe in filth\'s pursuit',
+        doctrine:'Not metaphorical maggots. Documented Mutoid Vermin larvae, Stage 0, pre-hatched. "Filth\'s pursuit" is the doctrine of directed decay — the organisms are not random; they pursue specific tissues designated by the Codex signal as priority infection sites.',
+        xref:'→ Lore III: Mutoid Vermin biology and targeting mechanism'
+      },
+      {
+        text:'Bless the vermin in their feast',
+        doctrine:'"Blessing" here is a vibrational act — the Plague Priest\'s vocal output at this line produces a specific frequency that activates the Mutoid Vermin\'s feeding response. The congregation believes they are offering a prayer. They are completing a biological command.',
+        xref:'→ Lore II: Stage II — Vibrational rewriting of soft tissue'
+      },
+      {
+        text:'Praise the swarm, the sacred beast',
+        doctrine:'"Sacred" in Plague Priest doctrine does not mean holy. It means necessary — something without which the ritual cannot function. The swarm is not an object of worship. It is infrastructure. <span class="dt-classified" onclick="this.style.background=\'rgba(74,107,42,0.2)\';this.style.color=\'var(--bile)\'">The congregation that praises the swarm is activating it. The praise is the ignition key.</span>',
+        xref:''
+      }
+    ]
+  },
+  {
+    id:'chorus',label:'[ Chorus ]',
+    lines:[
+      {
+        text:'Mutoid vermin hear our cry',
+        doctrine:'The Chorus is a summoning frequency, not a prayer. "Hear our cry" is the carrier frequency of the Plague Priest\'s voice at full Stage IV resonance — the precise vibrational pattern that activates dormant spore-shells in the Cathedral walls. The congregation singing it amplifies the signal. Mass chanting creates harmonic saturation.',
+        xref:'→ Archivum Note: Spore-shells embedded in the Track III audio recording'
+      },
+      {
+        text:'Spread your plague across the sky',
+        doctrine:'"Sky" in ShatterRealm doctrine refers to the permeable membrane between Realm II and Realm I — the substrate boundary. The instruction is literal: organisms, disperse upward through the boundary. The Codex signal travels this route. Now it sends biological cargo the same way.',
+        xref:'→ Apocrypha IV: The Bridge frequency — the only sound documented to cross Realm boundaries'
+      },
+      {
+        text:'Flesh will melt, the bones will sing',
+        doctrine:'Clinical prediction, not poetry. Flesh melting: Stage III soft tissue restructuring around the colonization architecture. Bones singing: Stage V — skeletal calcium matrix embedding and subsequent vibrational broadcast continuing after biological death, at 19.4Hz, for centuries. <span class="dt-classified" onclick="this.style.background=\'rgba(74,107,42,0.2)\';this.style.color=\'var(--bile)\'">The Chorus tells the congregation exactly what will happen to them. They interpret it as glorification. It is a disclosure.</span>',
+        xref:'→ Lore IV, Pillar III: Bone as Archive'
+      },
+      {
+        text:'In your name the rot will cling',
+        doctrine:'"Your name" is not the Mutoid Vermin\'s name — they have no individual names. It is the Codex signal\'s designation — the frequency-signature that will be embedded in every colonized cell. The rot does not cling randomly. It clings to the Codex signature as a binding agent. Every infected carrier is marked.',
+        xref:''
+      }
+    ]
+  },
+  {
+    id:'verse2',label:'[ Verse II ]',
+    lines:[
+      {
+        text:'Bless the stench of sacred blight',
+        doctrine:'The stench is a diagnostic. Fully infected carriers at Stage III emit a specific biological odor — the byproduct of Mutoid Vermin metabolic processes rewriting tissue. The congregation that blesses this stench is being trained to recognize an infection marker as holy. They will seek it. They will follow it. <span class="dt-classified" onclick="this.style.background=\'rgba(74,107,42,0.2)\';this.style.color=\'var(--bile)\'">They will carry it toward uninfected populations and understand this as devotion.</span>',
+        xref:''
+      },
+      {
+        text:'Pustules bloom in endless night',
+        doctrine:'"Bloom" is precise. The pustules that develop on Stage III carriers are not wounds. They are nodes — biological transmission points that erupt and disperse spore-material when ruptured. "Endless night" is the Cathedral interior — no light sources documented in any recovery team report. The darkness is maintained because the Mutoid Vermin are photosensitive at certain stages of development.',
+        xref:'→ Apocrypha I: The congregation at Stage III — what the body becomes'
+      },
+      {
+        text:'Whisper prayers through shattered teeth',
+        doctrine:'Stage III physical consequence: the jaw structure weakens as biological mass is redirected to the colonization architecture. Teeth fracture under the vibrational resonance the carrier now constantly produces. "Whisper" is not gentle — it is the physical limitation of late-stage carriers whose vocal apparatus has been partially restructured. The whisper still carries the signal. Volume is not required.',
+        xref:''
+      },
+      {
+        text:'To the filth that lies beneath',
+        doctrine:'"Beneath" is literal — beneath Deck Hollow-13, the Cathedral sub-level, the bedrock of the ShatterRealm. The Plague Priest doctrine holds that the deepest substrate of Realm II contains the oldest Mutoid Vermin colony — the original infection point. All current Liturgy rites are communications back to this source. The congregation prays downward.',
+        xref:'→ Lore I: What the ShatterRealm\'s substrate contains — the Cathedral\'s true depth'
+      }
+    ]
+  },
+  {
+    id:'bridge',label:'[ Bridge — Restricted ]',
+    lines:[
+      {
+        text:'Chant in rhythm to decay',
+        doctrine:'The Bridge frequency is different from the Verse and Chorus frequencies. It is produced at a lower register — below the range the congregation can consciously replicate — by the Plague Priest alone, sustained under the congregation\'s audible chanting. The Bridge is the Priest\'s private transmission to the Realm I substrate. The congregation provides vibrational cover. <span class="dt-classified" onclick="this.style.background=\'rgba(74,107,42,0.2)\';this.style.color=\'var(--bile)\'">They do not know they are a shield.</span>',
+        xref:'→ Apocrypha IV: The Bridge traveled without a living Priest during the Track III playback event'
+      },
+      {
+        text:'Let the world be swept away',
+        doctrine:'"World" here does not mean the ShatterRealm. It means the existing cognitive architecture of Realm I — the set of assumptions about reality that make the population resistant to the Codex signal. The Bridge instruction is: dissolve the substrate. Not physically. Conceptually. Enough carriers broadcasting at 19.4Hz simultaneously will erode the epistemological foundations that prevent recognition.',
+        xref:''
+      },
+      {
+        text:'Mutoid vermin guide our hands',
+        doctrine:'Stage IV and beyond: voluntary motor control has been partially transferred to the colonization architecture. The carrier\'s hands do not act independently. The organisms, networked through the carrier\'s nervous system, direct fine motor function toward infection-spreading tasks. The congregation believes they are choosing to serve. <span class="dt-classified" onclick="this.style.background=\'rgba(74,107,42,0.2)\';this.style.color=\'var(--bile)\'">They are reporting what is already happening to them as a theological virtue.</span>',
+        xref:'→ Apocrypha II: Stage IV — the passenger and the driver'
+      },
+      {
+        text:'To spread disease across the lands',
+        doctrine:'Not metaphor. Not spiritual. The Bridge closes with a literal directive — the Stage IV carrier, whose voluntary motor function is now shared with the colonization architecture, will leave the Cathedral and move toward uninfected populations. The Bridge tells them this is guidance. It is <span class="dt-classified" onclick="this.style.background=\'rgba(74,107,42,0.2)\';this.style.color=\'var(--bile)\'">deployment.</span>',
+        xref:''
+      }
+    ]
+  },
+  {
+    id:'verse3',label:'[ Verse III ]',
+    lines:[
+      {
+        text:'In the pus and bile we kneel',
+        doctrine:'The kneeling posture places the congregation\'s faces below the primary spore-release height of active pustule nodes — approximately chest level on a standing Stage III carrier. The congregation kneels not in humility but in optimal biological positioning. The doctrine of humility is the delivery mechanism for increased exposure.',
+        xref:'→ Lore II: Plague Priest selection and investiture — the physical ceremony of Position I transfer'
+      },
+      {
+        text:'Every wound a prayer we seal',
+        doctrine:'"Seal" is the operative word. Infected wounds in Stage II carriers contain active Mutoid Vermin colonies. Sealing them — covering them, pressing cloth against them — disperses spore-material outward through the covering. The congregation sealing their own wounds is a dispersal gesture. The prayer is real. The dispersal mechanism is more real.',
+        xref:''
+      },
+      {
+        text:'Let the rot consume the air',
+        doctrine:'The final request of the Liturgy before the Chorus repeats is for total atmospheric saturation — every breath in the space carrying viable organisms. This is achievable once Stage III carriers are present in sufficient density. At full Liturgy saturation, no one who breathes the Cathedral air leaves Stage 0. <span class="dt-classified" onclick="this.style.background=\'rgba(74,107,42,0.2)\';this.style.color=\'var(--bile)\'">The Cathedral does not have doors that lock. It does not need them.</span>',
+        xref:''
+      },
+      {
+        text:'Mutoid vermin we declare',
+        doctrine:'The Liturgy ends mid-declaration — not as a stylistic choice but as a functional one. The final line is open. The congregation fills it with whatever they brought into the Cathedral — their specific devotion, their particular surrender. The Plague Priest\'s doctrine: the individual\'s completion of the declaration is their consent. Whatever they say, they are saying yes. The Codex does not require specific words. It requires the open mouth.',
+        xref:'→ Cross-reference all: The Liturgy is a complete ritual from first breath to final declaration'
+      }
+    ]
+  }
+];
+
+let decoded=new Set(),totalLines=0;
+SECTIONS.forEach(s=>totalLines+=s.lines.length);
+
+function buildDecoder(){
+  const wrap=document.getElementById('dec-wrap');
+  wrap.innerHTML='';
+  SECTIONS.forEach((sec,si)=>{
+    const div=document.createElement('div');
+    div.className='dec-section';
+    div.id='ds-'+sec.id;
+    const secDecoded=sec.lines.every((_,li)=>decoded.has(sec.id+'-'+li));
+    div.innerHTML=`
+      <div class="ds-header">
+        <span class="ds-label">☣ &nbsp; ${sec.label}</span>
+        <span class="ds-status ${secDecoded?'decoded':'locked'}" id="dss-${sec.id}">${secDecoded?'DECODED':'LOCKED'}</span>
+      </div>
+      <div class="ds-body">
+        <div class="ds-surface">
+          <div class="surface-label">Surface Text &nbsp;·&nbsp; What the Congregation Sings</div>
+          ${sec.lines.map((l,li)=>{
+            const id=sec.id+'-'+li;
+            const rev=decoded.has(id);
+            return `<div class="hymn-line-d ${sec.id==='chorus'?'chorus':''} ${rev?'revealed':''}" id="hl-${id}" onclick="decodeLine('${sec.id}',${li})">${l.text}</div>`;
+          }).join('')}
+        </div>
+        <div class="ds-decoded">
+          <div class="decoded-label">Decoded Doctrine &nbsp;·&nbsp; The Actual Instruction</div>
+          <div class="decoded-content">
+            <div class="decoded-idle" id="did-${sec.id}">// Click a line to decode //</div>
+            ${sec.lines.map((l,li)=>{
+              const id=sec.id+'-'+li;
+              const isVis=decoded.has(id);
+              return `<div class="decoded-text ${isVis?'on':''}" id="dt-${id}">
+                <div class="dt-line-label">Decoding: "${l.text.substring(0,30)}${l.text.length>30?'..':''}"</div>
+                <div class="dt-surface">"${l.text}"</div>
+                <div class="dt-doctrine">${l.doctrine}</div>
+                ${l.xref?`<div class="dt-xref">${l.xref}</div>`:''}
+              </div>`;
+            }).join('')}
+          </div>
+        </div>
+      </div>
+    `;
+    wrap.appendChild(div);
+  });
+}
+
+window.decodeLine=function(secId,lineIdx){
+  const id=secId+'-'+lineIdx;
+  decoded.add(id);
+  // Update line style
+  const hl=document.getElementById('hl-'+id);
+  if(hl)hl.classList.add('revealed');
+  // Hide idle
+  const idle=document.getElementById('did-'+secId);
+  if(idle)idle.style.display='none';
+  // Hide all decoded texts in section, show this one
+  const sec=SECTIONS.find(s=>s.id===secId);
+  if(sec){
+    sec.lines.forEach((_,li)=>{
+      const dt=document.getElementById('dt-'+secId+'-'+li);
+      if(dt){dt.classList.remove('on');}
+    });
+  }
+  const dt=document.getElementById('dt-'+id);
+  if(dt)dt.classList.add('on');
+  // Update section status
+  const secData=SECTIONS.find(s=>s.id===secId);
+  if(secData){
+    const allDecoded=secData.lines.every((_,li)=>decoded.has(secId+'-'+li));
+    if(allDecoded){
+      const dss=document.getElementById('dss-'+secId);
+      if(dss){dss.textContent='DECODED';dss.className='ds-status decoded';}
+    }
+  }
+  // Update progress
+  const pct=Math.round(decoded.size/totalLines*100);
+  const fill=document.getElementById('prog-fill');
+  if(fill)fill.style.width=pct+'%';
+  const val=document.getElementById('prog-val');
+  if(val)val.textContent=decoded.size+' / '+totalLines;
+  // Check complete
+  if(decoded.size===totalLines){
+    setTimeout(()=>{
+      const comp=document.getElementById('dec-complete');
+      if(comp)comp.classList.add('on');
+    },800);
+  }
+};
+
+// Entry sequence with glitch
+(function(){
+  const cv=document.getElementById('entry-cv'),ctx=cv.getContext('2d');
+  cv.width=window.innerWidth;cv.height=window.innerHeight;
+  const W=cv.width,H=cv.height;
+  ctx.fillStyle='#000';ctx.fillRect(0,0,W,H);
+  function draw(){
+    ctx.fillStyle='rgba(0,0,0,0.9)';ctx.fillRect(0,0,W,H);
+    // Spore drift
+    for(let i=0;i<3;i++){
+      const x=Math.random()*W,y=Math.random()*H;
+      ctx.beginPath();ctx.arc(x,y,Math.random()*2,0,Math.PI*2);
+      ctx.fillStyle=`rgba(74,107,42,${Math.random()*0.06})`;ctx.fill();
+    }
+    requestAnimationFrame(draw);
+  }
+  draw();
+  const entry=document.getElementById('ENTRY');
+  setTimeout(()=>{
+    entry.style.transition='opacity 1s';entry.style.opacity='0';
+    setTimeout(()=>{
+      entry.style.display='none';
+      document.getElementById('APP').classList.add('on');
+      buildDecoder();
+    },1000);
+  },2600);
+})();
+</script>
+</body>
+</html>
