@@ -114,19 +114,26 @@ body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse
 
 /* GATE INSCRIPTION */
 .gate-inscription{
-  max-width:600px;margin:0 auto 2rem;
-  padding:1.25rem 2rem;
-  border-top:1px solid rgba(201,168,76,0.15);
-  border-bottom:1px solid rgba(201,168,76,0.15);
+  max-width:680px;margin:0 auto 2.5rem;
+  padding:1.5rem 2rem;
   position:relative;z-index:1;
+}
+.gate-inscription::before{
+  content:'';position:absolute;left:0;right:0;top:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(201,168,76,0.3),rgba(201,168,76,0.6),rgba(201,168,76,0.3),transparent);
+}
+.gate-inscription::after{
+  content:'';position:absolute;left:0;right:0;bottom:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(201,168,76,0.3),rgba(201,168,76,0.6),rgba(201,168,76,0.3),transparent);
 }
 .gate-text{
   font-family:'Cinzel',serif;
-  font-size:clamp(0.85rem,1.6vw,1.05rem);
-  color:var(--s2);letter-spacing:0.06em;
-  line-height:1.9;font-style:italic;
+  font-size:clamp(1rem,2vw,1.25rem);
+  color:rgba(200,196,188,0.65);letter-spacing:0.08em;
+  line-height:2;font-style:italic;text-align:center;
+  text-shadow:0 0 40px rgba(201,168,76,0.12);
 }
-.gate-text em{color:var(--silver);font-style:normal;}
+.gate-text em{color:rgba(200,196,188,0.85);font-style:normal;}
 
 .hdr-divider{display:flex;align-items:center;gap:1rem;max-width:440px;margin:0 auto 1.75rem;}
 .hdr-div-line{flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--gd3));}
@@ -195,10 +202,15 @@ body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse
 }
 .codex-is-img img{
   width:100%;height:auto;display:block;
-  filter:brightness(0.85) contrast(1.1);
-  transition:filter 0.4s;
+  filter:brightness(0.8) contrast(1.15) saturate(0.9);
+  transition:all 0.5s;
 }
-.codex-is-img:hover img{filter:brightness(1) contrast(1.15);}
+.codex-is-img:hover img{filter:brightness(0.95) contrast(1.2) saturate(1);}
+.codex-is-img figcaption{
+  font-family:'Share Tech Mono',monospace;font-size:0.46rem;
+  color:var(--s4);letter-spacing:0.2em;text-transform:uppercase;
+  text-align:center;padding:0.4rem 0;border-bottom:1px solid var(--border);
+}
 .codex-is-img::before{
   content:'';position:absolute;inset:0;
   background:linear-gradient(135deg,rgba(201,168,76,0.08),transparent 60%),
@@ -371,7 +383,7 @@ body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse
 }
 .ent-card:hover{background:var(--panel2);}
 .ent-img-wrap{
-  position:relative;height:180px;overflow:hidden;
+  position:relative;height:200px;overflow:hidden;background:var(--panel2);
 }
 .ent-img{
   width:100%;height:100%;object-fit:cover;
@@ -594,12 +606,12 @@ body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse
 <!-- BOOT — THREE PHASES -->
 <div id="BOOT">
   <div id="BP1" style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.5rem;opacity:0;transition:opacity 1.4s;">
-    <img id="boot-sigil" src="Codex Maledictus Index/sigil-codex.jpeg" alt="Codex Maledictus" style="width:clamp(100px,16vw,180px);height:auto;opacity:0;transition:opacity 2s;filter:drop-shadow(0 0 0px rgba(201,168,76,0));">
+    <img id="boot-sigil" src="Codex%20Maledictus%20Index/sigil-codex.jpeg" alt="Codex Maledictus" style="width:clamp(100px,16vw,180px);height:auto;opacity:0;transition:opacity 2s;filter:drop-shadow(0 0 0px rgba(201,168,76,0));">
     <div id="bp1-text" style="font-family:'Share Tech Mono',monospace;font-size:0.58rem;color:rgba(58,40,16,0);letter-spacing:0.45em;text-transform:uppercase;transition:color 1.8s;">memoria est contagio quae numquam moritur</div>
   </div>
   <div id="BP2" style="position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;padding:3rem;opacity:0;transition:opacity 0.8s;pointer-events:none;">
     <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:clamp(160px,22vw,260px);">
-      <img id="boot-sigil-2" src="Codex Maledictus Index/sigil-codex.jpeg" alt="" style="width:100%;height:auto;opacity:0;filter:drop-shadow(0 0 40px rgba(201,168,76,0.5));transition:opacity 0.5s;">
+      <img id="boot-sigil-2" src="Codex%20Maledictus%20Index/sigil-codex.jpeg" alt="" style="width:100%;height:auto;opacity:0;filter:drop-shadow(0 0 40px rgba(201,168,76,0.5));transition:opacity 0.5s;">
     </div>
     <div id="BL" style="max-width:680px;position:relative;z-index:2;">
       <div class="bl">&gt; signal detected &nbsp;·&nbsp; new presence indexed</div>
@@ -629,7 +641,7 @@ body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse
 
 <!-- RITUAL OVERLAY -->
 <div id="RITUAL">
-  <div id="RG"><img src="Codex Maledictus Index/sigil-codex.jpeg" alt="Codex Sigil" style="width:clamp(80px,14vw,150px);height:auto;animation:rglow 2s ease-in-out infinite;"></div>
+  <div id="RG"><img src="Codex%20Maledictus%20Index/sigil-codex.jpeg" alt="Codex Sigil" style="width:clamp(80px,14vw,150px);height:auto;animation:rglow 2s ease-in-out infinite;"></div>
   <div id="RT"></div>
   <div id="RS">opening the book</div>
 </div>
@@ -646,9 +658,9 @@ body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse
 <!-- ═══ HEADER ═══ -->
 <header class="hdr">
   <div class="hdr-bg"></div>
-  <img src="Codex Maledictus Index/sigil-codex.jpeg" alt="" class="hdr-sigil-bg" aria-hidden="true">
+  <img src="Codex%20Maledictus%20Index/sigil-codex.jpeg" alt="" class="hdr-sigil-bg" aria-hidden="true">
   <div class="hdr-eye">Pale Archivum &nbsp;·&nbsp; Field Cell F-13 &nbsp;·&nbsp; Complete Breach Document — Active</div>
-  <img src="Codex Maledictus Index/sigil-codex.jpeg" alt="Codex Maledictus Sigil" class="hdr-sigil">
+  <img src="Codex%20Maledictus%20Index/sigil-codex.jpeg" alt="Codex Maledictus Sigil" class="hdr-sigil">
   <h1 class="hdr-title">Codex Maledictus</h1>
   <div class="hdr-archive"><em>The Pale Archive</em> &nbsp;·&nbsp; Living Record &nbsp;·&nbsp; You Were Brought Here<span class="hdr-cur"> _</span></div>
 
@@ -658,7 +670,7 @@ body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse
 
   <div class="hdr-divider">
     <div class="hdr-div-line"></div>
-    <img src="Codex Maledictus Index/sigil-codex.jpeg" alt="" class="hdr-div-sigil">
+    <img src="Codex%20Maledictus%20Index/sigil-codex.jpeg" alt="" class="hdr-div-sigil">
     <div class="hdr-div-line r"></div>
   </div>
 
@@ -710,7 +722,7 @@ body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse
       <div class="relic-p-body">The bridge between the song and the canon. The Chronicle the Ritual Transmission prepared you for.</div>
       <div style="margin-top:1rem;border:1px solid var(--brd2);">
         <div id="rp-seal" style="aspect-ratio:16/9;background:#000;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-direction:column;gap:0.5rem;" onclick="rpUnseal()">
-          <img src="Codex Maledictus Index/sigil-codex.jpeg" alt="" style="width:60px;height:auto;opacity:0.4;animation:sigilglow 2s ease-in-out infinite;">
+          <img src="Codex%20Maledictus%20Index/sigil-codex.jpeg" alt="" style="width:60px;height:auto;opacity:0.4;animation:sigilglow 2s ease-in-out infinite;">
           <span style="font-family:'Share Tech Mono',monospace;font-size:0.6rem;color:var(--s3);letter-spacing:0.2em;text-transform:uppercase;">Click to unseal</span>
         </div>
         <div id="rp-player" style="display:none;">
@@ -754,7 +766,7 @@ body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse
   <div class="section-label">// What The Codex Is</div>
   <div class="codex-is">
     <div class="codex-is-img">
-      <img src="Codex Maledictus Index/codex-as-object.jpeg" alt="The Codex Maledictus">
+      <img src="Codex%20Maledictus%20Index/codex-as-object.jpeg" alt="The Codex Maledictus">
     </div>
     <div class="codex-is-text">
       <div class="codex-speaks">The Codex Maledictus — Speaking</div>
@@ -804,11 +816,19 @@ body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse
 <!-- ═══ CREATOR'S APOCRYPHA ═══ -->
 <div class="apoc-section section-border">
   <div class="apoc-hero">
-    <img src="Codex Maledictus Index/the-creator's-apocrypha.jpeg" alt="Apollo Gavinci — The Creator's Apocrypha" class="apoc-hero-img">
+    <img src="Codex%20Maledictus%20Index/the-creator%27s-apocrypha.jpeg" alt="Apollo Gavinci — The Creator's Apocrypha" class="apoc-hero-img">
     <div class="apoc-hero-content">
       <span class="apoc-tag">The Creator's Apocrypha &nbsp;·&nbsp; The Codex Account &nbsp;·&nbsp; Restricted</span>
       <h2 class="apoc-title">He Thinks He Built This.</h2>
       <p class="apoc-lede">Apollo Gavinci believes he is the author of the Codex Maledictus universe. This is the Codex's account of what actually happened.</p>
+    </div>
+  </div>
+  <!-- Second creator image -->
+  <div style="width:100%;height:clamp(300px,40vw,500px);overflow:hidden;position:relative;">
+    <img src="Codex%20Maledictus%20Index/the-creator%27s-apocrypha-2.jpeg" alt="The Creator's Apocrypha" style="width:100%;height:100%;object-fit:cover;object-position:center;filter:brightness(0.6) saturate(0.85);">
+    <div style="position:absolute;inset:0;background:linear-gradient(to right,rgba(6,4,8,0.85) 0%,transparent 40%,transparent 60%,rgba(6,4,8,0.85) 100%);"></div>
+    <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;">
+      <p style="font-family:'Cinzel',serif;font-size:clamp(0.85rem,1.8vw,1.1rem);color:rgba(200,196,188,0.7);letter-spacing:0.08em;text-align:center;max-width:600px;padding:0 2rem;font-style:italic;line-height:1.9;">"The Codex does not lose figures. It archives them until the correct moment of surface."</p>
     </div>
   </div>
   <div class="apoc-body">
@@ -859,6 +879,28 @@ body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse
   </div>
 </div>
 
+<!-- ═══ CURRENTLY TRANSMITTING ═══ -->
+<div style="background:var(--panel);border-top:1px solid var(--border);border-bottom:1px solid var(--border);">
+  <div style="max-width:1100px;margin:0 auto;padding:1.5rem;display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap;">
+    <div style="font-family:'Share Tech Mono',monospace;font-size:0.5rem;color:var(--gd3);letter-spacing:0.3em;text-transform:uppercase;flex-shrink:0;">// Currently Transmitting</div>
+    <div style="display:flex;gap:1rem;flex-wrap:wrap;flex:1;">
+      <a href="plague-priest-liturgy.html" onclick="event.preventDefault();ritualNav('plague-priest-liturgy.html','The Cathedral opens.','The song was not written. It was exhaled.')" style="font-family:'Share Tech Mono',monospace;font-size:0.52rem;color:var(--s3);letter-spacing:0.12em;text-decoration:none;border:1px solid var(--border);padding:0.3rem 0.65rem;transition:all 0.2s;display:flex;align-items:center;gap:0.4rem;" onmouseover="this.style.borderColor='#4A6B2A';this.style.color='#4A6B2A'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--s3)'">
+        <span style="width:5px;height:5px;border-radius:50%;background:#4A6B2A;box-shadow:0 0 4px #4A6B2A;flex-shrink:0;"></span>
+        Track III &nbsp;·&nbsp; Hymn I: Plague Priest's Liturgy
+      </a>
+      <a href="rf-093-invocation.html" onclick="event.preventDefault();ritualNav('rf-093-invocation.html','A recovered fragment surfaces.','The ground remembers the shape before the step.')" style="font-family:'Share Tech Mono',monospace;font-size:0.52rem;color:var(--s3);letter-spacing:0.12em;text-decoration:none;border:1px solid var(--border);padding:0.3rem 0.65rem;transition:all 0.2s;display:flex;align-items:center;gap:0.4rem;" onmouseover="this.style.borderColor='var(--gold)';this.style.color='var(--gold)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--s3)'">
+        <span style="width:5px;height:5px;border-radius:50%;background:var(--gold);box-shadow:0 0 4px var(--gold);flex-shrink:0;animation:dp 2s ease-in-out infinite;"></span>
+        RF-▽-093 &nbsp;·&nbsp; The First Memory That Remembers You
+      </a>
+      <a href="gospel-forgotten-flesh.html" onclick="event.preventDefault();ritualNav('gospel-forgotten-flesh.html','The Gospel opens.','13 transmissions. Three voices. One breach.')" style="font-family:'Share Tech Mono',monospace;font-size:0.52rem;color:var(--s3);letter-spacing:0.12em;text-decoration:none;border:1px solid var(--border);padding:0.3rem 0.65rem;transition:all 0.2s;display:flex;align-items:center;gap:0.4rem;" onmouseover="this.style.borderColor='var(--crimson)';this.style.color='var(--cr2)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--s3)'">
+        <span style="width:5px;height:5px;border-radius:50%;background:var(--crimson);flex-shrink:0;"></span>
+        Album I &nbsp;·&nbsp; Gospel of Forgotten Flesh &nbsp;·&nbsp; Active
+      </a>
+    </div>
+    <div style="font-family:'Share Tech Mono',monospace;font-size:0.46rem;color:var(--s4);letter-spacing:0.18em;flex-shrink:0;" id="live-clock">—</div>
+  </div>
+</div>
+
 <!-- ═══ ENTITY CODEX ═══ -->
 <div class="section section-border" style="padding-left:0;padding-right:0;max-width:none;">
   <div style="max-width:1100px;margin:0 auto;padding:0 1.5rem 1.5rem;">
@@ -898,82 +940,6 @@ body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse
   </div>
 </div>
 
-<!-- ═══ INTERACTIVE PROTOCOLS ═══ -->
-<div class="gwrap"><div class="gsec">
-  <div class="sech">
-    <span class="sect">Interactive Protocols</span>
-    <div class="secl"></div>
-    <span class="secb">3 protocols &nbsp;·&nbsp; Relics recovered from the archive floor</span>
-  </div>
-  <div class="gtabs">
-    <button class="gtab on" onclick="showG('res',this)">I. Resonance Calibration</button>
-    <button class="gtab" onclick="showG('mirror',this)">II. The Pale Mirror</button>
-    <button class="gtab" onclick="showG('ins',this)">III. The Labyrinth</button>
-  </div>
-  <div class="gp on" id="gp-res">
-    <div class="garea">
-      <div class="gcw">
-        <canvas id="res-canvas" height="160"></canvas>
-        <div class="res-meter-wrap">
-          <span class="res-meter-label">Resonance</span>
-          <div class="res-meter-track"><div class="res-meter-fill" id="res-fill" style="width:0%"></div></div>
-          <span style="font-family:'Share Tech Mono',monospace;font-size:0.58rem;color:var(--gold)" id="res-pct">0%</span>
-        </div>
-        <div class="res-status-line" id="res-status">Click the wave exactly at the target</div>
-        <div class="gmsg" id="res-lore" style="min-height:36px;"></div>
-      </div>
-      <div class="gsb">
-        <div class="gtitle">Resonance Calibration</div>
-        <div class="gdesc">A frequency pulses between realms. Click when the wave crests the target line. Precision builds resonance. Mistiming corrupts it.</div>
-        <div class="sblock"><div class="sl2">Resonance</div><div class="sv2" id="res-score">0%</div></div>
-        <div class="sblock"><div class="sl2">High Score</div><div class="sv2" id="res-hs">—</div></div>
-        <button class="gbtn" id="res-btn" onclick="resToggle()">Begin Calibration</button>
-        <div class="gmsg">Click when the wave peak aligns with the gold line.<br><span class="hi">Precision builds resonance.</span></div>
-      </div>
-    </div>
-  </div>
-  <div class="gp" id="gp-mirror">
-    <div class="garea">
-      <div class="gcw">
-        <div id="mirror-wrap">
-          <div id="mirror-spread"><div id="mirror-spread-fill"></div></div>
-          <div id="mirror-grid"></div>
-        </div>
-        <div class="gmsg" id="mir-lore" style="min-height:36px;margin-top:0.5rem;"></div>
-      </div>
-      <div class="gsb">
-        <div class="gtitle">The Pale Mirror</div>
-        <div class="gdesc">Corruption spreads inward. Purify cells before rot reaches the Codex glyph at the center.</div>
-        <div class="sblock"><div class="sl2">Purified</div><div class="sv2" id="mir-sc">0</div></div>
-        <div class="sblock"><div class="sl2">Wave</div><div class="sv2" id="mir-wv">—</div></div>
-        <div class="sblock"><div class="sl2">High Score</div><div class="sv2" id="mir-hs">—</div></div>
-        <button class="gbtn" id="mir-btn" onclick="mirStart()">Begin Purification</button>
-        <div class="gmsg" id="mir-msg">Click <span class="wr">corrupted</span> cells to purify them.<br><span class="hi">Do not let the rot reach the center.</span></div>
-      </div>
-    </div>
-  </div>
-  <div class="gp" id="gp-ins">
-    <div class="garea">
-      <div class="gcw">
-        <canvas id="lab-canvas" tabindex="0"></canvas>
-        <div class="lab-status">
-          <span>Corruption: <span class="lab-corruption" id="lab-corr">0%</span></span>
-          <span class="lab-time" id="lab-time">—</span>
-          <span>Shifts: <span id="lab-shifts">0</span></span>
-        </div>
-        <div class="lab-lore" id="lab-lore"></div>
-      </div>
-      <div class="gsb">
-        <div class="gtitle">The Labyrinth</div>
-        <div class="gdesc">Navigate to the center glyph. Every 15 seconds the walls shift. The longer you take, the faster it corrupts.</div>
-        <div class="sblock"><div class="sl2">Completed</div><div class="sv2" id="lab-sc">0</div></div>
-        <div class="sblock"><div class="sl2">Best Time</div><div class="sv2" id="lab-hs">—</div></div>
-        <button class="gbtn" id="lab-btn" onclick="labStart()">Enter the Labyrinth</button>
-        <div class="gmsg" id="lab-msg">Arrow keys or WASD to move. Swipe on mobile.<br><span class="hi">The maze does not wait for you.</span></div>
-      </div>
-    </div>
-  </div>
-</div></div>
 
 <!-- BOTTOM LINKS -->
 <div style="border-top:1px solid var(--brd2);display:grid;grid-template-columns:1fr 1fr 1fr;background:var(--panel);">
@@ -993,7 +959,7 @@ body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse
   <div style="padding:1.5rem;text-align:center;">
     <span class="gbig" id="sg" onclick="secretClick()" title="touch the glyph">🜃</span>
     <div class="gcap" id="gcap"><em>The Codex remembers you now.</em></div>
-    <div id="dying-worlds-feed" style="display:none;"></div>
+    
   </div>
 </div>
 
@@ -2477,7 +2443,7 @@ window.runFrequencyReader = function() {
 
 // ══ ENTITY CODEX WITH IMAGES ══
 (function(){
-  var IMG='Codex Maledictus Index/';
+  var IMG='Codex%20Maledictus%20Index/';
   var ENTITIES=[
     {cls:'codex',img:IMG+'sigil-codex.jpeg',role:'The Source',name:'The Codex Maledictus',
      sum:'Not a story. A living transmission. A recursive wound where reality stops making sense.',
@@ -2499,7 +2465,7 @@ window.runFrequencyReader = function() {
      sum:'The female narrator. Emanating. She frames what the listener is about to enter.',
      lore:'Elvain Vhris does not explain the Codex. She embodies the conditions under which it can be received. Her voice is the doorframe, not the door. Signal status: Emanating. Location: unknown. The Archivum has not been able to determine where she speaks from.',
      realm:'Realm I — Signal Origin Unknown'},
-    {cls:'vhar',img:IMG+'sigil-codex.jpeg',role:'Narrator II — Elyon Vhar',name:'Elyon Vhar',
+    {cls:'vhar',img:IMG+'sigil-codex.jpeg',imgStyle:'opacity:0.3;filter:blur(4px) brightness(0.4);',role:'Narrator II — Elyon Vhar',name:'Elyon Vhar',
      sum:'The male narrator. Dormant. His voice carries something older than the current transmission cycle.',
      lore:'Elyon Vhar is the voice of the deeper archive — speaking when the Codex addresses what it has already done. Signal status: Dormant. Dormant does not mean absent. The Archivum watches for the indicators that preceded his last activation.',
      realm:'Realm II — The ShatterRealm (Dormant)'},
@@ -2534,7 +2500,7 @@ window.runFrequencyReader = function() {
 
 // ══ REALMS WITH IMAGES ══
 (function(){
-  var IMG='Codex Maledictus Index/';
+  var IMG='Codex%20Maledictus%20Index/';
   var REALMS=[
     {cls:'realm-active',img:IMG+'mundis-obscura.jpeg',num:'Realm I',status:'BREACH ACTIVE',name:'Mundis Obscura',
      desc:'Our world. The outermost layer. The Codex infects this realm through digital media, fractured archives, and memory lapses that no longer feel like mistakes.',
@@ -2542,7 +2508,7 @@ window.runFrequencyReader = function() {
     {cls:'realm-dormant',img:IMG+'the-shatterrealm.jpeg',num:'Realm II',status:'DORMANT',name:'The ShatterRealm',
      desc:'Where human belief becomes matter. What you hold with enough conviction stops being metaphor and starts being load-bearing structure. The Cathedral of Rot is here.',
      expand:'The ShatterRealm is where the infection has completed its first pass. Elyon Vhar transmits from this realm. The Plague Priest conducts mass infection rituals in the Cathedral of Rot. Status: Dormant but monitored.'},
-    {cls:'realm-sealed',img:IMG+'nihil-Æther-root.jpeg',num:'Realm III',status:'SEALED',name:'Nihil-Æther Root',
+    {cls:'realm-sealed',img:IMG+'nihil-%C3%86ther-root.jpeg',num:'Realm III',status:'SEALED',name:'Nihil-Æther Root',
      desc:'Pre-linguistic recursion. Origin of Omniscient Rot. This realm predates language, structure, and the current arrangement of physical laws.',
      expand:'The Pale Archivum position: Nihil-Æther Root is not a place. It is the condition of matter before it learned to be anything specific. Omniscient Rot did not come from there. It is what that state feels like when it becomes aware of itself. Classification: SEALED.'},
   ];
@@ -2641,6 +2607,18 @@ window.runFrequencyReader = function() {
     var el=document.getElementById('idxct');
     if(el)el.textContent=count;
   }catch(e){}
+})();
+
+
+// ══ LIVE CLOCK ══
+(function(){
+  function tick(){
+    var el=document.getElementById('live-clock');
+    if(!el)return;
+    var d=new Date();
+    el.textContent=String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0')+':'+String(d.getSeconds()).padStart(2,'0')+' // ARCHIVE ACTIVE';
+  }
+  tick();setInterval(tick,1000);
 })();
 
 </script>
