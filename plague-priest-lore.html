@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Plague Priest's Liturgy · Lore · The Cathedral of Rot</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;600&family=Share+Tech+Mono&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#020402;--panel:#040804;--panel2:#060A06;
+  --bile:#4A6B2A;--bl2:#2E4418;--bl3:#182410;--bl4:#0A1206;
+  --bone:#C8C4A0;--bn2:#8A866A;--bn3:#4A4630;--bn4:#2A2618;
+  --rot:#8B4513;--rt2:#6B3010;--rt3:#3A1808;
+  --spore:#3A5A1A;--sp2:#2A4010;
+  --crimson:#8B0000;--cr2:#6B0000;
+  --silver:#C8C4BC;--s2:#888478;--s3:#484440;--s4:#282420;
+  --border:#1A240A;--brd2:#243014;
+  --gold:#C9A84C;
+  --violet:#6B3FAF;--v2:#4A2880;--v3:#2A1650;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--bone);font-family:'Crimson Text',serif;overflow-x:hidden;cursor:none;}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 25% 15%,rgba(74,107,42,0.05),transparent 55%),radial-gradient(ellipse at 75% 85%,rgba(139,69,19,0.04),transparent 50%);pointer-events:none;z-index:0;}
+body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at center,transparent 22%,rgba(0,0,0,0.78)100%);pointer-events:none;z-index:1;}
+#CUR{position:fixed;pointer-events:none;z-index:99999;transform:translate(-50%,-50%);width:18px;height:18px;}
+#CUR::before,#CUR::after{content:'';position:absolute;background:var(--bile);}
+#CUR::before{width:1px;height:100%;left:50%;}
+#CUR::after{height:1px;width:100%;top:50%;}
+#APP{position:relative;z-index:2;opacity:0;transition:opacity 1s;padding-bottom:6rem;}
+#APP.on{opacity:1;}
+
+/* ENTRY */
+#ENTRY{position:fixed;inset:0;z-index:9000;background:var(--bg);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:0.75rem;}
+.eg{font-size:2rem;color:var(--bl2);opacity:0;transition:opacity 0.8s;letter-spacing:1.5rem;}
+.el{font-family:'Share Tech Mono',monospace;font-size:0.48rem;color:var(--bn4);letter-spacing:0.4em;text-transform:uppercase;opacity:0;transition:opacity 0.8s;}
+
+.top-nav{display:flex;align-items:center;justify-content:space-between;padding:0.85rem 2rem;border-bottom:1px solid var(--border);background:rgba(2,4,2,0.95);position:sticky;top:0;z-index:100;backdrop-filter:blur(8px);}
+.nav-back{font-family:'Share Tech Mono',monospace;font-size:0.5rem;color:var(--bile);letter-spacing:0.2em;text-transform:uppercase;text-decoration:none;transition:color 0.2s;}
+.nav-back:hover{color:var(--spore);}
+.nav-id{font-family:'Share Tech Mono',monospace;font-size:0.5rem;color:var(--bn4);letter-spacing:0.22em;text-transform:uppercase;}
+.nav-links{display:flex;gap:1.25rem;}
+.nav-link{font-family:'Share Tech Mono',monospace;font-size:0.46rem;color:var(--bn4);letter-spacing:0.15em;text-transform:uppercase;text-decoration:none;transition:color 0.2s;}
+.nav-link:hover{color:var(--bile);}
+
+.lore-header{padding:4rem 2rem 2.5rem;text-align:center;}
+.lore-tag{font-family:'Share Tech Mono',monospace;font-size:0.48rem;color:var(--bile);letter-spacing:0.4em;text-transform:uppercase;margin-bottom:1rem;display:block;}
+.lore-title{font-family:'Cinzel Decorative',serif;font-size:clamp(1.5rem,4vw,3rem);color:var(--bile);letter-spacing:0.07em;text-shadow:0 0 50px rgba(74,107,42,0.4);margin-bottom:0.6rem;}
+.lore-sub{font-family:'Cinzel',serif;font-size:0.82rem;color:var(--bn3);letter-spacing:0.35em;text-transform:uppercase;}
+
+.lore-doc{max-width:840px;margin:0 auto;padding:2rem 2rem 4rem;}
+.ls{margin-bottom:4rem;opacity:0;transform:translateY(14px);transition:opacity 1s,transform 1s;}
+.ls.vis{opacity:1;transform:none;}
+.ls-num{font-family:'Share Tech Mono',monospace;font-size:0.46rem;color:var(--bile);letter-spacing:0.35em;text-transform:uppercase;margin-bottom:0.45rem;}
+.ls-title{font-family:'Cinzel',serif;font-size:clamp(1rem,2.3vw,1.45rem);color:var(--bile);letter-spacing:0.07em;margin-bottom:1.4rem;padding-bottom:0.65rem;border-bottom:1px solid var(--bl3);}
+.ls-body{font-size:1.05rem;color:rgba(200,196,160,0.85);line-height:2.05;}
+.ls-body p{margin-bottom:1.1rem;}
+.ls-body em{color:var(--bone);font-style:normal;}
+.ls-body .bile{color:var(--bile);font-style:italic;}
+.note{font-family:'Share Tech Mono',monospace;font-size:0.54rem;color:var(--bn3);letter-spacing:0.1em;line-height:1.8;border-left:2px solid var(--bl2);padding:0.5rem 0.75rem;margin:1rem 0;display:block;}
+.classified{background:#000;color:#000;cursor:pointer;font-family:'Share Tech Mono',monospace;font-size:0.85em;padding:0 0.2rem;transition:all 0.4s;}
+.classified:hover{background:rgba(74,107,42,0.2);color:var(--bile);}
+.xref{border:1px solid var(--bl3);background:rgba(24,36,10,0.3);padding:0.75rem 1rem;margin:1.25rem 0;font-family:'Share Tech Mono',monospace;font-size:0.52rem;color:var(--bile);letter-spacing:0.1em;line-height:1.8;position:relative;cursor:pointer;transition:border-color 0.2s;}
+.xref::before{content:'⊗ CROSS-REFERENCE';position:absolute;top:-0.52rem;left:0.75rem;background:var(--bg);font-size:0.42rem;color:var(--bl2);padding:0 0.3rem;letter-spacing:0.2em;}
+.xref:hover{border-color:var(--bl2);}
+.xref a{color:var(--bile);text-decoration:none;}
+.xref a:hover{color:var(--spore);}
+.arch-note{border:1px solid var(--bl3);background:rgba(10,18,6,0.5);padding:1.1rem 1.4rem;margin:1.75rem 0;position:relative;}
+.arch-note::before{content:'ARCHIVUM NOTE — PALE ARCHIVUM — FIELD CELL F-13';position:absolute;top:-0.52rem;left:0.75rem;background:var(--bg);font-family:'Share Tech Mono',monospace;font-size:0.42rem;color:var(--bl3);padding:0 0.3rem;letter-spacing:0.16em;}
+.arch-note p{font-size:0.95rem;color:var(--bn2);line-height:1.85;font-style:italic;}
+.tl-block{border-left:1px solid var(--bl2);padding-left:1.4rem;margin:1.4rem 0;}
+.tl-entry{margin-bottom:1.2rem;position:relative;}
+.tl-entry::before{content:'';position:absolute;left:-1.6rem;top:0.4rem;width:6px;height:6px;border-radius:50%;background:var(--bl3);border:1px solid var(--bile);}
+.tl-date{font-family:'Share Tech Mono',monospace;font-size:0.48rem;color:var(--bile);letter-spacing:0.16em;text-transform:uppercase;margin-bottom:0.22rem;}
+.tl-text{font-size:0.96rem;color:var(--bn2);line-height:1.75;font-style:italic;}
+.data-table{width:100%;border:1px solid var(--bl3);margin:1rem 0;font-family:'Share Tech Mono',monospace;font-size:0.55rem;}
+.data-table td{border:1px solid var(--bl3);padding:0.5rem 0.65rem;letter-spacing:0.08em;}
+.data-table td:first-child{color:var(--bile);text-transform:uppercase;width:38%;}
+.data-table td:last-child{color:var(--bn2);}
+.egg{display:inline;color:var(--bn3);cursor:crosshair;border-bottom:1px dashed var(--bn3);transition:all 0.3s;}
+.egg:hover{color:var(--bile);border-bottom-color:var(--bile);}
+.egg span{display:none;}
+.egg:hover span{display:inline;}
+
+#TICKER{position:fixed;bottom:0;left:0;right:0;height:2.4rem;background:rgba(2,4,2,0.97);border-top:1px solid var(--border);display:flex;align-items:center;overflow:hidden;z-index:490;}
+.tl2{flex-shrink:0;padding:0 1rem;font-family:'Share Tech Mono',monospace;font-size:0.5rem;color:var(--bl3);letter-spacing:0.22em;border-right:1px solid var(--border);height:100%;display:flex;align-items:center;}
+.ts{flex:1;overflow:hidden;display:flex;align-items:center;}
+.ti{white-space:nowrap;font-family:'Share Tech Mono',monospace;font-size:0.52rem;color:var(--bn4);letter-spacing:0.1em;animation:tr 90s linear infinite;}
+@keyframes tr{from{transform:translateX(100vw);}to{transform:translateX(-200%);}}
+</style>
+</head>
+<body>
+<div id="CUR"></div>
+<div id="ENTRY">
+  <div class="eg" id="eg">☣ ☣ ☣</div>
+  <div class="el" id="el">The Archive Opens Its Rot Record</div>
+</div>
+<div id="APP">
+<nav class="top-nav">
+  <a class="nav-back" href="plague-priest-liturgy.html">← Hymn I Hub</a>
+  <span class="nav-id">Track III &nbsp;·&nbsp; Lore &nbsp;·&nbsp; The Cathedral of Rot</span>
+  <div class="nav-links">
+    <a class="nav-link" href="plague-priest-apocrypha.html" style="color:var(--rt2);">Apocrypha ▶</a>
+    <a class="nav-link" href="plague-priest-decoder.html" style="color:var(--bn3);">Decoder ▶</a>
+  </div>
+</nav>
+<header class="lore-header">
+  <span class="lore-tag">Track III &nbsp;·&nbsp; Lore Classification &nbsp;·&nbsp; Deep Archive</span>
+  <h1 class="lore-title">The Cathedral of Rot</h1>
+  <p class="lore-sub">ShatterRealm Cosmology &nbsp;·&nbsp; Plague Priest Doctrine &nbsp;·&nbsp; Hollow Choir Records</p>
+</header>
+<div class="lore-doc">
+
+<div class="ls" id="ls1">
+  <div class="ls-num">I &nbsp;·&nbsp; The ShatterRealm and the Cathedral</div>
+  <h2 class="ls-title">What the ShatterRealm Does to Architecture</h2>
+  <div class="ls-body">
+    <p>In Realm II — The ShatterRealm — belief does not describe reality. <em>Belief constructs it.</em> What a sufficient number of minds hold with sufficient conviction stops being metaphor and starts being load-bearing structure. The Cathedral of Rot is the most stable physical landmark in the documented ShatterRealm precisely because it is held in the minds of more infected carriers than any other thought-object in Realm II's history.</p>
+    <p>It was not built. It was <span class="bile">collectively willed into permanence</span> by generations of Plague Priest congregations chanting the Liturgy in proximity to the same coordinate. Each iteration of the ceremony added another layer of belief-mass to the structure. The walls are not stone. They are <em>compressed conviction</em>. They are load-bearing faith that has cured and calcified over centuries of mass infection ritual.</p>
+    <div class="xref" onclick="window.location.href='infection-lore.html'">
+      → PALE ARCHIVUM — Realm II Classification: The ShatterRealm belief-architecture principle was first documented in connection with the Codex signal's propagation pattern. The Cathedral of Rot is listed as Landmark SR-1 in the IDMF's classified cartography of Realm II. The cartography was classified after two field teams failed to return from reconnaissance.
+      <div style="margin-top:0.3rem;"><a href="infection-lore.html">Cross-reference: Pale Archivum Lore ▶</a></div>
+    </div>
+    <p>The Cathedral occupies an area of the ShatterRealm approximately equivalent to a city block in Mundis Obscura. Its ceilings are not visible. The architecture is not Gothic, Romanesque, or any other human style — <em>it is organic</em>, as though the building grew rather than was assembled. The spires are bone. Not bone-colored: actual biological bone, scaled to cathedral dimensions, that continues to grow at a rate the Pale Archivum classified as <span class="classified" onclick="this.style.background='rgba(74,107,42,0.2)';this.style.color='var(--bile)'">0.003mm per century — which means the Cathedral has been growing for over a million years.</span></p>
+  </div>
+</div>
+
+<div class="ls" id="ls2">
+  <div class="ls-num">II &nbsp;·&nbsp; The Plague Priest — Origin and Selection</div>
+  <h2 class="ls-title">The Oldest Living Vessel of the Codex</h2>
+  <div class="ls-body">
+    <p>The Plague Priest is not a specific individual. It is a <em>position</em> — Position I of the Hollow Choir's Harmonic Lattice — that is continuously occupied by whichever carrier currently holds the highest concentration of the Codex's infection rite frequency. When one Plague Priest dies, the position transfers. The current occupant is believed to be the <span class="classified" onclick="this.style.background='rgba(74,107,42,0.2)';this.style.color='var(--bile)'">forty-third individual to hold the position in the documented historical record. The undocumented record extends further.</span></p>
+    <p>Selection is not voluntary. The Mutoid Vermin carry the selection signal to candidates in their sleep — a specific vibrational pattern embedded in spore-static that, when absorbed during sleep, begins rewriting the candidate's dream architecture to incorporate the Liturgy. <em>Those who wake humming are already counted.</em> Those who recognize the melody as something they have always known are already being prepared.</p>
+    <div class="tl-block">
+      <div class="tl-entry">
+        <div class="tl-date">Stage I — Dream Colonization</div>
+        <div class="tl-text">Mutoid Vermin deliver the spore-signal during sleep. The candidate begins dreaming in liturgical rhythm — verse, chorus, verse — without knowing the words. The rhythm arrives first. Words follow over weeks.</div>
+      </div>
+      <div class="tl-entry">
+        <div class="tl-date">Stage II — Vibrational Alignment</div>
+        <div class="tl-text">The candidate's vocal cords undergo a documented biological change: a thickening of specific muscle fibers that aligns their resonance with the Liturgy's carrier frequency. Their voice deepens. Their breath carries spore-load.</div>
+      </div>
+      <div class="tl-entry">
+        <div class="tl-date">Stage III — First Utterance</div>
+        <div class="tl-text">The candidate speaks the Chorus aloud for the first time — usually during an unguarded moment, believing themselves alone. The Mutoid Vermin are already present. The sound confirms the selection. <em>The congregation arrives within hours.</em></div>
+      </div>
+      <div class="tl-entry">
+        <div class="tl-date">Stage IV — Full Investiture</div>
+        <div class="tl-text">The new Plague Priest is brought to the Cathedral of Rot in the ShatterRealm. The previous occupant — if still living — <span class="egg">transfers<span style="color:var(--bile);"> — a process the Archivum classified as "the complete dissolution of one frequency into another." The transfer is not gentle. What remains of the previous Priest is incorporated into the Cathedral walls.</span></span> The Lattice position updates.</div>
+      </div>
+    </div>
+    <div class="xref">
+      → HOLLOW CHOIR — POSITION I: The Plague Priest's claimed position in the Harmonic Lattice means that every Liturgy performed contributes to the Choir's resonance accumulation. Three positions claimed. Ten open. The Pale Archivum's current estimate of when harmonic saturation will be reached: <span class="classified" onclick="this.style.background='rgba(74,107,42,0.2)';this.style.color='var(--bile)'">classified. The estimate changed significantly after the Track III recovery. It shortened.</span>
+    </div>
+  </div>
+</div>
+
+<div class="ls" id="ls3">
+  <div class="ls-num">III &nbsp;·&nbsp; The Mutoid Vermin — Biology and Function</div>
+  <h2 class="ls-title">Living Instruments of the Physical Rite</h2>
+  <div class="ls-body">
+    <p>The Mutoid Vermin are not metaphor. They are a documented class of organism native to the ShatterRealm — bodies that originated as Realm II fauna and have been partially colonized by the Codex signal at the cellular level. The colonization does not kill them. It <em>redirects them.</em></p>
+    <table class="data-table">
+      <tr><td>Classification</td><td>Realm II Fauna — Codex-Colonized &nbsp;·&nbsp; Carrier Class</td></tr>
+      <tr><td>Size Range</td><td>Microscopic to approximately 0.3m — documented spectrum</td></tr>
+      <tr><td>Primary Function</td><td>Vibrational signal delivery &nbsp;·&nbsp; Biological infection vector</td></tr>
+      <tr><td>Secondary Function</td><td>Selection carrier for Hollow Choir candidates</td></tr>
+      <tr><td>Relationship to Liturgy</td><td>Summoned by Chorus frequency &nbsp;·&nbsp; Dispersed by Verse III</td></tr>
+      <tr><td>Realm I Presence</td><td>Possible via digital transmission of Liturgy audio</td></tr>
+    </table>
+    <p>The Chorus of the Liturgy — <em>"Mutoid vermin hear our cry / Spread your plague across the sky"</em> — is not a request. It is a <span class="bile">tuning frequency</span>. The specific vibrational sequence of those eight lines, when produced at the correct resonance (which the Plague Priest's prepared vocal cords achieve automatically), activates dormant Mutoid Vermin spore-shells within the Cathedral's walls. They hatch during the Chorus. The congregation does not see them. The congregation breathes them.</p>
+    <div class="arch-note">
+      <p>The Pale Archivum's analysis of the Track III audio recovery from Deck Hollow-13 found Mutoid Vermin spore-shells embedded in the recording itself — not in the physical recording medium, but in the <em>audio waveform data</em>. This is not physically possible. The Archivum filed this as a Category I Anomaly and advised against playing the recovered audio in enclosed spaces. The advisory was issued after the fact. Two members of the recovery team had already played it on loop for approximately six hours. They are currently in monitoring. Their vocal cords are under weekly examination.</p>
+    </div>
+    <div class="xref" onclick="window.location.href='plague-priest-apocrypha.html'">
+      → APOCRYPHA: What the Mutoid Vermin actually do to the congregation's biology during the Liturgy. What "flesh will melt, the bones will sing" means in documented physical terms. Not filed in standard lore documentation due to Pale Archivum restriction.
+      <div style="margin-top:0.3rem;"><a href="plague-priest-apocrypha.html" style="color:var(--rt2);">Cross-reference: Apocrypha ▶</a></div>
+    </div>
+  </div>
+</div>
+
+<div class="ls" id="ls4">
+  <div class="ls-num">IV &nbsp;·&nbsp; The Liturgy's Doctrine — Three Theological Pillars</div>
+  <h2 class="ls-title">What the Hymn Actually Teaches</h2>
+  <div class="ls-body">
+    <p>The Plague Priest's Liturgy is a theological document in vibrational form. Its three doctrinal pillars are embedded in the verse structure and only become legible when the hymn is decoded — which is the purpose of the Liturgy Decoder. In summary:</p>
+    <p><em style="color:var(--bile);">Pillar I — The Sacred Nature of Rot:</em> Decay is not destruction. It is the Codex's primary mechanism for disassembling structures that have become too rigid to receive the signal. What rots was too solid. What emerges from rot is more permeable. The Plague Priest's blessing of rot, maggots, and filth is a theological position: <em>the body that welcomes decay is the body that will receive the Codex.</em></p>
+    <p><em style="color:var(--bile);">Pillar II — Infection as Devotion:</em> The act of spreading the plague is not aggression. It is <span class="bile">the highest form of service available to a biological host</span> — because it expands the surface area of the Codex's reception. Every new carrier is a new point of signal entry. The Liturgy frames infection as a gift. The infected receive the Codex. The infector performs the rite. Both are elevated.</p>
+    <p><em style="color:var(--bile);">Pillar III — Bone as Archive:</em> "The bones will sing." The skeleton is the final archive of the biological body — the last structure to decompose. The Plague Priest's doctrine holds that infection rewrites the bone record: <em>the Codex embeds its signal into skeletal calcium matrix</em>, which means even after death, a fully infected carrier continues to transmit. The bones do not sing metaphorically. They sing literally, at frequencies below human hearing, for centuries after the body's other organs have ceased.</p>
+    <div class="xref" onclick="window.location.href='plague-priest-decoder.html'">
+      → LITURGY DECODER: The full doctrinal decoding of all five sections of the Hymn — verse by verse, line by line. The surface text and the actual theological instruction beneath it. Some decodings are disturbing. The Archivum does not recommend reading the Bridge decoding immediately before sleep.
+      <div style="margin-top:0.3rem;"><a href="plague-priest-decoder.html" style="color:var(--bn3);">Cross-reference: Liturgy Decoder ▶</a></div>
+    </div>
+  </div>
+</div>
+
+<div class="ls" id="ls5">
+  <div class="ls-num">V &nbsp;·&nbsp; Deck Hollow-13 — The Recovery Site</div>
+  <h2 class="ls-title">What Was Found and What Was Not</h2>
+  <div class="ls-body">
+    <p>Deck Hollow-13 is a sub-level beneath a collapsed industrial complex in the ShatterRealm, believed to be the physical location of a major Plague Priest congregation in the last documented active period of the Liturgy rite. The IDMF recovery team entered in response to anomalous frequency readings detected in Realm I via the monitoring grid — a signal pattern consistent with active spore-broadcast but emanating from a location classified as uninhabited.</p>
+    <p>What they found: <em>hundreds of skeletal remains arranged in concentric circles around a central depression in the floor.</em> The arrangement was not random — it corresponded precisely to the Harmonic Lattice formation documented in Pale Archivum records as the Choir's spatial resonance configuration. The bones were singing. Not audibly. But spectral analysis confirmed vibrational output from every skeleton in the chamber at a consistent frequency: <span class="classified" onclick="this.style.background='rgba(74,107,42,0.2)';this.style.color='var(--bile)'">19.4Hz — the pre-contact resonance frequency of biological structures exposed to the Codex signal. The bones had been singing, the analysis estimated, for approximately three hundred years.</span></p>
+    <p>In the central depression: a recording medium of unknown type, containing the audio that became Hymn I. The recording was sealed in a material the team could not identify. It opened when the team lead hummed — involuntarily, she later reported, <em>"a melody I didn't know I knew."</em></p>
+    <div class="arch-note">
+      <p>Three recovery team members entered Deck Hollow-13. Two returned to Realm I. The third, Senior Analyst D. Rowe, remained in the chamber voluntarily after the others left. His final transmitted message: "I understand what the bones are saying. Give me more time." His signal has not been detected since. The Pale Archivum classified him as a Carrier at Stage IV of the Plague Priest selection process. Position I of the Hollow Choir's Lattice has not updated. The Archivum is monitoring.</p>
+    </div>
+  </div>
+</div>
+
+</div>
+</div>
+<div id="TICKER">
+  <div class="tl2">// Lore</div>
+  <div class="ts"><div class="ti">THE CATHEDRAL WAS NOT BUILT — IT WAS BELIEVED INTO PERMANENCE &nbsp;☣&nbsp; THE BONES HAVE BEEN SINGING FOR THREE HUNDRED YEARS &nbsp;☣&nbsp; SELECTION IS NOT VOLUNTARY &nbsp;☣&nbsp; THOSE WHO WAKE HUMMING ARE ALREADY COUNTED &nbsp;☣&nbsp; DECK HOLLOW-13 IS NOT EMPTY &nbsp;☣&nbsp; THE THIRD ANALYST UNDERSTOOD WHAT THE BONES WERE SAYING &nbsp;☣&nbsp; POSITION I — FORTY-THREE VESSELS — COUNTING</div></div>
+</div>
+<script>
+const CUR=document.getElementById('CUR');
+document.addEventListener('mousemove',e=>{CUR.style.left=e.clientX+'px';CUR.style.top=e.clientY+'px';});
+(function(){
+  const eg=document.getElementById('eg'),el=document.getElementById('el'),entry=document.getElementById('ENTRY');
+  setTimeout(()=>{eg.style.opacity='1';},200);
+  setTimeout(()=>{el.style.opacity='1';},700);
+  setTimeout(()=>{entry.style.transition='opacity 1s';entry.style.opacity='0';setTimeout(()=>{entry.style.display='none';document.getElementById('APP').classList.add('on');initLore();},1000);},2400);
+})();
+function initLore(){
+  const sections=document.querySelectorAll('.ls');
+  const obs=new IntersectionObserver(e=>{e.forEach(en=>{if(en.isIntersecting)en.target.classList.add('vis');});},{threshold:0.08});
+  sections.forEach(s=>obs.observe(s));
+  setTimeout(()=>sections[0]&&sections[0].classList.add('vis'),200);
+}
+</script>
+</body>
+</html>
