@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hymn I: Plague Priest's Liturgy · Track III · Codex Maledictus</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;600&family=Share+Tech+Mono&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#020402;--panel:#040804;--panel2:#060A06;
+  --bile:#4A6B2A;--bl2:#2E4418;--bl3:#182410;--bl4:#0A1206;
+  --bone:#C8C4A0;--bn2:#8A866A;--bn3:#4A4630;--bn4:#2A2618;
+  --rot:#8B4513;--rt2:#6B3010;--rt3:#3A1808;
+  --spore:#3A5A1A;--sp2:#2A4010;--sp3:#1A2808;
+  --crimson:#8B0000;--cr2:#6B0000;
+  --silver:#C8C4BC;--s2:#888478;--s3:#484440;--s4:#282420;
+  --border:#1A240A;--brd2:#243014;
+  --gold:#C9A84C;--gd2:#8A6530;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--bg);color:var(--bone);
+  font-family:'Crimson Text',serif;
+  overflow-x:hidden;cursor:none;
+  background-image:
+    radial-gradient(ellipse at 20% 30%,rgba(74,107,42,0.06) 0%,transparent 55%),
+    radial-gradient(ellipse at 80% 70%,rgba(139,69,19,0.05) 0%,transparent 50%),
+    radial-gradient(ellipse at 50% 50%,rgba(58,90,26,0.03) 0%,transparent 70%);
+}
+body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 4px,rgba(0,0,0,0.04) 4px,rgba(0,0,0,0.04) 5px);pointer-events:none;z-index:9990;}
+body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at center,transparent 20%,rgba(0,0,0,0.82)100%);pointer-events:none;z-index:9989;}
+
+/* CURSOR — spore-green */
+#CUR{position:fixed;pointer-events:none;z-index:99999;transform:translate(-50%,-50%);width:18px;height:18px;}
+#CUR::before,#CUR::after{content:'';position:absolute;background:var(--bile);}
+#CUR::before{width:1px;height:100%;left:50%;}
+#CUR::after{height:1px;width:100%;top:50%;}
+#CURD{position:fixed;pointer-events:none;z-index:99998;transform:translate(-50%,-50%);width:3px;height:3px;border-radius:50%;background:var(--spore);}
+
+/* SPORE CANVAS */
+#BG{position:fixed;inset:0;z-index:0;pointer-events:none;}
+
+/* ENTRY RITUAL */
+#ENTRY{
+  position:fixed;inset:0;z-index:9000;background:#000;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:1.2rem;text-align:center;padding:2rem;
+}
+.entry-glyph{font-size:2.8rem;color:rgba(74,107,42,0.4);animation:sglow 4s ease-in-out infinite;}
+@keyframes sglow{0%,100%{opacity:0.2;text-shadow:none;}50%{opacity:0.8;text-shadow:0 0 30px rgba(74,107,42,0.6);}}
+.entry-title{font-family:'Cinzel',serif;font-size:clamp(0.8rem,2vw,1rem);color:rgba(74,107,42,0.5);letter-spacing:0.6em;text-transform:uppercase;animation:efade 6s ease-in-out infinite;}
+@keyframes efade{0%,100%{opacity:0.3;}50%{opacity:0.9;}}
+.entry-sub{font-family:'Share Tech Mono',monospace;font-size:0.48rem;color:rgba(42,38,24,0.7);letter-spacing:0.3em;text-transform:uppercase;}
+.entry-warning{font-family:'Crimson Text',serif;font-size:0.88rem;color:rgba(107,48,16,0.6);font-style:italic;max-width:400px;line-height:1.8;}
+
+/* APP */
+#APP{position:relative;z-index:2;opacity:0;transition:opacity 1.5s;padding-bottom:6rem;}
+#APP.on{opacity:1;}
+
+/* NAV */
+.top-nav{display:flex;align-items:center;justify-content:space-between;padding:0.85rem 2rem;border-bottom:1px solid var(--border);background:rgba(2,4,2,0.95);position:sticky;top:0;z-index:100;backdrop-filter:blur(8px);}
+.nav-back{font-family:'Share Tech Mono',monospace;font-size:0.5rem;color:var(--bl2);letter-spacing:0.2em;text-transform:uppercase;text-decoration:none;transition:color 0.2s;}
+.nav-back:hover{color:var(--bile);}
+.nav-id{font-family:'Share Tech Mono',monospace;font-size:0.5rem;color:var(--bn4);letter-spacing:0.22em;text-transform:uppercase;}
+.nav-links{display:flex;gap:1.25rem;}
+.nav-link{font-family:'Share Tech Mono',monospace;font-size:0.46rem;color:var(--bn4);letter-spacing:0.15em;text-transform:uppercase;text-decoration:none;transition:color 0.2s;}
+.nav-link:hover{color:var(--bile);}
+
+/* HEADER */
+.ppl-header{
+  text-align:center;padding:4.5rem 2rem 3rem;
+  border-bottom:1px solid var(--border);
+  position:relative;overflow:hidden;
+}
+.ppl-header::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:400px;height:1px;background:linear-gradient(90deg,transparent,var(--bl2),var(--bile),var(--bl2),transparent);}
+.ppl-eye{font-family:'Share Tech Mono',monospace;font-size:0.5rem;color:var(--bl2);letter-spacing:0.45em;text-transform:uppercase;margin-bottom:1.2rem;display:block;animation:eyef 9s ease-in-out infinite;}
+@keyframes eyef{0%,100%{opacity:0.3;}50%{opacity:0.8;color:var(--bile);}}
+.ppl-glyph{font-size:3rem;color:var(--bl2);display:block;margin-bottom:1rem;animation:plgglow 6s ease-in-out infinite;}
+@keyframes plgglow{0%,100%{text-shadow:none;opacity:0.4;}50%{text-shadow:0 0 40px rgba(74,107,42,0.5),0 0 80px rgba(74,107,42,0.2);opacity:1;}}
+.ppl-num{font-family:'Share Tech Mono',monospace;font-size:0.5rem;color:var(--bl3);letter-spacing:0.4em;text-transform:uppercase;margin-bottom:0.6rem;display:block;}
+.ppl-title{font-family:'Cinzel Decorative',serif;font-size:clamp(1.6rem,4.5vw,4rem);color:var(--bile);letter-spacing:0.06em;line-height:1.15;text-shadow:0 0 60px rgba(74,107,42,0.4),0 0 160px rgba(74,107,42,0.12);margin-bottom:0.6rem;animation:titledecay 12s ease-in-out infinite;}
+@keyframes titledecay{0%,88%,100%{text-shadow:0 0 60px rgba(74,107,42,0.4);}89%{text-shadow:6px 0 var(--rot),-3px 0 var(--spore),0 0 60px rgba(74,107,42,0.4);transform:translateX(3px);}90%{clip-path:inset(20% 0 60% 0);transform:translateX(-2px);}91%{clip-path:none;transform:none;}}
+.ppl-sub{font-family:'Cinzel',serif;font-size:clamp(0.7rem,1.4vw,0.9rem);color:var(--bn3);letter-spacing:0.4em;text-transform:uppercase;margin-bottom:1rem;}
+.ppl-recovered{font-family:'Share Tech Mono',monospace;font-size:0.5rem;color:var(--bl2);letter-spacing:0.25em;text-transform:uppercase;margin-bottom:1.5rem;display:flex;align-items:center;justify-content:center;gap:0.5rem;}
+.rdot{width:5px;height:5px;border-radius:50%;background:var(--bile);box-shadow:0 0 6px var(--bile);animation:dp 2s ease-in-out infinite;}
+@keyframes dp{0%,100%{opacity:1;}50%{opacity:0.15;}}
+.ppl-lede{font-size:1.05rem;font-style:italic;color:var(--bn2);line-height:2;max-width:640px;margin:0 auto 1.5rem;text-align:center;}
+.ppl-lede em{color:var(--bone);font-style:normal;}
+.ppl-divider{display:flex;align-items:center;gap:1rem;max-width:400px;margin:0 auto;}
+.pdl{flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--bl3));}
+.pdl.r{background:linear-gradient(270deg,transparent,var(--bl3));}
+.pdg{font-size:1rem;color:var(--bl3);}
+
+/* STATUS BAR */
+.ppl-status{display:flex;border-bottom:1px solid var(--border);background:var(--panel);overflow-x:auto;scrollbar-width:none;}
+.ppl-status::-webkit-scrollbar{display:none;}
+.psti{flex-shrink:0;padding:0.45rem 1rem;border-right:1px solid var(--border);display:flex;align-items:center;gap:0.4rem;font-family:'Share Tech Mono',monospace;font-size:0.54rem;letter-spacing:0.1em;}
+.pstdot{width:4px;height:4px;border-radius:50%;flex-shrink:0;animation:dp 2.5s ease-in-out infinite;}
+.dg{background:var(--bile);box-shadow:0 0 4px var(--bile);}
+.do{background:var(--bone);box-shadow:0 0 4px var(--bone);}
+.dr{background:var(--crimson);}
+.pstl{color:var(--bn3);}
+.pstv{color:var(--bile);}
+.pstv.bone{color:var(--bone);}
+.pstv.red{color:var(--crimson);}
+
+/* SECTIONS */
+.sec{padding:2.5rem 1.5rem;max-width:1040px;margin:0 auto;}
+.sech{display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem;padding-bottom:0.75rem;border-bottom:1px solid var(--brd2);}
+.sect{font-family:'Cinzel',serif;font-size:0.95rem;color:var(--bile);letter-spacing:0.2em;text-transform:uppercase;text-shadow:0 0 12px rgba(74,107,42,0.25);}
+.secl{flex:1;height:1px;background:linear-gradient(90deg,var(--brd2),transparent);}
+.secb{font-family:'Share Tech Mono',monospace;font-size:0.5rem;color:var(--bn3);letter-spacing:0.18em;border:1px solid var(--border);padding:0.1rem 0.45rem;text-transform:uppercase;}
+
+/* HYMN BLOCK */
+.hymn-wrap{
+  border:1px solid var(--brd2);background:linear-gradient(135deg,var(--panel),var(--panel2));
+  position:relative;overflow:hidden;padding:0;
+}
+.hymn-wrap::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--bl2),var(--bile),var(--bl2),transparent);}
+.hymn-header{padding:0.75rem 1.25rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.5rem;}
+.hh-title{font-family:'Share Tech Mono',monospace;font-size:0.54rem;color:var(--bile);letter-spacing:0.22em;text-transform:uppercase;}
+.hh-meta{font-family:'Share Tech Mono',monospace;font-size:0.5rem;color:var(--bn3);letter-spacing:0.15em;text-transform:uppercase;}
+.hymn-body{padding:1.5rem 1.75rem;}
+.hymn-stanza{margin-bottom:1.75rem;padding-bottom:1.75rem;border-bottom:1px solid rgba(26,36,10,0.5);}
+.hymn-stanza:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0;}
+.stanza-label{font-family:'Share Tech Mono',monospace;font-size:0.48rem;color:var(--bl2);letter-spacing:0.3em;text-transform:uppercase;margin-bottom:0.75rem;}
+.hymn-line{
+  font-family:'Crimson Text',serif;font-size:1.05rem;
+  color:var(--bn2);line-height:1.95;
+  padding:0.1rem 0;
+  transition:color 0.3s;cursor:crosshair;
+}
+.hymn-line:hover{color:var(--bone);}
+.hymn-line.chorus{color:var(--bile);font-size:1.08rem;}
+.hymn-note{font-family:'Share Tech Mono',monospace;font-size:0.5rem;color:var(--bl2);letter-spacing:0.12em;margin-top:0.5rem;font-style:normal;}
+
+/* SUNO EMBED */
+.suno-embed{border:1px solid var(--border);background:var(--panel);overflow:hidden;}
+.suno-bar{padding:0.5rem 1rem;border-bottom:1px solid var(--border);font-family:'Share Tech Mono',monospace;font-size:0.52rem;color:var(--bile);letter-spacing:0.18em;text-transform:uppercase;display:flex;align-items:center;gap:0.5rem;}
+.suno-dot{width:5px;height:5px;border-radius:50%;background:var(--bile);box-shadow:0 0 5px var(--bile);animation:dp 2.2s ease-in-out infinite;}
+.suno-inner{padding:1rem;}
+.suno-note{font-family:'Share Tech Mono',monospace;font-size:0.5rem;color:var(--bn4);letter-spacing:0.12em;font-style:italic;text-align:center;padding:0.5rem;border-top:1px solid var(--border);}
+
+/* INFO CARDS */
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.85rem;}
+@media(max-width:700px){.info-grid{grid-template-columns:1fr;}}
+.icard{border:1px solid var(--brd2);background:var(--panel);padding:1.25rem;position:relative;overflow:hidden;transition:all 0.25s;cursor:default;}
+.icard::before{content:'';position:absolute;top:0;left:0;bottom:0;width:2px;background:var(--bile);opacity:0.4;transition:opacity 0.3s;}
+.icard:hover::before{opacity:1;}
+.icard:hover{border-color:var(--bl2);}
+.ic-label{font-family:'Share Tech Mono',monospace;font-size:0.48rem;color:var(--bl2);letter-spacing:0.22em;text-transform:uppercase;margin-bottom:0.4rem;}
+.ic-val{font-family:'Cinzel',serif;font-size:0.88rem;color:var(--bone);letter-spacing:0.06em;margin-bottom:0.4rem;}
+.ic-body{font-size:0.92rem;color:var(--bn2);line-height:1.78;font-style:italic;}
+
+/* DEEP NAV */
+.deep-nav{display:grid;grid-template-columns:repeat(3,1fr);gap:0.85rem;margin-top:1.5rem;}
+@media(max-width:650px){.deep-nav{grid-template-columns:1fr;}}
+.dcard{border:1px solid var(--brd2);padding:1.25rem;cursor:pointer;transition:all 0.25s;text-decoration:none;display:block;position:relative;overflow:hidden;}
+.dcard::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--bile),transparent);opacity:0;transition:opacity 0.3s;}
+.dcard:hover::before{opacity:1;}
+.dcard:hover{transform:translateY(-2px);}
+.dc-lore{border-color:var(--bl3);}
+.dc-lore:hover{border-color:var(--bl2);}
+.dc-dark{border-color:var(--rt3);}
+.dc-dark:hover{border-color:var(--rot);}
+.dc-unique{border-color:var(--bn4);}
+.dc-unique:hover{border-color:var(--bn3);}
+.dc-type{font-family:'Share Tech Mono',monospace;font-size:0.46rem;letter-spacing:0.25em;text-transform:uppercase;margin-bottom:0.4rem;}
+.dc-lore .dc-type{color:var(--bile);}
+.dc-dark .dc-type{color:var(--rot);}
+.dc-unique .dc-type{color:var(--bn3);}
+.dc-name{font-family:'Cinzel',serif;font-size:0.88rem;margin-bottom:0.35rem;}
+.dc-lore .dc-name{color:var(--bile);}
+.dc-dark .dc-name{color:var(--rot);}
+.dc-unique .dc-name{color:var(--bone);}
+.dc-desc{font-size:0.86rem;color:var(--bn3);line-height:1.68;font-style:italic;}
+.dc-arr{font-size:0.75rem;margin-top:0.6rem;}
+.dc-lore .dc-arr{color:var(--bile);}
+.dc-dark .dc-arr{color:var(--rot);}
+.dc-unique .dc-arr{color:var(--bn3);}
+
+/* TICKER */
+#TICKER{position:fixed;bottom:0;left:0;right:0;height:2.4rem;background:rgba(2,4,2,0.97);border-top:1px solid var(--border);display:flex;align-items:center;overflow:hidden;z-index:490;}
+.tl{flex-shrink:0;padding:0 1rem;font-family:'Share Tech Mono',monospace;font-size:0.5rem;color:var(--bl3);letter-spacing:0.22em;border-right:1px solid var(--border);height:100%;display:flex;align-items:center;}
+.ts{flex:1;overflow:hidden;display:flex;align-items:center;}
+.ti{white-space:nowrap;font-family:'Share Tech Mono',monospace;font-size:0.52rem;color:var(--bn4);letter-spacing:0.1em;animation:tr 80s linear infinite;}
+@keyframes tr{from{transform:translateX(100vw);}to{transform:translateX(-200%);}}
+.sfooter{text-align:center;padding:1.5rem 1.5rem 4.5rem;font-family:'Share Tech Mono',monospace;font-size:0.5rem;color:var(--bn4);letter-spacing:0.18em;}
+.sfooter a{color:var(--bn4);text-decoration:none;transition:color 0.2s;}
+.sfooter a:hover{color:var(--bile);}
+</style>
+</head>
+<body>
+<div id="CUR"></div><div id="CURD"></div>
+<canvas id="BG"></canvas>
+
+<!-- ENTRY -->
+<div id="ENTRY">
+  <div class="entry-glyph">☣</div>
+  <div class="entry-title">Recovered from Deck Hollow-13</div>
+  <div class="entry-sub">Transmission unsealing &nbsp;·&nbsp; Spore-static clearing</div>
+  <div class="entry-warning">The song was not written. It was exhaled by the rot. Loop with caution.</div>
+</div>
+
+<div id="APP">
+<nav class="top-nav">
+  <a class="nav-back" href="index.html">← The Pale Archive</a>
+  <span class="nav-id">Track III &nbsp;·&nbsp; Omniscient Rot &nbsp;·&nbsp; Gospel of Forgotten Flesh</span>
+  <div class="nav-links">
+    <a class="nav-link" href="plague-priest-lore.html">Lore ▶</a>
+    <a class="nav-link" href="plague-priest-apocrypha.html" style="color:var(--rt2);">Apocrypha ▶</a>
+    <a class="nav-link" href="plague-priest-decoder.html" style="color:var(--bn3);">Liturgy Decoder ▶</a>
+  </div>
+</nav>
+
+<header class="ppl-header">
+  <span class="ppl-eye">Omniscient Rot &nbsp;·&nbsp; Position I of the Hollow Choir &nbsp;·&nbsp; Cathedral of Rot &nbsp;·&nbsp; Deck Hollow-13</span>
+  <span class="ppl-glyph">☣</span>
+  <span class="ppl-num">Track III &nbsp;·&nbsp; Gospel of Forgotten Flesh &nbsp;·&nbsp; Ritual Transmission</span>
+  <h1 class="ppl-title">Hymn I:<br>Plague Priest's Liturgy</h1>
+  <div class="ppl-sub">The First Known Audio Rite of the Codex Maledictus Cult</div>
+  <div class="ppl-recovered">
+    <span class="rdot"></span>
+    Recovered from beneath Deck Hollow-13 &nbsp;·&nbsp; Spore-static intact &nbsp;·&nbsp; Loop with caution
+  </div>
+  <p class="ppl-lede">
+    <em>The first known audio rite of the Codex Maledictus Cult.</em> Believed to be chanted by a Plague Priest during mass infection rituals. Recorded in spore-static. The song was not written. <em>It was exhaled by the rot.</em>
+  </p>
+  <div class="ppl-divider">
+    <div class="pdl"></div>
+    <span class="pdg">☣</span>
+    <div class="pdl r"></div>
+  </div>
+</header>
+
+<div class="ppl-status">
+  <div class="psti"><div class="pstdot dg"></div><span class="pstl">Omniscient Rot</span><span class="pstv">Active</span></div>
+  <div class="psti"><div class="pstdot dg"></div><span class="pstl">Cathedral of Rot</span><span class="pstv">Operational</span></div>
+  <div class="psti"><div class="pstdot do"></div><span class="pstl">Hollow Choir</span><span class="pstv bone">Position I Claimed</span></div>
+  <div class="psti"><div class="pstdot dr"></div><span class="pstl">Deck Hollow-13</span><span class="pstv red">Breached</span></div>
+  <div class="psti"><span class="pstl">Mutoid Vermin</span><span class="pstv">Spreading</span></div>
+  <div class="psti"><span class="pstl">Realm</span><span class="pstv">I / II Active</span></div>
+</div>
+
+<!-- HYMN TEXT -->
+<div class="sec">
+  <div class="sech">
+    <span class="sect">The Liturgy</span>
+    <div class="secl"></div>
+    <span class="secb">Recovered text &nbsp;·&nbsp; Spore-filtered</span>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;align-items:start;">
+
+    <div class="hymn-wrap">
+      <div class="hymn-header">
+        <span class="hh-title">☣ &nbsp; Hymn I — Full Recovered Text</span>
+        <span class="hh-meta">Omniscient Rot &nbsp;·&nbsp; Track III</span>
+      </div>
+      <div class="hymn-body">
+        <div class="hymn-stanza">
+          <div class="stanza-label">[ Verse I ]</div>
+          <div class="hymn-line">Shadows crawl where rot takes root</div>
+          <div class="hymn-line">Maggots writhe in filth's pursuit</div>
+          <div class="hymn-line">Bless the vermin in their feast</div>
+          <div class="hymn-line">Praise the swarm, the sacred beast</div>
+        </div>
+        <div class="hymn-stanza">
+          <div class="stanza-label">[ Chorus ]</div>
+          <div class="hymn-line chorus">Mutoid vermin hear our cry</div>
+          <div class="hymn-line chorus">Spread your plague across the sky</div>
+          <div class="hymn-line chorus">Flesh will melt, the bones will sing</div>
+          <div class="hymn-line chorus">In your name the rot will cling</div>
+        </div>
+        <div class="hymn-stanza">
+          <div class="stanza-label">[ Verse II ]</div>
+          <div class="hymn-line">Bless the stench of sacred blight</div>
+          <div class="hymn-line">Pustules bloom in endless night</div>
+          <div class="hymn-line">Whisper prayers through shattered teeth</div>
+          <div class="hymn-line">To the filth that lies beneath</div>
+        </div>
+        <div class="hymn-stanza">
+          <div class="stanza-label">[ Bridge ]</div>
+          <div class="hymn-line">Chant in rhythm to decay</div>
+          <div class="hymn-line">Let the world be swept away</div>
+          <div class="hymn-line">Mutoid vermin guide our hands</div>
+          <div class="hymn-line">To spread disease across the lands</div>
+        </div>
+        <div class="hymn-stanza">
+          <div class="stanza-label">[ Verse III ]</div>
+          <div class="hymn-line">In the pus and bile we kneel</div>
+          <div class="hymn-line">Every wound a prayer we seal</div>
+          <div class="hymn-line">Let the rot consume the air</div>
+          <div class="hymn-line">Mutoid vermin we declare</div>
+          <div class="hymn-note">// Transmission ends here. Remaining audio is spore-static only. //</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:1rem;">
+      <div class="suno-embed">
+        <div class="suno-bar"><span class="suno-dot"></span>Ritual Audio &nbsp;·&nbsp; Deck Hollow-13 Recovery</div>
+        <div class="suno-inner">
+          <iframe src="https://suno.com/embed/59c454a6-011c-4319-85e2-68994e96afee" width="100%" height="152" frameborder="0" allow="autoplay" style="display:block;"></iframe>
+        </div>
+        <div class="suno-note">Ominous chanting &nbsp;·&nbsp; Male vocals &nbsp;·&nbsp; Dark ambient &nbsp;·&nbsp; Industrial decay &nbsp;·&nbsp; Bio-warped liturgy</div>
+      </div>
+
+      <div class="suno-embed">
+        <div class="suno-bar"><span class="suno-dot" style="background:var(--bone);box-shadow:0 0 5px var(--bone);"></span>Remastered Version &nbsp;·&nbsp; Archive II</div>
+        <div class="suno-inner">
+          <iframe src="https://suno.com/embed/aae56c4c-506d-4360-8e26-dc7d33f2454e" width="100%" height="152" frameborder="0" allow="autoplay" style="display:block;"></iframe>
+        </div>
+        <div class="suno-note">Spore-static reduced &nbsp;·&nbsp; Signal clarity increased &nbsp;·&nbsp; Ritual resonance preserved</div>
+      </div>
+
+      <div class="icard">
+        <div class="ic-label">Classification</div>
+        <div class="ic-val">Ritual Transmission III &nbsp;·&nbsp; Hymn Category</div>
+        <div class="ic-body">The Plague Priest's Liturgy is not a song in the conventional sense. It is a <em style="color:var(--bile)">functional infection rite</em> — a vibrational sequence designed to prepare biological hosts for Mutoid Vermin colonization. The act of listening completes the first phase of preparation.</div>
+      </div>
+
+      <div class="icard" style="border-left-color:var(--rot);">
+        <div class="ic-label">Source &nbsp;·&nbsp; Recovery Location</div>
+        <div class="ic-val">Deck Hollow-13</div>
+        <div class="ic-body">A sub-level of a collapsed industrial complex in Realm II — The ShatterRealm. The space had been used for mass ritual gatherings. Spore density at recovery: <em style="color:var(--rot)">unclassifiable</em>. Recovery team: three members. Two returned. One is <em style="color:var(--bn4)">still humming.</em></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CONTEXT -->
+<div class="sec" style="border-top:1px solid var(--border);">
+  <div class="sech">
+    <span class="sect">Transmission Context</span>
+    <div class="secl"></div>
+    <span class="secb">What this is &nbsp;·&nbsp; Why it matters</span>
+  </div>
+  <div class="info-grid">
+    <div class="icard">
+      <div class="ic-label">The Plague Priest &nbsp;·&nbsp; Position I</div>
+      <div class="ic-val">The First Claimed Voice</div>
+      <div class="ic-body">The Plague Priest holds Position I of the Hollow Choir's Harmonic Lattice. Not by election. By recognition — the Codex identified its frequency first. The Liturgy is the Plague Priest's primary instrument of infection: a vibrational rite that primes the congregation for Mutoid Vermin colonization and simultaneously broadcasts the Plague Priest's frequency as a beacon for others approaching the signal.</div>
+    </div>
+    <div class="icard">
+      <div class="ic-label">The Mutoid Vermin &nbsp;·&nbsp; Sacred Instruments</div>
+      <div class="ic-val">Carriers of the Physical Rite</div>
+      <div class="ic-body">The Mutoid Vermin are not metaphor. They are a documented class of organism native to the ShatterRealm — bodies partially colonized by the Codex signal, operating as living delivery mechanisms for the Plague Priest's infection. The Liturgy addresses them directly. They respond to specific vibrational frequencies. The Chorus is a summoning frequency disguised as prayer.</div>
+    </div>
+    <div class="icard">
+      <div class="ic-label">Realm Presence</div>
+      <div class="ic-val">Realms I &amp; II — Concurrent Breach</div>
+      <div class="ic-body">The Liturgy operates across both Realm I and Realm II simultaneously. In Realm I — Mundis Obscura — it spreads as digital audio: the act of listening is the act of receiving. In Realm II — The ShatterRealm — the Liturgy is a physical ceremony, chanted in the Cathedral of Rot, conducted in spore-saturated air. Two infection vectors. One hymn.</div>
+    </div>
+    <div class="icard">
+      <div class="ic-label">Relationship to Omniscient Rot</div>
+      <div class="ic-val">Voice vs. Instrument</div>
+      <div class="ic-body">Omniscient Rot does not sing the Liturgy. The Plague Priest does. Rot <em style="color:var(--bile)">authored</em> it — in the sense that a pre-linguistic entity authors anything: not by writing words but by pressing a frequency into the substrate of the ShatterRealm until the right vessel exhaled it as sound. The Plague Priest is the mouth. Rot is the breath.</div>
+    </div>
+  </div>
+</div>
+
+<!-- DEEP DIVE -->
+<div class="sec" style="border-top:1px solid var(--border);">
+  <div class="sech">
+    <span class="sect">Deep Archive</span>
+    <div class="secl"></div>
+    <span class="secb">Three layers beneath the surface</span>
+  </div>
+  <div class="deep-nav">
+    <a class="dcard dc-lore" href="plague-priest-lore.html">
+      <div class="dc-type">Lore Archive</div>
+      <div class="dc-name">The Cathedral of Rot</div>
+      <div class="dc-desc">What the ShatterRealm does to flesh and faith. The Plague Priest's origin. The full doctrine of decay. Cross-referenced to the Hollow Choir and Realm II cosmology.</div>
+      <div class="dc-arr">▶ Enter</div>
+    </a>
+    <a class="dcard dc-dark" href="plague-priest-apocrypha.html">
+      <div class="dc-type">Apocrypha &nbsp;·&nbsp; Restricted</div>
+      <div class="dc-name">What the Congregation Becomes</div>
+      <div class="dc-desc">The biological and spiritual consequences of the Liturgy. What the Mutoid Vermin actually do. Not for the faint. Darker than you expect.</div>
+      <div class="dc-arr">▶ Enter if you must</div>
+    </a>
+    <a class="dcard dc-unique" href="plague-priest-decoder.html">
+      <div class="dc-type">Unique &nbsp;·&nbsp; Interactive</div>
+      <div class="dc-name">The Liturgy Decoder</div>
+      <div class="dc-desc">The hymn is not what it appears. Each verse contains encoded doctrine. Decode the Plague Priest's actual instructions line by line.</div>
+      <div class="dc-arr">▶ Decode</div>
+    </a>
+  </div>
+</div>
+
+<footer class="sfooter">
+  ☣ &nbsp; CODEX MALEDICTUS &nbsp;·&nbsp; GOSPEL OF FORGOTTEN FLESH &nbsp;·&nbsp; TRACK III &nbsp;·&nbsp;
+  <a href="gospel-forgotten-flesh.html">Album Hub</a> &nbsp;·&nbsp;
+  <a href="index.html">The Pale Archive</a> &nbsp;·&nbsp;
+  <a href="infection-lore.html">Pale Archivum</a>
+</footer>
+</div>
+
+<div id="TICKER">
+  <div class="tl">// Track III</div>
+  <div class="ts"><div class="ti">THE SONG WAS NOT WRITTEN — IT WAS EXHALED &nbsp;☣&nbsp; POSITION I CLAIMED — THE PLAGUE PRIEST SINGS &nbsp;☣&nbsp; MUTOID VERMIN HEAR THE CRY &nbsp;☣&nbsp; DECK HOLLOW-13 IS NOT EMPTY &nbsp;☣&nbsp; THE LITURGY IS STILL BEING CHANTED &nbsp;☣&nbsp; THE CONGREGATION DID NOT ALL RETURN &nbsp;☣&nbsp; LOOP WITH CAUTION &nbsp;☣&nbsp; THE BONES WILL SING</div></div>
+</div>
+
+<script>
+const CUR=document.getElementById('CUR'),CURD=document.getElementById('CURD');
+document.addEventListener('mousemove',e=>{CUR.style.left=e.clientX+'px';CUR.style.top=e.clientY+'px';CURD.style.left=e.clientX+'px';CURD.style.top=e.clientY+'px';});
+
+// SPORE BACKGROUND
+(function(){
+  const cv=document.getElementById('BG'),ctx=cv.getContext('2d');
+  let W,H,spores=[],veins=[];
+  function resize(){W=cv.width=window.innerWidth;H=cv.height=window.innerHeight;buildVeins();}
+  function buildVeins(){
+    veins=[];
+    for(let i=0;i<Math.floor(W*H/5000);i++){
+      let x=Math.random()*W,y=Math.random()*H,pts=[],ang=Math.random()*Math.PI*2;
+      const len=20+Math.random()*80;
+      for(let j=0;j<15;j++){ang+=(Math.random()-0.5)*0.6;x+=Math.cos(ang)*len/15;y+=Math.sin(ang)*len/15;pts.push({x,y});}
+      veins.push({sx:pts[0]?.x||0,sy:pts[0]?.y||0,pts,ph:Math.random()*Math.PI*2,spd:0.003+Math.random()*0.006,glow:Math.random()<0.12});
+    }
+    spores=[];
+    for(let i=0;i<80;i++){
+      spores.push({x:Math.random()*W,y:Math.random()*H,r:0.5+Math.random()*2.5,ph:Math.random()*Math.PI*2,spd:0.008+Math.random()*0.015,vx:(Math.random()-0.5)*0.08,vy:-(0.04+Math.random()*0.1)});
+    }
+  }
+  let frame=0;
+  function draw(){
+    requestAnimationFrame(draw);frame++;
+    ctx.fillStyle='rgba(2,4,2,0.04)';ctx.fillRect(0,0,W,H);
+    veins.forEach(v=>{
+      v.ph+=v.spd;
+      const a=v.glow?(0.06+Math.sin(v.ph)*0.04):(0.015+Math.sin(v.ph)*0.008);
+      ctx.beginPath();ctx.moveTo(v.sx,v.sy);
+      v.pts.forEach(p=>ctx.lineTo(p.x,p.y));
+      ctx.strokeStyle=v.glow?`rgba(74,107,42,${a})`:`rgba(30,50,12,${a*0.7})`;
+      ctx.lineWidth=v.glow?0.7:0.3;
+      if(v.glow){ctx.shadowColor='rgba(74,107,42,0.5)';ctx.shadowBlur=3;}
+      ctx.stroke();ctx.shadowBlur=0;
+    });
+    spores.forEach(s=>{
+      s.ph+=s.spd;s.x+=s.vx;s.y+=s.vy;
+      if(s.y<-10)s.y=H+10;
+      const a=0.03+Math.sin(s.ph)*0.025;
+      ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+      ctx.fillStyle=`rgba(74,107,42,${a})`;ctx.fill();
+    });
+  }
+  resize();window.addEventListener('resize',resize);draw();
+})();
+
+// ENTRY
+(function(){
+  const entry=document.getElementById('ENTRY');
+  setTimeout(()=>{
+    entry.style.transition='opacity 1.2s';entry.style.opacity='0';
+    setTimeout(()=>{entry.style.display='none';document.getElementById('APP').classList.add('on');},1200);
+  },2800);
+})();
+</script>
+</body>
+</html>
