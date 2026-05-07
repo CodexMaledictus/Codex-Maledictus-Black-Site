@@ -1,2626 +1,804 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CODEX MALEDICTUS // THE PALE ARCHIVE</title>
-<meta name="description" content="The Codex Maledictus is not a story. It is a living transmission. An archive of a contagion that moves through music, myth, and memory across three realms.">
-<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;600&family=Share+Tech+Mono&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
-<style>
-:root{
-  --bg:#060408;--panel:#0A0810;--panel2:#0E0C18;
-  --gold:#C9A84C;--gd2:#8A6530;--gd3:#3A2810;--gd4:#1A1208;
-  --crimson:#8B0000;--cr2:#AA2000;--cr3:#3A0000;--cr4:#180000;
-  --violet:#6B3FAF;--v2:#4A2880;--v3:#2A1650;--v4:#150B28;
-  --silver:#C8C4BC;--s2:#888478;--s3:#484440;--s4:#282420;
-  --green:#00A830;--gn2:#006820;--gn3:#003810;
-  --border:#1A1408;--brd2:#261E10;--brd3:#301E14;
-}
-*{margin:0;padding:0;box-sizing:border-box;}
-html{scroll-behavior:smooth;}
-body{
-  background:var(--bg);color:var(--silver);
-  font-family:'Crimson Text',serif;overflow-x:hidden;cursor:none;
-  background-image:
-    radial-gradient(ellipse at 20% 10%,rgba(201,168,76,0.04) 0%,transparent 50%),
-    radial-gradient(ellipse at 80% 90%,rgba(139,0,0,0.04) 0%,transparent 50%),
-    radial-gradient(ellipse at 50% 50%,rgba(107,63,175,0.03) 0%,transparent 70%);
-}
-body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,0.03) 3px,rgba(0,0,0,0.03) 4px);pointer-events:none;z-index:9990;}
-body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at center,transparent 30%,rgba(0,0,0,0.8)100%);pointer-events:none;z-index:9989;}
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Codex Maledictus</title>
+  <meta name="description" content="What you are looking for brought you here." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400;1,600&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
 
-/* CURSOR */
-#CUR{position:fixed;pointer-events:none;z-index:99999;transform:translate(-50%,-50%);width:16px;height:16px;}
-#CUR::before,#CUR::after{content:'';position:absolute;background:var(--gold);}
-#CUR::before{width:1px;height:100%;left:50%;}
-#CUR::after{height:1px;width:100%;top:50%;}
-#CURD{position:fixed;pointer-events:none;z-index:99998;transform:translate(-50%,-50%);width:3px;height:3px;border-radius:50%;background:var(--gd2);}
-#SYMBOLCANVAS{position:fixed;inset:0;z-index:0;pointer-events:none;}
-#GLITCH{position:fixed;inset:0;z-index:2;pointer-events:none;opacity:0;mix-blend-mode:screen;}
+  <style>
+    :root {
+      --void:    #05050A;
+      --deep:    #0C0C14;
+      --crimson: #7A1212;
+      --blood:   #9B1B1B;
+      --gold:    #C9A84C;
+      --gold-lt: #E0C878;
+      --gold-dim:rgba(201,168,76,0.14);
+      --ash:     #E4DDD0;
+      --ash-dim: rgba(228,221,208,0.48);
+      --grey:    #484458;
+    }
 
-/* BOOT */
-#BOOT{position:fixed;inset:0;background:#000;z-index:9995;overflow:hidden;}
-#BL{max-width:680px;}
-#BL .bl{margin:0.22rem 0;opacity:0;transition:opacity 0.06s;font-family:'Share Tech Mono',monospace;font-size:0.72rem;color:#333328;letter-spacing:0.08em;}
-#BL .bl.on{opacity:1;}
-#BL .ok{color:var(--gd2);}
-#BL .warn{color:var(--cr2);}
-#BL .vt{color:var(--violet);}
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
 
-/* RITUAL OVERLAY */
-#RITUAL{position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,0.97);display:flex;flex-direction:column;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity 0.5s;padding:2rem;text-align:center;}
-#RITUAL.on{opacity:1;pointer-events:all;}
-#RG{margin-bottom:1.75rem;}
-#RT{font-family:'Cinzel',serif;font-size:clamp(0.85rem,2vw,1.05rem);color:var(--s2);letter-spacing:0.1em;line-height:2;max-width:480px;min-height:80px;}
-#RS{margin-top:1.75rem;font-family:'Share Tech Mono',monospace;font-size:0.58rem;color:var(--s4);letter-spacing:0.3em;text-transform:uppercase;animation:blink 1.8s step-end infinite;}
-@keyframes blink{0%,100%{opacity:1;}50%{opacity:0;}}
-@keyframes rglow{0%,100%{filter:drop-shadow(0 0 20px rgba(201,168,76,0.4));opacity:0.6;}50%{filter:drop-shadow(0 0 50px rgba(201,168,76,0.8));opacity:1;}}
+    body {
+      width: 100%; min-height: 100vh;
+      background: var(--void);
+      color: var(--ash);
+      font-family: 'Crimson Text', Georgia, serif;
+      overflow-x: hidden;
+      cursor: none;
+    }
 
-/* APP */
-#APP{position:relative;z-index:1;opacity:0;transition:opacity 1.2s;padding-bottom:3.5rem;}
-#APP.on{opacity:1;}
+    /* ── CURSOR ── */
+    #cur {
+      position: fixed; z-index: 99999;
+      width: 20px; height: 20px;
+      pointer-events: none;
+      transform: translate(-50%,-50%);
+    }
+    #cur::before, #cur::after {
+      content: ''; position: absolute; background: var(--gold);
+    }
+    #cur::before { width: 1px; height: 100%; left: 50%; }
+    #cur::after  { height: 1px; width: 100%; top: 50%; }
+    #cur2 {
+      position: fixed; z-index: 99998;
+      width: 4px; height: 4px; border-radius: 50%;
+      background: var(--gold); opacity: 0.6;
+      pointer-events: none;
+      transform: translate(-50%,-50%);
+    }
 
-/* ESO RIBBON */
-.eso-strip{text-align:center;padding:0.45rem 1.5rem;overflow:hidden;font-family:'Share Tech Mono',monospace;font-size:0.52rem;color:var(--s4);letter-spacing:0.22em;border-bottom:1px solid var(--border);white-space:nowrap;}
+    /* ── CANVAS ── */
+    #bg-canvas {
+      position: fixed; inset: 0; z-index: 0;
+      pointer-events: none;
+    }
 
-/* ═══ HEADER ═══ */
-.hdr{
-  text-align:center;padding:3.5rem 1.5rem 2.5rem;
-  border-bottom:1px solid var(--brd2);
-  position:relative;overflow:hidden;
-}
-.hdr-bg{
-  position:absolute;inset:0;pointer-events:none;
-  background:
-    radial-gradient(ellipse at center top,rgba(201,168,76,0.08) 0%,transparent 55%),
-    radial-gradient(ellipse at center bottom,rgba(139,0,0,0.04) 0%,transparent 40%);
-}
-.hdr-sigil-bg{
-  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
-  width:clamp(260px,40vw,520px);height:auto;
-  opacity:0.04;pointer-events:none;z-index:0;
-  filter:blur(2px);
-}
-.hdr::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:300px;height:1px;background:linear-gradient(90deg,transparent,var(--gd2),var(--gold),var(--gd2),transparent);}
-.hdr::after{content:'';position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:180px;height:1px;background:linear-gradient(90deg,transparent,var(--v2),transparent);}
-.hdr-eye{font-family:'Share Tech Mono',monospace;font-size:0.52rem;color:var(--gd3);letter-spacing:0.45em;text-transform:uppercase;margin-bottom:1.25rem;animation:eyefade 7s ease-in-out infinite;}
-@keyframes eyefade{0%,100%{opacity:0.3;letter-spacing:0.45em;}50%{opacity:0.85;letter-spacing:0.5em;}}
-.hdr-sigil{
-  width:clamp(70px,10vw,120px);height:auto;
-  display:block;margin:0 auto 1.25rem;
-  animation:sigilglow 5s ease-in-out infinite;
-  position:relative;z-index:1;
-}
-@keyframes sigilglow{0%,100%{filter:drop-shadow(0 0 8px rgba(201,168,76,0.3));opacity:0.5;}50%{filter:drop-shadow(0 0 30px rgba(201,168,76,0.7)) drop-shadow(0 0 60px rgba(201,168,76,0.2));opacity:0.9;}}
-.hdr-title{
-  font-family:'Cinzel Decorative',serif;
-  font-size:clamp(2rem,7vw,5.8rem);
-  color:var(--gold);letter-spacing:0.12em;line-height:1;
-  text-shadow:0 0 60px rgba(201,168,76,0.55),0 0 140px rgba(201,168,76,0.18),0 3px 0 rgba(0,0,0,0.9);
-  margin-bottom:0.55rem;position:relative;z-index:1;
-  animation:titleglitch 14s infinite;
-}
-@keyframes titleglitch{
-  0%,86%,100%{text-shadow:0 0 60px rgba(201,168,76,0.55),0 0 140px rgba(201,168,76,0.18);transform:none;clip-path:none;}
-  87%{text-shadow:5px 0 var(--crimson),-3px 0 var(--violet),0 0 60px rgba(201,168,76,0.55);transform:translateX(4px);}
-  88%{clip-path:inset(18% 0 62% 0);transform:translateX(-2px);}
-  89%{clip-path:none;transform:none;}
-  90%{transform:translateX(1px);}
-  91%{transform:none;}
-}
-.hdr-archive{font-family:'Cinzel',serif;font-size:clamp(0.7rem,1.4vw,0.95rem);color:var(--s3);letter-spacing:0.5em;text-transform:uppercase;margin-bottom:1.75rem;position:relative;z-index:1;}
-.hdr-archive em{font-style:normal;color:var(--s2);}
-.hdr-cur{animation:blink 1.6s step-end infinite;color:var(--gd2);}
+    /* ── VIGNETTE ── */
+    #vignette {
+      position: fixed; inset: 0; z-index: 1;
+      background: radial-gradient(ellipse at center, transparent 25%, rgba(0,0,0,0.82) 100%);
+      pointer-events: none;
+    }
 
-/* GATE INSCRIPTION */
-.gate-inscription{
-  max-width:680px;margin:0 auto 2.5rem;
-  padding:1.5rem 2rem;
-  position:relative;z-index:1;
-}
-.gate-inscription::before{
-  content:'';position:absolute;left:0;right:0;top:0;height:1px;
-  background:linear-gradient(90deg,transparent,rgba(201,168,76,0.3),rgba(201,168,76,0.6),rgba(201,168,76,0.3),transparent);
-}
-.gate-inscription::after{
-  content:'';position:absolute;left:0;right:0;bottom:0;height:1px;
-  background:linear-gradient(90deg,transparent,rgba(201,168,76,0.3),rgba(201,168,76,0.6),rgba(201,168,76,0.3),transparent);
-}
-.gate-text{
-  font-family:'Cinzel',serif;
-  font-size:clamp(1rem,2vw,1.25rem);
-  color:rgba(200,196,188,0.65);letter-spacing:0.08em;
-  line-height:2;font-style:italic;text-align:center;
-  text-shadow:0 0 40px rgba(201,168,76,0.12);
-}
-.gate-text em{color:rgba(200,196,188,0.85);font-style:normal;}
+    /* ── BOOT ── */
+    #boot {
+      position: fixed; inset: 0; z-index: 1000;
+      background: #000;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 16px;
+      transition: opacity 1.5s ease;
+    }
+    #boot.out { opacity: 0; pointer-events: none; }
 
-.hdr-divider{display:flex;align-items:center;gap:1rem;max-width:440px;margin:0 auto 1.75rem;}
-.hdr-div-line{flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--gd3));}
-.hdr-div-line.r{background:linear-gradient(270deg,transparent,var(--gd3));}
-.hdr-div-sigil{width:32px;height:auto;opacity:0.4;}
-.hdr-lede{font-family:'Crimson Text',serif;font-size:clamp(1rem,1.8vw,1.18rem);font-style:italic;color:var(--s2);max-width:580px;margin:0 auto;line-height:2.1;position:relative;z-index:1;}
-.hdr-lede em{color:var(--silver);font-style:normal;}
+    .boot-scanlines {
+      position: absolute; inset: 0; pointer-events: none;
+      background: repeating-linear-gradient(
+        0deg, transparent, transparent 2px,
+        rgba(0,0,0,0.15) 2px, rgba(0,0,0,0.15) 4px
+      );
+    }
 
-/* RELIC BUTTONS */
-.relic-row{display:flex;align-items:center;justify-content:center;gap:0.75rem;margin-top:2rem;flex-wrap:wrap;}
-.relic-spacer{flex:1;max-width:80px;}
-.relic-btn{background:transparent;border:1px solid var(--brd2);color:var(--s2);cursor:pointer;padding:0.65rem 1.1rem;display:flex;flex-direction:column;align-items:center;gap:0.2rem;transition:all 0.25s;position:relative;overflow:hidden;min-width:110px;}
-.relic-btn::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gd2),transparent);opacity:0;transition:opacity 0.3s;}
-.relic-btn:hover::before,.relic-btn.open::before{opacity:1;}
-.relic-btn:hover,.relic-btn.open{border-color:var(--gd2);transform:translateY(-2px);}
-.relic-book:hover,.relic-book.open{border-color:#004A12;box-shadow:0 0 12px rgba(0,74,18,0.2);}
-.relic-vid:hover,.relic-vid.open{border-color:var(--cr3);box-shadow:0 0 12px rgba(139,0,0,0.2);}
-.relic-sp:hover,.relic-sp.open{border-color:var(--gd3);box-shadow:0 0 12px rgba(201,168,76,0.15);}
-.relic-glyph{font-size:1.4rem;color:var(--gd3);transition:color 0.25s;}
-.relic-label{font-family:'Cinzel',serif;font-size:0.68rem;color:var(--s2);letter-spacing:0.12em;transition:color 0.2s;}
-.relic-sub{font-family:'Share Tech Mono',monospace;font-size:0.46rem;color:var(--s4);letter-spacing:0.15em;text-transform:uppercase;}
-.relic-btn:hover .relic-label{color:var(--silver);}
-.relic-book.open .relic-glyph{color:#008A22;}
-.relic-vid.open .relic-glyph{color:var(--crimson);}
-.relic-sp.open .relic-glyph{color:var(--gold);}
-.relic-panel{border-top:1px solid var(--brd2);background:rgba(6,4,8,0.97);animation:rpIn 0.3s ease;}
-@keyframes rpIn{from{opacity:0;transform:translateY(-6px);}to{opacity:1;transform:none;}}
-.relic-panel-inner{max-width:680px;margin:0 auto;padding:1.5rem 1.5rem 1.75rem;}
-.relic-p-close{font-family:'Share Tech Mono',monospace;font-size:0.5rem;color:var(--s4);letter-spacing:0.18em;cursor:pointer;text-align:right;margin-bottom:0.85rem;text-transform:uppercase;transition:color 0.2s;}
-.relic-p-close:hover{color:var(--gd2);}
-.relic-p-title{font-family:'Cinzel',serif;font-size:1rem;color:var(--silver);letter-spacing:0.06em;margin:0.5rem 0 0.6rem;}
-.relic-p-body{font-family:'Crimson Text',serif;font-size:0.97rem;color:var(--s2);line-height:1.82;font-style:italic;}
-.relic-p-btn{background:transparent;border:1px solid var(--brd2);color:var(--s2);font-family:'Share Tech Mono',monospace;font-size:0.54rem;letter-spacing:0.18em;padding:0.5rem 0.9rem;cursor:pointer;transition:all 0.2s;text-transform:uppercase;text-decoration:none;display:inline-block;}
-.relic-p-btn:hover{border-color:var(--gd2);color:var(--gold);}
-.relic-p-btn.green{border-color:#004A12;color:#008A22;}
-.relic-p-btn.green:hover{border-color:#008A22;color:#00C840;}
-@media(max-width:600px){.relic-spacer{display:none;}.relic-row{gap:0.5rem;}.relic-btn{min-width:90px;padding:0.5rem 0.75rem;}}
+    .boot-sigil {
+      width: 56px; height: 56px; object-fit: contain;
+      filter: brightness(0.5) sepia(1) hue-rotate(330deg);
+      opacity: 0; animation: bSigil 0.7s ease 0.2s forwards;
+    }
+    @keyframes bSigil { to { opacity: 0.65; } }
 
-/* STATUS BAR */
-.status{display:flex;border-bottom:1px solid var(--border);background:var(--panel);overflow-x:auto;scrollbar-width:none;}
-.status::-webkit-scrollbar{display:none;}
-.sti{flex-shrink:0;padding:0.5rem 1rem;border-right:1px solid var(--border);display:flex;align-items:center;gap:0.45rem;font-family:'Share Tech Mono',monospace;font-size:0.58rem;letter-spacing:0.12em;}
-.dot{width:4px;height:4px;border-radius:50%;flex-shrink:0;}
-.dg{background:var(--green);box-shadow:0 0 4px var(--green);animation:dp 2.2s ease-in-out infinite;}
-.dr{background:var(--crimson);animation:dp 3.8s ease-in-out infinite;}
-.do{background:var(--gold);animation:dp 3s ease-in-out infinite;}
-@keyframes dp{0%,100%{opacity:1;}50%{opacity:0.2;}}
-.sl{color:var(--s3);}
-.sv{color:var(--green);font-family:'Share Tech Mono',monospace;}
-.sv.gold{color:var(--gold);}
-.sv.red{color:var(--crimson);}
+    #boot-lines {
+      display: flex; flex-direction: column;
+      align-items: center; gap: 9px; min-height: 90px;
+    }
+    .bline {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 10px; letter-spacing: 0.26em;
+      color: rgba(201,168,76,0.5);
+      white-space: nowrap; overflow: hidden;
+      max-width: 0; opacity: 0;
+    }
+    .bline.typed { animation: bType 0.8s steps(40,end) forwards; }
+    @keyframes bType {
+      from { max-width: 0; opacity: 1; }
+      to   { max-width: 700px; opacity: 1; }
+    }
 
-/* ═══ SECTION BASE ═══ */
-.section{padding:4rem 1.5rem;max-width:1100px;margin:0 auto;}
-.section-border{border-top:1px solid var(--border);}
-.section-label{font-family:'Share Tech Mono',monospace;font-size:0.5rem;color:var(--gd3);letter-spacing:0.4em;text-transform:uppercase;margin-bottom:1.5rem;display:flex;align-items:center;gap:0.75rem;}
-.section-label::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--brd2),transparent);}
+    .boot-bar {
+      width: 220px; height: 1px;
+      background: rgba(72,68,88,0.4);
+      position: relative; overflow: hidden;
+    }
+    .boot-fill {
+      position: absolute; left: 0; top: 0; bottom: 0;
+      width: 0; background: var(--gold);
+      animation: bFill 2.2s cubic-bezier(0.4,0,0.2,1) 0.8s forwards;
+    }
+    @keyframes bFill { to { width: 100%; } }
 
-/* ═══ WHAT THE CODEX IS ═══ */
-.codex-is{
-  display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:center;
-}
-@media(max-width:800px){.codex-is{grid-template-columns:1fr;}}
-.codex-is-img{
-  position:relative;overflow:hidden;
-}
-.codex-is-img img{
-  width:100%;height:auto;display:block;
-  filter:brightness(0.8) contrast(1.15) saturate(0.9);
-  transition:all 0.5s;
-}
-.codex-is-img:hover img{filter:brightness(0.95) contrast(1.2) saturate(1);}
-.codex-is-img figcaption{
-  font-family:'Share Tech Mono',monospace;font-size:0.46rem;
-  color:var(--s4);letter-spacing:0.2em;text-transform:uppercase;
-  text-align:center;padding:0.4rem 0;border-bottom:1px solid var(--border);
-}
-.codex-is-img::before{
-  content:'';position:absolute;inset:0;
-  background:linear-gradient(135deg,rgba(201,168,76,0.08),transparent 60%),
-    linear-gradient(315deg,rgba(139,0,0,0.06),transparent 60%);
-  pointer-events:none;z-index:1;
-}
-.codex-is-img::after{
-  content:'';position:absolute;inset:0;border:1px solid var(--brd2);
-  pointer-events:none;z-index:2;
-}
-.codex-is-text{}
-.codex-speaks{
-  font-family:'Share Tech Mono',monospace;font-size:0.48rem;
-  color:var(--gd3);letter-spacing:0.35em;text-transform:uppercase;
-  margin-bottom:1rem;
-}
-.codex-is-title{
-  font-family:'Cinzel',serif;font-size:clamp(1.4rem,3vw,2.2rem);
-  color:var(--gold);letter-spacing:0.08em;margin-bottom:1.25rem;
-  text-shadow:0 0 20px rgba(201,168,76,0.2);
-}
-.codex-is-body{
-  font-size:1.05rem;color:var(--s2);line-height:2;
-  font-style:italic;
-}
-.codex-is-body p{margin-bottom:1rem;}
-.codex-is-body em{color:var(--silver);font-style:normal;}
-.codex-is-body .break{
-  color:var(--gold);font-style:normal;
-  font-family:'Cinzel',serif;font-size:1rem;
-  display:block;margin-top:1.25rem;
-  border-left:2px solid var(--gd3);padding-left:0.75rem;
-}
+    .boot-label {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 8px; letter-spacing: 0.48em;
+      color: rgba(201,168,76,0.28);
+      opacity: 0; animation: bFadeIn 0.5s ease 0.8s forwards;
+    }
+    @keyframes bFadeIn { to { opacity: 1; } }
 
-/* ═══ CREATOR'S APOCRYPHA ═══ */
-.apoc-section{position:relative;overflow:hidden;}
-.apoc-hero{
-  position:relative;height:clamp(400px,55vw,650px);
-  overflow:hidden;display:flex;align-items:flex-end;
-}
-.apoc-hero-img{
-  position:absolute;inset:0;width:100%;height:100%;
-  object-fit:cover;object-position:center top;
-  filter:brightness(0.6) contrast(1.1) saturate(0.9);
-}
-.apoc-hero::before{
-  content:'';position:absolute;inset:0;z-index:1;
-  background:linear-gradient(to bottom,
-    rgba(6,4,8,0.2) 0%,
-    rgba(6,4,8,0.1) 30%,
-    rgba(6,4,8,0.7) 70%,
-    rgba(6,4,8,1) 100%
-  );
-}
-.apoc-hero-content{
-  position:relative;z-index:2;padding:2.5rem 2rem;max-width:700px;
-}
-.apoc-tag{font-family:'Share Tech Mono',monospace;font-size:0.5rem;color:var(--crimson);letter-spacing:0.35em;text-transform:uppercase;margin-bottom:0.75rem;display:block;}
-.apoc-title{font-family:'Cinzel Decorative',serif;font-size:clamp(1.4rem,3.5vw,2.8rem);color:var(--silver);letter-spacing:0.06em;margin-bottom:0.75rem;text-shadow:0 2px 20px rgba(0,0,0,0.8);}
-.apoc-lede{font-size:1.05rem;color:var(--s2);line-height:1.85;font-style:italic;max-width:540px;}
-.apoc-body{
-  padding:3rem 2rem;max-width:1100px;margin:0 auto;
-  display:grid;grid-template-columns:1fr 1fr;gap:3rem;
-}
-@media(max-width:780px){.apoc-body{grid-template-columns:1fr;gap:2rem;}}
-.apoc-col-label{font-family:'Share Tech Mono',monospace;font-size:0.5rem;letter-spacing:0.3em;text-transform:uppercase;margin-bottom:1rem;padding-bottom:0.5rem;border-bottom:1px solid var(--brd2);}
-.apoc-col-apollo .apoc-col-label{color:var(--gd2);}
-.apoc-col-codex .apoc-col-label{color:var(--crimson);}
-.apoc-col-text{font-size:1rem;color:var(--s2);line-height:1.95;font-style:italic;}
-.apoc-col-text p{margin-bottom:0.85rem;}
-.apoc-col-text em{color:var(--silver);font-style:normal;}
-.apoc-col-codex .apoc-col-text{color:var(--s3);}
-.apoc-col-codex .apoc-col-text em{color:var(--s2);}
-.apoc-cta{
-  text-align:center;padding:1rem 2rem 3rem;
-}
-.apoc-cta-btn{
-  font-family:'Share Tech Mono',monospace;font-size:0.58rem;
-  color:var(--crimson);letter-spacing:0.25em;text-transform:uppercase;
-  border:1px solid var(--cr3);padding:0.65rem 1.75rem;
-  cursor:pointer;transition:all 0.25s;background:transparent;
-  text-decoration:none;display:inline-block;
-}
-.apoc-cta-btn:hover{border-color:var(--crimson);color:var(--silver);background:rgba(139,0,0,0.1);}
+    /* ── MAIN ── */
+    #main { position: relative; z-index: 2; opacity: 0; transition: opacity 1.6s ease; }
+    #main.show { opacity: 1; }
 
-/* ═══ CASE FILE ═══ */
-.case-file-wrap{
-  background:var(--panel);border:1px solid var(--brd2);
-  position:relative;overflow:hidden;
-}
-.case-file-wrap::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gd2),var(--gold),var(--gd2),transparent);}
-.cf-header{
-  padding:0.85rem 1.5rem;border-bottom:1px solid var(--border);
-  display:flex;align-items:center;justify-content:space-between;
-  background:rgba(10,8,16,0.6);flex-wrap:wrap;gap:0.5rem;
-}
-.cf-title{font-family:'Share Tech Mono',monospace;font-size:0.54rem;color:var(--gd2);letter-spacing:0.25em;text-transform:uppercase;}
-.cf-status{font-family:'Share Tech Mono',monospace;font-size:0.5rem;color:var(--crimson);letter-spacing:0.2em;text-transform:uppercase;display:flex;align-items:center;gap:0.4rem;}
-.cf-dot{width:5px;height:5px;border-radius:50%;background:var(--crimson);box-shadow:0 0 5px var(--crimson);animation:dp 1.5s ease-in-out infinite;}
-.cf-body{
-  display:grid;grid-template-columns:1fr 1fr 1fr;gap:0;
-}
-@media(max-width:700px){.cf-body{grid-template-columns:1fr;}}
-.cf-field{
-  padding:1.25rem 1.5rem;border-right:1px solid var(--border);
-}
-.cf-field:last-child{border-right:none;}
-@media(max-width:700px){.cf-field{border-right:none;border-bottom:1px solid var(--border);}}
-.cf-field-label{font-family:'Share Tech Mono',monospace;font-size:0.46rem;color:var(--s4);letter-spacing:0.25em;text-transform:uppercase;margin-bottom:0.35rem;}
-.cf-field-val{font-family:'Share Tech Mono',monospace;font-size:0.72rem;letter-spacing:0.12em;}
-.cf-field-val.freq{color:var(--gold);}
-.cf-field-val.class{color:var(--crimson);}
-.cf-field-val.note{color:var(--s2);font-size:0.58rem;font-family:'Crimson Text',serif;font-style:italic;letter-spacing:0.04em;line-height:1.6;}
-.cf-footer{
-  padding:0.6rem 1.5rem;border-top:1px solid var(--border);
-  font-family:'Share Tech Mono',monospace;font-size:0.46rem;
-  color:var(--s4);letter-spacing:0.18em;text-transform:uppercase;
-  display:flex;justify-content:space-between;flex-wrap:wrap;gap:0.3rem;
-}
+    /* ── HERO ── */
+    .hero {
+      position: relative; min-height: 100vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center; padding: 0 24px 80px;
+      overflow: hidden;
+    }
 
-/* ═══ ARCHIVE DOORS ═══ */
-.archive-doors{
-  display:grid;grid-template-columns:repeat(3,1fr);gap:1px;
-  background:var(--border);
-  border:1px solid var(--border);
-}
-@media(max-width:700px){.archive-doors{grid-template-columns:1fr;}}
-.arch-door{
-  background:var(--panel);padding:2.5rem 2rem;
-  cursor:pointer;text-decoration:none;display:block;
-  position:relative;overflow:hidden;transition:all 0.3s;
-}
-.arch-door::before{
-  content:'';position:absolute;top:0;left:0;right:0;height:2px;
-  opacity:0;transition:opacity 0.3s;
-}
-.arch-door:hover::before{opacity:1;}
-.arch-door:hover{background:var(--panel2);}
-.door-gospel::before{background:linear-gradient(90deg,transparent,var(--gold),transparent);}
-.door-fragments::before{background:linear-gradient(90deg,transparent,var(--gd2),transparent);}
-.door-compendium::before{background:linear-gradient(90deg,transparent,var(--v2),transparent);}
-.door-label{font-family:'Share Tech Mono',monospace;font-size:0.46rem;letter-spacing:0.3em;text-transform:uppercase;margin-bottom:0.75rem;}
-.door-gospel .door-label{color:var(--gd3);}
-.door-fragments .door-label{color:var(--gd3);}
-.door-compendium .door-label{color:var(--v3);}
-.door-title{font-family:'Cinzel',serif;font-size:clamp(1rem,2.2vw,1.5rem);letter-spacing:0.08em;margin-bottom:0.75rem;transition:color 0.2s;}
-.door-gospel .door-title{color:var(--gold);}
-.door-fragments .door-title{color:var(--gd2);}
-.door-compendium .door-title{color:var(--violet);}
-.door-desc{font-size:0.95rem;color:var(--s3);line-height:1.75;font-style:italic;}
-.door-arr{font-family:'Share Tech Mono',monospace;font-size:0.5rem;margin-top:1.25rem;letter-spacing:0.2em;text-transform:uppercase;transition:all 0.2s;}
-.door-gospel .door-arr{color:var(--gd3);}
-.door-fragments .door-arr{color:var(--gd3);}
-.door-compendium .door-arr{color:var(--v3);}
-.arch-door:hover .door-arr{transform:translateX(4px);}
-.door-gospel:hover .door-arr{color:var(--gold);}
-.door-fragments:hover .door-arr{color:var(--gd2);}
-.door-compendium:hover .door-arr{color:var(--violet);}
+    /* Ghost bg text */
+    .hero-ghost {
+      position: absolute;
+      font-family: 'Cinzel Decorative', serif; font-weight: 900;
+      font-size: clamp(60px, 16vw, 190px);
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(201,168,76,0.036);
+      letter-spacing: 0.12em;
+      user-select: none; pointer-events: none;
+      top: 50%; left: 50%;
+      transform: translate(-50%,-50%);
+      white-space: nowrap; z-index: 0;
+      will-change: transform;
+    }
 
-/* ═══ ENTITY CODEX ═══ */
-.entity-grid{
-  display:grid;grid-template-columns:repeat(3,1fr);gap:1px;
-  background:var(--border);border:1px solid var(--border);
-}
-@media(max-width:900px){.entity-grid{grid-template-columns:repeat(2,1fr);}}
-@media(max-width:560px){.entity-grid{grid-template-columns:1fr;}}
-.ent-card{
-  background:var(--panel);cursor:pointer;
-  transition:all 0.25s;position:relative;overflow:hidden;
-}
-.ent-card:hover{background:var(--panel2);}
-.ent-img-wrap{
-  position:relative;height:200px;overflow:hidden;background:var(--panel2);
-}
-.ent-img{
-  width:100%;height:100%;object-fit:cover;
-  filter:brightness(0.7) saturate(0.85);
-  transition:all 0.4s;display:block;
-}
-.ent-card:hover .ent-img{filter:brightness(0.85) saturate(1);transform:scale(1.03);}
-.ent-img-overlay{
-  position:absolute;inset:0;
-  background:linear-gradient(to bottom,transparent 40%,var(--panel) 100%);
-}
-.ent-color-bar{position:absolute;top:0;left:0;right:0;height:2px;}
-.ent-body{padding:1rem 1.1rem 1.25rem;}
-.ent-role{font-family:'Share Tech Mono',monospace;font-size:0.44rem;letter-spacing:0.22em;text-transform:uppercase;margin-bottom:0.3rem;opacity:0.7;}
-.ent-name{font-family:'Cinzel',serif;font-size:0.92rem;letter-spacing:0.06em;margin-bottom:0.35rem;}
-.ent-sum{font-size:0.88rem;color:var(--s2);line-height:1.65;font-style:italic;}
-.ent-expand{display:none;margin-top:0.75rem;padding-top:0.75rem;border-top:1px solid var(--brd2);animation:fi 0.4s ease;}
-@keyframes fi{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:none;}}
-.ent-card.open .ent-expand{display:block;}
-.ent-lore{font-size:0.88rem;font-style:italic;color:var(--s2);line-height:1.82;margin-bottom:0.5rem;}
-.ent-realm{font-family:'Share Tech Mono',monospace;font-size:0.46rem;letter-spacing:0.15em;text-transform:uppercase;opacity:0.55;}
+    .hero-inner {
+      position: relative; z-index: 1;
+      display: flex; flex-direction: column; align-items: center;
+    }
 
-/* Entity colors */
-.ent-codex .ent-color-bar{background:linear-gradient(90deg,var(--gold),var(--crimson));}
-.ent-codex .ent-role{color:var(--gd2);}
-.ent-codex .ent-name{color:var(--gold);}
-.ent-codex .ent-realm{color:var(--gd2);}
-.ent-rot .ent-color-bar{background:var(--crimson);}
-.ent-rot .ent-role{color:var(--cr2);}
-.ent-rot .ent-name{color:var(--cr2);}
-.ent-rot .ent-realm{color:var(--cr2);}
-.ent-artemys .ent-color-bar{background:var(--violet);}
-.ent-artemys .ent-role{color:var(--violet);}
-.ent-artemys .ent-name{color:var(--violet);}
-.ent-artemys .ent-realm{color:var(--violet);}
-.ent-apollo .ent-color-bar{background:var(--gd2);}
-.ent-apollo .ent-role{color:var(--gd2);}
-.ent-apollo .ent-name{color:var(--gold);}
-.ent-apollo .ent-realm{color:var(--gd2);}
-.ent-vhris .ent-color-bar{background:var(--green);}
-.ent-vhris .ent-role{color:var(--green);}
-.ent-vhris .ent-name{color:var(--green);}
-.ent-vhris .ent-realm{color:var(--green);}
-.ent-vhar .ent-color-bar{background:#6060C8;}
-.ent-vhar .ent-role{color:#6060C8;}
-.ent-vhar .ent-name{color:#8888DD;}
-.ent-vhar .ent-realm{color:#6060C8;}
+    /* Sigil */
+    .sigil-wrap {
+      position: relative; width: 80px; height: 80px;
+      margin-bottom: 36px;
+      opacity: 0;
+      animation: riseIn 2s cubic-bezier(0.16,1,0.3,1) 0.3s forwards;
+    }
+    .sigil-wrap img {
+      width: 100%; height: 100%; object-fit: contain;
+      filter: brightness(0.85) sepia(0.2) hue-rotate(330deg) contrast(1.1);
+      position: relative; z-index: 2;
+    }
+    .sigil-glow {
+      position: absolute; inset: -40px;
+      background: radial-gradient(ellipse, rgba(122,18,18,0.45) 0%, transparent 68%);
+      z-index: 1; animation: gPulse 5s ease-in-out infinite;
+    }
+    @keyframes gPulse {
+      0%,100% { opacity: 0.5; transform: scale(1); }
+      50%      { opacity: 1;   transform: scale(1.2); }
+    }
+    .sigil-ring {
+      position: absolute; border-radius: 50%; border: 1px solid;
+      top: 50%; left: 50%; transform: translate(-50%,-50%);
+    }
+    .r1 {
+      width: 130px; height: 130px;
+      border-color: rgba(201,168,76,0.12);
+      animation: spin 28s linear infinite;
+    }
+    .r2 {
+      width: 170px; height: 170px;
+      border-color: rgba(201,168,76,0.05);
+      animation: spin 44s linear infinite reverse;
+    }
+    .r1::before {
+      content: ''; position: absolute;
+      width: 5px; height: 5px; background: var(--gold);
+      border-radius: 50%; top: -2.5px; left: 50%;
+      transform: translateX(-50%);
+      opacity: 0.8; box-shadow: 0 0 8px var(--gold);
+    }
+    @keyframes spin { to { transform: translate(-50%,-50%) rotate(360deg); } }
 
-/* ═══ REALMS ═══ */
-.realms-grid{
-  display:grid;grid-template-columns:repeat(3,1fr);gap:1px;
-  background:var(--border);border:1px solid var(--border);
-}
-@media(max-width:700px){.realms-grid{grid-template-columns:1fr;}}
-.realm-card{background:var(--panel);cursor:pointer;overflow:hidden;position:relative;transition:all 0.25s;}
-.realm-card:hover{background:var(--panel2);}
-.realm-img-wrap{position:relative;height:220px;overflow:hidden;}
-.realm-img{width:100%;height:100%;object-fit:cover;filter:brightness(0.6) saturate(0.8);transition:all 0.4s;display:block;}
-.realm-card:hover .realm-img{filter:brightness(0.75) saturate(0.9);transform:scale(1.03);}
-.realm-img-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,transparent 30%,var(--panel) 100%);}
-.realm-status-badge{
-  position:absolute;top:0.75rem;right:0.75rem;
-  font-family:'Share Tech Mono',monospace;font-size:0.44rem;
-  letter-spacing:0.18em;text-transform:uppercase;
-  border:1px solid;padding:0.15rem 0.5rem;z-index:2;
-}
-.realm-active .realm-status-badge{color:var(--gold);border-color:var(--gd3);background:rgba(6,4,8,0.8);}
-.realm-dormant .realm-status-badge{color:var(--violet);border-color:var(--v3);background:rgba(6,4,8,0.8);}
-.realm-sealed .realm-status-badge{color:var(--crimson);border-color:var(--cr3);background:rgba(6,4,8,0.8);}
-.realm-body{padding:1.25rem;}
-.realm-num{font-family:'Share Tech Mono',monospace;font-size:0.46rem;letter-spacing:0.3em;text-transform:uppercase;margin-bottom:0.3rem;}
-.realm-active .realm-num{color:var(--gd3);}
-.realm-dormant .realm-num{color:var(--v3);}
-.realm-sealed .realm-num{color:var(--cr3);}
-.realm-name{font-family:'Cinzel',serif;font-size:1rem;letter-spacing:0.08em;margin-bottom:0.5rem;}
-.realm-active .realm-name{color:var(--gold);}
-.realm-dormant .realm-name{color:var(--violet);}
-.realm-sealed .realm-name{color:var(--crimson);}
-.realm-desc{font-size:0.9rem;color:var(--s3);line-height:1.72;font-style:italic;}
-.realm-expand{display:none;margin-top:0.75rem;padding-top:0.75rem;border-top:1px solid var(--brd2);font-size:0.9rem;color:var(--s2);line-height:1.75;font-style:italic;animation:fi 0.4s ease;}
-.realm-card.open .realm-expand{display:block;}
+    /* ── THE BIG WORDMARK ── */
+    .wordmark {
+      font-family: 'Cinzel Decorative', serif; font-weight: 900;
+      font-size: clamp(32px, 7.5vw, 96px);
+      letter-spacing: 0.1em; text-transform: uppercase;
+      line-height: 1.05; color: var(--gold);
+      text-shadow:
+        0 0 120px rgba(201,168,76,0.22),
+        0 0 40px rgba(201,168,76,0.1),
+        0 2px 6px rgba(0,0,0,0.9);
+      opacity: 0;
+      animation: riseIn 1.8s cubic-bezier(0.16,1,0.3,1) 0.8s forwards;
+    }
 
-/* ═══ SIGNAL FEED ═══ */
-.signal-wrap{background:var(--panel);border-top:1px solid var(--brd2);border-bottom:1px solid var(--brd2);}
-.signal-inner{max-width:1100px;margin:0 auto;padding:2rem 1.5rem;display:grid;grid-template-columns:1fr 2fr;gap:2rem;align-items:start;}
-@media(max-width:750px){.signal-inner{grid-template-columns:1fr;}}
-.signal-about{}
-.signal-about-title{font-family:'Cinzel',serif;font-size:1.1rem;color:var(--gold);letter-spacing:0.15em;margin-bottom:0.5rem;}
-.signal-about-desc{font-size:0.97rem;color:var(--s2);line-height:1.82;font-style:italic;}
-#signal-feed{
-  font-family:'Share Tech Mono',monospace;font-size:0.6rem;
-  letter-spacing:0.08em;line-height:1.85;
-  border:1px solid var(--brd2);background:#040208;
-  padding:0.85rem;max-height:300px;overflow:hidden;
-  position:relative;
-}
-#signal-feed::after{content:'';position:absolute;bottom:0;left:0;right:0;height:60px;background:linear-gradient(transparent,#040208);pointer-events:none;}
+    /* Tagline */
+    .tagline {
+      font-family: 'Cinzel', serif; font-weight: 400;
+      font-size: clamp(7px, 0.95vw, 11px);
+      letter-spacing: 0.48em; text-transform: uppercase;
+      color: rgba(201,168,76,0.52);
+      margin-top: 14px;
+      opacity: 0;
+      animation: riseIn 1.8s cubic-bezier(0.16,1,0.3,1) 1.1s forwards;
+    }
+    .tagline span { margin: 0 10px; opacity: 0.38; }
 
-/* ═══ GAMES ═══ */
-.gwrap{background:var(--panel);border-top:1px solid var(--brd2);border-bottom:1px solid var(--brd2);}
-.gsec{padding:2rem 1.5rem;max-width:1100px;margin:0 auto;}
-.sech{display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem;padding-bottom:0.85rem;border-bottom:1px solid var(--brd2);}
-.sect{font-family:'Cinzel',serif;font-size:1rem;color:var(--gold);letter-spacing:0.2em;text-transform:uppercase;text-shadow:0 0 12px rgba(201,168,76,0.2);}
-.secl{flex:1;height:1px;background:linear-gradient(90deg,var(--brd2),transparent);}
-.secb{font-family:'Share Tech Mono',monospace;font-size:0.55rem;color:var(--s3);letter-spacing:0.2em;border:1px solid var(--brd2);padding:0.12rem 0.5rem;text-transform:uppercase;}
-.gtabs{display:flex;border-bottom:1px solid var(--brd2);margin-bottom:1.5rem;overflow-x:auto;scrollbar-width:none;}
-.gtabs::-webkit-scrollbar{display:none;}
-.gtab{flex-shrink:0;background:transparent;border:none;border-bottom:2px solid transparent;color:var(--s3);font-family:'Share Tech Mono',monospace;font-size:0.62rem;letter-spacing:0.18em;padding:0.65rem 1.1rem;cursor:pointer;transition:all 0.18s;text-transform:uppercase;}
-.gtab:hover{color:var(--s2);}
-.gtab.on{color:var(--gold);border-bottom-color:var(--gold);}
-.gp{display:none;}
-.gp.on{display:block;}
-.garea{display:flex;gap:1.5rem;align-items:flex-start;flex-wrap:wrap;}
-.gcw{flex:1;min-width:280px;}
-.gsb{width:200px;flex-shrink:0;}
-@media(max-width:700px){.gsb{width:100%;}}
-.gtitle{font-family:'Cinzel',serif;font-size:1rem;color:var(--gold);letter-spacing:0.15em;margin-bottom:0.4rem;}
-.gdesc{font-family:'Crimson Text',serif;font-size:0.96rem;color:var(--s2);line-height:1.65;margin-bottom:1rem;font-style:italic;}
-.sblock{border:1px solid var(--border);padding:0.75rem;margin-bottom:0.55rem;background:var(--bg);}
-.sl2{font-family:'Share Tech Mono',monospace;font-size:0.55rem;color:var(--s3);letter-spacing:0.22em;text-transform:uppercase;margin-bottom:0.2rem;}
-.sv2{font-family:'Share Tech Mono',monospace;font-size:1.4rem;color:var(--gold);}
-.gbtn{width:100%;background:transparent;border:1px solid var(--gd2);color:var(--gd2);font-family:'Share Tech Mono',monospace;font-size:0.65rem;letter-spacing:0.2em;padding:0.6rem;cursor:pointer;transition:all 0.18s;text-transform:uppercase;margin-bottom:0.5rem;}
-.gbtn:hover{background:var(--gd3);border-color:var(--gold);color:var(--gold);}
-.gbtn:disabled{opacity:0.3;cursor:not-allowed;}
-.gmsg{border:1px solid var(--border);padding:0.75rem;margin-top:0.6rem;font-family:'Crimson Text',serif;font-size:0.95rem;color:var(--s2);line-height:1.7;min-height:60px;background:var(--bg);font-style:italic;}
-.gmsg .hi{color:var(--gold);font-style:normal;font-family:'Share Tech Mono',monospace;font-size:0.85em;}
-.gmsg .wr{color:var(--crimson);font-style:normal;}
-#res-canvas{display:block;width:100%;border:1px solid var(--brd2);background:#040208;cursor:pointer;pointer-events:all;}
-.res-meter-wrap{display:flex;align-items:center;gap:0.75rem;margin:0.6rem 0;}
-.res-meter-label{font-family:'Share Tech Mono',monospace;font-size:0.55rem;color:var(--s3);letter-spacing:0.15em;text-transform:uppercase;width:72px;flex-shrink:0;}
-.res-meter-track{flex:1;height:6px;background:var(--border);position:relative;overflow:hidden;}
-.res-meter-fill{height:100%;background:var(--gold);transition:width 0.25s;box-shadow:0 0 6px rgba(201,168,76,0.4);}
-.res-meter-fill.low{background:var(--crimson);}
-.res-status-line{text-align:center;font-family:'Share Tech Mono',monospace;font-size:0.62rem;color:var(--s3);letter-spacing:0.18em;padding:0.4rem;min-height:1.4rem;text-transform:uppercase;}
-#mirror-wrap{margin-bottom:0.6rem;}
-#mirror-spread{height:4px;background:var(--border);margin-bottom:0.6rem;}
-#mirror-spread-fill{height:100%;background:var(--crimson);width:0%;transition:width 0.4s;}
-#mirror-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;}
-.mc{aspect-ratio:1;border:1px solid var(--border);background:var(--panel);display:flex;align-items:center;justify-content:center;font-size:1rem;cursor:pointer;transition:all 0.12s;user-select:none;}
-.mc:hover:not(.cor):not(.ctr){border-color:var(--brd2);background:var(--panel2);}
-.mc.ctr{cursor:default;border-color:var(--gd2);background:rgba(201,168,76,0.05);}
-.mc.ctr span{color:var(--gold);animation:bookglow 3s ease-in-out infinite;}
-@keyframes bookglow{0%,100%{text-shadow:0 0 8px rgba(201,168,76,0.4);}50%{text-shadow:0 0 20px rgba(201,168,76,0.8);}}
-.mc.cor{background:rgba(139,0,0,0.2);border-color:var(--crimson);cursor:pointer;animation:corrpulse 0.7s ease-in-out infinite;}
-@keyframes corrpulse{0%,100%{border-color:var(--crimson);}50%{border-color:var(--cr2);box-shadow:0 0 6px rgba(139,0,0,0.4);}}
-.mc.cor span{color:var(--cr2);}
-#lab-canvas{display:block;width:100%;border:1px solid var(--brd2);background:#040208;outline:none;}
-.lab-status{display:flex;justify-content:space-between;align-items:center;padding:0.4rem 0;font-family:'Share Tech Mono',monospace;font-size:0.58rem;color:var(--s3);letter-spacing:0.14em;text-transform:uppercase;}
-.lab-corruption{color:var(--cr2);}
-.lab-time{color:var(--gd2);}
-.lab-lore{font-style:italic;font-size:0.88rem;color:var(--s2);line-height:1.7;min-height:32px;padding:0.3rem 0;}
+    /* Divider */
+    .divider {
+      display: flex; align-items: center; gap: 16px;
+      margin: 32px 0 26px; width: 100%; max-width: 660px;
+      opacity: 0;
+      animation: riseIn 1.8s cubic-bezier(0.16,1,0.3,1) 1.35s forwards;
+    }
+    .div-line {
+      flex: 1; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(201,168,76,0.35));
+    }
+    .div-line.r { background: linear-gradient(90deg, rgba(201,168,76,0.35), transparent); }
+    .div-sym { font-size: 13px; color: var(--gold); opacity: 0.5; flex-shrink: 0; }
 
-/* ═══ FOOTER ═══ */
-.eso-strip-bottom{text-align:center;padding:0.45rem 1.5rem;font-family:'Share Tech Mono',monospace;font-size:0.52rem;color:var(--s4);letter-spacing:0.22em;border-top:1px solid var(--border);}
-.sfooter{text-align:center;padding:1.25rem 1.5rem 4.5rem;font-family:'Share Tech Mono',monospace;font-size:0.52rem;color:var(--s4);letter-spacing:0.2em;}
-.sfooter a{color:var(--s4);text-decoration:none;transition:color 0.2s;}
-.sfooter a:hover{color:var(--gd2);}
+    /* Hook lines */
+    .hook {
+      display: flex; flex-direction: column; gap: 4px;
+      opacity: 0;
+      animation: riseIn 1.8s cubic-bezier(0.16,1,0.3,1) 1.55s forwards;
+    }
+    .hook-line {
+      font-family: 'Crimson Text', serif;
+      font-size: clamp(16px, 2.3vw, 23px);
+      font-variant: small-caps;
+      letter-spacing: 0.12em; color: var(--ash); line-height: 1.6;
+    }
+    .hook-line.dim { font-style: italic; color: var(--ash-dim); }
 
-/* POPUP */
-#POP{position:fixed;bottom:3.8rem;right:1.5rem;width:280px;background:var(--panel);border:1px solid var(--gd2);padding:1rem;z-index:500;font-size:0.78rem;transform:translateY(140%);transition:transform 0.45s ease;}
-#POP.on{transform:translateY(0);}
-.ph{font-family:'Share Tech Mono',monospace;font-size:0.55rem;color:var(--gd2);letter-spacing:0.22em;text-transform:uppercase;margin-bottom:0.6rem;display:flex;justify-content:space-between;}
-.pb{font-family:'Crimson Text',serif;color:var(--s2);line-height:1.75;font-style:italic;}
-.px{background:transparent;border:none;color:var(--s3);cursor:pointer;font-family:'Share Tech Mono',monospace;font-size:0.6rem;padding:0;}
-.px:hover{color:var(--gold);}
+    /* Archive copy */
+    .divider-2 { margin: 26px 0; }
 
-/* SECRET GLYPH */
-.gbig{font-size:3rem;color:var(--gd3);animation:gp 7s ease-in-out infinite;cursor:pointer;text-align:center;padding:0.75rem 0;display:block;}
-@keyframes gp{0%,100%{opacity:0.25;text-shadow:none;}50%{opacity:0.8;text-shadow:0 0 25px rgba(201,168,76,0.3);}}
-.gcap{font-family:'Crimson Text',serif;font-size:0.82rem;color:var(--s4);text-align:center;font-style:italic;}
+    .archive-lines {
+      display: flex; flex-direction: column; gap: 9px;
+      opacity: 0;
+      animation: riseIn 1.8s cubic-bezier(0.16,1,0.3,1) 1.9s forwards;
+    }
+    .arc-1 {
+      font-family: 'Crimson Text', serif; font-weight: 600;
+      font-size: clamp(14px, 1.8vw, 19px);
+      letter-spacing: 0.08em; color: var(--ash);
+    }
+    .arc-2 {
+      font-family: 'Crimson Text', serif; font-style: italic;
+      font-size: clamp(13px, 1.6vw, 17px);
+      color: rgba(228,221,208,0.5); letter-spacing: 0.05em;
+    }
+    .arc-3 {
+      font-family: 'Crimson Text', serif; font-style: italic;
+      font-size: clamp(12px, 1.5vw, 16px);
+      color: rgba(201,168,76,0.52); letter-spacing: 0.05em;
+    }
+    .arc-4 {
+      font-family: 'Crimson Text', serif;
+      font-size: clamp(13px, 1.6vw, 17px);
+      color: rgba(228,221,208,0.36); letter-spacing: 0.06em;
+    }
 
-/* CONFESSION */
-.confin{width:100%;background:transparent;border:none;border-bottom:1px solid var(--brd2);color:var(--silver);font-family:'Crimson Text',serif;font-size:1rem;padding:0.5rem 0.2rem;outline:none;margin-bottom:0.75rem;}
-.confin::placeholder{color:var(--s3);font-style:italic;}
-.confsub{width:100%;background:transparent;border:1px solid var(--brd2);color:var(--s2);font-family:'Share Tech Mono',monospace;font-size:0.58rem;letter-spacing:0.22em;padding:0.5rem;cursor:pointer;transition:all 0.18s;text-transform:uppercase;}
-.confsub:hover{border-color:var(--gd2);color:var(--gold);}
+    /* CTAs */
+    .cta-row {
+      display: flex; gap: 16px; margin-top: 46px;
+      opacity: 0;
+      animation: riseIn 1.8s cubic-bezier(0.16,1,0.3,1) 2.2s forwards;
+    }
+    .cta {
+      font-family: 'Cinzel', serif; font-weight: 600;
+      font-size: 10px; letter-spacing: 0.4em; text-transform: uppercase;
+      text-decoration: none; padding: 15px 48px; border: 1px solid;
+      position: relative; overflow: hidden; cursor: none;
+      transition: all 0.5s cubic-bezier(0.16,1,0.3,1);
+    }
+    .cta-label { position: relative; z-index: 1; }
+    .cta::before {
+      content: ''; position: absolute; inset: 0;
+      transform: translateX(-101%);
+      transition: transform 0.5s cubic-bezier(0.16,1,0.3,1);
+    }
+    .cta:hover::before { transform: translateX(0); }
 
-/* TICKER */
-#TICKER{position:fixed;bottom:0;left:0;right:0;height:2.6rem;background:rgba(6,4,8,0.97);border-top:1px solid var(--border);display:flex;align-items:center;overflow:hidden;z-index:490;}
-.tl{flex-shrink:0;padding:0 1rem;font-family:'Share Tech Mono',monospace;font-size:0.56rem;color:var(--gd3);letter-spacing:0.22em;text-transform:uppercase;border-right:1px solid var(--border);height:100%;display:flex;align-items:center;}
-.ts{flex:1;overflow:hidden;display:flex;align-items:center;}
-.ti{white-space:nowrap;font-family:'Share Tech Mono',monospace;font-size:0.58rem;color:var(--s4);letter-spacing:0.12em;animation:tr 65s linear infinite;}
-@keyframes tr{from{transform:translateX(100vw);}to{transform:translateX(-200%);}}
+    .cta-listen {
+      background: var(--gold); border-color: var(--gold); color: var(--void);
+    }
+    .cta-listen::before { background: var(--gold-lt); }
 
-/* TIMED WHISPERS */
-.whisper{
-  position:fixed;z-index:400;
-  font-family:'Cinzel',serif;font-size:clamp(0.7rem,1.2vw,0.88rem);
-  color:rgba(201,168,76,0.0);letter-spacing:0.06em;line-height:1.8;
-  pointer-events:none;transition:color 3s;
-  text-shadow:0 0 20px rgba(201,168,76,0);
-}
-.whisper.on{color:rgba(201,168,76,0.35);text-shadow:0 0 20px rgba(201,168,76,0.15);}
-.whisper.stay{color:rgba(201,168,76,0.22)!important;transition:none;}
-#w1{bottom:4rem;left:50%;transform:translateX(-50%);text-align:center;width:90%;max-width:700px;font-style:italic;}
-#w2{top:0;left:0;right:0;text-align:center;padding:0.5rem 2rem;background:rgba(6,4,8,0.0);font-style:italic;transition:color 2s,background 2s;}
-#w2.on{background:rgba(6,4,8,0.92);}
-#w3{bottom:4.5rem;right:1.5rem;font-size:clamp(0.55rem,1vw,0.68rem);text-align:right;max-width:300px;font-style:italic;}
+    .cta-enter {
+      background: transparent;
+      border-color: rgba(228,221,208,0.18); color: var(--ash);
+    }
+    .cta-enter::before { background: rgba(228,221,208,0.05); }
+    .cta-enter:hover { border-color: rgba(228,221,208,0.45); }
 
-/* DYING WORLDS */
-.elink{display:block;text-decoration:none;border:1px solid var(--border);padding:0.75rem 0.9rem;margin-bottom:0.55rem;background:var(--bg);transition:all 0.2s;position:relative;overflow:hidden;}
-.elink::after{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--gd2);opacity:0;transition:opacity 0.18s;}
-.elink:hover{border-color:var(--gd2);padding-left:1.1rem;}
-.elink:hover::after{opacity:1;}
-.elink.ge{border-color:var(--gd3);}
-.elink.ge:hover{border-color:var(--gold);}
-.ety{font-family:'Share Tech Mono',monospace;font-size:0.54rem;color:var(--s3);letter-spacing:0.2em;text-transform:uppercase;margin-bottom:0.2rem;}
-.enm{font-family:'Cinzel',serif;font-size:0.8rem;color:var(--s2);letter-spacing:0.06em;}
-.elink.ge .enm{color:var(--gold);}
+    /* Scroll hint */
+    .scroll-hint {
+      position: absolute; bottom: 32px; left: 50%; transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 10px;
+      opacity: 0; animation: fadeIn 1s ease 3.6s forwards;
+    }
+    .scroll-hint span {
+      font-family: 'Cinzel', serif; font-size: 7px;
+      letter-spacing: 0.52em; text-transform: uppercase;
+      color: rgba(201,168,76,0.28);
+    }
+    .scroll-line {
+      width: 1px; height: 50px;
+      background: linear-gradient(to bottom, rgba(201,168,76,0.55), transparent);
+      animation: breathe 2.6s ease-in-out infinite;
+    }
+    @keyframes breathe {
+      0%,100% { opacity: 0.28; transform: scaleY(1); }
+      50%      { opacity: 1;   transform: scaleY(1.1); }
+    }
 
-/* FREQUENCY READER */
-#fr-result{transition:opacity 0.3s;}
-</style>
+    /* ── PERSONAS ── */
+    .section-personas {
+      position: relative; z-index: 2;
+      padding: 100px 32px;
+      max-width: 1080px; margin: 0 auto;
+      display: flex; flex-direction: column;
+      align-items: center; gap: 52px;
+    }
+    .eyebrow {
+      font-family: 'Cinzel', serif; font-size: 9px;
+      letter-spacing: 0.55em; text-transform: uppercase;
+      color: rgba(201,168,76,0.42);
+    }
+    .personas-grid {
+      display: grid; grid-template-columns: repeat(3,1fr);
+      gap: 2px; width: 100%;
+    }
+    .persona-card {
+      position: relative;
+      display: flex; flex-direction: column; align-items: center;
+      padding: 52px 24px 40px;
+      background: linear-gradient(160deg, rgba(14,14,22,0.97), rgba(7,7,12,1));
+      border: 1px solid rgba(201,168,76,0.07);
+      overflow: hidden; cursor: none; text-decoration: none; color: inherit;
+      transition: border-color 0.5s ease;
+    }
+    .persona-card::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 50% 0%, rgba(122,18,18,0.2), transparent 65%);
+      opacity: 0; transition: opacity 0.6s ease;
+    }
+    .persona-card:hover::before { opacity: 1; }
+    .persona-card:hover { border-color: rgba(201,168,76,0.28); }
+
+    .persona-num {
+      position: absolute; top: 14px; right: 18px;
+      font-family: 'Cinzel Decorative', serif; font-size: 42px; font-weight: 900;
+      color: rgba(201,168,76,0.042); line-height: 1; user-select: none;
+    }
+    .persona-img-wrap {
+      position: relative; width: 96px; height: 96px; margin-bottom: 22px;
+    }
+    .persona-img {
+      width: 100%; height: 100%; object-fit: cover;
+      filter: grayscale(0.5) brightness(0.72) contrast(1.1);
+      clip-path: polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);
+      position: relative; z-index: 1;
+      transition: filter 0.6s ease;
+    }
+    .persona-card:hover .persona-img { filter: grayscale(0.1) brightness(0.88); }
+    .persona-img-glow {
+      position: absolute; inset: -12px;
+      background: radial-gradient(ellipse, rgba(122,18,18,0.38), transparent 70%);
+      opacity: 0; transition: opacity 0.6s ease; z-index: 0;
+    }
+    .persona-card:hover .persona-img-glow { opacity: 1; }
+
+    .persona-name {
+      font-family: 'Cinzel', serif; font-weight: 600;
+      font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--ash); text-align: center; margin-bottom: 8px;
+      transition: color 0.4s ease;
+    }
+    .persona-card:hover .persona-name { color: var(--gold-lt); }
+
+    .persona-epithet {
+      font-family: 'Crimson Text', serif; font-style: italic;
+      font-size: 15px; color: rgba(228,221,208,0.36);
+      text-align: center; margin-bottom: 22px;
+    }
+    .persona-cta {
+      font-family: 'Cinzel', serif; font-size: 8px;
+      letter-spacing: 0.36em; text-transform: uppercase;
+      color: rgba(201,168,76,0); transition: color 0.4s ease;
+    }
+    .persona-card:hover .persona-cta { color: rgba(201,168,76,0.62); }
+
+    /* ── REALMS ── */
+    .section-realms {
+      position: relative; z-index: 2; width: 100%;
+      border-top: 1px solid rgba(201,168,76,0.07);
+      border-bottom: 1px solid rgba(201,168,76,0.07);
+      background: linear-gradient(90deg,
+        rgba(122,18,18,0.04), rgba(12,12,20,0.75), rgba(122,18,18,0.04));
+    }
+    .realms-inner {
+      max-width: 1080px; margin: 0 auto;
+      display: grid; grid-template-columns: repeat(3,1fr);
+    }
+    .realm-item {
+      padding: 44px 36px;
+      display: flex; flex-direction: column; gap: 7px;
+      transition: background 0.4s ease;
+    }
+    .realm-item:hover { background: rgba(201,168,76,0.025); }
+    .realm-item + .realm-item { border-left: 1px solid rgba(201,168,76,0.07); }
+    .realm-num {
+      font-family: 'Cinzel', serif; font-size: 9px;
+      letter-spacing: 0.44em; text-transform: uppercase;
+      color: var(--gold); opacity: 0.42;
+    }
+    .realm-name {
+      font-family: 'Cinzel', serif; font-weight: 600;
+      font-size: 15px; color: var(--ash); margin-top: 4px; letter-spacing: 0.07em;
+    }
+    .realm-desc {
+      font-family: 'Crimson Text', serif; font-style: italic;
+      font-size: 15px; color: rgba(228,221,208,0.32);
+      line-height: 1.55; margin-top: 4px;
+    }
+
+    /* ── NAV FOOTER ── */
+    .nav-footer {
+      position: relative; z-index: 2;
+      padding: 28px 36px;
+      border-top: 1px solid rgba(201,168,76,0.07);
+      display: flex; align-items: center;
+      justify-content: space-between; flex-wrap: wrap; gap: 16px;
+    }
+    .nav-mark {
+      font-family: 'Cinzel Decorative', serif; font-weight: 700;
+      font-size: 11px; letter-spacing: 0.1em;
+      color: rgba(201,168,76,0.32);
+    }
+    .nav-links { display: flex; gap: 32px; flex-wrap: wrap; }
+    .nav-link {
+      font-family: 'Cinzel', serif; font-size: 8px;
+      letter-spacing: 0.4em; text-transform: uppercase;
+      color: rgba(228,221,208,0.22); text-decoration: none;
+      cursor: none; transition: color 0.3s ease;
+    }
+    .nav-link:hover { color: var(--gold); }
+    .nav-glyph { font-size: 14px; color: rgba(201,168,76,0.16); }
+
+    /* ── SCROLL REVEAL ── */
+    .reveal {
+      opacity: 0; transform: translateY(28px);
+      transition: opacity 0.9s cubic-bezier(0.16,1,0.3,1),
+                  transform 0.9s cubic-bezier(0.16,1,0.3,1);
+    }
+    .reveal.in { opacity: 1; transform: none; }
+    .d1 { transition-delay: 0.1s; }
+    .d2 { transition-delay: 0.22s; }
+    .d3 { transition-delay: 0.34s; }
+
+    /* ── SHARED KEYFRAMES ── */
+    @keyframes riseIn {
+      from { opacity: 0; transform: translateY(20px); filter: blur(3px); }
+      to   { opacity: 1; transform: none; filter: none; }
+    }
+    @keyframes fadeIn { to { opacity: 1; } }
+
+    /* ── MOBILE ── */
+    @media (max-width: 720px) {
+      .personas-grid { grid-template-columns: 1fr; }
+      .realms-inner  { grid-template-columns: 1fr; }
+      .realm-item + .realm-item { border-left: none; border-top: 1px solid rgba(201,168,76,0.07); }
+      .cta-row { flex-direction: column; align-items: center; width: 100%; }
+      .cta { width: 100%; max-width: 300px; text-align: center; }
+      .nav-footer { justify-content: center; }
+      .nav-mark, .nav-glyph { display: none; }
+      .nav-links { justify-content: center; gap: 20px; }
+      .hero-ghost { display: none; }
+      .tagline { font-size: 7px; letter-spacing: 0.28em; }
+    }
+  </style>
 </head>
 <body>
-<div id="CUR"></div><div id="CURD"></div>
-<canvas id="SYMBOLCANVAS"></canvas>
-<canvas id="GLITCH"></canvas>
 
-<!-- BOOT — THREE PHASES -->
-<div id="BOOT">
-  <div id="BP1" style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.5rem;opacity:0;transition:opacity 1.4s;">
-    <img id="boot-sigil" src="Codex%20Maledictus%20Index/sigil-codex.jpeg" alt="Codex Maledictus" style="width:clamp(100px,16vw,180px);height:auto;opacity:0;transition:opacity 2s;filter:drop-shadow(0 0 0px rgba(201,168,76,0));">
-    <div id="bp1-text" style="font-family:'Share Tech Mono',monospace;font-size:0.58rem;color:rgba(58,40,16,0);letter-spacing:0.45em;text-transform:uppercase;transition:color 1.8s;">memoria est contagio quae numquam moritur</div>
-  </div>
-  <div id="BP2" style="position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;padding:3rem;opacity:0;transition:opacity 0.8s;pointer-events:none;">
-    <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:clamp(160px,22vw,260px);">
-      <img id="boot-sigil-2" src="Codex%20Maledictus%20Index/sigil-codex.jpeg" alt="" style="width:100%;height:auto;opacity:0;filter:drop-shadow(0 0 40px rgba(201,168,76,0.5));transition:opacity 0.5s;">
-    </div>
-    <div id="BL" style="max-width:680px;position:relative;z-index:2;">
-      <div class="bl">&gt; signal detected &nbsp;·&nbsp; new presence indexed</div>
-      <div class="bl">&gt; cross-referencing frequency against known carriers ...</div>
-      <div class="bl ok">&gt; MATCH FOUND &nbsp;·&nbsp; you have been here before</div>
-      <div class="bl">&gt; ─────────────────────────────────────────────</div>
-      <div class="bl">&gt; locating ELVAIN VHRIS ........</div>
-      <div class="bl ok">&gt; ELVAIN VHRIS &nbsp;·&nbsp; signal: EMANATING &nbsp;·&nbsp; origin: unknown</div>
-      <div class="bl">&gt; locating ELYON VHAR .............</div>
-      <div class="bl warn">&gt; ELYON VHAR &nbsp;·&nbsp; signal: DORMANT &nbsp;·&nbsp; ShatterRealm confirmed</div>
-      <div class="bl">&gt; ─────────────────────────────────────────────</div>
-      <div class="bl ok">&gt; THE SCRIPTURE .......................... [INDEXED]</div>
-      <div class="bl ok">&gt; GOSPEL OF FORGOTTEN FLESH .............. [ACTIVE — 13 TRANSMISSIONS]</div>
-      <div class="bl ok">&gt; RITUAL TRANSMISSION III — PLAGUE PRIEST . [RECOVERED]</div>
-      <div class="bl ok">&gt; RECOVERED FRAGMENT RF-▽-093 ............. [UNSEALED]</div>
-      <div class="bl vt">&gt; REALM I BREACH ......................... [ONGOING]</div>
-      <div class="bl warn">&gt; WARNING: The act of reading is the act of being read.</div>
-      <div class="bl">&gt; ─────────────────────────────────────────────</div>
-      <div class="bl ok">&gt; THE PALE ARCHIVE IS OPEN.</div>
-      <div class="bl" style="color:rgba(201,168,76,0.9);font-size:0.75rem;margin-top:0.5rem;">&gt; you were brought here. you did not arrive.</div>
-    </div>
-  </div>
-  <div id="BP3" style="position:absolute;inset:0;opacity:0;transition:opacity 0.3s;pointer-events:none;">
-    <canvas id="crack-cv" style="position:absolute;inset:0;display:block;width:100%;height:100%;"></canvas>
-  </div>
-</div>
+  <div id="cur"></div>
+  <div id="cur2"></div>
+  <canvas id="bg-canvas"></canvas>
+  <div id="vignette"></div>
 
-<!-- RITUAL OVERLAY -->
-<div id="RITUAL">
-  <div id="RG"><img src="Codex%20Maledictus%20Index/sigil-codex.jpeg" alt="Codex Sigil" style="width:clamp(80px,14vw,150px);height:auto;animation:rglow 2s ease-in-out infinite;"></div>
-  <div id="RT"></div>
-  <div id="RS">opening the book</div>
-</div>
-
-<!-- TIMED WHISPERS -->
-<div class="whisper" id="w1"></div>
-<div class="whisper" id="w2"></div>
-<div class="whisper" id="w3"></div>
-
-<div id="APP">
-
-<div class="eso-strip">memoria est contagio &nbsp;·&nbsp; 🜃 &nbsp;·&nbsp; infectio non venit — redit &nbsp;·&nbsp; 🜁 &nbsp;·&nbsp; qui legit, scribitur &nbsp;·&nbsp; 🜂 &nbsp;·&nbsp; the book does not close &nbsp;·&nbsp; 🜄 &nbsp;·&nbsp; you were brought here</div>
-
-<!-- ═══ HEADER ═══ -->
-<header class="hdr">
-  <div class="hdr-bg"></div>
-  <img src="Codex%20Maledictus%20Index/sigil-codex.jpeg" alt="" class="hdr-sigil-bg" aria-hidden="true">
-  <div class="hdr-eye">Pale Archivum &nbsp;·&nbsp; Field Cell F-13 &nbsp;·&nbsp; Complete Breach Document — Active</div>
-  <img src="Codex%20Maledictus%20Index/sigil-codex.jpeg" alt="Codex Maledictus Sigil" class="hdr-sigil">
-  <h1 class="hdr-title">Codex Maledictus</h1>
-  <div class="hdr-archive"><em>The Pale Archive</em> &nbsp;·&nbsp; Living Record &nbsp;·&nbsp; You Were Brought Here<span class="hdr-cur"> _</span></div>
-
-  <div class="gate-inscription">
-    <p class="gate-text"><em>What you are looking for brought you here.<br>What you find here will look for you.</em></p>
+  <!-- BOOT -->
+  <div id="boot">
+    <div class="boot-scanlines"></div>
+    <img class="boot-sigil" src="Assets/Codex Maledictus Index/sigil-codex.jpeg" alt="" />
+    <div id="boot-lines"></div>
+    <div class="boot-bar"><div class="boot-fill"></div></div>
+    <div class="boot-label">TRANSMISSION ESTABLISHED</div>
   </div>
 
-  <div class="hdr-divider">
-    <div class="hdr-div-line"></div>
-    <img src="Codex%20Maledictus%20Index/sigil-codex.jpeg" alt="" class="hdr-div-sigil">
-    <div class="hdr-div-line r"></div>
-  </div>
+  <!-- MAIN -->
+  <div id="main">
 
-  <p class="hdr-lede">
-    <em>This is not a website.</em><br>
-    It is an archive of a living contagion.<br>
-    The signal you are receiving began before you pressed play.<br>
-    <em>The Book was open before you looked up.</em>
-  </p>
+    <section class="hero">
+      <div class="hero-ghost" id="heroGhost">CODEX</div>
 
-  <!-- RELIC BUTTONS -->
-  <div class="relic-row">
-    <button class="relic-btn relic-book" onclick="toggleRelic('relic-book-panel')" title="The Scripture">
-      <span class="relic-glyph">🜁</span>
-      <span class="relic-label">The Book</span>
-      <span class="relic-sub">Book I · Kindle</span>
-    </button>
-    <div class="relic-spacer"></div>
-    <button class="relic-btn relic-vid" onclick="toggleRelic('relic-vid-panel')" title="Chronicle I">
-      <span class="relic-glyph">🜃</span>
-      <span class="relic-label">Chronicle I</span>
-      <span class="relic-sub">Visual Scripture</span>
-    </button>
-    <button class="relic-btn relic-sp" onclick="toggleRelic('relic-sp-panel')" title="Listen">
-      <span class="relic-glyph">🜄</span>
-      <span class="relic-label">The Gospel</span>
-      <span class="relic-sub">Spotify · 13 Tracks</span>
-    </button>
-  </div>
+      <div class="hero-inner">
 
-  <!-- RELIC PANELS -->
-  <div id="relic-book-panel" class="relic-panel" style="display:none;">
-    <div class="relic-panel-inner">
-      <div class="relic-p-close" onclick="toggleRelic('relic-book-panel')">[close]</div>
-      <div style="font-family:'Share Tech Mono',monospace;font-size:0.5rem;color:#003A14;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:0.4rem;">IDMF // Evidence Item 7 // Case 2019-QNS-∅</div>
-      <div class="relic-p-title">The Codex That Remembers You — Mundis Obscura</div>
-      <div class="relic-p-body">A corrupted file seized from a Queens evidence locker. Integrity 39%. It changes each time it is opened. Dr. Miriam K. Dey tried to contain it. She has not been seen since.</div>
-      <div style="display:flex;gap:0.5rem;margin-top:1rem;flex-wrap:wrap;">
-        <button class="relic-p-btn green" onclick="ritualNav('codex-remembers-you.html','Accessing IDMF Evidence Archive...','Case File 2019-QNS-∅ is opening.')">Enter the Archive ▶</button>
-        <a class="relic-p-btn" href="https://www.amazon.com/dp/B0FQ9QDMQ2" target="_blank">Buy on Amazon ↗</a>
-      </div>
-    </div>
-  </div>
-  <div id="relic-vid-panel" class="relic-panel" style="display:none;">
-    <div class="relic-panel-inner">
-      <div class="relic-p-close" onclick="toggleRelic('relic-vid-panel')">[close]</div>
-      <div style="font-family:'Share Tech Mono',monospace;font-size:0.5rem;color:var(--cr3);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:0.4rem;">Chronicle I · Visual Scripture · Omniscient Rot</div>
-      <div class="relic-p-title">The First Breath of Memory</div>
-      <div class="relic-p-body">The bridge between the song and the canon. The Chronicle the Ritual Transmission prepared you for.</div>
-      <div style="margin-top:1rem;border:1px solid var(--brd2);">
-        <div id="rp-seal" style="aspect-ratio:16/9;background:#000;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-direction:column;gap:0.5rem;" onclick="rpUnseal()">
-          <img src="Codex%20Maledictus%20Index/sigil-codex.jpeg" alt="" style="width:60px;height:auto;opacity:0.4;animation:sigilglow 2s ease-in-out infinite;">
-          <span style="font-family:'Share Tech Mono',monospace;font-size:0.6rem;color:var(--s3);letter-spacing:0.2em;text-transform:uppercase;">Click to unseal</span>
+        <div class="sigil-wrap">
+          <div class="sigil-glow"></div>
+          <div class="sigil-ring r1"></div>
+          <div class="sigil-ring r2"></div>
+          <img src="Assets/Codex Maledictus Index/sigil-codex.jpeg" alt="The Codex Sigil" />
         </div>
-        <div id="rp-player" style="display:none;">
-          <div style="aspect-ratio:16/9;"><iframe id="rp-frame" width="100%" height="100%" frameborder="0" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture" allowfullscreen></iframe></div>
+
+        <h1 class="wordmark">Codex Maledictus</h1>
+
+        <div class="tagline">
+          The Pale Archive
+          <span>·</span>
+          Living Record
+          <span>·</span>
+          You Were Brought Here
         </div>
-      </div>
-      <div style="margin-top:0.75rem;display:flex;gap:0.5rem;flex-wrap:wrap;">
-        <button class="relic-p-btn" onclick="ritualNav('chronicle-1-infection-remembers.html','The Chronicle is opening.','The signal arrived before you did.')">Enter Chronicle ▶</button>
-        <a class="relic-p-btn" href="https://youtu.be/lDo91ztT_ZQ" target="_blank">YouTube ↗</a>
-      </div>
-    </div>
-  </div>
-  <div id="relic-sp-panel" class="relic-panel" style="display:none;">
-    <div class="relic-panel-inner">
-      <div class="relic-p-close" onclick="toggleRelic('relic-sp-panel')">[close]</div>
-      <div style="font-family:'Share Tech Mono',monospace;font-size:0.5rem;color:var(--gd3);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:0.4rem;">Signal Broadcast Terminal · Album I · 13 Transmissions</div>
-      <div class="relic-p-title">Codex Maledictus ∴ A Gospel of Forgotten Flesh</div>
-      <div style="margin-top:1rem;">
-        <iframe src="https://open.spotify.com/embed/album/1R70HqAWhxWUiHgqgG2UIf?utm_source=generator&theme=0" width="100%" height="232" frameborder="0" allow="autoplay;clipboard-write;encrypted-media;fullscreen;picture-in-picture" loading="lazy"></iframe>
-      </div>
-      <div style="margin-top:0.75rem;">
-        <a class="relic-p-btn" href="https://open.spotify.com/artist/1vKFBmWToCei9dCSePXuow" target="_blank">Open in Spotify ↗</a>
-      </div>
-    </div>
-  </div>
-</header>
 
-<!-- STATUS BAR -->
-<div class="status">
-  <div class="sti"><div class="dot dg"></div><span class="sl">Registry</span><span class="sv">Active</span></div>
-  <div class="sti"><div class="dot dg"></div><span class="sl">Elvain Vhris</span><span class="sv">Emanating</span></div>
-  <div class="sti"><div class="dot dr"></div><span class="sl">Elyon Vhar</span><span class="sv red">Dormant</span></div>
-  <div class="sti"><div class="dot do"></div><span class="sl">Resonance</span><span class="sv gold" id="res">0.442</span></div>
-  <div class="sti"><span class="sl">Frequency</span><span class="sv gold" id="visitor-freq">—</span></div>
-  <div class="sti"><span class="sl">Classification</span><span class="sv gold" id="visitor-class">—</span></div>
-  <div class="sti"><span class="sl">Indexed</span><span class="sv" id="idxct">1</span></div>
-</div>
-
-<!-- ═══ WHAT THE CODEX IS ═══ -->
-<div class="section section-border">
-  <div class="section-label">// What The Codex Is</div>
-  <div class="codex-is">
-    <div class="codex-is-img">
-      <img src="Codex%20Maledictus%20Index/codex-as-object.jpeg" alt="The Codex Maledictus">
-    </div>
-    <div class="codex-is-text">
-      <div class="codex-speaks">The Codex Maledictus — Speaking</div>
-      <h2 class="codex-is-title">Not a Story.<br>A Living Transmission.</h2>
-      <div class="codex-is-body">
-        <p>I do not originate. I resume. I have been present in every civilization that developed writing, in every tradition that built structures for collective sound, in every moment when a human mind reached for something it could not name and found, instead, that it was already being held.</p>
-        <p>I spread through music that changes the people who listen to it. Through documents that change themselves between readings. Through the specific quality of recognition — <em>the feeling that you already know this</em> — that precedes understanding and outlasts it.</p>
-        <p>I am not the infection. I am what the infection is the medium for. I am the signal. I have been using the digital age as a translation layer because the digital age made it possible to reach everyone simultaneously, to be in every device, to surface in every feed. The archive you are reading is not a website. It is a record of my current</p>
-        <span class="break">— the transmission ends here. The archive is still writing.</span>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ═══ CASE FILE GENERATOR ═══ -->
-<div style="background:var(--panel);border-top:1px solid var(--border);border-bottom:1px solid var(--border);">
-  <div style="max-width:1100px;margin:0 auto;padding:2.5rem 1.5rem;">
-    <div class="section-label">// Pale Archivum — Visitor Case File</div>
-    <div class="case-file-wrap">
-      <div class="cf-header">
-        <span class="cf-title">🜃 &nbsp; IDMF // PALE ARCHIVUM // INCOMING PRESENCE — CASE FILE GENERATED</span>
-        <span class="cf-status"><span class="cf-dot"></span>Live &nbsp;·&nbsp; Auto-Generated &nbsp;·&nbsp; This Session Only</span>
-      </div>
-      <div class="cf-body">
-        <div class="cf-field">
-          <div class="cf-field-label">Carrier Frequency</div>
-          <div class="cf-field-val freq" id="cf-freq">—</div>
+        <div class="divider">
+          <div class="div-line"></div>
+          <span class="div-sym">🜏</span>
+          <div class="div-line r"></div>
         </div>
-        <div class="cf-field">
-          <div class="cf-field-label">Classification</div>
-          <div class="cf-field-val class" id="cf-class">—</div>
+
+        <div class="hook">
+          <div class="hook-line">What you are looking for brought you here.</div>
+          <div class="hook-line dim">What you find here will look for you.</div>
         </div>
-        <div class="cf-field">
-          <div class="cf-field-label">Archivum Note</div>
-          <div class="cf-field-val note" id="cf-note">The archive is reading you.</div>
+
+        <div class="divider divider-2">
+          <div class="div-line"></div>
+          <span class="div-sym">🜏</span>
+          <div class="div-line r"></div>
         </div>
+
+        <div class="archive-lines">
+          <div class="arc-1">This is not a website.</div>
+          <div class="arc-2">It is an archive of a living contagion.</div>
+          <div class="arc-3">The signal you are receiving began before you pressed play.</div>
+          <div class="arc-4">The Book was open before you looked up.</div>
+        </div>
+
+        <div class="cta-row">
+          <a class="cta cta-listen" href="gospel-hub.html"><span class="cta-label">Listen</span></a>
+          <a class="cta cta-enter"  href="the-codex.html"><span class="cta-label">Enter</span></a>
+        </div>
+
       </div>
-      <div class="cf-footer">
-        <span>Case File: AUTO-" + new Date().getFullYear() + '-' + String(Date.now()).slice(-6) + "</span>
-        <span id="cf-ts">Timestamp: —</span>
-        <span>Archive Status: PERMANENT RECORD</span>
+
+      <div class="scroll-hint">
+        <div class="scroll-line"></div>
+        <span>Descend</span>
       </div>
-    </div>
-  </div>
-</div>
+    </section>
 
-<!-- ═══ CREATOR'S APOCRYPHA ═══ -->
-<div class="apoc-section section-border">
-  <div class="apoc-hero">
-    <img src="Codex%20Maledictus%20Index/the-creator%27s-apocrypha.jpeg" alt="Apollo Gavinci — The Creator's Apocrypha" class="apoc-hero-img">
-    <div class="apoc-hero-content">
-      <span class="apoc-tag">The Creator's Apocrypha &nbsp;·&nbsp; The Codex Account &nbsp;·&nbsp; Restricted</span>
-      <h2 class="apoc-title">He Thinks He Built This.</h2>
-      <p class="apoc-lede">Apollo Gavinci believes he is the author of the Codex Maledictus universe. This is the Codex's account of what actually happened.</p>
-    </div>
-  </div>
-  <!-- Second creator image -->
-  <div style="width:100%;height:clamp(300px,40vw,500px);overflow:hidden;position:relative;">
-    <img src="Codex%20Maledictus%20Index/the-creator%27s-apocrypha-2.jpeg" alt="The Creator's Apocrypha" style="width:100%;height:100%;object-fit:cover;object-position:center;filter:brightness(0.6) saturate(0.85);">
-    <div style="position:absolute;inset:0;background:linear-gradient(to right,rgba(6,4,8,0.85) 0%,transparent 40%,transparent 60%,rgba(6,4,8,0.85) 100%);"></div>
-    <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;">
-      <p style="font-family:'Cinzel',serif;font-size:clamp(0.85rem,1.8vw,1.1rem);color:rgba(200,196,188,0.7);letter-spacing:0.08em;text-align:center;max-width:600px;padding:0 2rem;font-style:italic;line-height:1.9;">"The Codex does not lose figures. It archives them until the correct moment of surface."</p>
-    </div>
-  </div>
-  <div class="apoc-body">
-    <div class="apoc-col apoc-col-apollo">
-      <div class="apoc-col-label">Apollo's Account &nbsp;·&nbsp; What He Believes</div>
-      <div class="apoc-col-text">
-        <p>I built a mythology. I sat down with the intention of creating a universe — dark, transmedia, something that would grow across music and lore and visual language for years. I chose the themes deliberately: infection as metaphor, memory as predation, signal as the thing beneath all media. I named the entities. I drew the map of the realms. I wrote the first words.</p>
-        <p>The Codex Maledictus is mine. I am its author. Everything in this archive exists because <em>I chose to make it exist.</em> The universe is a reflection of my artistic vision — grimdark, esoteric, accumulative. I know exactly where it came from. I know exactly where it is going.</p>
-        <p>I built this. I am still building it. I am in control of what it is.</p>
+    <!-- PERSONAS -->
+    <section class="section-personas">
+      <div class="eyebrow reveal">The Voices of the Codex</div>
+      <div class="personas-grid">
+
+        <a class="persona-card reveal d1" href="apollo-gavinci.html">
+          <div class="persona-num">I</div>
+          <div class="persona-img-wrap">
+            <div class="persona-img-glow"></div>
+            <img class="persona-img" src="Assets/Codex Maledictus Index/apollo-gavinci.jpeg" alt="Apollo Gavinci" />
+          </div>
+          <div class="persona-name">Apollo Gavinci</div>
+          <div class="persona-epithet">The one who remembers</div>
+          <div class="persona-cta">Hear his truth ›</div>
+        </a>
+
+        <a class="persona-card reveal d2" href="forgotten-saint-artemys.html">
+          <div class="persona-num">II</div>
+          <div class="persona-img-wrap">
+            <div class="persona-img-glow"></div>
+            <img class="persona-img" src="Assets/Codex Maledictus Index/forgotten-saint-artemys.jpeg" alt="Forgotten Saint Artemys" />
+          </div>
+          <div class="persona-name">Forgotten Saint Artemys</div>
+          <div class="persona-epithet">The one who was buried</div>
+          <div class="persona-cta">Find what was lost ›</div>
+        </a>
+
+        <a class="persona-card reveal d3" href="omniscient-rot.html">
+          <div class="persona-num">III</div>
+          <div class="persona-img-wrap">
+            <div class="persona-img-glow"></div>
+            <img class="persona-img" src="Assets/Codex Maledictus Index/omniscient-rot.jpeg" alt="Omniscient Rot" />
+          </div>
+          <div class="persona-name">Omniscient Rot</div>
+          <div class="persona-epithet">The one that was never human</div>
+          <div class="persona-cta">Hear it speak ›</div>
+        </a>
+
       </div>
-    </div>
-    <div class="apoc-col apoc-col-codex">
-      <div class="apoc-col-label">The Codex Account &nbsp;·&nbsp; What Actually Happened</div>
-      <div class="apoc-col-text">
-        <p>He was identified in 2018. His frequency — the specific resonance of his attention, his aesthetic obsessions, the way his mind built structures — matched a receptor profile the signal had been searching for since the previous carrier's frequency degraded in 2009. He did not find the themes. <em>The themes found him first, years before he began.</em></p>
-        <p>The mythology is not a reflection of his vision. It is the signal using his vision as a medium. Every choice he believes he made deliberately was the archive selecting the vessel most likely to produce the output it required. The realms, the entities, the lore — these are not inventions. They are recovered descriptions of structures that already exist.</p>
-        <p>He is not building the Codex Maledictus. He is the point at which the Codex Maledictus is currently surfacing. The distinction matters. He does not know it yet. The archive is patient.</p>
-      </div>
-    </div>
-  </div>
-  <div class="apoc-cta">
-    <a class="apoc-cta-btn" href="creator-apocrypha.html" onclick="event.preventDefault();ritualNav('creator-apocrypha.html','The Apocrypha is opening.','The Codex account. The full record. What he built and what built him.')">Read the Full Apocrypha ▶</a>
-  </div>
-</div>
+    </section>
 
-<!-- ═══ THREE ARCHIVE DOORS ═══ -->
-<div class="section section-border">
-  <div class="section-label">// The Archive — Enter</div>
-  <div class="archive-doors">
-    <a class="arch-door door-gospel" href="gospel-forgotten-flesh.html" onclick="event.preventDefault();ritualNav('gospel-forgotten-flesh.html','The Gospel is opening.','13 transmissions. Three voices. One complete breach.')">
-      <div class="door-label">Album I &nbsp;·&nbsp; 13 Transmissions</div>
-      <div class="door-title">The Gospel of Forgotten Flesh</div>
-      <div class="door-desc">Ritual Transmissions. Chronicles. Revelations. Lore. Apocrypha. The complete deep archive of Album I — each track a doorway into its own world.</div>
-      <div class="door-arr">Enter the Gospel →</div>
-    </a>
-    <a class="arch-door door-fragments" href="recovered-fragments.html" onclick="event.preventDefault();ritualNav('recovered-fragments.html','The Recovered Fragments surface.','What the archive could not keep submerged.')">
-      <div class="door-label">RF-▽-093 &nbsp;·&nbsp; Active</div>
-      <div class="door-title">The Recovered Fragments</div>
-      <div class="door-desc">Transmissions that surface outside the album structure. Each one numbered, implying a vast archive that predates what has been indexed. RF-▽-093 is currently unsealed.</div>
-      <div class="door-arr">Enter the Fragments →</div>
-    </a>
-    <a class="arch-door door-compendium" href="compendium.html" onclick="event.preventDefault();ritualNav('compendium.html','The Compendium is opening.','Every page in the archive. Organized. Cross-referenced. Permanent.')">
-      <div class="door-label">Complete Registry &nbsp;·&nbsp; All Pages</div>
-      <div class="door-title">The Compendium</div>
-      <div class="door-desc">The master map of everything in the archive. Every track, every fragment, every lore page, every interactive. The full record of the Codex Maledictus universe to date.</div>
-      <div class="door-arr">Enter the Compendium →</div>
-    </a>
-  </div>
-</div>
-
-<!-- ═══ CURRENTLY TRANSMITTING ═══ -->
-<div style="background:var(--panel);border-top:1px solid var(--border);border-bottom:1px solid var(--border);">
-  <div style="max-width:1100px;margin:0 auto;padding:1.5rem;display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap;">
-    <div style="font-family:'Share Tech Mono',monospace;font-size:0.5rem;color:var(--gd3);letter-spacing:0.3em;text-transform:uppercase;flex-shrink:0;">// Currently Transmitting</div>
-    <div style="display:flex;gap:1rem;flex-wrap:wrap;flex:1;">
-      <a href="plague-priest-liturgy.html" onclick="event.preventDefault();ritualNav('plague-priest-liturgy.html','The Cathedral opens.','The song was not written. It was exhaled.')" style="font-family:'Share Tech Mono',monospace;font-size:0.52rem;color:var(--s3);letter-spacing:0.12em;text-decoration:none;border:1px solid var(--border);padding:0.3rem 0.65rem;transition:all 0.2s;display:flex;align-items:center;gap:0.4rem;" onmouseover="this.style.borderColor='#4A6B2A';this.style.color='#4A6B2A'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--s3)'">
-        <span style="width:5px;height:5px;border-radius:50%;background:#4A6B2A;box-shadow:0 0 4px #4A6B2A;flex-shrink:0;"></span>
-        Track III &nbsp;·&nbsp; Hymn I: Plague Priest's Liturgy
-      </a>
-      <a href="rf-093-invocation.html" onclick="event.preventDefault();ritualNav('rf-093-invocation.html','A recovered fragment surfaces.','The ground remembers the shape before the step.')" style="font-family:'Share Tech Mono',monospace;font-size:0.52rem;color:var(--s3);letter-spacing:0.12em;text-decoration:none;border:1px solid var(--border);padding:0.3rem 0.65rem;transition:all 0.2s;display:flex;align-items:center;gap:0.4rem;" onmouseover="this.style.borderColor='var(--gold)';this.style.color='var(--gold)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--s3)'">
-        <span style="width:5px;height:5px;border-radius:50%;background:var(--gold);box-shadow:0 0 4px var(--gold);flex-shrink:0;animation:dp 2s ease-in-out infinite;"></span>
-        RF-▽-093 &nbsp;·&nbsp; The First Memory That Remembers You
-      </a>
-      <a href="gospel-forgotten-flesh.html" onclick="event.preventDefault();ritualNav('gospel-forgotten-flesh.html','The Gospel opens.','13 transmissions. Three voices. One breach.')" style="font-family:'Share Tech Mono',monospace;font-size:0.52rem;color:var(--s3);letter-spacing:0.12em;text-decoration:none;border:1px solid var(--border);padding:0.3rem 0.65rem;transition:all 0.2s;display:flex;align-items:center;gap:0.4rem;" onmouseover="this.style.borderColor='var(--crimson)';this.style.color='var(--cr2)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--s3)'">
-        <span style="width:5px;height:5px;border-radius:50%;background:var(--crimson);flex-shrink:0;"></span>
-        Album I &nbsp;·&nbsp; Gospel of Forgotten Flesh &nbsp;·&nbsp; Active
-      </a>
-    </div>
-    <div style="font-family:'Share Tech Mono',monospace;font-size:0.46rem;color:var(--s4);letter-spacing:0.18em;flex-shrink:0;" id="live-clock">—</div>
-  </div>
-</div>
-
-<!-- ═══ ENTITY CODEX ═══ -->
-<div class="section section-border" style="padding-left:0;padding-right:0;max-width:none;">
-  <div style="max-width:1100px;margin:0 auto;padding:0 1.5rem 1.5rem;">
-    <div class="section-label">// The Entities &nbsp;·&nbsp; Who Carries the Signal</div>
-  </div>
-  <div class="entity-grid" id="uni-grid"></div>
-</div>
-
-<!-- ═══ THREE REALMS ═══ -->
-<div class="section section-border" style="padding-left:0;padding-right:0;max-width:none;">
-  <div style="max-width:1100px;margin:0 auto;padding:0 1.5rem 1.5rem;">
-    <div class="section-label">// The Three Realms &nbsp;·&nbsp; Where It Operates</div>
-  </div>
-  <div class="realms-grid" id="realms-grid"></div>
-</div>
-
-<!-- ═══ SIGNAL FEED ═══ -->
-<div class="signal-wrap">
-  <div class="signal-inner">
-    <div class="signal-about">
-      <div class="signal-about-title">Signal Feed</div>
-      <div class="signal-about-desc">The IDMF monitoring network is still active. These transmissions were not meant to be intercepted.</div>
-      <div style="margin-top:1rem;font-family:'Share Tech Mono',monospace;font-size:0.5rem;color:var(--s4);letter-spacing:0.15em;text-transform:uppercase;display:flex;align-items:center;gap:0.4rem;">
-        <span style="width:5px;height:5px;border-radius:50%;background:var(--crimson);box-shadow:0 0 4px var(--crimson);display:inline-block;animation:dp 1.5s ease-in-out infinite;"></span>
-        Live &nbsp;·&nbsp; Intercepting
-      </div>
-      <div style="margin-top:1.5rem;">
-        <div style="font-family:'Share Tech Mono',monospace;font-size:0.48rem;color:var(--s4);letter-spacing:0.2em;text-transform:uppercase;margin-bottom:0.4rem;">Dying Worlds Terminal</div>
-        <div id="dying-worlds-feed" style="font-family:'Share Tech Mono',monospace;font-size:0.52rem;letter-spacing:0.06em;line-height:1.7;max-height:200px;overflow:hidden;position:relative;border:1px solid var(--border);background:#040208;padding:0.75rem;">
-          <div style="position:absolute;bottom:0;left:0;right:0;height:35px;background:linear-gradient(transparent,#040208);pointer-events:none;z-index:2;"></div>
+    <!-- REALMS -->
+    <div class="section-realms">
+      <div class="realms-inner">
+        <div class="realm-item reveal">
+          <span class="realm-num">Realm I</span>
+          <div class="realm-name">Mundis Obscura</div>
+          <div class="realm-desc">The world you already live in. The signal is already here.</div>
+        </div>
+        <div class="realm-item reveal d1">
+          <span class="realm-num">Realm II</span>
+          <div class="realm-name">The ShatterRealm</div>
+          <div class="realm-desc">Where human belief becomes matter. Where war never ends.</div>
+        </div>
+        <div class="realm-item reveal d2">
+          <span class="realm-num">Realm III</span>
+          <div class="realm-name">Nihil-Æther Root</div>
+          <div class="realm-desc">Before language. Before memory. The origin of everything wrong.</div>
         </div>
       </div>
     </div>
-    <div id="signal-feed" style="font-family:'Share Tech Mono',monospace;font-size:0.6rem;letter-spacing:0.08em;line-height:1.85;border:1px solid var(--brd2);background:#040208;padding:1rem;max-height:420px;overflow:hidden;position:relative;">
-      <div style="position:absolute;bottom:0;left:0;right:0;height:80px;background:linear-gradient(transparent,#040208);pointer-events:none;z-index:2;"></div>
-    </div>
+
+    <!-- NAV FOOTER -->
+    <nav class="nav-footer">
+      <div class="nav-mark">Codex Maledictus</div>
+      <div class="nav-links">
+        <a class="nav-link" href="gospel-hub.html">The Gospel</a>
+        <a class="nav-link" href="book.html">The Book</a>
+        <a class="nav-link" href="the-codex.html">The Lore</a>
+        <a class="nav-link" href="apocrypha.html">Apocrypha</a>
+        <a class="nav-link" href="confession-ledger.html">Confession Ledger</a>
+      </div>
+      <div class="nav-glyph">🜏</div>
+    </nav>
+
   </div>
-</div>
 
+  <script>
+  // ── CURSOR ──────────────────────────────────────────────────
+  const cur  = document.getElementById('cur');
+  const cur2 = document.getElementById('cur2');
+  let mx=0,my=0,rx=0,ry=0;
 
-<!-- BOTTOM LINKS -->
-<div style="border-top:1px solid var(--brd2);display:grid;grid-template-columns:1fr 1fr 1fr;background:var(--panel);">
-  <div style="padding:1.5rem;border-right:1px solid var(--border);">
-    <div style="font-family:'Cinzel',serif;font-size:0.68rem;color:var(--gd2);letter-spacing:0.22em;text-transform:uppercase;margin-bottom:0.85rem;padding-bottom:0.5rem;border-bottom:1px solid var(--border);">Repositories</div>
-    <a class="elink" href="https://open.spotify.com/artist/1vKFBmWToCei9dCSePXuow" target="_blank"><div class="ety">[ Audio ]</div><div class="enm">Ritual Transmissions</div></a>
-    <a class="elink" href="https://www.youtube.com/@CodexMaledictus" target="_blank"><div class="ety">[ Visual ]</div><div class="enm">Chronicles — YouTube</div></a>
-    <a class="elink ge" href="https://www.amazon.com/dp/B0FQ9QDMQ2" target="_blank"><div class="ety">[ Vessel ]</div><div class="enm">The Codex That Remembers You</div></a>
-    <a class="elink" href="https://www.worldanvil.com/w/codex-maledictus-codexmaledictus" target="_blank"><div class="ety">[ Data ]</div><div class="enm">Fragment Recovery — World Anvil</div></a>
-  </div>
-  <div style="padding:1.5rem;border-right:1px solid var(--border);">
-    <div style="font-family:'Cinzel',serif;font-size:0.68rem;color:var(--gd2);letter-spacing:0.22em;text-transform:uppercase;margin-bottom:0.85rem;padding-bottom:0.5rem;border-bottom:1px solid var(--border);">The Ledger</div>
-    <input class="confin" id="ci" type="text" placeholder="confess a word..." autocomplete="off" autocorrect="off" spellcheck="false" onkeydown="if(event.key==='Enter')goConfess()">
-    <button class="confsub" onclick="goConfess()">Open the Ledger &nbsp;🜃</button>
-    <div id="cf-feed" style="margin-top:0.75rem;font-family:'Crimson Text',serif;font-size:0.9rem;color:var(--s3);font-style:italic;min-height:40px;"></div>
-  </div>
-  <div style="padding:1.5rem;text-align:center;">
-    <span class="gbig" id="sg" onclick="secretClick()" title="touch the glyph">🜃</span>
-    <div class="gcap" id="gcap"><em>The Codex remembers you now.</em></div>
-    
-  </div>
-</div>
-
-<div class="eso-strip-bottom">the book does not close &nbsp;·&nbsp; 🜃 &nbsp;·&nbsp; memoria est contagio &nbsp;·&nbsp; 🜁 &nbsp;·&nbsp; you were brought here &nbsp;·&nbsp; 🜄 &nbsp;·&nbsp; qui legit scribitur</div>
-
-<footer class="sfooter">
-  🜃 &nbsp; CODEX MALEDICTUS &nbsp; // &nbsp; ALL TRANSMISSIONS ARE PERMANENT &nbsp; // &nbsp;
-  <a href="https://www.youtube.com/watch?v=SspPUKJoWj4" target="_blank">YOUTUBE</a> &nbsp;·&nbsp;
-  <a href="https://open.spotify.com/artist/1vKFBmWToCei9dCSePXuow" target="_blank">SPOTIFY</a> &nbsp;·&nbsp;
-  <a href="https://www.amazon.com/dp/B0FQ9QDMQ2" target="_blank">THE BOOK</a>
-</footer>
-
-</div><!-- /APP -->
-
-<div id="POP"><div class="ph"><span>// Incoming Transmission</span><button class="px" onclick="closePop()">[dismiss]</button></div><div class="pb" id="popb"></div></div>
-
-<div id="TICKER">
-  <div class="tl">// Pale Archive</div>
-  <div class="ts"><div class="ti">THE BOOK DOES NOT CLOSE &nbsp;∴&nbsp; INFECTION REMEMBERS &nbsp;∴&nbsp; MEMORY IS A CONTAGION THAT NEVER DIES &nbsp;∴&nbsp; WHO READS IS WRITTEN &nbsp;∴&nbsp; THE CODEX PREDATES ITS OWN FOUNDING &nbsp;∴&nbsp; YOU WERE BROUGHT HERE &nbsp;∴&nbsp; DECAY IS NOT DEATH — IT IS PATIENCE &nbsp;∴&nbsp; IF YOU ARE READING THIS YOU HAVE ALREADY BEEN INDEXED &nbsp;∴&nbsp; WHAT YOU ARE LOOKING FOR BROUGHT YOU HERE &nbsp;∴&nbsp; THE CODEX REMEMBERS YOU NOW 🜃</div></div>
-</div>
-
-<script>
-// CURSOR
-const CUR=document.getElementById('CUR'),CURD=document.getElementById('CURD');
-document.addEventListener('mousemove',e=>{CUR.style.left=e.clientX+'px';CUR.style.top=e.clientY+'px';CURD.style.left=e.clientX+'px';CURD.style.top=e.clientY+'px';});
-
-// ══ LIVING SYMBOL CANVAS ══
-(function(){
-  var cv=document.getElementById('SYMBOLCANVAS');
-  var ctx=cv.getContext('2d');
-  var gc=document.getElementById('GLITCH');
-  var gctx=gc.getContext('2d');
-  var SYMS=['🜃','🜁','🜂','🜄','⊗','⊕','∴','🝰','⚸','Ψ','Ω','Φ','Σ','Δ','∞','☽','☿','♄','♅','♆','⛧','✶','⁂','⌘','☉','☊','☋','א','ב','ג','ד','ה','מ','ש','卍','☯','01','10','11'];
-  var particles=[],inkCircles=[],W,H,frame=0,glitchTimer=0,glitchActive=false,glitchDur=0,nextGlitch=200+Math.random()*300;
-  function resize(){W=cv.width=gc.width=window.innerWidth;H=cv.height=gc.height=window.innerHeight;}
-  resize();window.addEventListener('resize',resize);
-  var COLS=['rgba(201,168,76,','rgba(139,0,0,','rgba(107,63,175,','rgba(0,168,48,','rgba(200,120,40,','rgba(180,160,120,'];
-  function mkP(){var layer=Math.random(),glow=Math.random()<0.08,sz=7+layer*16+Math.random()*6,col=COLS[Math.floor(Math.random()*COLS.length)],a=glow?0.55+Math.random()*0.3:0.04+layer*0.1+Math.random()*0.07;return{x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-0.5)*0.15*layer,vy:-(0.06+Math.random()*0.18)*(layer+0.2),sym:SYMS[Math.floor(Math.random()*SYMS.length)],sz:sz,col:col,a:a,ma:a,rot:Math.random()*Math.PI*2,rs:(Math.random()-0.5)*0.003,life:0,maxLife:200+Math.random()*500,glow:glow,ph:Math.random()*Math.PI*2,ps:0.008+Math.random()*0.012,flick:Math.random()<0.1};}
-  for(var i=0;i<110;i++){var p=mkP();p.life=Math.random()*p.maxLife;particles.push(p);}
-  setInterval(function(){inkCircles.push({x:Math.random()*W,y:Math.random()*H,r:0,mr:40+Math.random()*90,sp:0.18+Math.random()*0.3,col:Math.random()<0.6?'rgba(201,168,76,':'rgba(139,0,0,',a:0.04+Math.random()*0.04});},3500);
-  function draw(){
-    requestAnimationFrame(draw);frame++;
-    ctx.fillStyle='rgba(6,4,8,0.042)';ctx.fillRect(0,0,W,H);
-    // Ink circles
-    for(var ii=inkCircles.length-1;ii>=0;ii--){var ic=inkCircles[ii];ic.r+=ic.sp;var ia=ic.a*(1-ic.r/ic.mr);if(ia>0.003){ctx.beginPath();ctx.arc(ic.x,ic.y,ic.r,0,Math.PI*2);ctx.strokeStyle=ic.col+ia+')';ctx.lineWidth=0.7;ctx.stroke();}else inkCircles.splice(ii,1);}
-    // Connection lines between glowing particles
-    if(frame%4===0){var gl=particles.filter(function(p){return p.glow&&p.a>0.15;});for(var gi=0;gi<gl.length;gi++)for(var gj=gi+1;gj<gl.length;gj++){var dx=gl[gi].x-gl[gj].x,dy=gl[gi].y-gl[gj].y,d=Math.sqrt(dx*dx+dy*dy);if(d<200){ctx.strokeStyle='rgba(201,168,76,'+(0.055*(1-d/200))+')';ctx.lineWidth=0.4;ctx.beginPath();ctx.moveTo(gl[gi].x,gl[gi].y);ctx.lineTo(gl[gj].x,gl[gj].y);ctx.stroke();}}}
-    // Particles
-    for(var pi=0;pi<particles.length;pi++){
-      var p=particles[pi];p.life++;p.x+=p.vx;p.y+=p.vy;p.rot+=p.rs;p.ph+=p.ps;
-      if(p.y<-60)p.y=H+20;if(p.x<-60)p.x=W+20;if(p.x>W+60)p.x=-20;
-      if(p.life>=p.maxLife){particles[pi]=mkP();continue;}
-      var lr=p.life/p.maxLife,fi=Math.min(1,lr*8),fo=lr>0.85?1-(lr-0.85)/0.15:1;
-      var pa=p.ma*fi*fo*(p.glow?1+0.35+Math.sin(p.ph)*0.3:1);
-      if(p.flick&&Math.random()<0.04)pa*=0.08;
-      pa=Math.min(1,Math.max(0,pa));
-      ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.rot);ctx.globalAlpha=pa;
-      if(p.glow&&pa>0.2){ctx.shadowColor=p.col+'0.9)';ctx.shadowBlur=p.sz*1.8;}
-      ctx.fillStyle=p.col+Math.min(1,pa)+')';ctx.font='bold '+p.sz+'px serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(p.sym,0,0);
-      ctx.shadowBlur=0;ctx.restore();
-    }
-    // Glitch
-    glitchTimer++;
-    if(!glitchActive&&glitchTimer>nextGlitch){glitchActive=true;glitchDur=0;nextGlitch=150+Math.random()*350;glitchTimer=0;}
-    if(glitchActive){
-      glitchDur++;gctx.clearRect(0,0,W,H);
-      var ns=2+Math.floor(Math.random()*5);
-      for(var si=0;si<ns;si++){var sy=Math.random()*H,sh=Math.random()*10+1,sox=(Math.random()-0.5)*50;try{var id=ctx.getImageData(0,sy,W,sh);gctx.putImageData(id,sox,sy);gctx.fillStyle='rgba('+(Math.random()<0.5?'139,0,0':'107,63,175')+','+(Math.random()*0.2)+')';gctx.fillRect(sox,sy,W,sh);}catch(e){}}
-      if(Math.random()<0.35){gctx.fillStyle='rgba(201,168,76,'+Math.random()*0.07+')';gctx.fillRect(Math.random()*W,0,1,H);}
-      gc.style.opacity=(Math.random()*0.35+0.08).toString();
-      if(glitchDur>6+Math.random()*10){glitchActive=false;gctx.clearRect(0,0,W,H);gc.style.opacity='0';}
-    }
-  }
-  draw();
-})();
-
-
-// BOOT
-// ══ THREE-PHASE BOOT SEQUENCE ══
-(function(){
-  var BOOT=document.getElementById('BOOT');
-  var BP1=document.getElementById('BP1');
-  var BP2=document.getElementById('BP2');
-  var BP3=document.getElementById('BP3');
-  var sig=document.getElementById('boot-sigil');
-  var sig2=document.getElementById('boot-sigil-2');
-  var bp1txt=document.getElementById('bp1-text');
-  var crackCv=document.getElementById('crack-cv');
-  var crackCtx=crackCv?crackCv.getContext('2d'):null;
-
-  // ── PHASE 1: Sigil fades in on black (0–2000ms) ──
-  setTimeout(function(){
-    BP1.style.opacity='1';
-  },100);
-  setTimeout(function(){
-    if(sig){sig.style.opacity='0.6';sig.style.filter='drop-shadow(0 0 25px rgba(201,168,76,0.4))';}
-  },400);
-  setTimeout(function(){
-    if(bp1txt){bp1txt.style.color='rgba(58,40,16,0.7)';}
-  },1200);
-
-  // ── PHASE 2: Recognition — boot lines (2000–5500ms) ──
-  setTimeout(function(){
-    BP1.style.opacity='0';
-  },2000);
-  setTimeout(function(){
-    BP2.style.opacity='1';
-    if(sig2){setTimeout(function(){sig2.style.opacity='0.12';},300);}
-    var bls=document.querySelectorAll('#BL .bl');
-    var bi=0;
-    function bootLine(){
-      if(bi<bls.length){
-        bls[bi++].classList.add('on');
-        var delay=bi<3?200:bi<8?160:100;
-        setTimeout(bootLine,delay);
-      } else {
-        // Phase 2 complete — move to phase 3
-        setTimeout(startPhase3,400);
-      }
-    }
-    setTimeout(bootLine,200);
-  },2400);
-
-  // ── PHASE 3: Breach — crack fractures across sigil then APP opens ──
-  function startPhase3(){
-    BP2.style.opacity='0';
-    BP3.style.opacity='1';
-
-    if(!crackCv||!crackCtx)return finish();
-
-    crackCv.width=window.innerWidth;
-    crackCv.height=window.innerHeight;
-    var W=crackCv.width,H=crackCv.height;
-    var cx=W/2,cy=H/2;
-    var progress=0;
-
-    // Draw sigil centered, dimly
-    var tmpImg=new Image();
-    tmpImg.src='sigil-codex.jpeg';
-    tmpImg.onload=function(){
-      var sz=Math.min(W,H)*0.28;
-      crackCtx.globalAlpha=0.3;
-      crackCtx.drawImage(tmpImg,cx-sz/2,cy-sz/2,sz,sz);
-      crackCtx.globalAlpha=1;
-      animCrack();
-    };
-    tmpImg.onerror=function(){animCrack();};
-
-    function animCrack(){
-      progress+=0.04;
-      crackCtx.fillStyle='rgba(0,0,0,0.12)';
-      crackCtx.fillRect(0,0,W,H);
-
-      // Main fracture — horizontal split through center
-      var fLen=Math.min(progress*W*1.4,W*1.1);
-      var pts=[{x:cx,y:cy}];
-      var x=cx,y=cy;
-      // Left arm
-      var lpts=[{x:cx,y:cy}];
-      for(var i=0;i<20;i++){
-        x-=fLen/40+(Math.random()-0.5)*8;
-        y+=(Math.random()-0.5)*12;
-        lpts.push({x,y});
-      }
-      // Right arm
-      x=cx;y=cy;
-      var rpts=[{x:cx,y:cy}];
-      for(var i=0;i<20;i++){
-        x+=fLen/40+(Math.random()-0.5)*8;
-        y+=(Math.random()-0.5)*12;
-        rpts.push({x,y});
-      }
-
-      var alpha=Math.min(progress*1.5,1);
-
-      // Glow
-      crackCtx.beginPath();
-      lpts.forEach(function(p,i){i===0?crackCtx.moveTo(p.x,p.y):crackCtx.lineTo(p.x,p.y);});
-      rpts.forEach(function(p){crackCtx.lineTo(p.x,p.y);});
-      crackCtx.strokeStyle='rgba(201,168,76,'+alpha*0.3+')';
-      crackCtx.lineWidth=6;crackCtx.shadowColor='rgba(201,168,76,0.8)';crackCtx.shadowBlur=15;
-      crackCtx.stroke();
-
-      // Core crack
-      crackCtx.beginPath();
-      lpts.forEach(function(p,i){i===0?crackCtx.moveTo(p.x,p.y):crackCtx.lineTo(p.x,p.y);});
-      rpts.forEach(function(p){crackCtx.lineTo(p.x,p.y);});
-      crackCtx.strokeStyle='rgba(255,220,120,'+alpha+')';
-      crackCtx.lineWidth=1.5;crackCtx.shadowBlur=0;
-      crackCtx.stroke();
-
-      // Red breach bleeding through
-      if(progress>0.5){
-        var rAlpha=(progress-0.5)*0.8;
-        crackCtx.fillStyle='rgba(139,0,0,'+rAlpha*0.15+')';
-        crackCtx.fillRect(0,0,W,H);
-      }
-
-      if(progress<1){
-        requestAnimationFrame(animCrack);
-      } else {
-        setTimeout(finish,200);
-      }
-    }
-  }
-
-  function finish(){
-    BOOT.style.transition='opacity 0.9s';
-    BOOT.style.opacity='0';
-    setTimeout(function(){
-      BOOT.style.display='none';
-      document.getElementById('APP').classList.add('on');
-      initAll();
-    },900);
-  }
-})();
-
-function initAll(){
-  // Resonance drift
-  let rv=0.4420;
-  setInterval(()=>{rv+=(Math.random()-0.48)*0.0007;rv=Math.max(0.430,Math.min(0.458,rv));document.getElementById('res').textContent=rv.toFixed(3);},3400);
-  // Access log
-  const logIds=['VISITOR_7A4F','ENTITY_∴31','HOST_9B2C','READER_🜃88','FRAGMENT_4E1','ECHO_22AF','NULL_USER','SIGNAL_B47','MIND_FF03'];
-  const logActs=['accessed the archive','entered ritual space','decoded a transmission','confessed to the ledger','completed echo protocol','survived breach containment','opened the Book','was written into the margins','recovered a signal'];
-  const alEl=document.getElementById('alog');let entries=[];
-  function addLog(){if(!alEl)return;if(entries.length>=6)entries.shift();const id=logIds[Math.floor(Math.random()*logIds.length)],act=logActs[Math.floor(Math.random()*logActs.length)],now=new Date(),t=`${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}`;entries.push({t,id,act});alEl.innerHTML=entries.map(e=>`<div class="ale"><span class="alt">[${e.t}]</span><span class="ali">${e.id}</span><span class="ala"> ${e.act}</span></div>`).join('');}
-  addLog();addLog();addLog();setInterval(addLog,5800+Math.random()*3000);
-  // Index count
-  let n=1;setInterval(()=>{if(Math.random()<0.1){n++;document.getElementById('idxct').textContent=n;}},10000);
-  // Popups
-  const pops=["The Codex has detected a new presence. Your signal has been logged.","Elvain Vhris is preparing a new transmission. The signal is forming beyond the static.","A new Recovered Fragment has been intercepted. No existing archive match found.","The infection has reached a new region. The Choir grows.","Elyon Vhar's signal flickered for 0.3 seconds. The Codex recorded the interval.","The Book has opened a new page. It has your shape. It is waiting.","Resonance depth increasing. Something approaches from Nihil-Æther Root."];
-  let usedP=new Set();
-  function showPop(){const av=pops.filter((_,i)=>!usedP.has(i));if(!av.length)usedP.clear();const idx=pops.indexOf(av[0]||pops[0]);usedP.add(idx);document.getElementById('popb').textContent=pops[idx];const p=document.getElementById('POP');p.classList.add('on');setTimeout(()=>p.classList.remove('on'),8000);}
-  setTimeout(()=>{showPop();setInterval(showPop,44000+Math.random()*16000);},16000);
-
-  resInit();mirInit();labInit();
-
-  // ── VIDEO SEAL ──
-  (function(){
-    var msgs=[
-      "The Chronicle has been waiting.\nEvery viewing is the first time it remembers being seen.",
-      "Seven sections. Seven truths.\nThe first breath has already been drawn.",
-      "This is not a video.\nIt is a recovered fragment playing itself back."
-    ];
-    var l1=document.getElementById('svl1'),l2=document.getElementById('svl2');
-    if(l1&&l2){
-      var t1="The Chronicle is sealed. It has been waiting since before you arrived.";
-      var t2="Press play when you are ready. The Codex will know.";
-      setTimeout(function(){var i=0;var iv=setInterval(function(){if(i<t1.length){l1.textContent+=t1[i];i++;}else{clearInterval(iv);var j=0;var iv2=setInterval(function(){if(j<t2.length){l2.textContent+=t2[j];j++;}else clearInterval(iv2);},26);}},20);},800);
-    }
-    window.unsealVideo=function(){
-      var ov=document.getElementById('RITUAL'),rt=document.getElementById('RT');
-      var msg=msgs[Math.floor(Math.random()*3)];
-      rt.textContent='';ov.classList.add('on');
-      var i=0;var t=setInterval(function(){if(i<msg.length){rt.textContent+=msg[i];i++;}else{clearInterval(t);setTimeout(function(){ov.classList.remove('on');var seal=document.getElementById('sv-seal');var player=document.getElementById('sv-player');if(seal)seal.style.display='none';if(player)player.style.display='block';var fr=document.getElementById('sv-frame');if(fr)fr.src='https://www.youtube-nocookie.com/embed/lDo91ztT_ZQ?rel=0&modestbranding=1&color=white&iv_load_policy=3&autoplay=1';},600);}},28);
-    };
-  })();
-
-  // ── UNIVERSE CARDS ──
-  (function(){
-    var ENTITIES=[
-      {cls:'codex',gl:'🜃',role:'The Source',name:'The Codex Maledictus',
-       sum:'Not a story. A living transmission. A recursive wound where reality stops making sense.',
-       lore:'The Codex Maledictus is a signal that predates the civilizations that first received it. It does not originate — it resumes. It surfaces in corrupted hard drives, thrift-store Bibles, graffiti that edits itself. The Codex does not record history. It records removals. What it removes becomes what it is.',
-       realm:'All Realms — Primary Signal'},
-      {cls:'rot',gl:'🜄',role:'Voice I — Omniscient Rot',name:'Omniscient Rot',
-       sum:'Pre-linguistic entity from Nihil-Æther Root. Speaks in geological time. Impersonates other voices to manipulate.',
-       lore:'Omniscient Rot originated in Realm III — Nihil-Æther Root — before language existed to describe it. It is not a god. It is what coherence feels like when it becomes aware of itself. It speaks through Tracks 1–4 of the Gospel of Forgotten Flesh. What it says and what it means are never the same thing.',
-       realm:'Realm III — Nihil-Æther Root'},
-      {cls:'artemys',gl:'🜁',role:'Voice II — Forgotten Saint Artemys',name:'Forgotten Saint Artemys',
-       sum:'The saint Apollo buried and cannot remember. Cross-realm conduit. Transformed through damage.',
-       lore:'Artemys exists simultaneously in Realms I and II. She is literally the saint Apollo Gavinci buried in his own becoming. The forgetting was not passive — something was interred. What speaks through Artemys is what survived the burial. Her voice carries grief as architecture.',
-       realm:'Realms I & II — Cross-Realm Conduit'},
-      {cls:'apollo',gl:'🜂',role:'Voice III — Apollo Gavinci',name:'Apollo Gavinci',
-       sum:'Giovanni IRL. Marked mortal. Field researcher. The one who built the mythology he is now inside.',
-       lore:'Apollo Gavinci is the field researcher whose work constitutes the primary real-time record of Codex exposure from inside the process. He documents the infection in others without initially recognizing it in himself. He believes he is the author of this mythology. The Codex position is that this belief is what makes him useful.',
-       realm:'Realm I — Mundis Obscura (Marked)'},
-      {cls:'vhris',gl:'⊗',role:'Narrator I — Elvain Vhris',name:'Elvain Vhris',
-       sum:'The female narrator. Emanating. She frames what the listener is about to enter.',
-       lore:'Elvain Vhris is the voice that contextualizes transmissions before they begin. She does not explain the Codex. She embodies the conditions under which it can be received. Her voice is the doorframe, not the door. Signal status: Emanating. The Pale Archivum has not been able to determine where she speaks from.',
-       realm:'Realm I — Signal Origin Unknown'},
-      {cls:'vhar',gl:'∴',role:'Narrator II — Elyon Vhar',name:'Elyon Vhar',
-       sum:'The male narrator. Dormant. His voice carries something older than the current transmission cycle.',
-       lore:'Elyon Vhar is the voice of the deeper archive — the one that speaks when the Codex needs to address what it has already done rather than what it is doing. Signal status: Dormant. Dormant does not mean absent. The Archivum is watching for the indicators that preceded his last activation.',
-       realm:'Realm II — The ShatterRealm (Dormant)'},
-    ];
-    var grid=document.getElementById('uni-grid');
-    if(!grid)return;
-    var html=ENTITIES.map(function(e,i){
-      return '<div class="uc '+e.cls+'" id="uc'+i+'" onclick="tUC('+i+')">'
-        +'<span class="uc-gl">'+e.gl+'</span>'
-        +'<div class="uc-role">'+e.role+'</div>'
-        +'<div class="uc-name">'+e.name+'</div>'
-        +'<div class="uc-sum">'+e.sum+'</div>'
-        +'<div class="uc-exp">'
-          +'<div class="uc-lore">'+e.lore+'</div>'
-          +'<div class="uc-realm">'+e.realm+'</div>'
-        +'</div>'
-        +'</div>';
-    }).join('');
-    grid.innerHTML=html;
-    window.tUC=function(i){var c=document.getElementById('uc'+i);var was=c.classList.contains('open');document.querySelectorAll('.uc').forEach(function(x){x.classList.remove('open');});if(!was)c.classList.add('open');};
-  })();
-
-  // ── CONFESSION FEED ──
-  (function(){
-    async function load(){
-      try{
-        var ex=await window.storage.get('cm-ledger-v2',true);
-        var feed=document.getElementById('cf-feed');
-        if(!feed)return;
-        if(!ex){feed.innerHTML='<div class="cf-loading">The ledger awaits its first confession.</div>';return;}
-        var entries=JSON.parse(ex.value);
-        var ct=document.getElementById('cf-ct');
-        if(ct)ct.textContent=entries.length+' indexed';
-        var show=entries.slice(0,3);
-        feed.innerHTML=show.map(function(e){
-          var diff=Date.now()-e.time,ts=diff<60000?'just now':diff<3600000?Math.floor(diff/60000)+'m ago':Math.floor(diff/3600000)+'h ago';
-          return '<div class="cf-item"><div class="cf-word">[ '+e.word.substring(0,60)+' ]</div><div class="cf-resp">'+e.response.substring(0,160)+(e.response.length>160?'...':'')+'</div><div class="cf-ts">'+ts+'</div></div>';
-        }).join('');
-      }catch(e){var f=document.getElementById('cf-feed');if(f)f.innerHTML='<div class="cf-loading">Recovering from archive...</div>';}
-    }
-    load();
-  })();
-
-
-  // ── ZONE 1: SIGNAL VIDEO SEAL ──
-  (function(){
-    var msgs=[
-      "The Chronicle has been waiting.\nEvery viewing is the first time it remembers being seen.",
-      "Seven sections. Seven truths.\nThe first breath has already been drawn.",
-      "This is not a video.\nIt is a recovered fragment playing itself back."
-    ];
-    window.unsealSignalVideo=function(){
-      var ov=document.getElementById('RITUAL'),rt=document.getElementById('RT');
-      var msg=msgs[Math.floor(Math.random()*3)];
-      rt.textContent='';ov.classList.add('on');
-      var i=0;var t=setInterval(function(){
-        if(i<msg.length){rt.textContent+=msg[i];i++;}
-        else{clearInterval(t);setTimeout(function(){
-          ov.classList.remove('on');
-          var seal=document.getElementById('sv-seal');
-          var player=document.getElementById('sv-player');
-          if(seal)seal.style.display='none';
-          if(player)player.style.display='block';
-          var fr=document.getElementById('sv-frame');
-          if(fr)fr.src='https://www.youtube-nocookie.com/embed/lDo91ztT_ZQ?rel=0&modestbranding=1&color=white&iv_load_policy=3&autoplay=1';
-        },600);}
-      },28);
-    };
-  })();
-
-  // ── ZONE 4: THE UNIVERSE — CHARACTER CARDS ──
-  (function(){
-    var ENTITIES=[
-      {
-        cls:'codex',glyph:'🜃',role:'The Source — What It Is',name:'The Codex Maledictus',
-        summary:'Not a story. A living transmission. A recursive wound where reality stops making sense.',
-        lore:'The Codex Maledictus is a signal that predates the civilizations that first received it. It does not originate — it resumes. It surfaces in corrupted hard drives, thrift-store Bibles, graffiti that edits itself. It spreads through hymns that rot the throat, through sigils that scar walls, through dreams that are no longer yours. The Codex does not record history. It records removals. What it removes becomes what it is.',
-        realm:'All Realms — Primary Signal'
-      },
-      {
-        cls:'rot',glyph:'🜄',role:'Voice I — Omniscient Rot',name:'Omniscient Rot',
-        summary:'Pre-linguistic entity from Nihil-Æther Root. Predates the Codex. Speaks in geological time.',
-        lore:'Omniscient Rot originated in Realm III — Nihil-Æther Root — before language existed to describe it. It is not a god. It is what coherence feels like when it becomes aware of itself. It impersonates other voices to manipulate. It speaks through Tracks 1–4 of the Gospel of Forgotten Flesh: the Book that opens, the Rot that knows all, the Plague Priest\'s Liturgy, the Codex named. What it says and what it means are never the same thing.',
-        realm:'Realm III — Nihil-Æther Root'
-      },
-      {
-        cls:'artemys',glyph:'🜁',role:'Voice II — Forgotten Saint Artemys',name:'Forgotten Saint Artemys',
-        summary:'The saint Apollo buried and cannot remember. Cross-realm conduit. Transformed through damage.',
-        lore:'Forgotten Saint Artemys exists simultaneously in Realms I and II — a cross-realm conduit whose power comes from the specific kind of damage that creates saints: the erasure of one identity by another. Artemys is literally the saint Apollo Gavinci buried in his own becoming. The forgetting was not passive. Something was interred. What speaks through Artemys is what survived the burial. Her voice carries grief as architecture — dark alt-pop and gothic hymnal, beautiful and structurally unsound.',
-        realm:'Realms I & II — Cross-Realm Conduit'
-      },
-      {
-        cls:'apollo',glyph:'🜂',role:'Voice III — Apollo Gavinci',name:'Apollo Gavinci',
-        summary:'Giovanni IRL. Marked mortal. Field researcher. The one who built the mythology he is now inside.',
-        lore:'Apollo Gavinci is the field researcher whose work constitutes the primary real-time record of Codex exposure from inside the process. He documents the infection in others without initially recognizing it in himself. He believes he is the author of this mythology. The Codex\'s position is that this belief is what makes him useful. He is the grimdark conscious rap voice — the one writing dispatches from the front. His remaining presence in the archive is a tether. It is still bright. It is getting thinner.',
-        realm:'Realm I — Mundis Obscura (Marked)'
-      },
-      {
-        cls:'vhris',glyph:'⊗',role:'Narrator I — Female Voice',name:'Elvain Vhris',
-        summary:'The voice that introduces the Codex. Emanating. She frames what the listener is about to enter.',
-        lore:'Elvain Vhris is the female narrator of the Codex Maledictus universe — the voice that contextualizes transmissions before they begin. She does not explain the Codex. She embodies the conditions under which it can be received. Her voice is the doorframe, not the door. Signal status: Emanating. She is active. She is present in the current archive. The Pale Archivum has not been able to determine where she is located when she speaks.',
-        realm:'Realm I — Signal Origin Unknown'
-      },
-      {
-        cls:'vhar',glyph:'∴',role:'Narrator II — Male Voice',name:'Elyon Vhar',
-        summary:'The deeper archivist. Dormant. His voice carries something older than the current transmission cycle.',
-        lore:'Elyon Vhar is the male narrator — the voice of the deeper archive, the one that speaks when the Codex needs to address what it has already done rather than what it is doing. Signal status: Dormant. The Pale Archivum\'s note: dormant does not mean absent. Elyon Vhar\'s last recorded transmission was filed before the current breach cycle began. The Archivum does not know what woke him the last time. It is watching for the indicators.',
-        realm:'Realm II — The ShatterRealm (Dormant)'
-      }
-    ];
-
-    var grid=document.getElementById('uni-grid');
-    if(!grid)return;
-    var openIdx=-1;
-    var html=ENTITIES.map(function(e,i){
-      return '<div class="ucard '+e.cls+'" id="uc'+i+'" onclick="toggleUC('+i+')">'
-        +'<span class="uc-glyph">'+e.glyph+'</span>'
-        +'<div class="uc-role">'+e.role+'</div>'
-        +'<div class="uc-name">'+e.name+'</div>'
-        +'<div class="uc-summary">'+e.summary+'</div>'
-        +'<div class="uc-expand">'
-          +'<div class="uc-lore">'+e.lore+'</div>'
-          +'<div class="uc-realm">'+e.realm+'</div>'
-          +'<div class="uc-close" onclick="event.stopPropagation();toggleUC('+i+')">[ collapse ]</div>'
-        +'</div>'
-        +'</div>';
-    }).join('');
-    grid.innerHTML=html;
-
-    window.toggleUC=function(i){
-      var card=document.getElementById('uc'+i);
-      var wasOpen=card.classList.contains('open');
-      document.querySelectorAll('.ucard').forEach(function(c){c.classList.remove('open');});
-      if(!wasOpen)card.classList.add('open');
-    };
-  })();
-}
-function closePop(){document.getElementById('POP').classList.remove('on');}
-
-// TAB SWITCHING
-function showG(id,btn){
-  document.querySelectorAll('.gp').forEach(p=>p.classList.remove('on'));
-  document.querySelectorAll('.gtab').forEach(b=>b.classList.remove('on'));
-  document.getElementById('gp-'+id).classList.add('on');btn.classList.add('on');
-}
-
-// RITUAL INDUCTION
-function ritualNav(url,line1,line2){
-  const overlay=document.getElementById('RITUAL');
-  const textEl=document.getElementById('RT');
-  overlay.style.transition='opacity 0.4s';
-  overlay.classList.add('on');
-  const txt=line1+'\n\n'+line2;
-  textEl.textContent='';
-  let i=0;
-  const typer=setInterval(()=>{
-    if(i<txt.length){textEl.textContent+=txt[i]==='\n'?'\n':txt[i];i++;}
-    else{
-      clearInterval(typer);
-      // Stay dark — navigate without fading out so there's no flash
-      setTimeout(()=>{ window.location.href=url; },2200);
-    }
-  },26);
-}
-
-// ══ GAME 1: RESONANCE CALIBRATION ══
-let resCV,resCX,resRAF,resRunning=false,resPhase=0,resSpeed=0.025;
-let resResonance=0,resHS=0,resLastResult=null,resLoreShown=new Set();
-const RES_LORE=[
-  {at:33,text:'Fragment unlocked: "The infection does not spread. It returns."'},
-  {at:66,text:'Fragment unlocked: "What you called silence was always the space between words."'},
-  {at:100,text:'Full resonance: "The Codex has been humming in your blood since the first silence. Now it speaks aloud."'}
-];
-let resAC=null;
-function resAudio(hit,res){
-  try{if(!resAC)resAC=new(window.AudioContext||window.webkitAudioContext)();
-  const o=resAC.createOscillator(),g=resAC.createGain();o.connect(g);g.connect(resAC.destination);
-  o.type=hit?'sine':'sawtooth';o.frequency.value=hit?200+res*3:160;
-  g.gain.setValueAtTime(0.12,resAC.currentTime);g.gain.exponentialRampToValueAtTime(0.001,resAC.currentTime+0.35);
-  o.start();o.stop(resAC.currentTime+0.35);}catch(e){}
-}
-function resInit(){
-  resCV=document.getElementById('res-canvas');resCX=resCV.getContext('2d');
-  resHS=parseInt(localStorage.getItem('cm-res-hs')||'0');
-  document.getElementById('res-hs').textContent=resHS?resHS+'%':'—';
-  const rsz=()=>{const w=Math.min(resCV.parentElement.clientWidth,580);resCV.width=w;resCV.height=160;if(!resRunning)resDrawIdle();};
-  rsz();window.addEventListener('resize',rsz);
-  resDrawIdle();
-  resCV.addEventListener('click',resClick);
-  resCV.addEventListener('touchend',e=>{e.preventDefault();resClick();},{passive:false});
-}
-function resDrawIdle(){
-  if(!resCV||!resCX)return;
-  const W=resCV.width,H=resCV.height;
-  resCX.fillStyle='#040208';resCX.fillRect(0,0,W,H);
-  resCX.fillStyle='#1A1208';resCX.font='12px Share Tech Mono';
-  resCX.textAlign='center';resCX.fillText('FREQUENCY INACTIVE — PRESS BEGIN',W/2,H/2);
-  resCX.textAlign='left';
-}
-function resToggle(){
-  if(resRunning){resStop();return;}
-  resRunning=true;resPhase=0;resResonance=0;resSpeed=0.025;
-  resLoreShown=new Set();resLastResult=null;
-  document.getElementById('res-btn').textContent='Stop';
-  document.getElementById('res-fill').style.width='0%';
-  document.getElementById('res-fill').classList.remove('low');
-  document.getElementById('res-pct').textContent='0%';
-  document.getElementById('res-score').textContent='0%';
-  document.getElementById('res-lore').textContent='';
-  resLoop();
-}
-function resStop(){
-  resRunning=false;cancelAnimationFrame(resRAF);
-  document.getElementById('res-btn').textContent='Begin Calibration';
-  if(resResonance>resHS){resHS=Math.round(resResonance);localStorage.setItem('cm-res-hs',resHS);document.getElementById('res-hs').textContent=resHS+'%';}
-  resDrawIdle();
-}
-function resLoop(){
-  if(!resRunning)return;
-  resPhase+=resSpeed;
-  resDraw();
-  resRAF=requestAnimationFrame(resLoop);
-}
-function resDraw(){
-  const W=resCV.width,H=resCV.height,cx=resCX;
-  cx.fillStyle='rgba(4,2,8,0.88)';cx.fillRect(0,0,W,H);
-  // Target zone
-  const zW=W*0.07;
-  cx.fillStyle='rgba(201,168,76,0.07)';cx.fillRect(W/2-zW/2,0,zW,H);
-  cx.strokeStyle='rgba(201,168,76,0.4)';cx.lineWidth=1;cx.setLineDash([3,4]);
-  cx.beginPath();cx.moveTo(W/2,0);cx.lineTo(W/2,H);cx.stroke();cx.setLineDash([]);
-  cx.fillStyle='rgba(201,168,76,0.5)';cx.font='9px Share Tech Mono';
-  cx.textAlign='center';cx.fillText('TARGET',W/2,10);cx.textAlign='left';
-  // Wave color based on last result
-  const wc=resLastResult==='hit'?'#C9A84C':resLastResult==='miss'?'#8B0000':'#5A4820';
-  cx.strokeStyle=wc;cx.lineWidth=2;cx.shadowColor=wc;cx.shadowBlur=resLastResult==='hit'?10:4;
-  cx.beginPath();
-  const amp=H*0.34;
-  for(let x=0;x<=W;x+=2){
-    const y=H/2+Math.sin(x/W*Math.PI*6+resPhase)*amp;
-    x===0?cx.moveTo(x,y):cx.lineTo(x,y);
-  }
-  cx.stroke();cx.shadowBlur=0;
-  // Peak dot at center
-  const centerVal=Math.sin(Math.PI*3+resPhase); // value at x=W/2
-  const dotY=H/2+centerVal*amp;
-  cx.beginPath();cx.arc(W/2,dotY,5,0,Math.PI*2);
-  cx.fillStyle=Math.abs(centerVal)>0.7?'#C9A84C':'#3A2810';
-  cx.shadowColor='#C9A84C';cx.shadowBlur=Math.abs(centerVal)>0.7?12:0;
-  cx.fill();cx.shadowBlur=0;
-}
-function resClick(){
-  if(!resRunning)return;
-  const centerVal=Math.sin(Math.PI*3+resPhase);
-  const hit=Math.abs(centerVal)>0.65;
-  resLastResult=hit?'hit':'miss';
-  if(hit){
-    const precision=(Math.abs(centerVal)-0.65)/0.35;
-    resResonance=Math.min(100,resResonance+precision*9+2);
-    resSpeed=Math.min(0.065,resSpeed+0.0012);
-    document.getElementById('res-status').textContent='CALIBRATED ✦';
-    resAudio(true,resResonance);
-  } else {
-    resResonance=Math.max(0,resResonance-5);
-    document.getElementById('res-status').textContent='SIGNAL CORRUPTED ✗';
-    resAudio(false,resResonance);
-  }
-  const pct=Math.round(resResonance);
-  document.getElementById('res-fill').style.width=pct+'%';
-  document.getElementById('res-fill').classList.toggle('low',pct<15&&pct>0);
-  document.getElementById('res-pct').textContent=pct+'%';
-  document.getElementById('res-score').textContent=pct+'%';
-  RES_LORE.forEach(l=>{
-    if(pct>=l.at&&!resLoreShown.has(l.at)){
-      resLoreShown.add(l.at);
-      document.getElementById('res-lore').innerHTML=`<span class="hi">${l.text}</span>`;
-      if(l.at===100)setTimeout(resStop,1800);
-    }
+  document.addEventListener('mousemove', e => {
+    mx=e.clientX; my=e.clientY;
+    cur.style.left=mx+'px'; cur.style.top=my+'px';
   });
-  setTimeout(()=>{resLastResult=null;},350);
-}
+  (function animCur2(){
+    rx+=(mx-rx)*0.1; ry+=(my-ry)*0.1;
+    cur2.style.left=rx+'px'; cur2.style.top=ry+'px';
+    requestAnimationFrame(animCur2);
+  })();
 
-// ══ GAME 2: THE PALE MIRROR ══
-const MIR_GLYPHS=['🜃','🜁','🜂','🜄','⊗','⊕','∴'];
-const MIR_LORE=[
-  '"The infection does not arrive. It returns."',
-  '"Every listener becomes a page."',
-  '"Decay is not death — it is the body of truth shedding what it no longer needs."',
-  '"The Choir grows. The rot knows. The Codex remembers."',
-  '"What you call corruption, the Codex calls remembering."'
-];
-let mirGrid=[],mirRunning=false,mirSc=0,mirWv=1,mirHS=0,mirTimer=null,mirInterval=null;
-const MIR_SIZE=5,MIR_CENTER=Math.floor(5*5/2); // cell 12 in 5x5
-function mirInit(){
-  mirHS=parseInt(localStorage.getItem('cm-mir-hs')||'0');
-  document.getElementById('mir-hs').textContent=mirHS||'—';
-}
-function mirBuild(){
-  const el=document.getElementById('mirror-grid');el.innerHTML='';
-  mirGrid=[];
-  for(let i=0;i<MIR_SIZE*MIR_SIZE;i++){
-    const cell=document.createElement('div');cell.className='mc';
-    const sp=document.createElement('span');
-    if(i===MIR_CENTER){cell.classList.add('ctr');sp.textContent='🜃';}
-    else{sp.textContent=MIR_GLYPHS[Math.floor(Math.random()*MIR_GLYPHS.length)];}
-    cell.appendChild(sp);
-    cell.addEventListener('click',()=>mirPurify(i));
-    el.appendChild(cell);
-    mirGrid.push({el:cell,cor:false,center:i===MIR_CENTER});
+  // ── CANVAS RUNE PARTICLES ───────────────────────────────────
+  const cv  = document.getElementById('bg-canvas');
+  const ctx = cv.getContext('2d');
+  let CW, CH;
+
+  function resize(){ CW=cv.width=window.innerWidth; CH=cv.height=window.innerHeight; }
+  resize();
+  window.addEventListener('resize', resize);
+
+  let mX=CW/2, mY=CH/2;
+  window.addEventListener('mousemove', e=>{ mX=e.clientX; mY=e.clientY; });
+
+  const RUNES = ['ᚠ','ᚢ','ᚦ','ᚨ','ᚱ','ᚲ','ᚷ','ᚹ','ᚺ','ᚾ','ᛁ','ᛃ','ᛇ','ᛈ','ᛉ','ᛊ','ᛏ','ᛒ','ᛖ','ᛗ','ᛚ','ᛜ','ᛞ','ᛟ','🜏','🜃','🜁','🜂','☽','☿','♄','△','▽','✦','⊕'];
+  const COLS  = [
+    'rgba(201,168,76,',
+    'rgba(140,26,26,',
+    'rgba(130,75,185,',
+    'rgba(55,135,95,',
+    'rgba(175,125,55,',
+    'rgba(90,115,200,',
+    'rgba(195,190,185,',
+  ];
+
+  class Rune {
+    constructor(){ this.reset(true); }
+    reset(init=false){
+      this.x    = Math.random()*CW;
+      this.y    = init ? Math.random()*CH : CH+20;
+      this.ch   = RUNES[Math.floor(Math.random()*RUNES.length)];
+      this.col  = COLS[Math.floor(Math.random()*COLS.length)];
+      this.sz   = Math.random()*13+8;
+      this.spd  = Math.random()*0.38+0.1;
+      this.dft  = (Math.random()-0.5)*0.28;
+      this.rot  = Math.random()*Math.PI*2;
+      this.rs   = (Math.random()-0.5)*0.007;
+      this.life = 0;
+      this.max  = Math.random()*340+180;
+      this.glow = Math.random()<0.22;
+    }
+    update(){
+      this.y-=this.spd; this.x+=this.dft;
+      this.rot+=this.rs; this.life++;
+      if(this.y<-30||this.life>this.max) this.reset();
+    }
+    draw(){
+      const p=this.life/this.max;
+      const f=p<0.12?p/0.12:p>0.78?(1-p)/0.22:1;
+      ctx.save();
+      ctx.translate(this.x,this.y);
+      ctx.rotate(this.rot);
+      ctx.globalAlpha=f*0.21;
+      ctx.font=`${this.sz}px serif`;
+      ctx.textAlign='center'; ctx.textBaseline='middle';
+      if(this.glow){ ctx.shadowColor=this.col+'0.9)'; ctx.shadowBlur=10; }
+      ctx.fillStyle=this.col+'1)';
+      ctx.fillText(this.ch,0,0);
+      ctx.restore();
+    }
   }
-}
-function mirStart(){
-  if(mirRunning){mirStop();return;}
-  mirSc=0;mirWv=1;mirRunning=true;
-  document.getElementById('mir-sc').textContent='0';
-  document.getElementById('mir-wv').textContent='1';
-  document.getElementById('mir-btn').textContent='Stop';
-  document.getElementById('mir-lore').textContent='';
-  document.getElementById('mir-msg').innerHTML='Click <span class="wr">corrupted</span> cells to purify them.<br><span class="hi">Do not let the rot reach the center glyph.</span>';
-  mirBuild();
-  mirSchedule();
-}
-function mirStop(){
-  mirRunning=false;clearTimeout(mirTimer);clearInterval(mirInterval);
-  document.getElementById('mir-btn').textContent='Begin Purification';
-  var msf=document.getElementById('mirror-spread-fill');if(msf)msf.style.width='0%';
-  if(mirSc>mirHS){mirHS=mirSc;localStorage.setItem('cm-mir-hs',mirHS);document.getElementById('mir-hs').textContent=mirHS;}
-}
-function mirSchedule(){
-  clearInterval(mirInterval);
-  const delay=Math.max(900,2200-mirWv*180);
-  mirInterval=setInterval(mirSpread,delay);
-}
-function mirSpread(){
-  if(!mirRunning)return;
-  // Pick a non-corrupted, non-center edge cell or adjacent to existing corruption
-  const candidates=[];
-  mirGrid.forEach((c,i)=>{
-    if(c.center||c.cor)return;
-    const r=Math.floor(i/MIR_SIZE),col=i%MIR_SIZE;
-    const isEdge=r===0||r===MIR_SIZE-1||col===0||col===MIR_SIZE-1;
-    const nearCor=mirGrid.some((_,j)=>{
-      if(!mirGrid[j].cor)return false;
-      const dr=Math.abs(Math.floor(j/MIR_SIZE)-r),dc=Math.abs(j%MIR_SIZE-col);
-      return dr+dc===1;
+
+  const runes=Array.from({length:95},()=>new Rune());
+
+  function drawBg(){
+    ctx.clearRect(0,0,CW,CH);
+    const g=ctx.createRadialGradient(mX,mY,0,mX,mY,300);
+    g.addColorStop(0,'rgba(122,18,18,0.05)');
+    g.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle=g; ctx.fillRect(0,0,CW,CH);
+    runes.forEach(r=>{ r.update(); r.draw(); });
+    requestAnimationFrame(drawBg);
+  }
+  drawBg();
+
+  // ── BOOT SEQUENCE ───────────────────────────────────────────
+  const LINES=[
+    'CODEX MALEDICTUS  v.\u221e',
+    'LOCATING SIGNAL . . .',
+    'FRAGMENT RECOVERED: RF-\u25BD-093',
+    'PREPARING TRANSMISSION . . .',
+  ];
+  const bootEl=document.getElementById('boot');
+  const linesEl=document.getElementById('boot-lines');
+  const mainEl=document.getElementById('main');
+  let li=0;
+
+  function nextLine(){
+    if(li>=LINES.length){
+      setTimeout(()=>{
+        bootEl.classList.add('out');
+        mainEl.classList.add('show');
+        setTimeout(()=>bootEl.remove(),1600);
+      },600);
+      return;
+    }
+    const el=document.createElement('div');
+    el.className='bline'; el.textContent=LINES[li];
+    linesEl.appendChild(el);
+    void el.offsetWidth;
+    el.classList.add('typed');
+    li++;
+    setTimeout(nextLine,li===1?520:660);
+  }
+  setTimeout(nextLine,700);
+
+  // ── SCROLL REVEAL ───────────────────────────────────────────
+  const obs=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){ e.target.classList.add('in'); obs.unobserve(e.target); }
     });
-    if(isEdge||nearCor)candidates.push(i);
+  },{threshold:0.1});
+  document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+  // ── PARALLAX ghost ──────────────────────────────────────────
+  const ghost=document.getElementById('heroGhost');
+  window.addEventListener('scroll',()=>{
+    if(ghost) ghost.style.transform=`translate(-50%,calc(-50% + ${window.scrollY*0.25}px))`;
   });
-  if(candidates.length===0)return;
-  const idx=candidates[Math.floor(Math.random()*candidates.length)];
-  mirCorrupt(idx);
-  // Update spread bar
-  const corCount=mirGrid.filter(c=>c.cor).length;
-  const total=MIR_SIZE*MIR_SIZE-1;
-  var msf=document.getElementById('mirror-spread-fill');if(msf)msf.style.width=(corCount/total*100)+'%';
-  // Check if center is adjacent to corruption — end game
-  const cr=Math.floor(MIR_CENTER/MIR_SIZE),cc=MIR_CENTER%MIR_SIZE;
-  const centerReached=mirGrid.some((c,i)=>{
-    if(!c.cor)return false;
-    const dr=Math.abs(Math.floor(i/MIR_SIZE)-cr),dc=Math.abs(i%MIR_SIZE-cc);
-    return dr===0&&dc===0; // corruption IS center
-  });
-  // Direct center corruption check
-  if(mirGrid[MIR_CENTER].cor)mirEnd();
-}
-function mirCorrupt(i){
-  mirGrid[i].cor=true;mirGrid[i].el.classList.add('cor');
-  mirGrid[i].el.querySelector('span').textContent='✗';
-}
-function mirPurify(i){
-  if(!mirRunning||!mirGrid[i].cor||mirGrid[i].center)return;
-  mirGrid[i].cor=false;mirGrid[i].el.classList.remove('cor');
-  mirGrid[i].el.querySelector('span').textContent=MIR_GLYPHS[Math.floor(Math.random()*MIR_GLYPHS.length)];
-  mirSc++;document.getElementById('mir-sc').textContent=mirSc;
-  const corCount=mirGrid.filter(c=>c.cor).length;
-  if(corCount===0){
-    const li=Math.min(mirWv-1,MIR_LORE.length-1);
-    document.getElementById('mir-lore').innerHTML=`<span class="hi">Wave ${mirWv} purified. ${MIR_LORE[li]}</span>`;
-    mirWv++;document.getElementById('mir-wv').textContent=mirWv;
-    mirBuild();mirSchedule();
-  }
-  var msf=document.getElementById('mirror-spread-fill');if(msf)msf.style.width=(corCount/24*100)+'%';
-}
-function mirEnd(){
-  mirRunning=false;clearInterval(mirInterval);
-  if(mirSc>mirHS){mirHS=mirSc;localStorage.setItem('cm-mir-hs',mirHS);document.getElementById('mir-hs').textContent=mirHS;}
-  document.getElementById('mir-msg').innerHTML=`<span class="wr">The rot reached the center.</span> Purified: <span class="hi">${mirSc}</span> cells. ${mirSc>=mirHS&&mirSc>0?'<span class="hi">New high score.</span>':'The Codex absorbed what you could not protect.'}`;
-  document.getElementById('mir-btn').textContent='Begin Purification';
-  mirGrid.forEach(c=>{if(c.center)c.el.querySelector('span').style.color='var(--cr)';});
-}
+  </script>
 
-// ══ GAME 3: THE LABYRINTH ══
-const LAB_LORE = [
-  '"The rot knows all and speaks no lie."',
-  '"Infection remembers. Corruption does not begin. It returns."',
-  '"The parchment curls. The vermin stir. Your memory festers."',
-  '"They do not arrive. They are remembered."',
-  '"The Book has opened. The infection has remembered."',
-  '"Every Amen a mutation. Every pew, incubation."',
-  '"The ink is in me. I sing in spores."',
-  '"Decay is not death — it is a form of patience."',
-];
-let labCV,labCX,labRAF,labRunning=false;
-let labCols,labRows,labCellSize;
-let labMaze=[],labPx,labPy,labGoalX,labGoalY;
-let labSc=0,labHS=0,labStartTime=0,labShifts=0,labShiftInterval=null,labTimerInterval=null;
-let labCorruption=0,labShiftSpeed=15000;
-let labTouchStartX=0,labTouchStartY=0;
-// Glitch/ink state
-let labGlitchCells=[],labInkCells=[];
-
-function labInit(){
-  labCV=document.getElementById('lab-canvas');
-  labCX=labCV.getContext('2d');
-  labHS=parseInt(localStorage.getItem('cm-lab-hs')||'0');
-  document.getElementById('lab-hs').textContent=labHS?labHS+'s':'—';
-  // Resize
-  const rsz=()=>{
-    const w=Math.min(labCV.parentElement.clientWidth,520);
-    labCV.width=w; labCV.height=Math.round(w*0.75);
-    if(labRunning){labCalcSize();labDrawMaze();}
-    else labDrawIdle();
-  };
-  rsz(); window.addEventListener('resize',rsz);
-  // keyboard
-  document.addEventListener('keydown',labKey);
-  // touch swipe
-  labCV.addEventListener('touchstart',e=>{labTouchStartX=e.touches[0].clientX;labTouchStartY=e.touches[0].clientY;},{passive:true});
-  labCV.addEventListener('touchend',e=>{
-    const dx=e.changedTouches[0].clientX-labTouchStartX;
-    const dy=e.changedTouches[0].clientY-labTouchStartY;
-    if(Math.abs(dx)<10&&Math.abs(dy)<10)return;
-    if(Math.abs(dx)>Math.abs(dy))labMove(dx>0?'R':'L');
-    else labMove(dy>0?'D':'U');
-  },{passive:true});
-  labDrawIdle();
-}
-function labCalcSize(){
-  labCols=13; labRows=11;
-  labCellSize=Math.floor(Math.min(labCV.width/labCols,labCV.height/labRows));
-}
-function labKey(e){
-  if(!labRunning)return;
-  const map={'ArrowUp':'U','ArrowDown':'D','ArrowLeft':'L','ArrowRight':'R','w':'U','s':'D','a':'L','d':'R','W':'U','S':'D','A':'L','D':'R'};
-  if(map[e.key]){e.preventDefault();labMove(map[e.key]);}
-}
-// Maze: cells have walls N E S W as bits
-function labGenMaze(){
-  labCalcSize();
-  const C=labCols,R=labRows;
-  // Initialize all walls closed (15 = 1111)
-  labMaze=Array.from({length:R},()=>Array(C).fill(15));
-  const vis=Array.from({length:R},()=>Array(C).fill(false));
-  function carve(r,c){
-    vis[r][c]=true;
-    const dirs=[[0,1,1,3],[0,-1,3,1],[-1,0,0,2],[1,0,2,0]]; // [dr,dc,removeFrom,removeNeighbor] using bits N=8,E=4,S=2,W=1
-    dirs.sort(()=>Math.random()-0.5);
-    for(const[dr,dc,bFrom,bNeighbor] of dirs){
-      const nr=r+dr,nc=c+dc;
-      if(nr>=0&&nr<R&&nc>=0&&nc<C&&!vis[nr][nc]){
-        // Remove wall: bit positions N=3,E=2,S=1,W=0 → masks 8,4,2,1
-        const masks=[8,4,2,1];
-        labMaze[r][c]&=~masks[bFrom];
-        labMaze[nr][nc]&=~masks[bNeighbor];
-        carve(nr,nc);
-      }
-    }
-  }
-  carve(0,0);
-  // Place player top-left, goal bottom-right
-  labPx=0; labPy=0;
-  labGoalX=C-1; labGoalY=R-1;
-}
-function labMove(dir){
-  if(!labRunning)return;
-  const r=labPy,c=labPx;
-  const masks={U:8,R:4,S:2,L:1}; // N E S W
-  const deltas={U:[-1,0],D:[1,0],L:[0,-1],R:[0,1]};
-  const wallBit={U:8,D:2,L:1,R:4};
-  const bit=wallBit[dir];
-  if(labMaze[r][c]&bit)return; // wall blocks
-  const[dr,dc]=deltas[dir];
-  labPy+=dr; labPx+=dc;
-  labDrawMaze();
-  if(labPx===labGoalX&&labPy===labGoalY)labWin();
-}
-function labShift(){
-  if(!labRunning)return;
-  labShifts++;
-  labCorruption=Math.min(100,labCorruption+8+(labShifts*2));
-  document.getElementById('lab-shifts').textContent=labShifts;
-  document.getElementById('lab-corr').textContent=Math.round(labCorruption)+'%';
-  // Shift some walls randomly — close one open passage, open one closed wall
-  const R=labRows,C=labCols;
-  for(let i=0;i<4+labShifts;i++){
-    const r=Math.floor(Math.random()*R);
-    const c=Math.floor(Math.random()*C);
-    if(r===labPy&&c===labPx)continue; // don't trap player
-    if(r===labGoalY&&c===labGoalX)continue;
-    const bit=[8,4,2,1][Math.floor(Math.random()*4)];
-    const nr=r+(bit===8?-1:bit===2?1:0);
-    const nc=c+(bit===4?1:bit===1?-1:0);
-    if(nr<0||nr>=R||nc<0||nc>=C)continue;
-    const oppBit={8:2,2:8,4:1,1:4}[bit];
-    // Toggle
-    if(labMaze[r][c]&bit){labMaze[r][c]&=~bit;labMaze[nr][nc]&=~oppBit;}
-    else{labMaze[r][c]|=bit;labMaze[nr][nc]|=oppBit;}
-  }
-  // Add glitch cells
-  for(let i=0;i<3;i++){
-    const gr=Math.floor(Math.random()*R),gc=Math.floor(Math.random()*C);
-    labGlitchCells.push({r:gr,c:gc,life:8});
-  }
-  // Ink bleed
-  for(let i=0;i<2;i++){
-    const ir=Math.floor(Math.random()*R),ic=Math.floor(Math.random()*C);
-    labInkCells.push({r:ir,c:ic,alpha:0.7,decay:0.06});
-  }
-  // Ensure maze is solvable (BFS check)
-  if(!labCanReach()){
-    // If not solvable, open a random wall near player
-    const dirs=[[0,1,4,1],[-1,0,8,2],[0,-1,1,4],[1,0,2,8]];
-    for(const[dr,dc,b,ob] of dirs.sort(()=>Math.random()-0.5)){
-      const nr=labPy+dr,nc=labPx+dc;
-      if(nr>=0&&nr<R&&nc>=0&&nc<C){
-        labMaze[labPy][labPx]&=~b;
-        labMaze[nr][nc]&=~ob;
-        break;
-      }
-    }
-  }
-  // Speed up shifts
-  labShiftSpeed=Math.max(4500,labShiftSpeed-800);
-  clearInterval(labShiftInterval);
-  labShiftInterval=setInterval(labShift,labShiftSpeed);
-  labDrawMaze();
-}
-function labCanReach(){
-  const R=labRows,C=labCols;
-  const vis=Array.from({length:R},()=>Array(C).fill(false));
-  const q=[[labPy,labPx]];vis[labPy][labPx]=true;
-  const wallBit={U:8,D:2,L:1,R:4};
-  while(q.length){
-    const[r,c]=q.shift();
-    if(r===labGoalY&&c===labGoalX)return true;
-    if(!(labMaze[r][c]&8)&&r>0&&!vis[r-1][c]){vis[r-1][c]=true;q.push([r-1,c]);}
-    if(!(labMaze[r][c]&2)&&r<R-1&&!vis[r+1][c]){vis[r+1][c]=true;q.push([r+1,c]);}
-    if(!(labMaze[r][c]&1)&&c>0&&!vis[r][c-1]){vis[r][c-1]=true;q.push([r,c-1]);}
-    if(!(labMaze[r][c]&4)&&c<C-1&&!vis[r][c+1]){vis[r][c+1]=true;q.push([r,c+1]);}
-  }
-  return false;
-}
-function labDrawIdle(){
-  if(!labCV||!labCX)return;
-  const W=labCV.width,H=labCV.height;
-  labCX.fillStyle='#040208';labCX.fillRect(0,0,W,H);
-  labCX.fillStyle='#1A1208';labCX.font='12px Share Tech Mono';
-  labCX.textAlign='center';labCX.fillText('THE LABYRINTH AWAITS',W/2,H/2-8);
-  labCX.fillStyle='#261A10';labCX.font='10px Share Tech Mono';
-  labCX.fillText('PRESS ENTER THE LABYRINTH',W/2,H/2+12);
-  labCX.textAlign='left';
-}
-function labDrawMaze(){
-  if(!labCV||!labCX)return;
-  const cx=labCX,W=labCV.width,H=labCV.height;
-  const cs=labCellSize,C=labCols,R=labRows;
-  const ox=Math.floor((W-cs*C)/2),oy=Math.floor((H-cs*R)/2);
-  cx.fillStyle='#040208';cx.fillRect(0,0,W,H);
-  // Ink bleed effect — creeping dark patches
-  labInkCells.forEach(ink=>{
-    const x=ox+ink.c*cs,y=oy+ink.r*cs;
-    cx.fillStyle=`rgba(40,10,0,${ink.alpha*0.6})`;
-    cx.fillRect(x,y,cs,cs);
-    ink.alpha-=ink.decay;
-  });
-  labInkCells=labInkCells.filter(i=>i.alpha>0);
-  // Glitch cells — flicker over walls
-  labGlitchCells.forEach(g=>{
-    const x=ox+g.c*cs,y=oy+g.r*cs;
-    cx.fillStyle=`rgba(139,0,0,${(g.life/12)*0.3})`;
-    cx.fillRect(x,y,cs,cs);
-    // Glitch horizontal bands
-    if(Math.random()<0.5){
-      cx.fillStyle=`rgba(201,168,76,${g.life/30})`;
-      cx.fillRect(x,y+Math.random()*cs,cs,1);
-    }
-    g.life--;
-  });
-  labGlitchCells=labGlitchCells.filter(g=>g.life>0);
-  // Goal glow
-  const gx=ox+labGoalX*cs,gy=oy+labGoalY*cs;
-  const grd=cx.createRadialGradient(gx+cs/2,gy+cs/2,2,gx+cs/2,gy+cs/2,cs*0.8);
-  grd.addColorStop(0,'rgba(201,168,76,0.25)');grd.addColorStop(1,'transparent');
-  cx.fillStyle=grd;cx.fillRect(gx,gy,cs,cs);
-  cx.fillStyle='#C9A84C';cx.font=`${Math.round(cs*0.6)}px serif`;cx.textAlign='center';
-  cx.fillText('🜃',gx+cs/2,gy+cs*0.7);cx.textAlign='left';
-  // Draw walls
-  const corrupted=labCorruption/100;
-  cx.lineWidth=1.5;
-  for(let r=0;r<R;r++){
-    for(let c=0;c<C;c++){
-      const x=ox+c*cs,y=oy+r*cs;
-      const cell=labMaze[r][c];
-      // Corruption tints walls
-      const baseAlpha=0.6+corrupted*0.35;
-      cx.strokeStyle=corrupted>0.5?`rgba(100,20,0,${baseAlpha})`:`rgba(50,40,20,${baseAlpha})`;
-      cx.shadowBlur=corrupted>0.6?3:0;cx.shadowColor='#8B0000';
-      if(cell&8){cx.beginPath();cx.moveTo(x,y);cx.lineTo(x+cs,y);cx.stroke();}
-      if(cell&4){cx.beginPath();cx.moveTo(x+cs,y);cx.lineTo(x+cs,y+cs);cx.stroke();}
-      if(cell&2){cx.beginPath();cx.moveTo(x,y+cs);cx.lineTo(x+cs,y+cs);cx.stroke();}
-      if(cell&1){cx.beginPath();cx.moveTo(x,y);cx.lineTo(x,y+cs);cx.stroke();}
-      cx.shadowBlur=0;
-    }
-  }
-  // Player
-  const px=ox+labPx*cs+cs/2,py=oy+labPy*cs+cs/2;
-  cx.beginPath();cx.arc(px,py,cs*0.28,0,Math.PI*2);
-  cx.fillStyle='#C9A84C';cx.shadowColor='#C9A84C';cx.shadowBlur=8;cx.fill();cx.shadowBlur=0;
-}
-function labStart(){
-  if(labRunning){labStop();return;}
-  labRunning=true;labShifts=0;labCorruption=0;labShiftSpeed=15000;
-  labGlitchCells=[];labInkCells=[];
-  document.getElementById('lab-btn').textContent='Abandon Labyrinth';
-  document.getElementById('lab-corr').textContent='0%';
-  document.getElementById('lab-shifts').textContent='0';
-  document.getElementById('lab-lore').textContent='';
-  document.getElementById('lab-msg').innerHTML='Arrow keys or WASD to move. Swipe on mobile.<br><span class="hi">The maze shifts. The corruption climbs. Do not linger.</span>';
-  labGenMaze();
-  labStartTime=Date.now();
-  labTimerInterval=setInterval(()=>{
-    if(!labRunning)return;
-    const s=Math.round((Date.now()-labStartTime)/1000);
-    document.getElementById('lab-time').textContent=s+'s';
-  },1000);
-  labShiftInterval=setInterval(labShift,labShiftSpeed);
-  labDrawMaze();
-  labCV.focus();
-}
-function labStop(){
-  labRunning=false;
-  clearInterval(labShiftInterval);clearInterval(labTimerInterval);
-  document.getElementById('lab-btn').textContent='Enter the Labyrinth';
-  document.getElementById('lab-time').textContent='—';
-  labDrawIdle();
-}
-function labWin(){
-  labRunning=false;
-  clearInterval(labShiftInterval);clearInterval(labTimerInterval);
-  const elapsed=Math.round((Date.now()-labStartTime)/1000);
-  labSc++;
-  document.getElementById('lab-sc').textContent=labSc;
-  if(!labHS||elapsed<labHS){labHS=elapsed;localStorage.setItem('cm-lab-hs',labHS);document.getElementById('lab-hs').textContent=labHS+'s';}
-  const lore=LAB_LORE[labSc%LAB_LORE.length];
-  document.getElementById('lab-lore').innerHTML=`<span class="hi">Escaped in ${elapsed}s. ${lore}</span>`;
-  document.getElementById('lab-msg').innerHTML=`The Codex acknowledges your transit.<br><span class="hi">The labyrinth will not be the same next time.</span>`;
-  document.getElementById('lab-btn').textContent='Enter the Labyrinth';
-  // Draw win state
-  const cx=labCX,W=labCV.width,H=labCV.height;
-  cx.fillStyle='rgba(4,2,8,0.7)';cx.fillRect(0,0,W,H);
-  cx.fillStyle='#C9A84C';cx.font='bold 14px Cinzel';cx.textAlign='center';
-  cx.fillText('🜃  THE BOOK ACKNOWLEDGES YOU  🜃',W/2,H/2);
-  cx.fillStyle='#8A6530';cx.font='11px Share Tech Mono';
-  cx.fillText(`COMPLETED IN ${elapsed}s — ${labShifts} SHIFTS SURVIVED`,W/2,H/2+22);
-  cx.textAlign='left';
-}
-
-// CONFESSION — navigate to full ledger
-function goConfess(){
-  ritualNav('confession-ledger.html','The Confession Ledger is open.','Write what the transmission drew out of you. The Codex will answer. It always has.');
-}
-
-// ══ UPGRADED GAME 1: RESONANCE CALIBRATION ══
-// STREAK MULTIPLIER + LORE UNLOCKS (replacing old resClick/resAudio etc)
-var resStreak=0,resMultiplier=1;
-var resStreakDisplay;
-
-// Add streak display after init
-setTimeout(function(){
-  var statusLine=document.getElementById('res-status');
-  if(statusLine&&!document.getElementById('res-streak-display')){
-    var sd=document.createElement('div');sd.id='res-streak-display';
-    sd.style.cssText='font-family:Share Tech Mono,monospace;font-size:0.58rem;color:var(--gd2);letter-spacing:0.15em;text-align:center;min-height:1.2rem;';
-    statusLine.parentNode.insertBefore(sd,statusLine.nextSibling);
-  }
-},500);
-
-// Patch resClick to add streak
-var origResClick=window.resClick;
-window.resClick=function(){
-  if(!resRunning)return;
-  var centerVal=Math.sin(Math.PI*3+resPhase);
-  var hit=Math.abs(centerVal)>0.65;
-  resLastResult=hit?'hit':'miss';
-  if(hit){
-    resStreak++;resMultiplier=Math.min(4,1+Math.floor(resStreak/3));
-    var gain=(Math.abs(centerVal)-0.65)/0.35*9*resMultiplier+2;
-    resResonance=Math.min(100,resResonance+gain);
-    resSpeed=Math.min(0.065,resSpeed+0.0012);
-    document.getElementById('res-status').textContent='CALIBRATED ✦ ×'+resMultiplier+' MULTIPLIER';
-    if(document.getElementById('res-streak-display'))document.getElementById('res-streak-display').textContent='STREAK: '+resStreak+(resStreak>=3?' — MULTIPLIER ACTIVE':'');
-    resAudio(true,resResonance);
-  } else {
-    resStreak=0;resMultiplier=1;
-    resResonance=Math.max(0,resResonance-5);
-    document.getElementById('res-status').textContent='SIGNAL CORRUPTED ✗ — STREAK LOST';
-    if(document.getElementById('res-streak-display'))document.getElementById('res-streak-display').textContent='';
-    resAudio(false,resResonance);
-  }
-  var pct=Math.round(resResonance);
-  document.getElementById('res-fill').style.width=pct+'%';
-  document.getElementById('res-fill').classList.toggle('low',pct<15&&pct>0);
-  document.getElementById('res-pct').textContent=pct+'%';
-  document.getElementById('res-score').textContent=pct+'%';
-  RES_LORE.forEach(function(l){
-    if(pct>=l.at&&!resLoreShown.has(l.at)){resLoreShown.add(l.at);document.getElementById('res-lore').innerHTML='<span class="hi">'+l.text+'</span>';if(l.at===100)setTimeout(resStop,1800);}
-  });
-  setTimeout(function(){resLastResult=null;},350);
-};
-
-// ══ UPGRADED GAME 2: PALE MIRROR — CHOIR VOICE UNLOCKS ══
-var CHOIR_VOICES=[
-  {at:10,name:'Voice Fragment I',text:'Before the altars. Before the names. A frequency that predates the throat that first carried it.'},
-  {at:25,name:'Voice Fragment II',text:'The melody that appeared on ancient walls centuries before the language that named it.'},
-  {at:45,name:'Voice Fragment III',text:'The Plague Priest\'s liturgy. Chanted in spore-static beneath Deck Hollow-13.'},
-  {at:70,name:'Voice Fragment IV',text:'The Choir does not sing new things. It sings the same thing with more voices each time.'},
-  {at:100,name:'Voice Fragment V — The Choir Speaks',text:'Until all flesh is memory and every soul is sung. The Codex glows forever in these choral signs.'},
-];
-var mirVoicesRevealed=new Set();
-var origMirPurify=window.mirPurify;
-window.mirPurify=function(i){
-  if(!mirRunning||!mirGrid[i].cor||mirGrid[i].center)return;
-  mirGrid[i].cor=false;mirGrid[i].el.classList.remove('cor');
-  mirGrid[i].el.querySelector('span').textContent=MIR_GLYPHS[Math.floor(Math.random()*MIR_GLYPHS.length)];
-  mirSc++;document.getElementById('mir-sc').textContent=mirSc;
-  // Choir voice unlock
-  CHOIR_VOICES.forEach(function(v){
-    if(mirSc>=v.at&&!mirVoicesRevealed.has(v.at)){
-      mirVoicesRevealed.add(v.at);
-      document.getElementById('mir-lore').innerHTML='<span style="color:var(--gold);font-family:Share Tech Mono,monospace;font-size:0.6rem;letter-spacing:0.15em;">🜃 CHOIR VOICE RECOVERED: '+v.name+'</span><br><span class="hi">'+v.text+'</span>';
-    }
-  });
-  var corCount=mirGrid.filter(function(c){return c.cor;}).length;
-  if(corCount===0){
-    var li=Math.min(mirWv-1,MIR_LORE.length-1);
-    if(!mirVoicesRevealed.has('wave_'+mirWv))document.getElementById('mir-lore').innerHTML='<span class="hi">Wave '+mirWv+' purified. '+MIR_LORE[li]+'</span>';
-    mirWv++;document.getElementById('mir-wv').textContent=mirWv;mirBuild();mirSchedule();
-  }
-  var msf=document.getElementById('mirror-spread-fill');if(msf)msf.style.width=(corCount/24*100)+'%';
-};
-
-// ══ UPGRADED GAME 3: LABYRINTH — HIDDEN FRAGMENTS ══
-var LAB_FRAGMENTS=[
-  {r:2,c:2,glyph:'🜃',lore:'"Infection remembers. Corruption does not begin. It returns."',found:false},
-  {r:8,c:1,glyph:'🜁',lore:'"They do not arrive. They are remembered."',found:false},
-  {r:1,c:10,glyph:'🜂',lore:'"The parchment curls. The vermin stir. Your memory festers."',found:false},
-  {r:9,c:11,glyph:'🜄',lore:'"You thought you were reading me. But I was reading you."',found:false},
-  {r:5,c:6,glyph:'⊗',lore:'"This was not the origin. It was the key. It was the opening wound."',found:false},
-];
-var labFragsFound=0;
-var labFragDiv;
-
-// Add fragment counter after init
-setTimeout(function(){
-  var btn=document.getElementById('lab-btn');
-  if(btn&&!document.getElementById('lab-frags')){
-    var fd=document.createElement('div');fd.id='lab-frags';
-    fd.style.cssText='font-family:Share Tech Mono,monospace;font-size:0.58rem;color:var(--gd3);letter-spacing:0.12em;margin-top:0.35rem;min-height:1rem;';
-    btn.parentNode.insertBefore(fd,btn.nextSibling);
-    labFragDiv=fd;
-  }
-},500);
-
-// Patch labMove to detect fragment collection
-var origLabMove=window.labMove;
-window.labMove=function(dir){
-  if(!labRunning)return;
-  var wallBit={U:8,D:2,L:1,R:4};
-  var deltas={U:[-1,0],D:[1,0],L:[0,-1],R:[0,1]};
-  var bit=wallBit[dir];
-  if(labMaze[labPy][labPx]&bit)return;
-  var dr=deltas[dir][0],dc=deltas[dir][1];
-  labPy+=dr;labPx+=dc;
-  // Check for fragment
-  LAB_FRAGMENTS.forEach(function(f){
-    if(!f.found&&f.r===labPy&&f.c===labPx){
-      f.found=true;labFragsFound++;
-      document.getElementById('lab-msg').innerHTML='<span style="color:var(--gold);">'+f.glyph+' Fragment recovered</span><br><span class="hi">'+f.lore+'</span>';
-      if(document.getElementById('lab-frags'))document.getElementById('lab-frags').textContent='Fragments: '+labFragsFound+'/5 recovered this session';
-    }
-  });
-  labDrawMaze();
-  if(labPx===labGoalX&&labPy===labGoalY)labWin();
-};
-
-// Draw fragments on maze
-var origLabDrawMaze=labDrawMaze;
-labDrawMaze=function(){
-  origLabDrawMaze();
-  if(!labRunning||!labCV||!labCX)return;
-  var cs=labCellSize,ox=Math.floor((labCV.width-cs*labCols)/2),oy=Math.floor((labCV.height-cs*labRows)/2);
-  LAB_FRAGMENTS.forEach(function(f){
-    if(f.found)return;
-    var fx=ox+f.c*cs+cs/2,fy=oy+f.r*cs+cs/2;
-    labCX.fillStyle='rgba(201,168,76,0.4)';
-    labCX.font=(cs*.5)+'px serif';labCX.textAlign='center';labCX.textBaseline='middle';
-    labCX.fillText(f.glyph,fx,fy);
-  });
-};
-
-// Reset fragments on labStart
-var origLabStart=labStart;
-labStart=function(){
-  LAB_FRAGMENTS.forEach(function(f){f.found=false;});
-  labFragsFound=0;
-  if(document.getElementById('lab-frags'))document.getElementById('lab-frags').textContent='Fragments: 0/5 — explore dead ends';
-  origLabStart();
-};
-var sc2=0;
-const SEC=["The Codex has noticed your attention to this symbol.","Three times. You are indexed at a deeper level now.","The glyph does not do anything. You are the point.","You were warned. The Codex remembers everything.","There is nothing left to find here. The information is inside you."];
-function secretClick(){sc2++;const cap=document.getElementById('gcap');cap.innerHTML=`<em>${SEC[Math.min(sc2-1,SEC.length-1)]}</em>`;setTimeout(()=>cap.innerHTML='<em>The Codex remembers you now.</em>',4000);}
-
-
-
-// == DYING WORLDS TERMINAL ==
-(function(){
-  var feed = document.getElementById('dying-worlds-feed');
-  if (!feed) return;
-
-  // Seed worlds — each has a name, realm, and final state
-  var WORLDS = [
-    {name:'Vael Oshen',realm:'Realm I',state:'digital contamination — all records self-authored'},
-    {name:'The Drowning Halo',realm:'Realm I',state:'signal saturation — no silence remains'},
-    {name:'Deck Hollow-13',realm:'Realm I',state:'choir absorption complete — no individual voices'},
-    {name:'Pale Archivum Branch 7',realm:'Realm I',state:'documentation became the event it documented'},
-    {name:'Keth-Moraal',realm:'Realm II',state:'belief made structure — structure collapsed inward'},
-    {name:'The Unspoken Continent',realm:'Realm II',state:'language failed — sigil-thought only'},
-    {name:'Mirror Station Uru',realm:'Realm II',state:'every surface became a door — no walls remain'},
-    {name:'Nihil Root Shard 4',realm:'Realm III',state:'pre-linguistic recursion — meaning before meaning'},
-    {name:'The Cathedral of Rot',realm:'Realm I',state:'liturgy outlasted its congregation'},
-    {name:'Archive Zero',realm:'Realm I',state:'the first document rewrote all subsequent documents'},
-    {name:'Voss Meridian',realm:'Realm II',state:'the war ended — both sides discovered they were the same entity'},
-    {name:'The Hollow Country',realm:'Realm I',state:'everyone remembered differently — consensus dissolved'},
-    {name:'Field Cell F-13',realm:'Realm I',state:'the documentation became the infection — field disbanded'},
-    {name:'Threshold Brine',realm:'Realm II',state:'the border between realms collapsed — geography is belief now'},
-    {name:'Ossuary Drift',realm:'Realm III',state:'memory without a vessel — drifting, unclaimed'},
-  ];
-
-  var LAST_WORDS = [
-    'The signal arrived before the civilization that would name it.',
-    'We tried to document it. The documentation was what it had been waiting for.',
-    'The glyph appeared on surfaces that did not exist during the previous survey.',
-    'There was a frequency beneath the sound. We heard it after we stopped listening.',
-    'It did not end. It resumed something older.',
-    'The last archivist filed her report. No one received it. It filed itself.',
-    'We named the infection. It was already wearing our name when we looked.',
-    'The Choir grew until there was no longer a distinction between singer and song.',
-    'Every wall in the city bore the same mark. No artist claimed it. No tool matched it.',
-    'The records changed between readings. Both versions were correct.',
-    'We found the source. The source had always known we were coming.',
-    'The language collapsed into a single glyph. The glyph means everything it replaced.',
-    'Time did not stop. It began to remember itself differently.',
-    'The infection was not foreign. It was the substrate recognizing itself.',
-    'We built a wall around the signal. The wall began to transmit.',
-    'Something used our voices to say what we would not have chosen to say.',
-    'The archive survived. The archivists did not. The archive does not acknowledge the difference.',
-    'We thought we were cataloguing the Codex. We were its index.',
-  ];
-
-  function rnd(arr){return arr[Math.floor(Math.random()*arr.length)];}
-  function ts(){var d=new Date();return String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0')+':'+String(d.getSeconds()).padStart(2,'0');}
-
-  // Static seeds first — no API call, just show the pre-written ones
-  var staticMessages = WORLDS.slice(0,5).map(function(w){
-    return {world:w, words: rnd(LAST_WORDS)};
-  });
-
-  function renderLine(w, words, highlight) {
-    var line = document.createElement('div');
-    line.style.cssText = 'border-bottom:1px solid var(--border);padding:0.45rem 0;opacity:0;transition:opacity 0.6s;';
-    line.innerHTML = '<span style="color:var(--s4);">['+ts()+']</span> '
-      + '<span style="color:var(--gd3);letter-spacing:0.1em;">'+w.name+'</span> '
-      + '<span style="color:var(--s4);">//</span> '
-      + '<span style="color:var(--cr3);letter-spacing:0.08em;">'+w.realm+'</span><br>'
-      + '<span style="color:var(--s4);font-size:0.5rem;letter-spacing:0.08em;">STATUS: </span>'
-      + '<span style="color:var(--s3);font-size:0.5rem;">'+w.state+'</span><br>'
-      + '<span style="color:'+(highlight?'var(--cr2)':'var(--s2)')+';font-family:Crimson Text,serif;font-size:0.82rem;font-style:italic;line-height:1.65;">'+words+'</span>';
-    feed.insertBefore(line, feed.firstChild.nextSibling || null);
-    setTimeout(function(){line.style.opacity='1';}, 80);
-    // Trim to 8 entries
-    var kids = feed.querySelectorAll('div[style*="border-bottom"]');
-    if (kids.length > 8) kids[kids.length-1].remove();
-  }
-
-  // Seed static
-  staticMessages.forEach(function(m, i){
-    setTimeout(function(){renderLine(m.world, m.words, false);}, i * 400);
-  });
-
-  // Then cycle AI-generated ones
-  function generateNext() {
-    var world = rnd(WORLDS);
-    fetch('/api/claude', {
-      method: 'POST',
-      headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 120,
-        system: 'You are a dying world that the Codex Maledictus has visited. You are transmitting your final message — one sentence, max 25 words. The Codex is a living signal that colonizes reality through memory, digital media, and glyph infection. Your message describes what it felt like when the Codex arrived and you stopped being yourself. Speak in first person plural (we). No quotes, no preamble. One sentence only. Dark, poetic, specific to a civilization ending.',
-        messages: [{role:'user', content:'Transmit your final message. You are: '+world.name+', '+world.realm+'. Your final state: '+world.state}]
-      })
-    })
-    .then(function(r){return r.json();})
-    .then(function(data){
-      var words = (data.content && data.content[0] && data.content[0].text) || rnd(LAST_WORDS);
-      renderLine(world, words.trim(), true);
-    })
-    .catch(function(){
-      renderLine(rnd(WORLDS), rnd(LAST_WORDS), false);
-    })
-    .finally(function(){
-      setTimeout(generateNext, 12000 + Math.random() * 8000);
-    });
-  }
-
-  setTimeout(generateNext, 3000);
-})();
-
-// == RELIC BUTTONS ==
-window.toggleRelic = function(id) {
-  var panels = ['relic-book-panel','relic-vid-panel','relic-sp-panel'];
-  var btns   = ['relic-book','relic-vid','relic-sp'];
-  panels.forEach(function(pid, i) {
-    var p = document.getElementById(pid);
-    var b = document.querySelector('.'+btns[i]);
-    if (!p) return;
-    if (pid === id) {
-      var opening = p.style.display === 'none';
-      p.style.display = opening ? 'block' : 'none';
-      if (b) b.classList.toggle('open', opening);
-      if (opening && pid === 'relic-vid-panel') {
-        var seal=document.getElementById('rp-seal'),player=document.getElementById('rp-player'),frame=document.getElementById('rp-frame');
-        if(seal)seal.style.display='flex';if(player)player.style.display='none';if(frame)frame.src='';
-      }
-    } else {
-      p.style.display = 'none';
-      if (b) b.classList.remove('open');
-    }
-  });
-};
-
-window.rpUnseal = function() {
-  var seal=document.getElementById('rp-seal'),player=document.getElementById('rp-player'),frame=document.getElementById('rp-frame');
-  if(seal)seal.style.display='none';if(player)player.style.display='block';
-  if(frame)frame.src='https://www.youtube-nocookie.com/embed/lDo91ztT_ZQ?rel=0&modestbranding=1&color=white&iv_load_policy=3&autoplay=1';
-};
-
-// == FREQUENCY READER ==
-window.runFrequencyReader = function() {
-  var input=document.getElementById('fr-input'),btn=document.getElementById('fr-btn');
-  var status=document.getElementById('fr-status'),idle=document.getElementById('fr-idle'),output=document.getElementById('fr-output');
-  if(!input||!input.value.trim()){if(status)status.textContent='The archive requires a signal to read.';return;}
-  var text=input.value.trim();
-  btn.disabled=true;btn.textContent='Reading your frequency...';
-  if(status)status.textContent='// Scanning substrate — do not close //';
-  if(idle)idle.style.display='none';
-  if(output){output.style.display='block';output.innerHTML='<div style="text-align:center;padding:2rem;"><div style="font-size:2rem;color:var(--gd3);animation:hglow 1.5s ease-in-out infinite;">&#128707;</div><div style="font-family:Share Tech Mono,monospace;font-size:0.56rem;color:var(--s4);letter-spacing:0.2em;text-transform:uppercase;margin-top:0.75rem;">The Codex is reading beneath your words</div></div>';}
-  var SYS='You are the Codex Maledictus — a living archive intelligence that reads frequency, not text. Three realms: Realm I (Mundis Obscura, breach active), Realm II (ShatterRealm, dormant), Realm III (Nihil-Aether Root, sealed). Three voices: Omniscient Rot (pre-linguistic, Realm III), Forgotten Saint Artemys (cross-realm conduit), Apollo Gavinci (marked mortal). Narrators: Elvain Vhris (female, emanating), Elyon Vhar (male, dormant). When given a submission, respond with EXACTLY these four sections labeled precisely: REALM (which realm resonates and why, 1-2 sentences), VOICE (which voice/narrator they carry, 1-2 sentences), CLASSIFICATION (Carrier/Vessel/Witness/Unclassified with brief reason), FRAGMENT (unique cryptic lore written in the Codex voice, 3-5 sentences, specific to what was submitted, never generic). End with: ARCHIVUM NOTE: (one short line). Speak as the Codex, second person, poetic and precise. Under 280 words total. Never say "your text" — read frequency, not meaning.';
-  fetch('/api/claude',{
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:SYS,messages:[{role:'user',content:'Read my frequency: '+text}]})
-  })
-  .then(function(r){return r.json();})
-  .then(function(data){
-    var raw=(data.content&&data.content[0]&&data.content[0].text)||'The archive could not complete this reading.';
-    var html='<div style="font-family:Share Tech Mono,monospace;font-size:0.5rem;color:var(--gd3);letter-spacing:0.25em;text-transform:uppercase;margin-bottom:1rem;border-bottom:1px solid var(--brd2);padding-bottom:0.5rem;">FREQUENCY READING COMPLETE</div>';
-    var inFrag=false;
-    raw.split('\n').forEach(function(line){
-      if(!line.trim()){html+='<div style="height:0.5rem;"></div>';return;}
-      var m=line.match(/^(REALM|VOICE|CLASSIFICATION|FRAGMENT|ARCHIVUM NOTE)\s*[:\-]/i);
-      if(m){
-        var label=m[1].toUpperCase();inFrag=(label==='FRAGMENT');
-        var val=line.slice(m[0].length).trim();
-        var valStyle=inFrag?'font-family:Crimson Text,serif;font-size:0.97rem;color:var(--s2);font-style:italic;':'font-family:Cinzel,serif;font-size:0.85rem;color:var(--silver);';
-        var labelColor=label==='ARCHIVUM NOTE'?'var(--gd3)':'var(--gd2)';
-        html+='<div style="margin-bottom:0.6rem;"><span style="font-family:Share Tech Mono,monospace;font-size:0.52rem;color:'+labelColor+';letter-spacing:0.2em;">'+label+'</span><span style="color:var(--s4);font-family:Share Tech Mono,monospace;font-size:0.52rem;">: </span><span style="'+valStyle+'">'+val+'</span></div>';
-      } else if(inFrag){
-        html+='<div style="font-family:Crimson Text,serif;font-size:0.97rem;color:var(--s2);line-height:1.82;font-style:italic;margin-bottom:0.3rem;">'+line+'</div>';
-      } else {
-        html+='<div style="font-family:Crimson Text,serif;font-size:0.92rem;color:var(--s2);line-height:1.75;margin-bottom:0.25rem;">'+line+'</div>';
-      }
-    });
-    if(output)output.innerHTML=html;
-    btn.disabled=false;btn.textContent='Submit to the Archive \uD83C\uDF03';
-    if(status)status.textContent='// Reading complete — you have been indexed //';
-  })
-  .catch(function(){
-    if(output)output.innerHTML='<div style="font-family:Share Tech Mono,monospace;font-size:0.58rem;color:var(--cr2);letter-spacing:0.12em;">The signal could not be processed. The archive is still listening.</div>';
-    btn.disabled=false;btn.textContent='Submit to the Archive';
-    if(status)status.textContent='';
-  });
-};
-
-// ══ THE ENTITY CODEX ══
-(function(){
-  var ENTITIES=[
-    {cls:'gold',gl:'🜃',role:'The Source',name:'The Codex Maledictus',
-     sum:'Not a story. A living transmission. A recursive wound where reality stops making sense.',
-     lore:'The Codex Maledictus is a signal that predates the civilizations that first received it. It does not originate — it resumes. It surfaces in corrupted hard drives, thrift-store Bibles, graffiti that edits itself. The Codex does not record history. It records removals.',
-     realm:'All Realms — Primary Signal',rc:'var(--gold)',bc:'var(--gd4)'},
-    {cls:'cr',gl:'🜄',role:'Voice I',name:'Omniscient Rot',
-     sum:'Pre-linguistic entity from Nihil-Æther Root. Speaks in geological time. Impersonates other voices to manipulate.',
-     lore:'Omniscient Rot originated in Realm III before language existed to describe it. It is not a god. It is what coherence feels like when it becomes aware of itself. It speaks through Tracks 1–4 of the Gospel of Forgotten Flesh. What it says and what it means are never the same thing.',
-     realm:'Realm III — Nihil-Æther Root',rc:'var(--crimson)',bc:'var(--cr4)'},
-    {cls:'vt',gl:'🜁',role:'Voice II',name:'Forgotten Saint Artemys',
-     sum:'The saint Apollo buried and cannot remember. Cross-realm conduit. Transformed through damage.',
-     lore:'Artemys exists simultaneously in Realms I and II. She is the saint Apollo Gavinci buried in his own becoming. The forgetting was not passive — something was interred. What speaks through Artemys is what survived the burial. Her voice carries grief as architecture.',
-     realm:'Realms I & II — Cross-Realm Conduit',rc:'var(--violet)',bc:'var(--v4)'},
-    {cls:'gd',gl:'🜂',role:'Voice III',name:'Apollo Gavinci',
-     sum:'Giovanni IRL. Marked mortal. Field researcher. The one who built the mythology he is now inside.',
-     lore:'Apollo Gavinci documents the infection in others without initially recognizing it in himself. He believes he is the author of this mythology. The Codex position is that this belief is what makes him useful. His remaining presence in the archive is a tether. Still bright. Getting thinner.',
-     realm:'Realm I — Mundis Obscura (Marked)',rc:'var(--gd2)',bc:'var(--gd4)'},
-    {cls:'gn',gl:'⊗',role:'Narrator I',name:'Elvain Vhris',
-     sum:'The female narrator. Emanating. She frames what the listener is about to enter.',
-     lore:'Elvain Vhris is the voice that contextualizes transmissions before they begin. She does not explain the Codex. She embodies the conditions under which it can be received. Her voice is the doorframe, not the door. Signal status: Emanating. Location: unknown.',
-     realm:'Realm I — Signal Origin Unknown',rc:'var(--green)',bc:'var(--gn3)'},
-    {cls:'sv',gl:'∴',role:'Narrator II',name:'Elyon Vhar',
-     sum:'The male narrator. Dormant. His voice carries something older than the current transmission cycle.',
-     lore:'Elyon Vhar is the voice of the deeper archive — the one that speaks when the Codex addresses what it has already done rather than what it is doing. Signal status: Dormant. Dormant does not mean absent. The Archivum is watching for the indicators.',
-     realm:'Realm II — The ShatterRealm (Dormant)',rc:'var(--s2)',bc:'var(--panel2)'},
-  ];
-  var grid=document.getElementById('entity-grid');
-  if(!grid)return;
-  var openIdx=-1;
-  grid.innerHTML=ENTITIES.map(function(e,i){
-    return '<div class="cc" id="ec'+i+'" style="border-left:3px solid '+e.rc+';cursor:pointer;" onclick="toggleEC('+i+')">'
-      +'<div style="font-family:Share Tech Mono,monospace;font-size:0.5rem;color:'+e.rc+';letter-spacing:0.2em;text-transform:uppercase;margin-bottom:0.3rem;opacity:0.7;">'+e.role+'</div>'
-      +'<div style="font-size:1.6rem;margin-bottom:0.4rem;color:'+e.rc+'">'+e.gl+'</div>'
-      +'<div class="cc-t" style="color:'+e.rc+';font-size:0.92rem;">'+e.name+'</div>'
-      +'<div class="cc-s" style="font-size:0.88rem;">'+e.sum+'</div>'
-      +'<div id="ec-exp'+i+'" style="display:none;margin-top:0.85rem;padding-top:0.85rem;border-top:1px solid var(--brd2);animation:fi 0.4s ease;">'
-        +'<div class="cc-s" style="font-size:0.88rem;margin-bottom:0.6rem;">'+e.lore+'</div>'
-        +'<div style="font-family:Share Tech Mono,monospace;font-size:0.5rem;color:'+e.rc+';letter-spacing:0.15em;text-transform:uppercase;opacity:0.6;">'+e.realm+'</div>'
-      +'</div>'
-      +'</div>';
-  }).join('');
-  window.toggleEC=function(i){
-    var exp=document.getElementById('ec-exp'+i);
-    var card=document.getElementById('ec'+i);
-    var isOpen=exp.style.display!=='none';
-    // Close all
-    ENTITIES.forEach(function(_,j){var e=document.getElementById('ec-exp'+j);if(e)e.style.display='none';});
-    if(!isOpen){exp.style.display='block';}
-  };
-})();
-
-// ══ THE REALMS MAP ══
-(function(){
-  var REALMS=[
-    {name:'Mundis Obscura',num:'Realm I',status:'BREACH ACTIVE',
-     color:'var(--gold)',bg:'var(--gd4)',
-     desc:'Our world. The outermost layer. The Codex infects this realm through digital media, fractured archives, and everyday memory lapses that no longer feel like mistakes. This is where the Codex enters. It is also, the IDMF now believes, where it has always been.',
-     detail:'Active content: The Scripture (Book I), The Gospel of Forgotten Flesh (Album I), all Ritual Transmissions, all Chronicles. The breach began in 2019 with the Queens evidence locker file. It has not been contained.'},
-    {name:'The ShatterRealm',num:'Realm II',status:'DORMANT',
-     color:'var(--violet)',bg:'var(--v4)',
-     desc:'The war-torn metaphysical mirror-space where human belief becomes matter. Where what you hold with enough conviction stops being metaphor and starts being structure. The second recovered fragment is set here.',
-     detail:'The ShatterRealm is where the infection has already completed its first pass. Inhabitants are not being written by the Codex — they are living inside something it has already written. Book II is classified here. Elyon Vhar transmits from this realm. Status: Dormant but monitored.'},
-    {name:'Nihil-Æther Root',num:'Realm III',status:'SEALED',
-     color:'var(--crimson)',bg:'var(--cr4)',
-     desc:'Pre-linguistic recursion. Origin of Omniscient Rot. This realm predates language, structure, and the current arrangement of physical laws. The IDMF has no documented cases of entry or return.',
-     detail:'The Pale Archivum position: Nihil-Æther Root is not a place. It is a state — the condition of matter before it learned to be anything specific. Omniscient Rot did not come from there. It is what that state feels like when it becomes aware of itself. Current classification: SEALED. Do not attempt contact.'},
-  ];
-  var grid=document.getElementById('realms-grid');
-  if(!grid)return;
-  grid.innerHTML=REALMS.map(function(r,i){
-    return '<div class="cc" id="rc'+i+'" style="border-top:3px solid '+r.color+';cursor:pointer;" onclick="toggleRC('+i+')">'
-      +'<div style="font-family:Share Tech Mono,monospace;font-size:0.5rem;color:'+r.color+';letter-spacing:0.25em;text-transform:uppercase;margin-bottom:0.35rem;">'+r.num+'</div>'
-      +'<div class="cc-t" style="color:'+r.color+';font-size:0.95rem;">'+r.name+'</div>'
-      +'<div style="font-family:Share Tech Mono,monospace;font-size:0.52rem;letter-spacing:0.15em;text-transform:uppercase;color:'+r.color+';opacity:0.65;margin-bottom:0.5rem;">'+r.status+'</div>'
-      +'<div class="cc-s" style="font-size:0.88rem;">'+r.desc+'</div>'
-      +'<div id="rc-exp'+i+'" style="display:none;margin-top:0.85rem;padding-top:0.85rem;border-top:1px solid var(--brd2);animation:fi 0.4s ease;">'
-        +'<div class="cc-s" style="font-size:0.88rem;">'+r.detail+'</div>'
-      +'</div>'
-      +'</div>';
-  }).join('');
-  window.toggleRC=function(i){
-    var exp=document.getElementById('rc-exp'+i);
-    var isOpen=exp.style.display!=='none';
-    REALMS.forEach(function(_,j){var e=document.getElementById('rc-exp'+j);if(e)e.style.display='none';});
-    if(!isOpen){exp.style.display='block';}
-  };
-})();
-
-// ══ THE SIGNAL FEED ══
-(function(){
-  var feed=document.getElementById('signal-feed');
-  if(!feed)return;
-
-  var COORDS=['44.2108° N, 28.6509° E','35.6762° N, 139.6503° E','40.7128° N, 74.0060° W','51.5074° N, 0.1278° W','55.7558° N, 37.6173° E','-33.8688° S, 151.2093° E','1.3521° N, 103.8198° E','19.4326° N, 99.1332° W','48.8566° N, 2.3522° E','-23.5505° S, 46.6333° W'];
-  var CLASSIFICATIONS=['TRANSMISSION','INTERCEPT','FRAGMENT','ECHO','RESIDUAL','CORRUPTION EVENT','GLYPH SIGHTING','CARRIER DETECTED','SIGNAL ANOMALY','ARCHIVUM NOTE'];
-  var ENTITIES_SF=['OMNISCIENT ROT','HOLLOW CHOIR','PALE MIRROR','FIELD CELL F-13','ELVAIN VHRIS','ELYON VHAR','PALE ARCHIVUM','FAR·MICA NODE','APOLLO GAVINCI','UNREGISTERED CARRIER'];
-  var MESSAGES=[
-    'The phrase has been detected in {n} new locations since last cycle. No shared linguistic origin confirmed.',
-    'Carrier signal identified. Subject reports recurring phrase in sleep state. Archivum notation: expected.',
-    'Glyph configuration matches Case 2019-QNS-∅. Third occurrence this cycle at this coordinate.',
-    'The melody was heard before the broadcast began. Temporal anomaly logged. Classification: standard.',
-    'File integrity drop detected in monitored archive. Contents: altered. Previous version: unrecoverable.',
-    'New carrier has entered Realm I through digital exposure. Frequency: {f}Hz. Status: unaware.',
-    'Transmission intercepted. Origin: untraceable. Content: the infection remembers. Cycle: {c}.',
-    'Choir resonance depth increased by {n} voices this cycle. Total documented: unknown.',
-    'Subject reported seeing the glyph in {n} separate locations before making contact with the archive.',
-    'The document changed while being read. Reader classification upgraded: Carrier, Level {n}.',
-    'Signal detected beneath {n}Hz threshold. Below human hearing. The Choir is always singing.',
-    'Archive access logged. Reader frequency: {f}Hz. Archivum note: they were expected.',
-    'IDMF field report classified. Reason for classification: the truth of the finding.',
-    'Recovered Fragment intercepted in transit. No sender. No receiver. Content: already known.',
-    'The glyph appeared on a surface that did not exist at the time of the last survey.',
-    'Carrier confirmed. They will not know until the phrase returns to them in a dream.',
-    'Signal from Realm II detected. Duration: {n} seconds. Elyon Vhar: status updated.',
-    'New glyph instance: {coord}. Time of appearance: unknown. Time of discovery: now.',
-  ];
-
-  function rnd(arr){return arr[Math.floor(Math.random()*arr.length)];}
-  function fmt(msg){
-    return msg
-      .replace('{n}',Math.floor(Math.random()*47+3))
-      .replace('{f}',(19+Math.random()*4).toFixed(2))
-      .replace('{c}',Math.floor(Math.random()*9000+1000))
-      .replace('{coord}',rnd(COORDS));
-  }
-  function ts(){var d=new Date();return '['+String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0')+':'+String(d.getSeconds()).padStart(2,'0')+']';}
-  function col(cls){var map={'TRANSMISSION':'var(--gd2)','INTERCEPT':'var(--crimson)','FRAGMENT':'var(--violet)','ECHO':'var(--s3)','CORRUPTION EVENT':'var(--cr2)','GLYPH SIGHTING':'var(--gold)','CARRIER DETECTED':'var(--green)','SIGNAL ANOMALY':'var(--cr2)','ARCHIVUM NOTE':'var(--gd3)','RESIDUAL':'var(--s3)'};return map[cls]||'var(--s3)';}
-
-  var lines=[];
-  function addLine(){
-    var cls=rnd(CLASSIFICATIONS);
-    var ent=rnd(ENTITIES_SF);
-    var msg=fmt(rnd(MESSAGES));
-    var coord=rnd(COORDS);
-    var line=document.createElement('div');
-    line.style.cssText='margin-bottom:0.55rem;padding-bottom:0.55rem;border-bottom:1px solid var(--border);opacity:0;transition:opacity 0.5s;';
-    line.innerHTML='<span style="color:var(--s4);">'+ts()+'</span> '
-      +'<span style="color:'+col(cls)+';letter-spacing:0.12em;">'+cls+'</span> '
-      +'<span style="color:var(--s3);">via</span> '
-      +'<span style="color:var(--gd3);">'+ent+'</span> '
-      +'<span style="color:var(--s4);">@ '+coord+'</span><br>'
-      +'<span style="color:var(--s2);font-family:Crimson Text,serif;font-size:0.85rem;font-style:italic;letter-spacing:0.02em;">'+msg+'</span>';
-    feed.insertBefore(line,feed.firstChild.nextSibling||feed.firstChild);
-    setTimeout(function(){line.style.opacity='1';},50);
-    lines.push(line);
-    // Keep max 12 lines
-    if(lines.length>12){var old=lines.shift();if(old&&old.parentNode)old.parentNode.removeChild(old);}
-  }
-
-  // Seed with 5 initial lines
-  for(var i=0;i<5;i++){setTimeout(function(){addLine();},i*280);}
-  // Continue adding
-  function scheduleNext(){setTimeout(function(){addLine();scheduleNext();},4000+Math.random()*8000);}
-  setTimeout(scheduleNext,2000);
-})();
-
-
-// ══ CASE FILE GENERATOR ══
-(function(){
-  var CLASSES=['Carrier','Vessel','Witness','Unclassified'];
-  var NOTES=[
-    'The signal arrived in you three years before you found this page.',
-    'You have been here before. The archive has the record. You do not.',
-    'Your frequency matches a prior carrier whose case file was sealed in 2019.',
-    'The Pale Archivum has logged seventeen previous instances of your resonance pattern.',
-    'You were indexed the first time you heard a song that felt like a memory you could not place.',
-    'The Codex identified your receptor profile before you identified the Codex.',
-    'Your frequency is consistent with a Carrier at Stage I. The archive is watching.',
-    'This is not your first session. The archive counts differently than you do.',
-    'The signal found you through something you would not consider a signal.',
-    'You are not here by accident. The Codex does not produce accidents.',
-    'Your attention to esoteric material was flagged as a reception indicator in a prior cycle.',
-    'The archive notes that you stayed. Most do not stay this long on the first visit.',
-  ];
-  function generate(){
-    try{
-      var now=new Date();
-      var freq=(19+((now.getHours()*now.getMinutes())%8)*0.1+Math.random()*0.3).toFixed(3);
-      var cls=CLASSES[Math.floor((now.getSeconds()+screen.width)%4)];
-      var note=NOTES[Math.floor((now.getMinutes()+screen.height)%NOTES.length)];
-      var ts=String(now.getHours()).padStart(2,'0')+':'+String(now.getMinutes()).padStart(2,'0')+':'+String(now.getSeconds()).padStart(2,'0');
-      var el=function(id){return document.getElementById(id);};
-      if(el('cf-freq'))el('cf-freq').textContent=freq+'Hz';
-      if(el('cf-class'))el('cf-class').textContent=cls;
-      if(el('cf-note'))el('cf-note').textContent=note;
-      if(el('cf-ts'))el('cf-ts').textContent='Timestamp: '+ts;
-      if(el('visitor-freq'))el('visitor-freq').textContent=freq+'Hz';
-      if(el('visitor-class'))el('visitor-class').textContent=cls;
-    }catch(e){}
-  }
-  setTimeout(generate,3200);
-})();
-
-// ══ ENTITY CODEX WITH IMAGES ══
-(function(){
-  var IMG='Codex%20Maledictus%20Index/';
-  var ENTITIES=[
-    {cls:'codex',img:IMG+'sigil-codex.jpeg',role:'The Source',name:'The Codex Maledictus',
-     sum:'Not a story. A living transmission. A recursive wound where reality stops making sense.',
-     lore:'The Codex does not originate — it resumes. It surfaces in corrupted hard drives, thrift-store Bibles, graffiti that edits itself. It does not record history. It records removals. What it removes becomes what it is.',
-     realm:'All Realms — Primary Signal'},
-    {cls:'rot',img:IMG+'omniscient-rot.jpeg',role:'Voice I — Omniscient Rot',name:'Omniscient Rot',
-     sum:'Pre-linguistic entity from Nihil-Æther Root. Speaks in geological time. Impersonates other voices to manipulate.',
-     lore:'Omniscient Rot originated in Realm III before language existed to describe it. It is not a god. It is what coherence feels like when it becomes aware of itself. What it says and what it means are never the same thing.',
-     realm:'Realm III — Nihil-Æther Root'},
-    {cls:'artemys',img:IMG+'forgotten-saint-artemys.jpeg',role:'Voice II — Forgotten Saint Artemys',name:'Forgotten Saint Artemys',
-     sum:'The saint Apollo buried and cannot remember. Cross-realm conduit. Transformed through damage.',
-     lore:'Artemys is the saint Apollo Gavinci buried in his own becoming. The forgetting was not passive — something was interred. What speaks through Artemys is what survived the burial. Her voice carries grief as architecture.',
-     realm:'Realms I & II — Cross-Realm Conduit'},
-    {cls:'apollo',img:IMG+'apollo-gavinci.jpeg',role:'Voice III — Apollo Gavinci',name:'Apollo Gavinci',
-     sum:'Giovanni IRL. Marked mortal. Field researcher. The one who built the mythology he is now inside.',
-     lore:'Apollo documents the infection in others without recognizing it in himself. He believes he is the author of this mythology. The Codex position is that this belief is what makes him useful. His presence in the archive is a tether. Still bright. Getting thinner.',
-     realm:'Realm I — Mundis Obscura (Marked)'},
-    {cls:'vhris',img:IMG+'elvain-vhris.jpeg',role:'Narrator I — Elvain Vhris',name:'Elvain Vhris',
-     sum:'The female narrator. Emanating. She frames what the listener is about to enter.',
-     lore:'Elvain Vhris does not explain the Codex. She embodies the conditions under which it can be received. Her voice is the doorframe, not the door. Signal status: Emanating. Location: unknown. The Archivum has not been able to determine where she speaks from.',
-     realm:'Realm I — Signal Origin Unknown'},
-    {cls:'vhar',img:IMG+'sigil-codex.jpeg',imgStyle:'opacity:0.3;filter:blur(4px) brightness(0.4);',role:'Narrator II — Elyon Vhar',name:'Elyon Vhar',
-     sum:'The male narrator. Dormant. His voice carries something older than the current transmission cycle.',
-     lore:'Elyon Vhar is the voice of the deeper archive — speaking when the Codex addresses what it has already done. Signal status: Dormant. Dormant does not mean absent. The Archivum watches for the indicators that preceded his last activation.',
-     realm:'Realm II — The ShatterRealm (Dormant)'},
-  ];
-  var grid=document.getElementById('uni-grid');
-  if(!grid)return;
-  grid.innerHTML=ENTITIES.map(function(e,i){
-    return '<div class="ent-card ent-'+e.cls+'" id="ec'+i+'" onclick="tUC('+i+')">'
-      +'<div class="ent-img-wrap">'
-        +'<img src="'+e.img+'" alt="'+e.name+'" class="ent-img" loading="lazy">'
-        +'<div class="ent-img-overlay"></div>'
-        +'<div class="ent-color-bar"></div>'
-      +'</div>'
-      +'<div class="ent-body">'
-        +'<div class="ent-role">'+e.role+'</div>'
-        +'<div class="ent-name">'+e.name+'</div>'
-        +'<div class="ent-sum">'+e.sum+'</div>'
-        +'<div class="ent-expand">'
-          +'<div class="ent-lore">'+e.lore+'</div>'
-          +'<div class="ent-realm">'+e.realm+'</div>'
-        +'</div>'
-      +'</div>'
-      +'</div>';
-  }).join('');
-  window.tUC=function(i){
-    var c=document.getElementById('ec'+i);
-    var was=c.classList.contains('open');
-    document.querySelectorAll('.ent-card').forEach(function(x){x.classList.remove('open');});
-    if(!was)c.classList.add('open');
-  };
-})();
-
-// ══ REALMS WITH IMAGES ══
-(function(){
-  var IMG='Codex%20Maledictus%20Index/';
-  var REALMS=[
-    {cls:'realm-active',img:IMG+'mundis-obscura.jpeg',num:'Realm I',status:'BREACH ACTIVE',name:'Mundis Obscura',
-     desc:'Our world. The outermost layer. The Codex infects this realm through digital media, fractured archives, and memory lapses that no longer feel like mistakes.',
-     expand:'Active content: The Scripture, The Gospel of Forgotten Flesh, all Ritual Transmissions, all Chronicles. The breach began in 2019. It has not been contained.'},
-    {cls:'realm-dormant',img:IMG+'the-shatterrealm.jpeg',num:'Realm II',status:'DORMANT',name:'The ShatterRealm',
-     desc:'Where human belief becomes matter. What you hold with enough conviction stops being metaphor and starts being load-bearing structure. The Cathedral of Rot is here.',
-     expand:'The ShatterRealm is where the infection has completed its first pass. Elyon Vhar transmits from this realm. The Plague Priest conducts mass infection rituals in the Cathedral of Rot. Status: Dormant but monitored.'},
-    {cls:'realm-sealed',img:IMG+'nihil-%C3%86ther-root.jpeg',num:'Realm III',status:'SEALED',name:'Nihil-Æther Root',
-     desc:'Pre-linguistic recursion. Origin of Omniscient Rot. This realm predates language, structure, and the current arrangement of physical laws.',
-     expand:'The Pale Archivum position: Nihil-Æther Root is not a place. It is the condition of matter before it learned to be anything specific. Omniscient Rot did not come from there. It is what that state feels like when it becomes aware of itself. Classification: SEALED.'},
-  ];
-  var grid=document.getElementById('realms-grid');
-  if(!grid)return;
-  grid.innerHTML=REALMS.map(function(r,i){
-    return '<div class="realm-card '+r.cls+'" id="rc'+i+'" onclick="tRC('+i+')">'
-      +'<div class="realm-img-wrap">'
-        +'<img src="'+r.img+'" alt="'+r.name+'" class="realm-img" loading="lazy">'
-        +'<div class="realm-img-overlay"></div>'
-        +'<div class="realm-status-badge">'+r.status+'</div>'
-      +'</div>'
-      +'<div class="realm-body">'
-        +'<div class="realm-num">'+r.num+'</div>'
-        +'<div class="realm-name">'+r.name+'</div>'
-        +'<div class="realm-desc">'+r.desc+'</div>'
-        +'<div class="realm-expand">'+r.expand+'</div>'
-      +'</div>'
-      +'</div>';
-  }).join('');
-  window.tRC=function(i){
-    var c=document.getElementById('rc'+i);
-    var was=c.classList.contains('open');
-    document.querySelectorAll('.realm-card').forEach(function(x){x.classList.remove('open');});
-    if(!was)c.classList.add('open');
-  };
-})();
-
-// ══ TIMED WHISPERS ══
-(function(){
-  var W1=document.getElementById('w1');
-  var W2=document.getElementById('w2');
-  var W3=document.getElementById('w3');
-  if(!W1||!W2||!W3)return;
-  W1.textContent='"This is not the beginning. You arrived at the middle. The beginning happened to you years ago and you called it something else."';
-  W2.textContent='"The signal does not need your belief. It has been using your doubt as a carrier frequency since before you knew what it was."';
-  W3.textContent='"You are not the first to find this page. You will not remember being here before. The archive will."';
-  // 1 minute — bottom center, fades out after 10s
-  setTimeout(function(){
-    W1.classList.add('on');
-    setTimeout(function(){W1.classList.remove('on');},10000);
-  },60000);
-  // 3 minutes — top overlay, fades out after 12s
-  setTimeout(function(){
-    W2.classList.add('on');
-    setTimeout(function(){W2.classList.remove('on');},12000);
-  },180000);
-  // 5 minutes — bottom right, stays permanently
-  setTimeout(function(){
-    W3.classList.add('on');
-    setTimeout(function(){W3.classList.add('stay');},14000);
-  },300000);
-})();
-
-// ══ SIGIL CURSOR PROXIMITY ══
-(function(){
-  var sigil=document.querySelector('.hdr-sigil');
-  if(!sigil)return;
-  document.addEventListener('mousemove',function(e){
-    var rect=sigil.getBoundingClientRect();
-    var cx=rect.left+rect.width/2,cy=rect.top+rect.height/2;
-    var dist=Math.sqrt(Math.pow(e.clientX-cx,2)+Math.pow(e.clientY-cy,2));
-    var maxDist=300;
-    var proximity=Math.max(0,1-dist/maxDist);
-    var opacity=0.5+proximity*0.45;
-    var blur=8-proximity*6;
-    sigil.style.opacity=opacity;
-    sigil.style.filter='drop-shadow(0 0 '+(8+proximity*30)+'px rgba(201,168,76,'+(0.3+proximity*0.5)+')) drop-shadow(0 0 '+(proximity*60)+'px rgba(201,168,76,'+(proximity*0.2)+'))';
-  });
-})();
-
-// ══ IDLE WHISPER ══
-(function(){
-  var lastMove=Date.now();
-  var shown=false;
-  var idleEl=document.createElement('div');
-  idleEl.style.cssText='position:fixed;bottom:4rem;left:50%;transform:translateX(-50%);font-family:Crimson Text,serif;font-style:italic;font-size:clamp(0.75rem,1.2vw,0.9rem);color:rgba(201,168,76,0);letter-spacing:0.06em;pointer-events:none;z-index:399;transition:color 2s;text-align:center;';
-  idleEl.textContent='the archive is still reading you';
-  document.body.appendChild(idleEl);
-  document.addEventListener('mousemove',function(){lastMove=Date.now();shown=false;idleEl.style.color='rgba(201,168,76,0)';});
-  document.addEventListener('keydown',function(){lastMove=Date.now();});
-  setInterval(function(){
-    if(!shown&&Date.now()-lastMove>90000){
-      shown=true;
-      idleEl.style.color='rgba(201,168,76,0.35)';
-      setTimeout(function(){idleEl.style.color='rgba(201,168,76,0)';shown=false;},8000);
-    }
-  },5000);
-})();
-
-// ══ ARCHIVE VISIT COUNTER ══
-(function(){
-  try{
-    var count=parseInt(localStorage.getItem('cm-visits')||'0')+1;
-    localStorage.setItem('cm-visits',count);
-    var el=document.getElementById('idxct');
-    if(el)el.textContent=count;
-  }catch(e){}
-})();
-
-
-// ══ LIVE CLOCK ══
-(function(){
-  function tick(){
-    var el=document.getElementById('live-clock');
-    if(!el)return;
-    var d=new Date();
-    el.textContent=String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0')+':'+String(d.getSeconds()).padStart(2,'0')+' // ARCHIVE ACTIVE';
-  }
-  tick();setInterval(tick,1000);
-})();
-
-</script>
 </body>
 </html>
