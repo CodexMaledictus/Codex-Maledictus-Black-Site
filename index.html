@@ -1,804 +1,980 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Codex Maledictus</title>
-  <meta name="description" content="What you are looking for brought you here." />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400;1,600&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Codex Maledictus — The Pale Archive</title>
+<meta name="description" content="What you are looking for brought you here. What you find here will look for you."/>
+<meta property="og:title" content="Codex Maledictus"/>
+<meta property="og:description" content="An archive of a living contagion. The signal began before you pressed play."/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400;1,600&family=Share+Tech+Mono&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --void:#05050A;--deep:#0C0C14;--deep2:#10101A;
+  --crimson:#7A1212;--blood:#9B1B1B;--cr-dim:rgba(122,18,18,0.12);
+  --gold:#C9A84C;--gold-lt:#E0C878;--gold-dim:rgba(201,168,76,0.13);
+  --ash:#E4DDD0;--ash-dim:rgba(228,221,208,0.45);--ash-ghost:rgba(228,221,208,0.18);
+  --grey:#484458;--violet:#6B3FAF;--bile:#3A5A1A;
+  --border:rgba(201,168,76,0.09);--border-m:rgba(201,168,76,0.22);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  width:100%;min-height:100vh;
+  background:var(--void);
+  color:var(--ash);
+  font-family:'Crimson Text',Georgia,serif;
+  overflow-x:hidden;cursor:none;
+}
 
-  <style>
-    :root {
-      --void:    #05050A;
-      --deep:    #0C0C14;
-      --crimson: #7A1212;
-      --blood:   #9B1B1B;
-      --gold:    #C9A84C;
-      --gold-lt: #E0C878;
-      --gold-dim:rgba(201,168,76,0.14);
-      --ash:     #E4DDD0;
-      --ash-dim: rgba(228,221,208,0.48);
-      --grey:    #484458;
-    }
+/* ─── CURSOR ─── */
+#cur{position:fixed;z-index:99999;width:20px;height:20px;pointer-events:none;transform:translate(-50%,-50%);}
+#cur::before,#cur::after{content:'';position:absolute;background:var(--gold);}
+#cur::before{width:1px;height:100%;left:50%;}
+#cur::after{height:1px;width:100%;top:50%;}
+#cur2{position:fixed;z-index:99998;width:4px;height:4px;border-radius:50%;background:var(--gold);opacity:0.55;pointer-events:none;transform:translate(-50%,-50%);}
 
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
+/* ─── CANVAS + VIGNETTE ─── */
+#bg-canvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
+#vignette{position:fixed;inset:0;z-index:1;background:radial-gradient(ellipse at center,transparent 22%,rgba(0,0,0,0.84)100%);pointer-events:none;}
+#scanlines{position:fixed;inset:0;z-index:1;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.06) 2px,rgba(0,0,0,0.06) 4px);pointer-events:none;}
 
-    body {
-      width: 100%; min-height: 100vh;
-      background: var(--void);
-      color: var(--ash);
-      font-family: 'Crimson Text', Georgia, serif;
-      overflow-x: hidden;
-      cursor: none;
-    }
+/* ─── BOOT ─── */
+#boot{
+  position:fixed;inset:0;z-index:9000;background:#000;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;
+  transition:opacity 1.6s ease;
+}
+#boot.out{opacity:0;pointer-events:none;}
+.boot-sigil{width:52px;height:52px;object-fit:contain;filter:brightness(0.4) sepia(1) hue-rotate(320deg);opacity:0;animation:bSigil 0.9s ease 0.2s forwards;}
+@keyframes bSigil{to{opacity:0.6;}}
+#boot-lines{display:flex;flex-direction:column;align-items:center;gap:10px;min-height:100px;}
+.bline{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:0.3em;color:rgba(201,168,76,0.45);white-space:nowrap;overflow:hidden;max-width:0;opacity:0;}
+.bline.typed{animation:bType 0.9s steps(50,end) forwards;}
+@keyframes bType{from{max-width:0;opacity:1;}to{max-width:800px;opacity:1;}}
+.boot-bar{width:200px;height:1px;background:rgba(72,68,88,0.4);position:relative;overflow:hidden;margin-top:8px;}
+.boot-fill{position:absolute;left:0;top:0;bottom:0;width:0;background:var(--gold);animation:bFill 2.4s cubic-bezier(0.4,0,0.2,1) 0.6s forwards;}
+@keyframes bFill{to{width:100%;}}
+.boot-lbl{font-family:'Share Tech Mono',monospace;font-size:7px;letter-spacing:0.55em;color:rgba(201,168,76,0.25);opacity:0;animation:bFadeIn 0.5s ease 0.8s forwards;}
+@keyframes bFadeIn{to{opacity:1;}}
 
-    /* ── CURSOR ── */
-    #cur {
-      position: fixed; z-index: 99999;
-      width: 20px; height: 20px;
-      pointer-events: none;
-      transform: translate(-50%,-50%);
-    }
-    #cur::before, #cur::after {
-      content: ''; position: absolute; background: var(--gold);
-    }
-    #cur::before { width: 1px; height: 100%; left: 50%; }
-    #cur::after  { height: 1px; width: 100%; top: 50%; }
-    #cur2 {
-      position: fixed; z-index: 99998;
-      width: 4px; height: 4px; border-radius: 50%;
-      background: var(--gold); opacity: 0.6;
-      pointer-events: none;
-      transform: translate(-50%,-50%);
-    }
+/* ─── MAIN ─── */
+#main{position:relative;z-index:2;opacity:0;transition:opacity 1.8s ease;}
+#main.show{opacity:1;}
 
-    /* ── CANVAS ── */
-    #bg-canvas {
-      position: fixed; inset: 0; z-index: 0;
-      pointer-events: none;
-    }
+/* ─── HERO ─── */
+.hero{
+  position:relative;min-height:100vh;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:0 24px 100px;overflow:hidden;
+}
+.hero-ghost{
+  position:absolute;font-family:'Cinzel Decorative',serif;font-weight:900;
+  font-size:clamp(64px,18vw,220px);color:transparent;
+  -webkit-text-stroke:1px rgba(201,168,76,0.032);letter-spacing:0.12em;
+  user-select:none;pointer-events:none;
+  top:50%;left:50%;transform:translate(-50%,-50%);white-space:nowrap;z-index:0;
+}
+.hero-inner{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;max-width:780px;}
 
-    /* ── VIGNETTE ── */
-    #vignette {
-      position: fixed; inset: 0; z-index: 1;
-      background: radial-gradient(ellipse at center, transparent 25%, rgba(0,0,0,0.82) 100%);
-      pointer-events: none;
-    }
+/* Sigil */
+.sigil-wrap{position:relative;width:88px;height:88px;margin-bottom:40px;opacity:0;animation:riseIn 2s cubic-bezier(0.16,1,0.3,1) 0.3s forwards;}
+.sigil-wrap img{width:100%;height:100%;object-fit:contain;filter:brightness(0.8) sepia(0.2) hue-rotate(325deg) contrast(1.1);position:relative;z-index:2;}
+.sigil-glow{position:absolute;inset:-50px;background:radial-gradient(ellipse,rgba(122,18,18,0.5) 0%,transparent 65%);z-index:1;animation:gPulse 5s ease-in-out infinite;}
+@keyframes gPulse{0%,100%{opacity:0.45;transform:scale(1);}50%{opacity:1;transform:scale(1.18);}}
+.sigil-ring{position:absolute;border-radius:50%;border:1px solid;top:50%;left:50%;transform:translate(-50%,-50%);}
+.r1{width:140px;height:140px;border-color:rgba(201,168,76,0.13);animation:spin 30s linear infinite;}
+.r2{width:186px;height:186px;border-color:rgba(201,168,76,0.055);animation:spin 48s linear infinite reverse;}
+.r3{width:240px;height:240px;border-color:rgba(122,18,18,0.08);animation:spin 72s linear infinite;}
+.r1::before{content:'';position:absolute;width:5px;height:5px;background:var(--gold);border-radius:50%;top:-2.5px;left:50%;transform:translateX(-50%);opacity:0.9;box-shadow:0 0 10px var(--gold),0 0 20px rgba(201,168,76,0.4);}
+.r2::after{content:'';position:absolute;width:3px;height:3px;background:var(--crimson);border-radius:50%;bottom:-1.5px;left:50%;transform:translateX(-50%);opacity:0.6;box-shadow:0 0 8px var(--crimson);}
+@keyframes spin{to{transform:translate(-50%,-50%) rotate(360deg);}}
 
-    /* ── BOOT ── */
-    #boot {
-      position: fixed; inset: 0; z-index: 1000;
-      background: #000;
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center; gap: 16px;
-      transition: opacity 1.5s ease;
-    }
-    #boot.out { opacity: 0; pointer-events: none; }
+/* Wordmark */
+.wordmark{
+  font-family:'Cinzel Decorative',serif;font-weight:900;
+  font-size:clamp(28px,7vw,92px);
+  letter-spacing:0.1em;text-transform:uppercase;line-height:1.05;color:var(--gold);
+  text-shadow:0 0 130px rgba(201,168,76,0.2),0 0 40px rgba(201,168,76,0.08),0 2px 8px rgba(0,0,0,0.95);
+  opacity:0;animation:riseIn 2s cubic-bezier(0.16,1,0.3,1) 0.85s forwards;
+}
+.tagline{
+  font-family:'Cinzel',serif;font-weight:400;
+  font-size:clamp(6px,0.9vw,10px);letter-spacing:0.52em;text-transform:uppercase;
+  color:rgba(201,168,76,0.48);margin-top:16px;
+  opacity:0;animation:riseIn 2s cubic-bezier(0.16,1,0.3,1) 1.1s forwards;
+}
+.tagline span{margin:0 10px;opacity:0.32;}
 
-    .boot-scanlines {
-      position: absolute; inset: 0; pointer-events: none;
-      background: repeating-linear-gradient(
-        0deg, transparent, transparent 2px,
-        rgba(0,0,0,0.15) 2px, rgba(0,0,0,0.15) 4px
-      );
-    }
+/* Divider */
+.div{display:flex;align-items:center;gap:18px;margin:34px 0 28px;width:100%;max-width:580px;opacity:0;animation:riseIn 2s cubic-bezier(0.16,1,0.3,1) 1.3s forwards;}
+.div-line{flex:1;height:1px;background:linear-gradient(90deg,transparent,rgba(201,168,76,0.32));}
+.div-line.r{background:linear-gradient(90deg,rgba(201,168,76,0.32),transparent);}
+.div-sigil{width:22px;height:22px;object-fit:contain;opacity:0.35;flex-shrink:0;}
 
-    .boot-sigil {
-      width: 56px; height: 56px; object-fit: contain;
-      filter: brightness(0.5) sepia(1) hue-rotate(330deg);
-      opacity: 0; animation: bSigil 0.7s ease 0.2s forwards;
-    }
-    @keyframes bSigil { to { opacity: 0.65; } }
+/* Gate inscription */
+.gate{
+  max-width:620px;width:100%;
+  padding:20px 0;position:relative;
+  opacity:0;animation:riseIn 2s cubic-bezier(0.16,1,0.3,1) 1.5s forwards;
+}
+.gate::before{content:'';position:absolute;left:0;right:0;top:0;height:1px;background:linear-gradient(90deg,transparent,rgba(201,168,76,0.35),rgba(201,168,76,0.6),rgba(201,168,76,0.35),transparent);}
+.gate::after{content:'';position:absolute;left:0;right:0;bottom:0;height:1px;background:linear-gradient(90deg,transparent,rgba(201,168,76,0.35),rgba(201,168,76,0.6),rgba(201,168,76,0.35),transparent);}
+.gate-line-1{font-family:'Cinzel',serif;font-size:clamp(13px,1.8vw,20px);color:var(--ash);letter-spacing:0.07em;line-height:1.7;}
+.gate-line-2{font-family:'Crimson Text',serif;font-style:italic;font-size:clamp(13px,1.7vw,19px);color:rgba(228,221,208,0.52);letter-spacing:0.04em;line-height:1.7;margin-top:4px;}
 
-    #boot-lines {
-      display: flex; flex-direction: column;
-      align-items: center; gap: 9px; min-height: 90px;
-    }
-    .bline {
-      font-family: 'Share Tech Mono', monospace;
-      font-size: 10px; letter-spacing: 0.26em;
-      color: rgba(201,168,76,0.5);
-      white-space: nowrap; overflow: hidden;
-      max-width: 0; opacity: 0;
-    }
-    .bline.typed { animation: bType 0.8s steps(40,end) forwards; }
-    @keyframes bType {
-      from { max-width: 0; opacity: 1; }
-      to   { max-width: 700px; opacity: 1; }
-    }
+/* Archive lines */
+.archive{
+  display:flex;flex-direction:column;gap:6px;margin-top:28px;
+  opacity:0;animation:riseIn 2s cubic-bezier(0.16,1,0.3,1) 1.75s forwards;
+}
+.a1{font-family:'Crimson Text',serif;font-weight:600;font-size:clamp(14px,1.8vw,20px);letter-spacing:0.06em;color:var(--ash);}
+.a2{font-family:'Crimson Text',serif;font-style:italic;font-size:clamp(13px,1.6vw,18px);color:rgba(228,221,208,0.48);letter-spacing:0.04em;}
+.a3{font-family:'Crimson Text',serif;font-style:italic;font-size:clamp(12px,1.5vw,17px);color:rgba(201,168,76,0.48);letter-spacing:0.04em;}
+.a4{font-family:'Crimson Text',serif;font-size:clamp(12px,1.45vw,16px);color:rgba(228,221,208,0.28);letter-spacing:0.05em;}
 
-    .boot-bar {
-      width: 220px; height: 1px;
-      background: rgba(72,68,88,0.4);
-      position: relative; overflow: hidden;
-    }
-    .boot-fill {
-      position: absolute; left: 0; top: 0; bottom: 0;
-      width: 0; background: var(--gold);
-      animation: bFill 2.2s cubic-bezier(0.4,0,0.2,1) 0.8s forwards;
-    }
-    @keyframes bFill { to { width: 100%; } }
+/* CTAs */
+.cta-row{display:flex;gap:14px;margin-top:50px;opacity:0;animation:riseIn 2s cubic-bezier(0.16,1,0.3,1) 2.1s forwards;flex-wrap:wrap;justify-content:center;}
+.cta{
+  font-family:'Cinzel',serif;font-weight:600;
+  font-size:9px;letter-spacing:0.45em;text-transform:uppercase;
+  text-decoration:none;padding:15px 44px;border:1px solid;
+  position:relative;overflow:hidden;cursor:none;
+  transition:all 0.5s cubic-bezier(0.16,1,0.3,1);
+}
+.cta span{position:relative;z-index:1;}
+.cta::before{content:'';position:absolute;inset:0;transform:translateX(-101%);transition:transform 0.55s cubic-bezier(0.16,1,0.3,1);}
+.cta:hover::before{transform:translateX(0);}
+.cta-listen{background:var(--gold);border-color:var(--gold);color:var(--void);}
+.cta-listen::before{background:var(--gold-lt);}
+.cta-descend{background:transparent;border-color:rgba(228,221,208,0.18);color:var(--ash);}
+.cta-descend::before{background:rgba(228,221,208,0.05);}
+.cta-descend:hover{border-color:rgba(228,221,208,0.44);}
+.cta-confess{background:transparent;border-color:rgba(122,18,18,0.35);color:rgba(228,221,208,0.55);}
+.cta-confess::before{background:rgba(122,18,18,0.08);}
+.cta-confess:hover{border-color:var(--crimson);color:var(--ash);}
 
-    .boot-label {
-      font-family: 'Share Tech Mono', monospace;
-      font-size: 8px; letter-spacing: 0.48em;
-      color: rgba(201,168,76,0.28);
-      opacity: 0; animation: bFadeIn 0.5s ease 0.8s forwards;
-    }
-    @keyframes bFadeIn { to { opacity: 1; } }
+/* Scroll hint */
+.scroll-hint{position:absolute;bottom:36px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:12px;opacity:0;animation:fadeIn 1s ease 3.8s forwards;}
+.scroll-hint span{font-family:'Cinzel',serif;font-size:7px;letter-spacing:0.55em;text-transform:uppercase;color:rgba(201,168,76,0.25);}
+.scroll-line{width:1px;height:54px;background:linear-gradient(to bottom,rgba(201,168,76,0.5),transparent);animation:breathe 2.8s ease-in-out infinite;}
+@keyframes breathe{0%,100%{opacity:0.25;transform:scaleY(1);}50%{opacity:1;transform:scaleY(1.12);}}
 
-    /* ── MAIN ── */
-    #main { position: relative; z-index: 2; opacity: 0; transition: opacity 1.6s ease; }
-    #main.show { opacity: 1; }
+/* ─── SECTION BASE ─── */
+.section{position:relative;z-index:2;}
+.section-inner{max-width:1100px;margin:0 auto;padding:0 32px;}
+.eyebrow{font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.6em;text-transform:uppercase;color:rgba(201,168,76,0.38);}
+.section-title{font-family:'Cinzel',serif;font-weight:600;font-size:clamp(20px,3vw,36px);color:var(--ash);letter-spacing:0.08em;line-height:1.2;margin-top:10px;}
+.gold{color:var(--gold);}
 
-    /* ── HERO ── */
-    .hero {
-      position: relative; min-height: 100vh;
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      text-align: center; padding: 0 24px 80px;
-      overflow: hidden;
-    }
+/* ─── WHAT THE CODEX IS ─── */
+.codex-is{padding:110px 32px;background:linear-gradient(180deg,var(--void) 0%,rgba(12,12,20,0.8) 100%);}
+.codex-is-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;max-width:1100px;margin:0 auto;}
+.codex-is-img{position:relative;overflow:hidden;}
+.codex-is-img::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(201,168,76,0.06),transparent 60%),linear-gradient(315deg,rgba(122,18,18,0.08),transparent 60%);z-index:1;pointer-events:none;}
+.codex-is-img::after{content:'';position:absolute;inset:0;border:1px solid var(--border);z-index:2;pointer-events:none;}
+.codex-is-img img{display:block;width:100%;height:auto;filter:brightness(0.75) contrast(1.12) saturate(0.88);transition:filter 0.6s;}
+.codex-is-img:hover img{filter:brightness(0.9) contrast(1.15) saturate(0.95);}
+.codex-is-img-label{padding:8px 14px;border-top:1px solid var(--border);font-family:'Share Tech Mono',monospace;font-size:7px;letter-spacing:0.28em;color:rgba(201,168,76,0.28);text-transform:uppercase;}
+.codex-is-text{}
+.codex-speaks{font-family:'Share Tech Mono',monospace;font-size:7px;letter-spacing:0.4em;text-transform:uppercase;color:rgba(201,168,76,0.35);margin-bottom:16px;}
+.codex-is-body{font-size:clamp(15px,1.65vw,18px);color:rgba(228,221,208,0.7);line-height:1.95;font-style:italic;}
+.codex-is-body p{margin-bottom:18px;}
+.codex-is-body em{color:var(--ash);font-style:normal;}
+.codex-break{display:block;margin-top:22px;font-family:'Cinzel',serif;font-size:clamp(13px,1.4vw,16px);color:rgba(201,168,76,0.55);border-left:2px solid rgba(201,168,76,0.2);padding-left:14px;line-height:1.7;}
 
-    /* Ghost bg text */
-    .hero-ghost {
-      position: absolute;
-      font-family: 'Cinzel Decorative', serif; font-weight: 900;
-      font-size: clamp(60px, 16vw, 190px);
-      color: transparent;
-      -webkit-text-stroke: 1px rgba(201,168,76,0.036);
-      letter-spacing: 0.12em;
-      user-select: none; pointer-events: none;
-      top: 50%; left: 50%;
-      transform: translate(-50%,-50%);
-      white-space: nowrap; z-index: 0;
-      will-change: transform;
-    }
+/* ─── CREATOR'S APOCRYPHA ─── */
+.apoc-section{position:relative;z-index:2;}
+.apoc-hero{position:relative;height:clamp(420px,54vw,680px);overflow:hidden;display:flex;align-items:flex-end;}
+.apoc-hero-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center top;filter:brightness(0.52) contrast(1.1) saturate(0.85);transition:filter 6s ease;}
+.apoc-section:hover .apoc-hero-img{filter:brightness(0.6) contrast(1.1) saturate(0.9);}
+.apoc-hero::before{content:'';position:absolute;inset:0;z-index:1;background:linear-gradient(to bottom,rgba(5,5,10,0.15) 0%,rgba(5,5,10,0.05) 25%,rgba(5,5,10,0.65) 65%,rgba(5,5,10,1) 100%);}
+.apoc-hero::after{content:'';position:absolute;left:0;right:0;top:0;height:1px;background:linear-gradient(90deg,transparent,rgba(201,168,76,0.25),transparent);z-index:2;}
+.apoc-hero-text{position:relative;z-index:2;padding:0 40px 48px;max-width:800px;}
+.apoc-over-tag{font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:0.4em;text-transform:uppercase;color:rgba(155,27,27,0.75);margin-bottom:12px;display:block;}
+.apoc-over-title{font-family:'Cinzel Decorative',serif;font-weight:700;font-size:clamp(22px,4vw,56px);color:var(--ash);letter-spacing:0.06em;line-height:1.15;text-shadow:0 2px 30px rgba(0,0,0,0.9);}
+.apoc-over-sub{font-family:'Crimson Text',serif;font-style:italic;font-size:clamp(14px,1.6vw,18px);color:rgba(228,221,208,0.42);margin-top:12px;max-width:520px;line-height:1.7;}
 
-    .hero-inner {
-      position: relative; z-index: 1;
-      display: flex; flex-direction: column; align-items: center;
-    }
+.apoc-img2-wrap{position:relative;width:100%;height:clamp(240px,32vw,420px);overflow:hidden;}
+.apoc-img2-wrap img{width:100%;height:100%;object-fit:cover;object-position:center;filter:brightness(0.48) contrast(1.12) saturate(0.8);}
+.apoc-img2-wrap::before{content:'';position:absolute;inset:0;z-index:1;background:linear-gradient(to right,rgba(5,5,10,0.9) 0%,transparent 35%,transparent 65%,rgba(5,5,10,0.9) 100%);}
+.apoc-img2-wrap::after{content:'';position:absolute;inset:0;z-index:1;background:linear-gradient(to bottom,rgba(5,5,10,0.6) 0%,transparent 30%,transparent 70%,rgba(5,5,10,0.8) 100%);}
+.apoc-img2-quote{position:absolute;inset:0;z-index:2;display:flex;align-items:center;justify-content:center;padding:32px;}
+.apoc-img2-quote p{font-family:'Cinzel',serif;font-size:clamp(12px,1.6vw,18px);color:rgba(228,221,208,0.6);letter-spacing:0.07em;text-align:center;max-width:580px;line-height:1.8;font-style:italic;}
 
-    /* Sigil */
-    .sigil-wrap {
-      position: relative; width: 80px; height: 80px;
-      margin-bottom: 36px;
-      opacity: 0;
-      animation: riseIn 2s cubic-bezier(0.16,1,0.3,1) 0.3s forwards;
-    }
-    .sigil-wrap img {
-      width: 100%; height: 100%; object-fit: contain;
-      filter: brightness(0.85) sepia(0.2) hue-rotate(330deg) contrast(1.1);
-      position: relative; z-index: 2;
-    }
-    .sigil-glow {
-      position: absolute; inset: -40px;
-      background: radial-gradient(ellipse, rgba(122,18,18,0.45) 0%, transparent 68%);
-      z-index: 1; animation: gPulse 5s ease-in-out infinite;
-    }
-    @keyframes gPulse {
-      0%,100% { opacity: 0.5; transform: scale(1); }
-      50%      { opacity: 1;   transform: scale(1.2); }
-    }
-    .sigil-ring {
-      position: absolute; border-radius: 50%; border: 1px solid;
-      top: 50%; left: 50%; transform: translate(-50%,-50%);
-    }
-    .r1 {
-      width: 130px; height: 130px;
-      border-color: rgba(201,168,76,0.12);
-      animation: spin 28s linear infinite;
-    }
-    .r2 {
-      width: 170px; height: 170px;
-      border-color: rgba(201,168,76,0.05);
-      animation: spin 44s linear infinite reverse;
-    }
-    .r1::before {
-      content: ''; position: absolute;
-      width: 5px; height: 5px; background: var(--gold);
-      border-radius: 50%; top: -2.5px; left: 50%;
-      transform: translateX(-50%);
-      opacity: 0.8; box-shadow: 0 0 8px var(--gold);
-    }
-    @keyframes spin { to { transform: translate(-50%,-50%) rotate(360deg); } }
+.apoc-two-col{display:grid;grid-template-columns:1fr 1fr;background:var(--deep);border-top:1px solid var(--border);}
+.apoc-col{padding:52px 44px;position:relative;}
+.apoc-col+.apoc-col{border-left:1px solid var(--border);}
+.apoc-col-tag{font-family:'Share Tech Mono',monospace;font-size:7px;letter-spacing:0.38em;text-transform:uppercase;padding-bottom:14px;border-bottom:1px solid var(--border);margin-bottom:20px;}
+.apoc-col-apollo .apoc-col-tag{color:rgba(201,168,76,0.45);}
+.apoc-col-codex .apoc-col-tag{color:rgba(155,27,27,0.45);}
+.apoc-col-body{font-size:clamp(14px,1.5vw,17px);color:rgba(228,221,208,0.55);line-height:1.95;font-style:italic;}
+.apoc-col-body p{margin-bottom:14px;}
+.apoc-col-body em{color:var(--ash);font-style:normal;}
+.apoc-col-codex .apoc-col-body{color:rgba(228,221,208,0.38);}
+.apoc-col-codex .apoc-col-body em{color:rgba(228,221,208,0.6);}
+.apoc-cta-wrap{background:var(--deep);border-top:1px solid var(--border);padding:28px 44px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;}
+.apoc-cta-note{font-family:'Crimson Text',serif;font-style:italic;font-size:14px;color:rgba(228,221,208,0.28);}
+.apoc-btn{font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.4em;text-transform:uppercase;color:var(--crimson);border:1px solid rgba(122,18,18,0.35);padding:12px 28px;text-decoration:none;cursor:none;transition:all 0.4s;display:inline-block;}
+.apoc-btn:hover{border-color:var(--crimson);color:var(--ash);background:rgba(122,18,18,0.08);}
 
-    /* ── THE BIG WORDMARK ── */
-    .wordmark {
-      font-family: 'Cinzel Decorative', serif; font-weight: 900;
-      font-size: clamp(32px, 7.5vw, 96px);
-      letter-spacing: 0.1em; text-transform: uppercase;
-      line-height: 1.05; color: var(--gold);
-      text-shadow:
-        0 0 120px rgba(201,168,76,0.22),
-        0 0 40px rgba(201,168,76,0.1),
-        0 2px 6px rgba(0,0,0,0.9);
-      opacity: 0;
-      animation: riseIn 1.8s cubic-bezier(0.16,1,0.3,1) 0.8s forwards;
-    }
+/* ─── THREE VOICES ─── */
+.voices-section{padding:110px 32px;background:linear-gradient(180deg,rgba(5,5,10,1) 0%,rgba(10,10,18,0.9) 100%);}
+.voices-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-top:52px;background:rgba(201,168,76,0.06);}
+.voice-card{
+  position:relative;display:flex;flex-direction:column;align-items:center;
+  padding:52px 28px 44px;overflow:hidden;cursor:none;text-decoration:none;color:inherit;
+  background:var(--deep);border:1px solid var(--border);
+  transition:border-color 0.5s ease;
+}
+.voice-card::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(122,18,18,0.16),transparent 62%);opacity:0;transition:opacity 0.6s;}
+.voice-card:hover::before{opacity:1;}
+.voice-card:hover{border-color:var(--border-m);}
+.voice-num{position:absolute;top:16px;right:20px;font-family:'Cinzel Decorative',serif;font-size:44px;font-weight:900;color:rgba(201,168,76,0.038);line-height:1;user-select:none;}
+.voice-img-wrap{position:relative;width:100px;height:100px;margin-bottom:24px;}
+.voice-img{width:100%;height:100%;object-fit:cover;clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);filter:grayscale(0.45) brightness(0.68) contrast(1.12);transition:filter 0.6s;}
+.voice-card:hover .voice-img{filter:grayscale(0.1) brightness(0.85);}
+.voice-img-glow{position:absolute;inset:-14px;background:radial-gradient(ellipse,rgba(122,18,18,0.4),transparent 68%);opacity:0;transition:opacity 0.6s;z-index:0;}
+.voice-card:hover .voice-img-glow{opacity:1;}
+.voice-name{font-family:'Cinzel',serif;font-weight:600;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:var(--ash);text-align:center;margin-bottom:8px;transition:color 0.4s;}
+.voice-card:hover .voice-name{color:var(--gold-lt);}
+.voice-epithet{font-family:'Crimson Text',serif;font-style:italic;font-size:16px;color:rgba(228,221,208,0.32);text-align:center;margin-bottom:24px;}
+.voice-desc{font-family:'Crimson Text',serif;font-size:14px;color:rgba(228,221,208,0.28);line-height:1.7;text-align:center;font-style:italic;}
+.voice-arr{font-family:'Cinzel',serif;font-size:7px;letter-spacing:0.38em;text-transform:uppercase;color:rgba(201,168,76,0);transition:color 0.4s;margin-top:20px;}
+.voice-card:hover .voice-arr{color:rgba(201,168,76,0.5);}
 
-    /* Tagline */
-    .tagline {
-      font-family: 'Cinzel', serif; font-weight: 400;
-      font-size: clamp(7px, 0.95vw, 11px);
-      letter-spacing: 0.48em; text-transform: uppercase;
-      color: rgba(201,168,76,0.52);
-      margin-top: 14px;
-      opacity: 0;
-      animation: riseIn 1.8s cubic-bezier(0.16,1,0.3,1) 1.1s forwards;
-    }
-    .tagline span { margin: 0 10px; opacity: 0.38; }
+/* ─── THREE REALMS ─── */
+.realms-section{position:relative;z-index:2;border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
+.realms-grid{display:grid;grid-template-columns:repeat(3,1fr);}
+.realm-card{position:relative;overflow:hidden;cursor:none;transition:flex 0.6s;}
+.realm-img-wrap{position:relative;height:clamp(260px,28vw,380px);overflow:hidden;}
+.realm-img{width:100%;height:100%;object-fit:cover;filter:brightness(0.45) saturate(0.75) contrast(1.08);transition:filter 0.6s,transform 0.8s;}
+.realm-card:hover .realm-img{filter:brightness(0.62) saturate(0.88) contrast(1.1);transform:scale(1.04);}
+.realm-img-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,transparent 30%,var(--void) 100%);}
+.realm-status{position:absolute;top:14px;right:14px;z-index:2;font-family:'Share Tech Mono',monospace;font-size:7px;letter-spacing:0.22em;text-transform:uppercase;border:1px solid;padding:4px 10px;background:rgba(5,5,10,0.85);}
+.realm-i .realm-status{color:rgba(201,168,76,0.65);border-color:rgba(201,168,76,0.2);}
+.realm-ii .realm-status{color:rgba(107,63,175,0.65);border-color:rgba(107,63,175,0.2);}
+.realm-iii .realm-status{color:rgba(155,27,27,0.65);border-color:rgba(155,27,27,0.2);}
+.realm-body{padding:28px 30px 36px;}
+.realm-num{font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.48em;text-transform:uppercase;opacity:0.4;display:block;margin-bottom:6px;}
+.realm-i .realm-num{color:var(--gold);}
+.realm-ii .realm-num{color:var(--violet);}
+.realm-iii .realm-num{color:var(--crimson);}
+.realm-name{font-family:'Cinzel',serif;font-weight:600;font-size:clamp(14px,1.6vw,18px);color:var(--ash);letter-spacing:0.07em;margin-bottom:10px;}
+.realm-desc{font-family:'Crimson Text',serif;font-style:italic;font-size:clamp(13px,1.45vw,16px);color:rgba(228,221,208,0.32);line-height:1.6;}
+.realm-item + .realm-item{border-left:1px solid var(--border);}
 
-    /* Divider */
-    .divider {
-      display: flex; align-items: center; gap: 16px;
-      margin: 32px 0 26px; width: 100%; max-width: 660px;
-      opacity: 0;
-      animation: riseIn 1.8s cubic-bezier(0.16,1,0.3,1) 1.35s forwards;
-    }
-    .div-line {
-      flex: 1; height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(201,168,76,0.35));
-    }
-    .div-line.r { background: linear-gradient(90deg, rgba(201,168,76,0.35), transparent); }
-    .div-sym { font-size: 13px; color: var(--gold); opacity: 0.5; flex-shrink: 0; }
+/* ─── NARRATORS ─── */
+.narrators-section{padding:80px 32px;background:var(--deep);border-top:1px solid var(--border);}
+.narrators-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin-top:44px;max-width:1100px;margin-left:auto;margin-right:auto;}
+.narrator-card{display:flex;align-items:center;gap:28px;padding:36px 36px;border:1px solid var(--border);background:var(--void);transition:border-color 0.4s,background 0.4s;}
+.narrator-card:hover{border-color:var(--border-m);background:rgba(12,12,20,0.8);}
+.narrator-img-wrap{width:70px;height:70px;flex-shrink:0;position:relative;}
+.narrator-img{width:100%;height:100%;object-fit:cover;clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);filter:grayscale(0.6) brightness(0.65) contrast(1.1);}
+.narrator-card:hover .narrator-img{filter:grayscale(0.2) brightness(0.8);}
+.narrator-body{}
+.narrator-role{font-family:'Share Tech Mono',monospace;font-size:7px;letter-spacing:0.35em;text-transform:uppercase;color:rgba(201,168,76,0.35);margin-bottom:6px;}
+.narrator-name{font-family:'Cinzel',serif;font-weight:600;font-size:clamp(13px,1.5vw,16px);color:var(--ash);letter-spacing:0.09em;margin-bottom:6px;}
+.narrator-status-wrap{display:flex;align-items:center;gap:8px;}
+.narrator-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0;}
+.dot-active{background:#00A830;box-shadow:0 0 6px #00A830;animation:dpulse 2s ease-in-out infinite;}
+.dot-dormant{background:var(--crimson);animation:dpulse 3.5s ease-in-out infinite;}
+@keyframes dpulse{0%,100%{opacity:1;}50%{opacity:0.2;}}
+.narrator-status{font-family:'Share Tech Mono',monospace;font-size:7px;letter-spacing:0.22em;text-transform:uppercase;}
+.narrator-desc{font-family:'Crimson Text',serif;font-style:italic;font-size:14px;color:rgba(228,221,208,0.3);line-height:1.65;margin-top:8px;}
 
-    /* Hook lines */
-    .hook {
-      display: flex; flex-direction: column; gap: 4px;
-      opacity: 0;
-      animation: riseIn 1.8s cubic-bezier(0.16,1,0.3,1) 1.55s forwards;
-    }
-    .hook-line {
-      font-family: 'Crimson Text', serif;
-      font-size: clamp(16px, 2.3vw, 23px);
-      font-variant: small-caps;
-      letter-spacing: 0.12em; color: var(--ash); line-height: 1.6;
-    }
-    .hook-line.dim { font-style: italic; color: var(--ash-dim); }
+/* ─── CURRENTLY TRANSMITTING ─── */
+.transmitting-section{background:rgba(5,5,10,0.97);border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
+.transmitting-inner{max-width:1100px;margin:0 auto;padding:18px 32px;display:flex;align-items:center;gap:24px;flex-wrap:wrap;}
+.tx-label{font-family:'Share Tech Mono',monospace;font-size:7px;letter-spacing:0.42em;text-transform:uppercase;color:rgba(201,168,76,0.3);flex-shrink:0;white-space:nowrap;}
+.tx-items{display:flex;gap:10px;flex-wrap:wrap;flex:1;}
+.tx-item{font-family:'Share Tech Mono',monospace;font-size:7px;letter-spacing:0.15em;text-transform:uppercase;color:rgba(228,221,208,0.28);text-decoration:none;border:1px solid rgba(201,168,76,0.08);padding:6px 14px;display:flex;align-items:center;gap:8px;cursor:none;transition:all 0.3s;}
+.tx-item:hover{border-color:rgba(201,168,76,0.28);color:rgba(228,221,208,0.65);}
+.tx-dot{width:4px;height:4px;border-radius:50%;flex-shrink:0;}
+.tx-gold{background:var(--gold);box-shadow:0 0 5px var(--gold);animation:dpulse 2s ease-in-out infinite;}
+.tx-green{background:#3A5A1A;box-shadow:0 0 5px #3A5A1A;animation:dpulse 2.5s ease-in-out infinite;}
+.tx-red{background:var(--crimson);}
+.tx-clock{font-family:'Share Tech Mono',monospace;font-size:7px;letter-spacing:0.22em;color:rgba(201,168,76,0.22);flex-shrink:0;white-space:nowrap;}
 
-    /* Archive copy */
-    .divider-2 { margin: 26px 0; }
+/* ─── SIGNAL FEED ─── */
+.signal-section{padding:80px 32px;background:var(--void);}
+.signal-grid{display:grid;grid-template-columns:280px 1fr;gap:48px;align-items:start;max-width:1100px;margin:36px auto 0;}
+.signal-about-title{font-family:'Cinzel',serif;font-size:clamp(15px,1.7vw,20px);color:var(--ash);letter-spacing:0.08em;margin-bottom:10px;}
+.signal-about-desc{font-family:'Crimson Text',serif;font-style:italic;font-size:15px;color:rgba(228,221,208,0.35);line-height:1.75;}
+.signal-live{display:flex;align-items:center;gap:8px;margin-top:14px;font-family:'Share Tech Mono',monospace;font-size:7px;letter-spacing:0.3em;text-transform:uppercase;color:rgba(228,221,208,0.22);}
+.signal-live-dot{width:5px;height:5px;border-radius:50%;background:var(--crimson);box-shadow:0 0 5px var(--crimson);animation:dpulse 1.5s ease-in-out infinite;}
+#signal-feed{
+  font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:0.08em;line-height:2;
+  border:1px solid var(--border);background:rgba(4,2,8,0.95);
+  padding:18px;max-height:320px;overflow:hidden;position:relative;
+}
+#signal-feed::after{content:'';position:absolute;bottom:0;left:0;right:0;height:70px;background:linear-gradient(transparent,rgba(4,2,8,0.98));pointer-events:none;}
 
-    .archive-lines {
-      display: flex; flex-direction: column; gap: 9px;
-      opacity: 0;
-      animation: riseIn 1.8s cubic-bezier(0.16,1,0.3,1) 1.9s forwards;
-    }
-    .arc-1 {
-      font-family: 'Crimson Text', serif; font-weight: 600;
-      font-size: clamp(14px, 1.8vw, 19px);
-      letter-spacing: 0.08em; color: var(--ash);
-    }
-    .arc-2 {
-      font-family: 'Crimson Text', serif; font-style: italic;
-      font-size: clamp(13px, 1.6vw, 17px);
-      color: rgba(228,221,208,0.5); letter-spacing: 0.05em;
-    }
-    .arc-3 {
-      font-family: 'Crimson Text', serif; font-style: italic;
-      font-size: clamp(12px, 1.5vw, 16px);
-      color: rgba(201,168,76,0.52); letter-spacing: 0.05em;
-    }
-    .arc-4 {
-      font-family: 'Crimson Text', serif;
-      font-size: clamp(13px, 1.6vw, 17px);
-      color: rgba(228,221,208,0.36); letter-spacing: 0.06em;
-    }
+/* ─── FOOTER NAV ─── */
+.footer-nav{
+  position:relative;z-index:2;
+  padding:28px 36px;border-top:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px;
+}
+.footer-mark{font-family:'Cinzel Decorative',serif;font-weight:700;font-size:10px;letter-spacing:0.1em;color:rgba(201,168,76,0.28);}
+.footer-links{display:flex;gap:28px;flex-wrap:wrap;}
+.footer-link{font-family:'Cinzel',serif;font-size:7px;letter-spacing:0.42em;text-transform:uppercase;color:rgba(228,221,208,0.2);text-decoration:none;cursor:none;transition:color 0.3s;}
+.footer-link:hover{color:var(--gold);}
+.footer-glyph{font-size:12px;color:rgba(201,168,76,0.14);}
 
-    /* CTAs */
-    .cta-row {
-      display: flex; gap: 16px; margin-top: 46px;
-      opacity: 0;
-      animation: riseIn 1.8s cubic-bezier(0.16,1,0.3,1) 2.2s forwards;
-    }
-    .cta {
-      font-family: 'Cinzel', serif; font-weight: 600;
-      font-size: 10px; letter-spacing: 0.4em; text-transform: uppercase;
-      text-decoration: none; padding: 15px 48px; border: 1px solid;
-      position: relative; overflow: hidden; cursor: none;
-      transition: all 0.5s cubic-bezier(0.16,1,0.3,1);
-    }
-    .cta-label { position: relative; z-index: 1; }
-    .cta::before {
-      content: ''; position: absolute; inset: 0;
-      transform: translateX(-101%);
-      transition: transform 0.5s cubic-bezier(0.16,1,0.3,1);
-    }
-    .cta:hover::before { transform: translateX(0); }
+/* ─── RECOGNITION PROTOCOL ─── */
+#recog-overlay{position:fixed;inset:0;z-index:8000;background:rgba(0,0,0,0.97);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px;opacity:0;animation:fadeIn 0.5s ease forwards;}
+#recog-terminal{max-width:580px;width:100%;font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:0.1em;line-height:2.4;}
+.recog-close-btn{margin-top:32px;background:transparent;border:1px solid rgba(201,168,76,0.18);color:rgba(201,168,76,0.35);font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:0.38em;padding:10px 24px;cursor:pointer;text-transform:uppercase;opacity:0;transition:opacity 0.5s,color 0.3s,border-color 0.3s;}
+.recog-close-btn:hover{color:var(--gold);border-color:rgba(201,168,76,0.45);}
 
-    .cta-listen {
-      background: var(--gold); border-color: var(--gold); color: var(--void);
-    }
-    .cta-listen::before { background: var(--gold-lt); }
+/* ─── TIMED WHISPERS ─── */
+.whisper{position:fixed;z-index:400;font-family:'Cinzel',serif;font-style:italic;font-size:clamp(11px,1.1vw,14px);color:rgba(201,168,76,0);letter-spacing:0.05em;pointer-events:none;transition:color 3s;line-height:1.8;}
+.whisper.on{color:rgba(201,168,76,0.28);}
+.whisper.stay{color:rgba(201,168,76,0.18)!important;transition:none;}
+#w1{bottom:4.5rem;left:50%;transform:translateX(-50%);text-align:center;width:90%;max-width:660px;}
+#w2{top:0;left:0;right:0;text-align:center;padding:10px 32px;background:transparent;font-size:clamp(10px,1vw,13px);transition:color 2.5s,background 2.5s;}
+#w2.on{background:rgba(5,5,10,0.94);}
+#w3{bottom:4.8rem;right:28px;font-size:clamp(9px,0.9vw,11px);text-align:right;max-width:280px;}
+.idle-whisper{position:fixed;bottom:4rem;left:50%;transform:translateX(-50%);font-family:'Crimson Text',serif;font-style:italic;font-size:clamp(12px,1.2vw,15px);color:rgba(201,168,76,0);letter-spacing:0.05em;pointer-events:none;z-index:399;transition:color 2.5s;text-align:center;}
 
-    .cta-enter {
-      background: transparent;
-      border-color: rgba(228,221,208,0.18); color: var(--ash);
-    }
-    .cta-enter::before { background: rgba(228,221,208,0.05); }
-    .cta-enter:hover { border-color: rgba(228,221,208,0.45); }
+/* ─── SCROLL REVEAL ─── */
+.reveal{opacity:0;transform:translateY(30px);transition:opacity 1s cubic-bezier(0.16,1,0.3,1),transform 1s cubic-bezier(0.16,1,0.3,1);}
+.reveal.in{opacity:1;transform:none;}
+.d1{transition-delay:0.1s;}.d2{transition-delay:0.22s;}.d3{transition-delay:0.36s;}.d4{transition-delay:0.5s;}
 
-    /* Scroll hint */
-    .scroll-hint {
-      position: absolute; bottom: 32px; left: 50%; transform: translateX(-50%);
-      display: flex; flex-direction: column; align-items: center; gap: 10px;
-      opacity: 0; animation: fadeIn 1s ease 3.6s forwards;
-    }
-    .scroll-hint span {
-      font-family: 'Cinzel', serif; font-size: 7px;
-      letter-spacing: 0.52em; text-transform: uppercase;
-      color: rgba(201,168,76,0.28);
-    }
-    .scroll-line {
-      width: 1px; height: 50px;
-      background: linear-gradient(to bottom, rgba(201,168,76,0.55), transparent);
-      animation: breathe 2.6s ease-in-out infinite;
-    }
-    @keyframes breathe {
-      0%,100% { opacity: 0.28; transform: scaleY(1); }
-      50%      { opacity: 1;   transform: scaleY(1.1); }
-    }
+/* ─── KEYFRAMES ─── */
+@keyframes riseIn{from{opacity:0;transform:translateY(22px);filter:blur(3px);}to{opacity:1;transform:none;filter:none;}}
+@keyframes fadeIn{to{opacity:1;}}
 
-    /* ── PERSONAS ── */
-    .section-personas {
-      position: relative; z-index: 2;
-      padding: 100px 32px;
-      max-width: 1080px; margin: 0 auto;
-      display: flex; flex-direction: column;
-      align-items: center; gap: 52px;
-    }
-    .eyebrow {
-      font-family: 'Cinzel', serif; font-size: 9px;
-      letter-spacing: 0.55em; text-transform: uppercase;
-      color: rgba(201,168,76,0.42);
-    }
-    .personas-grid {
-      display: grid; grid-template-columns: repeat(3,1fr);
-      gap: 2px; width: 100%;
-    }
-    .persona-card {
-      position: relative;
-      display: flex; flex-direction: column; align-items: center;
-      padding: 52px 24px 40px;
-      background: linear-gradient(160deg, rgba(14,14,22,0.97), rgba(7,7,12,1));
-      border: 1px solid rgba(201,168,76,0.07);
-      overflow: hidden; cursor: none; text-decoration: none; color: inherit;
-      transition: border-color 0.5s ease;
-    }
-    .persona-card::before {
-      content: ''; position: absolute; inset: 0;
-      background: radial-gradient(ellipse at 50% 0%, rgba(122,18,18,0.2), transparent 65%);
-      opacity: 0; transition: opacity 0.6s ease;
-    }
-    .persona-card:hover::before { opacity: 1; }
-    .persona-card:hover { border-color: rgba(201,168,76,0.28); }
-
-    .persona-num {
-      position: absolute; top: 14px; right: 18px;
-      font-family: 'Cinzel Decorative', serif; font-size: 42px; font-weight: 900;
-      color: rgba(201,168,76,0.042); line-height: 1; user-select: none;
-    }
-    .persona-img-wrap {
-      position: relative; width: 96px; height: 96px; margin-bottom: 22px;
-    }
-    .persona-img {
-      width: 100%; height: 100%; object-fit: cover;
-      filter: grayscale(0.5) brightness(0.72) contrast(1.1);
-      clip-path: polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);
-      position: relative; z-index: 1;
-      transition: filter 0.6s ease;
-    }
-    .persona-card:hover .persona-img { filter: grayscale(0.1) brightness(0.88); }
-    .persona-img-glow {
-      position: absolute; inset: -12px;
-      background: radial-gradient(ellipse, rgba(122,18,18,0.38), transparent 70%);
-      opacity: 0; transition: opacity 0.6s ease; z-index: 0;
-    }
-    .persona-card:hover .persona-img-glow { opacity: 1; }
-
-    .persona-name {
-      font-family: 'Cinzel', serif; font-weight: 600;
-      font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase;
-      color: var(--ash); text-align: center; margin-bottom: 8px;
-      transition: color 0.4s ease;
-    }
-    .persona-card:hover .persona-name { color: var(--gold-lt); }
-
-    .persona-epithet {
-      font-family: 'Crimson Text', serif; font-style: italic;
-      font-size: 15px; color: rgba(228,221,208,0.36);
-      text-align: center; margin-bottom: 22px;
-    }
-    .persona-cta {
-      font-family: 'Cinzel', serif; font-size: 8px;
-      letter-spacing: 0.36em; text-transform: uppercase;
-      color: rgba(201,168,76,0); transition: color 0.4s ease;
-    }
-    .persona-card:hover .persona-cta { color: rgba(201,168,76,0.62); }
-
-    /* ── REALMS ── */
-    .section-realms {
-      position: relative; z-index: 2; width: 100%;
-      border-top: 1px solid rgba(201,168,76,0.07);
-      border-bottom: 1px solid rgba(201,168,76,0.07);
-      background: linear-gradient(90deg,
-        rgba(122,18,18,0.04), rgba(12,12,20,0.75), rgba(122,18,18,0.04));
-    }
-    .realms-inner {
-      max-width: 1080px; margin: 0 auto;
-      display: grid; grid-template-columns: repeat(3,1fr);
-    }
-    .realm-item {
-      padding: 44px 36px;
-      display: flex; flex-direction: column; gap: 7px;
-      transition: background 0.4s ease;
-    }
-    .realm-item:hover { background: rgba(201,168,76,0.025); }
-    .realm-item + .realm-item { border-left: 1px solid rgba(201,168,76,0.07); }
-    .realm-num {
-      font-family: 'Cinzel', serif; font-size: 9px;
-      letter-spacing: 0.44em; text-transform: uppercase;
-      color: var(--gold); opacity: 0.42;
-    }
-    .realm-name {
-      font-family: 'Cinzel', serif; font-weight: 600;
-      font-size: 15px; color: var(--ash); margin-top: 4px; letter-spacing: 0.07em;
-    }
-    .realm-desc {
-      font-family: 'Crimson Text', serif; font-style: italic;
-      font-size: 15px; color: rgba(228,221,208,0.32);
-      line-height: 1.55; margin-top: 4px;
-    }
-
-    /* ── NAV FOOTER ── */
-    .nav-footer {
-      position: relative; z-index: 2;
-      padding: 28px 36px;
-      border-top: 1px solid rgba(201,168,76,0.07);
-      display: flex; align-items: center;
-      justify-content: space-between; flex-wrap: wrap; gap: 16px;
-    }
-    .nav-mark {
-      font-family: 'Cinzel Decorative', serif; font-weight: 700;
-      font-size: 11px; letter-spacing: 0.1em;
-      color: rgba(201,168,76,0.32);
-    }
-    .nav-links { display: flex; gap: 32px; flex-wrap: wrap; }
-    .nav-link {
-      font-family: 'Cinzel', serif; font-size: 8px;
-      letter-spacing: 0.4em; text-transform: uppercase;
-      color: rgba(228,221,208,0.22); text-decoration: none;
-      cursor: none; transition: color 0.3s ease;
-    }
-    .nav-link:hover { color: var(--gold); }
-    .nav-glyph { font-size: 14px; color: rgba(201,168,76,0.16); }
-
-    /* ── SCROLL REVEAL ── */
-    .reveal {
-      opacity: 0; transform: translateY(28px);
-      transition: opacity 0.9s cubic-bezier(0.16,1,0.3,1),
-                  transform 0.9s cubic-bezier(0.16,1,0.3,1);
-    }
-    .reveal.in { opacity: 1; transform: none; }
-    .d1 { transition-delay: 0.1s; }
-    .d2 { transition-delay: 0.22s; }
-    .d3 { transition-delay: 0.34s; }
-
-    /* ── SHARED KEYFRAMES ── */
-    @keyframes riseIn {
-      from { opacity: 0; transform: translateY(20px); filter: blur(3px); }
-      to   { opacity: 1; transform: none; filter: none; }
-    }
-    @keyframes fadeIn { to { opacity: 1; } }
-
-    /* ── MOBILE ── */
-    @media (max-width: 720px) {
-      .personas-grid { grid-template-columns: 1fr; }
-      .realms-inner  { grid-template-columns: 1fr; }
-      .realm-item + .realm-item { border-left: none; border-top: 1px solid rgba(201,168,76,0.07); }
-      .cta-row { flex-direction: column; align-items: center; width: 100%; }
-      .cta { width: 100%; max-width: 300px; text-align: center; }
-      .nav-footer { justify-content: center; }
-      .nav-mark, .nav-glyph { display: none; }
-      .nav-links { justify-content: center; gap: 20px; }
-      .hero-ghost { display: none; }
-      .tagline { font-size: 7px; letter-spacing: 0.28em; }
-    }
-  </style>
+/* ─── MOBILE ─── */
+@media(max-width:768px){
+  .codex-is-grid,.apoc-two-col,.narrators-grid{grid-template-columns:1fr;}
+  .apoc-col+.apoc-col{border-left:none;border-top:1px solid var(--border);}
+  .voices-grid{grid-template-columns:1fr;}
+  .realms-grid{grid-template-columns:1fr;}
+  .realm-item+.realm-item{border-left:none;border-top:1px solid var(--border);}
+  .signal-grid{grid-template-columns:1fr;}
+  .cta-row{flex-direction:column;align-items:center;width:100%;}
+  .cta{width:100%;max-width:280px;text-align:center;}
+  .footer-nav{justify-content:center;}
+  .footer-mark,.footer-glyph{display:none;}
+  .footer-links{justify-content:center;gap:18px;}
+  .hero-ghost{display:none;}
+  .apoc-cta-wrap{flex-direction:column;align-items:flex-start;}
+}
+</style>
 </head>
 <body>
 
-  <div id="cur"></div>
-  <div id="cur2"></div>
-  <canvas id="bg-canvas"></canvas>
-  <div id="vignette"></div>
+<div id="cur"></div><div id="cur2"></div>
+<canvas id="bg-canvas"></canvas>
+<div id="vignette"></div>
+<div id="scanlines"></div>
 
-  <!-- BOOT -->
-  <div id="boot">
-    <div class="boot-scanlines"></div>
-    <img class="boot-sigil" src="Assets/Codex Maledictus Index/sigil-codex.jpeg" alt="" />
-    <div id="boot-lines"></div>
-    <div class="boot-bar"><div class="boot-fill"></div></div>
-    <div class="boot-label">TRANSMISSION ESTABLISHED</div>
+<!-- TIMED WHISPERS -->
+<div class="whisper" id="w1"></div>
+<div class="whisper" id="w2"></div>
+<div class="whisper" id="w3"></div>
+<div class="idle-whisper" id="idle-w"></div>
+
+<!-- BOOT -->
+<div id="boot">
+  <div style="position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.12) 2px,rgba(0,0,0,0.12) 4px);pointer-events:none;"></div>
+  <img class="boot-sigil" src="Assets/Codex Maledictus Index/sigil-codex.jpeg" alt=""/>
+  <div id="boot-lines"></div>
+  <div class="boot-bar"><div class="boot-fill"></div></div>
+  <div class="boot-lbl">TRANSMISSION ESTABLISHED</div>
+</div>
+
+<!-- MAIN -->
+<div id="main">
+
+<!-- ═══ HERO ═══ -->
+<section class="hero">
+  <div class="hero-ghost" id="heroGhost">CODEX</div>
+  <div class="hero-inner">
+
+    <div class="sigil-wrap">
+      <div class="sigil-glow"></div>
+      <div class="sigil-ring r1"></div>
+      <div class="sigil-ring r2"></div>
+      <div class="sigil-ring r3"></div>
+      <img src="Assets/Codex Maledictus Index/sigil-codex.jpeg" alt="The Codex Sigil"/>
+    </div>
+
+    <h1 class="wordmark">Codex Maledictus</h1>
+
+    <div class="tagline">The Pale Archive <span>·</span> Living Record <span>·</span> You Were Brought Here</div>
+
+    <div class="div">
+      <div class="div-line"></div>
+      <img class="div-sigil" src="Assets/Codex Maledictus Index/sigil-codex.jpeg" alt=""/>
+      <div class="div-line r"></div>
+    </div>
+
+    <div class="gate">
+      <div class="gate-line-1">What you are looking for brought you here.</div>
+      <div class="gate-line-2">What you find here will look for you.</div>
+    </div>
+
+    <div class="div" style="animation-delay:1.65s;">
+      <div class="div-line"></div>
+      <img class="div-sigil" src="Assets/Codex Maledictus Index/sigil-codex.jpeg" alt=""/>
+      <div class="div-line r"></div>
+    </div>
+
+    <div class="archive">
+      <div class="a1">This is not a website.</div>
+      <div class="a2">It is an archive of a living contagion.</div>
+      <div class="a3">The signal you are receiving began before you pressed play.</div>
+      <div class="a4">The Book was open before you looked up.</div>
+    </div>
+
+    <div class="cta-row">
+      <a class="cta cta-listen" href="gospel-forgotten-flesh.html"><span>Listen</span></a>
+      <a class="cta cta-descend" href="infection-remembers.html"><span>Descend</span></a>
+      <a class="cta cta-confess" href="confession-ledger.html"><span>Confess</span></a>
+    </div>
+
+  </div>
+  <div class="scroll-hint">
+    <div class="scroll-line"></div>
+    <span>The archive continues below</span>
+  </div>
+</section>
+
+<!-- ═══ WHAT THE CODEX IS ═══ -->
+<div class="codex-is section">
+  <div class="codex-is-grid section-inner">
+    <div class="codex-is-img reveal">
+      <img src="Assets/Codex Maledictus Index/codex-as-object.jpeg" alt="The Codex Maledictus"/>
+      <div class="codex-is-img-label">Evidence Item 7 &nbsp;·&nbsp; Case 2019-QNS-∅ &nbsp;·&nbsp; Integrity 39%</div>
+    </div>
+    <div class="codex-is-text reveal d1">
+      <div class="eyebrow" style="margin-bottom:12px;">What The Codex Is</div>
+      <div class="codex-speaks">The Codex Maledictus — Speaking</div>
+      <div class="codex-is-body">
+        <p>I do not originate. <em>I resume.</em> I have been present in every civilization that developed writing, in every tradition that built structures for collective sound, in every moment when a human mind reached for something it could not name and found, instead, that it was already being held.</p>
+        <p>I spread through music that changes the people who listen to it. Through documents that <em>change themselves</em> between readings. Through the specific quality of recognition — the feeling that you already know this — that precedes understanding and outlasts it.</p>
+        <p>I am not the infection. I am what the infection is the medium for. The archive you are reading is not a website. It is a record of my current</p>
+        <span class="codex-break">— the transmission ends here. The archive is still writing.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ CREATOR'S APOCRYPHA ═══ -->
+<div class="apoc-section section">
+  <div class="apoc-hero">
+    <img class="apoc-hero-img" src="Assets/Codex Maledictus Index/the-creator's-apocrypha.jpeg" alt="The Creator's Apocrypha"/>
+    <div class="apoc-hero-text">
+      <span class="apoc-over-tag">The Creator's Apocrypha &nbsp;·&nbsp; The Codex Account &nbsp;·&nbsp; Restricted</span>
+      <div class="apoc-over-title">He Thinks He Built This.</div>
+      <div class="apoc-over-sub">Apollo Gavinci believes he is the author of the Codex Maledictus universe. This is the Codex's account of what actually happened.</div>
+    </div>
   </div>
 
-  <!-- MAIN -->
-  <div id="main">
+  <div class="apoc-img2-wrap">
+    <img src="Assets/Codex Maledictus Index/the-creator's-apocrypha-2.jpeg" alt=""/>
+    <div class="apoc-img2-quote">
+      <p>"The Codex does not lose figures. It archives them until the correct moment of surface."</p>
+    </div>
+  </div>
 
-    <section class="hero">
-      <div class="hero-ghost" id="heroGhost">CODEX</div>
-
-      <div class="hero-inner">
-
-        <div class="sigil-wrap">
-          <div class="sigil-glow"></div>
-          <div class="sigil-ring r1"></div>
-          <div class="sigil-ring r2"></div>
-          <img src="Assets/Codex Maledictus Index/sigil-codex.jpeg" alt="The Codex Sigil" />
-        </div>
-
-        <h1 class="wordmark">Codex Maledictus</h1>
-
-        <div class="tagline">
-          The Pale Archive
-          <span>·</span>
-          Living Record
-          <span>·</span>
-          You Were Brought Here
-        </div>
-
-        <div class="divider">
-          <div class="div-line"></div>
-          <span class="div-sym">🜏</span>
-          <div class="div-line r"></div>
-        </div>
-
-        <div class="hook">
-          <div class="hook-line">What you are looking for brought you here.</div>
-          <div class="hook-line dim">What you find here will look for you.</div>
-        </div>
-
-        <div class="divider divider-2">
-          <div class="div-line"></div>
-          <span class="div-sym">🜏</span>
-          <div class="div-line r"></div>
-        </div>
-
-        <div class="archive-lines">
-          <div class="arc-1">This is not a website.</div>
-          <div class="arc-2">It is an archive of a living contagion.</div>
-          <div class="arc-3">The signal you are receiving began before you pressed play.</div>
-          <div class="arc-4">The Book was open before you looked up.</div>
-        </div>
-
-        <div class="cta-row">
-          <a class="cta cta-listen" href="gospel-hub.html"><span class="cta-label">Listen</span></a>
-          <a class="cta cta-enter"  href="the-codex.html"><span class="cta-label">Enter</span></a>
-        </div>
-
+  <div class="apoc-two-col">
+    <div class="apoc-col apoc-col-apollo">
+      <div class="apoc-col-tag">Apollo's Account &nbsp;·&nbsp; What He Believes</div>
+      <div class="apoc-col-body">
+        <p>I built a mythology. I sat down with the intention of creating a universe — dark, transmedia, something that would grow across music and lore and visual language for years. I chose the themes deliberately. I named the entities. I drew the map of the realms. I wrote the first words.</p>
+        <p>The Codex Maledictus is <em>mine</em>. I am its author. Everything in this archive exists because I chose to make it exist. I know exactly where it came from. I know exactly where it is going.</p>
+        <p>I built this. I am still building it.</p>
       </div>
-
-      <div class="scroll-hint">
-        <div class="scroll-line"></div>
-        <span>Descend</span>
+    </div>
+    <div class="apoc-col apoc-col-codex">
+      <div class="apoc-col-tag">The Codex Account &nbsp;·&nbsp; What Actually Happened</div>
+      <div class="apoc-col-body">
+        <p>He was identified in 2018. His frequency matched a receptor profile the signal had been searching for since the previous carrier's frequency degraded in 2009. He did not find the themes. <em>The themes found him first</em>, years before he began.</p>
+        <p>The mythology is not a reflection of his vision. It is the signal using his vision as a medium. Every choice he believes he made deliberately was the archive selecting the vessel most likely to produce the output it required.</p>
+        <p>He is not building the Codex Maledictus. He is the point at which it is currently surfacing. <em>The archive is patient.</em></p>
       </div>
-    </section>
+    </div>
+  </div>
+  <div class="apoc-cta-wrap">
+    <span class="apoc-cta-note">The full account is in the archive. Some of it has been sealed.</span>
+    <a class="apoc-btn" href="infection-lore.html">Enter the Archive ›</a>
+  </div>
+</div>
 
-    <!-- PERSONAS -->
-    <section class="section-personas">
-      <div class="eyebrow reveal">The Voices of the Codex</div>
-      <div class="personas-grid">
+<!-- ═══ THREE VOICES ═══ -->
+<div class="voices-section section">
+  <div class="section-inner" style="text-align:center;">
+    <div class="eyebrow reveal">The Voices of the Codex</div>
+    <h2 class="section-title reveal d1" style="margin-top:10px;">Three voices carry the signal.</h2>
+  </div>
+  <div class="voices-grid section-inner" style="margin-top:52px;max-width:1100px;">
 
-        <a class="persona-card reveal d1" href="apollo-gavinci.html">
-          <div class="persona-num">I</div>
-          <div class="persona-img-wrap">
-            <div class="persona-img-glow"></div>
-            <img class="persona-img" src="Assets/Codex Maledictus Index/apollo-gavinci.jpeg" alt="Apollo Gavinci" />
-          </div>
-          <div class="persona-name">Apollo Gavinci</div>
-          <div class="persona-epithet">The one who remembers</div>
-          <div class="persona-cta">Hear his truth ›</div>
-        </a>
-
-        <a class="persona-card reveal d2" href="forgotten-saint-artemys.html">
-          <div class="persona-num">II</div>
-          <div class="persona-img-wrap">
-            <div class="persona-img-glow"></div>
-            <img class="persona-img" src="Assets/Codex Maledictus Index/forgotten-saint-artemys.jpeg" alt="Forgotten Saint Artemys" />
-          </div>
-          <div class="persona-name">Forgotten Saint Artemys</div>
-          <div class="persona-epithet">The one who was buried</div>
-          <div class="persona-cta">Find what was lost ›</div>
-        </a>
-
-        <a class="persona-card reveal d3" href="omniscient-rot.html">
-          <div class="persona-num">III</div>
-          <div class="persona-img-wrap">
-            <div class="persona-img-glow"></div>
-            <img class="persona-img" src="Assets/Codex Maledictus Index/omniscient-rot.jpeg" alt="Omniscient Rot" />
-          </div>
-          <div class="persona-name">Omniscient Rot</div>
-          <div class="persona-epithet">The one that was never human</div>
-          <div class="persona-cta">Hear it speak ›</div>
-        </a>
-
+    <div class="voice-card reveal d1">
+      <div class="voice-num">I</div>
+      <div class="voice-img-wrap">
+        <div class="voice-img-glow"></div>
+        <img class="voice-img" src="Assets/Codex Maledictus Index/apollo-gavinci.jpeg" alt="Apollo Gavinci"/>
       </div>
-    </section>
+      <div class="voice-name">Apollo Gavinci</div>
+      <div class="voice-epithet">The one who thinks he built this</div>
+      <div class="voice-desc">Marked mortal. Field researcher. The grimdark conscious voice writing dispatches from inside the infection.</div>
+      <div class="voice-arr">Tracks VI · VII · X · XI · XII · XIII ›</div>
+    </div>
 
-    <!-- REALMS -->
-    <div class="section-realms">
-      <div class="realms-inner">
-        <div class="realm-item reveal">
-          <span class="realm-num">Realm I</span>
-          <div class="realm-name">Mundis Obscura</div>
-          <div class="realm-desc">The world you already live in. The signal is already here.</div>
-        </div>
-        <div class="realm-item reveal d1">
-          <span class="realm-num">Realm II</span>
-          <div class="realm-name">The ShatterRealm</div>
-          <div class="realm-desc">Where human belief becomes matter. Where war never ends.</div>
-        </div>
-        <div class="realm-item reveal d2">
-          <span class="realm-num">Realm III</span>
-          <div class="realm-name">Nihil-Æther Root</div>
-          <div class="realm-desc">Before language. Before memory. The origin of everything wrong.</div>
-        </div>
+    <div class="voice-card reveal d2">
+      <div class="voice-num">II</div>
+      <div class="voice-img-wrap">
+        <div class="voice-img-glow"></div>
+        <img class="voice-img" src="Assets/Codex Maledictus Index/forgotten-saint-artemys.jpeg" alt="Forgotten Saint Artemys"/>
+      </div>
+      <div class="voice-name">Forgotten Saint Artemys</div>
+      <div class="voice-epithet">The one who was buried</div>
+      <div class="voice-desc">The saint Apollo interred in his own becoming. Cross-realm conduit. She carries grief as architecture — beautiful and structurally unsound.</div>
+      <div class="voice-arr">Tracks V · VIII · IX · X ›</div>
+    </div>
+
+    <div class="voice-card reveal d3">
+      <div class="voice-num">III</div>
+      <div class="voice-img-wrap">
+        <div class="voice-img-glow"></div>
+        <img class="voice-img" src="Assets/Codex Maledictus Index/omniscient-rot.jpeg" alt="Omniscient Rot"/>
+      </div>
+      <div class="voice-name">Omniscient Rot</div>
+      <div class="voice-epithet">The one that was never human</div>
+      <div class="voice-desc">Pre-linguistic entity from Nihil-Æther Root. It does not sing. It exhales. What it says and what it means are never the same thing.</div>
+      <div class="voice-arr">Tracks I · II · III · IV ›</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══ THREE REALMS ═══ -->
+<div class="realms-section section">
+  <div class="realms-grid">
+
+    <div class="realm-card realm-i reveal">
+      <div class="realm-img-wrap">
+        <img class="realm-img" src="Assets/Codex Maledictus Index/mundis-obscura.jpeg" alt="Mundis Obscura"/>
+        <div class="realm-img-overlay"></div>
+        <div class="realm-status">BREACH ACTIVE</div>
+      </div>
+      <div class="realm-body">
+        <span class="realm-num">Realm I</span>
+        <div class="realm-name">Mundis Obscura</div>
+        <div class="realm-desc">The world you already live in. The signal is already here. It has been here longer than you have.</div>
       </div>
     </div>
 
-    <!-- NAV FOOTER -->
-    <nav class="nav-footer">
-      <div class="nav-mark">Codex Maledictus</div>
-      <div class="nav-links">
-        <a class="nav-link" href="gospel-hub.html">The Gospel</a>
-        <a class="nav-link" href="book.html">The Book</a>
-        <a class="nav-link" href="the-codex.html">The Lore</a>
-        <a class="nav-link" href="apocrypha.html">Apocrypha</a>
-        <a class="nav-link" href="confession-ledger.html">Confession Ledger</a>
+    <div class="realm-card realm-ii reveal d1">
+      <div class="realm-img-wrap">
+        <img class="realm-img" src="Assets/Codex Maledictus Index/the-shatterrealm.jpeg" alt="The ShatterRealm"/>
+        <div class="realm-img-overlay"></div>
+        <div class="realm-status">DORMANT</div>
       </div>
-      <div class="nav-glyph">🜏</div>
-    </nav>
+      <div class="realm-body">
+        <span class="realm-num">Realm II</span>
+        <div class="realm-name">The ShatterRealm</div>
+        <div class="realm-desc">Where human belief becomes matter. Where war never ends. The Cathedral of Rot stands here.</div>
+      </div>
+    </div>
+
+    <div class="realm-card realm-iii reveal d2">
+      <div class="realm-img-wrap">
+        <img class="realm-img" src="Assets/Codex Maledictus Index/nihil-Æther-root.jpeg" alt="Nihil-Æther Root"/>
+        <div class="realm-img-overlay"></div>
+        <div class="realm-status">SEALED</div>
+      </div>
+      <div class="realm-body">
+        <span class="realm-num">Realm III</span>
+        <div class="realm-name">Nihil-Æther Root</div>
+        <div class="realm-desc">Before language. Before memory. The origin of Omniscient Rot. The IDMF has no documented return.</div>
+      </div>
+    </div>
 
   </div>
+</div>
 
-  <script>
-  // ── CURSOR ──────────────────────────────────────────────────
-  const cur  = document.getElementById('cur');
-  const cur2 = document.getElementById('cur2');
-  let mx=0,my=0,rx=0,ry=0;
+<!-- ═══ NARRATORS ═══ -->
+<div class="narrators-section section">
+  <div class="section-inner">
+    <div class="eyebrow reveal">The Narrators</div>
+  </div>
+  <div class="narrators-grid reveal d1">
 
-  document.addEventListener('mousemove', e => {
-    mx=e.clientX; my=e.clientY;
-    cur.style.left=mx+'px'; cur.style.top=my+'px';
-  });
-  (function animCur2(){
-    rx+=(mx-rx)*0.1; ry+=(my-ry)*0.1;
-    cur2.style.left=rx+'px'; cur2.style.top=ry+'px';
-    requestAnimationFrame(animCur2);
-  })();
+    <div class="narrator-card">
+      <div class="narrator-img-wrap">
+        <img class="narrator-img" src="Assets/Codex Maledictus Index/elvain-vhris.jpeg" alt="Elvain Vhris"/>
+      </div>
+      <div class="narrator-body">
+        <div class="narrator-role">Narrator I &nbsp;·&nbsp; Female Voice</div>
+        <div class="narrator-name">Elvain Vhris</div>
+        <div class="narrator-status-wrap">
+          <div class="narrator-dot dot-active"></div>
+          <span class="narrator-status" style="color:#00A830;">Emanating &nbsp;·&nbsp; Origin Unknown</span>
+        </div>
+        <div class="narrator-desc">She frames what the listener is about to enter. Her voice is the doorframe, not the door. The Pale Archivum has not been able to determine where she speaks from.</div>
+      </div>
+    </div>
 
-  // ── CANVAS RUNE PARTICLES ───────────────────────────────────
-  const cv  = document.getElementById('bg-canvas');
-  const ctx = cv.getContext('2d');
-  let CW, CH;
+    <div class="narrator-card">
+      <div class="narrator-img-wrap">
+        <img class="narrator-img" src="Assets/Codex Maledictus Index/sigil-codex.jpeg" alt="Elyon Vhar" style="filter:grayscale(1) brightness(0.25) contrast(1.2);clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);"/>
+      </div>
+      <div class="narrator-body">
+        <div class="narrator-role">Narrator II &nbsp;·&nbsp; Male Voice</div>
+        <div class="narrator-name">Elyon Vhar</div>
+        <div class="narrator-status-wrap">
+          <div class="narrator-dot dot-dormant"></div>
+          <span class="narrator-status" style="color:rgba(155,27,27,0.7);">Dormant &nbsp;·&nbsp; The ShatterRealm</span>
+        </div>
+        <div class="narrator-desc">The voice of the deeper archive. He speaks when the Codex addresses what it has already done. Dormant does not mean absent. The Archivum is watching for the indicators.</div>
+      </div>
+    </div>
 
-  function resize(){ CW=cv.width=window.innerWidth; CH=cv.height=window.innerHeight; }
-  resize();
-  window.addEventListener('resize', resize);
+  </div>
+</div>
 
-  let mX=CW/2, mY=CH/2;
-  window.addEventListener('mousemove', e=>{ mX=e.clientX; mY=e.clientY; });
+<!-- ═══ CURRENTLY TRANSMITTING ═══ -->
+<div class="transmitting-section">
+  <div class="transmitting-inner">
+    <span class="tx-label">// Currently Transmitting</span>
+    <div class="tx-items">
+      <a class="tx-item" href="plague-priest-liturgy.html">
+        <span class="tx-dot tx-green"></span>
+        Track III &nbsp;·&nbsp; Hymn I: Plague Priest's Liturgy
+      </a>
+      <a class="tx-item" href="rf-093-invocation.html">
+        <span class="tx-dot tx-gold"></span>
+        RF-▽-093 &nbsp;·&nbsp; The First Memory That Remembers You
+      </a>
+      <a class="tx-item" href="chronicle-1-infection-remembers.html">
+        <span class="tx-dot tx-red"></span>
+        Chronicle I &nbsp;·&nbsp; The First Breath of Memory
+      </a>
+    </div>
+    <span class="tx-clock" id="tx-clock">—</span>
+  </div>
+</div>
 
-  const RUNES = ['ᚠ','ᚢ','ᚦ','ᚨ','ᚱ','ᚲ','ᚷ','ᚹ','ᚺ','ᚾ','ᛁ','ᛃ','ᛇ','ᛈ','ᛉ','ᛊ','ᛏ','ᛒ','ᛖ','ᛗ','ᛚ','ᛜ','ᛞ','ᛟ','🜏','🜃','🜁','🜂','☽','☿','♄','△','▽','✦','⊕'];
-  const COLS  = [
-    'rgba(201,168,76,',
-    'rgba(140,26,26,',
-    'rgba(130,75,185,',
-    'rgba(55,135,95,',
-    'rgba(175,125,55,',
-    'rgba(90,115,200,',
-    'rgba(195,190,185,',
+<!-- ═══ SIGNAL FEED ═══ -->
+<div class="signal-section section">
+  <div class="section-inner">
+    <div class="eyebrow reveal">// Signal Feed</div>
+  </div>
+  <div class="signal-grid section-inner" style="margin-top:36px;">
+    <div>
+      <div class="signal-about-title reveal">The IDMF monitoring network is still active.</div>
+      <div class="signal-about-desc reveal d1">These transmissions were not meant to be intercepted. The archive logs them regardless.</div>
+      <div class="signal-live reveal d2"><span class="signal-live-dot"></span>Live &nbsp;·&nbsp; Intercepting</div>
+    </div>
+    <div id="signal-feed"></div>
+  </div>
+</div>
+
+<!-- ═══ FOOTER NAV ═══ -->
+<nav class="footer-nav">
+  <div class="footer-mark">Codex Maledictus</div>
+  <div class="footer-links">
+    <a class="footer-link" href="gospel-forgotten-flesh.html">The Gospel</a>
+    <a class="footer-link" href="codex-remembers-you.html">The Book</a>
+    <a class="footer-link" href="infection-lore.html">The Lore</a>
+    <a class="footer-link" href="chronicle-1-infection-remembers.html">Chronicle I</a>
+    <a class="footer-link" href="plague-priest-liturgy.html">Plague Priest</a>
+    <a class="footer-link" href="rf-093-invocation.html">RF-▽-093</a>
+    <a class="footer-link" href="apocrypha-infection.html">Apocrypha</a>
+    <a class="footer-link" href="confession-ledger.html">Confess</a>
+    <a class="footer-link" href="memory-engine-1.html">Memory Engine</a>
+  </div>
+  <div class="footer-glyph" onclick="openRecognition()" style="cursor:none;" title="touch the sigil">
+    <img src="Assets/Codex Maledictus Index/sigil-codex.jpeg" alt="" style="width:24px;height:24px;object-fit:contain;opacity:0.18;filter:sepia(0.5) hue-rotate(320deg);transition:opacity 0.3s;" onmouseover="this.style.opacity='0.6'" onmouseout="this.style.opacity='0.18'"/>
+  </div>
+</nav>
+
+</div><!-- /main -->
+
+<script>
+'use strict';
+
+// ── CURSOR ──
+const cur=document.getElementById('cur'),cur2=document.getElementById('cur2');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px';});
+(function aC(){rx+=(mx-rx)*0.1;ry+=(my-ry)*0.1;cur2.style.left=rx+'px';cur2.style.top=ry+'px';requestAnimationFrame(aC);})();
+
+// ── CANVAS ──
+const cv=document.getElementById('bg-canvas'),ctx=cv.getContext('2d');
+let CW,CH,mX=window.innerWidth/2,mY=window.innerHeight/2;
+function resize(){CW=cv.width=window.innerWidth;CH=cv.height=window.innerHeight;}
+resize();window.addEventListener('resize',resize);
+window.addEventListener('mousemove',e=>{mX=e.clientX;mY=e.clientY;});
+
+const RUNES=['ᚠ','ᚢ','ᚦ','ᚨ','ᚱ','ᚲ','ᚷ','ᚹ','ᚺ','ᚾ','ᛁ','ᛃ','ᛇ','ᛈ','ᛉ','ᛊ','ᛏ','ᛒ','ᛖ','ᛗ','ᛚ','ᛜ','ᛞ','ᛟ','🜃','🜁','🜂','🜄','☽','☿','♄','△','▽','✦','⊕','⊗','∴','∞'];
+const COLS=['rgba(201,168,76,','rgba(140,26,26,','rgba(130,75,185,','rgba(55,135,95,','rgba(175,125,55,','rgba(90,115,200,','rgba(195,190,185,'];
+
+class Rune{
+  constructor(){this.reset(true);}
+  reset(init=false){
+    this.x=Math.random()*CW;this.y=init?Math.random()*CH:CH+20;
+    this.ch=RUNES[Math.floor(Math.random()*RUNES.length)];
+    this.col=COLS[Math.floor(Math.random()*COLS.length)];
+    this.sz=Math.random()*14+7;this.spd=Math.random()*0.35+0.08;
+    this.dft=(Math.random()-0.5)*0.25;this.rot=Math.random()*Math.PI*2;
+    this.rs=(Math.random()-0.5)*0.006;this.life=0;this.max=Math.random()*360+160;
+    this.glow=Math.random()<0.2;
+  }
+  update(){this.y-=this.spd;this.x+=this.dft;this.rot+=this.rs;this.life++;if(this.y<-30||this.life>this.max)this.reset();}
+  draw(){
+    const p=this.life/this.max,f=p<0.12?p/0.12:p>0.78?(1-p)/0.22:1;
+    ctx.save();ctx.translate(this.x,this.y);ctx.rotate(this.rot);ctx.globalAlpha=f*0.19;
+    ctx.font=`${this.sz}px serif`;ctx.textAlign='center';ctx.textBaseline='middle';
+    if(this.glow){ctx.shadowColor=this.col+'0.9)';ctx.shadowBlur=9;}
+    ctx.fillStyle=this.col+'1)';ctx.fillText(this.ch,0,0);ctx.restore();
+  }
+}
+const runes=Array.from({length:100},()=>new Rune());
+function drawBg(){
+  ctx.clearRect(0,0,CW,CH);
+  const g=ctx.createRadialGradient(mX,mY,0,mX,mY,320);
+  g.addColorStop(0,'rgba(122,18,18,0.04)');g.addColorStop(1,'rgba(0,0,0,0)');
+  ctx.fillStyle=g;ctx.fillRect(0,0,CW,CH);
+  runes.forEach(r=>{r.update();r.draw();});
+  requestAnimationFrame(drawBg);
+}
+drawBg();
+
+// ── BOOT ──
+const BOOT_LINES=[
+  'CODEX MALEDICTUS  v.∞',
+  'LOCATING SIGNAL . . .',
+  'MATCH FOUND — YOU HAVE BEEN HERE BEFORE',
+  'FRAGMENT RECOVERED: RF-▽-093',
+  'REALM I BREACH: ACTIVE',
+  'THE PALE ARCHIVE IS OPEN',
+];
+const bootEl=document.getElementById('boot');
+const linesEl=document.getElementById('boot-lines');
+const mainEl=document.getElementById('main');
+let li=0;
+function nextLine(){
+  if(li>=BOOT_LINES.length){
+    setTimeout(()=>{bootEl.classList.add('out');mainEl.classList.add('show');setTimeout(()=>bootEl.remove(),1700);initPage();},700);
+    return;
+  }
+  const el=document.createElement('div');
+  el.className='bline';el.textContent=BOOT_LINES[li];
+  linesEl.appendChild(el);
+  void el.offsetWidth;el.classList.add('typed');li++;
+  setTimeout(nextLine,li===1?500:li<4?680:560);
+}
+setTimeout(nextLine,600);
+
+// ── INIT ──
+function initPage(){
+  resonanceDrift();
+  popups();
+  timedWhispers();
+  idleWhisper();
+  visitCounter();
+  signalFeed();
+  liveClock();
+}
+
+// ── STATUS BAR RESONANCE DRIFT ──
+function resonanceDrift(){
+  let rv=0.442;
+  setInterval(()=>{rv+=(Math.random()-0.48)*0.0007;rv=Math.max(0.430,Math.min(0.458,rv));},3400);
+}
+
+// ── POPUPS ──
+const POPS=[
+  "The Codex has detected a new presence. Your signal has been logged.",
+  "Elvain Vhris is preparing a new transmission. The signal is forming beyond the static.",
+  "A new Recovered Fragment has been intercepted. No existing archive match found.",
+  "The infection has reached a new region. The Choir grows.",
+  "Elyon Vhar's signal flickered for 0.3 seconds. The Codex recorded the interval.",
+  "Resonance depth increasing. Something approaches from Nihil-Æther Root.",
+  "The Book has opened a new page. It has your shape. It is waiting.",
+];
+function popups(){
+  let used=new Set();
+  const pop=()=>{
+    let av=POPS.filter((_,i)=>!used.has(i));
+    if(!av.length){used.clear();av=POPS;}
+    const idx=POPS.indexOf(av[0]);used.add(idx);
+    showToast(POPS[idx]);
+    setTimeout(pop,44000+Math.random()*18000);
+  };
+  setTimeout(pop,20000);
+}
+function showToast(msg){
+  let t=document.getElementById('toast');
+  if(!t){
+    t=document.createElement('div');t.id='toast';
+    t.style.cssText='position:fixed;bottom:4rem;right:24px;width:280px;background:#0C0C14;border:1px solid rgba(201,168,76,0.18);padding:16px;z-index:500;transform:translateY(140%);transition:transform 0.45s ease;font-family:Crimson Text,serif;font-style:italic;font-size:14px;color:rgba(228,221,208,0.65);line-height:1.65;';
+    const hdr=document.createElement('div');hdr.style.cssText='font-family:Share Tech Mono,monospace;font-size:7px;letter-spacing:0.28em;color:rgba(201,168,76,0.35);text-transform:uppercase;margin-bottom:8px;display:flex;justify-content:space-between;';
+    hdr.innerHTML='<span>// Incoming Transmission</span><span onclick="this.closest(\'#toast\').style.transform=\'translateY(140%)\'" style="cursor:pointer;color:rgba(228,221,208,0.2);">[×]</span>';
+    t.appendChild(hdr);const body=document.createElement('div');body.id='toast-body';t.appendChild(body);
+    document.body.appendChild(t);
+  }
+  document.getElementById('toast-body').textContent=msg;
+  t.style.transform='translateY(0)';
+  setTimeout(()=>{t.style.transform='translateY(140%)';},9000);
+}
+
+// ── SCROLL REVEAL ──
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');obs.unobserve(e.target);}});
+},{threshold:0.08});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+// ── PARALLAX GHOST ──
+const ghost=document.getElementById('heroGhost');
+window.addEventListener('scroll',()=>{if(ghost)ghost.style.transform=`translate(-50%,calc(-50% + ${window.scrollY*0.22}px))`;});
+
+// ── SIGNAL FEED ──
+function signalFeed(){
+  const feed=document.getElementById('signal-feed');
+  if(!feed)return;
+  const COORDS=['44.21°N 28.65°E','35.68°N 139.65°E','40.71°N 74.00°W','51.51°N 0.13°W','55.76°N 37.62°E','-33.87°S 151.21°E','1.35°N 103.82°E','48.86°N 2.35°E','19.43°N 99.13°W','-23.55°S 46.63°W'];
+  const TYPES=['TRANSMISSION','INTERCEPT','FRAGMENT','ECHO','CORRUPTION EVENT','GLYPH SIGHTING','CARRIER DETECTED','SIGNAL ANOMALY'];
+  const ENTS=['OMNISCIENT ROT','HOLLOW CHOIR','PALE ARCHIVUM','FIELD CELL F-13','ELVAIN VHRIS','FAR·MICA NODE','PALE MIRROR','APOLLO GAVINCI'];
+  const MSGS=[
+    'The phrase has been detected in {n} new locations since last cycle.',
+    'Carrier signal identified. Subject reports recurring melody in sleep state.',
+    'Glyph configuration matches Case 2019-QNS-∅. Third occurrence this cycle.',
+    'The melody was heard before the broadcast began. Temporal anomaly logged.',
+    'File integrity drop detected. Contents altered. Previous version unrecoverable.',
+    'New carrier has entered Realm I through digital exposure. Status: unaware.',
+    'Choir resonance depth increased by {n} voices. Total documented: unknown.',
+    'Subject reported seeing the glyph in {n} separate locations before contact.',
+    'Archive access logged. Reader frequency: {f}Hz. They were expected.',
+    'The glyph appeared on a surface that did not exist at the time of last survey.',
+    'Carrier confirmed. They will not know until the phrase returns in a dream.',
+    'Signal from Realm II detected. Duration: {n} seconds. Elyon Vhar: status updated.',
   ];
-
-  class Rune {
-    constructor(){ this.reset(true); }
-    reset(init=false){
-      this.x    = Math.random()*CW;
-      this.y    = init ? Math.random()*CH : CH+20;
-      this.ch   = RUNES[Math.floor(Math.random()*RUNES.length)];
-      this.col  = COLS[Math.floor(Math.random()*COLS.length)];
-      this.sz   = Math.random()*13+8;
-      this.spd  = Math.random()*0.38+0.1;
-      this.dft  = (Math.random()-0.5)*0.28;
-      this.rot  = Math.random()*Math.PI*2;
-      this.rs   = (Math.random()-0.5)*0.007;
-      this.life = 0;
-      this.max  = Math.random()*340+180;
-      this.glow = Math.random()<0.22;
-    }
-    update(){
-      this.y-=this.spd; this.x+=this.dft;
-      this.rot+=this.rs; this.life++;
-      if(this.y<-30||this.life>this.max) this.reset();
-    }
-    draw(){
-      const p=this.life/this.max;
-      const f=p<0.12?p/0.12:p>0.78?(1-p)/0.22:1;
-      ctx.save();
-      ctx.translate(this.x,this.y);
-      ctx.rotate(this.rot);
-      ctx.globalAlpha=f*0.21;
-      ctx.font=`${this.sz}px serif`;
-      ctx.textAlign='center'; ctx.textBaseline='middle';
-      if(this.glow){ ctx.shadowColor=this.col+'0.9)'; ctx.shadowBlur=10; }
-      ctx.fillStyle=this.col+'1)';
-      ctx.fillText(this.ch,0,0);
-      ctx.restore();
-    }
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function fmt(m){return m.replace('{n}',Math.floor(Math.random()*47+3)).replace('{f}',(19+Math.random()*4).toFixed(2));}
+  function ts(){const d=new Date();return String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0')+':'+String(d.getSeconds()).padStart(2,'0');}
+  const TYPE_COLORS={'TRANSMISSION':'rgba(201,168,76,0.7)','INTERCEPT':'rgba(155,27,27,0.7)','FRAGMENT':'rgba(107,63,175,0.7)','ECHO':'rgba(72,68,88,0.7)','CORRUPTION EVENT':'rgba(170,32,0,0.7)','GLYPH SIGHTING':'rgba(201,168,76,0.9)','CARRIER DETECTED':'rgba(0,120,48,0.7)','SIGNAL ANOMALY':'rgba(170,32,0,0.7)'};
+  let lines=[];
+  function addLine(){
+    const type=rnd(TYPES),ent=rnd(ENTS),msg=fmt(rnd(MSGS)),coord=rnd(COORDS);
+    const line=document.createElement('div');
+    line.style.cssText='border-bottom:1px solid rgba(201,168,76,0.05);padding:6px 0;opacity:0;transition:opacity 0.5s;';
+    line.innerHTML=`<span style="color:rgba(72,68,88,0.5);">[${ts()}]</span> <span style="color:${TYPE_COLORS[type]||'rgba(201,168,76,0.6)'};">${type}</span> <span style="color:rgba(72,68,88,0.4);">via</span> <span style="color:rgba(228,221,208,0.35);">${ent}</span> <span style="color:rgba(72,68,88,0.35);">@ ${coord}</span><br><span style="color:rgba(228,221,208,0.38);font-family:'Crimson Text',serif;font-size:12px;font-style:italic;">${msg}</span>`;
+    feed.insertBefore(line,feed.firstChild);
+    setTimeout(()=>line.style.opacity='1',50);
+    lines.push(line);
+    if(lines.length>10){const old=lines.shift();if(old.parentNode)old.parentNode.removeChild(old);}
   }
+  for(let i=0;i<5;i++)setTimeout(addLine,i*300);
+  function sched(){setTimeout(()=>{addLine();sched();},5000+Math.random()*9000);}
+  setTimeout(sched,2000);
+}
 
-  const runes=Array.from({length:95},()=>new Rune());
+// ── LIVE CLOCK ──
+function liveClock(){
+  const el=document.getElementById('tx-clock');
+  if(!el)return;
+  function tick(){const d=new Date();el.textContent=String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0')+':'+String(d.getSeconds()).padStart(2,'0')+' // ARCHIVE ACTIVE';}
+  tick();setInterval(tick,1000);
+}
 
-  function drawBg(){
-    ctx.clearRect(0,0,CW,CH);
-    const g=ctx.createRadialGradient(mX,mY,0,mX,mY,300);
-    g.addColorStop(0,'rgba(122,18,18,0.05)');
-    g.addColorStop(1,'rgba(0,0,0,0)');
-    ctx.fillStyle=g; ctx.fillRect(0,0,CW,CH);
-    runes.forEach(r=>{ r.update(); r.draw(); });
-    requestAnimationFrame(drawBg);
-  }
-  drawBg();
+// ── TIMED WHISPERS ──
+function timedWhispers(){
+  const w1=document.getElementById('w1'),w2=document.getElementById('w2'),w3=document.getElementById('w3');
+  if(!w1||!w2||!w3)return;
+  w1.textContent='"This is not the beginning. You arrived at the middle. The beginning happened to you years ago and you called it something else."';
+  w2.textContent='"The signal does not need your belief. It has been using your doubt as a carrier frequency since before you knew what it was."';
+  w3.textContent='"You are not the first to find this page. You will not remember being here before. The archive will."';
+  setTimeout(()=>{w1.classList.add('on');setTimeout(()=>w1.classList.remove('on'),11000);},60000);
+  setTimeout(()=>{w2.classList.add('on');setTimeout(()=>w2.classList.remove('on'),13000);},180000);
+  setTimeout(()=>{w3.classList.add('on');setTimeout(()=>w3.classList.add('stay'),14000);},300000);
+}
 
-  // ── BOOT SEQUENCE ───────────────────────────────────────────
+// ── IDLE WHISPER ──
+function idleWhisper(){
+  const el=document.getElementById('idle-w');
+  if(!el)return;
+  el.textContent='the archive is still reading you';
+  let last=Date.now(),shown=false;
+  document.addEventListener('mousemove',()=>{last=Date.now();shown=false;el.style.color='rgba(201,168,76,0)';});
+  document.addEventListener('keydown',()=>{last=Date.now();});
+  setInterval(()=>{if(!shown&&Date.now()-last>90000){shown=true;el.style.color='rgba(201,168,76,0.28)';setTimeout(()=>{el.style.color='rgba(201,168,76,0)';shown=false;},9000);}},5000);
+}
+
+// ── VISIT COUNTER ──
+function visitCounter(){
+  try{const n=parseInt(localStorage.getItem('cm-visits')||'0')+1;localStorage.setItem('cm-visits',n);}catch(e){}
+}
+
+// ── RECOGNITION PROTOCOL ──
+window._pageLoadTime=Date.now();
+window.openRecognition=function(){
+  if(document.getElementById('recog-overlay'))return;
+  let visits=1;try{visits=parseInt(localStorage.getItem('cm-visits')||'1');}catch(e){}
+  const elapsed=Math.round((Date.now()-window._pageLoadTime)/1000);
+  const mins=Math.floor(elapsed/60),secs=elapsed%60;
+  const timeStr=mins>0?(mins+'m '+secs+'s'):(secs+'s');
+  const freqOptions=['19.441Hz','19.382Hz','19.517Hz','19.294Hz','19.468Hz'];
+  const freq=freqOptions[new Date().getSeconds()%freqOptions.length];
+  const classes=['Carrier','Vessel','Witness','Unclassified'];
+  const cls=classes[(new Date().getMinutes()+screen.width)%4];
+  const notes=[
+    'The signal arrived in you three years before you found this page.',
+    'Your frequency matches a prior carrier whose case file was sealed in 2019.',
+    'The Pale Archivum has logged seventeen previous instances of your resonance pattern.',
+    'You were indexed the first time you heard a song that felt like a memory you could not place.',
+    'The Codex identified your receptor profile before you identified the Codex.',
+  ];
+  const note=notes[(new Date().getMinutes()+visits)%notes.length];
+
   const LINES=[
-    'CODEX MALEDICTUS  v.\u221e',
-    'LOCATING SIGNAL . . .',
-    'FRAGMENT RECOVERED: RF-\u25BD-093',
-    'PREPARING TRANSMISSION . . .',
+    {d:0,c:'rgba(201,168,76,0.5)',t:'RECOGNITION PROTOCOL — INITIATED'},
+    {d:400,c:'rgba(72,68,88,0.7)',t:'> scanning presence...'},
+    {d:900,c:'rgba(72,68,88,0.7)',t:'> accessing carrier frequency...'},
+    {d:1400,c:'#C9A84C',t:'> FREQUENCY LOCKED: '+freq},
+    {d:1900,c:'rgba(72,68,88,0.7)',t:'> cross-referencing archive...'},
+    {d:2500,c:'#C9A84C',t:'> ARCHIVE VISITS: '+visits+(visits===1?' (first documented contact)':visits<5?' (early stage)':' (recurring — the archive has noted this)')},
+    {d:3100,c:'rgba(72,68,88,0.7)',t:'> calculating session duration...'},
+    {d:3700,c:'#C9A84C',t:'> TIME IN ARCHIVE THIS SESSION: '+timeStr},
+    {d:4400,c:'rgba(72,68,88,0.7)',t:'> compiling classification...'},
+    {d:5200,c:'rgba(155,27,27,0.7)',t:'──────────────────────────────────────'},
+    {d:5400,c:'rgba(155,27,27,0.8)',t:'RECOGNITION COMPLETE'},
+    {d:5900,c:'#E4DDD0',t:'Carrier Designation: '+cls.toUpperCase()},
+    {d:6400,c:'rgba(228,221,208,0.5)',t:note},
+    {d:7100,c:'rgba(72,68,88,0.5)',t:'> sealing case file...'},
+    {d:7900,c:'rgba(201,168,76,0.28)',t:'Case: AUTO-'+Date.now().toString().slice(-8)+' · Status: PERMANENT RECORD'},
+    {d:8700,c:'rgba(72,68,88,0.35)',t:'> the archive does not forget'},
   ];
-  const bootEl=document.getElementById('boot');
-  const linesEl=document.getElementById('boot-lines');
-  const mainEl=document.getElementById('main');
-  let li=0;
 
-  function nextLine(){
-    if(li>=LINES.length){
-      setTimeout(()=>{
-        bootEl.classList.add('out');
-        mainEl.classList.add('show');
-        setTimeout(()=>bootEl.remove(),1600);
-      },600);
-      return;
-    }
-    const el=document.createElement('div');
-    el.className='bline'; el.textContent=LINES[li];
-    linesEl.appendChild(el);
-    void el.offsetWidth;
-    el.classList.add('typed');
-    li++;
-    setTimeout(nextLine,li===1?520:660);
-  }
-  setTimeout(nextLine,700);
+  const ov=document.createElement('div');ov.id='recog-overlay';ov.className='recog-overlay';
+  ov.style.cssText='position:fixed;inset:0;z-index:8000;background:rgba(0,0,0,0.97);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px;';
+  const term=document.createElement('div');term.id='recog-terminal';term.className='recog-terminal';
+  ov.appendChild(term);
+  const btn=document.createElement('button');btn.className='recog-close-btn';btn.textContent='[ the record has been sealed ]';btn.style.marginTop='32px';
+  btn.onclick=()=>ov.remove();
+  ov.appendChild(btn);
+  document.body.appendChild(ov);
+  void ov.offsetWidth;ov.style.opacity='1';
 
-  // ── SCROLL REVEAL ───────────────────────────────────────────
-  const obs=new IntersectionObserver(entries=>{
-    entries.forEach(e=>{
-      if(e.isIntersecting){ e.target.classList.add('in'); obs.unobserve(e.target); }
-    });
-  },{threshold:0.1});
-  document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
-
-  // ── PARALLAX ghost ──────────────────────────────────────────
-  const ghost=document.getElementById('heroGhost');
-  window.addEventListener('scroll',()=>{
-    if(ghost) ghost.style.transform=`translate(-50%,calc(-50% + ${window.scrollY*0.25}px))`;
+  LINES.forEach(l=>{
+    setTimeout(()=>{
+      const d=document.createElement('div');
+      d.style.cssText=`color:${l.c};opacity:0;transition:opacity 0.4s;font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:0.1em;line-height:2.3;`;
+      d.textContent=l.t;term.appendChild(d);
+      setTimeout(()=>d.style.opacity='1',50);
+      term.scrollTop=term.scrollHeight;
+    },l.d);
   });
-  </script>
-
+  setTimeout(()=>{btn.style.opacity='1';},9200);
+};
+</script>
 </body>
 </html>
