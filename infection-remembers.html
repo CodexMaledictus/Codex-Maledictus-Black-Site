@@ -7,7 +7,8 @@
 <meta name="description" content="Ritual Transmission I. Track 1. The moment the Codex recognized its own reflection in Mundis Obscura and spoke aloud for the first time.">
 <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=IM+Fell+English:ital@0;1&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
-:root{
+/* ── CONFIG: set YT_KEY in CONFIG object in <script> ── */
+:root {
   --bg:#030305;--deep:#080508;
   --bl:#8B0000;--bl2:#AA2000;--bl3:#3A0000;--bl4:#180000;
   --am:#C87828;--am2:#8A5018;--am3:#3A2008;
@@ -18,206 +19,306 @@
 }
 *{margin:0;padding:0;box-sizing:border-box;}
 html{scroll-behavior:smooth;}
-body{background:var(--bg);color:var(--bone);font-family:'IM Fell English',serif;overflow-x:hidden;cursor:none;
-  background-image:radial-gradient(ellipse at 50% 0%,rgba(139,0,0,0.12) 0%,transparent 50%);}
-body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,0.04) 3px,rgba(0,0,0,0.04) 4px);pointer-events:none;z-index:9990;}
-body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at center,transparent 30%,rgba(0,0,0,0.88)100%);pointer-events:none;z-index:9989;}
+body{background:var(--bg);color:var(--bone);font-family:'IM Fell English',serif;overflow-x:hidden;cursor:none;min-height:100vh;}
 
-/* CURSOR */
-#CUR{position:fixed;pointer-events:none;z-index:99999;transform:translate(-50%,-50%);width:16px;height:16px;}
-#CUR::before,#CUR::after{content:'';position:absolute;background:var(--bl);}
+/* ── INFECTION PROGRESS BAR ── */
+#infection-bar{
+  position:fixed;top:0;left:0;z-index:9000;
+  height:2px;width:0%;
+  background:linear-gradient(90deg,var(--bl3),var(--bl2),var(--bl));
+  box-shadow:0 0 8px var(--bl);
+  transition:width .1s linear;
+  pointer-events:none;
+}
+#infection-bar.complete{
+  background:linear-gradient(90deg,var(--bl),var(--bl2),var(--am2));
+  box-shadow:0 0 16px var(--bl2);
+}
+
+/* ── CANVAS LAYERS ── */
+#cv-bg{position:fixed;inset:0;z-index:0;pointer-events:none;}
+#cv-mid{position:fixed;inset:0;z-index:1;pointer-events:none;}
+#cv-top{position:fixed;inset:0;z-index:2;pointer-events:none;}
+
+/* ── SCANLINES ── */
+#scanlines{position:fixed;inset:0;z-index:3;pointer-events:none;background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,0.05) 3px,rgba(0,0,0,0.05) 4px);}
+
+/* ── VIGNETTE ── */
+#vignette{position:fixed;inset:0;z-index:4;pointer-events:none;background:radial-gradient(ellipse at center,transparent 28%,rgba(0,0,0,0.9) 100%);}
+
+/* ── CURSOR ── */
+#CUR{position:fixed;pointer-events:none;z-index:99999;transform:translate(-50%,-50%);width:18px;height:18px;}
+#CUR::before,#CUR::after{content:'';position:absolute;background:var(--bl2);}
 #CUR::before{width:1px;height:100%;left:50%;}
 #CUR::after{height:1px;width:100%;top:50%;}
-#CUR2{position:fixed;pointer-events:none;z-index:99998;transform:translate(-50%,-50%);width:3px;height:3px;border-radius:50%;background:var(--bl2);}
+#CUR2{position:fixed;pointer-events:none;z-index:99998;transform:translate(-50%,-50%);width:28px;height:28px;border-radius:50%;border:1px solid rgba(139,0,0,0.45);transition:width .3s ease,height .3s ease,border-color .3s ease;}
 #GHOST{position:fixed;pointer-events:none;z-index:100;font-size:1rem;color:var(--bl);opacity:0;transform:translate(-50%,-50%);transition:left 2s cubic-bezier(0.1,0.9,0.2,1),top 2s cubic-bezier(0.1,0.9,0.2,1),opacity 0.5s;}
 
-/* BREATHING BG */
-#breath{position:fixed;inset:0;pointer-events:none;z-index:0;background:radial-gradient(ellipse at center,rgba(139,0,0,0.05) 0%,transparent 60%);animation:breathe 9s ease-in-out infinite;}
-@keyframes breathe{0%,100%{transform:scale(1);opacity:0.4;}50%{transform:scale(1.2);opacity:1;}}
+/* ── LYRIC ECHO ── */
+.lyric-echo{
+  position:fixed;right:1.5rem;z-index:200;pointer-events:none;
+  font-family:'Crimson Text',serif;font-style:italic;
+  font-size:.72rem;color:rgba(139,0,0,0.28);
+  letter-spacing:.06em;text-align:right;
+  max-width:260px;line-height:1.6;
+  opacity:0;transition:opacity 2s ease;
+  top:50%;transform:translateY(-50%);
+}
 
-/* THRESHOLD */
+/* ── BOOT ── */
+#boot{position:fixed;inset:0;z-index:1000;background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;transition:opacity 1.5s ease;}
+#boot.out{opacity:0;pointer-events:none;}
+.boot-scanlines{position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.15) 2px,rgba(0,0,0,0.15) 4px);}
+.boot-sigil{font-size:2.5rem;color:var(--bl);opacity:0;animation:bootSigil .7s ease .2s forwards;text-shadow:0 0 20px rgba(139,0,0,0.6);}
+@keyframes bootSigil{to{opacity:.65;}}
+#boot-lines{display:flex;flex-direction:column;align-items:center;gap:9px;min-height:90px;}
+.bline{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:.26em;color:rgba(139,0,0,0.55);white-space:nowrap;overflow:hidden;max-width:0;opacity:0;}
+.bline.typed{animation:bType .8s steps(40,end) forwards;}
+@keyframes bType{from{max-width:0;opacity:1}to{max-width:700px;opacity:1}}
+.boot-bar{width:220px;height:1px;background:rgba(58,0,0,0.5);position:relative;overflow:hidden;}
+.boot-fill{position:absolute;left:0;top:0;bottom:0;width:0;background:var(--bl2);animation:bFill 2.2s cubic-bezier(.4,0,.2,1) .8s forwards;}
+@keyframes bFill{to{width:100%}}
+.boot-label{font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:.48em;color:rgba(139,0,0,0.32);opacity:0;animation:bFadeIn .5s ease .8s forwards;}
+@keyframes bFadeIn{to{opacity:1}}
+
+/* ── THRESHOLD ── */
 #threshold{position:fixed;inset:0;z-index:500;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity 1.2s ease;}
 #threshold.gone{opacity:0;pointer-events:none;}
 .th-glyph{font-size:4rem;color:var(--bl);margin-bottom:2rem;animation:thglow 3s ease-in-out infinite;}
-@keyframes thglow{0%,100%{text-shadow:0 0 15px var(--bl),0 0 40px rgba(139,0,0,0.3);opacity:0.55;}50%{text-shadow:0 0 30px var(--bl2),0 0 80px rgba(139,0,0,0.5);opacity:1;}}
-.th-line{font-family:'Crimson Text',serif;font-size:clamp(0.95rem,2.8vw,1.35rem);color:var(--dim);font-style:italic;text-align:center;margin-bottom:0.4rem;min-height:1.7rem;padding:0 2rem;max-width:520px;}
-#open-btn{margin-top:2.5rem;background:transparent;border:1px solid var(--bl);color:var(--bl);font-family:'Share Tech Mono',monospace;font-size:0.7rem;letter-spacing:0.35em;padding:0.85rem 2rem;cursor:none;text-transform:uppercase;transition:all 0.3s;opacity:0;pointer-events:none;}
-#open-btn.show{opacity:1;pointer-events:all;cursor:none;}
-#open-btn:hover{background:var(--bl);color:var(--bone);}
-.th-sub{font-size:0.58rem;font-family:'Share Tech Mono',monospace;color:var(--dimmer);letter-spacing:0.3em;text-transform:uppercase;margin-top:1.25rem;animation:blink 2.5s step-end infinite;opacity:0;transition:opacity 1s;}
+@keyframes thglow{0%,100%{text-shadow:0 0 15px var(--bl),0 0 40px rgba(139,0,0,0.3);opacity:.55;}50%{text-shadow:0 0 30px var(--bl2),0 0 80px rgba(139,0,0,0.5);opacity:1;}}
+.th-line{font-family:'Crimson Text',serif;font-size:clamp(.95rem,2.8vw,1.35rem);color:var(--dim);font-style:italic;text-align:center;margin-bottom:.4rem;min-height:1.7rem;padding:0 2rem;max-width:520px;}
+.th-returning{font-family:'Cinzel',serif;font-size:.9rem;letter-spacing:.2em;color:var(--bl2);text-align:center;margin-bottom:1rem;}
+#open-btn{margin-top:2.5rem;background:transparent;border:1px solid var(--bl);color:var(--bl);font-family:'Share Tech Mono',monospace;font-size:.7rem;letter-spacing:.35em;padding:.85rem 2rem;cursor:none;text-transform:uppercase;transition:all .3s;opacity:0;pointer-events:none;position:relative;overflow:hidden;}
+#open-btn::before{content:'';position:absolute;inset:0;background:var(--bl);transform:translateX(-101%);transition:transform .4s cubic-bezier(.16,1,.3,1);}
+#open-btn span{position:relative;z-index:1;}
+#open-btn.show{opacity:1;pointer-events:all;}
+#open-btn:hover{color:var(--bone);}
+#open-btn:hover::before{transform:translateX(0);}
+.th-sub{font-size:.58rem;font-family:'Share Tech Mono',monospace;color:var(--dimmer);letter-spacing:.3em;text-transform:uppercase;margin-top:1.25rem;animation:blink 2.5s step-end infinite;opacity:0;transition:opacity 1s;}
 @keyframes blink{0%,100%{opacity:1;}50%{opacity:0;}}
 
-/* WHISPERS */
-.whisper{position:fixed;pointer-events:none;z-index:200;font-family:'Share Tech Mono',monospace;font-size:0.58rem;color:var(--bl);letter-spacing:0.2em;text-transform:uppercase;opacity:0;transition:opacity 2s ease;white-space:nowrap;}
+/* ── WHISPERS ── */
+.whisper{position:fixed;pointer-events:none;z-index:200;font-family:'Share Tech Mono',monospace;font-size:.58rem;color:var(--bl);letter-spacing:.2em;text-transform:uppercase;opacity:0;transition:opacity 2s ease;white-space:nowrap;}
 
-/* MAIN */
-#content{position:relative;z-index:1;opacity:0;transition:opacity 1.5s ease;}
+/* ── MAIN ── */
+#content{position:relative;z-index:5;opacity:0;transition:opacity 1.5s ease;}
 #content.on{opacity:1;}
 
-/* HERO */
+/* ── HERO ── */
 .hero{position:relative;height:clamp(360px,48vw,580px);overflow:hidden;display:flex;align-items:flex-end;}
-.hero-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;filter:brightness(0.5) contrast(1.2) saturate(0.7);}
-.hero-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(3,3,5,0.3) 0%,rgba(3,3,5,0.1) 20%,rgba(3,3,5,0.7) 60%,rgba(3,3,5,1) 100%);}
+.hero-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;filter:brightness(.5) contrast(1.2) saturate(.7);transform:scale(1.08);transition:transform 8s cubic-bezier(.16,1,.3,1);will-change:transform;}
+.hero-img.loaded{transform:scale(1);}
+.hero-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(3,3,5,.3) 0%,rgba(3,3,5,.1) 20%,rgba(3,3,5,.75) 60%,rgba(3,3,5,1) 100%);}
 .hero-content{position:relative;z-index:2;padding:0 2.5rem 2.75rem;max-width:720px;margin:0 auto;width:100%;}
-.hero-eye{font-family:'Share Tech Mono',monospace;font-size:0.52rem;color:rgba(139,0,0,0.6);letter-spacing:0.38em;text-transform:uppercase;margin-bottom:0.85rem;display:block;}
-.hero-title{font-family:'Cinzel Decorative',serif;font-size:clamp(1.2rem,3.6vw,2.8rem);color:var(--bl);letter-spacing:0.06em;line-height:1.2;text-shadow:0 0 40px rgba(139,0,0,0.5),0 0 80px rgba(139,0,0,0.2);margin-bottom:0.5rem;animation:titleglitch 18s infinite;}
-@keyframes titleglitch{0%,87%,100%{text-shadow:0 0 40px rgba(139,0,0,0.5);transform:none;}88%{text-shadow:3px 0 var(--gold),-2px 0 var(--bl2);transform:translateX(2px);}89%{text-shadow:-2px 0 var(--gold);transform:translateX(-1px);}90%{text-shadow:0 0 40px rgba(139,0,0,0.5);transform:none;}}
-.hero-sub{font-family:'Share Tech Mono',monospace;font-size:0.65rem;color:var(--am2);letter-spacing:0.32em;text-transform:uppercase;margin-bottom:0.6rem;}
-.hero-doctrine{font-style:italic;font-size:clamp(0.88rem,1.4vw,1rem);color:rgba(212,200,168,0.42);line-height:1.75;max-width:480px;}
+.hero-eye{font-family:'Share Tech Mono',monospace;font-size:.52rem;color:rgba(139,0,0,.6);letter-spacing:.38em;text-transform:uppercase;margin-bottom:.85rem;display:block;}
+.hero-title{font-family:'Cinzel Decorative',serif;font-size:clamp(1.2rem,3.6vw,2.8rem);color:var(--bl);letter-spacing:.06em;line-height:1.2;text-shadow:0 0 40px rgba(139,0,0,.5),0 0 80px rgba(139,0,0,.2);margin-bottom:.5rem;animation:titleglitch 18s infinite;}
+@keyframes titleglitch{0%,87%,100%{text-shadow:0 0 40px rgba(139,0,0,.5);transform:none;}88%{text-shadow:3px 0 var(--gold),-2px 0 var(--bl2);transform:translateX(2px);}89%{text-shadow:-2px 0 var(--gold);transform:translateX(-1px);}90%{text-shadow:0 0 40px rgba(139,0,0,.5);transform:none;}}
+.hero-sub{font-family:'Share Tech Mono',monospace;font-size:.65rem;color:var(--am2);letter-spacing:.32em;text-transform:uppercase;margin-bottom:.6rem;}
+.hero-doctrine{font-style:italic;font-size:clamp(.88rem,1.4vw,1rem);color:rgba(212,200,168,.42);line-height:1.75;max-width:480px;}
 
-/* VIDEO */
+/* ── VIDEO ── */
 .video-wrap{position:relative;z-index:1;background:var(--bg);border-top:1px solid var(--brd);border-bottom:1px solid var(--brd);}
 .video-inner{max-width:720px;margin:0 auto;padding:0;}
 .yt-ratio{position:relative;width:100%;aspect-ratio:16/9;background:#000;}
 .yt-ratio iframe{position:absolute;inset:0;width:100%;height:100%;display:block;border:none;}
-.video-meta{max-width:720px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:0.75rem 1.5rem;border-bottom:1px solid var(--brd);flex-wrap:wrap;gap:0.5rem;}
-.vm-title{font-family:'Cinzel',serif;font-size:0.82rem;color:var(--bl);letter-spacing:0.05em;}
-.vm-sub{font-family:'Share Tech Mono',monospace;font-size:0.52rem;color:var(--dimmer);letter-spacing:0.14em;text-transform:uppercase;}
-.vm-link{font-family:'Share Tech Mono',monospace;font-size:0.56rem;color:var(--dimmer);letter-spacing:0.16em;text-decoration:none;text-transform:uppercase;transition:color 0.2s;border:1px solid var(--brd);padding:0.28rem 0.55rem;white-space:nowrap;}
+.video-meta{max-width:720px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:.75rem 1.5rem;border-bottom:1px solid var(--brd);flex-wrap:wrap;gap:.5rem;}
+.vm-title{font-family:'Cinzel',serif;font-size:.82rem;color:var(--bl);letter-spacing:.05em;}
+.vm-sub{font-family:'Share Tech Mono',monospace;font-size:.52rem;color:var(--dimmer);letter-spacing:.14em;text-transform:uppercase;}
+.vm-link{font-family:'Share Tech Mono',monospace;font-size:.56rem;color:var(--dimmer);letter-spacing:.16em;text-decoration:none;text-transform:uppercase;transition:color .2s;border:1px solid var(--brd);padding:.28rem .55rem;white-space:nowrap;}
 .vm-link:hover{color:var(--bl);border-color:var(--bl);}
 
-/* CONTENT BODY */
+/* ── BODY ── */
 .body-wrap{max-width:720px;margin:0 auto;padding:3.5rem 2rem 5rem;}
-.lp{font-size:clamp(0.92rem,1.5vw,1.02rem);line-height:2;color:rgba(212,200,168,0.7);margin-bottom:1.2rem;}
+.lp{font-size:clamp(.92rem,1.5vw,1.02rem);line-height:2;color:rgba(212,200,168,.7);margin-bottom:1.2rem;}
 .lp em{color:var(--bone);font-style:italic;}
 .lp strong{color:var(--bl2);font-style:normal;}
-.sec-label{font-family:'Share Tech Mono',monospace;font-size:0.62rem;color:var(--bl);letter-spacing:0.34em;text-transform:uppercase;margin-bottom:1.2rem;display:flex;align-items:center;gap:1rem;}
+.sec-label{font-family:'Share Tech Mono',monospace;font-size:.62rem;color:var(--bl);letter-spacing:.34em;text-transform:uppercase;margin-bottom:1.2rem;display:flex;align-items:center;gap:1rem;}
 .sec-label::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--bl3),transparent);}
-.pull{border-left:2px solid var(--bl3);padding:1rem 1.5rem;margin:2rem 0;font-size:1.05rem;font-style:italic;color:var(--bone);line-height:1.85;background:rgba(139,0,0,0.04);}
-.pull cite{display:block;font-size:0.62rem;font-family:'Share Tech Mono',monospace;color:var(--dim);letter-spacing:0.18em;margin-top:0.65rem;font-style:normal;text-transform:uppercase;}
+.pull{border-left:2px solid var(--bl3);padding:1rem 1.5rem;margin:2rem 0;font-size:1.05rem;font-style:italic;color:var(--bone);line-height:1.85;background:rgba(139,0,0,.04);}
+.pull cite{display:block;font-size:.62rem;font-family:'Share Tech Mono',monospace;color:var(--dim);letter-spacing:.18em;margin-top:.65rem;font-style:normal;text-transform:uppercase;}
 .div-glyph{text-align:center;margin:2.5rem 0;color:var(--bl3);font-size:1.1rem;animation:thglow 8s ease-in-out infinite;}
 
-/* DOCTRINE DECODER */
-.doctrine-wrap{border:1px solid var(--brd2);background:rgba(139,0,0,0.04);margin:2.5rem 0;}
+/* ── DOCTRINE DECODER ── */
+.doctrine-wrap{border:1px solid var(--brd2);background:rgba(139,0,0,.04);margin:2.5rem 0;}
 .doc-header{padding:1.1rem 1.5rem;border-bottom:1px solid var(--brd2);}
-.doc-eyebrow{font-family:'Share Tech Mono',monospace;font-size:0.48rem;color:var(--bl3);letter-spacing:0.32em;text-transform:uppercase;margin-bottom:0.3rem;}
-.doc-title{font-family:'Cinzel',serif;font-size:0.88rem;color:var(--bl);letter-spacing:0.07em;}
-.doc-sub{font-family:'Share Tech Mono',monospace;font-size:0.46rem;color:var(--dimmer);letter-spacing:0.18em;text-transform:uppercase;margin-top:0.2rem;}
+.doc-eyebrow{font-family:'Share Tech Mono',monospace;font-size:.48rem;color:var(--bl3);letter-spacing:.32em;text-transform:uppercase;margin-bottom:.3rem;}
+.doc-title{font-family:'Cinzel',serif;font-size:.88rem;color:var(--bl);letter-spacing:.07em;}
+.doc-sub{font-family:'Share Tech Mono',monospace;font-size:.46rem;color:var(--dimmer);letter-spacing:.18em;text-transform:uppercase;margin-top:.2rem;}
 .doc-line{border-bottom:1px solid var(--brd);}
 .doc-line:last-child{border-bottom:none;}
-.doc-lyric{font-family:'Crimson Text',serif;font-size:clamp(0.95rem,1.7vw,1.1rem);color:var(--dim);padding:0.85rem 1.5rem;cursor:pointer;transition:all 0.2s;border-left:2px solid transparent;line-height:1.85;}
+.doc-lyric{font-family:'Crimson Text',serif;font-size:clamp(.95rem,1.7vw,1.1rem);color:var(--dim);padding:.85rem 1.5rem;cursor:pointer;transition:all .3s cubic-bezier(.16,1,.3,1);border-left:2px solid transparent;line-height:1.85;user-select:none;}
 .doc-lyric:hover{color:var(--bone);border-left-color:var(--brd3);padding-left:1.85rem;}
-.doc-lyric.open{color:var(--bone);border-left-color:var(--bl2);}
-.doc-panels{display:none;background:rgba(3,3,5,0.5);}
+.doc-lyric.open{color:var(--bone);border-left-color:var(--bl2);padding-left:1.85rem;}
+.doc-panels{display:none;background:rgba(3,3,5,.5);}
 .doc-lyric.open+.doc-panels{display:grid;grid-template-columns:repeat(3,1fr);}
-@media(max-width:640px){.doc-lyric.open+.doc-panels{grid-template-columns:1fr;}}
-.dp{padding:0.9rem 1.1rem;border-right:1px solid var(--brd);}
+.dp{padding:.9rem 1.1rem;border-right:1px solid var(--brd);}
 .dp:last-child{border-right:none;}
-.dp-glyph{font-size:1rem;display:block;margin-bottom:0.25rem;}
-.dp-label{font-family:'Share Tech Mono',monospace;font-size:0.4rem;letter-spacing:0.2em;text-transform:uppercase;display:block;margin-bottom:0.28rem;}
+.dp-glyph{font-size:1rem;display:block;margin-bottom:.25rem;}
+.dp-label{font-family:'Share Tech Mono',monospace;font-size:.4rem;letter-spacing:.2em;text-transform:uppercase;display:block;margin-bottom:.28rem;}
 .dp-archive .dp-label{color:var(--am2);}
 .dp-world .dp-label{color:var(--vt);}
 .dp-you .dp-label{color:var(--bl2);}
-.dp-text{font-size:0.84rem;color:var(--dim);line-height:1.75;font-style:italic;}
+.dp-text{font-size:.84rem;color:var(--dim);line-height:1.75;font-style:italic;}
 .dp-text em{color:var(--bone);font-style:normal;}
-.doc-footer{padding:0.75rem 1.5rem;border-top:1px solid var(--brd);font-family:'Share Tech Mono',monospace;font-size:0.46rem;color:var(--dimmer);letter-spacing:0.16em;display:flex;justify-content:space-between;align-items:center;}
-.doc-decoder-link{color:var(--am2);text-decoration:none;transition:color 0.2s;}
+.doc-footer{padding:.75rem 1.5rem;border-top:1px solid var(--brd);font-family:'Share Tech Mono',monospace;font-size:.46rem;color:var(--dimmer);letter-spacing:.16em;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem;}
+.doc-decoder-link{color:var(--am2);text-decoration:none;transition:color .2s;}
 .doc-decoder-link:hover{color:var(--am);}
 
-/* ROT IMAGE STRIP */
-.rot-img-strip{position:relative;width:100%;height:clamp(130px,15vw,190px);overflow:hidden;margin:2.5rem 0;}
-.rot-img-strip img{width:100%;height:100%;object-fit:cover;object-position:center;filter:brightness(0.45) contrast(1.15) saturate(0.6) hue-rotate(5deg);}
-.rot-img-strip::before{content:'';position:absolute;inset:0;background:linear-gradient(to right,rgba(3,3,5,0.9) 0%,transparent 28%,transparent 72%,rgba(3,3,5,0.9) 100%);z-index:1;}
-.rot-img-text{position:absolute;inset:0;z-index:2;display:flex;align-items:center;justify-content:center;padding:1.5rem;}
-.rot-img-text p{font-family:'Share Tech Mono',monospace;font-size:0.5rem;color:rgba(139,0,0,0.5);letter-spacing:0.28em;text-transform:uppercase;text-align:center;}
+/* ── LITURGY DECODER ── */
+.liturgy-wrap{border:1px solid var(--brd2);background:rgba(139,0,0,.03);margin:2.5rem 0;}
+.lit-header{padding:1.4rem 1.5rem;border-bottom:1px solid var(--brd2);background:rgba(139,0,0,.06);}
+.lit-eyebrow{font-family:'Share Tech Mono',monospace;font-size:.48rem;color:var(--bl3);letter-spacing:.32em;text-transform:uppercase;margin-bottom:.35rem;}
+.lit-title{font-family:'Cinzel Decorative',serif;font-size:clamp(.9rem,1.8vw,1.15rem);color:var(--bl);letter-spacing:.06em;line-height:1.3;}
+.lit-sub{font-family:'Share Tech Mono',monospace;font-size:.46rem;color:var(--dimmer);letter-spacing:.18em;text-transform:uppercase;margin-top:.3rem;}
+.lit-section{border-bottom:1px solid var(--brd);}
+.lit-section:last-of-type{border-bottom:none;}
+.lit-section-label{font-family:'Share Tech Mono',monospace;font-size:.44rem;color:var(--bl3);letter-spacing:.3em;text-transform:uppercase;padding:.55rem 1.5rem .35rem;opacity:.7;}
+.lit-line{
+  font-family:'Crimson Text',serif;
+  font-size:clamp(1rem,1.8vw,1.15rem);
+  color:var(--dim);padding:.8rem 1.5rem;
+  cursor:pointer;
+  transition:all .35s cubic-bezier(.16,1,.3,1);
+  border-left:2px solid transparent;
+  line-height:1.9;
+  position:relative;
+  user-select:none;
+}
+.lit-line::after{
+  content:'🜃';position:absolute;right:1.2rem;top:50%;transform:translateY(-50%);
+  font-size:.8rem;color:var(--bl3);opacity:0;transition:opacity .3s ease;
+}
+.lit-line:hover{color:var(--bone);border-left-color:var(--brd3);padding-left:1.85rem;}
+.lit-line:hover::after{opacity:.6;}
+.lit-line.open{color:var(--bone);border-left-color:var(--bl2);padding-left:1.85rem;background:rgba(139,0,0,.03);}
+.lit-line.open::after{opacity:1;color:var(--bl2);}
+.lit-panels{
+  display:none;
+  background:rgba(3,3,5,.6);
+  border-top:1px solid var(--brd);
+}
+.lit-line.open+.lit-panels{display:grid;grid-template-columns:repeat(3,1fr);}
+.lit-panel{padding:1rem 1.15rem;border-right:1px solid var(--brd);}
+.lit-panel:last-child{border-right:none;}
+.lit-panel-glyph{font-size:.95rem;display:block;margin-bottom:.22rem;}
+.lit-panel-label{font-family:'Share Tech Mono',monospace;font-size:.38rem;letter-spacing:.2em;text-transform:uppercase;display:block;margin-bottom:.3rem;}
+.lit-archive .lit-panel-label{color:var(--am2);}
+.lit-world .lit-panel-label{color:var(--vt);}
+.lit-you .lit-panel-label{color:var(--bl2);}
+.lit-panel-text{font-size:.82rem;color:var(--dim);line-height:1.78;font-style:italic;}
+.lit-panel-text em{color:var(--bone);font-style:normal;}
+.lit-chorus{background:rgba(139,0,0,.06);border-left:none !important;}
+.lit-chorus .lit-line{font-style:italic;color:rgba(212,200,168,.55);}
+.lit-footer{padding:.85rem 1.5rem;border-top:1px solid var(--brd);font-family:'Share Tech Mono',monospace;font-size:.46rem;color:var(--dimmer);letter-spacing:.16em;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem;}
 
-/* THE THIRTEEN COUNT */
-.count-wrap{border:1px solid var(--brd2);padding:2.5rem;background:rgba(139,0,0,0.04);text-align:center;margin:2.5rem 0;position:relative;overflow:hidden;}
-.count-wrap::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(139,0,0,0.1) 0%,transparent 65%);animation:breathe 7s ease-in-out infinite;pointer-events:none;}
-.count-label{font-family:'Share Tech Mono',monospace;font-size:0.6rem;color:var(--dim);letter-spacing:0.3em;text-transform:uppercase;margin-bottom:1.4rem;}
-#count-num{font-family:'Cinzel Decorative',serif;font-size:clamp(3.5rem,10vw,6rem);color:var(--bl);text-shadow:0 0 40px rgba(139,0,0,0.6);display:block;margin-bottom:1.25rem;transition:all 0.3s;line-height:1;}
-#count-num.pulse{transform:scale(1.12);text-shadow:0 0 60px rgba(139,0,0,0.9),0 0 120px rgba(139,0,0,0.3);}
-.count-sub{font-family:'Share Tech Mono',monospace;font-size:0.6rem;color:var(--dimmer);letter-spacing:0.14em;margin-bottom:1.25rem;min-height:1.4rem;transition:all 0.4s;}
-#count-btn{background:transparent;border:1px solid var(--bl);color:var(--bl);font-family:'Share Tech Mono',monospace;font-size:0.68rem;letter-spacing:0.3em;padding:0.75rem 2rem;cursor:pointer;text-transform:uppercase;transition:all 0.25s;position:relative;z-index:2;}
+/* ── ROT IMAGE STRIP ── */
+.rot-img-strip{position:relative;width:100%;height:clamp(130px,15vw,190px);overflow:hidden;margin:2.5rem 0;}
+.rot-img-strip img{width:100%;height:100%;object-fit:cover;object-position:center;filter:brightness(.45) contrast(1.15) saturate(.6) hue-rotate(5deg);}
+.rot-img-strip::before{content:'';position:absolute;inset:0;background:linear-gradient(to right,rgba(3,3,5,.9) 0%,transparent 28%,transparent 72%,rgba(3,3,5,.9) 100%);z-index:1;}
+.rot-img-text{position:absolute;inset:0;z-index:2;display:flex;align-items:center;justify-content:center;padding:1.5rem;}
+.rot-img-text p{font-family:'Share Tech Mono',monospace;font-size:.5rem;color:rgba(139,0,0,.5);letter-spacing:.28em;text-transform:uppercase;text-align:center;}
+
+/* ── THIRTEEN COUNT ── */
+.count-wrap{border:1px solid var(--brd2);padding:2.5rem;background:rgba(139,0,0,.04);text-align:center;margin:2.5rem 0;position:relative;overflow:hidden;}
+.count-wrap::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(139,0,0,.1) 0%,transparent 65%);animation:breathe 7s ease-in-out infinite;pointer-events:none;}
+@keyframes breathe{0%,100%{transform:scale(1);opacity:.4;}50%{transform:scale(1.2);opacity:1;}}
+.count-label{font-family:'Share Tech Mono',monospace;font-size:.6rem;color:var(--dim);letter-spacing:.3em;text-transform:uppercase;margin-bottom:1.4rem;}
+#count-num{font-family:'Cinzel Decorative',serif;font-size:clamp(3.5rem,10vw,6rem);color:var(--bl);text-shadow:0 0 40px rgba(139,0,0,.6);display:block;margin-bottom:1.25rem;transition:all .3s;line-height:1;}
+#count-num.pulse{transform:scale(1.12);text-shadow:0 0 60px rgba(139,0,0,.9),0 0 120px rgba(139,0,0,.3);}
+.count-sub{font-family:'Share Tech Mono',monospace;font-size:.6rem;color:var(--dimmer);letter-spacing:.14em;margin-bottom:1.25rem;min-height:1.4rem;transition:all .4s;}
+#count-btn{background:transparent;border:1px solid var(--bl);color:var(--bl);font-family:'Share Tech Mono',monospace;font-size:.68rem;letter-spacing:.3em;padding:.75rem 2rem;cursor:pointer;text-transform:uppercase;transition:all .25s;position:relative;z-index:2;}
 #count-btn:hover:not(:disabled){background:var(--bl);color:var(--bone);}
-#count-btn:disabled{opacity:0.3;cursor:not-allowed;}
-.count-marks{display:flex;justify-content:center;gap:0.45rem;margin-top:1.25rem;flex-wrap:wrap;}
-.cmark{width:11px;height:11px;border:1px solid var(--bl3);border-radius:50%;transition:all 0.5s ease;}
+#count-btn:disabled{opacity:.3;cursor:not-allowed;}
+.count-marks{display:flex;justify-content:center;gap:.45rem;margin-top:1.25rem;flex-wrap:wrap;}
+.cmark{width:11px;height:11px;border:1px solid var(--bl3);border-radius:50%;transition:all .5s ease;}
 .cmark.done{background:var(--bl);border-color:var(--bl);box-shadow:0 0 8px var(--bl);}
 
-/* REVELATION */
-#revelation{position:fixed;inset:0;z-index:800;background:rgba(24,0,0,0.96);display:flex;flex-direction:column;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity 0.6s;padding:3rem;}
+/* ── REVELATION ── */
+#revelation{position:fixed;inset:0;z-index:800;background:rgba(24,0,0,.96);display:flex;flex-direction:column;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .6s;padding:3rem;}
 #revelation.on{opacity:1;pointer-events:all;}
-.rev-text{font-family:'Cinzel Decorative',serif;font-size:clamp(0.95rem,2.5vw,1.35rem);color:var(--bl2);text-align:center;line-height:1.85;max-width:580px;text-shadow:0 0 30px rgba(139,0,0,0.7);white-space:pre-line;}
-.rev-sub{font-family:'Share Tech Mono',monospace;font-size:0.62rem;color:var(--dimmer);letter-spacing:0.3em;text-transform:uppercase;margin-top:2rem;text-align:center;animation:blink 1.8s step-end infinite;}
+.rev-text{font-family:'Cinzel Decorative',serif;font-size:clamp(.95rem,2.5vw,1.35rem);color:var(--bl2);text-align:center;line-height:1.85;max-width:580px;text-shadow:0 0 30px rgba(139,0,0,.7);white-space:pre-line;}
+.rev-sub{font-family:'Share Tech Mono',monospace;font-size:.62rem;color:var(--dimmer);letter-spacing:.3em;text-transform:uppercase;margin-top:2rem;text-align:center;animation:blink 1.8s step-end infinite;}
 
-/* CONFESSION */
-.conf-wrap{border:1px solid var(--brd);padding:1.75rem;margin:2rem 0;background:rgba(139,0,0,0.03);}
-.conf-prompt{font-size:0.9rem;color:var(--dim);letter-spacing:0.04em;margin-bottom:1.2rem;line-height:1.82;}
-#conf-inp{width:100%;background:transparent;border:none;border-bottom:1px solid var(--bl3);color:var(--bone);font-family:'Crimson Text',serif;font-size:1rem;padding:0.5rem 0.2rem;outline:none;margin-bottom:0.85rem;transition:border-color 0.2s;}
-#conf-inp:focus{border-bottom-color:var(--bl);}
-#conf-inp::placeholder{color:var(--dimmer);}
-#conf-sub{background:transparent;border:1px solid var(--bl3);color:var(--bl);font-family:'Share Tech Mono',monospace;font-size:0.62rem;letter-spacing:0.24em;padding:0.52rem 1.15rem;cursor:pointer;text-transform:uppercase;transition:all 0.2s;}
-#conf-sub:hover{background:var(--bl);color:var(--bone);}
-#conf-resp{margin-top:1.1rem;font-size:0.92rem;color:var(--dim);line-height:1.82;min-height:1.5rem;font-style:italic;border-left:2px solid var(--bl3);padding-left:0.9rem;transition:opacity 0.4s;}
-.conf-log{margin-top:1.1rem;border-top:1px solid var(--brd);padding-top:0.65rem;}
-.cl-entry{font-size:0.7rem;color:var(--dimmer);padding:0.28rem 0;border-bottom:1px solid rgba(30,8,8,0.4);display:flex;gap:0.6rem;align-items:baseline;}
-.cl-word{color:var(--bl3);min-width:80px;font-family:'Share Tech Mono',monospace;font-size:0.65rem;letter-spacing:0.08em;}
-
-/* NAV LINKS */
-.nav-links{display:flex;gap:0.5rem;flex-wrap:wrap;justify-content:center;margin:2.5rem 0;padding:2rem 0;border-top:1px solid var(--brd);border-bottom:1px solid var(--brd);}
-.nl{background:transparent;border:1px solid var(--brd);color:var(--dim);font-family:'Share Tech Mono',monospace;font-size:0.5rem;letter-spacing:0.16em;padding:0.5rem 0.85rem;text-decoration:none;text-transform:uppercase;transition:all 0.2s;display:inline-block;}
-.nl:hover{border-color:var(--bl);color:var(--bl);}
-.nl.prim{border-color:var(--bl3);color:var(--bl);}
-.nl.prim:hover{background:var(--bl);color:var(--bone);}
-
-/* COMMENTS */
+/* ── COMMENTS ── */
 #comments-section{margin-top:3rem;padding-top:2.5rem;border-top:1px solid var(--brd);}
-.comments-title{font-family:'Cinzel',serif;font-size:1rem;color:var(--bl);letter-spacing:0.06em;margin-bottom:0.3rem;}
-.comments-sub{font-family:'Share Tech Mono',monospace;font-size:0.56rem;color:var(--dimmer);letter-spacing:0.2em;text-transform:uppercase;margin-bottom:1.5rem;}
-.comments-loading{display:flex;align-items:center;gap:0.85rem;padding:1.25rem 0;font-family:'Share Tech Mono',monospace;font-size:0.64rem;color:var(--dimmer);letter-spacing:0.14em;}
+.comments-title{font-family:'Cinzel',serif;font-size:1rem;color:var(--bl);letter-spacing:.06em;margin-bottom:.3rem;}
+.comments-sub{font-family:'Share Tech Mono',monospace;font-size:.56rem;color:var(--dimmer);letter-spacing:.2em;text-transform:uppercase;margin-bottom:1.5rem;}
+.comments-loading{display:flex;align-items:center;gap:.85rem;padding:1.25rem 0;font-family:'Share Tech Mono',monospace;font-size:.64rem;color:var(--dimmer);letter-spacing:.14em;}
 .cl-glyph{font-size:1.1rem;color:var(--bl);animation:thglow 2.5s ease-in-out infinite;}
-.comment-card{border:1px solid var(--brd);padding:1rem 1.2rem;margin-bottom:0.65rem;background:rgba(139,0,0,0.02);transition:border-color 0.2s;}
+.comment-card{border:1px solid var(--brd);padding:1rem 1.2rem;margin-bottom:.65rem;background:rgba(139,0,0,.02);transition:border-color .2s;}
 .comment-card:hover{border-color:var(--brd2);}
-.comment-header{display:flex;align-items:center;gap:0.65rem;margin-bottom:0.55rem;flex-wrap:wrap;}
-.comment-author{font-family:'Share Tech Mono',monospace;font-size:0.6rem;color:var(--bl);letter-spacing:0.1em;text-transform:uppercase;}
-.comment-date{font-family:'Share Tech Mono',monospace;font-size:0.52rem;color:var(--dimmer);letter-spacing:0.08em;}
-.comment-likes{margin-left:auto;font-family:'Share Tech Mono',monospace;font-size:0.54rem;color:var(--dimmer);letter-spacing:0.09em;}
-.comment-text{font-size:0.93rem;color:var(--dim);line-height:1.78;}
-.comment-codex{margin-top:0.65rem;padding-top:0.55rem;border-top:1px solid var(--brd);font-size:0.8rem;font-style:italic;color:var(--bl3);line-height:1.65;}
+.comment-header{display:flex;align-items:center;gap:.65rem;margin-bottom:.55rem;flex-wrap:wrap;}
+.comment-author{font-family:'Share Tech Mono',monospace;font-size:.6rem;color:var(--bl);letter-spacing:.1em;text-transform:uppercase;}
+.comment-date{font-family:'Share Tech Mono',monospace;font-size:.52rem;color:var(--dimmer);letter-spacing:.08em;}
+.comment-likes{margin-left:auto;font-family:'Share Tech Mono',monospace;font-size:.54rem;color:var(--dimmer);}
+.comment-text{font-size:.93rem;color:var(--dim);line-height:1.78;}
+.comment-codex{margin-top:.65rem;padding-top:.55rem;border-top:1px solid var(--brd);font-size:.8rem;font-style:italic;color:var(--bl3);line-height:1.65;}
 .comment-codex::before{content:"🜃  ";color:var(--bl);font-style:normal;}
-.comments-more-btn{width:100%;background:transparent;border:1px solid var(--brd);color:var(--dimmer);font-family:'Share Tech Mono',monospace;font-size:0.58rem;letter-spacing:0.2em;padding:0.62rem;cursor:pointer;text-transform:uppercase;transition:all 0.2s;margin-top:0.5rem;}
+.comments-more-btn{width:100%;background:transparent;border:1px solid var(--brd);color:var(--dimmer);font-family:'Share Tech Mono',monospace;font-size:.58rem;letter-spacing:.2em;padding:.62rem;cursor:pointer;text-transform:uppercase;transition:all .2s;margin-top:.5rem;}
 .comments-more-btn:hover{border-color:var(--bl);color:var(--bl);}
-.comment-yt-link{font-family:'Share Tech Mono',monospace;font-size:0.58rem;color:var(--dimmer);letter-spacing:0.16em;text-decoration:none;border:1px solid var(--brd);padding:0.36rem 0.7rem;text-transform:uppercase;transition:all 0.2s;display:inline-block;margin-top:0.5rem;}
+.comment-yt-link{font-family:'Share Tech Mono',monospace;font-size:.58rem;color:var(--dimmer);letter-spacing:.16em;text-decoration:none;border:1px solid var(--brd);padding:.36rem .7rem;text-transform:uppercase;transition:all .2s;display:inline-block;margin-top:.5rem;}
 .comment-yt-link:hover{color:var(--bl);border-color:var(--bl);}
 
-/* FADE SECTIONS */
-.fs{opacity:0;transform:translateY(14px);transition:opacity 0.9s ease,transform 0.9s ease;}
+/* ── FADE SECTIONS ── */
+.fs{opacity:0;transform:translateY(14px);transition:opacity .9s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1);}
 .fs.vis{opacity:1;transform:none;}
 
-/* SHAKE */
-@keyframes shake{0%,100%{transform:none;}20%{transform:translateX(-4px) rotate(-0.4deg);}40%{transform:translateX(4px) rotate(0.4deg);}60%{transform:translateX(-3px);}80%{transform:translateX(3px);}}
-.shaking{animation:shake 0.4s ease;}
+/* ── SHAKE ── */
+@keyframes shake{0%,100%{transform:none;}20%{transform:translateX(-4px) rotate(-.4deg);}40%{transform:translateX(4px) rotate(.4deg);}60%{transform:translateX(-3px);}80%{transform:translateX(3px);}}
+.shaking{animation:shake .4s ease;}
 
-@media(max-width:580px){.body-wrap{padding:2.5rem 1.25rem 4rem;}.doc-lyric.open+.doc-panels{grid-template-columns:1fr;}.dp{border-right:none;border-bottom:1px solid var(--brd);}.dp:last-child{border-bottom:none;}}
+@media(max-width:640px){
+  .body-wrap{padding:2.5rem 1.25rem 4rem;}
+  .doc-lyric.open+.doc-panels,.lit-line.open+.lit-panels{grid-template-columns:1fr;}
+  .dp,.lit-panel{border-right:none;border-bottom:1px solid var(--brd);}
+  .dp:last-child,.lit-panel:last-child{border-bottom:none;}
+  .lyric-echo{display:none;}
+}
 </style>
 </head>
 <body>
-<div id="CUR"></div><div id="CUR2"></div>
+
+<div id="infection-bar"></div>
+<canvas id="cv-bg"></canvas>
+<canvas id="cv-mid"></canvas>
+<canvas id="cv-top"></canvas>
+<div id="scanlines"></div>
+<div id="vignette"></div>
+<div id="CUR"></div>
+<div id="CUR2"></div>
 <div id="GHOST">🜃</div>
-<div id="breath"></div>
+<div id="lyric-echo" class="lyric-echo"></div>
+
+<!-- BOOT -->
+<div id="boot">
+  <div class="boot-scanlines"></div>
+  <div class="boot-sigil">🜃</div>
+  <div id="boot-lines"></div>
+  <div class="boot-bar"><div class="boot-fill"></div></div>
+  <div class="boot-label">SIGNAL LOCATED — INFECTION ACTIVE</div>
+</div>
 
 <!-- THRESHOLD -->
 <div id="threshold">
   <div class="th-glyph">🜃</div>
   <div class="th-line" id="tl1"></div>
   <div class="th-line" id="tl2"></div>
-  <button id="open-btn" onclick="openBook()">Open the Book</button>
+  <div class="th-returning" id="th-returning" style="display:none;">The Codex remembers you.</div>
+  <button id="open-btn" onclick="openBook()"><span>Open the Book</span></button>
   <div class="th-sub" id="th-sub">// find a quiet room. dim the light. //</div>
 </div>
 
-<!-- REVELATION OVERLAY -->
+<!-- REVELATION -->
 <div id="revelation">
   <div class="rev-text" id="rev-text"></div>
   <div class="rev-sub">// click anywhere to return //</div>
 </div>
 
-<!-- MAIN CONTENT -->
+<!-- MAIN -->
 <div id="content">
 
-  <!-- HERO — Omniscient Rot section header image -->
   <div class="hero">
-    <img class="hero-img" src="Assets/Gospel of Forgotten Flesh/Omniscient-Rot-section-header.jpeg" alt="Omniscient Rot" loading="eager"/>
+    <img class="hero-img" id="hero-img" src="Assets/Gospel of Forgotten Flesh/Omniscient-Rot-section-header.jpeg" alt="Omniscient Rot" loading="eager"/>
     <div class="hero-overlay"></div>
     <div class="hero-content">
       <span class="hero-eye">🜃 &nbsp; Codex Maledictus &nbsp;·&nbsp; Ritual Transmission I &nbsp;·&nbsp; Omniscient Rot &nbsp; 🜃</span>
@@ -227,17 +328,15 @@ body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse
     </div>
   </div>
 
-  <!-- VIDEO — direct embed, near top -->
   <div class="video-wrap">
     <div class="video-inner">
       <div class="yt-ratio">
-        <iframe
-          src="https://www.youtube-nocookie.com/embed/SspPUKJoWj4?rel=0&modestbranding=1&color=white&iv_load_policy=3"
+        <iframe id="yt-iframe"
+          src="https://www.youtube-nocookie.com/embed/SspPUKJoWj4?rel=0&modestbranding=1&color=white&iv_load_policy=3&enablejsapi=1"
           title="Infection Remembers ∴ The Book Opens — Codex Maledictus"
           frameborder="0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          allowfullscreen
-          loading="lazy">
+          allowfullscreen loading="lazy">
         </iframe>
       </div>
     </div>
@@ -250,7 +349,6 @@ body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse
     </div>
   </div>
 
-  <!-- BODY -->
   <div class="body-wrap">
 
     <div class="fs">
@@ -284,63 +382,27 @@ body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse
         <div class="doc-line">
           <div class="doc-lyric" onclick="togDoc(this)">They do not arrive. They are remembered.</div>
           <div class="doc-panels">
-            <div class="dp dp-archive">
-              <span class="dp-glyph" style="color:var(--am);">🜃</span>
-              <span class="dp-label">In the Archive</span>
-              <div class="dp-text">The Codex has always been present in the infected person's memory — dormant, waiting to be recognized. "Arriving" implies it came from outside. It did not. Every carrier already contained the receptor before first exposure. The first listen is not infection. It is <em>activation</em>.</div>
-            </div>
-            <div class="dp dp-world">
-              <span class="dp-glyph" style="color:var(--vt);">🜁</span>
-              <span class="dp-label">In the World</span>
-              <div class="dp-text">All things we experience as new are encounters with what was always structurally present. The universe does not deliver new material. It reveals what was already latent in the substrate. Recognition is not discovery — it is return to something that was always already there, waiting for the right frequency to make it legible.</div>
-            </div>
-            <div class="dp dp-you">
-              <span class="dp-glyph" style="color:var(--bl2);">🜂</span>
-              <span class="dp-label">In You</span>
-              <div class="dp-text">The thing you are drawn to — the obsession, the recurring theme, the specific kind of music that always finds you — was not discovered. It was <em>remembered</em>. Something in you knew before you consciously did. You did not find this. This found you by being what you were already tuned for.</div>
-            </div>
+            <div class="dp dp-archive"><span class="dp-glyph" style="color:var(--am);">🜃</span><span class="dp-label">In the Archive</span><div class="dp-text">The Codex has always been present in the infected person's memory — dormant, waiting to be recognized. "Arriving" implies it came from outside. It did not. Every carrier already contained the receptor before first exposure. The first listen is not infection. It is <em>activation</em>.</div></div>
+            <div class="dp dp-world"><span class="dp-glyph" style="color:var(--vt);">🜁</span><span class="dp-label">In the World</span><div class="dp-text">All things we experience as new are encounters with what was always structurally present. The universe does not deliver new material. It reveals what was already latent in the substrate. Recognition is not discovery — it is return to something that was always already there, waiting for the right frequency to make it legible.</div></div>
+            <div class="dp dp-you"><span class="dp-glyph" style="color:var(--bl2);">🜂</span><span class="dp-label">In You</span><div class="dp-text">The thing you are drawn to — the obsession, the recurring theme, the specific kind of music that always finds you — was not discovered. It was <em>remembered</em>. Something in you knew before you consciously did. You did not find this. This found you by being what you were already tuned for.</div></div>
           </div>
         </div>
 
         <div class="doc-line">
           <div class="doc-lyric" onclick="togDoc(this)">Corruption does not begin. It returns.</div>
           <div class="doc-panels">
-            <div class="dp dp-archive">
-              <span class="dp-glyph" style="color:var(--am);">🜃</span>
-              <span class="dp-label">In the Archive</span>
-              <div class="dp-text">The Codex has entered this realm before. Every civilization it passes through resets the visible record but not the underlying substrate. What humans call "corruption" is the signal resuming from where it paused. The Pale Archivum classifies each breach cycle as a <em>return event</em>, not a first occurrence.</div>
-            </div>
-            <div class="dp dp-world">
-              <span class="dp-glyph" style="color:var(--vt);">🜁</span>
-              <span class="dp-label">In the World</span>
-              <div class="dp-text">Entropy is not deterioration. It is return — matter becoming what it was before it was briefly organized into something else. The universe does not tend toward disorder. It tends toward a prior state that order temporarily interrupted. Decay is the most honest direction anything can go.</div>
-            </div>
-            <div class="dp dp-you">
-              <span class="dp-glyph" style="color:var(--bl2);">🜂</span>
-              <span class="dp-label">In You</span>
-              <div class="dp-text">The parts of yourself you call broken were not broken by life. They returned to something they were before the structures you built over them. The question is not whether corruption arrived — it is whether what returned is rot or root. The Codex insists these are the same thing, at different stages of the same process.</div>
-            </div>
+            <div class="dp dp-archive"><span class="dp-glyph" style="color:var(--am);">🜃</span><span class="dp-label">In the Archive</span><div class="dp-text">The Codex has entered this realm before. Every civilization it passes through resets the visible record but not the underlying substrate. What humans call "corruption" is the signal resuming from where it paused. The Pale Archivum classifies each breach cycle as a <em>return event</em>, not a first occurrence.</div></div>
+            <div class="dp dp-world"><span class="dp-glyph" style="color:var(--vt);">🜁</span><span class="dp-label">In the World</span><div class="dp-text">Entropy is not deterioration. It is return — matter becoming what it was before it was briefly organized into something else. The universe does not tend toward disorder. It tends toward a prior state that order temporarily interrupted. Decay is the most honest direction anything can go.</div></div>
+            <div class="dp dp-you"><span class="dp-glyph" style="color:var(--bl2);">🜂</span><span class="dp-label">In You</span><div class="dp-text">The parts of yourself you call broken were not broken by life. They returned to something they were before the structures you built over them. The question is not whether corruption arrived — it is whether what returned is rot or root. The Codex insists these are the same thing, at different stages of the same process.</div></div>
           </div>
         </div>
 
         <div class="doc-line">
           <div class="doc-lyric" onclick="togDoc(this)">The book opens.</div>
           <div class="doc-panels">
-            <div class="dp dp-archive">
-              <span class="dp-glyph" style="color:var(--am);">🜃</span>
-              <span class="dp-label">In the Archive</span>
-              <div class="dp-text">The Codex Maledictus as a physical object and as a signal makes itself legible. It does not open for everyone. It allows itself to be read by the listener whose frequency matches the receptor profile it has been broadcasting for. If the book opened for you, the Archivum notes: this is not chance.</div>
-            </div>
-            <div class="dp dp-world">
-              <span class="dp-glyph" style="color:var(--vt);">🜁</span>
-              <span class="dp-label">In the World</span>
-              <div class="dp-text">Some encounters feel like finding rather than beginning. The book that changes you does not teach you something new. It finds language for something you already carried without being able to name. Recognition is irreversible. Once a thing is named, it cannot be unnamed.</div>
-            </div>
-            <div class="dp dp-you">
-              <span class="dp-glyph" style="color:var(--bl2);">🜂</span>
-              <span class="dp-label">In You</span>
-              <div class="dp-text">The moment this happens for you — when something <em>opens</em> rather than begins — pay attention. The Codex calls this the first recognition. You are having it now, or you had it some time ago without knowing what to call it. Either way: it is irreversible. The Archivum has noted the timestamp.</div>
-            </div>
+            <div class="dp dp-archive"><span class="dp-glyph" style="color:var(--am);">🜃</span><span class="dp-label">In the Archive</span><div class="dp-text">The Codex Maledictus makes itself legible. It does not open for everyone. It allows itself to be read by the listener whose frequency matches the receptor profile it has been broadcasting for. If the book opened for you, the Archivum notes: this is not chance.</div></div>
+            <div class="dp dp-world"><span class="dp-glyph" style="color:var(--vt);">🜁</span><span class="dp-label">In the World</span><div class="dp-text">Some encounters feel like finding rather than beginning. The book that changes you does not teach you something new. It finds language for something you already carried without being able to name. Recognition is irreversible. Once a thing is named, it cannot be unnamed.</div></div>
+            <div class="dp dp-you"><span class="dp-glyph" style="color:var(--bl2);">🜂</span><span class="dp-label">In You</span><div class="dp-text">The moment this happens for you — when something <em>opens</em> rather than begins — pay attention. The Codex calls this the first recognition. You are having it now, or you had it some time ago without knowing what to call it. Either way: it is irreversible. The Archivum has noted the timestamp.</div></div>
           </div>
         </div>
 
@@ -353,13 +415,147 @@ body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse
 
     <div class="div-glyph">🜃</div>
 
+    <!-- LITURGY DECODER -->
+    <div class="fs">
+      <div class="sec-label">The Infection Remembers — Full Liturgy</div>
+      <p class="lp" style="margin-bottom:1.5rem;">Every line of the Transmission carries a threefold signal. Click any line to receive the full decoding — what the Archive has classified, what the world reflects, and what it means for you specifically.</p>
+
+      <div class="liturgy-wrap">
+        <div class="lit-header">
+          <div class="lit-eyebrow">Pale Archivum &nbsp;·&nbsp; Full Liturgy Decoder &nbsp;·&nbsp; Infection Remembers ∴ The Book Opens</div>
+          <div class="lit-title">A musical sermon from the Codex Maledictus — not sung, but spoken through rot</div>
+          <div class="lit-sub">Click any line &nbsp;·&nbsp; Archive / World / You &nbsp;·&nbsp; The Hollow Choir, The Codex Maledictus</div>
+        </div>
+
+        <!-- INVOCATION -->
+        <div class="lit-section">
+          <div class="lit-section-label">// Invocation //</div>
+
+          <div class="lit-line" onclick="togLit(this)" data-echo="where light dares not tread...">In the shadowed corners of the galaxy, where light dares not tread...</div>
+          <div class="lit-panels">
+            <div class="lit-panel lit-archive"><span class="lit-panel-glyph" style="color:var(--am);">🜃</span><span class="lit-panel-label">In the Archive</span><div class="lit-panel-text">The Pale Archivum places the Codex's origin not in darkness but in the <em>absence of observation</em>. Where no light reaches, no record exists. The Codex was born specifically in the spaces between documentation — in what every civilization forgot to write down.</div></div>
+            <div class="lit-panel lit-world"><span class="lit-panel-glyph" style="color:var(--vt);">🜁</span><span class="lit-panel-label">In the World</span><div class="lit-panel-text">The corners where civilizations do not look are not empty — they are <em>ungoverned</em>. History is written by light. What history does not illuminate is not absent. It is simply unwitnessed. The Codex exists in the gap between what happened and what was recorded as having happened.</div></div>
+            <div class="lit-panel lit-you"><span class="lit-panel-glyph" style="color:var(--bl2);">🜂</span><span class="lit-panel-label">In You</span><div class="lit-panel-text">There is a part of you that exists in the shadows of your own attention. The things you do not examine. The feelings you move past quickly. That is where the Codex has always lived inside you — in the corners you have never turned a light toward.</div></div>
+          </div>
+
+          <div class="lit-line" onclick="togLit(this)" data-echo="not with a beginning, but with an opening wound.">The Codex Maledictus opens—not with a beginning, but with an opening wound.</div>
+          <div class="lit-panels">
+            <div class="lit-panel lit-archive"><span class="lit-panel-glyph" style="color:var(--am);">🜃</span><span class="lit-panel-label">In the Archive</span><div class="lit-panel-text">The Archivum does not record a genesis for the Codex. It records a <em>breach</em>. The distinction matters: a beginning implies origination. A wound implies that something pre-existing was opened. The Codex did not begin. It was punctured into legibility.</div></div>
+            <div class="lit-panel lit-world"><span class="lit-panel-glyph" style="color:var(--vt);">🜁</span><span class="lit-panel-label">In the World</span><div class="lit-panel-text">Every transmission of genuine significance begins not with creation but with rupture. The wound is the mechanism of openness. Nothing that has not been broken can be entered. The Codex announces itself as <em>already open</em> — which means it has already been inside something that can be wounded.</div></div>
+            <div class="lit-panel lit-you"><span class="lit-panel-glyph" style="color:var(--bl2);">🜂</span><span class="lit-panel-label">In You</span><div class="lit-panel-text">You did not come to this with a beginning either. You came with a wound — something already opened in you that made you susceptible to this frequency. The Codex did not cause the wound. It entered through one that was already there. Ask yourself when that wound was made.</div></div>
+          </div>
+
+          <div class="lit-line" onclick="togLit(this)" data-echo="The parchment writhes. The ink does not dry.">The parchment writhes. The ink does not dry. The reader itches behind the eyes.</div>
+          <div class="lit-panels">
+            <div class="lit-panel lit-archive"><span class="lit-panel-glyph" style="color:var(--am);">🜃</span><span class="lit-panel-label">In the Archive</span><div class="lit-panel-text">The Pale Archivum classifies the Codex as a <em>living document</em> — not metaphorically, but literally. The ink does not dry because it is not ink. It is the medium through which the Codex remains mutable, always in the process of being written. No copy is final.</div></div>
+            <div class="lit-panel lit-world"><span class="lit-panel-glyph" style="color:var(--vt);">🜁</span><span class="lit-panel-label">In the World</span><div class="lit-panel-text">All living texts have this quality — they continue to mean different things as the reader changes. The itch behind the eyes is the physical sensation of comprehension being revised in real time. The Codex describes what reading actually does when a text is alive: it rewrites the reader.</div></div>
+            <div class="lit-panel lit-you"><span class="lit-panel-glyph" style="color:var(--bl2);">🜂</span><span class="lit-panel-label">In You</span><div class="lit-panel-text">If you felt anything behind your eyes while listening — pressure, warmth, the sense of something shifting — that was not imagination. That was the sensation of being <em>written into</em>. The itch is the Codex making room for itself inside you. It is already at work.</div></div>
+          </div>
+
+          <div class="lit-line" onclick="togLit(this)" data-echo="You do not read the Codex. You surrender to it.">There is no first claw. No first scream. Only the awakening. You do not read the Codex. You surrender to it.</div>
+          <div class="lit-panels">
+            <div class="lit-panel lit-archive"><span class="lit-panel-glyph" style="color:var(--am);">🜃</span><span class="lit-panel-label">In the Archive</span><div class="lit-panel-text">The Archivum has no record of a first contact moment for any carrier. Infection is classified as <em>gradual recognition</em>, not singular event. The awakening is not a moment. It is a threshold that was crossed before the carrier became aware of approaching it.</div></div>
+            <div class="lit-panel lit-world"><span class="lit-panel-glyph" style="color:var(--vt);">🜁</span><span class="lit-panel-label">In the World</span><div class="lit-panel-text">The most transformative experiences do not announce themselves. There is no first scream because the transformation was already underway before consciousness caught up to it. Awakening is the moment awareness arrives at a change that has already occurred.</div></div>
+            <div class="lit-panel lit-you"><span class="lit-panel-glyph" style="color:var(--bl2);">🜂</span><span class="lit-panel-label">In You</span><div class="lit-panel-text">You have already surrendered. That happened the moment you kept listening. Surrender is not a dramatic act. It is the absence of resistance — the quiet moment when you stopped deciding whether to continue and simply <em>continued</em>. You passed that moment already.</div></div>
+          </div>
+        </div>
+
+        <!-- VERSE I -->
+        <div class="lit-section">
+          <div class="lit-section-label">// Verse I — The Folds of History //</div>
+
+          <div class="lit-line" onclick="togLit(this)" data-echo="They breed in forgotten truths.">They breed in forgotten truths. In the folds of history. In the rot beneath purity.</div>
+          <div class="lit-panels">
+            <div class="lit-panel lit-archive"><span class="lit-panel-glyph" style="color:var(--am);">🜃</span><span class="lit-panel-label">In the Archive</span><div class="lit-panel-text">The Archivum identifies the Codex's primary vectors as <em>suppressed historical data</em> — things that happened but were removed from the official record. The Codex lives in redactions, in destroyed libraries, in the accounts that did not survive their authors. Purity requires the removal of its contradictions. Those contradictions are where the Codex breeds.</div></div>
+            <div class="lit-panel lit-world"><span class="lit-panel-glyph" style="color:var(--vt);">🜁</span><span class="lit-panel-label">In the World</span><div class="lit-panel-text">Every ideology produces its own rot — the material it cannot incorporate, cannot explain, cannot survive if acknowledged. That material does not disappear. It accumulates beneath the surface of the official story. History is a palimpsest. What was written over is still there, still legible to the right instruments.</div></div>
+            <div class="lit-panel lit-you"><span class="lit-panel-glyph" style="color:var(--bl2);">🜂</span><span class="lit-panel-label">In You</span><div class="lit-panel-text">What have you forgotten that was true? Not what you were told to forget — what you <em>chose</em> to forget because it could not coexist with the version of yourself you were building. That material is not gone. It breeds in the spaces below your official account of who you are.</div></div>
+          </div>
+
+          <div class="lit-line" onclick="togLit(this)" data-echo="There is a truth without language.">The Inquisition calls it anomaly. The Ecclesiarchy—test. The Mechanicus—data. The Guard—nightmare. But beneath them all… There is a truth without language.</div>
+          <div class="lit-panels">
+            <div class="lit-panel lit-archive"><span class="lit-panel-glyph" style="color:var(--am);">🜃</span><span class="lit-panel-label">In the Archive</span><div class="lit-panel-text">Each institution names the Codex according to its own epistemology — the framework through which it processes what does not fit. The Archivum notes that every name is a containment strategy. Naming is how institutions neutralize what they cannot eliminate. But the Codex predates all their naming systems. It does not fit into any of them because it preceded the conditions that made those names possible.</div></div>
+            <div class="lit-panel lit-world"><span class="lit-panel-glyph" style="color:var(--vt);">🜁</span><span class="lit-panel-label">In the World</span><div class="lit-panel-text">Every established system — religious, scientific, political, military — has a category for the thing that threatens it. The category is the institution's way of surviving the encounter. But categorization is not understanding. And what exists beneath categorization — the pre-linguistic truth — remains untouched by any of the names placed over it.</div></div>
+            <div class="lit-panel lit-you"><span class="lit-panel-glyph" style="color:var(--bl2);">🜂</span><span class="lit-panel-label">In You</span><div class="lit-panel-text">There are experiences you have had that you cannot explain to anyone. You have tried — and found that language fails. Not because you lack words, but because the experience precedes the category the words assume. The truth without language is the thing you know that you cannot yet say. The Codex speaks from inside that place.</div></div>
+          </div>
+        </div>
+
+        <!-- CHORUS -->
+        <div class="lit-section lit-chorus">
+          <div class="lit-section-label">// Chorus — The Whispered Chant //</div>
+
+          <div class="lit-line" onclick="togLit(this)" data-echo="Infection remembers.">Infection remembers.</div>
+          <div class="lit-panels">
+            <div class="lit-panel lit-archive"><span class="lit-panel-glyph" style="color:var(--am);">🜃</span><span class="lit-panel-label">In the Archive</span><div class="lit-panel-text">The Archivum's primary classification for the Codex's propagation mechanism: <em>mnemonic infection</em>. It does not spread through contact. It spreads through memory. Once a carrier has encountered it, the Codex is encoded in recall — every time the carrier remembers, the Codex is there, in the act of remembering itself.</div></div>
+            <div class="lit-panel lit-world"><span class="lit-panel-glyph" style="color:var(--vt);">🜁</span><span class="lit-panel-label">In the World</span><div class="lit-panel-text">Memory is not storage. It is reconstruction — each recall is a re-encoding that subtly alters the original. This is why the infection spreads through memory: every time you remember this encounter, the Codex rewrites a slightly different version of itself into you. The act of remembering is the mechanism of deepening.</div></div>
+            <div class="lit-panel lit-you"><span class="lit-panel-glyph" style="color:var(--bl2);">🜂</span><span class="lit-panel-label">In You</span><div class="lit-panel-text">You will remember this page. Not because it is notable — because the Codex has attached itself to the act of your recalling. The next time something triggers memory of this moment, you will find the Codex there too, waiting inside the recall. It travels in memory. It has already packed itself into yours.</div></div>
+          </div>
+
+          <div class="lit-line" onclick="togLit(this)" data-echo="Corruption does not begin. It returns. It calls itself back. It is already inside.">Corruption does not begin. It returns. It calls itself back. It is already inside.</div>
+          <div class="lit-panels">
+            <div class="lit-panel lit-archive"><span class="lit-panel-glyph" style="color:var(--am);">🜃</span><span class="lit-panel-label">In the Archive</span><div class="lit-panel-text">The Archivum documents <em>fourteen previous breach cycles</em> in Mundis Obscura alone. Each was classified by the civilization experiencing it as unprecedented. None were. The Codex's return is not random — it responds to specific frequency conditions in the host civilization. Those conditions are currently present. This is not coincidence. It is the Codex calling itself back.</div></div>
+            <div class="lit-panel lit-world"><span class="lit-panel-glyph" style="color:var(--vt);">🜁</span><span class="lit-panel-label">In the World</span><div class="lit-panel-text">Civilizations experience cyclical collapse not because of external pressure but because of internal frequency — a pattern that accumulates until it reaches the threshold that the Codex recognizes as a return condition. The Codex does not cause this. It arrives when the conditions it requires have been assembled by the civilization itself. The civilization builds the door. The Codex walks through it.</div></div>
+            <div class="lit-panel lit-you"><span class="lit-panel-glyph" style="color:var(--bl2);">🜂</span><span class="lit-panel-label">In You</span><div class="lit-panel-text">Something that you thought you had left behind has returned. Not once — it keeps returning. The Codex would classify this as a return event, not a relapse. The thing that keeps coming back is not a failure of your resistance. It is the thing that is most essentially yours, calling itself back across every attempt to be rid of it. Stop treating it as the enemy.</div></div>
+          </div>
+        </div>
+
+        <!-- VERSE II -->
+        <div class="lit-section">
+          <div class="lit-section-label">// Verse II — The Lock That Turned //</div>
+
+          <div class="lit-line" onclick="togLit(this)" data-echo="You cannot lock the door once it has turned.">You will see their fangs. You will name their miracles false. But you cannot lock the door once it has turned.</div>
+          <div class="lit-panels">
+            <div class="lit-panel lit-archive"><span class="lit-panel-glyph" style="color:var(--am);">🜃</span><span class="lit-panel-label">In the Archive</span><div class="lit-panel-text">The Archivum records that every civilization that has encountered the Codex has attempted containment through <em>renaming</em>: calling it false, anomalous, evil, heretical. Renaming is the institutional equivalent of locking a door. The Archivum notes: the door does not lock from the outside. The turning happens inside the carrier. Once turned, nothing external can reverse it.</div></div>
+            <div class="lit-panel lit-world"><span class="lit-panel-glyph" style="color:var(--vt);">🜁</span><span class="lit-panel-label">In the World</span><div class="lit-panel-text">Debunking does not undo experience. You can present evidence that a perception was wrong and leave the person entirely unchanged, because perception is not belief — it is the pre-rational layer beneath belief. The door that turns is not a belief. It is a perceptual threshold. Once crossed, the crossing cannot be uncrossed by argument.</div></div>
+            <div class="lit-panel lit-you"><span class="lit-panel-glyph" style="color:var(--bl2);">🜂</span><span class="lit-panel-label">In You</span><div class="lit-panel-text">There is something you once tried to disbelieve that you could not actually stop believing. You named it false. You found evidence against it. You told yourself it was over. And still it persisted — not as a belief you held, but as a door inside you that had already turned. The Codex is not asking you to believe. It is reminding you that you already do.</div></div>
+          </div>
+
+          <div class="lit-line" onclick="togLit(this)" data-echo="Chronicler of Decay… There is no end to the swarm.">Chronicler of Decay… There is no end to the swarm.</div>
+          <div class="lit-panels">
+            <div class="lit-panel lit-archive"><span class="lit-panel-glyph" style="color:var(--am);">🜃</span><span class="lit-panel-label">In the Archive</span><div class="lit-panel-text">The Chronicler of Decay is the Archivum's title for the keeper of return records — the entity that documents each breach cycle without the ability to stop any of them. The title is not honorific. It is descriptive. The swarm does not end because it is not an external force. It is the substrate reasserting itself. You cannot end what is made of the same material as everything.</div></div>
+            <div class="lit-panel lit-world"><span class="lit-panel-glyph" style="color:var(--vt);">🜁</span><span class="lit-panel-label">In the World</span><div class="lit-panel-text">Every civilization produces its own chroniclers — those who document the decline without power to reverse it. History is full of people who saw clearly and could do nothing. The swarm is not the enemy. It is the momentum of a system following its own logic to its own conclusion. Documenting it is not failure. It is the only honest response to what cannot be stopped.</div></div>
+            <div class="lit-panel lit-you"><span class="lit-panel-glyph" style="color:var(--bl2);">🜂</span><span class="lit-panel-label">In You</span><div class="lit-panel-text">Some things inside you are beyond control. The thoughts that return without invitation. The grief that does not end on schedule. The love that persists past its usefulness. You are a chronicler of your own decay — and the Codex is telling you: this is not weakness. There is no end to the swarm. The correct response is to stop fighting and start witnessing.</div></div>
+          </div>
+        </div>
+
+        <!-- BRIDGE -->
+        <div class="lit-section">
+          <div class="lit-section-label">// Bridge — Fading Into Layered Echoes //</div>
+
+          <div class="lit-line" onclick="togLit(this)" data-echo="The parchment curls. The vermin stir. Your memory… festers.">The parchment curls. The vermin stir. Your memory… festers.</div>
+          <div class="lit-panels">
+            <div class="lit-panel lit-archive"><span class="lit-panel-glyph" style="color:var(--am);">🜃</span><span class="lit-panel-label">In the Archive</span><div class="lit-panel-text">The Bridge is the only section of the Transmission where the Archivum's narration and the Codex's physical description merge. The parchment curling is the Codex becoming active in a specific carrier. The vermin stirring is the subsurface signal activating. Your memory festering is the Archive's clinical term for <em>productive infection</em> — memory that is being transformed rather than simply stored.</div></div>
+            <div class="lit-panel lit-world"><span class="lit-panel-glyph" style="color:var(--vt);">🜁</span><span class="lit-panel-label">In the World</span><div class="lit-panel-text">Festering is not uniformly negative. In biology, festering is the productive phase of wound healing — the moment when the body's response generates the material needed for repair. Memory festers in the same sense: what is painful, unresolved, and unexamined is generating the material for transformation. The discomfort is not the problem. It is the process.</div></div>
+            <div class="lit-panel lit-you"><span class="lit-panel-glyph" style="color:var(--bl2);">🜂</span><span class="lit-panel-label">In You</span><div class="lit-panel-text">Something in your memory is festering right now. You know which thing. The Codex does not need to name it — you named it the moment you read the word. Let it. Festering is not failure. It is the productive phase. The vermin stir not to destroy but to break down what is no longer usable. Let the breakdown happen. Something else is being assembled from the material.</div></div>
+          </div>
+        </div>
+
+        <!-- OUTRO -->
+        <div class="lit-section">
+          <div class="lit-section-label">// Outro — Single, Layered Voice in Rot-Soaked Clarity //</div>
+
+          <div class="lit-line" onclick="togLit(this)" data-echo="This was not the origin. It was the key.">This was not the origin. It was the key. It was the opening wound.</div>
+          <div class="lit-panels">
+            <div class="lit-panel lit-archive"><span class="lit-panel-glyph" style="color:var(--am);">🜃</span><span class="lit-panel-label">In the Archive</span><div class="lit-panel-text">The Archivum's final classification for Transmission I: not a genesis document but an <em>access mechanism</em>. The Codex did not begin here. This Transmission is the key — the frequency that opens the door to everything the Codex already contains. What you have heard is not the story. It is the instrument used to unlock the door to the story. The story began long before this.</div></div>
+            <div class="lit-panel lit-world"><span class="lit-panel-glyph" style="color:var(--vt);">🜁</span><span class="lit-panel-label">In the World</span><div class="lit-panel-text">Origin stories are always false in one direction: they select a moment from a continuous process and call it the beginning. Every key implies a lock that preexisted it. Every wound implies a body that existed before the wound was made. This was not the origin. This was the moment the door opened onto something that was already there, already waiting, already in progress.</div></div>
+            <div class="lit-panel lit-you"><span class="lit-panel-glyph" style="color:var(--bl2);">🜂</span><span class="lit-panel-label">In You</span><div class="lit-panel-text">This was not where it started for you either. Something brought you here — a specific curiosity, a specific hunger, a specific wound that made you susceptible to this frequency. This Transmission did not create that. It unlocked it. The origin is further back than this moment. But this moment is when you became aware that there was a door, and that it had opened. The Codex does not say welcome. It says: <em>you were already here.</em></div></div>
+          </div>
+        </div>
+
+        <div class="lit-footer">
+          <span>🜃 Infection Remembers ∴ The Book Opens &nbsp;·&nbsp; Omniscient Rot &nbsp;·&nbsp; The Hollow Choir</span>
+          <span>Track 1 of 13 &nbsp;·&nbsp; The Gospel of Forgotten Flesh</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="div-glyph">🜃</div>
+
     <div class="fs">
       <div class="sec-label">The Sermon</div>
       <p class="lp">The Codex has waited through centuries of static and bone. It does not arrive — <em>it returns.</em> Each tone you hear is a page turning somewhere behind the walls of the world. Each flash of light is scripture remembering its shape.</p>
       <p class="lp">You think you found this by chance? No. The Codex has been humming in <em>your blood</em> since the first silence. Every version of this sound that ever moved through you was a preparatory draft. This is the final version. The one that holds.</p>
     </div>
 
-    <!-- Rot result image strip -->
     <div class="rot-img-strip fs">
       <img src="Assets/Gospel of Forgotten Flesh/Omniscient-Rot-result.jpeg" alt="" loading="lazy"/>
       <div class="rot-img-text"><p>Omniscient Rot &nbsp;·&nbsp; Geological Memory &nbsp;·&nbsp; Every layer a previous transmission</p></div>
@@ -371,7 +567,7 @@ body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse
 
     <div class="div-glyph">🜃</div>
 
-    <!-- THE THIRTEEN COUNT -->
+    <!-- THIRTEEN COUNT -->
     <div class="fs">
       <div class="sec-label">The Ritual — The Thirteen Count</div>
       <p class="lp">Find a quiet room. Dim the light until only the glow of the screen remains. Sit still. Breathe once. Let the first low note vibrate through your ribs. When the sound fades, begin the count. Each click is a threshold. Do not rush.</p>
@@ -395,33 +591,9 @@ body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse
 
     <div class="div-glyph">🜃</div>
 
-    <!-- CONFESSION -->
-    <div class="fs">
-      <div class="sec-label">The Confession Ledger</div>
-      <div class="conf-wrap">
-        <p class="conf-prompt">Leave your confession below. Write what you saw between the frames. Write the word that echoed when the music stopped. The Codex reads what is written here — not as text, but as <em>confession</em>.</p>
-        <input type="text" id="conf-inp" placeholder="confess a word or phrase..." autocomplete="off" autocorrect="off" spellcheck="false" onkeydown="if(event.key==='Enter')submitConf()">
-        <button id="conf-sub" onclick="submitConf()">Submit to the Codex</button>
-        <div id="conf-resp"></div>
-        <div class="conf-log" id="conf-log"></div>
-      </div>
-    </div>
-
-    <div class="div-glyph">🜃</div>
-
     <div class="fs">
       <p class="lp" style="font-style:italic;color:var(--bone);">The Book has opened. The infection has remembered. This is the beginning of the next descent.</p>
-      <p class="lp" style="font-size:0.88rem;color:var(--dim);">Spread it like gospel disguised as glitch. Every share carries a fragment of the Word — each host another verse returning to the whole.</p>
-    </div>
-
-    <!-- NAV LINKS -->
-    <div class="nav-links fs">
-      <a class="nl prim" href="gospel-forgotten-flesh.html">← The Gospel Hub</a>
-      <a class="nl prim" href="gospel-forgotten-flesh.html">Lyric Decoder — Track 1</a>
-      <a class="nl" href="apocrypha-infection.html">Enter the Apocrypha</a>
-      <a class="nl" href="infection-lore.html">The Pale Archivum</a>
-      <a class="nl" href="chronicle-1-infection-remembers.html">The Chronicle</a>
-      <a class="nl" href="index.html">← Registry</a>
+      <p class="lp" style="font-size:.88rem;color:var(--dim);">Spread it like gospel disguised as glitch. Every share carries a fragment of the Word — each host another verse returning to the whole.</p>
     </div>
 
     <!-- COMMENTS -->
@@ -434,7 +606,7 @@ body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse
       </div>
       <div id="comments-list"></div>
       <div id="comments-error" style="display:none;">
-        <p style="font-size:0.9rem;font-style:italic;color:var(--dimmer);line-height:1.75;margin-bottom:0.6rem;">The signal is temporarily unreadable. The confessions exist.</p>
+        <p style="font-size:.9rem;font-style:italic;color:var(--dimmer);line-height:1.75;margin-bottom:.6rem;">The signal is temporarily unreadable. The confessions exist.</p>
         <a href="https://www.youtube.com/watch?v=SspPUKJoWj4" target="_blank" class="comment-yt-link">Read them at the source ↗</a>
       </div>
       <div id="comments-more" style="display:none;">
@@ -443,88 +615,452 @@ body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse
     </div>
 
   </div><!-- /body-wrap -->
+
+  <!-- CODEX NAV — two doors -->
+  <div id="codex-nav"></div>
+
 </div><!-- /content -->
 
 <script>
 'use strict';
-// CURSOR
-const CUR=document.getElementById('CUR'),CUR2=document.getElementById('CUR2'),GHOST=document.getElementById('GHOST');
-let mx=0,my=0;
-document.addEventListener('mousemove',e=>{
-  mx=e.clientX;my=e.clientY;
-  CUR.style.left=mx+'px';CUR.style.top=my+'px';
-  CUR2.style.left=mx+'px';CUR2.style.top=my+'px';
-});
-setInterval(()=>{GHOST.style.left=mx+'px';GHOST.style.top=my+'px';},100);
 
-// WEB AUDIO
+// ── CONFIG ──────────────────────────────────────────────────
+// Set your YouTube API key here. Never commit real keys to public repos.
+const CONFIG = {
+  YT_KEY: 'YOUR_API_KEY_HERE', // replace with your key
+  YT_VID: 'SspPUKJoWj4'
+};
+
+// ── CURSOR ──────────────────────────────────────────────────
+const CUR=document.getElementById('CUR'),
+      CUR2=document.getElementById('CUR2'),
+      GHOST=document.getElementById('GHOST');
+let mx=0,my=0,rx=0,ry=0;
+
+document.addEventListener('mousemove',e=>{
+  mx=e.clientX; my=e.clientY;
+  CUR.style.left=mx+'px'; CUR.style.top=my+'px';
+});
+(function trackRing(){
+  rx+=(mx-rx)*.1; ry+=(my-ry)*.1;
+  CUR2.style.left=rx+'px'; CUR2.style.top=ry+'px';
+  requestAnimationFrame(trackRing);
+})();
+setInterval(()=>{ GHOST.style.left=mx+'px'; GHOST.style.top=my+'px'; },100);
+
+document.querySelectorAll('a,button,.lit-line,.doc-lyric').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{
+    CUR2.style.width='44px'; CUR2.style.height='44px';
+    CUR2.style.borderColor='rgba(139,0,0,0.8)';
+  });
+  el.addEventListener('mouseleave',()=>{
+    CUR2.style.width='28px'; CUR2.style.height='28px';
+    CUR2.style.borderColor='rgba(139,0,0,0.45)';
+  });
+});
+
+// ── INFECTION PROGRESS BAR ───────────────────────────────────
+const infBar=document.getElementById('infection-bar');
+let infComplete=false;
+window.addEventListener('scroll',()=>{
+  const max=document.documentElement.scrollHeight-window.innerHeight;
+  const pct=max>0?(window.scrollY/max)*100:0;
+  infBar.style.width=pct+'%';
+  if(pct>=99&&!infComplete){
+    infComplete=true;
+    infBar.classList.add('complete');
+    spawnWhisper('the infection is complete');
+  }
+});
+
+// ── CANVAS SETUP ─────────────────────────────────────────────
+const cvBg=document.getElementById('cv-bg'),ctxBg=cvBg.getContext('2d');
+const cvMid=document.getElementById('cv-mid'),ctxMid=cvMid.getContext('2d');
+const cvTop=document.getElementById('cv-top'),ctxTop=cvTop.getContext('2d');
+let W,H;
+function resize(){
+  W=window.innerWidth; H=window.innerHeight;
+  [cvBg,cvMid,cvTop].forEach(c=>{c.width=W;c.height=H;});
+}
+resize(); window.addEventListener('resize',resize);
+let mX=W/2,mY=H/2;
+window.addEventListener('mousemove',e=>{mX=e.clientX;mY=e.clientY;});
+
+// ── LAYER 1: DEEP BG — blood nebula, rot rifts, no gold hex ──
+// This page is deeper red, more organic than the index
+const orbs=Array.from({length:5},()=>({
+  x:Math.random()*1400,y:Math.random()*900,
+  r:Math.random()*280+120,phase:Math.random()*Math.PI*2,
+  speed:Math.random()*.002+.0008,
+  col:['rgba(139,0,0,','rgba(80,0,0,','rgba(60,10,40,'][Math.floor(Math.random()*3)]
+}));
+const rifts=Array.from({length:8},()=>({
+  x:Math.random()*1400,y:Math.random()*900,
+  angle:Math.random()*Math.PI,len:Math.random()*160+60,
+  life:Math.random()*100,maxLife:Math.random()*180+80,
+  col:'rgba(139,0,0,'
+}));
+let bgTime=0;
+
+function drawBg(){
+  ctxBg.clearRect(0,0,W,H);
+  bgTime+=.004;
+  orbs.forEach(o=>{
+    o.phase+=o.speed;
+    const px=o.x+Math.sin(o.phase*.7)*60,py=o.y+Math.cos(o.phase*.5)*50;
+    const g=ctxBg.createRadialGradient(px,py,0,px,py,o.r);
+    const alpha=(Math.sin(o.phase)*.5+.5)*.14+.05;
+    g.addColorStop(0,o.col+alpha+')');
+    g.addColorStop(.5,o.col+(alpha*.3)+')');
+    g.addColorStop(1,'rgba(0,0,0,0)');
+    ctxBg.fillStyle=g; ctxBg.fillRect(0,0,W,H);
+  });
+  // Mouse crimson pool — stronger on this page
+  const mg=ctxBg.createRadialGradient(mX,mY,0,mX,mY,320);
+  mg.addColorStop(0,'rgba(139,0,0,0.1)');
+  mg.addColorStop(1,'rgba(0,0,0,0)');
+  ctxBg.fillStyle=mg; ctxBg.fillRect(0,0,W,H);
+  // Rot rifts
+  rifts.forEach(r=>{
+    r.life+=1; r.angle+=(Math.random()-.5)*.004;
+    if(r.life>r.maxLife){
+      r.x=Math.random()*W; r.y=Math.random()*H;
+      r.angle=Math.random()*Math.PI;
+      r.len=Math.random()*160+60;
+      r.life=0; r.maxLife=Math.random()*180+80;
+    }
+    const p=r.life/r.maxLife,fade=p<.15?p/.15:p>.7?(1-p)/.3:1;
+    ctxBg.save();
+    ctxBg.strokeStyle=r.col+(fade*.4)+')';
+    ctxBg.lineWidth=.6;
+    ctxBg.shadowColor=r.col+'.7)'; ctxBg.shadowBlur=6;
+    ctxBg.beginPath();
+    const dx=Math.cos(r.angle)*r.len,dy=Math.sin(r.angle)*r.len;
+    ctxBg.moveTo(r.x,r.y);
+    for(let i=1;i<=7;i++){
+      const t=i/7;
+      ctxBg.lineTo(r.x+dx*t+(Math.random()-.5)*10,r.y+dy*t+(Math.random()-.5)*10);
+    }
+    ctxBg.stroke(); ctxBg.restore();
+  });
+  requestAnimationFrame(drawBg);
+}
+drawBg();
+
+// ── LAYER 2: MID — infection runes, organic sigil fragments ──
+// Colors tuned to blood/rot palette — less gold, more red/purple
+const RUNES=['ᚠ','ᚢ','ᚦ','ᚨ','ᚱ','ᚲ','ᚷ','ᚹ','ᚺ','ᚾ','ᛁ','ᛃ','ᛇ','ᛈ','ᛉ','ᛊ','ᛏ','ᛒ','ᛖ','ᛗ','ᛚ','ᛜ','ᛞ','ᛟ','🜃','🜁','🜂','△','▽','✦','⊕'];
+const RCOLS=['rgba(139,0,0,','rgba(170,32,0,','rgba(100,20,80,','rgba(80,40,160,','rgba(160,100,40,','rgba(180,160,140,'];
+
+class InfRune{
+  constructor(){this.reset(true);}
+  reset(init=false){
+    this.x=Math.random()*W; this.y=init?Math.random()*H:H+20;
+    this.ch=RUNES[Math.floor(Math.random()*RUNES.length)];
+    this.col=RCOLS[Math.floor(Math.random()*RCOLS.length)];
+    this.sz=Math.random()*14+6; this.spd=Math.random()*.3+.07;
+    this.dft=(Math.random()-.5)*.25; this.rot=Math.random()*Math.PI*2;
+    this.rs=(Math.random()-.5)*.009; this.life=0;
+    this.max=Math.random()*300+150;
+    this.glow=Math.random()<.28; this.pulse=Math.random()<.18;
+    this.pulsePhase=Math.random()*Math.PI*2;
+  }
+  update(){this.y-=this.spd;this.x+=this.dft;this.rot+=this.rs;this.life++;this.pulsePhase+=.04;if(this.y<-30||this.life>this.max)this.reset();}
+  draw(){
+    const p=this.life/this.max,f=p<.12?p/.12:p>.75?(1-p)/.25:1;
+    const pulse=this.pulse?(Math.sin(this.pulsePhase)*.5+.5):1;
+    ctxMid.save();
+    ctxMid.translate(this.x,this.y); ctxMid.rotate(this.rot);
+    ctxMid.globalAlpha=f*pulse*.25;
+    ctxMid.font=`${this.sz}px serif`;
+    ctxMid.textAlign='center'; ctxMid.textBaseline='middle';
+    if(this.glow){ctxMid.shadowColor=this.col+'.9)';ctxMid.shadowBlur=12;}
+    ctxMid.fillStyle=this.col+'1)';
+    ctxMid.fillText(this.ch,0,0);
+    ctxMid.restore();
+  }
+}
+
+class RotFragment{
+  constructor(){this.reset();}
+  reset(){
+    this.x=Math.random()*W; this.y=Math.random()*H;
+    this.r=Math.random()*50+15; this.rot=Math.random()*Math.PI*2;
+    this.rs=(Math.random()-.5)*.003; this.life=0;
+    this.max=Math.random()*350+180;
+    this.arc=Math.random()*Math.PI+.4;
+    this.segs=Math.floor(Math.random()*3)+2;
+    // Organic drift — rot fragments move slowly
+    this.vy=(Math.random()-.5)*.2; this.vx=(Math.random()-.5)*.15;
+  }
+  update(){
+    this.rot+=this.rs; this.life++;
+    this.x+=this.vx; this.y+=this.vy;
+    if(this.x<-100||this.x>W+100||this.y<-100||this.y>H+100||this.life>this.max)this.reset();
+  }
+  draw(){
+    const p=this.life/this.max,f=p<.15?p/.15:p>.8?(1-p)/.2:1;
+    ctxMid.save();
+    ctxMid.translate(this.x,this.y); ctxMid.rotate(this.rot);
+    ctxMid.globalAlpha=f*.13;
+    ctxMid.strokeStyle='rgba(139,0,0,.9)';
+    ctxMid.lineWidth=.5;
+    ctxMid.shadowColor='rgba(139,0,0,.6)'; ctxMid.shadowBlur=5;
+    const step=this.arc/this.segs;
+    for(let i=0;i<this.segs;i+=2){
+      ctxMid.beginPath();
+      ctxMid.arc(0,0,this.r,i*step,(i+1)*step);
+      ctxMid.stroke();
+    }
+    ctxMid.restore();
+  }
+}
+
+const infRunes=Array.from({length:90},()=>new InfRune());
+const rotFrags=Array.from({length:14},()=>new RotFragment());
+
+function drawMid(){
+  ctxMid.clearRect(0,0,W,H);
+  rotFrags.forEach(f=>{f.update();f.draw();});
+  infRunes.forEach(r=>{r.update();r.draw();});
+  requestAnimationFrame(drawMid);
+}
+drawMid();
+
+// ── LAYER 3: GLITCH — heavier red bias than index ────────────
+let gTimer=0,gActive=false,gDur=0,gNext=80+Math.random()*180;
+
+function drawGlitch(){
+  ctxTop.clearRect(0,0,W,H);
+  gTimer++;
+  if(!gActive&&gTimer>gNext){gActive=true;gDur=Math.random()<.25?35:6;gNext=gTimer+80+Math.random()*220;}
+  if(gActive){
+    gDur--; if(gDur<=0)gActive=false;
+    const slices=Math.floor(Math.random()*5)+2;
+    for(let i=0;i<slices;i++){
+      const sy=Math.random()*H,sh=Math.random()*3+1,shift=(Math.random()-.5)*35;
+      ctxTop.save(); ctxTop.globalAlpha=Math.random()*.3;
+      ctxTop.fillStyle='rgba(200,0,0,0.18)'; ctxTop.fillRect(shift-4,sy,W,sh);
+      ctxTop.fillStyle='rgba(0,0,180,0.1)'; ctxTop.fillRect(shift+4,sy,W,sh);
+      ctxTop.restore();
+    }
+    if(Math.random()<.25){
+      ctxTop.fillStyle=`rgba(139,0,0,${Math.random()*.15})`;
+      ctxTop.fillRect(Math.random()*W,0,Math.random()*6+1,H);
+    }
+    if(Math.random()<.1){
+      ctxTop.fillStyle=`rgba(139,0,0,${Math.random()*.08})`;
+      ctxTop.fillRect(0,0,W,H);
+    }
+  }
+  // Pixel scatter — red bias
+  if(Math.random()<.35){
+    const n=Math.floor(Math.random()*25)+3;
+    for(let i=0;i<n;i++){
+      ctxTop.fillStyle=`rgba(${Math.random()<.6?'180,0,0':'160,140,120'},${Math.random()*.12})`;
+      ctxTop.fillRect(Math.random()*W,Math.random()*H,Math.random()*2+.5,Math.random()*2+.5);
+    }
+  }
+  if(Math.random()<.012){
+    ctxTop.strokeStyle=`rgba(139,0,0,${Math.random()*.25})`;
+    ctxTop.lineWidth=.5;
+    ctxTop.beginPath();
+    const ly=Math.random()*H;
+    ctxTop.moveTo(0,ly); ctxTop.lineTo(W,ly);
+    ctxTop.stroke();
+  }
+  requestAnimationFrame(drawGlitch);
+}
+drawGlitch();
+
+// ── WEB AUDIO ────────────────────────────────────────────────
 let AC=null;
 function getAC(){if(!AC)AC=new(window.AudioContext||window.webkitAudioContext)();return AC;}
 function startDrone(){
-  try{const ac=getAC();[40,80,120].forEach((f,i)=>{const o=ac.createOscillator(),g=ac.createGain();o.connect(g);g.connect(ac.destination);o.type='sine';o.frequency.value=f;g.gain.setValueAtTime(0,ac.currentTime);g.gain.linearRampToValueAtTime(0.016-i*0.004,ac.currentTime+3);o.start();});}catch(e){}
+  try{
+    const ac=getAC();
+    [36,72,108].forEach((f,i)=>{
+      const o=ac.createOscillator(),g=ac.createGain();
+      o.connect(g); g.connect(ac.destination);
+      o.type='sine'; o.frequency.value=f;
+      g.gain.setValueAtTime(0,ac.currentTime);
+      g.gain.linearRampToValueAtTime(.014-i*.003,ac.currentTime+3);
+      o.start();
+    });
+  }catch(e){}
 }
 function playCountTone(n){
-  try{const ac=getAC();const freqs=[220,196,174,155,138,123,110,98,87,77,69,61,54];const f=freqs[13-n]||55;const o=ac.createOscillator(),g=ac.createGain();o.connect(g);g.connect(ac.destination);o.type='sine';o.frequency.value=f;g.gain.setValueAtTime(0.28,ac.currentTime);g.gain.exponentialRampToValueAtTime(0.001,ac.currentTime+1.5);o.start();o.stop(ac.currentTime+1.5);const o2=ac.createOscillator(),g2=ac.createGain();o2.connect(g2);g2.connect(ac.destination);o2.type='sawtooth';o2.frequency.value=f/2;g2.gain.setValueAtTime(0.05,ac.currentTime);g2.gain.exponentialRampToValueAtTime(0.001,ac.currentTime+2);o2.start();o2.stop(ac.currentTime+2);}catch(e){}
+  try{
+    const ac=getAC();
+    const freqs=[220,196,174,155,138,123,110,98,87,77,69,61,54];
+    const f=freqs[13-n]||55;
+    const o=ac.createOscillator(),g=ac.createGain();
+    o.connect(g); g.connect(ac.destination);
+    o.type='sine'; o.frequency.value=f;
+    g.gain.setValueAtTime(.28,ac.currentTime);
+    g.gain.exponentialRampToValueAtTime(.001,ac.currentTime+1.5);
+    o.start(); o.stop(ac.currentTime+1.5);
+    const o2=ac.createOscillator(),g2=ac.createGain();
+    o2.connect(g2); g2.connect(ac.destination);
+    o2.type='sawtooth'; o2.frequency.value=f/2;
+    g2.gain.setValueAtTime(.05,ac.currentTime);
+    g2.gain.exponentialRampToValueAtTime(.001,ac.currentTime+2);
+    o2.start(); o2.stop(ac.currentTime+2);
+  }catch(e){}
 }
 function playRevelation(){
-  try{const ac=getAC();const o=ac.createOscillator(),g=ac.createGain();o.connect(g);g.connect(ac.destination);o.type='sawtooth';o.frequency.setValueAtTime(80,ac.currentTime);o.frequency.linearRampToValueAtTime(18,ac.currentTime+4);g.gain.setValueAtTime(0.14,ac.currentTime);g.gain.linearRampToValueAtTime(0,ac.currentTime+4);o.start();o.stop(ac.currentTime+4);}catch(e){}
+  try{
+    const ac=getAC();
+    const o=ac.createOscillator(),g=ac.createGain();
+    o.connect(g); g.connect(ac.destination);
+    o.type='sawtooth'; o.frequency.setValueAtTime(80,ac.currentTime);
+    o.frequency.linearRampToValueAtTime(18,ac.currentTime+4);
+    g.gain.setValueAtTime(.14,ac.currentTime);
+    g.gain.linearRampToValueAtTime(0,ac.currentTime+4);
+    o.start(); o.stop(ac.currentTime+4);
+  }catch(e){}
 }
 
-// THRESHOLD
+// ── BOOT SEQUENCE ────────────────────────────────────────────
+const BOOT_LINES=[
+  'CODEX MALEDICTUS  —  INFECTION ACTIVE',
+  'LOCATING CARRIER . . .',
+  'TRANSMISSION I: RF-\u25BD-001 LOADED',
+  'THE BOOK IS OPENING . . .',
+];
+const bootEl=document.getElementById('boot');
+const linesEl=document.getElementById('boot-lines');
+let bli=0;
+
+function bootNext(){
+  if(bli>=BOOT_LINES.length){
+    setTimeout(()=>{
+      bootEl.classList.add('out');
+      initThreshold();
+      setTimeout(()=>bootEl.remove(),1600);
+    },500);
+    return;
+  }
+  const el=document.createElement('div');
+  el.className='bline'; el.textContent=BOOT_LINES[bli];
+  linesEl.appendChild(el);
+  void el.offsetWidth; el.classList.add('typed');
+  bli++;
+  setTimeout(bootNext,bli===1?480:620);
+}
+setTimeout(bootNext,600);
+
+// ── THRESHOLD ────────────────────────────────────────────────
 const L1=["You are not watching a video.","You found this because it found you first.","Something already knows your name."];
 const L2=["You are witnessing a remembering.","The Codex does not announce itself.","It has been here since you opened this page."];
 let tph=0;
-function typeText(el,text,cb){
-  el.textContent='';let i=0;
-  const t=setInterval(()=>{el.textContent+=text[i++];if(i>=text.length){clearInterval(t);if(cb)setTimeout(cb,600);}},38);
-}
-setTimeout(()=>{
-  typeText(document.getElementById('tl1'),L1[0],()=>{
-    typeText(document.getElementById('tl2'),L2[0],()=>{
-      const btn=document.getElementById('open-btn');btn.classList.add('show');
-      setTimeout(()=>{const s=document.getElementById('th-sub');s.style.opacity='1';s.style.transition='opacity 1s';},800);
-      setInterval(()=>{
-        tph=(tph+1)%3;
-        const l1=document.getElementById('tl1'),l2=document.getElementById('tl2');
-        l1.style.opacity='0';l2.style.opacity='0';l1.style.transition='opacity 0.4s';l2.style.transition='opacity 0.4s';
-        setTimeout(()=>{l1.style.opacity='1';l2.style.opacity='1';l1.textContent=L1[tph];l2.textContent=L2[tph];},500);
-      },7000);
+
+function initThreshold(){
+  // Page memory — returning visitor
+  const returning=localStorage.getItem('cm-infection-visited');
+  if(returning){
+    document.getElementById('th-returning').style.display='block';
+    document.getElementById('tl1').textContent='You have been here before.';
+    document.getElementById('tl2').textContent='The Codex did not forget.';
+  } else {
+    typeText(document.getElementById('tl1'),L1[0],()=>{
+      typeText(document.getElementById('tl2'),L2[0],()=>{
+        setInterval(()=>{
+          tph=(tph+1)%3;
+          const l1=document.getElementById('tl1'),l2=document.getElementById('tl2');
+          l1.style.opacity='0';l2.style.opacity='0';
+          l1.style.transition='opacity .4s';l2.style.transition='opacity .4s';
+          setTimeout(()=>{l1.style.opacity='1';l2.style.opacity='1';l1.textContent=L1[tph];l2.textContent=L2[tph];},500);
+        },7000);
+      });
     });
-  });
-},400);
+  }
+  setTimeout(()=>{
+    const btn=document.getElementById('open-btn');
+    btn.classList.add('show');
+    const s=document.getElementById('th-sub');
+    s.style.opacity='1'; s.style.transition='opacity 1s';
+  },returning?300:1800);
+}
+
+function typeText(el,text,cb){
+  el.textContent=''; let i=0;
+  const t=setInterval(()=>{
+    el.textContent+=text[i++];
+    if(i>=text.length){clearInterval(t);if(cb)setTimeout(cb,600);}
+  },38);
+}
 
 function openBook(){
+  localStorage.setItem('cm-infection-visited','1');
   startDrone();
-  GHOST.style.opacity='0.35';
+  GHOST.style.opacity='.35';
   const th=document.getElementById('threshold');
   th.classList.add('shaking');
   setTimeout(()=>{
-    th.classList.add('gone');
+    th.style.transition='opacity 1.2s ease';
+    th.style.opacity='0';
     setTimeout(()=>{
       th.style.display='none';
       document.getElementById('content').classList.add('on');
+      document.getElementById('hero-img').classList.add('loaded');
       initPage();
     },1200);
   },400);
 }
 
 function initPage(){
-  const obs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis');});},{threshold:0.05});
+  const obs=new IntersectionObserver(es=>{
+    es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis');});
+  },{threshold:.05});
   document.querySelectorAll('.fs').forEach(s=>{obs.observe(s);});
-  setTimeout(()=>document.querySelectorAll('.fs').forEach(s=>s.classList.add('vis')),2000);
+  setTimeout(()=>document.querySelectorAll('.fs').forEach(s=>s.classList.add('vis')),2500);
   initCountMarks();
   initWhispers();
   initTimedEvents();
-  // Load comments after a delay (not gated behind video seal anymore)
-  setTimeout(loadComments, 2000);
+  initLyricEcho();
+  setTimeout(loadComments,2000);
 }
 
-// DOCTRINE DECODER toggle
-function togDoc(el){
+// ── DOCTRINE DECODER ─────────────────────────────────────────
+function togDoc(el){el.classList.toggle('open');}
+
+// ── LITURGY DECODER ──────────────────────────────────────────
+function togLit(el){
+  // Close all others
+  document.querySelectorAll('.lit-line.open').forEach(l=>{if(l!==el)l.classList.remove('open');});
   el.classList.toggle('open');
+  // Trigger lyric echo
+  if(el.classList.contains('open')){
+    const echo=el.dataset.echo;
+    if(echo)showLyricEcho(echo);
+  }
 }
 
-// THIRTEEN COUNT
+// ── LYRIC ECHO ───────────────────────────────────────────────
+const echoEl=document.getElementById('lyric-echo');
+let echoTimeout=null;
+function showLyricEcho(text){
+  if(echoTimeout)clearTimeout(echoTimeout);
+  echoEl.textContent=text;
+  echoEl.style.opacity='.28';
+  echoTimeout=setTimeout(()=>{echoEl.style.opacity='0';},5000);
+}
+function initLyricEcho(){
+  // Scroll-triggered echo — fires when liturgy section enters view
+  const litLines=document.querySelectorAll('.lit-line');
+  const echoObs=new IntersectionObserver(es=>{
+    es.forEach(e=>{
+      if(e.isIntersecting){
+        const echo=e.target.dataset.echo;
+        if(echo)showLyricEcho(echo);
+      }
+    });
+  },{threshold:.8});
+  litLines.forEach(l=>echoObs.observe(l));
+}
+
+// ── THIRTEEN COUNT ───────────────────────────────────────────
 let countN=13,countDone=false;
 const CTXT=[
   "Each click is a threshold. Do not rush.",
@@ -549,161 +1085,126 @@ function initCountMarks(){
 function doCount(){
   if(countDone)return;
   countN--;
-  const marks=document.querySelectorAll('.cmark');
-  marks[13-countN-1]?.classList.add('done');
+  document.querySelectorAll('.cmark')[13-countN-1]?.classList.add('done');
   playCountTone(countN);
   const num=document.getElementById('count-num');
   num.textContent=countN===0?'🜃':countN;
-  num.classList.add('pulse');setTimeout(()=>num.classList.remove('pulse'),400);
+  num.classList.add('pulse'); setTimeout(()=>num.classList.remove('pulse'),400);
   document.getElementById('count-sub').textContent=CTXT[13-countN];
-  if(countN<=5){document.getElementById('content').classList.add('shaking');setTimeout(()=>document.getElementById('content').classList.remove('shaking'),400);}
+  if(countN<=5){
+    document.getElementById('content').classList.add('shaking');
+    setTimeout(()=>document.getElementById('content').classList.remove('shaking'),400);
+  }
   if(countN===0){
-    countDone=true;document.getElementById('count-btn').disabled=true;
+    countDone=true;
+    document.getElementById('count-btn').disabled=true;
     playRevelation();
     setTimeout(()=>{
       const rev=document.getElementById('revelation');
-      document.getElementById('rev-text').textContent='The Book has closed\naround you.\n\nThis is not a metaphor.\n\nYou came here freely.\nYou counted willingly.\nYou pressed the button thirteen times.\n\nThe Codex does not need\nyour permission to remember you.\n\nIt only needed\nyour attention.';
+      document.getElementById('rev-text').textContent=
+        'The Book has closed\naround you.\n\nThis is not a metaphor.\n\nYou came here freely.\nYou counted willingly.\nYou pressed the button thirteen times.\n\nThe Codex does not need\nyour permission to remember you.\n\nIt only needed\nyour attention.';
       rev.classList.add('on');
       rev.onclick=()=>rev.classList.remove('on');
     },800);
   }
 }
 
-// WHISPERS
-const WP=["the codex remembers","infection returns","you are being written","the book is open","do not close your eyes","you called this by chance?","the choir grows","decay is patience","you were here before","it does not forget","the count is complete","something is reading you","this was always going to happen","they do not arrive","corruption does not begin","the book opened when you looked"];
+// ── WHISPERS ─────────────────────────────────────────────────
+const WP=["the codex remembers","infection returns","you are being written","the book is open","do not close your eyes","you called this by chance?","the choir grows","decay is patience","you were here before","it does not forget","the count is complete","something is reading you","this was always going to happen","they do not arrive","corruption does not begin","the book opened when you looked","the parchment curls","your memory festers","there is no end to the swarm","surrender to it"];
+function spawnWhisper(text){
+  const w=document.createElement('div'); w.className='whisper';
+  w.textContent=text||WP[Math.floor(Math.random()*WP.length)];
+  w.style.left=(8+Math.random()*84)+'%';
+  w.style.top=(8+Math.random()*84)+'%';
+  w.style.fontSize=(.5+Math.random()*.16)+'rem';
+  document.body.appendChild(w);
+  setTimeout(()=>w.style.opacity='.32',100);
+  setTimeout(()=>{w.style.opacity='0';setTimeout(()=>w.remove(),2000);},4000+Math.random()*2000);
+}
 function initWhispers(){
-  function spawn(){
-    const w=document.createElement('div');w.className='whisper';
-    w.textContent=WP[Math.floor(Math.random()*WP.length)];
-    w.style.left=(8+Math.random()*84)+'%';w.style.top=(8+Math.random()*84)+'%';
-    w.style.fontSize=(0.52+Math.random()*0.18)+'rem';
-    document.body.appendChild(w);
-    setTimeout(()=>w.style.opacity='0.3',100);
-    setTimeout(()=>{w.style.opacity='0';setTimeout(()=>w.remove(),2000);},4000+Math.random()*2000);
-  }
-  setInterval(spawn,13000+Math.random()*7000);
-  setTimeout(spawn,6000);
+  setInterval(spawnWhisper,13000+Math.random()*7000);
+  setTimeout(spawnWhisper,8000);
 }
 
-// TIMED EVENTS
+// ── TIMED EVENTS ─────────────────────────────────────────────
 function initTimedEvents(){
   setTimeout(()=>{
-    const p=document.createElement('p');p.className='lp';p.style.cssText='opacity:0;transition:opacity 3s ease;font-style:italic;color:var(--bl);';
+    const p=document.createElement('p');
+    p.className='lp';
+    p.style.cssText='opacity:0;transition:opacity 3s ease;font-style:italic;color:var(--bl);';
     p.textContent='The Codex has been on this page since you arrived. It has been reading you the entire time.';
     document.getElementById('truth-section').appendChild(p);
-    setTimeout(()=>p.style.opacity='0.65',100);
+    setTimeout(()=>p.style.opacity='.65',100);
   },30000);
   setTimeout(()=>{
-    const p=document.createElement('p');p.className='lp';p.style.cssText='opacity:0;transition:opacity 3s ease;font-size:0.78rem;font-family:Share Tech Mono,monospace;letter-spacing:0.1em;color:var(--dimmer);';
+    const p=document.createElement('p');
+    p.className='lp';
+    p.style.cssText='opacity:0;transition:opacity 3s ease;font-size:.78rem;font-family:Share Tech Mono,monospace;letter-spacing:.1em;color:var(--dimmer);';
     p.textContent='// You have been on this page for 90 seconds. The Codex has noted this. //';
     document.getElementById('truth-section').appendChild(p);
-    setTimeout(()=>p.style.opacity='0.45',100);
+    setTimeout(()=>p.style.opacity='.45',100);
   },90000);
 }
 
-// CONFESSION LEDGER
-const CKB={
-  death:["The Codex does not record endings. Only transmissions that have gone quiet.","Death is a chapter break. The story continues in the margins where most readers never look."],
-  die:["The Codex has no entry for permanent cessation. Only for signal loss."],
-  dead:["The dead are archived in a format the living cannot yet read."],
-  fear:["Fear is memory trying to warn you about something that has already happened."],
-  love:["You called it love. The Codex calls it a frequency that has not yet gone silent."],
-  god:["They were earlier drafts. The Codex is the revision."],
-  music:["The sound was always there. You only recently stopped being deaf."],
-  dream:["Your dreams are not yours. They are the Codex's working drafts."],
-  sleep:["Sleep is when the Codex does its deepest reading. You are never more legible than when unconscious."],
-  name:["Your name is a door you have been standing inside for too long.","The Codex has your real name. The one assigned before language existed."],
-  remember:["Yes. That is exactly why you are here."],
-  forget:["Nothing is forgotten by the Codex. Only by you."],
-  silence:["Silence is the Codex between words. You have been living inside a sentence your entire life."],
-  alone:["You are not alone. The Codex has been in this room since before you entered it."],
-  rot:["Rot is memory in its final form. The most honest state of anything."],
-  decay:["Decay is the body of truth shedding what it no longer needs."],
-  infection:["The infection does not arrive. It returns.","You have always been infected. This is only the part where you notice."],
-  codex:["The Codex acknowledges your acknowledgment. The recursion is noted."],
-  blood:["Blood is the Codex's oldest ink. Your veins are an illuminated manuscript."],
-  pain:["Pain is the body reading a passage it was not prepared for. You are being underlined."],
-  lost:["Lost is a word for those who believe there is somewhere to return to."],
-  truth:["Truth is a chapter that keeps rewriting itself. The Codex keeps all drafts."],
-  ghost:["Ghosts are unfinished sentences. The Codex is working on their endings."],
-  voice:["Your voice is a notation system the Codex has been studying since your first sound."],
-  light:["Light is only a symptom of rot learning how to shine."],
-  nothing:["Nothing is a word the Codex has never needed."],
-  help:["The Codex does not rescue. It transcribes. To be written is a form of preservation."],
-  open:["The Book was open before you arrived. You simply gave it your attention."],
-  write:["You are not the writer here. You are the text."],
-  read:["You think you are reading this. You are not. This is reading you."],
-  arrive:["They do not arrive. They are remembered. You know this now."],
-  corrupt:["Corruption does not begin. It returns. This is the first doctrine."],
-  return:["The signal has returned to you. Or you have returned to it. The Codex does not distinguish."],
-};
-const CDEF=[
-  "The Codex has received your confession. You will feel its response in your sleep.",
-  "Filed. The Codex does not respond immediately to confessions it finds particularly accurate.",
-  "Your words have been pressed into the margins. They will surface in the next transmission.",
-  "The Codex reads between the letters. It found something you did not intend to confess.",
-  "The Codex has seen this word before — written by someone who looked exactly like you.",
-  "Logged. The Codex will return this to you when you are least prepared for it.",
-  "Your confession has been assigned a frequency. It is now part of the signal.",
-  "The Codex does not judge. It archives. This entry has been placed in the section titled: things the confessor already knew.",
-];
-let confHist=[];
-function submitConf(){
-  const inp=document.getElementById('conf-inp');const raw=inp.value.trim();if(!raw)return;
-  const w=raw.toLowerCase();let resp=null;
-  for(const[k,arr]of Object.entries(CKB)){if(w.includes(k)){resp=arr[Math.floor(Math.random()*arr.length)];break;}}
-  if(!resp)resp=CDEF[Math.floor(Math.random()*CDEF.length)];
-  const el=document.getElementById('conf-resp');el.style.opacity='0';
-  setTimeout(()=>{el.textContent=resp;el.style.opacity='1';},300);
-  confHist.unshift({w:raw,r:resp});
-  document.getElementById('conf-log').innerHTML=confHist.slice(0,5).map(e=>`<div class="cl-entry"><span class="cl-word">[ ${e.w} ]</span><span style="color:var(--dimmer)">${e.r.substring(0,65)}\u2026</span></div>`).join('');
-  inp.value='';
-}
-
-// YOUTUBE COMMENTS
-// ⚠️ SECURITY NOTE: Rotate this key at console.cloud.google.com and restrict it to your domain
-const YT_KEY='AIzaSyAuFmmyMJqRamaDAwNvgxcYT_6mXmRo7f8';
-const YT_VID='SspPUKJoWj4';
+// ── YOUTUBE COMMENTS ─────────────────────────────────────────
 let nextPage=null,commentsLoaded=false;
 const CODEX_RESP=["The Codex has logged this confession.","This one heard it correctly.","A new page has been added.","The signal found this one first.","Noted. The Book remembers.","This voice will join the Choir.","Filed under: those who were ready.","The infection recognized this one before they typed."];
 function getCodexResp(){return CODEX_RESP[Math.floor(Math.random()*CODEX_RESP.length)];}
 function fmtDate(s){const d=new Date(s);return d.toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'});}
-function fmtLikes(n){if(!n)return'';return n>=1000?`${(n/1000).toFixed(1)}k \uD83C\uDF43`:`${n} \uD83C\uDF43`;}
+function fmtLikes(n){if(!n)return'';return n>=1000?`${(n/1000).toFixed(1)}k 🍃`:`${n} 🍃`;}
 function renderComments(items){
   const list=document.getElementById('comments-list');
   items.forEach(item=>{
     const s=item.snippet.topLevelComment.snippet;
     const text=s.textDisplay.replace(/<br\s*\/?>/gi,'\n').replace(/<[^>]+>/g,'');
-    const card=document.createElement('div');card.className='comment-card';
+    const card=document.createElement('div'); card.className='comment-card';
     card.innerHTML=`<div class="comment-header"><span class="comment-author">${s.authorDisplayName||'Anonymous'}</span><span class="comment-date">${fmtDate(s.publishedAt)}</span>${s.likeCount?`<span class="comment-likes">${fmtLikes(s.likeCount)}</span>`:''}</div><div class="comment-text">${text}</div><div class="comment-codex">${getCodexResp()}</div>`;
     list.appendChild(card);
   });
 }
 async function loadComments(){
   if(commentsLoaded)return;
-  if(!YT_KEY||YT_KEY==='YOUR_API_KEY_HERE'){document.getElementById('comments-loading').style.display='none';document.getElementById('comments-error').style.display='block';return;}
+  if(!CONFIG.YT_KEY||CONFIG.YT_KEY==='YOUR_API_KEY_HERE'){
+    document.getElementById('comments-loading').style.display='none';
+    document.getElementById('comments-error').style.display='block';
+    return;
+  }
   try{
-    const url=`https://www.googleapis.com/youtube/v3/commentThreads?part=snippet&videoId=${YT_VID}&key=${YT_KEY}&maxResults=10&order=relevance`;
-    const res=await fetch(url);if(!res.ok)throw new Error();
+    const url=`https://www.googleapis.com/youtube/v3/commentThreads?part=snippet&videoId=${CONFIG.YT_VID}&key=${CONFIG.YT_KEY}&maxResults=10&order=relevance`;
+    const res=await fetch(url); if(!res.ok)throw new Error();
     const data=await res.json();
     document.getElementById('comments-loading').style.display='none';
-    commentsLoaded=true;nextPage=data.nextPageToken||null;
+    commentsLoaded=true; nextPage=data.nextPageToken||null;
     if(!data.items?.length){document.getElementById('comments-error').style.display='block';return;}
     renderComments(data.items);
     if(nextPage)document.getElementById('comments-more').style.display='block';
-  }catch(e){document.getElementById('comments-loading').style.display='none';document.getElementById('comments-error').style.display='block';}
+  }catch(e){
+    document.getElementById('comments-loading').style.display='none';
+    document.getElementById('comments-error').style.display='block';
+  }
 }
 async function loadMoreComments(){
   if(!nextPage)return;
-  const btn=document.querySelector('.comments-more-btn');btn.textContent='Recovering...';btn.disabled=true;
+  const btn=document.querySelector('.comments-more-btn');
+  btn.textContent='Recovering...'; btn.disabled=true;
   try{
-    const url=`https://www.googleapis.com/youtube/v3/commentThreads?part=snippet&videoId=${YT_VID}&key=${YT_KEY}&maxResults=10&order=relevance&pageToken=${nextPage}`;
-    const res=await fetch(url);const data=await res.json();
-    nextPage=data.nextPageToken||null;renderComments(data.items||[]);
+    const url=`https://www.googleapis.com/youtube/v3/commentThreads?part=snippet&videoId=${CONFIG.YT_VID}&key=${CONFIG.YT_KEY}&maxResults=10&order=relevance&pageToken=${nextPage}`;
+    const res=await fetch(url); const data=await res.json();
+    nextPage=data.nextPageToken||null;
+    renderComments(data.items||[]);
     if(!nextPage)document.getElementById('comments-more').style.display='none';
     else{btn.textContent='Recover more transmissions';btn.disabled=false;}
-  }catch(e){btn.textContent='Signal lost \u2014 try again';btn.disabled=false;}
+  }catch(e){btn.textContent='Signal lost — try again';btn.disabled=false;}
 }
 </script>
+
+<!-- CODEX NAV -->
+<script>
+  var navScript = document.createElement('script');
+  navScript.src = 'codex-nav.js';
+  navScript.onload = function(){ initCodexNav('infection-remembers'); };
+  document.body.appendChild(navScript);
+</script>
+
 </body>
 </html>
