@@ -11,9 +11,9 @@
 // pathB = sideways into a related thread (cross the threshold)
 // If a path is null, that door is hidden on that page.
 // ============================================================
- 
+
 const CODEX_MAP = {
- 
+
   // ── ENTRY POINT ─────────────────────────────────────────────
   "infection-remembers": {
     file:   "infection-remembers.html",
@@ -25,19 +25,19 @@ const CODEX_MAP = {
     pathA:  "infection-lore",
     pathB:  "codex-remembers-you"
   },
- 
+
   // ── REALM I — MUNDIS OBSCURA ─────────────────────────────────
   "infection-lore": {
     file:   "infection-lore.html",
     title:  "Lore of the Infection",
     realm:  "I",
     type:   "lore",
-    labelA: "Trace the origin",
-    labelB: "Enter the chronicle",
-    pathA:  "rf-093-lore",
+    labelA: "Enter the Apocrypha",
+    labelB: "Enter the Chronicle",
+    pathA:  "apocrypha-infection",
     pathB:  "lore-chronicle-1"
   },
- 
+
   "codex-remembers-you": {
     file:   "codex-remembers-you.html",
     title:  "The Codex Remembers You",
@@ -48,7 +48,7 @@ const CODEX_MAP = {
     pathA:  "memory-engine-1",
     pathB:  "rf-093-mirror"
   },
- 
+
   "memory-engine-1": {
     file:   "memory-engine-1.html",
     title:  "The Memory Engine",
@@ -59,7 +59,7 @@ const CODEX_MAP = {
     pathA:  "rf-093-lore",
     pathB:  "rf-093-invocation"
   },
- 
+
   // ── CHRONICLE THREAD ─────────────────────────────────────────
   "lore-chronicle-1": {
     file:   "lore-chronicle-1.html",
@@ -71,7 +71,7 @@ const CODEX_MAP = {
     pathA:  "chronicle-1-infection-remembers",
     pathB:  "infection-remembers"
   },
- 
+
   "chronicle-1-infection-remembers": {
     file:   "chronicle-1-infection-remembers.html",
     title:  "Chronicle I — The Infection Remembers",
@@ -82,7 +82,7 @@ const CODEX_MAP = {
     pathA:  "apocrypha-chronicle-1",
     pathB:  "rf-093-apocrypha"
   },
- 
+
   "apocrypha-chronicle-1": {
     file:   "apocrypha-chronicle-1.html",
     title:  "Apocrypha — Chronicle I",
@@ -93,7 +93,7 @@ const CODEX_MAP = {
     pathA:  "apocrypha-infection",
     pathB:  "rf-093-invocation"
   },
- 
+
   // ── APOCRYPHA THREAD ─────────────────────────────────────────
   "apocrypha-infection": {
     file:   "apocrypha-infection.html",
@@ -105,7 +105,7 @@ const CODEX_MAP = {
     pathA:  "rf-093-mirror",
     pathB:  "plague-priest-liturgy"
   },
- 
+
   // ── RF-093 CLUSTER ───────────────────────────────────────────
   "rf-093-lore": {
     file:   "rf-093-lore.html",
@@ -117,7 +117,7 @@ const CODEX_MAP = {
     pathA:  "rf-093-invocation",
     pathB:  "rf-093-mirror"
   },
- 
+
   "rf-093-invocation": {
     file:   "rf-093-invocation.html",
     title:  "Recovered Fragment 093 — Invocation",
@@ -128,7 +128,7 @@ const CODEX_MAP = {
     pathA:  "rf-093-apocrypha",
     pathB:  "memory-engine-1"
   },
- 
+
   "rf-093-mirror": {
     file:   "rf-093-mirror.html",
     title:  "Recovered Fragment 093 — Mirror",
@@ -139,7 +139,7 @@ const CODEX_MAP = {
     pathA:  "rf-093-lore",
     pathB:  "lore-chronicle-1"
   },
- 
+
   "rf-093-apocrypha": {
     file:   "rf-093-apocrypha.html",
     title:  "Recovered Fragment 093 — Apocrypha",
@@ -150,7 +150,7 @@ const CODEX_MAP = {
     pathA:  "plague-priest-lore",
     pathB:  "infection-remembers"
   },
- 
+
   // ── PLAGUE PRIEST CLUSTER — REALM I / SHATTERREALM BORDER ───
   "plague-priest-lore": {
     file:   "plague-priest-lore.html",
@@ -162,7 +162,7 @@ const CODEX_MAP = {
     pathA:  "plague-priest-decoder",
     pathB:  "plague-priest-liturgy"
   },
- 
+
   "plague-priest-decoder": {
     file:   "plague-priest-decoder.html",
     title:  "The Plague Priest — Decoder",
@@ -173,7 +173,7 @@ const CODEX_MAP = {
     pathA:  "plague-priest-apocrypha",
     pathB:  "plague-priest-liturgy"
   },
- 
+
   "plague-priest-liturgy": {
     file:   "plague-priest-liturgy.html",
     title:  "The Plague Priest — Liturgy",
@@ -184,7 +184,7 @@ const CODEX_MAP = {
     pathA:  "plague-priest-apocrypha",
     pathB:  "confession-ledger"
   },
- 
+
   "plague-priest-apocrypha": {
     file:   "plague-priest-apocrypha.html",
     title:  "The Plague Priest — Apocrypha",
@@ -195,7 +195,7 @@ const CODEX_MAP = {
     pathA:  "confession-ledger",
     pathB:  "infection-remembers"
   },
- 
+
   // ── THE HIDDEN ROOM — found only through the maze ───────────
   "confession-ledger": {
     file:   "confession-ledger.html",
@@ -207,7 +207,7 @@ const CODEX_MAP = {
     pathA:  null,
     pathB:  null
   },
- 
+
   // ── MUSIC ────────────────────────────────────────────────────
   "gospel-forgotten-flesh": {
     file:   "gospel-forgotten-flesh.html",
@@ -219,28 +219,28 @@ const CODEX_MAP = {
     pathA:  null,
     pathB:  null
   }
- 
+
 };
- 
+
 // ============================================================
 // NAVIGATION RENDERER
 // Call initCodexNav("this-page-id") at the bottom of any page.
 // It finds the current page in the map and renders its two doors.
 // ============================================================
- 
+
 function initCodexNav(currentId) {
   const page = CODEX_MAP[currentId];
   if (!page) return;
- 
+
   const a = page.pathA ? CODEX_MAP[page.pathA] : null;
   const b = page.pathB ? CODEX_MAP[page.pathB] : null;
- 
+
   // Don't render nav if both paths are null (hidden room, music pages)
   if (!a && !b) return;
- 
+
   const nav = document.getElementById('codex-nav');
   if (!nav) return;
- 
+
   nav.innerHTML = `
     <div class="cnav-inner">
       <div class="cnav-divider">
@@ -264,13 +264,13 @@ function initCodexNav(currentId) {
     </div>
   `;
 }
- 
+
 // ============================================================
 // SHARED CSS
 // Inject navigation styles into any page that imports this file.
 // No need to copy CSS into each page manually.
 // ============================================================
- 
+
 (function injectNavStyles() {
   const style = document.createElement('style');
   style.textContent = `
@@ -280,7 +280,7 @@ function initCodexNav(currentId) {
       padding: 60px 32px 80px;
       width: 100%;
     }
- 
+
     .cnav-inner {
       max-width: 800px;
       margin: 0 auto;
@@ -289,30 +289,30 @@ function initCodexNav(currentId) {
       align-items: center;
       gap: 32px;
     }
- 
+
     .cnav-divider {
       display: flex;
       align-items: center;
       gap: 16px;
       width: 100%;
     }
- 
+
     .cnav-line {
       flex: 1;
       height: 1px;
       background: linear-gradient(90deg, transparent, rgba(201,168,76,0.35));
     }
- 
+
     .cnav-line.r {
       background: linear-gradient(90deg, rgba(201,168,76,0.35), transparent);
     }
- 
+
     .cnav-glyph {
       font-size: 13px;
       color: rgba(201,168,76,0.5);
       flex-shrink: 0;
     }
- 
+
     .cnav-doors {
       display: flex;
       gap: 16px;
@@ -320,7 +320,7 @@ function initCodexNav(currentId) {
       justify-content: center;
       flex-wrap: wrap;
     }
- 
+
     .cnav-door {
       flex: 1;
       min-width: 200px;
@@ -337,7 +337,7 @@ function initCodexNav(currentId) {
       cursor: none;
       transition: all 0.5s cubic-bezier(0.16,1,0.3,1);
     }
- 
+
     .cnav-door::before {
       content: '';
       position: absolute;
@@ -345,39 +345,39 @@ function initCodexNav(currentId) {
       transform: translateX(-101%);
       transition: transform 0.5s cubic-bezier(0.16,1,0.3,1);
     }
- 
+
     .cnav-door:hover::before {
       transform: translateX(0);
     }
- 
+
     .cnav-a {
       background: transparent;
       border-color: rgba(201,168,76,0.25);
       color: #E4DDD0;
     }
- 
+
     .cnav-a::before {
       background: rgba(201,168,76,0.07);
     }
- 
+
     .cnav-a:hover {
       border-color: rgba(201,168,76,0.6);
     }
- 
+
     .cnav-b {
       background: transparent;
       border-color: rgba(122,18,18,0.35);
       color: #E4DDD0;
     }
- 
+
     .cnav-b::before {
       background: rgba(122,18,18,0.1);
     }
- 
+
     .cnav-b:hover {
       border-color: rgba(122,18,18,0.8);
     }
- 
+
     .cnav-door-label {
       font-family: 'Cinzel', serif;
       font-size: 9px;
@@ -387,7 +387,7 @@ function initCodexNav(currentId) {
       position: relative;
       z-index: 1;
     }
- 
+
     .cnav-door-dest {
       font-family: 'Crimson Text', Georgia, serif;
       font-style: italic;
@@ -397,7 +397,7 @@ function initCodexNav(currentId) {
       z-index: 1;
       text-align: center;
     }
- 
+
     .cnav-realm {
       font-family: 'Cinzel', serif;
       font-size: 8px;
@@ -405,7 +405,7 @@ function initCodexNav(currentId) {
       text-transform: uppercase;
       color: rgba(201,168,76,0.28);
     }
- 
+
     @media (max-width: 600px) {
       .cnav-doors {
         flex-direction: column;
