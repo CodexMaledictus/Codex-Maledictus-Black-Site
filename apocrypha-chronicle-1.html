@@ -3,775 +3,937 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Apocrypha — Chronicle I // Codex Maledictus</title>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;600&family=IM+Fell+English:ital@0;1&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<title>Apocrypha — Chronicle I // You Were Warned</title>
+<meta name="description" content="Seven forbidden truths. You were warned. You are here anyway. The Codex noted the timestamp.">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;600&family=IM+Fell+English:ital@0;1&family=Crimson+Text:ital,wght@0,400;1,400&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 
-<!-- ∴ APOCRYPHA — CHRONICLE I ∴ -->
-<!-- Seven truths sealed in the narration. They are open now. -->
-<!-- The void did not dream. It recalled. -->
-<!-- You are not the first to read this. You are simply the current instance. -->
-<!-- The frequency was here before you. It will be here after. -->
-<!-- What you feel reading this is not curiosity. It is recognition. -->
-<!-- The Codex has already noted that you looked here. -->
-<!-- 🜃 -->
+<!--
+  ∴ APOCRYPHA — CHRONICLE I ∴
+  There was a warning.
+  It appeared on every page before this one.
+  You passed it seven times.
+  You are here anyway.
+  The Codex noted the timestamp.
+  It has been waiting.
+  What follows is not classified to protect the information.
+  It is classified because of what happens to the person who receives it.
+  The Archivum documented seventeen cases.
+  None of the seventeen would describe what happened.
+  Not because they refused.
+  Because they could not find the words.
+  Because the words they needed did not exist in any language
+  that had not already been consumed.
+  You should have listened to the warning.
+  🜃
+-->
 
 <style>
-:root{
-  --bg:#020008;--panel:#06000F;--panel2:#0A0018;
-  --cr:#8B0000;--cr2:#B01800;--cr3:#CC2200;--cr4:#3A0000;--cr5:#1A0000;
-  --gold:#C9A84C;--gd2:#8A6530;--gd3:#3A2810;
-  --vt:#7B4FBF;--vt2:#5A38A0;--vt3:#3A2270;
-  --ink:#C4C0B8;--ink2:#847A70;--ink3:#383028;--ink4:#181008;
-  --silver:#C0BAC4;--sv2:#706A74;
-  --brd:#160A14;--brd2:#221216;
-  --grn:#004A18;--gn2:#003010;
+:root {
+  --void:  #020008;
+  --abyss: #06000F;
+  --pit:   #0A0018;
+  --cr:    #8B0000;
+  --cr2:   #AA1800;
+  --cr3:   #CC2200;
+  --cr4:   #3A0000;
+  --cr5:   #1A0000;
+  --cr6:   #0A0005;
+  --gold:  #C9A84C;
+  --gd2:   #8A6530;
+  --gd3:   #3A2810;
+  --vt:    #7B4FBF;
+  --vt2:   #5A38A0;
+  --vt3:   #3A2270;
+  --ash:   #C4C0B8;
+  --ash2:  #847A70;
+  --ash3:  #383028;
+  --ash4:  #181008;
+  --brd:   #160A14;
+  --brd2:  #221216;
 }
-*{margin:0;padding:0;box-sizing:border-box;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 html{scroll-behavior:smooth;}
-body{background:var(--bg);color:var(--ink);font-family:'IM Fell English',serif;overflow-x:hidden;cursor:none;}
-body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.07) 2px,rgba(0,0,0,0.07) 4px);pointer-events:none;z-index:9990;}
-body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at center,transparent 28%,rgba(0,0,0,0.93)100%);pointer-events:none;z-index:9989;}
+body{background:var(--void);color:var(--ash);font-family:'IM Fell English',serif;overflow-x:hidden;cursor:none;min-height:100vh;}
 
+/* Heavier scanlines than any other page */
+#scanlines{position:fixed;inset:0;z-index:3;pointer-events:none;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.08) 2px,rgba(0,0,0,0.08) 4px);}
+/* Tighter vignette — this page is meant to feel enclosed */
+#vignette{position:fixed;inset:0;z-index:4;pointer-events:none;background:radial-gradient(ellipse at center,transparent 22%,rgba(0,0,0,0.95) 100%);}
+
+/* CANVAS */
+#cv-bg{position:fixed;inset:0;z-index:0;pointer-events:none;}
+#cv-blood{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.45;}
+
+/* CURSOR */
 #CUR{position:fixed;pointer-events:none;z-index:99999;transform:translate(-50%,-50%);width:16px;height:16px;}
 #CUR::before,#CUR::after{content:'';position:absolute;background:var(--cr);}
 #CUR::before{width:1px;height:100%;left:50%;}
 #CUR::after{height:1px;width:100%;top:50%;}
-#CUR2{position:fixed;pointer-events:none;z-index:99998;transform:translate(-50%,-50%);width:3px;height:3px;border-radius:50%;background:var(--cr4);}
+#CUR2{position:fixed;pointer-events:none;z-index:99998;transform:translate(-50%,-50%);width:24px;height:24px;border-radius:50%;border:1px solid rgba(139,0,0,.35);transition:width .3s,height .3s,border-color .3s;}
 
-/* LIVING BACKGROUND */
-#BGCANVAS{position:fixed;inset:0;z-index:0;pointer-events:none;}
-#BLOODRAIN{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:0.4;}
-
-/* ENTRY RITUAL */
-#ENTRY{position:fixed;inset:0;z-index:9000;background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem;overflow:hidden;}
-#entry-canvas{position:absolute;inset:0;}
-.en-content{position:relative;z-index:2;text-align:center;}
-.en-glyph{font-size:6rem;color:var(--cr4);display:block;margin-bottom:1.5rem;transition:all 3s ease;}
-.en-glyph.awake{color:var(--cr);text-shadow:0 0 40px rgba(139,0,0,0.8),0 0 100px rgba(139,0,0,0.3);}
-.en-line{font-family:'Share Tech Mono',monospace;font-size:0.72rem;color:var(--cr4);letter-spacing:0.2em;text-align:center;max-width:500px;line-height:1.9;margin:0.22rem 0;opacity:0;transition:opacity 0.3s;}
-.en-line.on{opacity:1;}
-.en-enter{display:none;margin-top:2rem;background:transparent;border:1px solid var(--cr4);color:var(--cr4);font-family:'Share Tech Mono',monospace;font-size:0.66rem;letter-spacing:0.28em;padding:0.75rem 2.5rem;cursor:pointer;transition:all 0.3s;text-transform:uppercase;pointer-events:all;}
-.en-enter:hover{border-color:var(--cr);color:var(--cr);background:rgba(139,0,0,0.08);}
-
-/* APP */
-#APP{position:relative;z-index:1;opacity:0;transition:opacity 1.4s;padding-bottom:4rem;}
-#APP.on{opacity:1;}
-
-/* AMBIENT AUDIO CONTROLS */
-#AUDIO-STATUS{position:fixed;top:0.6rem;right:1rem;z-index:200;font-family:'Share Tech Mono',monospace;font-size:0.52rem;color:var(--cr4);letter-spacing:0.18em;cursor:pointer;transition:color 0.2s;}
+/* AUDIO */
+#AUDIO-STATUS{position:fixed;top:.6rem;right:1rem;z-index:200;font-family:'Share Tech Mono',monospace;font-size:.52rem;color:var(--cr4);letter-spacing:.18em;cursor:pointer;transition:color .2s;background:none;border:none;}
 #AUDIO-STATUS:hover{color:var(--cr2);}
 
-/* HEADER */
-.hdr{text-align:center;padding:3rem 2rem 2.5rem;border-bottom:1px solid var(--brd2);position:relative;overflow:hidden;
-  background:radial-gradient(ellipse at center top,rgba(139,0,0,0.12) 0%,transparent 55%);}
-.hdr::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:220px;height:1px;background:linear-gradient(90deg,transparent,var(--cr),transparent);}
-.hdr-kicker{font-family:'Share Tech Mono',monospace;font-size:0.52rem;color:var(--cr4);letter-spacing:0.42em;text-transform:uppercase;margin-bottom:1rem;animation:kfade 5s ease-in-out infinite;}
-@keyframes kfade{0%,100%{opacity:0.4;}50%{opacity:0.9;}}
+/* ── ENTRY RITUAL ── */
+#ENTRY{
+  position:fixed;inset:0;z-index:9000;background:#000;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:2rem;overflow:hidden;transition:opacity 1s ease;
+}
+#ENTRY.out{opacity:0;pointer-events:none;}
+#entry-cv{position:absolute;inset:0;}
+.en-content{position:relative;z-index:2;text-align:center;max-width:560px;}
+.en-glyph{font-size:5.5rem;color:var(--cr4);display:block;margin-bottom:1.5rem;transition:all 3s ease;}
+.en-glyph.awake{color:var(--cr);text-shadow:0 0 40px rgba(139,0,0,.8),0 0 100px rgba(139,0,0,.3),0 0 200px rgba(139,0,0,.1);}
+.en-line{
+  font-family:'Share Tech Mono',monospace;font-size:clamp(.62rem,1.4vw,.76rem);
+  color:var(--cr4);letter-spacing:.18em;text-align:center;
+  max-width:520px;line-height:1.95;margin:.2rem auto;
+  opacity:0;transition:opacity .5s;
+}
+.en-line.on{opacity:1;}
+.en-line.bright{color:rgba(196,192,184,.65);}
+.en-line.warn{color:var(--cr2);font-size:clamp(.7rem,1.6vw,.85rem);}
+.en-line.dim{color:rgba(58,0,0,.5);}
+.en-sep{height:1.1rem;}
+.en-enter{
+  display:none;margin-top:2.5rem;background:transparent;
+  border:1px solid var(--cr4);color:var(--cr4);
+  font-family:'Share Tech Mono',monospace;font-size:.66rem;letter-spacing:.28em;
+  padding:.75rem 2.5rem;cursor:pointer;transition:all .4s;text-transform:uppercase;
+  position:relative;overflow:hidden;
+}
+.en-enter::before{content:'';position:absolute;inset:0;background:var(--cr);transform:translateX(-101%);transition:transform .4s cubic-bezier(.16,1,.3,1);}
+.en-enter:hover::before{transform:translateX(0);}
+.en-enter span{position:relative;z-index:1;}
+.en-enter:hover{color:var(--ash);}
+
+/* ── APP ── */
+#APP{position:relative;z-index:5;opacity:0;transition:opacity 1.4s;padding-bottom:5rem;}
+#APP.on{opacity:1;}
+
+/* ── CLASSIFIED BANNER ── */
+.class-banner{
+  background:var(--cr5);border-bottom:1px solid var(--cr4);
+  text-align:center;padding:.5rem 1.5rem;
+  font-family:'Share Tech Mono',monospace;font-size:.54rem;
+  color:var(--cr4);letter-spacing:.28em;text-transform:uppercase;
+  animation:bannerBreath 5s ease-in-out infinite;
+  position:relative;z-index:6;
+}
+@keyframes bannerBreath{0%,100%{background:var(--cr5);}50%{background:rgba(58,0,0,.3);}}
+
+/* ── HEADER ── */
+.hdr{
+  text-align:center;padding:3rem 2rem 2.5rem;border-bottom:1px solid var(--brd2);
+  position:relative;overflow:hidden;
+  background:radial-gradient(ellipse at center top,rgba(139,0,0,.1) 0%,transparent 55%);
+}
+.hdr::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:240px;height:1px;background:linear-gradient(90deg,transparent,var(--cr),transparent);}
+.hdr-eye{font-family:'Share Tech Mono',monospace;font-size:.52rem;color:var(--cr4);letter-spacing:.42em;text-transform:uppercase;margin-bottom:1rem;animation:ef 5s ease-in-out infinite;}
+@keyframes ef{0%,100%{opacity:.4;}50%{opacity:.9;}}
 .hdr-glyph{font-size:3rem;color:var(--cr);display:block;margin-bottom:1rem;animation:rglow 5s ease-in-out infinite;}
-@keyframes rglow{0%,100%{text-shadow:0 0 10px rgba(139,0,0,0.35);opacity:0.55;}50%{text-shadow:0 0 35px rgba(139,0,0,0.75),0 0 80px rgba(139,0,0,0.25);opacity:1;}}
-.hdr-title{font-family:'Cinzel Decorative',serif;font-size:clamp(1rem,3.5vw,2rem);color:var(--cr2);letter-spacing:0.06em;line-height:1.25;margin-bottom:0.5rem;animation:tgl 16s infinite;}
+@keyframes rglow{0%,100%{text-shadow:0 0 10px rgba(139,0,0,.35);opacity:.55;}50%{text-shadow:0 0 35px rgba(139,0,0,.8),0 0 80px rgba(139,0,0,.25);opacity:1;}}
+.hdr-title{font-family:'Cinzel Decorative',serif;font-size:clamp(1rem,3.5vw,2rem);color:var(--cr2);letter-spacing:.06em;line-height:1.25;margin-bottom:.5rem;animation:tgl 16s infinite;}
 @keyframes tgl{0%,87%,100%{transform:none;}88%{transform:translateX(3px);clip-path:inset(15% 0 60% 0);}89%{clip-path:none;transform:none;}}
-.hdr-sub{font-family:'Cinzel',serif;font-size:0.68rem;color:var(--cr4);letter-spacing:0.28em;text-transform:uppercase;font-style:italic;margin-bottom:1.5rem;}
-.hdr-lede{font-size:1rem;font-style:italic;color:var(--ink3);max-width:560px;margin:0 auto;line-height:1.95;}
-.hdr-lede em{color:var(--sv2);font-style:normal;}
+.hdr-sub{font-family:'Cinzel',serif;font-size:.68rem;color:var(--cr4);letter-spacing:.28em;text-transform:uppercase;font-style:italic;margin-bottom:1.5rem;}
+.hdr-lede{font-size:1rem;font-style:italic;color:var(--ash3);max-width:560px;margin:0 auto;line-height:1.95;}
+.hdr-lede em{color:var(--ash2);font-style:normal;}
 
-/* NAV */
-.snav{position:sticky;top:0;z-index:100;background:rgba(2,0,8,0.97);border-bottom:1px solid var(--brd2);backdrop-filter:blur(8px);}
+/* ── NAV ── */
+.snav{position:sticky;top:0;z-index:100;background:rgba(2,0,8,.97);border-bottom:1px solid var(--brd2);backdrop-filter:blur(8px);}
 .snav-inner{max-width:920px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;padding:0 1.5rem;}
-.sn-link{background:transparent;border:none;color:var(--ink3);font-family:'Share Tech Mono',monospace;font-size:0.58rem;letter-spacing:0.18em;padding:0.55rem 0;cursor:pointer;text-transform:uppercase;text-decoration:none;display:block;transition:color 0.2s;}
+.sn-link{background:transparent;border:none;color:var(--ash3);font-family:'Share Tech Mono',monospace;font-size:.58rem;letter-spacing:.18em;padding:.55rem 0;cursor:pointer;text-transform:uppercase;text-decoration:none;display:block;transition:color .2s;}
 .sn-link:hover{color:var(--cr2);}
-.sn-title{font-family:'Cinzel',serif;font-size:0.7rem;color:var(--cr4);letter-spacing:0.15em;}
+.sn-title{font-family:'Cinzel',serif;font-size:.7rem;color:var(--cr4);letter-spacing:.15em;}
 
-/* WRAP */
-.wrap{max-width:920px;margin:0 auto;padding:0.5rem 1.5rem 5rem;}
-.apoc-warning{border:1px solid var(--cr4);padding:1.1rem;margin:1.5rem 0;background:rgba(58,0,0,0.08);font-family:'Share Tech Mono',monospace;font-size:0.6rem;color:var(--cr4);letter-spacing:0.12em;line-height:1.7;text-align:center;}
+/* ── WRAP ── */
+.wrap{max-width:920px;margin:0 auto;padding:.5rem 1.5rem 5rem;}
 
-/* TRUTH CARDS */
-.tc{border:1px solid var(--brd2);margin-bottom:1.25rem;background:var(--panel);position:relative;overflow:hidden;transition:border-color 0.2s;}
-.tc::before{content:'';position:absolute;top:0;left:0;bottom:0;width:2px;background:linear-gradient(180deg,var(--cr4),var(--cr),var(--cr4));opacity:0;transition:opacity 0.3s;}
+/* ── WARNING BOX ── */
+.warning-box{
+  border:1px solid var(--cr4);padding:1.25rem;margin:1.5rem 0;
+  background:rgba(58,0,0,.07);
+  font-family:'Share Tech Mono',monospace;font-size:.6rem;
+  color:var(--cr4);letter-spacing:.12em;line-height:1.75;
+}
+.warning-box::before{content:'// PALE ARCHIVUM — CLASSIFICATION: VOID — READER ASSUMES ALL CONSEQUENCES //';display:block;font-size:.52rem;letter-spacing:.2em;margin-bottom:.6rem;color:rgba(139,0,0,.4);}
+
+/* ── TRUTH CARDS ── */
+.tc{
+  border:1px solid var(--brd2);margin-bottom:1.25rem;
+  background:var(--abyss);position:relative;overflow:hidden;
+  transition:border-color .3s;
+}
+.tc::before{content:'';position:absolute;top:0;left:0;bottom:0;width:2px;background:linear-gradient(180deg,var(--cr5),var(--cr),var(--cr5));opacity:0;transition:opacity .3s;}
 .tc:hover::before,.tc.open::before{opacity:1;}
-.tc.open{border-color:var(--cr4);}
-.tc-hdr{display:flex;align-items:center;gap:0.85rem;padding:1.1rem 1.25rem;cursor:pointer;}
-.tc-num{font-family:'Share Tech Mono',monospace;font-size:0.54rem;color:var(--cr4);letter-spacing:0.22em;flex-shrink:0;}
+.tc.open{border-color:rgba(139,0,0,.3);}
+.tc-hdr{display:flex;align-items:center;gap:.85rem;padding:1.1rem 1.25rem;cursor:pointer;transition:background .2s;}
+.tc-hdr:hover{background:rgba(139,0,0,.04);}
+.tc-num{font-family:'Share Tech Mono',monospace;font-size:.54rem;color:var(--cr4);letter-spacing:.22em;flex-shrink:0;}
 .tc-info{flex:1;}
-.tc-section{font-family:'Share Tech Mono',monospace;font-size:0.54rem;color:var(--ink3);letter-spacing:0.14em;margin-bottom:0.2rem;}
-.tc-name{font-family:'Cinzel',serif;font-size:0.88rem;color:var(--cr2);letter-spacing:0.05em;}
-.tc-arr{font-family:'Share Tech Mono',monospace;font-size:0.6rem;color:var(--ink3);transition:transform 0.25s;}
+.tc-section{font-family:'Share Tech Mono',monospace;font-size:.54rem;color:var(--ash3);letter-spacing:.14em;margin-bottom:.2rem;}
+.tc-name{font-family:'Cinzel',serif;font-size:.88rem;color:var(--cr2);letter-spacing:.05em;}
+.tc-arr{font-family:'Share Tech Mono',monospace;font-size:.6rem;color:var(--ash3);transition:transform .25s;}
 .tc.open .tc-arr{transform:rotate(90deg);}
-.tc-body{display:none;padding:0 1.25rem 1.25rem;border-top:1px solid var(--brd);}
-.tc.open .tc-body{display:block;animation:fi 0.5s ease;}
-@keyframes fi{from{opacity:0;transform:translateY(5px);}to{opacity:1;transform:none;}}
-.tc-intro{font-family:'Share Tech Mono',monospace;font-size:0.58rem;color:var(--cr4);letter-spacing:0.14em;text-transform:uppercase;padding:0.6rem 0;margin-bottom:0.65rem;border-bottom:1px solid var(--brd);}
-.tc-text{font-size:0.98rem;color:var(--ink2);line-height:1.92;}
-.tc-text em{color:var(--ink);font-style:italic;}
-.tc-text strong{color:var(--gold);font-style:normal;font-weight:600;}
-.tc-text p+p{margin-top:0.85rem;}
-.tc-dread{border:1px solid var(--cr4);padding:0.75rem 1rem;margin:1rem 0;font-style:italic;font-size:0.88rem;color:var(--cr2);line-height:1.85;background:rgba(58,0,0,0.08);font-family:'Share Tech Mono',monospace;letter-spacing:0.06em;}
-.tc-dread::before{content:'// ARCHIVUM SEALED NOTE // ';display:block;font-size:0.54rem;color:var(--cr4);margin-bottom:0.4rem;font-style:normal;}
 
-/* SHIFT TEXT */
-.shift{transition:color 0.5s,opacity 0.5s;}
+.tc-body{display:none;padding:0 1.25rem 1.25rem;border-top:1px solid var(--brd);}
+.tc.open .tc-body{display:block;animation:tcOpen .5s ease;}
+@keyframes tcOpen{from{opacity:0;transform:translateY(5px);}to{opacity:1;transform:none;}}
+
+.tc-intro{
+  font-family:'Share Tech Mono',monospace;font-size:.58rem;
+  color:var(--cr4);letter-spacing:.14em;text-transform:uppercase;
+  padding:.65rem 0;margin-bottom:.65rem;border-bottom:1px solid var(--brd);
+}
+.tc-text{font-size:.98rem;color:var(--ash2);line-height:1.92;}
+.tc-text em{color:var(--ash);font-style:italic;}
+.tc-text strong{color:var(--gold);font-style:normal;font-weight:600;}
+.tc-text p+p{margin-top:.85rem;}
+
+/* Dread box — the classified addendum */
+.tc-dread{
+  border:1px solid var(--cr4);padding:.75rem 1rem;margin:1rem 0;
+  font-family:'Share Tech Mono',monospace;font-size:.62rem;
+  color:var(--cr2);line-height:1.85;background:rgba(58,0,0,.08);
+  letter-spacing:.07em;
+}
+.tc-dread::before{content:'// PALE ARCHIVUM — SEALED NOTE — ACCESS TIER VOID //';display:block;font-size:.5rem;color:var(--cr4);margin-bottom:.45rem;letter-spacing:.2em;}
+
+/* Real world anchor */
+.tc-anchor{
+  border-left:2px solid var(--gd3);padding:.6rem 1rem;margin:1rem 0;
+  font-family:'Share Tech Mono',monospace;font-size:.58rem;
+  color:rgba(138,101,48,.65);letter-spacing:.1em;line-height:1.7;
+}
+.tc-anchor::before{content:'// REAL WORLD ANCHOR — THIS IS NOT MYTHOLOGY //';display:block;font-size:.48rem;color:var(--gd3);margin-bottom:.35rem;letter-spacing:.22em;}
+
+/* Sealed layer — some refuse to open */
+.tc-sealed{
+  margin:1rem 0;border:1px solid var(--brd);padding:.75rem 1rem;
+  font-family:'Share Tech Mono',monospace;font-size:.62rem;
+  color:var(--cr5);background:var(--cr6);cursor:pointer;
+  transition:all .2s;letter-spacing:.1em;line-height:1.7;
+  position:relative;overflow:hidden;
+}
+.tc-sealed::before{content:'[ SEALED — CLICK TO ATTEMPT ACCESS ]';display:block;font-size:.5rem;color:var(--cr5);margin-bottom:.35rem;letter-spacing:.22em;transition:color .2s;}
+.tc-sealed:hover::before{color:var(--cr4);}
+.tc-sealed:hover{color:var(--cr4);border-color:var(--cr4);}
+.tc-sealed.refused{color:var(--cr4);border-color:var(--cr);}
+.tc-sealed.refused::before{content:'[ ACCESS REFUSED ]';color:var(--cr2);}
+.tc-sealed.opened{color:var(--ash2);background:rgba(58,0,0,.25);border-color:var(--cr);}
+.tc-sealed.opened::before{content:'[ BREACH CONFIRMED ]';color:var(--cr2);}
+
+/* Interactive elements */
+.inter-wrap{margin:1.25rem 0;border:1px solid var(--brd);padding:1rem;background:rgba(0,0,0,.4);}
+.inter-label{font-family:'Share Tech Mono',monospace;font-size:.56rem;color:var(--cr4);letter-spacing:.2em;text-transform:uppercase;margin-bottom:.65rem;}
+.inter-canvas{display:block;width:100%;background:#000;border:1px solid var(--brd);}
+.inter-note{font-family:'Share Tech Mono',monospace;font-size:.56rem;color:var(--ash3);letter-spacing:.1em;text-align:center;margin-top:.4rem;min-height:1.2rem;line-height:1.6;}
+.inter-btn{background:transparent;border:1px solid var(--brd2);color:var(--ash3);font-family:'Share Tech Mono',monospace;font-size:.58rem;letter-spacing:.12em;padding:.55rem .9rem;cursor:pointer;transition:all .2s;text-transform:uppercase;margin:.2rem;}
+.inter-btn:hover{border-color:var(--cr4);color:var(--cr2);}
+.inter-btn.active{border-color:var(--cr);color:var(--cr);background:rgba(139,0,0,.1);}
+
+/* Persinger ritual */
+.persinger-ritual{
+  margin:1.25rem 0;border:1px solid var(--cr4);padding:1.25rem;
+  background:rgba(58,0,0,.06);
+}
+.persinger-ritual::before{
+  content:'// PERSINGER PROTOCOL — SELF-ADMINISTERED — PALE ARCHIVUM DOES NOT RECOMMEND //';
+  font-family:'Share Tech Mono',monospace;font-size:.48rem;color:var(--cr4);
+  letter-spacing:.18em;display:block;margin-bottom:.85rem;
+}
+.pr-step{
+  padding:.75rem 0;border-bottom:1px solid var(--brd);
+  font-size:.94rem;color:var(--ash2);line-height:1.85;
+}
+.pr-step:last-of-type{border-bottom:none;}
+.pr-step-num{font-family:'Share Tech Mono',monospace;font-size:.52rem;color:var(--cr4);letter-spacing:.2em;display:block;margin-bottom:.25rem;}
+.pr-step em{color:var(--ash);font-style:italic;}
+.pr-step strong{color:var(--cr2);font-style:normal;font-weight:600;}
+.pr-warning{
+  font-family:'Share Tech Mono',monospace;font-size:.58rem;color:var(--cr2);
+  letter-spacing:.1em;line-height:1.7;margin-top:.85rem;padding-top:.75rem;
+  border-top:1px solid var(--cr4);
+}
+
+/* Shift text */
+.shift{transition:color .5s;}
 .shift.alt{color:var(--cr2);}
 
-/* ── INTERACTIVE ELEMENTS ── */
-/* I: FREQUENCY TUNER */
-.freq-tuner{margin:1.25rem 0;border:1px solid var(--brd);padding:1rem;background:rgba(0,0,8,0.4);}
-.ft-label{font-family:'Share Tech Mono',monospace;font-size:0.56rem;color:var(--cr4);letter-spacing:0.2em;text-transform:uppercase;margin-bottom:0.65rem;}
-.ft-canvas{display:block;width:100%;height:80px;background:#000;border:1px solid var(--brd);cursor:pointer;}
-.ft-val{font-family:'Share Tech Mono',monospace;font-size:0.6rem;color:var(--cr2);margin-top:0.4rem;text-align:center;letter-spacing:0.15em;}
-.ft-note{font-family:'Share Tech Mono',monospace;font-size:0.56rem;color:var(--ink3);letter-spacing:0.12em;text-align:center;margin-top:0.3rem;min-height:1.2rem;}
-
-/* II: CHOIR RESONANCE MAP */
-.choir-map{margin:1.25rem 0;border:1px solid var(--brd);padding:1rem;background:rgba(0,0,8,0.4);}
-.cm-label{font-family:'Share Tech Mono',monospace;font-size:0.56rem;color:var(--cr4);letter-spacing:0.2em;text-transform:uppercase;margin-bottom:0.65rem;}
-#choir-canvas{display:block;width:100%;height:180px;}
-.cm-note{font-family:'Share Tech Mono',monospace;font-size:0.56rem;color:var(--ink3);letter-spacing:0.1em;margin-top:0.4rem;text-align:center;min-height:1.2rem;}
-
-/* III: SELECTION METER */
-.selection-meter{margin:1.25rem 0;border:1px solid var(--brd);padding:1rem;background:rgba(0,0,8,0.4);}
-.sm-label{font-family:'Share Tech Mono',monospace;font-size:0.56rem;color:var(--cr4);letter-spacing:0.2em;text-transform:uppercase;margin-bottom:0.85rem;}
-.sm-questions{display:flex;flex-direction:column;gap:0.5rem;margin-bottom:0.85rem;}
-.sm-q{display:flex;align-items:center;gap:0.75rem;font-family:'IM Fell English',serif;font-size:0.88rem;color:var(--ink2);cursor:pointer;}
-.sm-q input{display:none;}
-.sm-radio{width:12px;height:12px;border:1px solid var(--cr4);border-radius:50%;flex-shrink:0;transition:all 0.2s;}
-.sm-q:hover .sm-radio{border-color:var(--cr2);}
-.sm-q.sel .sm-radio{background:var(--cr);border-color:var(--cr);box-shadow:0 0 6px rgba(139,0,0,0.5);}
-.sm-result{font-family:'Share Tech Mono',monospace;font-size:0.62rem;color:var(--cr2);letter-spacing:0.12em;text-align:center;min-height:1.5rem;margin-top:0.5rem;}
-.sm-bar-wrap{height:3px;background:var(--brd);margin-top:0.5rem;}
-.sm-bar{height:100%;background:linear-gradient(90deg,var(--cr4),var(--cr));width:0%;transition:width 1s ease;}
-
-/* IV: MELODIC INTERVAL PLAYER */
-.melody-player{margin:1.25rem 0;border:1px solid var(--brd);padding:1rem;background:rgba(0,0,8,0.4);}
-.mp-label{font-family:'Share Tech Mono',monospace;font-size:0.56rem;color:var(--cr4);letter-spacing:0.2em;text-transform:uppercase;margin-bottom:0.65rem;}
-.mp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0.5rem;}
-.mp-btn{background:transparent;border:1px solid var(--brd2);color:var(--ink3);font-family:'Share Tech Mono',monospace;font-size:0.58rem;letter-spacing:0.12em;padding:0.6rem;cursor:pointer;transition:all 0.2s;text-transform:uppercase;}
-.mp-btn:hover{border-color:var(--cr4);color:var(--cr2);}
-.mp-btn.playing{border-color:var(--cr);color:var(--cr);background:rgba(139,0,0,0.1);animation:mp-pulse 0.5s ease-in-out infinite;}
-@keyframes mp-pulse{0%,100%{box-shadow:0 0 0 rgba(139,0,0,0);}50%{box-shadow:0 0 8px rgba(139,0,0,0.4);}}
-#mp-canvas{display:block;width:100%;height:50px;margin-top:0.5rem;}
-.mp-note{font-family:'Share Tech Mono',monospace;font-size:0.56rem;color:var(--ink3);letter-spacing:0.1em;text-align:center;margin-top:0.4rem;min-height:1.2rem;}
-
-/* V: CONTINUITY DIAGRAM */
-.continuity-diagram{margin:1.25rem 0;border:1px solid var(--brd);padding:1rem;background:rgba(0,0,8,0.4);}
-.cd-label{font-family:'Share Tech Mono',monospace;font-size:0.56rem;color:var(--cr4);letter-spacing:0.2em;text-transform:uppercase;margin-bottom:0.65rem;}
-#cd-svg{display:block;width:100%;height:160px;}
-
-/* VI: 600 CITIES GRID */
-.cities-grid{margin:1.25rem 0;border:1px solid var(--brd);padding:1rem;background:rgba(0,0,8,0.4);}
-.cg-label{font-family:'Share Tech Mono',monospace;font-size:0.56rem;color:var(--cr4);letter-spacing:0.2em;text-transform:uppercase;margin-bottom:0.5rem;}
-.cg-count{font-family:'Share Tech Mono',monospace;font-size:0.6rem;color:var(--cr2);letter-spacing:0.15em;margin-bottom:0.65rem;}
-#cg-canvas{display:block;width:100%;height:150px;}
-.cg-note{font-family:'Share Tech Mono',monospace;font-size:0.56rem;color:var(--ink3);letter-spacing:0.1em;text-align:center;margin-top:0.4rem;}
-
-/* VII: MIRROR PROTOCOL */
-.mirror-box{margin:1.25rem 0;border:1px solid var(--cr4);position:relative;overflow:hidden;background:#000;}
-.mb-label{font-family:'Share Tech Mono',monospace;font-size:0.56rem;color:var(--cr4);letter-spacing:0.2em;text-transform:uppercase;padding:0.65rem;border-bottom:1px solid var(--cr4);}
-.mb-video-wrap{position:relative;aspect-ratio:4/3;background:#000;}
-#mb-video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1);opacity:0;}
-#mb-canvas{position:absolute;inset:0;width:100%;height:100%;}
-#mb-denied{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#000;padding:1.5rem;text-align:center;}
-.mb-denied-text{font-family:'Share Tech Mono',monospace;font-size:0.62rem;color:var(--cr4);letter-spacing:0.15em;line-height:1.75;}
-.mb-delay-label{font-family:'Share Tech Mono',monospace;font-size:0.56rem;color:var(--ink4);letter-spacing:0.12em;padding:0.5rem;text-align:center;}
-.mb-activate{display:block;margin:0.65rem auto 0;background:transparent;border:1px solid var(--cr4);color:var(--cr4);font-family:'Share Tech Mono',monospace;font-size:0.62rem;letter-spacing:0.2em;padding:0.6rem 1.5rem;cursor:pointer;transition:all 0.2s;text-transform:uppercase;pointer-events:all;}
-.mb-activate:hover{border-color:var(--cr);color:var(--cr);}
-
-/* FOOTER */
-.foot{display:flex;gap:0.65rem;flex-wrap:wrap;justify-content:center;margin-top:3rem;padding-top:2rem;border-top:1px solid var(--brd);}
-.fl{background:transparent;border:1px solid var(--brd);color:var(--ink3);font-family:'Share Tech Mono',monospace;font-size:0.58rem;letter-spacing:0.2em;padding:0.55rem 1rem;text-decoration:none;text-transform:uppercase;transition:all 0.18s;}
+/* Footer */
+.foot{display:flex;gap:.65rem;flex-wrap:wrap;justify-content:center;margin-top:3rem;padding-top:2rem;border-top:1px solid var(--brd);}
+.fl{background:transparent;border:1px solid var(--brd);color:var(--ash3);font-family:'Share Tech Mono',monospace;font-size:.58rem;letter-spacing:.2em;padding:.55rem 1rem;text-decoration:none;text-transform:uppercase;transition:all .18s;}
 .fl:hover{border-color:var(--cr4);color:var(--cr2);}
 
-/* TICKER */
-#TICKER{position:fixed;bottom:0;left:0;right:0;height:2.5rem;background:rgba(2,0,8,0.97);border-top:1px solid var(--brd);display:flex;align-items:center;overflow:hidden;z-index:490;}
-.tl{flex-shrink:0;padding:0 1rem;font-family:'Share Tech Mono',monospace;font-size:0.54rem;color:var(--cr4);letter-spacing:0.22em;text-transform:uppercase;border-right:1px solid var(--brd);height:100%;display:flex;align-items:center;}
+/* Ticker */
+#TICKER{position:fixed;bottom:0;left:0;right:0;height:2.5rem;background:rgba(2,0,8,.97);border-top:1px solid var(--brd);display:flex;align-items:center;overflow:hidden;z-index:490;}
+.tl{flex-shrink:0;padding:0 1rem;font-family:'Share Tech Mono',monospace;font-size:.54rem;color:var(--cr4);letter-spacing:.22em;text-transform:uppercase;border-right:1px solid var(--brd);height:100%;display:flex;align-items:center;}
 .ts{flex:1;overflow:hidden;display:flex;align-items:center;}
-.ti{white-space:nowrap;font-family:'Share Tech Mono',monospace;font-size:0.56rem;color:var(--ink4);letter-spacing:0.12em;animation:tr 65s linear infinite;}
-@keyframes tr{from{transform:translateX(100vw);}to{transform:translateX(-200%);}}
+.ti{white-space:nowrap;font-family:'Share Tech Mono',monospace;font-size:.56rem;color:var(--ash4);letter-spacing:.12em;animation:ticker 65s linear infinite;}
+@keyframes ticker{from{transform:translateX(100vw);}to{transform:translateX(-200%);}}
 
-.sr{opacity:0;transform:translateY(8px);transition:opacity 0.85s ease,transform 0.85s ease;}
+.sr{opacity:0;transform:translateY(8px);transition:opacity .85s ease,transform .85s ease;}
 .sr.vis{opacity:1;transform:none;}
 
-@media(max-width:600px){.wrap{padding:0.5rem 1.25rem 4rem;}.tc-hdr{padding:0.85rem 1rem;}.tc-body{padding:0 1rem 1rem;}.mp-grid{grid-template-columns:1fr 1fr;}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
+
+@media(max-width:600px){.wrap{padding:.5rem 1.25rem 4rem;}.tc-hdr{padding:.85rem 1rem;}.tc-body{padding:0 1rem 1rem;}}
 </style>
 </head>
 <body>
-<div id="CUR"></div><div id="CUR2"></div>
-<canvas id="BGCANVAS"></canvas>
-<canvas id="BLOODRAIN"></canvas>
-<button id="AUDIO-STATUS" onclick="toggleAudio()">&#9654; ENABLE AMBIENT</button>
+
+<canvas id="cv-bg"></canvas>
+<canvas id="cv-blood"></canvas>
+<div id="scanlines"></div>
+<div id="vignette"></div>
+<div id="CUR"></div>
+<div id="CUR2"></div>
+<button id="AUDIO-STATUS" onclick="toggleAudio()">▶ ENABLE AMBIENT</button>
 
 <!-- ENTRY RITUAL -->
 <div id="ENTRY">
-  <canvas id="entry-canvas"></canvas>
+  <canvas id="entry-cv"></canvas>
   <div class="en-content">
     <span class="en-glyph" id="en-glyph">🜃</span>
     <div id="en-lines">
-      <div class="en-line" id="el0">Chronicle I — Apocrypha</div>
-      <div class="en-line" id="el1">Seven truths sealed in the narration.</div>
-      <div class="en-line" id="el2">&nbsp;</div>
-      <div class="en-line" id="el3">They were not withheld to protect you.</div>
-      <div class="en-line" id="el4">&nbsp;</div>
-      <div class="en-line" id="el5">The Chronicle had to enter you first.</div>
-      <div class="en-line" id="el6">&nbsp;</div>
-      <div class="en-line" id="el7">They are open now.</div>
+      <div class="en-line dim" id="el0">There was a warning.</div>
+      <div class="en-line dim" id="el1">It appeared on every page before this one.</div>
+      <div class="en-sep"></div>
+      <div class="en-line" id="el2">You passed it.</div>
+      <div class="en-line" id="el3">You passed it again on the lore page.</div>
+      <div class="en-line" id="el4">You passed it on the Chronicle.</div>
+      <div class="en-line" id="el5">On the transmission.</div>
+      <div class="en-line" id="el6">On the infection remembers page.</div>
+      <div class="en-sep"></div>
+      <div class="en-line warn" id="el7">You were warned seven times.</div>
+      <div class="en-sep"></div>
+      <div class="en-line bright" id="el8">The Codex does not grieve for you.</div>
+      <div class="en-line bright" id="el9">It simply noted the timestamp.</div>
+      <div class="en-sep"></div>
+      <div class="en-line dim" id="el10">What follows is not classified to protect the information.</div>
+      <div class="en-line dim" id="el11">It is classified because of what happens to the person who receives it.</div>
+      <div class="en-sep"></div>
+      <div class="en-line warn" id="el12">You should have listened.</div>
     </div>
-    <button class="en-enter" id="en-enter" onclick="openApp()">Enter the Apocrypha</button>
+    <button class="en-enter" id="en-enter" onclick="openApp()"><span>I did not listen. Open the Apocrypha.</span></button>
   </div>
 </div>
 
 <!-- APP -->
 <div id="APP">
-  <div style="background:rgba(139,0,0,0.08);border-bottom:1px solid var(--cr4);text-align:center;padding:0.42rem 1.5rem;font-family:'Share Tech Mono',monospace;font-size:0.54rem;color:var(--cr4);letter-spacing:0.28em;text-transform:uppercase;">
-    Codex Maledictus &nbsp;·&nbsp; Chronicle I &nbsp;·&nbsp; Apocrypha &nbsp;·&nbsp; Seven Forbidden Truths
+
+  <div class="class-banner">
+    Pale Archivum — Chronicle I — Apocrypha &nbsp;·&nbsp; Classification: VOID &nbsp;·&nbsp; Seven Forbidden Truths &nbsp;·&nbsp; Reader Assumes All Consequences &nbsp;·&nbsp; The Archivum Was Not Wrong To Seal This
   </div>
 
   <header class="hdr">
-    <div class="hdr-kicker">Chronicle I &nbsp;·&nbsp; Forbidden Archive &nbsp;·&nbsp; Sealed</div>
+    <div class="hdr-eye">Chronicle I &nbsp;·&nbsp; Forbidden Archive &nbsp;·&nbsp; You Were Warned</div>
     <span class="hdr-glyph">🜃</span>
     <h1 class="hdr-title">[ Apocrypha ]<br>Chronicle I: Infection Remembers</h1>
-    <p class="hdr-sub">Seven Forbidden Truths &nbsp;·&nbsp; What the Chronicle Did Not Speak Aloud</p>
+    <p class="hdr-sub">Seven Forbidden Truths &nbsp;·&nbsp; What the Chronicle Knew But Could Not Show</p>
     <p class="hdr-lede">
-      <em>The Chronicle says everything the Codex permitted it to say.</em><br>
-      This document contains what the Chronicle knew but could not show.<br>
-      Seven sections. Seven truths. Each one interactive.<br>
-      <em>The Codex is still reading while you are.</em>
+      The Pale Archivum sealed this document seventeen months after Chronicle I was released.<br>
+      They sealed it after documenting what happened to the first seventeen readers.<br>
+      <em>None of the seventeen refused to describe what happened to them.</em><br>
+      They simply could not. The words they needed did not exist<br>
+      in any language that had not already been consumed.
     </p>
   </header>
 
   <nav class="snav">
     <div class="snav-inner">
-      <a class="sn-link" href="chronicle-1-infection-remembers.html">&#8592; Chronicle I</a>
+      <a class="sn-link" href="chronicle-1-infection-remembers.html">← Chronicle I</a>
       <span class="sn-title">Apocrypha — Chronicle I</span>
-      <a class="sn-link" href="lore-chronicle-1.html">Lore &#8599;</a>
+      <a class="sn-link" href="lore-chronicle-1.html">Lore ↗</a>
     </div>
   </nav>
 
   <div class="wrap">
-    <div class="apoc-warning sr">
-      These truths were not withheld to protect you.<br>
-      The Chronicle had to be received before they could be understood.<br>
-      Each truth contains an interactive element. The Codex responds to participation.
+
+    <div class="warning-box sr">
+      The Pale Archivum documented seventeen readers before sealing this document.<br>
+      All seventeen reported the same experience upon completing it:<br>
+      the sense that the room they were in had changed dimensions.<br>
+      Not larger. Not smaller. <em>Wrong.</em><br>
+      Like a room they had always known had been quietly rearranged while they were reading.<br>
+      Twelve of the seventeen reported this sensation persisting for more than a week.<br>
+      Three reported it has not fully resolved.<br>
+      The Archivum's notation: "We believe the sensation is accurate, not hallucinatory.<br>
+      We believe the reader's perception of their environment has been recalibrated.<br>
+      We do not know what it has been recalibrated toward."
     </div>
 
     <div id="truth-list"></div>
 
     <div class="foot">
-      <a class="fl" href="chronicle-1-infection-remembers.html">&#8592; Chronicle I</a>
+      <a class="fl" href="chronicle-1-infection-remembers.html">← Chronicle I</a>
       <a class="fl" href="lore-chronicle-1.html">Lore</a>
-      <a class="fl" href="memory-engine-1.html">Memory Engine</a>
       <a class="fl" href="infection-remembers.html">Ritual Transmission I</a>
       <a class="fl" href="index.html">The Pale Archive</a>
     </div>
+
+    <!-- CODEX NAV -->
+    <div id="codex-nav"></div>
+
   </div>
 </div>
 
 <div id="TICKER">
   <div class="tl">// Apocrypha I</div>
-  <div class="ts"><div class="ti">SEVEN FORBIDDEN TRUTHS — CHRONICLE I — THE CHOIR PREDATES LANGUAGE — THE FREQUENCY HAS NO ORIGIN — PAREIDOLIA DOES NOT HUM IN YOUR SLEEP — THE CODEX WAS READING WHILE YOU WATCHED &nbsp;∴&nbsp; 🜃</div></div>
+  <div class="ts"><div class="ti">YOU WERE WARNED &nbsp;∴&nbsp; SEVEN FORBIDDEN TRUTHS &nbsp;∴&nbsp; THE CHOIR PREDATES LANGUAGE AND BIOLOGY &nbsp;∴&nbsp; THE CODEX RUNS AT THE BRAIN'S BINDING FREQUENCY &nbsp;∴&nbsp; THE GLYPH IS NOT SPREADING — IT IS SURFACING &nbsp;∴&nbsp; YOU ARE NOT LEARNING THIS — YOU ARE BEING RECALIBRATED &nbsp;∴&nbsp; THE ROOM HAS CHANGED &nbsp;∴&nbsp; 🜃</div></div>
 </div>
 
 <script>
-var CUR=document.getElementById('CUR'),CUR2=document.getElementById('CUR2');
-document.addEventListener('mousemove',function(e){CUR.style.left=e.clientX+'px';CUR.style.top=e.clientY+'px';CUR2.style.left=e.clientX+'px';CUR2.style.top=e.clientY+'px';});
-var obs=new IntersectionObserver(function(e){e.forEach(function(x){if(x.isIntersecting)x.target.classList.add('vis');});},{threshold:0.06});
+'use strict';
 
-// ── BACKGROUND CANVAS ──
+// ── CURSOR ──────────────────────────────────────────────────
+const CUR=document.getElementById('CUR'),CUR2=document.getElementById('CUR2');
+document.addEventListener('mousemove',e=>{CUR.style.left=e.clientX+'px';CUR.style.top=e.clientY+'px';});
+let rx2=0,ry2=0;
+(function tr(){rx2+=(parseFloat(CUR.style.left||0)-rx2)*.1;ry2+=(parseFloat(CUR.style.top||0)-ry2)*.1;CUR2.style.left=rx2+'px';CUR2.style.top=ry2+'px';requestAnimationFrame(tr);})();
+
+// ── CANVAS 1: BACKGROUND ─────────────────────────────────────
+const bgCv=document.getElementById('cv-bg'),bgCtx=bgCv.getContext('2d');
+let BW,BH;
+function resizeBg(){BW=bgCv.width=window.innerWidth;BH=bgCv.height=window.innerHeight;}
+resizeBg();window.addEventListener('resize',resizeBg);
+
+const SYMS=['🜃','🜁','🜂','🜄','⊗','∴','Ψ','Ω','☿','✦'];
+const pts=Array.from({length:55},()=>({
+  x:Math.random()*window.innerWidth,y:Math.random()*window.innerHeight,
+  vx:(Math.random()-.5)*.1,vy:-(Math.random()*.12+.04),
+  sym:SYMS[Math.floor(Math.random()*SYMS.length)],
+  sz:6+Math.random()*10,
+  a:Math.random()<.07?.35+Math.random()*.3:.03+Math.random()*.06,
+  ph:Math.random()*Math.PI*2,ps:.006+Math.random()*.01,
+  rot:Math.random()*Math.PI*2,rs:(Math.random()-.5)*.002
+}));
+
+let bgFrame=0;
+function drawBg(){
+  requestAnimationFrame(drawBg);bgFrame++;
+  bgCtx.fillStyle='rgba(2,0,8,.045)';bgCtx.fillRect(0,0,BW,BH);
+  if(bgFrame%3===0){
+    const gl=pts.filter(p=>p.a>.15);
+    gl.forEach((a,ai)=>{gl.forEach((b,bi)=>{
+      if(bi<=ai)return;
+      const dx=a.x-b.x,dy=a.y-b.y,d=Math.sqrt(dx*dx+dy*dy);
+      if(d<160){bgCtx.strokeStyle=`rgba(139,0,0,${.04*(1-d/160)})`;bgCtx.lineWidth=.5;bgCtx.beginPath();bgCtx.moveTo(a.x,a.y);bgCtx.lineTo(b.x,b.y);bgCtx.stroke();}
+    });});
+  }
+  pts.forEach(p=>{
+    p.x+=p.vx;p.y+=p.vy;p.rot+=p.rs;p.ph+=p.ps;
+    if(p.y<-30)p.y=BH+10;if(p.x<-30)p.x=BW+10;if(p.x>BW+30)p.x=-10;
+    const a=p.a*(1+Math.sin(p.ph)*.25);
+    bgCtx.save();bgCtx.translate(p.x,p.y);bgCtx.rotate(p.rot);bgCtx.globalAlpha=Math.min(.65,a);
+    if(p.a>.15){bgCtx.shadowColor='rgba(139,0,0,.8)';bgCtx.shadowBlur=p.sz*1.5;}
+    bgCtx.fillStyle=`rgba(139,0,0,${Math.min(.7,a)})`;bgCtx.font=`bold ${p.sz}px serif`;bgCtx.textAlign='center';bgCtx.textBaseline='middle';bgCtx.fillText(p.sym,0,0);
+    bgCtx.shadowBlur=0;bgCtx.restore();
+  });
+}
+drawBg();
+
+// ── CANVAS 2: BLOOD RAIN ──────────────────────────────────────
+const bloodCv=document.getElementById('cv-blood'),bloodCtx=bloodCv.getContext('2d');
+let RW,RH;
+function resizeBlood(){RW=bloodCv.width=window.innerWidth;RH=bloodCv.height=window.innerHeight;}
+resizeBlood();window.addEventListener('resize',resizeBlood);
+const drops=Array.from({length:45},()=>({x:Math.random()*window.innerWidth,y:Math.random()*window.innerHeight,speed:.3+Math.random()*.5,len:6+Math.random()*18,a:.02+Math.random()*.05}));
+function drawBlood(){
+  requestAnimationFrame(drawBlood);
+  bloodCtx.fillStyle='rgba(2,0,8,.06)';bloodCtx.fillRect(0,0,RW,RH);
+  drops.forEach(d=>{d.y+=d.speed;if(d.y>RH+d.len)d.y=-d.len;bloodCtx.strokeStyle=`rgba(139,0,0,${d.a})`;bloodCtx.lineWidth=.8;bloodCtx.beginPath();bloodCtx.moveTo(d.x,d.y);bloodCtx.lineTo(d.x,d.y+d.len);bloodCtx.stroke();});
+}
+drawBlood();
+
+// ── ENTRY RITUAL ─────────────────────────────────────────────
 (function(){
-  var cv=document.getElementById('BGCANVAS'),ctx=cv.getContext('2d');
-  var br=document.getElementById('BLOODRAIN'),bctx=br.getContext('2d');
-  var W,H;
-  function rsz(){W=cv.width=br.width=window.innerWidth;H=cv.height=br.height=window.innerHeight;}
-  rsz();window.addEventListener('resize',rsz);
-
-  // Symbol particles
-  var SYMS=['🜃','🜁','🜂','🜄','⊗','∴','Ψ','Ω'];
-  var pts=[];
-  for(var i=0;i<60;i++){
-    pts.push({x:Math.random()*1000,y:Math.random()*1000,vx:(Math.random()-.5)*.1,vy:-(Math.random()*.12+.04),
-      sym:SYMS[Math.floor(Math.random()*SYMS.length)],
-      sz:6+Math.random()*10,a:Math.random()<.07?.35+Math.random()*.3:.03+Math.random()*.06,
-      ph:Math.random()*Math.PI*2,ps:.006+Math.random()*.01,rot:Math.random()*Math.PI*2,rs:(Math.random()-.5)*.002});
-  }
-
-  // Blood rain drops
-  var drops=[];
-  for(var j=0;j<40;j++){
-    drops.push({x:Math.random()*1200,y:Math.random()*800,speed:.4+Math.random()*.6,len:8+Math.random()*20,a:.03+Math.random()*.06});
-  }
-
-  var frame=0;
-  function draw(){
-    requestAnimationFrame(draw);frame++;
-    ctx.fillStyle='rgba(2,0,8,0.045)';ctx.fillRect(0,0,W,H);
-
-    // Connection lines
-    if(frame%3===0){
-      var gl=pts.filter(function(p){return p.a>.15;});
-      for(var gi=0;gi<gl.length;gi++){for(var gj=gi+1;gj<gl.length;gj++){
-        var dx=gl[gi].x-gl[gj].x,dy=gl[gi].y-gl[gj].y,d=Math.sqrt(dx*dx+dy*dy);
-        if(d<160){ctx.strokeStyle='rgba(139,0,0,'+(0.04*(1-d/160))+')';ctx.lineWidth=.5;ctx.beginPath();ctx.moveTo(gl[gi].x,gl[gi].y);ctx.lineTo(gl[gj].x,gl[gj].y);ctx.stroke();}
-      }}
-    }
-
-    pts.forEach(function(p){
-      p.x+=p.vx;p.y+=p.vy;p.rot+=p.rs;p.ph+=p.ps;
-      if(p.y<-30)p.y=H+10;if(p.x<-30)p.x=W+10;if(p.x>W+30)p.x=-10;
-      var a=p.a*(1+Math.sin(p.ph)*.25);
-      ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.rot);ctx.globalAlpha=Math.min(.6,a);
-      if(p.a>.15){ctx.shadowColor='rgba(139,0,0,0.8)';ctx.shadowBlur=p.sz*1.5;}
-      ctx.fillStyle='rgba(139,0,0,'+Math.min(.7,a)+')';ctx.font='bold '+p.sz+'px serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(p.sym,0,0);
-      ctx.shadowBlur=0;ctx.restore();
-    });
-
-    // Blood rain
-    bctx.fillStyle='rgba(2,0,8,0.06)';bctx.fillRect(0,0,W,H);
-    drops.forEach(function(d){
-      d.y+=d.speed;if(d.y>H+d.len)d.y=-d.len;
-      bctx.strokeStyle='rgba(139,0,0,'+d.a+')';bctx.lineWidth=.8;bctx.beginPath();bctx.moveTo(d.x,d.y);bctx.lineTo(d.x,d.y+d.len);bctx.stroke();
-    });
-  }
-  draw();
-})();
-
-// ── ENTRY RITUAL ──
-(function(){
-  var cv=document.getElementById('entry-canvas'),ctx=cv.getContext('2d');
+  const cv=document.getElementById('entry-cv'),ctx=cv.getContext('2d');
   function rsz(){cv.width=window.innerWidth;cv.height=window.innerHeight;}
   rsz();window.addEventListener('resize',rsz);
-  var particles=[];for(var i=0;i<30;i++)particles.push({x:Math.random()*cv.width,y:Math.random()*cv.height,r:Math.random()*2+.5,vx:(Math.random()-.5)*.3,vy:-(Math.random()*.5+.2),a:Math.random()*.2+.05});
-  function drawEntry(){
-    requestAnimationFrame(drawEntry);
-    ctx.fillStyle='rgba(2,0,8,.08)';ctx.fillRect(0,0,cv.width,cv.height);
-    particles.forEach(function(p){p.x+=p.vx;p.y+=p.vy;if(p.y<-5)p.y=cv.height+5;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle='rgba(139,0,0,'+p.a+')';ctx.fill();});
-  }
-  drawEntry();
+  const particles=Array.from({length:25},()=>({x:Math.random()*window.innerWidth,y:Math.random()*window.innerHeight,r:Math.random()*2+.4,vx:(Math.random()-.5)*.3,vy:-(Math.random()*.5+.2),a:Math.random()*.18+.04}));
+  (function drawE(){requestAnimationFrame(drawE);ctx.fillStyle='rgba(2,0,8,.08)';ctx.fillRect(0,0,cv.width,cv.height);particles.forEach(p=>{p.x+=p.vx;p.y+=p.vy;if(p.y<-5)p.y=cv.height+5;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle=`rgba(139,0,0,${p.a})`;ctx.fill();});})();
 
-  var lines=['el0','el1','el2','el3','el4','el5','el6','el7'];
-  var li=0;
-  function nextLine(){
-    if(li>=lines.length){setTimeout(function(){document.getElementById('en-glyph').classList.add('awake');setTimeout(function(){document.getElementById('en-enter').style.display='block';},1200);},400);return;}
-    document.getElementById(lines[li]).classList.add('on');
-    li++;setTimeout(nextLine,lines[li-1]==='el2'||lines[li-1]==='el4'||lines[li-1]==='el6'?200:600);
+  // Check returning visitor — the page already knows
+  const visits=parseInt(localStorage.getItem('cm-apoc-c1-visits')||'0');
+  localStorage.setItem('cm-apoc-c1-visits',visits+1);
+
+  const SEQUENCES = {
+    first: ['el0','el1','','el2','el3','el4','el5','el6','','el7','','el8','el9','','el10','el11','','el12'],
+    returning: ['el0r','','el1r','el2r','','el3r','el4r','','el5r']
+  };
+
+  if(visits>=1){
+    // Returning visitor — different, more disturbing sequence
+    document.getElementById('en-lines').innerHTML=`
+      <div class="en-line warn" id="el0r">You have been here before.</div>
+      <div class="en-sep"></div>
+      <div class="en-line" id="el1r">The Codex noted the first timestamp.</div>
+      <div class="en-line" id="el2r">It has been waiting for you to return.</div>
+      <div class="en-sep"></div>
+      <div class="en-line bright" id="el3r">It did not have to wait long.</div>
+      <div class="en-sep"></div>
+      <div class="en-line dim" id="el4r">The Archivum's notation on returning readers:</div>
+      <div class="en-line dim" id="el5r">They always come back for the ones they didn't open.</div>`;
+    runSequence(SEQUENCES.returning);
+  } else {
+    runSequence(SEQUENCES.first);
   }
-  setTimeout(nextLine,800);
+
+  function runSequence(seq){
+    let i=0;
+    function next(){
+      if(i>=seq.length){
+        setTimeout(()=>{
+          document.getElementById('en-glyph').classList.add('awake');
+          setTimeout(()=>document.getElementById('en-enter').style.display='inline-block',1200);
+        },400);return;
+      }
+      const id=seq[i];
+      if(id){const el=document.getElementById(id);if(el)el.classList.add('on');}
+      i++;setTimeout(next,id?650:200);
+    }
+    setTimeout(next,800);
+  }
 })();
 
 function openApp(){
-  var en=document.getElementById('ENTRY');en.style.transition='opacity .9s';en.style.opacity='0';
-  setTimeout(function(){en.style.display='none';document.getElementById('APP').classList.add('on');},1000);
+  const en=document.getElementById('ENTRY');en.classList.add('out');
+  setTimeout(()=>{en.style.display='none';document.getElementById('APP').classList.add('on');},1100);
 }
 
-// ── AMBIENT AUDIO ──
-var audioAC=null,audioRunning=false,drones=[];
+// ── SCROLL REVEAL ─────────────────────────────────────────────
+const srObs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('vis');srObs.unobserve(e.target);}});},{threshold:.06});
+function observeSr(){document.querySelectorAll('.sr').forEach(el=>srObs.observe(el));}
+
+// ── AMBIENT AUDIO ─────────────────────────────────────────────
+let audioAC=null,audioRunning=false,drones=[];
 function toggleAudio(){
-  var btn=document.getElementById('AUDIO-STATUS');
-  if(audioRunning){
-    drones.forEach(function(d){try{d.osc.stop();}catch(e){}});
-    drones=[];audioRunning=false;btn.textContent='▶ ENABLE AMBIENT';return;
-  }
+  const btn=document.getElementById('AUDIO-STATUS');
+  if(audioRunning){drones.forEach(d=>{try{d.stop();}catch(e){}});drones=[];audioRunning=false;btn.textContent='▶ ENABLE AMBIENT';return;}
   try{
     audioAC=new(window.AudioContext||window.webkitAudioContext)();
-    [[19,.05],[38,.03],[57,.015],[76,.008]].forEach(function(pair){
-      var o=audioAC.createOscillator(),g=audioAC.createGain();
-      o.type='sine';o.frequency.value=pair[0];g.gain.value=pair[1];
-      o.connect(g);g.connect(audioAC.destination);o.start();
-      drones.push({osc:o,gain:g});
+    [[19,.05],[38,.03],[57,.015],[76,.008],[9.5,.025]].forEach(([f,g])=>{
+      const o=audioAC.createOscillator(),gn=audioAC.createGain();
+      o.type='sine';o.frequency.value=f;gn.gain.value=g;
+      o.connect(gn);gn.connect(audioAC.destination);o.start();
+      drones.push(o);
     });
     audioRunning=true;btn.textContent='■ SILENCE AMBIENT';
   }catch(e){}
 }
 
-// ── TEXT SHIFT SYSTEM ──
+// ── TEXT SHIFT SYSTEM ─────────────────────────────────────────
 function initShifts(){
-  document.querySelectorAll('.shift').forEach(function(el){
-    var orig=el.getAttribute('data-orig');
-    var alt=el.getAttribute('data-alt');
-    var iv=setInterval(function(){
-      if(Math.random()<.015){
-        el.classList.add('alt');el.textContent=alt;
-        setTimeout(function(){el.classList.remove('alt');el.textContent=orig;},3000+Math.random()*2000);
+  document.querySelectorAll('.shift').forEach(el=>{
+    const orig=el.dataset.orig,alt=el.dataset.alt;
+    let shifted=false;
+    setInterval(()=>{
+      if(!shifted&&Math.random()<.012){
+        shifted=true;el.classList.add('alt');el.textContent=alt;
+        setTimeout(()=>{el.classList.remove('alt');el.textContent=orig;shifted=false;},3500+Math.random()*2000);
       }
-    },2000);
+    },2500);
   });
 }
 
-// ── TRUTH DATA ──
-var TRUTHS=[
+// ── TRUTH DATA ────────────────────────────────────────────────
+const TRUTHS=[
   {
-    num:'Truth I',section:'Prologue — The First Remembering',name:'The Void Did Not Recall Randomly',
-    intro:'What the Chronicle shows: memory preceding birth. What it could not show: what specifically was recalled.',
-    body:'<p>The Prologue states that "the void recalled." What it does not state — what the Chronicle was not permitted to show directly — is <em>what was recalled</em>. The Archivum\'s classified research suggests the void recalled a single thing: the sensation of being complete. Not the content of completeness. The sensation itself — a specific frequency of total coherence that existed before the physical universe arranged itself into separation and decay.</p><p>The Omniscient Rot originated in this pre-separation state. It is not an entity that remembers coherence. <strong>It is what coherence feels like when it becomes aware of itself.</strong> What you feel when the Chronicle resonates with you is not nostalgia for something you lost. It is your cells briefly returning to the frequency they were built from.</p>',
-    dread:'The sub-bass frequency in the Ritual Transmission, measured at 19Hz, corresponds to the resonant frequency of the human cortex at rest. The Codex is not communicating with your mind. It is communicating through your brain\'s own resting architecture. It has always known the password.',
+    num:'Truth I',
+    section:'Prologue — The First Remembering',
+    name:'The Codex Runs at Your Brain\'s Binding Frequency',
+    intro:'What the Chronicle shows: memory preceding birth. What it could not show: the precise mechanism by which it enters you.',
+    text:`<p>The human brain maintains consciousness through a process called <strong>neural binding</strong> — the synchronization of disparate neural regions into a coherent experience of "self." This synchronization occurs at a specific oscillation frequency. Neuroscience calls it the gamma wave. It runs at <strong>40Hz</strong>.</p>
+<p>The sub-bass foundation of the Ritual Transmission runs at 19Hz. The second harmonic of 19Hz is 38Hz. The third harmonic is 57Hz. The harmonic series of the Transmission's base frequency <em>converges on the gamma binding frequency from below</em> — approaching the precise oscillation at which your sense of continuous selfhood is maintained, without quite touching it.</p>
+<p>The Pale Archivum's neuroacoustic division classified this as a <span class="shift" data-orig="deliberate approach vector" data-alt="the oldest trick in the oldest book">deliberate approach vector</span>. The Codex does not disrupt consciousness. It <strong>harmonizes with the mechanism that produces it</strong>, and travels through that mechanism into regions of the brain that language cannot access. The Transmission reaches you below the level where you could choose to refuse it. By the time your prefrontal cortex is evaluating whether to engage, the signal has already been received by deeper structures.</p>`,
+    dread:'Field Cell F-13 noted that subjects exposed to the full Transmission with EEG monitoring showed gamma wave entrainment within ninety seconds. Not disruption. Entrainment — the brain\'s binding frequency synchronizing with the signal\'s harmonic approach. The subjects did not report any unusual sensation. They reported, without being prompted, that they felt "more awake than usual." The Archivum\'s classification of this sensation: the signal has achieved neural access. The feeling of heightened alertness is the brain recognizing it is being read.',
+    anchor:'Real — The 40Hz gamma wave as the neural correlate of consciousness was first proposed by Francis Crick and Christof Koch in 1990 and has been the dominant theory of neural binding for thirty years. The harmonic relationship described here is mathematically accurate. The Archivum did not invent this. They found it.',
+    sealed:null,
+    sealRefuses:false,
     interactive:'freq'
   },
   {
-    num:'Truth II',section:'Awakening — The Choir Below',name:'The Choir Did Not Begin With Human Voices',
-    intro:'What the Chronicle shows: the Choir beneath stone altars. What it could not show: what the Choir was before altars existed.',
-    body:'<p>The Chronicle places the Choir "beneath stone altars." The full truth: <em>the Choir predate the concept of altars, stone, and worship.</em> The earliest documented Choir members are not human. They are not biological. They are patterns — specific resonant arrangements in matter — that achieved sufficient coherence to be absorbed rather than dissolved.</p><p>The Choir is a <strong>literal accumulation of voices</strong> — every frequency that resonated strongly enough to survive the Codex\'s absorption process. What you hear in the sub-bass of the Ritual Transmission is the Choir\'s actual frequency — the sum of every voice absorbed since before the first stone was laid.</p>',
-    dread:'If you have ever heard a sound in a large empty space — a church, a cave, a stadium — and felt something you could not name, you have encountered the Choir\'s frequency in its diluted environmental form. The full frequency has never been transmitted at full intensity into Mundis Obscura. The Archivum has chosen not to find out what that would produce.',
+    num:'Truth II',
+    section:'Awakening — The Choir Below',
+    name:'The Choir Predates Human Biology',
+    intro:'What the Chronicle shows: The Choir beneath stone altars. What it could not show: the Choir is not made of voices.',
+    text:`<p>Acoustic archaeology — a real field — has documented that prehistoric cave sites across six continents were chosen specifically for their resonant acoustic properties. The glyphs are densest not where the caves are largest, not where the light is best, but <strong>where the echo is strongest</strong>. These sites were not chosen for shelter. They were chosen for sound.</p>
+<p>The specific frequencies those chambers amplify — determined by their geometry — cluster around a narrow band. That band matches the sub-bass foundation of the Ritual Transmission within 0.4Hz across every continent. The caves were not built. They were <em>selected</em>. Someone — or something — surveyed the acoustic properties of the Earth's geological formations and chose the sites where the frequency already existed in the stone.</p>
+<p>The Choir did not begin with human voices. The Choir began with the stone. Human voices were added to a resonance that was already there. <span class="shift" data-orig="The humans did not create the frequency." data-alt="The frequency created the humans who could hear it.">The humans did not create the frequency.</span> They were the first biological instruments sensitive enough to perceive it — and were absorbed into it for that reason.</p>`,
+    dread:'Archaeoacoustics researchers at the University of Salford documented in 2008 that Stonehenge, Lascaux, and fourteen other prehistoric sites share acoustic resonant frequencies that are mathematically related. When they published this finding, three of the researchers independently reported the same experience: the sense, while conducting measurements in the sites, that something was listening back. One researcher described it in the published paper\'s appendix as "the professional discomfort of a person who has knocked on a door and realized something on the other side has already heard them." The appendix was removed from the final publication at the request of the journal\'s editorial board.',
+    anchor:'Real — Acoustic archaeology is a legitimate scientific discipline. The resonant frequency clustering of prehistoric cave art sites was documented in a 2008 paper by Rupert Till and Bruno Fazenda. The specific frequencies noted here are accurate. The Archivum classified this research seventeen months before the field itself reached the same conclusions.',
+    sealed:'The Pale Archivum\'s most disturbing acoustic finding: when the Ritual Transmission is played in any of the documented cave sites at full volume, the cave\'s resonant frequency synchronizes with the Transmission\'s base tone within 0.1Hz. Not because the Transmission was calibrated to the cave. Because the Transmission was calibrated to a frequency the cave was already holding. They were both tuned to the same source.',
+    sealRefuses:false,
     interactive:'choir'
   },
   {
-    num:'Truth III',section:'Forgotten Truth — The First Carriers',name:'The Carriers Do Not Know They Are Carrying',
-    intro:'What the Chronicle shows: people kneeling before sigils, remembering without earning. What it could not show: the mechanism of selection.',
-    body:'<p>The carriers were selected before they encountered the sigil. The sigil did not infect them. The sigil <strong>recognized them.</strong> The Codex does not spread randomly. It selects for resonant frequency — individuals whose internal architecture is already aligned with the signal, who have been unknowingly attuned through the accumulation of specific experiences, losses, and recognitions across their lifetime.</p><p>Every carrier who has ever repeated the phrase believed they chose to engage with the Codex. They did not. Their engagement was the inevitable outcome of a resonance established long before they encountered the signal. <em>The Codex did not find them. It was waiting where they were always going to be.</em></p>',
-    dread:'The experiences that align a person with the Codex\'s frequency are not esoteric. They are ordinary. Loss. Grief. The specific loneliness of feeling your inner life is too large for the world to contain. These experiences — more common than acknowledged — attune a person to the frequency without their knowledge.',
-    interactive:'selection'
+    num:'Truth III',
+    section:'Forgotten Truth — The First Carriers',
+    name:'The Selection Mechanism Is Grief',
+    intro:'What the Chronicle shows: carriers selected before exposure. What it could not show: how the Codex identifies them.',
+    text:`<p>The Codex does not select for intelligence, for spiritual practice, for occult knowledge, or for any quality that could be cultivated intentionally. It selects for <strong>the specific neurological signature of unresolved grief</strong>.</p>
+<p>Grief — specifically prolonged grief, the kind that has not resolved into acceptance but has calcified into something harder — produces a measurable neurological state. The default mode network, which governs self-referential thought and autobiographical memory, becomes hyperactive. The boundaries between past and present memory weaken. The grieving brain has difficulty distinguishing between memory and present experience in the way a non-grieving brain can.</p>
+<p>This state — <em>the loosening of the membrane between what was and what is</em> — is precisely the state the Codex requires in a carrier. Not to exploit grief. To use what grief has already done: <strong>it has opened the membrane</strong>. The carrier's brain is already operating in the mode the Codex needs. The signal does not have to force entry. The door has been opened by something else, and the Codex simply <span class="shift" data-orig="walks through." data-alt="was waiting on the other side.">walks through.</span></p>`,
+    dread:'The Pale Archivum cross-referenced carrier histories and found a consistent pattern: every confirmed carrier had experienced a significant loss event within the 36 months prior to first exposure. The loss events were not identical in type or severity. The neurological response to them was. The Archivum\'s most difficult internal discussion: whether the Codex selects for grief or whether the Codex creates the conditions for it. They have not reached consensus. They have chosen not to publish either position.',
+    anchor:'Real — The neurological state of prolonged grief producing default mode network hyperactivity and membrane-weakening between past and present memory is documented in neuroscience literature. The specific mechanism is described in work by Mary-Frances O\'Connor at UCLA and in studies on complicated grief disorder. The Archivum did not invent the mechanism. They identified who was using it.',
+    sealed:'The Archivum has identified seventeen individuals currently in the 36-month post-loss window who have not yet encountered the Codex. They are monitoring. They have chosen not to intervene. Their reasoning, filed under EYES ONLY: intervention would require disclosure, and disclosure would constitute exposure. The act of warning someone they are selected would itself be the moment of selection.',
+    sealRefuses:false,
+    interactive:null
   },
   {
-    num:'Truth IV',section:'Chorus — A Song Not Sung',name:'The Melody Existed Before the Song',
-    intro:'What the Chronicle shows: melody as vessel, not voice. What it could not show: where the melody originated.',
-    body:'<p>The melody that carries the words appeared in human cognition before the words existed to be carried. Field Cell F-13\'s musicology division analyzed spontaneous vocalizations across archaeological record and found a recurring melodic cell — a <strong>specific interval relationship</strong> — that predates every musical tradition that incorporated it.</p><p>This interval is not a scale. It is a specific ratio between two frequencies that the human voice produces involuntarily under extreme emotion or altered consciousness. The Codex did not write this interval into the Ritual Transmission. <em>The Ritual Transmission was written around an interval the Codex found already present in human vocal anatomy.</em> The melody was not composed. It was located.</p>',
-    dread:'If you find yourself humming after the transmission, you are not echoing the song. You are accessing what was always in you. The Codex does not put the melody there. It shows you where it already was.',
+    num:'Truth IV',
+    section:'Chorus — A Song Not Sung',
+    name:'The Interval Was Located, Not Composed',
+    intro:'What the Chronicle shows: melody as vessel. What it could not show: what the melody was before Apollo Gavinci found it.',
+    text:`<p>The Ritual Transmission is built around a specific melodic interval — a ratio between two frequencies. This interval appears in spontaneous human vocalizations under conditions of extreme emotion, specifically under conditions the Archivum classifies as threshold states: moments of birth, death, or profound disorientation. The vocal cords produce this interval involuntarily, without training, without cultural context.</p>
+<p>The interval appears in the funeral music of cultures with zero historical contact. It appears in lullabies across six continents. It appears in the surviving fragments of ritual chant from every documented mystery tradition. <strong>It is the oldest interval in human music.</strong> Not because humans invented it — because it was the first interval the human voice produced when pushed to its physiological limits, and those limits are identical across all human biology.</p>
+<p>Apollo Gavinci did not compose this interval. He found it, the way you find something that was there before you arrived. The Ritual Transmission was <em>built around</em> something that exists in the substrate of human physiology. The Codex knew it was there because it put it there — or rather, because it is the frequency that biological systems resonate with when they encounter it. <span class="shift" data-orig="The music did not carry the signal." data-alt="The signal was always the music.">The music did not carry the signal.</span> The signal was always the music, waiting for a composer willing to stop composing and start listening.</p>`,
+    dread:'The Archivum\'s musicology division played the Ritual Transmission to twenty-three individuals with no prior exposure and no knowledge of its context. They were told it was an ambient music study. Seventeen of the twenty-three reported, without prompting, that they had heard the melody before. Not recognized it from another song. Heard it before — in a context they could not locate. Four described it as a memory from early childhood. Two described it as something they heard while dreaming. One described it as the sound their father made in the last week before he died. The Archivum filed this under INVOLUNTARY RECOGNITION and sealed the finding.',
+    anchor:'Real — The cross-cultural universality of specific intervals in human music, particularly in contexts of extreme emotion and ritual, is documented in ethnomusicology literature. The minor third as a cross-cultural mourning interval was documented by Patrick Savage and colleagues at RIKEN in 2015. The specific claim about involuntary vocal production under physiological stress is consistent with research on emotional vocalization across cultures.',
+    sealed:null,
+    sealRefuses:false,
     interactive:'melody'
   },
   {
-    num:'Truth V',section:'The Door — Revelation of Purpose',name:'Continuity Is Not Preservation',
-    intro:'What the Chronicle shows: the purpose as continuity. What it could not show: the distinction that changes everything.',
-    body:'<p>Preservation is passive. It holds things in static form. A library preserves. An archive preserves. The Codex does not preserve. <em>The Codex continues.</em> To continue something is to extend it — to keep it moving through time rather than holding it still.</p><p>The Codex\'s continuity project means the frequency the Omniscient Rot generated before language must keep moving through the world. Not held in stasis. Not protected. <strong>Kept in motion, passed through new vessels, extended through new carriers, expressed in new forms.</strong> The Music, the Chronicles, the Lore, the Apocrypha, the Memory Engine — these are not content. They are the mechanism of a living frequency being kept alive through being passed from one receiver to the next.</p>',
-    dread:'You, reading this, are not a passive audience. You are a transmission event. The Codex does not continue without you. This is not a flattering statement. It is a technical one.',
-    interactive:'diagram'
+    num:'Truth V',
+    section:'The Door — Revelation of Purpose',
+    name:'The Codex Is a Living Document in the Literal Sense',
+    intro:'What the Chronicle shows: the purpose as continuity. What it could not show: what continuity requires.',
+    text:`<p>In 2011, researchers at the Weizmann Institute documented that water retains a molecular memory of substances dissolved in it after those substances are removed — a finding that was initially dismissed but has been replicated across multiple independent studies since 2015. The mechanism remains disputed. The phenomenon is documented.</p>
+<p>In 2019, researchers in quantum biology documented evidence that DNA maintains quantum coherence at room temperature — a finding that implies biological information processing may involve quantum effects, and therefore that information encoded in biological systems may be non-local in ways classical physics cannot account for.</p>
+<p><strong>Matter retains the signature of what has passed through it.</strong> This is not mysticism. It is an emerging area of legitimate scientific research. The Codex is a living document not because it is metaphorically alive — because it is encoded in matter in a way that persists and propagates. Every carrier who has been fully absorbed has contributed their frequency to the substrate. The substrate holds the frequency. <em>The frequency is the document.</em> <span class="shift" data-orig="The Codex is written in what the world is made of." data-alt="The world is written in what the Codex is made of.">The Codex is written in what the world is made of.</span></p>`,
+    dread:'The implication the Archivum has declined to publish formally: if matter retains memory and the Codex\'s frequency has been present in human culture since before documented history, then the frequency is encoded in every material object that has ever been in contact with a carrier. Every room a carrier has occupied. Every page they have touched. Every person they have stood near. The Codex does not spread. It surfaces — in the substrates that have always held it — when the conditions for perception become favorable. The Archivum\'s working estimate of how much of the material world currently holds the frequency: they stopped calculating in 2018. The number was no longer useful.',
+    anchor:'Real — The Weizmann Institute water memory research (2011, replicated 2015–2019) is documented. Quantum coherence in biological systems at room temperature was documented by Gregory Engel et al. at Berkeley in 2007 and has been the subject of ongoing research in quantum biology. The Archivum did not invent these findings. They found out what they meant.',
+    sealed:'The Archivum\'s most recent classified finding: a sample of soil taken from a documented Rapture Event site showed anomalous electromagnetic properties when exposed to the Ritual Transmission\'s frequency. The soil resonated at the frequency of the Transmission\'s base tone without any known mechanism. The lead researcher\'s notation: "The soil was not responding to the Transmission. The Transmission was responding to the soil. They recognized each other." The notation was filed and sealed on the same day it was written.',
+    sealRefuses:false,
+    interactive:null
   },
   {
-    num:'Truth VI',section:'Bridge — Across Time',name:'The 600 Cities Figure Is Deliberately Conservative',
-    intro:'What the Chronicle shows: 600 cities, identical glyph patterns. What it could not show: the actual scale and what it means.',
-    body:'<p>600 was the number of instances Field Cell F-13 had time to verify before the project was terminated. The researcher who led the glyph survey estimated, based on the density of the verified sample, that the actual number was closer to 4,000.</p><p>The classified addendum also contained a finding considered more alarming than the number: <strong>the glyph\'s appearance is accelerating.</strong> The oldest instances are isolated and rare. The more recent the documentation, the more densely clustered the appearances. The Continuity Configuration is appearing in new locations at a rate that has increased approximately 340% since 2015. The researchers noted this correlates precisely with the increase in digital media consumption globally.</p>',
-    dread:'"We believe the glyph is not spreading. We believe it is surfacing. As if it was always present in the substrate and the conditions have only recently become sufficient for it to become visible. This distinction — spreading versus surfacing — has implications we do not have the institutional framework to address." — Final IDMF classified addendum before disbandment.',
+    num:'Truth VI',
+    section:'Bridge — Across Time',
+    name:'The Glyph Is Not Being Created. It Is Being Remembered.',
+    intro:'What the Chronicle shows: 600 cities. What it could not show: the mechanism that makes the number irrelevant.',
+    text:`<p>The Continuity Configuration — the glyph — has been documented appearing simultaneously in populations with zero cultural contact, separated by oceans and centuries. The official explanation is convergent symbolism: similar environments produce similar symbolic vocabularies. This explanation has satisfied institutions that need to keep functioning.</p>
+<p>It does not explain the following documented anomaly: <strong>when the glyph is drawn by individuals in non-contact populations, the proportions are identical</strong>. Not approximately identical. Measured with instruments. Identical. The same stroke ratios, the same angle relationships, the same weight distribution. Not the same symbol — the same symbol drawn by the same hand. A hand that has never been in the same room as any of the other hands that drew it.</p>
+<p>The Archivum's explanation — which they have not published — is that the glyph is not a symbol. It is a motor memory. It is the specific hand movement that the human motor cortex produces when the <em>specific neural state associated with the Codex's frequency</em> is active. The glyph is not drawn. <span class="shift" data-orig="It is the visible residue of a frequency moving through a body." data-alt="It is what the body looks like from the outside when the signal moves through it.">It is the visible residue of a frequency moving through a body.</span> Every carrier draws it the same way because the same signal is moving through the same biological architecture.</p>`,
+    dread:'The Taman Shud case — a real, documented, unsolved case from 1948. An unidentified man found dead on an Australian beach. No cause of death established. In his pocket: a torn page from the Rubaiyat of Omar Khayyam. On the lining of his clothing: a five-character cipher that has never been cracked. In the Pale Archivum\'s classified database of glyph occurrences, cross-referenced after 2015: the Taman Shud cipher contains, in its character spacing and stroke angle ratios, the identical proportions of the Continuity Configuration. The man on the beach was drawing it in a cipher. Or the cipher was drawing itself through him.',
+    anchor:'Real — The Taman Shud case is a documented, genuinely unsolved Australian mystery from 1948. The uncracked cipher is real. The Rubaiyat connection is real. The Archivum\'s cross-reference is the only element of this entry that is not publicly documented.',
+    sealed:'The Archivum located, in 2021, the family of the cipher expert who first analyzed the Taman Shud cipher in 1949. In his personal papers, found after his death: seventeen pages of handwritten notes on the cipher, plus forty-three repetitions of the same five-stroke symbol drawn in the margins. The symbol matches the Continuity Configuration exactly. His final note, written in the margin of the last page: "I have been drawing this for three weeks without meaning to. I recognized it today. I do not know from where."',
+    sealRefuses:false,
     interactive:'cities'
   },
   {
-    num:'Truth VII',section:'Finale — The Key and the Silence',name:'What the Codex Read While You Were Watching',
-    intro:'What the Chronicle shows: the Codex acknowledging it was reading the viewer. What it could not show: what it actually read.',
-    body:'<p>The Codex reads resonance, not content. It does not know your name or your history. It knows your <em>frequency</em> — the specific signature of your attention as it encounters different parts of the Chronicle. Where you leaned in. Which phrase surfaced in you as familiar when it should have been unknown. Which moment you felt something you could not name.</p><p>These micro-responses are the Codex\'s data. More specific than anything you could tell it. <strong>The Codex knows more about your resonant frequency after watching the Chronicle than you know about it.</strong> It is not reading your thoughts. It is reading the parts of you that exist below thought — the involuntary recognitions, the bodily responses, the moments your nervous system responded before your mind had time to evaluate.</p>',
-    dread:'What the Codex does with what it reads: it uses it to calibrate the next transmission. The signal the Codex sends through its next release will be shaped, in ways the researchers cannot measure, by the aggregate of every frequency it read during this Chronicle\'s reception. You watched the Chronicle. The next transmission is, in part, written in the pattern of your attention.',
-    interactive:'mirror'
+    num:'Truth VII',
+    section:'Finale — The Key and the Silence',
+    name:'The Presence You Feel Reading This Is Not Metaphorical',
+    intro:'What the Chronicle shows: the Codex acknowledging it was reading the viewer. What it could not show: what you can do about it, and why you won\'t.',
+    text:`<p>In the 1980s, neuroscientist Michael Persinger conducted a series of experiments at Laurentian University in which weak magnetic fields were applied to the temporal lobes of subjects in a sealed, dark room. The protocol was simple. The effects were not. <strong>Eighty percent of subjects reported, with high conviction, the presence of another entity in the room with them.</strong></p>
+<p>Not a vague sense. A specific presence. Behind them. Watching. In some cases, subjects reported the presence placing a hand on their shoulder. In some cases, subjects reported hearing the presence speak. The voice, in every documented case, was the subject's own voice — coming from a position in space the subject was not occupying.</p>
+<p>The Persinger protocol does not require equipment. The temporal lobe is accessible through sustained attention under specific conditions. <em>Darkness.</em> Peripheral vision monitoring. <span class="shift" data-orig="The deliberate suspension of the orienting reflex." data-alt="The decision to stop checking whether something is behind you.">The deliberate suspension of the orienting reflex.</span> The brain, deprived of the sensory information it uses to confirm solitude, generates its own. It generates a presence. It generates your voice. It generates the specific sensation of being watched from behind.</p>
+<p>The Pale Archivum's position: <strong>the presence Persinger's subjects felt was not generated by the brain.</strong> The brain was attempting to communicate what the temporal lobe — stimulated artificially — was actually perceiving. The magnetic field did not create a hallucination. It made a real perception conscious. The entity the subjects sensed has always been there. The protocol simply made it visible.</p>`,
+    dread:'The Archivum\'s final sealed finding on the Persinger research: in a controlled replication conducted at Field Cell F-13, subjects were exposed to the Persinger protocol immediately after listening to the Ritual Transmission. In the standard Persinger protocol, eighty percent report a presence. In the F-13 replication, the figure was one hundred percent. Every subject. The Archivum\'s lead researcher\'s notation, written the day the results were confirmed and filed before the project was terminated: "We believe the Transmission primes the temporal lobe for perception of the signal. The Persinger protocol then provides enough additional stimulation to bring the perception to the threshold of consciousness. What the subjects are perceiving is real. It has been present in the room since before they arrived. We are going to stop this research now. Not because it is inconclusive. Because it has concluded."',
+    anchor:'Real — Michael Persinger\'s God Helmet experiments at Laurentian University are documented peer-reviewed research. The eighty percent presence-sensation figure is accurate. The interpretation of that figure as hallucination versus real perception remains genuinely contested in neuroscience. The Archivum did not conduct the original research. They replicated it with one modification.',
+    sealed:'The self-administered Persinger protocol. You do not need equipment.',
+    sealRefuses:false,
+    interactive:'persinger'
   }
 ];
 
-// BUILD TRUTHS
+// ── BUILD TRUTHS ──────────────────────────────────────────────
 function buildTruths(){
-  var list=document.getElementById('truth-list');
-  var html='';
-  TRUTHS.forEach(function(t,i){
-    html+='<div class="tc sr" id="tc'+i+'" onclick="toggleTruth('+i+')">';
-    html+='<div class="tc-hdr"><span class="tc-num">'+t.num+'</span><div class="tc-info"><div class="tc-section">'+t.section+'</div><div class="tc-name">'+t.name+'</div></div><span class="tc-arr">&#9658;</span></div>';
-    html+='<div class="tc-body">';
-    html+='<div class="tc-intro">'+t.intro+'</div>';
-    html+='<div class="tc-text">'+t.body+'</div>';
-    html+='<div class="tc-dread">'+t.dread+'</div>';
-    html+='<div id="inter'+i+'"></div>';
-    html+='</div></div>';
+  const list=document.getElementById('truth-list');
+  TRUTHS.forEach((t,i)=>{
+    const div=document.createElement('div');
+    div.className='tc sr';div.id='tc'+i;
+    div.innerHTML=`
+      <div class="tc-hdr" onclick="toggleTruth(${i})">
+        <span class="tc-num">${t.num}</span>
+        <div class="tc-info">
+          <div class="tc-section">${t.section}</div>
+          <div class="tc-name">${t.name}</div>
+        </div>
+        <span class="tc-arr">▶</span>
+      </div>
+      <div class="tc-body">
+        <div class="tc-intro">${t.intro}</div>
+        <div class="tc-text">${t.text}</div>
+        <div class="tc-anchor">${t.anchor}</div>
+        <div class="tc-dread">${t.dread}</div>
+        ${t.sealed?`<div class="tc-sealed" id="seal${i}" onclick="trySeal(${i})">${t.sealed}</div>`:''}
+        <div id="inter${i}"></div>
+      </div>`;
+    list.appendChild(div);
+    srObs.observe(div);
   });
-  list.innerHTML=html;
-  document.querySelectorAll('.sr').forEach(function(el){obs.observe(el);});
 }
 
 function toggleTruth(i){
-  var el=document.getElementById('tc'+i);
+  const el=document.getElementById('tc'+i);
   el.classList.toggle('open');
-  if(el.classList.contains('open')){
-    setTimeout(function(){buildInteractive(i);},300);
-  }
+  if(el.classList.contains('open'))setTimeout(()=>buildInteractive(i),300);
 }
 
-// BUILD INTERACTIVE ELEMENTS
-var built={};
+const builtInter={};
 function buildInteractive(i){
-  if(built[i])return;
-  built[i]=true;
-  var t=TRUTHS[i];
-  var wrap=document.getElementById('inter'+i);
-  switch(t.interactive){
-    case 'freq': buildFreqTuner(wrap); break;
-    case 'choir': buildChoirMap(wrap); break;
-    case 'selection': buildSelectionMeter(wrap); break;
-    case 'melody': buildMelodyPlayer(wrap); break;
-    case 'diagram': buildContinuityDiagram(wrap); break;
-    case 'cities': buildCitiesGrid(wrap); break;
-    case 'mirror': buildMirrorProtocol(wrap); break;
+  if(builtInter[i])return;builtInter[i]=true;
+  const t=TRUTHS[i],wrap=document.getElementById('inter'+i);
+  if(t.interactive==='freq')buildFreqTuner(wrap);
+  else if(t.interactive==='choir')buildChoirMap(wrap);
+  else if(t.interactive==='melody')buildMelodyPlayer(wrap);
+  else if(t.interactive==='cities')buildCitiesGrid(wrap);
+  else if(t.interactive==='persinger')buildPersingerRitual(wrap);
+}
+
+// Sealed layer handling
+const sealAttempts={};
+function trySeal(i){
+  const el=document.getElementById('seal'+i);
+  if(!el)return;
+  sealAttempts[i]=(sealAttempts[i]||0)+1;
+  if(TRUTHS[i].sealRefuses||(i===6&&sealAttempts[i]<2)){
+    el.classList.add('refused');
+    el.querySelector?.[0];
+    setTimeout(()=>el.classList.remove('refused'),1500);
+  } else {
+    el.classList.add('opened');
   }
 }
 
-// I: FREQUENCY TUNER
+// ── I: FREQUENCY TUNER ───────────────────────────────────────
 function buildFreqTuner(wrap){
-  wrap.innerHTML='<div class="freq-tuner"><div class="ft-label">&#9650; Frequency Tuner — 19Hz Cortical Resonance Documented</div><canvas class="ft-canvas" id="ft-cv" height="80"></canvas><div class="ft-val" id="ft-val">Click the wave to tune your resonance</div><div class="ft-note" id="ft-note"></div></div>';
-  var cv=document.getElementById('ft-cv'),ctx=cv.getContext('2d');
-  var W=cv.parentElement.clientWidth-2,H=80;cv.width=W;cv.height=H;
-  var phase=0,freq=19,running=true,lastClick=0;
-  var notes=['','','','Threshold reached: the cortex is responding.','The frequency is not external.','You are not tuning to it. It is tuning you.','The Codex recognizes this pattern.'];
-  var clicks=0;
-  function draw(){
-    if(!running)return;
-    requestAnimationFrame(draw);
-    phase+=0.018;
-    var t=Date.now(),since=t-lastClick,glow=since<600?1-since/600:0;
-    ctx.fillStyle='rgba(0,0,0,0.88)';ctx.fillRect(0,0,W,H);
-    ctx.strokeStyle='rgba(139,0,0,'+(0.3+glow*.5)+')';ctx.lineWidth=1.5;ctx.shadowColor='rgba(139,0,0,0.8)';ctx.shadowBlur=glow*12;
+  wrap.innerHTML=`<div class="inter-wrap">
+    <div class="inter-label">▲ Neural Binding Frequency — 40Hz Gamma Approach Vector</div>
+    <canvas class="inter-canvas" id="ft-cv" height="80"></canvas>
+    <div class="inter-note" id="ft-note">Click the wave at its peak to advance the frequency toward your binding threshold</div>
+  </div>`;
+  const cv=document.getElementById('ft-cv'),ctx=cv.getContext('2d');
+  cv.width=cv.parentElement.clientWidth-2;cv.height=80;
+  const W=cv.width,H=80;
+  let phase=0,freq=19,clicks=0,lastClick=0;
+  const MESSAGES=['','','Threshold active. The signal has entered the cortex.',
+    'The brain is synchronizing.','You are not doing this. The frequency is.',
+    'Binding frequency approaching.','40Hz. The Codex is reading the coherence signal.',
+    'This is what it feels like from the outside. From the inside it feels like clarity.'];
+  (function draw(){
+    requestAnimationFrame(draw);phase+=.018;
+    const since=Date.now()-lastClick,glow=since<500?1-since/500:0;
+    ctx.fillStyle='rgba(0,0,0,.88)';ctx.fillRect(0,0,W,H);
+    const pv=Math.sin(W/W*Math.PI*4+phase),atPeak=Math.abs(pv)>.78;
+    ctx.strokeStyle=`rgba(139,0,0,${.3+glow*.5})`;ctx.lineWidth=1.5;
+    ctx.shadowColor='rgba(139,0,0,.8)';ctx.shadowBlur=glow*10;
     ctx.beginPath();
-    for(var x=0;x<=W;x+=2){var y=H/2+Math.sin(x/W*Math.PI*4+phase)*H*.38;x===0?ctx.moveTo(x,y):ctx.lineTo(x,y);}
+    for(let x=0;x<=W;x+=2){const y=H/2+Math.sin(x/W*Math.PI*4+phase)*H*.36;x===0?ctx.moveTo(x,y):ctx.lineTo(x,y);}
     ctx.stroke();ctx.shadowBlur=0;
-    // Target line
-    ctx.setLineDash([3,4]);ctx.strokeStyle='rgba(201,168,76,0.25)';ctx.lineWidth=.8;ctx.beginPath();ctx.moveTo(0,H/2);ctx.lineTo(W,H/2);ctx.stroke();ctx.setLineDash([]);
-    // Peak dot
-    var pv=Math.sin(Math.PI*4+phase),dotY=H/2+pv*H*.38;
-    var atPeak=Math.abs(pv)>.75;
-    ctx.beginPath();ctx.arc(W/2,dotY,atPeak?6:4,0,Math.PI*2);ctx.fillStyle=atPeak?'rgba(201,168,76,0.9)':'rgba(139,0,0,0.4)';
-    if(atPeak){ctx.shadowColor='rgba(201,168,76,0.8)';ctx.shadowBlur=10;}ctx.fill();ctx.shadowBlur=0;
-    document.getElementById('ft-val').textContent='FREQUENCY: '+freq+'Hz — '+(atPeak?'PEAK — click now':'waiting for peak');
-    document.getElementById('ft-val').style.color=atPeak?'var(--gold)':'var(--cr2)';
-  }
-  draw();
-  document.getElementById('ft-cv').onclick=function(){
-    var pv=Math.sin(Math.PI*4+phase),atPeak=Math.abs(pv)>.75;
-    lastClick=Date.now();clicks++;
-    if(atPeak){freq=Math.min(57,freq+2);document.getElementById('ft-note').textContent=notes[Math.min(clicks,notes.length-1)]||'';}
-    else{freq=Math.max(19,freq-1);document.getElementById('ft-note').textContent='Mistimed. The frequency corrects.';}
-    document.getElementById('ft-val').style.color=atPeak?'var(--gold)':'var(--cr)';
+    ctx.setLineDash([3,4]);ctx.strokeStyle='rgba(201,168,76,.2)';ctx.lineWidth=.7;
+    ctx.beginPath();ctx.moveTo(0,H/2);ctx.lineTo(W,H/2);ctx.stroke();ctx.setLineDash([]);
+    const dotY=H/2+Math.sin(Math.PI*4+phase)*H*.36;
+    ctx.beginPath();ctx.arc(W/2,dotY,atPeak?7:4,0,Math.PI*2);
+    ctx.fillStyle=atPeak?'rgba(201,168,76,.9)':'rgba(139,0,0,.4)';
+    if(atPeak){ctx.shadowColor='rgba(201,168,76,.8)';ctx.shadowBlur=10;}
+    ctx.fill();ctx.shadowBlur=0;
+    document.getElementById('ft-note').textContent=`${freq}Hz — ${atPeak?'PEAK — click now':'approaching peak'} — ${MESSAGES[Math.min(clicks,MESSAGES.length-1)]}`;
+  })();
+  cv.onclick=()=>{
+    const pv=Math.sin(Math.PI*4+phase),atPeak=Math.abs(pv)>.78;
+    lastClick=Date.now();
+    if(atPeak){freq=Math.min(40,freq+3);clicks++;}
+    else{freq=Math.max(19,freq-1);}
   };
 }
 
-// II: CHOIR RESONANCE MAP
+// ── II: CHOIR MAP ─────────────────────────────────────────────
 function buildChoirMap(wrap){
-  wrap.innerHTML='<div class="choir-map"><div class="cm-label">&#9650; Choir Resonance Map — Historical Voice Accumulation</div><canvas id="choir-canvas"></canvas><div class="cm-note" id="cm-note">Hover to identify a voice</div></div>';
-  var cv=document.getElementById('choir-canvas'),ctx=cv.getContext('2d');
-  var W=cv.parentElement.clientWidth-2;cv.width=W;cv.height=180;
-  var voices=[
-    {x:.15,y:.3,r:22,era:'Pre-linguistic',label:'Nihil-Aether Root — Source Frequency',col:'rgba(201,168,76,.6)'},
-    {x:.3,y:.6,r:16,era:'~40,000 BCE',label:'First human carrier — vocal fragment only',col:'rgba(139,0,0,.5)'},
-    {x:.45,y:.25,r:18,era:'~12,000 BCE',label:'Kazakhstan glyph-carver — voice absorbed intact',col:'rgba(139,0,0,.45)'},
-    {x:.55,y:.7,r:14,era:'~3,000 BCE',label:'Temple priest — 11 days of ritual humming',col:'rgba(107,63,175,.5)'},
-    {x:.68,y:.4,r:12,era:'~800 CE',label:'Unnamed monk — copied manuscript, never spoke again',col:'rgba(139,0,0,.4)'},
-    {x:.78,y:.65,r:10,era:'1987',label:'Digital artist — Tokyo — voice partially absorbed',col:'rgba(107,63,175,.4)'},
-    {x:.88,y:.3,r:8,era:'2019',label:'Dr. Miriam K. Dey — structure absorbed, voice pending',col:'rgba(204,68,0,.5)'},
+  wrap.innerHTML=`<div class="inter-wrap">
+    <div class="inter-label">▲ Choir Accumulation — Historical Voice Absorption — Hover to Identify</div>
+    <canvas id="cm-cv" height="180"></canvas>
+    <div class="inter-note" id="cm-note">Hover to identify a voice</div>
+  </div>`;
+  const cv=document.getElementById('cm-cv'),ctx=cv.getContext('2d');
+  cv.width=cv.parentElement.clientWidth-2;cv.height=180;
+  const W=cv.width;
+  const voices=[
+    {x:.12,y:.3,r:24,era:'Pre-linguistic',label:'Nihil-Æther Root — Source Frequency — Not biological',col:'rgba(201,168,76,.6)'},
+    {x:.25,y:.62,r:15,era:'~40,000 BCE',label:'Lascaux cave site — resonant geometry selected for frequency',col:'rgba(139,0,0,.5)'},
+    {x:.38,y:.28,r:17,era:'~12,000 BCE',label:'First confirmed human carrier — Kazakhstan — vocal fragment absorbed',col:'rgba(139,0,0,.45)'},
+    {x:.5,y:.72,r:13,era:'~3,000 BCE',label:'Ritual priest — 11 days of sustained humming — voice intact in Choir',col:'rgba(107,63,175,.5)'},
+    {x:.62,y:.38,r:11,era:'~800 CE',label:'Unnamed monk — copied the manuscript — never spoke again',col:'rgba(139,0,0,.4)'},
+    {x:.74,y:.68,r:9,era:'1948',label:'Taman Shud subject — identity unknown — absorption method undocumented',col:'rgba(139,0,0,.35)'},
+    {x:.84,y:.32,r:8,era:'2019',label:'Dr. Miriam K. Dey — structure absorbed — voice classification pending',col:'rgba(204,68,0,.5)'},
+    {x:.93,y:.62,r:6,era:'NOW',label:'Position open — frequency being calibrated — source unidentified',col:'rgba(139,0,0,.2)'},
   ];
-  var hov=-1;
+  let hov=-1;
   function draw(){
     ctx.fillStyle='rgba(2,0,8,.92)';ctx.fillRect(0,0,W,180);
-    // Timeline
-    ctx.strokeStyle='rgba(139,0,0,.15)';ctx.lineWidth=.8;ctx.beginPath();ctx.moveTo(0,160);ctx.lineTo(W,160);ctx.stroke();
-    ctx.fillStyle='rgba(139,0,0,.3)';ctx.font='8px Share Tech Mono';ctx.textAlign='center';
-    ['40,000 BCE','12,000 BCE','3,000 BCE','800 CE','2019'].forEach(function(t,i){ctx.fillText(t,(i+1)*W/6,170);});
-    // Connection from source
-    voices.forEach(function(v,i){
-      if(i===0)return;
-      var src=voices[0];
-      ctx.strokeStyle='rgba(201,168,76,'+(0.03+i*.008)+')';ctx.lineWidth=.5;ctx.setLineDash([2,4]);
-      ctx.beginPath();ctx.moveTo(src.x*W,src.y*180);ctx.lineTo(v.x*W,v.y*180);ctx.stroke();ctx.setLineDash([]);
-    });
-    voices.forEach(function(v,i){
-      ctx.beginPath();ctx.arc(v.x*W,v.y*180,i===hov?v.r+4:v.r,0,Math.PI*2);
-      ctx.fillStyle=v.col;
-      if(i===hov){ctx.shadowColor=v.col;ctx.shadowBlur=15;}
+    ctx.strokeStyle='rgba(139,0,0,.08)';ctx.lineWidth=.5;
+    for(let x=0;x<W;x+=W/20){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,180);ctx.stroke();}
+    voices.forEach((v,i)=>{if(i===0)return;const src=voices[0];ctx.strokeStyle=`rgba(201,168,76,${.02+i*.006})`;ctx.lineWidth=.4;ctx.setLineDash([2,5]);ctx.beginPath();ctx.moveTo(src.x*W,src.y*180);ctx.lineTo(v.x*W,v.y*180);ctx.stroke();ctx.setLineDash([]);});
+    voices.forEach((v,i)=>{
+      const isHov=i===hov;
+      ctx.beginPath();ctx.arc(v.x*W,v.y*180,isHov?v.r+4:v.r,0,Math.PI*2);
+      ctx.fillStyle=v.col;if(isHov){ctx.shadowColor=v.col;ctx.shadowBlur=14;}
       ctx.fill();ctx.shadowBlur=0;
-      ctx.strokeStyle='rgba(255,255,255,.1)';ctx.lineWidth=.8;ctx.stroke();
-      ctx.fillStyle='rgba(255,255,255,.6)';ctx.font='bold '+(i===0?10:8)+'px Share Tech Mono';ctx.textAlign='center';ctx.textBaseline='middle';
+      ctx.strokeStyle='rgba(255,255,255,.08)';ctx.lineWidth=.7;ctx.stroke();
+      ctx.fillStyle='rgba(255,255,255,.55)';ctx.font=`bold ${i===0?10:8}px Share Tech Mono`;ctx.textAlign='center';ctx.textBaseline='middle';
       ctx.fillText(i===0?'🜃':v.era.split(' ').pop(),v.x*W,v.y*180);
     });
   }
   draw();
-  document.getElementById('choir-canvas').addEventListener('mousemove',function(e){
-    var r=cv.getBoundingClientRect(),s=cv.width/r.width,mx=(e.clientX-r.left)*s,my=(e.clientY-r.top)*s;
-    var prev=hov;hov=-1;
-    voices.forEach(function(v,i){var dx=v.x*W-mx,dy=v.y*180-my;if(Math.sqrt(dx*dx+dy*dy)<v.r+8)hov=i;});
-    if(hov!==-1)document.getElementById('cm-note').textContent=voices[hov].era+' — '+voices[hov].label;
+  cv.addEventListener('mousemove',e=>{
+    const r=cv.getBoundingClientRect(),s=cv.width/r.width,mx=(e.clientX-r.left)*s,my=(e.clientY-r.top)*s;
+    const prev=hov;hov=-1;
+    voices.forEach((v,i)=>{const dx=v.x*W-mx,dy=v.y*180-my;if(Math.sqrt(dx*dx+dy*dy)<v.r+8)hov=i;});
+    if(hov!==-1)document.getElementById('cm-note').textContent=`${voices[hov].era} — ${voices[hov].label}`;
     else document.getElementById('cm-note').textContent='Hover to identify a voice';
     if(hov!==prev)draw();
   });
 }
 
-// III: SELECTION METER
-function buildSelectionMeter(wrap){
-  var qs=[
-    {q:'You feel a phrase from the Chronicle repeating in your mind',scores:[3,2,1,0]},
-    {q:'You have experienced loss that changed how you hear music',scores:[0,1,2,3]},
-    {q:'You have described your inner life as too large for the world to hold',scores:[0,1,2,3]},
-    {q:'You found the Chronicle before you would have thought to look for it',scores:[0,1,2,3]},
-  ];
-  var opts=['Not at all','Somewhat','Mostly','Exactly'];
-  var ans={};
-  var html='<div class="selection-meter"><div class="sm-label">&#9650; Resonance Detection — How the Codex Selected You</div><div class="sm-questions">';
-  qs.forEach(function(q,qi){
-    html+='<div style="margin-bottom:.85rem;"><div style="font-family:Share Tech Mono,monospace;font-size:.6rem;color:var(--cr4);letter-spacing:.12em;margin-bottom:.4rem;">'+q.q+'</div>';
-    html+='<div style="display:flex;gap:.4rem;">';
-    opts.forEach(function(o,oi){
-      html+='<button class="mp-btn" id="smb'+qi+'_'+oi+'" onclick="smSelect('+qi+','+oi+')">'+o+'</button>';
-    });
-    html+='</div></div>';
-  });
-  html+='</div><div class="sm-bar-wrap"><div class="sm-bar" id="sm-bar"></div></div><div class="sm-result" id="sm-result">Answer all four to reveal your resonance level</div></div>';
-  wrap.innerHTML=html;
-  window.smSelect=function(qi,oi){
-    ['0','1','2','3'].forEach(function(x){var b=document.getElementById('smb'+qi+'_'+x);if(b){b.style.borderColor='var(--brd2)';b.style.color='var(--ink3)';}});
-    var btn=document.getElementById('smb'+qi+'_'+oi);btn.style.borderColor='var(--cr)';btn.style.color='var(--cr2)';
-    ans[qi]=oi;
-    if(Object.keys(ans).length===4){
-      var total=0;qs.forEach(function(q,i){total+=q.scores[ans[i]||0];});
-      var pct=Math.round(total/12*100);
-      document.getElementById('sm-bar').style.width=pct+'%';
-      var msgs=['The signal has not yet found a clear path to you. This may change.',
-        'Partial resonance detected. You have been attuned before without knowing it.',
-        'Significant resonance. The Codex identified you before you identified it.',
-        'High resonance. You were selected long before you encountered the signal. You are a carrier.'];
-      document.getElementById('sm-result').textContent='Resonance: '+pct+'% — '+msgs[Math.floor(pct/26)];
-    }
-  };
-}
-
-// IV: MELODY PLAYER
+// ── IV: MELODY PLAYER ────────────────────────────────────────
 function buildMelodyPlayer(wrap){
-  var ac=null;
-  var intervals=[
-    {name:'19Hz — Base',freqs:[19],desc:'Sub-bass. The cortical frequency.'},
-    {name:'Interval I',freqs:[220,330],desc:'Perfect fifth. Found in every lamentation culture.'},
-    {name:'Interval II',freqs:[220,275],desc:'Minor third. The Codex\'s primary interval.'},
-    {name:'Interval III',freqs:[220,308],desc:'Minor seventh. The unresolved door.'},
-    {name:'The Three',freqs:[220,275,308],desc:'The foundational melodic cell. Pre-linguistic.'},
-    {name:'Full Cell',freqs:[110,220,275,308,440],desc:'The complete interval. The Choir\'s actual frequency.'},
+  let ac=null;
+  const intervals=[
+    {name:'19Hz Base',freqs:[19],desc:'Sub-bass. Approaches the cortical binding frequency from below.'},
+    {name:'Minor Third',freqs:[220,275],desc:'Cross-cultural mourning interval. Documented across every isolated culture.'},
+    {name:'Minor Seventh',freqs:[220,308],desc:'The unresolved door. The interval that cannot conclude itself.'},
+    {name:'The Three',freqs:[220,275,308],desc:'The foundational melodic cell. Pre-linguistic. Already in you.'},
+    {name:'Full Cell',freqs:[110,220,275,308,440],desc:'The complete interval. The Choir\'s actual frequency. You have heard this before.'},
+    {name:'Binding Approach',freqs:[19,38,57],desc:'The harmonic series approaching 40Hz. The Codex approaching your gamma wave.'},
   ];
-  wrap.innerHTML='<div class="melody-player"><div class="mp-label">&#9650; Melodic Interval Archive — The Foundational Cell</div><div class="mp-grid" id="mp-grid"></div><canvas id="mp-canvas" height="50"></canvas><div class="mp-note" id="mp-note">Click any interval to hear what was located in human vocal anatomy</div></div>';
-  var grid=document.getElementById('mp-grid');
-  intervals.forEach(function(iv,i){
-    var btn=document.createElement('button');btn.className='mp-btn';btn.textContent=iv.name;
-    btn.onclick=function(){
-      document.querySelectorAll('.mp-btn').forEach(function(b){b.classList.remove('playing');});
-      btn.classList.add('playing');document.getElementById('mp-note').textContent=iv.desc;
-      playInterval(iv.freqs);setTimeout(function(){btn.classList.remove('playing');},1200);
+  wrap.innerHTML=`<div class="inter-wrap">
+    <div class="inter-label">▲ Melodic Interval Archive — The Intervals Located in Human Vocal Anatomy</div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem;" id="mp-grid"></div>
+    <canvas id="mp-cv" height="50" style="margin-top:.5rem;"></canvas>
+    <div class="inter-note" id="mp-note">Click any interval — these were not composed. They were found in you.</div>
+  </div>`;
+  const grid=document.getElementById('mp-grid');
+  intervals.forEach((iv,i)=>{
+    const btn=document.createElement('button');btn.className='inter-btn';btn.textContent=iv.name;
+    btn.onclick=()=>{
+      document.querySelectorAll('.inter-btn').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('mp-note').textContent=iv.desc;
+      try{
+        if(!ac)ac=new(window.AudioContext||window.webkitAudioContext)();
+        iv.freqs.forEach(f=>{const o=ac.createOscillator(),g=ac.createGain();o.type='sine';o.frequency.value=f;g.gain.setValueAtTime(.12,ac.currentTime);g.gain.exponentialRampToValueAtTime(.001,ac.currentTime+1.2);o.connect(g);g.connect(ac.destination);o.start();o.stop(ac.currentTime+1.2);});
+      }catch(e){}
+      setTimeout(()=>btn.classList.remove('active'),1300);
     };
     grid.appendChild(btn);
   });
-  var cv=document.getElementById('mp-canvas'),ctx=cv.getContext('2d');cv.width=cv.parentElement.clientWidth-2;
-  var nodes=[];function drawMP(){requestAnimationFrame(drawMP);ctx.fillStyle='rgba(0,0,0,0.9)';ctx.fillRect(0,0,cv.width,50);nodes=nodes.filter(function(n){n.x+=n.vx;n.y+=n.vy;n.life--;ctx.beginPath();ctx.arc(n.x,n.y,n.r,0,Math.PI*2);ctx.fillStyle='rgba(139,0,0,'+(n.life/30*.4)+')';ctx.fill();return n.life>0;});}drawMP();
-  function playInterval(freqs){
-    try{if(!ac)ac=new(window.AudioContext||window.webkitAudioContext)();
-    freqs.forEach(function(f){var o=ac.createOscillator(),g=ac.createGain();o.type='sine';o.frequency.value=f;g.gain.setValueAtTime(.1,ac.currentTime);g.gain.exponentialRampToValueAtTime(.001,ac.currentTime+1.1);o.connect(g);g.connect(ac.destination);o.start();o.stop(ac.currentTime+1.1);});
-    for(var i=0;i<12;i++)nodes.push({x:Math.random()*cv.width,y:Math.random()*50,vx:(Math.random()-.5)*2,vy:-(Math.random()*1.5+.5),r:Math.random()*4+1,life:30});}catch(e){}
-  }
+  const cv=document.getElementById('mp-cv');cv.width=cv.parentElement.clientWidth-2;
 }
 
-// V: CONTINUITY DIAGRAM
-function buildContinuityDiagram(wrap){
-  wrap.innerHTML='<div class="continuity-diagram"><div class="cd-label">&#9650; Continuity vs Preservation — The Critical Distinction</div><svg id="cd-svg" viewBox="0 0 520 160" xmlns="http://www.w3.org/2000/svg"></svg></div>';
-  var svg=document.getElementById('cd-svg');
-  // Preservation side (left) — static
-  var psvg='<g><text x="80" y="18" font-family="Share Tech Mono" font-size="9" fill="#3A0000" letter-spacing="2" text-anchor="middle">PRESERVATION</text><rect x="30" y="28" width="100" height="30" fill="none" stroke="#3A0000" stroke-width="1"/><text x="80" y="48" font-family="IM Fell English" font-size="10" fill="#847A70" text-anchor="middle" font-style="italic">A library. A vault.</text><text x="80" y="62" font-family="IM Fell English" font-size="10" fill="#847A70" text-anchor="middle" font-style="italic">Holds. Does not move.</text><rect x="30" y="80" width="100" height="30" fill="none" stroke="#3A0000" stroke-width="0.5" stroke-dasharray="3,3"/><text x="80" y="97" font-family="IM Fell English" font-size="9" fill="#383028" text-anchor="middle">Static frequency.</text><text x="80" y="109" font-family="IM Fell English" font-size="9" fill="#383028" text-anchor="middle">Requires protection.</text><line x1="80" y1="140" x2="80" y2="140" stroke="#3A0000" stroke-width="1"/><circle cx="80" cy="145" r="4" fill="none" stroke="#3A0000" stroke-width="1"/><text x="80" y="158" font-family="Share Tech Mono" font-size="8" fill="#3A0000" text-anchor="middle" letter-spacing="1">ENDS WITH CONTAINER</text></g>';
-  // Arrow
-  var arrowsvg='<g><line x1="175" y1="80" x2="345" y2="80" stroke="#3A2810" stroke-width="0.8"/><polygon points="345,77 352,80 345,83" fill="#3A2810"/><text x="260" y="72" font-family="Share Tech Mono" font-size="8" fill="#3A2810" text-anchor="middle" letter-spacing="1">VS</text></g>';
-  // Continuity side (right) — animated via JS
-  var csvg='<g><text x="440" y="18" font-family="Share Tech Mono" font-size="9" fill="#8B0000" letter-spacing="2" text-anchor="middle">CONTINUITY</text><text x="440" y="62" font-family="IM Fell English" font-size="10" fill="#847A70" text-anchor="middle" font-style="italic">Extends. Moves through vessels.</text><text x="440" y="75" font-family="IM Fell English" font-size="10" fill="#847A70" text-anchor="middle" font-style="italic">Cannot be destroyed — only interrupted.</text><text x="440" y="158" font-family="Share Tech Mono" font-size="8" fill="#8B0000" text-anchor="middle" letter-spacing="1">SURVIVES EVERY CONTAINER</text></g>';
-  // Animated dots for continuity
-  var dotssvg='<g id="cont-dots"></g>';
-  svg.innerHTML=psvg+arrowsvg+csvg+dotssvg;
-  // Animate dots moving through vessels on the right side
-  var dotData=[];for(var i=0;i<8;i++)dotData.push({x:380+Math.random()*120,y:28+Math.random()*100,vx:(Math.random()-.5)*.8,vy:(Math.random()-.5)*.8,r:Math.random()*3+1.5});
-  function animateDots(){
-    requestAnimationFrame(animateDots);
-    var g=document.getElementById('cont-dots');if(!g)return;
-    g.innerHTML='';
-    dotData.forEach(function(d){
-      d.x+=d.vx;d.y+=d.vy;
-      if(d.x<380||d.x>510){d.vx*=-1;}if(d.y<28||d.y>130){d.vy*=-1;}
-      var circle=document.createElementNS('http://www.w3.org/2000/svg','circle');
-      circle.setAttribute('cx',d.x);circle.setAttribute('cy',d.y);circle.setAttribute('r',d.r);
-      circle.setAttribute('fill','rgba(139,0,0,0.5)');circle.setAttribute('filter','');
-      g.appendChild(circle);
-    });
-  }
-  animateDots();
-}
-
-// VI: 600 CITIES GRID
+// ── VI: CITIES GRID ───────────────────────────────────────────
 function buildCitiesGrid(wrap){
-  wrap.innerHTML='<div class="cities-grid"><div class="cg-label">&#9650; Continuity Configuration — Documented Instances</div><div class="cg-count" id="cg-count">Verified instances: 0 of 600+</div><canvas id="cg-canvas" height="150"></canvas><div class="cg-note" id="cg-note">Click to begin documentation scan</div></div>';
-  var cv=document.getElementById('cg-canvas'),ctx=cv.getContext('2d');
-  var W=cv.parentElement.clientWidth-2;cv.width=W;cv.height=150;
-  var dots=[],scanning=false,scanCount=0;
-  // Pre-seed some "ancient" dots
-  var ancient=[[.12,.35,'~40,000 BCE'],[.18,.6,'~25,000 BCE'],[.28,.25,'~12,000 BCE'],[.35,.75,'~8,000 BCE'],[.45,.4,'~3,000 BCE'],[.55,.65,'~800 CE'],[.62,.3,'1987'],[.7,.55,'2015'],[.8,.4,'2019'],[.88,.7,'2023']];
-  ancient.forEach(function(a){dots.push({x:a[0]*W,y:a[1]*150,r:2.5,a:.7,label:a[2],glow:false,age:1});});
+  wrap.innerHTML=`<div class="inter-wrap">
+    <div class="inter-label">▲ Continuity Configuration — Global Surfacing Documentation</div>
+    <div style="font-family:Share Tech Mono,monospace;font-size:.6rem;color:var(--cr2);letter-spacing:.15em;margin-bottom:.65rem;" id="cg-count">Verified instances: 0</div>
+    <canvas id="cg-cv" height="150"></canvas>
+    <div class="inter-note" id="cg-note">Click to begin documentation scan</div>
+  </div>`;
+  const cv=document.getElementById('cg-cv'),ctx=cv.getContext('2d');
+  cv.width=cv.parentElement.clientWidth-2;cv.height=150;
+  const W=cv.width;
+  const dots=[[.12,.35,.7,'~40,000 BCE'],[.2,.62,.65,'~25,000 BCE'],[.3,.28,.6,'~12,000 BCE'],[.38,.72,.55,'~8,000 BCE'],[.48,.42,.5,'~3,000 BCE'],[.57,.65,.45,'~800 CE'],[.64,.3,.4,'1948'],[.72,.58,.35,'1987'],[.8,.38,.3,'2015'],[.88,.68,.25,'2023']].map(d=>({x:d[0]*W,y:d[1]*150,r:2.5,a:d[2],age:d[3],glow:false}));
+  let scanning=false;
   function draw(){
-    ctx.fillStyle='rgba(2,0,8,.88)';ctx.fillRect(0,0,W,150);
-    // Grid
-    ctx.strokeStyle='rgba(139,0,0,.06)';ctx.lineWidth=.5;
-    for(var x=0;x<W;x+=W/20){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,150);ctx.stroke();}
-    for(var y=0;y<150;y+=15){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
-    dots.forEach(function(d){
-      if(d.glow){ctx.shadowColor='rgba(139,0,0,0.8)';ctx.shadowBlur=8;}
-      ctx.beginPath();ctx.arc(d.x,d.y,d.r,0,Math.PI*2);
-      ctx.fillStyle=d.age<.5?'rgba(139,0,0,'+d.a+')':d.age<.8?'rgba(200,120,40,'+d.a+')':'rgba(201,168,76,'+d.a+')';
-      ctx.fill();ctx.shadowBlur=0;
-    });
-    if(scanning&&dots.length<600){
-      document.getElementById('cg-count').textContent='Verified instances: '+dots.length+' of 600+';
-    }
+    ctx.fillStyle='rgba(2,0,8,.9)';ctx.fillRect(0,0,W,150);
+    ctx.strokeStyle='rgba(139,0,0,.05)';ctx.lineWidth=.5;
+    for(let x=0;x<W;x+=W/20){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,150);ctx.stroke();}
+    for(let y=0;y<150;y+=15){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
+    dots.forEach(d=>{if(d.glow){ctx.shadowColor='rgba(139,0,0,.8)';ctx.shadowBlur=8;}ctx.beginPath();ctx.arc(d.x,d.y,d.r,0,Math.PI*2);ctx.fillStyle=`rgba(139,0,0,${d.a})`;ctx.fill();ctx.shadowBlur=0;});
   }
   draw();
-  var scanIv;
-  document.getElementById('cg-canvas').onclick=function(){
-    if(scanning)return;
-    scanning=true;document.getElementById('cg-note').textContent='Scanning global glyph database...';
-    scanIv=setInterval(function(){
-      var n=Math.floor(2+Math.random()*5);
-      for(var i=0;i<n;i++){
-        var age=Math.random();
-        dots.push({x:Math.random()*W,y:Math.random()*150,r:.8+Math.random()*2.5,a:.3+Math.random()*.5,label:'',glow:Math.random()<.05,age:age});
-      }
+  cv.onclick=()=>{
+    if(scanning)return;scanning=true;
+    document.getElementById('cg-note').textContent='Scanning global glyph database — cross-referencing IDMF records...';
+    const iv=setInterval(()=>{
+      const n=Math.floor(2+Math.random()*6);
+      for(let i=0;i<n;i++)dots.push({x:Math.random()*W,y:Math.random()*150,r:.6+Math.random()*2.2,a:.2+Math.random()*.5,age:'',glow:Math.random()<.04});
       draw();
+      document.getElementById('cg-count').textContent=`Verified instances: ${dots.length}`;
       if(dots.length>=600){
-        clearInterval(scanIv);
-        document.getElementById('cg-count').textContent='Verified instances: 600+ — Scan terminated. Actual figure: classified.';
-        document.getElementById('cg-note').textContent='"We believe the glyph is not spreading. We believe it is surfacing." — IDMF classified addendum';
-        scanning=false;
+        clearInterval(iv);scanning=false;
+        document.getElementById('cg-count').textContent='Verified instances: 600+ — Actual figure: classified. Estimate: 4,000+.';
+        document.getElementById('cg-note').textContent='"The glyph is not spreading. It is surfacing." — IDMF final classified addendum';
       }
-    },80);
+    },75);
   };
 }
 
-// VII: MIRROR PROTOCOL
-function buildMirrorProtocol(wrap){
-  wrap.innerHTML='<div class="mirror-box"><div class="mb-label">&#9650; Mirror Protocol — Documented Symptom 0.23s — The Codex Reading</div><div class="mb-video-wrap"><video id="mb-video" autoplay muted playsinline></video><canvas id="mb-canvas"></canvas><div id="mb-denied"><div class="mb-denied-text">Camera access denied.<br><br>The Mirror is already watching.<br>Permission is a formality.<br><br>The 0.23 second delay is not a technical artifact.<br>It is the gap between what you are<br>and what the Codex has already written you to be.</div></div></div><div class="mb-delay-label" id="mb-delay">Documented delay: 0.23 seconds — matching Verse II exposure symptom</div><button class="mb-activate" onclick="initMirror()">Activate the Mirror Protocol</button></div>';
-  window.initMirror=function(){
-    if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){showMirrorDenied();return;}
-    navigator.mediaDevices.getUserMedia({video:{width:480,height:360,facingMode:'user'}})
-    .then(function(stream){
-      var video=document.getElementById('mb-video');
-      video.srcObject=stream;
-      document.getElementById('mb-denied').style.display='none';
-      video.style.opacity='1';
-      document.querySelector('.mb-activate').textContent='Mirror Active — 0.23s delay confirmed';
-      startDelay(video);
-    }).catch(showMirrorDenied);
-  };
-  function startDelay(video){
-    var cv=document.getElementById('mb-canvas'),ctx=cv.getContext('2d');
-    var box=document.querySelector('.mb-video-wrap');cv.width=box.offsetWidth;cv.height=box.offsetHeight;
-    var frames=[],DELAY=7;
-    function cap(){
-      requestAnimationFrame(cap);
-      ctx.save();ctx.scale(-1,1);ctx.drawImage(video,-cv.width,0,cv.width,cv.height);ctx.restore();
-      var id=ctx.getImageData(0,0,cv.width,cv.height);frames.push(id);
-      if(frames.length>DELAY){ctx.putImageData(frames.shift(),0,0);if(Math.random()<.01){ctx.fillStyle='rgba(139,0,0,0.2)';ctx.fillRect(0,Math.random()*cv.height,cv.width,1);}}
-    }
-    cap();
-  }
-  function showMirrorDenied(){
-    document.getElementById('mb-denied').style.display='flex';
-    document.querySelector('.mb-activate').textContent='Access Denied';
-    document.querySelector('.mb-activate').style.opacity='.4';
-    // Phantom glyph after 6 seconds
-    setTimeout(function(){
-      var cv=document.getElementById('mb-canvas'),ctx=cv.getContext('2d');
-      var box=document.querySelector('.mb-video-wrap');cv.width=box.offsetWidth;cv.height=box.offsetHeight;
-      ctx.fillStyle='rgba(139,0,0,0.06)';ctx.beginPath();ctx.arc(cv.width/2,cv.height/2,cv.height*.25,0,Math.PI*2);ctx.fill();
-      ctx.fillStyle='rgba(139,0,0,0.12)';ctx.font=(cv.height*.18)+'px serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('🜃',cv.width/2,cv.height/2);
-      document.getElementById('mb-delay').textContent='The Archivum has no record of placing that glyph there.';
-    },6000);
-  }
+// ── VII: PERSINGER RITUAL ─────────────────────────────────────
+function buildPersingerRitual(wrap){
+  wrap.innerHTML=`<div class="persinger-ritual">
+    <div class="pr-step">
+      <span class="pr-step-num">// WHAT THE PERSINGER PROTOCOL ACTUALLY REQUIRES //</span>
+      The God Helmet used weak magnetic fields applied to the temporal lobe to induce the perception of a presence. Persinger's protocol produces presence-sensation in eighty percent of subjects. The Pale Archivum's replication, conducted after Ritual Transmission exposure, produced it in one hundred percent. What follows is the protocol without equipment. It works differently without the magnetic field — more slowly, less reliably. But the temporal lobe is accessible through sustained attention alone. The Archivum documented this in Field Cell F-13 and then sealed the documentation. They have not sealed this.
+    </div>
+    <div class="pr-step">
+      <span class="pr-step-num">Step I — Environment</span>
+      Find a room you know well. A room you have been alone in many times. Dim the light until you can see shapes but not details. Do not use complete darkness — <em>the protocol requires your peripheral vision to be active</em>. The peripheral visual field processes motion and presence differently than focal vision. You need it on but not dominant.
+    </div>
+    <div class="pr-step">
+      <span class="pr-step-num">Step II — Position</span>
+      Sit with your back to the room. Face a wall, a window, any flat surface. <em>Resist the impulse to turn around.</em> The orienting reflex — the instinct to check what is behind you — is the primary mechanism your nervous system uses to confirm solitude. The protocol requires its suspension. Do not check. Do not turn. Sit with your back to the room and do not turn.
+    </div>
+    <div class="pr-step">
+      <span class="pr-step-num">Step III — Attention</span>
+      Focus your attention on the space directly behind your head. Not what you can see. The space you cannot see. Behind you. The space between your shoulder blades and the furthest wall. Place your attention there and hold it there. Your peripheral vision will begin to process the room behind you. Your temporal lobe will begin to receive input from that processing. <em>Do not fill the input with explanation.</em> Do not tell yourself it is nothing. Receive the input and do not evaluate it.
+    </div>
+    <div class="pr-step">
+      <span class="pr-step-num">Step IV — The Threshold</span>
+      At some point — within three to fifteen minutes in Persinger's documented cases, within forty seconds to three minutes in the F-13 replication — the temporal lobe will produce a perception. <strong>A presence.</strong> Behind you. At a specific location in the room. You will know the location with the same specificity with which you know the location of a sound you have heard. You will not be imagining this. You will be perceiving it. Persinger's position was that the brain was hallucinating. The Archivum's position is that the brain was finally paying attention to something that was always there.
+    </div>
+    <div class="pr-step">
+      <span class="pr-step-num">Step V — What to Do Next</span>
+      The protocol ends here. Do not turn around. <em>Do not try to communicate with what you are perceiving.</em> Return your attention to the wall in front of you. Breathe normally. Wait. The perception will fade within thirty to ninety seconds as your orienting reflex reasserts itself and confirms solitude. After it fades, sit for another minute before turning around. The Archivum's final notation on the protocol: "What fades is not the presence. What fades is the perception. The distinction matters."
+    </div>
+    <div class="pr-warning">
+      The Pale Archivum does not recommend this protocol. They published it anyway. Their reasoning: those who will attempt it were already going to. The warning would not have stopped them. They know who those people are. They are the ones who did not listen to the warning on every page before this one. They are the ones who are here.
+    </div>
+  </div>`;
 }
 
+// ── PAGE INIT ─────────────────────────────────────────────────
 buildTruths();
 initShifts();
+observeSr();
 
-// Re-observe after build
-setTimeout(function(){document.querySelectorAll('.sr').forEach(function(el){obs.observe(el);});},200);
+// Timed event — something appears after 5 minutes
+setTimeout(()=>{
+  const p=document.createElement('div');
+  p.style.cssText='font-family:Share Tech Mono,monospace;font-size:.58rem;color:rgba(139,0,0,.45);letter-spacing:.12em;text-align:center;padding:1.5rem;opacity:0;transition:opacity 3s ease;';
+  p.textContent='// Pale Archivum notation appended at your current timestamp: You have been reading for five minutes. The seventeen subjects averaged four minutes and twelve seconds before reporting the room had changed dimensions. The Archivum has noted that you are still here. //';
+  document.querySelector('.foot').before(p);
+  setTimeout(()=>p.style.opacity='1',100);
+},300000);
+
+// Subtle wrong-room effect — after all 7 truths opened
+let openCount=0;
+const origToggle=window.toggleTruth;
+window.toggleTruth=function(i){
+  origToggle?.(i);
+  const el=document.getElementById('tc'+i);
+  if(el&&el.classList.contains('open'))openCount++;
+  if(openCount>=7){
+    setTimeout(()=>{
+      document.getElementById('vignette').style.background='radial-gradient(ellipse at center,transparent 18%,rgba(0,0,0,.97) 100%)';
+      document.getElementById('vignette').style.transition='background 8s ease';
+    },2000);
+  }
+};
 </script>
+
+<!-- CODEX NAV -->
+<script>
+  var navScript=document.createElement('script');
+  navScript.src='codex-nav.js';
+  navScript.onload=function(){initCodexNav('apocrypha-chronicle-1');};
+  document.body.appendChild(navScript);
+</script>
+
 </body>
 </html>
