@@ -35,7 +35,7 @@ const CODEX_MAP = {
     labelA: "Enter the Apocrypha",
     labelB: "Enter the Chronicle",
     pathA:  "apocrypha-infection",
-    pathB:  "lore-chronicle-1"
+    pathB:  "chronicle-1-infection-remembers"
   },
 
   "codex-remembers-you": {
@@ -77,10 +77,10 @@ const CODEX_MAP = {
     title:  "Chronicle I — The Infection Remembers",
     realm:  "I",
     type:   "chronicle",
-    labelA: "Read the apocrypha",
-    labelB: "Find the recovered fragment",
-    pathA:  "apocrypha-chronicle-1",
-    pathB:  "rf-093-apocrypha"
+    labelA: "Enter the Deep Lore",
+    labelB: "Enter the Chronicle Apocrypha",
+    pathA:  "lore-chronicle-1",
+    pathB:  "apocrypha-chronicle-1"
   },
 
   "apocrypha-chronicle-1": {
