@@ -66,10 +66,10 @@ const CODEX_MAP = {
     title:  "Chronicle I",
     realm:  "I",
     type:   "chronicle",
-    labelA: "Continue the chronicle",
-    labelB: "See where it remembers",
-    pathA:  "chronicle-1-infection-remembers",
-    pathB:  "infection-remembers"
+    labelA: "Enter the Chronicle Apocrypha",
+    labelB: "Enter the Gospel",
+    pathA:  "apocrypha-chronicle-1",
+    pathB:  "gospel-forgotten-flesh"
   },
 
   "chronicle-1-infection-remembers": {
