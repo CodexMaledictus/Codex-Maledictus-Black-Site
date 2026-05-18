@@ -33,23 +33,23 @@
   --abyss: #06000F;
   --pit:   #0A0018;
   --cr:    #8B0000;
-  --cr2:   #AA1800;
-  --cr3:   #CC2200;
-  --cr4:   #3A0000;
-  --cr5:   #1A0000;
-  --cr6:   #0A0005;
+  --cr2:   #CC2000;
+  --cr3:   #EE3300;
+  --cr4:   #8B2010;  /* was #3A0000 — now readable dark red */
+  --cr5:   #6A1808;  /* was #1A0000 — now readable */
+  --cr6:   #120008;
   --gold:  #C9A84C;
   --gd2:   #8A6530;
-  --gd3:   #3A2810;
+  --gd3:   #5A4020;  /* was #3A2810 — lighter */
   --vt:    #7B4FBF;
   --vt2:   #5A38A0;
   --vt3:   #3A2270;
-  --ash:   #D4D0C8;
-  --ash2:  #A09890;
-  --ash3:  #585048;
-  --ash4:  #281810;
-  --brd:   #160A14;
-  --brd2:  #221216;
+  --ash:   #D8D4CC;  /* brightest body text */
+  --ash2:  #B0A898;  /* secondary body text */
+  --ash3:  #786860;  /* was #585048 — lifted */
+  --ash4:  #382820;  /* ticker — slightly visible */
+  --brd:   #2A1020;  /* was #160A14 — borders more visible */
+  --brd2:  #361828;  /* was #221216 — lifted */
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 html{scroll-behavior:smooth;}
@@ -96,7 +96,7 @@ body{background:var(--void);color:var(--ash);font-family:'IM Fell English',serif
 .en-line.on{opacity:1;}
 .en-line.bright{color:rgba(196,192,184,.65);}
 .en-line.warn{color:var(--cr2);font-size:clamp(.7rem,1.6vw,.85rem);}
-.en-line.dim{color:rgba(58,0,0,.5);}
+.en-line.dim{color:rgba(160,80,60,.75);}
 .en-sep{height:1.1rem;}
 .en-enter{
   display:none;margin-top:2.5rem;background:transparent;
@@ -157,9 +157,9 @@ body{background:var(--void);color:var(--ash);font-family:'IM Fell English',serif
   border:1px solid var(--cr4);padding:1.25rem;margin:1.5rem 0;
   background:rgba(58,0,0,.07);
   font-family:'Share Tech Mono',monospace;font-size:.6rem;
-  color:var(--cr4);letter-spacing:.12em;line-height:1.75;
+  color:var(--ash2);letter-spacing:.12em;line-height:1.75;
 }
-.warning-box::before{content:'// PALE ARCHIVUM — CLASSIFICATION: VOID — READER ASSUMES ALL CONSEQUENCES //';display:block;font-size:.52rem;letter-spacing:.2em;margin-bottom:.6rem;color:rgba(139,0,0,.4);}
+.warning-box::before{content:'// PALE ARCHIVUM — CLASSIFICATION: VOID — READER ASSUMES ALL CONSEQUENCES //';display:block;font-size:.52rem;letter-spacing:.2em;margin-bottom:.6rem;color:var(--cr4);}
 
 /* ── TRUTH CARDS ── */
 .tc{
@@ -197,7 +197,7 @@ body{background:var(--void);color:var(--ash);font-family:'IM Fell English',serif
 .tc-dread{
   border:1px solid var(--cr4);padding:.75rem 1rem;margin:1rem 0;
   font-family:'Share Tech Mono',monospace;font-size:.62rem;
-  color:var(--cr2);line-height:1.85;background:rgba(58,0,0,.08);
+  color:var(--ash2);line-height:1.85;background:rgba(58,0,0,.08);
   letter-spacing:.07em;
 }
 .tc-dread::before{content:'// PALE ARCHIVUM — SEALED NOTE — ACCESS TIER VOID //';display:block;font-size:.5rem;color:var(--cr4);margin-bottom:.45rem;letter-spacing:.2em;}
@@ -206,34 +206,34 @@ body{background:var(--void);color:var(--ash);font-family:'IM Fell English',serif
 .tc-anchor{
   border-left:2px solid var(--gd3);padding:.6rem 1rem;margin:1rem 0;
   font-family:'Share Tech Mono',monospace;font-size:.58rem;
-  color:rgba(138,101,48,.65);letter-spacing:.1em;line-height:1.7;
+  color:var(--ash2);letter-spacing:.1em;line-height:1.7;
 }
-.tc-anchor::before{content:'// REAL WORLD ANCHOR — THIS IS NOT MYTHOLOGY //';display:block;font-size:.48rem;color:var(--gd3);margin-bottom:.35rem;letter-spacing:.22em;}
+.tc-anchor::before{content:'// REAL WORLD ANCHOR — THIS IS NOT MYTHOLOGY //';display:block;font-size:.48rem;color:var(--gd2);margin-bottom:.35rem;letter-spacing:.22em;}
 
 /* Sealed layer — some refuse to open */
 .tc-sealed{
-  margin:1rem 0;border:1px solid var(--brd);padding:.75rem 1rem;
+  margin:1rem 0;border:1px solid var(--brd2);padding:.75rem 1rem;
   font-family:'Share Tech Mono',monospace;font-size:.62rem;
-  color:var(--cr5);background:var(--cr6);cursor:pointer;
+  color:var(--ash3);background:rgba(10,0,20,.6);cursor:pointer;
   transition:all .2s;letter-spacing:.1em;line-height:1.7;
   position:relative;overflow:hidden;
 }
-.tc-sealed::before{content:'[ SEALED — CLICK TO ATTEMPT ACCESS ]';display:block;font-size:.5rem;color:var(--cr5);margin-bottom:.35rem;letter-spacing:.22em;transition:color .2s;}
-.tc-sealed:hover::before{color:var(--cr4);}
-.tc-sealed:hover{color:var(--cr4);border-color:var(--cr4);}
-.tc-sealed.refused{color:var(--cr4);border-color:var(--cr);}
-.tc-sealed.refused::before{content:'[ ACCESS REFUSED ]';color:var(--cr2);}
-.tc-sealed.opened{color:var(--ash2);background:rgba(58,0,0,.25);border-color:var(--cr);}
-.tc-sealed.opened::before{content:'[ BREACH CONFIRMED ]';color:var(--cr2);}
+.tc-sealed::before{content:'[ SEALED — CLICK TO ATTEMPT ACCESS ]';display:block;font-size:.5rem;color:var(--cr4);margin-bottom:.35rem;letter-spacing:.22em;transition:color .2s;}
+.tc-sealed:hover::before{color:var(--cr2);}
+.tc-sealed:hover{color:var(--ash2);border-color:var(--cr4);}
+.tc-sealed.refused{color:var(--cr2);border-color:var(--cr);}
+.tc-sealed.refused::before{content:'[ ACCESS REFUSED ]';color:var(--cr3);}
+.tc-sealed.opened{color:var(--ash2);background:rgba(58,0,0,.2);border-color:var(--cr);}
+.tc-sealed.opened::before{content:'[ BREACH CONFIRMED ]';color:var(--cr3);}
 
 /* Interactive elements */
 .inter-wrap{margin:1.25rem 0;border:1px solid var(--brd);padding:1rem;background:rgba(0,0,0,.4);}
-.inter-label{font-family:'Share Tech Mono',monospace;font-size:.56rem;color:var(--cr4);letter-spacing:.2em;text-transform:uppercase;margin-bottom:.65rem;}
+.inter-label{font-family:'Share Tech Mono',monospace;font-size:.56rem;color:var(--cr2);letter-spacing:.2em;text-transform:uppercase;margin-bottom:.65rem;}
 .inter-canvas{display:block;width:100%;background:#000;border:1px solid var(--brd);}
-.inter-note{font-family:'Share Tech Mono',monospace;font-size:.56rem;color:var(--ash3);letter-spacing:.1em;text-align:center;margin-top:.4rem;min-height:1.2rem;line-height:1.6;}
-.inter-btn{background:transparent;border:1px solid var(--brd2);color:var(--ash3);font-family:'Share Tech Mono',monospace;font-size:.58rem;letter-spacing:.12em;padding:.55rem .9rem;cursor:pointer;transition:all .2s;text-transform:uppercase;margin:.2rem;}
-.inter-btn:hover{border-color:var(--cr4);color:var(--cr2);}
-.inter-btn.active{border-color:var(--cr);color:var(--cr);background:rgba(139,0,0,.1);}
+.inter-note{font-family:'Share Tech Mono',monospace;font-size:.58rem;color:var(--ash2);letter-spacing:.1em;text-align:center;margin-top:.4rem;min-height:1.2rem;line-height:1.6;}
+.inter-btn{background:transparent;border:1px solid var(--brd2);color:var(--ash2);font-family:'Share Tech Mono',monospace;font-size:.58rem;letter-spacing:.12em;padding:.55rem .9rem;cursor:pointer;transition:all .2s;text-transform:uppercase;margin:.2rem;}
+.inter-btn:hover{border-color:var(--cr2);color:var(--cr3);}
+.inter-btn.active{border-color:var(--cr);color:var(--cr2);background:rgba(139,0,0,.1);}
 
 /* Persinger ritual */
 .persinger-ritual{
@@ -242,7 +242,7 @@ body{background:var(--void);color:var(--ash);font-family:'IM Fell English',serif
 }
 .persinger-ritual::before{
   content:'// PERSINGER PROTOCOL — SELF-ADMINISTERED — PALE ARCHIVUM DOES NOT RECOMMEND //';
-  font-family:'Share Tech Mono',monospace;font-size:.48rem;color:var(--cr4);
+  font-family:'Share Tech Mono',monospace;font-size:.48rem;color:var(--cr2);
   letter-spacing:.18em;display:block;margin-bottom:.85rem;
 }
 .pr-step{
@@ -250,11 +250,11 @@ body{background:var(--void);color:var(--ash);font-family:'IM Fell English',serif
   font-size:.94rem;color:var(--ash2);line-height:1.85;
 }
 .pr-step:last-of-type{border-bottom:none;}
-.pr-step-num{font-family:'Share Tech Mono',monospace;font-size:.52rem;color:var(--cr4);letter-spacing:.2em;display:block;margin-bottom:.25rem;}
+.pr-step-num{font-family:'Share Tech Mono',monospace;font-size:.52rem;color:var(--cr2);letter-spacing:.2em;display:block;margin-bottom:.25rem;}
 .pr-step em{color:var(--ash);font-style:italic;}
 .pr-step strong{color:var(--cr2);font-style:normal;font-weight:600;}
 .pr-warning{
-  font-family:'Share Tech Mono',monospace;font-size:.58rem;color:var(--cr2);
+  font-family:'Share Tech Mono',monospace;font-size:.58rem;color:var(--ash2);
   letter-spacing:.1em;line-height:1.7;margin-top:.85rem;padding-top:.75rem;
   border-top:1px solid var(--cr4);
 }
@@ -263,16 +263,14 @@ body{background:var(--void);color:var(--ash);font-family:'IM Fell English',serif
 .shift{transition:color .5s;}
 .shift.alt{color:var(--cr2);}
 
-/* Footer */
-.foot{display:flex;gap:.65rem;flex-wrap:wrap;justify-content:center;margin-top:3rem;padding-top:2rem;border-top:1px solid var(--brd);}
-.fl{background:transparent;border:1px solid var(--brd);color:var(--ash3);font-family:'Share Tech Mono',monospace;font-size:.58rem;letter-spacing:.2em;padding:.55rem 1rem;text-decoration:none;text-transform:uppercase;transition:all .18s;}
-.fl:hover{border-color:var(--cr4);color:var(--cr2);}
+.fl{background:transparent;border:1px solid var(--brd2);color:var(--ash2);font-family:'Share Tech Mono',monospace;font-size:.58rem;letter-spacing:.2em;padding:.55rem 1rem;text-decoration:none;text-transform:uppercase;transition:all .18s;}
+.fl:hover{border-color:var(--cr2);color:var(--cr3);}
 
 /* Ticker */
 #TICKER{position:fixed;bottom:0;left:0;right:0;height:2.5rem;background:rgba(2,0,8,.97);border-top:1px solid var(--brd);display:flex;align-items:center;overflow:hidden;z-index:490;}
 .tl{flex-shrink:0;padding:0 1rem;font-family:'Share Tech Mono',monospace;font-size:.54rem;color:var(--cr4);letter-spacing:.22em;text-transform:uppercase;border-right:1px solid var(--brd);height:100%;display:flex;align-items:center;}
 .ts{flex:1;overflow:hidden;display:flex;align-items:center;}
-.ti{white-space:nowrap;font-family:'Share Tech Mono',monospace;font-size:.56rem;color:var(--ash4);letter-spacing:.12em;animation:ticker 65s linear infinite;}
+.ti{white-space:nowrap;font-family:'Share Tech Mono',monospace;font-size:.56rem;color:var(--ash3);letter-spacing:.12em;animation:ticker 65s linear infinite;}
 @keyframes ticker{from{transform:translateX(100vw);}to{transform:translateX(-200%);}}
 
 .sr{opacity:0;transform:translateY(8px);transition:opacity .85s ease,transform .85s ease;}
@@ -1050,7 +1048,7 @@ observeSr();
 // Timed event — something appears after 5 minutes
 setTimeout(()=>{
   const p=document.createElement('div');
-  p.style.cssText='font-family:Share Tech Mono,monospace;font-size:.58rem;color:rgba(139,0,0,.45);letter-spacing:.12em;text-align:center;padding:1.5rem;opacity:0;transition:opacity 3s ease;';
+  p.style.cssText='font-family:Share Tech Mono,monospace;font-size:.58rem;color:rgba(200,80,60,.7);letter-spacing:.12em;text-align:center;padding:1.5rem;opacity:0;transition:opacity 3s ease;';
   p.textContent='// Pale Archivum notation appended at your current timestamp: You have been reading for five minutes. The seventeen subjects averaged four minutes and twelve seconds before reporting the room had changed dimensions. The Archivum has noted that you are still here. //';
   document.querySelector('.foot').before(p);
   setTimeout(()=>p.style.opacity='1',100);
