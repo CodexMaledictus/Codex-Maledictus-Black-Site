@@ -88,10 +88,10 @@ const CODEX_MAP = {
     title:  "Apocrypha — Chronicle I",
     realm:  "I",
     type:   "apocrypha",
-    labelA: "Enter the deeper apocrypha",
-    labelB: "Hear the invocation",
-    pathA:  "apocrypha-infection",
-    pathB:  "rf-093-invocation"
+    labelA: "The Codex Remembers You",
+    labelB: "Recovered Fragment 093",
+    pathA:  "codex-remembers-you",
+    pathB:  "rf-093-lore"
   },
 
   // ── APOCRYPHA THREAD ─────────────────────────────────────────
