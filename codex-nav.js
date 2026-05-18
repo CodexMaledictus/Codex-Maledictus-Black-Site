@@ -43,10 +43,10 @@ const CODEX_MAP = {
     title:  "The Codex Remembers You",
     realm:  "I",
     type:   "lore",
-    labelA: "Read what it left behind",
-    labelB: "Find the fragment",
-    pathA:  "memory-engine-1",
-    pathB:  "rf-093-mirror"
+    labelA: "Enter the Confession Ledger",
+    labelB: "Recovered Fragment 093",
+    pathA:  "confession-ledger",
+    pathB:  "rf-093-lore"
   },
 
   "memory-engine-1": {
