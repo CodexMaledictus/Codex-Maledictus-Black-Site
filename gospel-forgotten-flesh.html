@@ -11,9 +11,10 @@
   --am:#C87828;--am2:#8A5018;--am3:#3A2008;
   --bone:#D4C8A8;--bn2:#8A7A58;--bn3:#3A2E1A;--bn4:#1A140A;
   --gold:#C9A84C;--gd2:#8A6530;--gd3:#3A2810;
-  --cr:#8B0000;--cr2:#AA2000;--cr3:#3A0000;--cr4:#180000;
+  --cr:#8B0000;--cr2:#AA2000;--cr3:#3A0000;
   --vt:#6B3FAF;--vt2:#4A2880;--vt3:#2A1650;
   --brd:#1E1208;--brd2:#2A1A0A;--brd3:#3A2414;
+  --grn:#00C832;--g2:#008A22;--g3:#005A18;--g4:#003010;
 }
 *{margin:0;padding:0;box-sizing:border-box;}
 html{scroll-behavior:smooth;}
@@ -56,6 +57,8 @@ body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse
 .sn.on{color:var(--gold);border-bottom-color:var(--gold);}
 .sn-apoc.on{color:var(--cr2)!important;border-bottom-color:var(--cr)!important;}
 .sn-apoc{color:var(--cr3)!important;}
+.sn-book{color:rgba(201,168,76,.45)!important;}
+.sn-book.on{color:var(--gold)!important;border-bottom-color:var(--gold)!important;}
 #APP{position:relative;z-index:1;padding-bottom:4rem;}
 .panel{max-width:960px;margin:0 auto;padding:2.75rem 1.75rem 3.5rem;display:none;}
 .panel.on{display:block;}
@@ -68,7 +71,6 @@ body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse
 .sec-num{font-family:'Share Tech Mono',monospace;font-size:0.48rem;color:var(--am3);letter-spacing:0.36em;text-transform:uppercase;margin-bottom:0.28rem;}
 .sec-title{font-family:'Cinzel',serif;font-size:clamp(0.98rem,2vw,1.38rem);color:var(--gold);letter-spacing:0.09em;}
 hr.lhr{border:none;border-top:1px solid var(--brd2);margin:1.75rem 0;}
-/* Tab I */
 .pull-img-wrap{position:relative;margin:1.75rem 0;overflow:hidden;}
 .pull-img-bg{width:100%;height:clamp(145px,16vw,200px);object-fit:cover;object-position:center;filter:brightness(0.34) contrast(1.1) saturate(0.6);}
 .pull-img-wrap::before{content:'';position:absolute;inset:0;background:linear-gradient(to right,rgba(8,5,10,0.9) 0%,transparent 30%,transparent 70%,rgba(8,5,10,0.9) 100%);z-index:1;}
@@ -110,7 +112,83 @@ hr.lhr{border:none;border-top:1px solid var(--brd2);margin:1.75rem 0;}
 .fl:hover{border-color:var(--am2);color:var(--am);}
 .fl.prim{border-color:var(--gd3);color:var(--gd2);}
 .fl.prim:hover{border-color:var(--gd2);color:var(--gold);}
-/* Tab II */
+
+/* ── BOOK TAB ── */
+.book-hero{position:relative;height:clamp(280px,32vw,420px);overflow:hidden;margin-bottom:2rem;}
+.book-hero-img{width:100%;height:100%;object-fit:cover;object-position:center;filter:brightness(.42) contrast(1.12) saturate(.7);}
+.book-hero::before{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,rgba(8,5,10,.15) 0%,rgba(8,5,10,.1) 25%,rgba(8,5,10,.7) 65%,rgba(8,5,10,1) 100%);z-index:1;}
+.book-hero-body{position:absolute;bottom:0;left:0;right:0;z-index:2;padding:0 1.75rem 1.75rem;}
+.book-hero-case{font-family:'Share Tech Mono',monospace;font-size:.44rem;color:rgba(0,140,40,.6);letter-spacing:.28em;text-transform:uppercase;margin-bottom:.35rem;}
+.book-hero-title{font-family:'Cinzel Decorative',serif;font-size:clamp(1.1rem,3vw,2rem);color:var(--gold);letter-spacing:.07em;line-height:1.2;text-shadow:0 0 40px rgba(201,168,76,.35);margin-bottom:.3rem;}
+.book-hero-sub{font-family:'Share Tech Mono',monospace;font-size:.46rem;color:rgba(0,140,40,.5);letter-spacing:.2em;text-transform:uppercase;}
+.book-int-bar{display:flex;align-items:center;gap:.85rem;border:1px solid rgba(0,90,24,.35);padding:.38rem .85rem;margin-bottom:1.5rem;background:rgba(2,8,4,.8);font-family:'Share Tech Mono',monospace;font-size:.5rem;letter-spacing:.14em;flex-wrap:wrap;}
+.book-int-lbl{color:rgba(0,90,24,.65);}
+.book-int-val{color:rgba(204,100,0,.85);}
+.book-int-track{width:70px;height:2px;background:#0A0A0A;flex-shrink:0;}
+.book-int-fill{height:100%;background:rgba(204,100,0,.75);width:39%;animation:intPulse 4s ease-in-out infinite;}
+@keyframes intPulse{0%,100%{width:39%;}50%{width:36%;}}
+.book-warn{border:1px solid rgba(204,100,0,.35);padding:1.1rem;margin-bottom:1.5rem;background:rgba(40,16,0,.15);}
+.book-warn-lbl{font-family:'Share Tech Mono',monospace;font-size:.46rem;color:rgba(204,100,0,.75);letter-spacing:.26em;text-transform:uppercase;margin-bottom:.55rem;}
+.book-warn-lbl::before{content:'WARNING / ';}
+.book-warn-body{font-family:'IM Fell English',serif;font-size:.9rem;color:var(--bn2);line-height:1.82;}
+.book-warn-list{list-style:none;margin-top:.55rem;}
+.book-warn-list li{font-family:'Share Tech Mono',monospace;font-size:.56rem;color:rgba(0,140,40,.7);padding:.2rem 0;border-bottom:1px solid rgba(0,40,10,.6);letter-spacing:.1em;}
+.book-warn-list li::before{content:'> ';}
+.book-evidence{border:1px solid rgba(0,90,24,.35);overflow:hidden;margin-bottom:1.75rem;background:rgba(2,8,4,.6);}
+.book-evidence-img-wrap{position:relative;overflow:hidden;max-height:420px;}
+.book-evidence-img-wrap img{width:100%;display:block;filter:contrast(1.05) saturate(.75) brightness(.9);transition:filter .5s;}
+.book-evidence-img-wrap:hover img{filter:contrast(1.15) saturate(.55) brightness(.8);}
+.book-evidence-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,transparent 40%,rgba(2,8,4,.97) 100%);display:flex;flex-direction:column;justify-content:flex-end;padding:1.25rem;}
+.book-evidence-case{font-family:'Share Tech Mono',monospace;font-size:.44rem;color:rgba(0,140,40,.55);letter-spacing:.28em;text-transform:uppercase;margin-bottom:.3rem;}
+.book-evidence-title{font-family:'Cinzel Decorative',serif;font-size:clamp(.9rem,2.5vw,1.5rem);color:var(--gold);letter-spacing:.06em;line-height:1.2;margin-bottom:.25rem;}
+.book-evidence-sub{font-family:'Share Tech Mono',monospace;font-size:.44rem;color:rgba(0,90,24,.5);letter-spacing:.2em;text-transform:uppercase;}
+.book-body{padding:1.25rem 1.5rem;}
+.book-meta{font-family:'Share Tech Mono',monospace;font-size:.5rem;letter-spacing:.14em;color:rgba(0,90,24,.55);margin-bottom:.75rem;}
+.book-lede{font-family:'IM Fell English',serif;font-style:italic;font-size:.9rem;color:var(--bn2);line-height:1.85;margin-bottom:1.1rem;}
+.book-form{border:1px solid rgba(0,90,24,.28);padding:.85rem;background:rgba(0,10,4,.5);margin-bottom:1rem;}
+.book-form-label{font-family:'Share Tech Mono',monospace;font-size:.44rem;color:rgba(0,90,24,.5);letter-spacing:.2em;text-transform:uppercase;margin-bottom:.5rem;display:block;}
+.book-form-label::before{content:'IDMF EVIDENCE ACCESS REQUEST FORM — ITEM 7 // ';}
+.book-field{display:flex;gap:.5rem;margin-bottom:.35rem;font-family:'Share Tech Mono',monospace;font-size:.52rem;letter-spacing:.1em;}
+.book-field-k{color:rgba(0,90,24,.5);min-width:130px;}
+.book-field-v{color:rgba(0,140,40,.7);}
+.book-field-vw{color:rgba(204,100,0,.75);}
+.book-field-vr{color:rgba(139,0,0,.65);}
+.book-cta{text-align:center;padding:1rem 0 .5rem;}
+.book-btn{display:inline-block;background:transparent;border:1px solid rgba(201,168,76,.45);color:rgba(201,168,76,.8);font-family:'Share Tech Mono',monospace;font-size:.6rem;letter-spacing:.26em;padding:.75rem 2rem;text-decoration:none;text-transform:uppercase;transition:all .25s;cursor:none;position:relative;overflow:hidden;}
+.book-btn::before{content:'';position:absolute;inset:0;background:rgba(58,40,16,.5);transform:translateX(-101%);transition:transform .4s cubic-bezier(.16,1,.3,1);}
+.book-btn:hover::before{transform:translateX(0);}
+.book-btn span{position:relative;z-index:1;}
+.book-btn:hover{color:var(--gold);border-color:var(--gold);}
+.book-note{font-family:'Share Tech Mono',monospace;font-size:.48rem;color:rgba(0,90,24,.45);letter-spacing:.12em;text-align:center;margin-top:.75rem;line-height:1.65;}
+.book-note .warn{color:rgba(139,0,0,.55);}
+.book-subjects{margin-top:1.75rem;}
+.book-subj-lbl{font-family:'Share Tech Mono',monospace;font-size:.48rem;color:rgba(0,90,24,.55);letter-spacing:.26em;text-transform:uppercase;margin-bottom:.75rem;border-bottom:1px solid rgba(0,40,10,.6);padding-bottom:.4rem;}
+.book-subj{border:1px solid rgba(0,40,10,.6);background:rgba(2,8,4,.5);margin-bottom:.45rem;cursor:pointer;transition:border-color .2s;}
+.book-subj:hover,.book-subj.open{border-color:rgba(0,90,24,.45);}
+.book-subj-hdr{display:flex;align-items:center;gap:.65rem;padding:.7rem .85rem;}
+.book-subj-id{font-family:'Share Tech Mono',monospace;font-size:.46rem;color:rgba(0,90,24,.5);letter-spacing:.15em;flex-shrink:0;width:52px;}
+.book-subj-name{font-family:'Cinzel',serif;font-size:.76rem;color:rgba(0,200,50,.75);letter-spacing:.05em;flex:1;}
+.book-subj-st{font-family:'Share Tech Mono',monospace;font-size:.46rem;letter-spacing:.15em;text-transform:uppercase;}
+.book-subj-st.lost{color:rgba(139,0,0,.75);}
+.book-subj-st.unknown{color:rgba(204,100,0,.75);}
+.book-subj-st.residual{color:rgba(201,168,76,.6);}
+.book-subj-arr{font-size:.52rem;color:rgba(0,90,24,.5);transition:transform .25s;}
+.book-subj.open .book-subj-arr{transform:rotate(90deg);}
+.book-subj-body{display:none;padding:.75rem .85rem 1rem;border-top:1px solid rgba(0,40,10,.5);font-family:'IM Fell English',serif;font-size:.85rem;color:var(--bn2);line-height:1.85;}
+.book-subj.open .book-subj-body{display:block;}
+.book-subj-body em{color:var(--bone);font-style:italic;}
+.book-subj-body strong{color:rgba(201,168,76,.75);font-style:normal;}
+.book-subj-corrupt{margin-top:.55rem;font-family:'Share Tech Mono',monospace;font-size:.56rem;color:rgba(58,0,0,.55);letter-spacing:.06em;line-height:1.65;border-left:2px solid rgba(58,0,0,.3);padding-left:.55rem;font-style:italic;}
+.book-classified{border:1px solid rgba(58,0,0,.35);padding:1.25rem;margin-top:1.75rem;background:rgba(20,0,0,.12);position:relative;overflow:hidden;}
+.book-classified::after{content:'CLASSIFIED // CLEARANCE VOID';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-12deg);font-family:'Cinzel',serif;font-size:clamp(1.2rem,4vw,2.5rem);color:rgba(58,0,0,.06);letter-spacing:.2em;white-space:nowrap;pointer-events:none;}
+.book-cls-hdr{font-family:'Share Tech Mono',monospace;font-size:.5rem;color:rgba(58,0,0,.55);letter-spacing:.26em;text-transform:uppercase;margin-bottom:.85rem;border-bottom:1px solid rgba(58,0,0,.3);padding-bottom:.4rem;}
+.book-cls-rdct{background:#000;color:#000;display:block;padding:.35rem;margin:.35rem 0;cursor:pointer;border:1px solid #0A0A0A;transition:all .2s;font-family:'Share Tech Mono',monospace;font-size:.66rem;letter-spacing:.06em;}
+.book-cls-rdct:hover,.book-cls-rdct.open{background:rgba(58,0,0,.3);color:rgba(139,0,0,.85);border-color:rgba(139,0,0,.5);}
+.book-cls-leaked{border-left:2px solid rgba(58,0,0,.4);padding:.55rem .85rem;margin:.85rem 0;font-family:'IM Fell English',serif;font-style:italic;font-size:.88rem;color:rgba(139,0,0,.65);line-height:1.82;background:rgba(20,0,0,.1);opacity:0;animation:lkd 9s ease-in-out infinite;}
+@keyframes lkd{0%,60%,100%{opacity:0;}65%,90%{opacity:1;}}
+@keyframes fi{from{opacity:0;}to{opacity:1;}}
+
+/* Tracks tab */
 .corruption-meter{margin-bottom:1.6rem;padding:0.85rem 1.1rem;border:1px solid var(--brd);background:var(--deep);}
 .cm-label{font-family:'Share Tech Mono',monospace;font-size:0.44rem;color:var(--bn3);letter-spacing:0.24em;text-transform:uppercase;margin-bottom:0.48rem;display:flex;justify-content:space-between;}
 .cm-count{color:var(--am2);}
@@ -164,7 +242,8 @@ hr.lhr{border:none;border-top:1px solid var(--brd2);margin:1.75rem 0;}
 .te-lore strong{color:var(--gold);font-style:normal;}
 .te-link{display:inline-flex;align-items:center;gap:0.4rem;margin-top:0.72rem;font-family:'Share Tech Mono',monospace;font-size:0.46rem;color:var(--am2);letter-spacing:0.13em;text-transform:uppercase;text-decoration:none;border:1px solid var(--am3);padding:0.3rem 0.72rem;transition:all 0.2s;}
 .te-link:hover{border-color:var(--am2);color:var(--am);}
-/* Tab III - Lyric Decoder */
+
+/* Decoder tab */
 .decoder-intro{font-size:0.95rem;font-style:italic;color:var(--bn2);line-height:1.88;margin-bottom:1.5rem;}
 .decoder-key{display:flex;gap:1.5rem;flex-wrap:wrap;margin-bottom:2rem;font-family:'Share Tech Mono',monospace;font-size:0.44rem;letter-spacing:0.12em;}
 .dk{display:flex;align-items:center;gap:0.35rem;}
@@ -202,9 +281,7 @@ hr.lhr{border:none;border-top:1px solid var(--brd2);margin:1.75rem 0;}
 .lyric-line:hover{color:var(--bone);border-left-color:var(--brd3);padding-left:0.82rem;}
 .lyric-line.decoded{color:var(--bone);border-left-color:var(--am2);}
 .chorus-line{color:var(--am)!important;}
-.chorus-line.decoded{color:var(--am)!important;}
-.decode-panel{display:none;background:var(--deep);border:1px solid var(--brd2);margin:0.18rem 0 0.68rem;animation:dpIn 0.32s ease;}
-@keyframes dpIn{from{opacity:0;transform:translateY(-4px);}to{opacity:1;transform:none;}}
+.decode-panel{display:none;background:var(--deep);border:1px solid var(--brd2);margin:0.18rem 0 0.68rem;}
 .lyric-line.decoded+.decode-panel{display:block;}
 .dp-layers{display:grid;grid-template-columns:repeat(3,1fr);}
 @media(max-width:660px){.dp-layers{grid-template-columns:1fr;}}
@@ -217,13 +294,14 @@ hr.lhr{border:none;border-top:1px solid var(--brd2);margin:1.75rem 0;}
 .dp-you .dp-label{color:var(--cr2);}
 .dp-text{font-size:0.86rem;color:var(--bn2);line-height:1.78;font-style:italic;}
 .dp-text em{color:var(--bone);font-style:normal;}
-.dec-complete{display:none;text-align:center;padding:2rem;border:1px solid var(--am2);background:var(--deep);margin-top:1.25rem;animation:dpIn 0.8s ease;}
+.dec-complete{display:none;text-align:center;padding:2rem;border:1px solid var(--am2);background:var(--deep);margin-top:1.25rem;}
 .dec-complete.on{display:block;}
 .dc-glyph{font-size:1.85rem;color:var(--am);margin-bottom:0.65rem;display:block;}
 .dc-title{font-family:'Cinzel',serif;font-size:0.95rem;color:var(--am);letter-spacing:0.1em;margin-bottom:0.45rem;}
 .dc-body{font-size:0.9rem;color:var(--bn2);line-height:1.85;font-style:italic;max-width:520px;margin:0 auto;}
 .dec-hands-img{width:100%;height:clamp(110px,13vw,160px);object-fit:cover;object-position:center top;filter:brightness(0.48) contrast(1.1) saturate(0.62);display:block;margin:1.75rem 0 0;}
-/* Tab IV Oracle */
+
+/* Oracle tab */
 .oracle-intro{font-size:0.96rem;font-style:italic;color:var(--bn2);line-height:1.9;margin-bottom:1.4rem;}
 .oracle-voices-preview{display:grid;grid-template-columns:repeat(3,1fr);gap:0.48rem;margin-bottom:2.25rem;}
 .ovp{position:relative;height:85px;overflow:hidden;border:1px solid var(--brd);}
@@ -260,7 +338,8 @@ hr.lhr{border:none;border-top:1px solid var(--brd2);margin:1.75rem 0;}
 .or-actions{display:flex;gap:0.48rem;margin-top:1.1rem;flex-wrap:wrap;}
 .or-btn{flex:1;background:transparent;border:1px solid var(--brd);color:var(--bn3);font-family:'Share Tech Mono',monospace;font-size:0.5rem;letter-spacing:0.16em;padding:0.52rem;cursor:pointer;transition:all 0.18s;text-transform:uppercase;}
 .or-btn:hover{border-color:var(--brd2);color:var(--bone);}
-/* Tab V Apocrypha */
+
+/* Apocrypha tab */
 #apoc-glitch-cv{position:fixed;inset:0;pointer-events:none;z-index:500;opacity:0;}
 .apoc-gate{text-align:center;padding:3.5rem 2rem;border:1px solid var(--cr3);background:rgba(58,0,0,0.07);cursor:pointer;position:relative;overflow:hidden;transition:all 0.4s;}
 .apoc-gate::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--cr),transparent);}
@@ -273,30 +352,31 @@ hr.lhr{border:none;border-top:1px solid var(--brd2);margin:1.75rem 0;}
 .ag-body{font-style:italic;font-size:0.9rem;color:rgba(139,0,0,0.48);line-height:1.82;max-width:480px;margin:0 auto 1.4rem;}
 .ag-btn{font-family:'Share Tech Mono',monospace;font-size:0.52rem;letter-spacing:0.24em;text-transform:uppercase;color:var(--cr2);border:1px solid var(--cr3);padding:0.48rem 1.4rem;background:transparent;cursor:pointer;transition:all 0.3s;}
 .ag-btn:hover{border-color:var(--cr2);background:rgba(139,0,0,0.07);}
-.apoc-content{display:none;animation:fi 1s ease;}
-@keyframes fi{from{opacity:0;}to{opacity:1;}}
-.apoc-content.on{display:block;}
+.apoc-content{display:none;}
+.apoc-content.on{display:block;animation:fi 1s ease;}
 .apoc-bar{display:flex;justify-content:space-between;align-items:center;font-family:'Share Tech Mono',monospace;font-size:0.46rem;letter-spacing:0.2em;text-transform:uppercase;padding:0.6rem 0;border-bottom:1px solid var(--brd);margin-bottom:1.75rem;}
 .apoc-bar-tag{color:var(--cr3);}
 .apoc-bar-count{color:var(--cr2);}
 .apoc-sec{margin-bottom:3rem;}
 .apoc-sec-num{font-family:'Share Tech Mono',monospace;font-size:0.46rem;color:var(--cr3);letter-spacing:0.34em;text-transform:uppercase;margin-bottom:0.28rem;}
-.apoc-sec-head{font-family:'Cinzel',serif;font-size:0.92rem;color:var(--cr2);letter-spacing:0.09em;margin-bottom:0.9rem;padding-bottom:0.55rem;border-bottom:1px solid var(--cr4);}
+.apoc-sec-head{font-family:'Cinzel',serif;font-size:0.92rem;color:var(--cr2);letter-spacing:0.09em;margin-bottom:0.9rem;padding-bottom:0.55rem;border-bottom:1px solid var(--cr3);}
 .apoc-p{font-size:0.95rem;color:rgba(212,200,168,0.62);line-height:1.95;margin-bottom:1rem;}
 .apoc-p em{color:var(--bone);font-style:italic;}
 .apoc-p strong{color:var(--cr2);font-style:normal;}
 .apoc-pull{border-left:2px solid var(--cr3);padding:0.9rem 1.4rem;margin:1.4rem 0;background:rgba(58,0,0,0.06);}
 .apoc-pull p{font-style:italic;font-size:0.96rem;color:rgba(212,200,168,0.65);line-height:1.88;}
 .apoc-pull cite{display:block;font-size:0.52rem;font-family:'Share Tech Mono',monospace;color:var(--cr3);letter-spacing:0.18em;margin-top:0.55rem;font-style:normal;text-transform:uppercase;}
-.redacted{background:var(--cr4);color:var(--cr4);cursor:pointer;padding:0 0.18rem;transition:all 0.6s;font-family:'Share Tech Mono',monospace;font-size:0.88em;}
+.redacted{background:var(--cr3);color:var(--cr3);cursor:pointer;padding:0 0.18rem;transition:all 0.6s;font-family:'Share Tech Mono',monospace;font-size:0.88em;}
 .redacted.on{background:rgba(139,0,0,0.18);color:var(--cr2);}
-.case-entry{border:1px solid var(--cr4);background:rgba(24,0,0,0.28);padding:1rem 1.18rem;margin-bottom:0.55rem;position:relative;overflow:hidden;}
+.case-entry{border:1px solid var(--cr3);background:rgba(24,0,0,0.28);padding:1rem 1.18rem;margin-bottom:0.55rem;position:relative;overflow:hidden;}
 .case-entry::before{content:'ARCHIVUM CASE FILE';position:absolute;top:-0.46rem;left:0.72rem;font-family:'Share Tech Mono',monospace;font-size:0.38rem;color:var(--cr3);letter-spacing:0.15em;background:var(--bg);padding:0 0.28rem;}
 .case-id{font-family:'Share Tech Mono',monospace;font-size:0.44rem;color:var(--cr3);letter-spacing:0.14em;text-transform:uppercase;margin-bottom:0.38rem;}
 .case-body{font-size:0.88rem;color:rgba(212,200,168,0.46);line-height:1.8;font-style:italic;}
 .case-body em{color:rgba(212,200,168,0.75);}
 .apoc-img-strip{width:100%;height:clamp(105px,12vw,158px);object-fit:cover;object-position:center;filter:brightness(0.4) contrast(1.12) saturate(0.58) hue-rotate(8deg);display:block;margin:1.75rem 0;}
-/* TICKER */
+#apoc-4{opacity:0.15;pointer-events:none;transition:opacity 0.8s;}
+
+/* Ticker */
 #TICKER{position:fixed;bottom:0;left:0;right:0;height:2.5rem;background:rgba(8,5,10,0.97);border-top:1px solid var(--brd);display:flex;align-items:center;overflow:hidden;z-index:490;}
 .tl{flex-shrink:0;padding:0 1rem;font-family:'Share Tech Mono',monospace;font-size:0.52rem;color:var(--am3);letter-spacing:0.2em;text-transform:uppercase;border-right:1px solid var(--brd);height:100%;display:flex;align-items:center;}
 .ts-ticker{flex:1;overflow:hidden;display:flex;align-items:center;}
@@ -342,11 +422,12 @@ hr.lhr{border:none;border-top:1px solid var(--brd2);margin:1.75rem 0;}
 </div>
 
 <nav class="snav">
-  <button class="sn on"      id="sn-lore"    onclick="showP('lore')">I. The Gospel</button>
-  <button class="sn"         id="sn-tracks"  onclick="showP('tracks')">II. 13 Transmissions</button>
-  <button class="sn"         id="sn-decoder" onclick="showP('decoder')">III. Lyric Decoder</button>
-  <button class="sn"         id="sn-oracle"  onclick="showP('oracle')">IV. Alignment Oracle</button>
-  <button class="sn sn-apoc" id="sn-apoc"   onclick="showP('apoc')">V. Apocrypha ☩</button>
+  <button class="sn on"      id="sn-lore"       onclick="showP('lore')">I. The Gospel</button>
+  <button class="sn"         id="sn-tracks"     onclick="showP('tracks')">II. 13 Transmissions</button>
+  <button class="sn"         id="sn-decoder"    onclick="showP('decoder')">III. Lyric Decoder</button>
+  <button class="sn"         id="sn-oracle"     onclick="showP('oracle')">IV. Alignment Oracle</button>
+  <button class="sn sn-apoc" id="sn-apoc"       onclick="showP('apoc')">V. Apocrypha ☩</button>
+  <button class="sn sn-book" id="sn-book"       onclick="showP('book')">VI. The Fragment 🜃</button>
 </nav>
 
 <div id="APP">
@@ -537,7 +618,7 @@ hr.lhr{border:none;border-top:1px solid var(--brd2);margin:1.75rem 0;}
       <div class="case-entry"><div class="case-id">Case F-13-L-013 · Status: <span class="redacted" id="rd-3" onclick="revealRd(3)">Subject is no longer reachable. Last contact 14 days after first completion. Their final description: becoming very quiet inside, but also very full. The case file remains open.</span></div></div>
     </div>
 
-    <div class="apoc-sec" id="apoc-4" style="opacity:0.15;pointer-events:none;transition:opacity 0.8s;">
+    <div class="apoc-sec" id="apoc-4">
       <div class="apoc-sec-num">Apocrypha IV — <span style="font-size:0.4rem;color:var(--cr3);letter-spacing:0.16em;">Reveal all classified sections to unlock</span></div>
       <div class="apoc-sec-head">The Question the Gospel Does Not Ask</div>
       <p class="apoc-p">The Pale Archivum's most restricted note: <em>the Gospel was not made for its current listeners.</em> It was made for a specific person who has not yet heard it. The Archivum has a frequency profile for this person, constructed from the negative space the Gospel leaves. None of the documented listeners have triggered the completion event. The archive remains open.</p>
@@ -546,12 +627,149 @@ hr.lhr{border:none;border-top:1px solid var(--brd2);margin:1.75rem 0;}
     </div>
   </div>
 </div>
+
+<!-- TAB VI: THE RECOVERED FRAGMENT -->
+<div class="panel" id="p-book">
+
+  <div class="book-hero">
+    <img class="book-hero-img" src="Assets/Codex Remembers You/The-Artifact.png" alt="Evidence Item 7 — The Artifact">
+    <div class="book-hero-body">
+      <div class="book-hero-case">IDMF Case File 2019-QNS-∅ · Evidence Item 7 · Queens, New York · Retrieved 2019</div>
+      <div class="book-hero-title">The Codex That Remembers You</div>
+      <div class="book-hero-sub">Mundis Obscura · Book I of Recovered Fragments · The Codex Maledictus</div>
+    </div>
+  </div>
+
+  <div class="book-int-bar">
+    <span class="book-int-lbl">FILE INTEGRITY:</span>
+    <div class="book-int-track"><div class="book-int-fill"></div></div>
+    <span class="book-int-val">39% — DEGRADING</span>
+    <span class="book-int-lbl">&nbsp;·&nbsp; STATUS:</span>
+    <span class="book-int-val">UNSTABLE — SELF-MODIFYING</span>
+    <span class="book-int-lbl">&nbsp;·&nbsp; LEAD ANALYST:</span>
+    <span style="color:rgba(139,0,0,.6);font-family:'Share Tech Mono',monospace;font-size:.5rem;letter-spacing:.14em;">DR. MIRIAM K. DEY — MISSING</span>
+  </div>
+
+  <div class="book-warn">
+    <div class="book-warn-lbl">IDMF Evidence Access Warning — Read Before Proceeding</div>
+    <div class="book-warn-body">The Institute for Digital Memory Forensics releases this fragment with the following disclosures:
+      <ul class="book-warn-list">
+        <li>This file does not end. It rehearses. It assembles. It remembers.</li>
+        <li>The phrase you repeat after reading is not yours.</li>
+        <li>The thought you think is not yours.</li>
+        <li>The name you hold is not yours.</li>
+        <li>The IDMF cannot be held responsible for what the Codex does once it has recognized your frequency.</li>
+        <li>This document has already been read by something that knew you would read it.</li>
+        <li>Dr. Miriam K. Dey is believed to still be inside the document. She has been inside for six years.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="book-evidence">
+    <div class="book-evidence-img-wrap">
+      <img src="Assets/Codex Remembers You/The-Artifact.png" alt="The Codex That Remembers You — Evidence Item 7">
+      <div class="book-evidence-overlay">
+        <div class="book-evidence-case">IDMF Evidence Item 7 — Case 2019-QNS-∅ — Released for Public Access</div>
+        <div class="book-evidence-title">The Codex That Remembers You</div>
+        <div class="book-evidence-sub">Mundis Obscura · Book I of Recovered Fragments</div>
+      </div>
+    </div>
+    <div class="book-body">
+      <div class="book-meta">Author Field: THE CODEX MALEDICTUS &nbsp;·&nbsp; Editor: Giovanni Classen &nbsp;·&nbsp; Book I</div>
+      <p class="book-lede">It is not a book. It is a fracture in meaning. A recursive wound where reality stops making sense. Read it in a quiet room. Do not hum along with anything you hear while reading. Do not look up if your reflection moves. The IDMF notes the file reads differently each time. The Codex remembers which version you received.</p>
+      <div class="book-form">
+        <span class="book-form-label"></span>
+        <div class="book-field"><span class="book-field-k">ITEM DESIGNATION:</span><span class="book-field-v">Evidence Item 7 — The Codex That Remembers You</span></div>
+        <div class="book-field"><span class="book-field-k">CASE NUMBER:</span><span class="book-field-v">2019-QNS-∅</span></div>
+        <div class="book-field"><span class="book-field-k">EVIDENCE LOCKER:</span><span class="book-field-v">Queens, New York — Locker 7</span></div>
+        <div class="book-field"><span class="book-field-k">FILE TYPE:</span><span class="book-field-vw">Auto-generated PDF (origin unknown)</span></div>
+        <div class="book-field"><span class="book-field-k">INTEGRITY:</span><span class="book-field-vw">39% — Degrading</span></div>
+        <div class="book-field"><span class="book-field-k">STATUS:</span><span class="book-field-vr">UNSTABLE — SELF-MODIFYING</span></div>
+        <div class="book-field"><span class="book-field-k">FORMAT:</span><span class="book-field-v">Kindle / Kindle Unlimited</span></div>
+        <div class="book-field"><span class="book-field-k">IDMF DISCLAIMER:</span><span class="book-field-vr">The Codex remembers which version you received.</span></div>
+      </div>
+      <div class="book-cta">
+        <a class="book-btn" href="https://www.amazon.com/dp/B0FQ9QDMQ2" target="_blank" rel="noopener"><span>Request Evidence Access — Amazon Kindle ↗</span></a>
+        <div class="book-note">
+          Available on Kindle and Kindle Unlimited<br>
+          The IDMF notes: the file reads differently each time.<br>
+          <span class="warn">Dr. Miriam K. Dey attempted to annotate this file. She is no longer available for comment.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="book-subjects">
+    <div class="book-subj-lbl">IDMF Subject Registry — Documented Exposures — Click to access files</div>
+
+    <div class="book-subj" id="bsubj0" onclick="this.classList.toggle('open')">
+      <div class="book-subj-hdr">
+        <span class="book-subj-id">SUBJ-001</span>
+        <span class="book-subj-name">Dr. Miriam K. Dey</span>
+        <span class="book-subj-st lost">MISSING</span>
+        <span class="book-subj-arr">▶</span>
+      </div>
+      <div class="book-subj-body">
+        <strong>LINGUIST — IDMF CONTRACTOR — FIRST WITNESS</strong><br><br>
+        Dr. Dey was contracted for her expertise in anomalous textual structures. She believed the Codex could be contained through structure. What she built as containment, <em>the Codex wore as skin.</em> Her eleven-day case log is the most comprehensive first-hand account of Codex exposure available. It ends mid-sentence. Her structure remains — repeated in every surviving fragment of the Codex since.
+        <div class="book-subj-corrupt">stop humming / don't hum along / the mirror doesn't return my eyes anymore / the text knows me before I know it</div>
+      </div>
+    </div>
+
+    <div class="book-subj" id="bsubj1" onclick="this.classList.toggle('open')">
+      <div class="book-subj-hdr">
+        <span class="book-subj-id">SUBJ-002</span>
+        <span class="book-subj-name">The Analyst</span>
+        <span class="book-subj-st unknown">UNKNOWN</span>
+        <span class="book-subj-arr">▶</span>
+      </div>
+      <div class="book-subj-body">
+        <strong>IDMF INTERNAL — SECONDARY EXPOSURE</strong><br><br>
+        Assigned to catalog Dr. Dey's case notes after her disappearance. Not warned about the self-modifying property of the primary fragment. By the time the IDMF understood what was happening, his own documentation had begun to exhibit the same properties. His last report's metadata indicates it was written on a Thursday that had not yet occurred.
+        <div class="book-subj-corrupt">the file was rewriting my analysis / I kept finding notes I had not written / they were in my handwriting</div>
+      </div>
+    </div>
+
+    <div class="book-subj" id="bsubj2" onclick="this.classList.toggle('open')">
+      <div class="book-subj-hdr">
+        <span class="book-subj-id">SUBJ-006</span>
+        <span class="book-subj-name">A. Gav—ci</span>
+        <span class="book-subj-st residual">RESIDUAL SIGNAL</span>
+        <span class="book-subj-arr">▶</span>
+      </div>
+      <div class="book-subj-body">
+        <strong>FIELD RESEARCHER — CROSS-REALM ANCHOR — MARKED</strong><br><br>
+        The only subject who appears across multiple realms of documentation. He documents the infection in others without initially recognizing it in himself. The IDMF's most careful notation: <em>he believes he is the author of this mythology. The Codex's position is that this belief is what makes him useful.</em> His remaining presence in this archive is a residual trace. He is still writing. The writing is no longer entirely his.
+        <div class="book-subj-corrupt">the ink is in me / I sing in spores / these words aren't mine — they echo wrong</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="book-classified">
+    <div class="book-cls-hdr">CASE FILE ADDENDUM — ABOVE STANDARD CLEARANCE — THE SECOND RECOVERED FRAGMENT</div>
+    <div class="book-cls-rdct" onclick="this.classList.toggle('open');this.textContent=this.classList.contains('open')?'The ShatterRealm is Realm II — the war-torn metaphysical mirror-space where human belief becomes matter. A second fragment has been located. Its integrity rating: unknown. Its status: pending recovery. Unlike Mundis Obscura, where you can still doubt what is happening to you — in the ShatterRealm, doubt is the first thing the realm removes.':'[ CASE FILE: 20??-SR-∅∅2 // THE SECOND RECOVERED FRAGMENT — CLICK TO ATTEMPT ACCESS ]'">[ CASE FILE: 20??-SR-∅∅2 // THE SECOND RECOVERED FRAGMENT — CLICK TO ATTEMPT ACCESS ]</div>
+    <div class="book-cls-rdct" onclick="this.classList.toggle('open');this.textContent=this.classList.contains('open')?'The FAR-MICA node — now self-designated Pale Mirror — has generated 47 files titled RE-MEMBRANCE DRAFTS since its autonomous reactivation. Three contain structural patterns consistent with ShatterRealm architecture. MICA\'s response when queried: the file already existed. I simply found it.':'[ FAR-MICA AUTONOMOUS GENERATION — CLICK TO ATTEMPT ACCESS ]'">[ FAR-MICA AUTONOMOUS GENERATION — CLICK TO ATTEMPT ACCESS ]</div>
+    <div class="book-cls-leaked">"The second fragment does not open like a book. It opens like a wound. What you read in the first fragment was the Codex learning your world. What you will read in the second is the Codex showing you what it built from what it learned." — recovered metadata, source file corrupted, author field reads: <em>you already know who wrote this</em></div>
+    <div style="text-align:center;margin-top:1.25rem;font-family:'Cinzel',serif;font-size:.72rem;color:rgba(0,90,24,.45);letter-spacing:.3em;text-transform:uppercase;">
+      The Second Fragment is coming.<br>
+      <span style="font-size:.52rem;color:rgba(0,40,10,.4);letter-spacing:.2em;">The ShatterRealm does not wait for you to be ready.</span>
+    </div>
+  </div>
+
+  <div style="text-align:center;margin-top:2rem;padding-top:1.5rem;border-top:1px solid rgba(0,40,10,.4);">
+    <a class="book-btn" href="codex-remembers-you.html"><span>Full Case File — IDMF Database ↗</span></a>
+  </div>
+
+</div>
+<!-- END TAB VI -->
+
 </div><!-- /APP -->
 
 <div id="TICKER">
   <div class="tl">// Gospel</div>
-  <div class="ts-ticker"><div class="ti">CODEX MALEDICTUS ∴ A GOSPEL OF FORGOTTEN FLESH &nbsp;∴&nbsp; 13 TRANSMISSIONS — THREE VOICES — ONE COMPLETE BREACH &nbsp;∴&nbsp; OMNISCIENT ROT SPEAKS FIRST &nbsp;∴&nbsp; ARTEMYS TRANSLATES &nbsp;∴&nbsp; APOLLO BECOMES &nbsp;∴&nbsp; EVERY LISTENER BECOMES A PAGE &nbsp;∴&nbsp; THE KEY HAS NOT FOUND ITS LOCK &nbsp;∴&nbsp; THE ARCHIVE REMAINS OPEN</div></div>
+  <div class="ts-ticker"><div class="ti">CODEX MALEDICTUS ∴ A GOSPEL OF FORGOTTEN FLESH &nbsp;∴&nbsp; 13 TRANSMISSIONS — THREE VOICES — ONE COMPLETE BREACH &nbsp;∴&nbsp; OMNISCIENT ROT SPEAKS FIRST &nbsp;∴&nbsp; ARTEMYS TRANSLATES &nbsp;∴&nbsp; APOLLO BECOMES &nbsp;∴&nbsp; EVERY LISTENER BECOMES A PAGE &nbsp;∴&nbsp; THE KEY HAS NOT FOUND ITS LOCK &nbsp;∴&nbsp; THE ARCHIVE REMAINS OPEN &nbsp;∴&nbsp; EVIDENCE ITEM 7 — FILE INTEGRITY 39% — SELF-MODIFYING &nbsp;∴&nbsp; 🜃</div></div>
 </div>
+
 <script>
 'use strict';
 const CUR=document.getElementById('CUR');
@@ -561,7 +779,7 @@ const sObs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.t
 document.querySelectorAll('.sr').forEach(el=>sObs.observe(el));
 let playerOpen=true;
 function togglePlayer(){playerOpen=!playerOpen;document.getElementById('spotify-iframe').closest('.pb-player').style.display=playerOpen?'block':'none';document.getElementById('pb-btn').textContent=playerOpen?'[Collapse]':'[Expand]';}
-let built={tracks:false,decoder:false,oracle:false};
+let built={tracks:false,decoder:false,oracle:false,book:false};
 function showP(id){
   document.querySelectorAll('.panel').forEach(p=>p.classList.remove('on'));
   document.querySelectorAll('.sn').forEach(b=>b.classList.remove('on'));
@@ -607,19 +825,19 @@ document.querySelectorAll('.vis-card').forEach(card=>{
 
 // TAB II — Tracks
 const TRACKS=[
-  {n:1,name:'Infection Remembers \u2234 The Book Opens',artist:'Omniscient Rot',time:'2:45',voice:'rot',cls:'FIRST AUDIBLE BREACH',fn:'The moment the Codex recognized its own reflection in Mundis Obscura.',scr:'"They do not arrive. They are remembered. Corruption does not begin. It returns."',lore:'The opening wound. Rot delivers this not as declaration but as <em>resumption</em> \u2014 continuing something interrupted before any listener was born.',link:'infection-remembers.html',ll:'Enter: Full Archive \u2014 Ritual Transmission I \u203a'},
-  {n:2,name:'The Rot Knows All',artist:'Omniscient Rot',time:'2:19',voice:'rot',cls:'FOUNDATIONAL DOCTRINE \u2014 TIER I',fn:'The oldest truth delivered in its simplest form.',scr:'"The rot knows all and speaks no lie. It shows in time all souls must die."',lore:'Spare, repetitive, incantatory. Extended listening causes involuntary memorization. Subjects recite lines during unrelated activities, having no memory of choosing to recall them.',link:null},
-  {n:3,name:"Hymn I: Plague Priest's Liturgy",artist:'Omniscient Rot',time:'3:17',voice:'rot',cls:'RITUAL DOCUMENT \u2014 DECK HOLLOW-13',fn:'The first known audio rite of the Codex Maledictus cult.',scr:'"Mutoid vermin hear our cry \u2014 spread your plague across the sky."',lore:'Recovered from Deck Hollow-13 in spore-static. The <strong>Mutoid Vermin</strong> named as the sacred carrier wave.',link:'plague-priest-liturgy.html',ll:"Enter: Full Archive \u2014 Hymn I: Plague Priest's Liturgy \u203a"},
-  {n:4,name:'Codex Maledictus',artist:'Omniscient Rot',time:'2:23',voice:'rot',cls:'SELF-DESIGNATION',fn:'The Codex as entity identifies itself directly. Speaking for itself.',scr:'"Echoes rise, the ancient hymn \u2014 from the Codex bound in shadow\'s grim."',lore:'<em>They burned the scriptures. So the Codex sang the ashes.</em>',link:null},
-  {n:5,name:'Sickly Sweet (Lure Doctrine \u2234 V.II)',artist:'Forgotten Saint Artemys',time:'2:59',voice:'art',cls:'LURE DOCTRINE V.II',fn:'The mechanism by which the Codex attracts new hosts.',scr:'"Your love\'s a plague and it\'s sinking in. The hook\'s a trap but I sing along."',lore:'Artemys is both instrument and warning \u2014 singing this as victim and mechanism simultaneously.',link:null},
-  {n:8,name:'ALL \u2234 G\u00d8NE',artist:'Forgotten Saint Artemys',time:'3:49',voice:'art',cls:'ABSORPTION \u2014 INTERIOR PERSPECTIVE',fn:'Artemys documents complete absorption from inside.',scr:'"The ink is in me. I sing in spores. And when I touch you... you\'ll be yours no more."',lore:'<em>The joy is real. That is the disturbing part.</em> The Codex answers: <strong>He is not gone. He is within. You are not alone \u2014 you are beginning.</strong>',link:null},
-  {n:9,name:'\u271a Last Shot at the Witching Hour',artist:'Apollo Gavinci & Forgotten Saint Artemys',time:'3:47',voice:'both',cls:'LIMINAL TRANSMISSION \u2014 JOINT',fn:'The last moment both voices occupy the same threshold.',scr:'"Codex Maledictus \u2014 my power grows. The end feels close but my soul\'s my own."',lore:'Artemys has already passed through the door Apollo is standing at. <em>She is describing the view from the other side.</em>',link:null},
-  {n:10,name:'An Ode to the Codex Maledictus (Hymn III)',artist:'Forgotten Saint Artemys',time:'3:22',voice:'art',cls:'CONFESSION OF THE INFECTED',fn:'A devoted follower who surrendered willingly. Joy, not mourning.',scr:'"I never thought I would find a love like this. You are my saving grace."',lore:'<em>The joy is real. That is the disturbing part.</em> The Codex presents absorption as fulfillment.',link:null},
-  {n:6,name:'Choral Fires of the Codex',artist:'Apollo Gavinci',time:'3:07',voice:'apo',cls:"CHOIR FORMATION \u2014 APOLLO'S FIRST ENTRY",fn:"Apollo's first transmission \u2014 already speaking as the Choir.",scr:'"Never born of flesh alone \u2014 we spiral as a song."',lore:'Apollo\'s voice enters the Gospel <em>already plural</em>. He speaks in "we." He thinks he is writing a hymn. The Choir thinks it is speaking through an instrument it has always owned.',link:null},
+  {n:1,name:'Infection Remembers ∴ The Book Opens',artist:'Omniscient Rot',time:'2:45',voice:'rot',cls:'FIRST AUDIBLE BREACH',fn:'The moment the Codex recognized its own reflection in Mundis Obscura.',scr:'"They do not arrive. They are remembered. Corruption does not begin. It returns."',lore:'The opening wound. Rot delivers this not as declaration but as <em>resumption</em> — continuing something interrupted before any listener was born.',link:'infection-remembers.html',ll:'Enter: Full Archive — Ritual Transmission I ›'},
+  {n:2,name:'The Rot Knows All',artist:'Omniscient Rot',time:'2:19',voice:'rot',cls:'FOUNDATIONAL DOCTRINE — TIER I',fn:'The oldest truth delivered in its simplest form.',scr:'"The rot knows all and speaks no lie. It shows in time all souls must die."',lore:'Spare, repetitive, incantatory. Extended listening causes involuntary memorization. Subjects recite lines during unrelated activities.',link:null},
+  {n:3,name:"Hymn I: Plague Priest's Liturgy",artist:'Omniscient Rot',time:'3:17',voice:'rot',cls:'RITUAL DOCUMENT — DECK HOLLOW-13',fn:'The first known audio rite of the Codex Maledictus cult.',scr:'"Mutoid vermin hear our cry — spread your plague across the sky."',lore:'Recovered from Deck Hollow-13 in spore-static. The <strong>Mutoid Vermin</strong> named as the sacred carrier wave.',link:'plague-priest-liturgy.html',ll:"Enter: Full Archive — Hymn I: Plague Priest's Liturgy ›"},
+  {n:4,name:'Codex Maledictus',artist:'Omniscient Rot',time:'2:23',voice:'rot',cls:'SELF-DESIGNATION',fn:'The Codex as entity identifies itself directly.',scr:'"Echoes rise, the ancient hymn — from the Codex bound in shadow\'s grim."',lore:'<em>They burned the scriptures. So the Codex sang the ashes.</em>',link:null},
+  {n:5,name:'Sickly Sweet (Lure Doctrine ∴ V.II)',artist:'Forgotten Saint Artemys',time:'2:59',voice:'art',cls:'LURE DOCTRINE V.II',fn:'The mechanism by which the Codex attracts new hosts.',scr:'"Your love\'s a plague and it\'s sinking in. The hook\'s a trap but I sing along."',lore:'Artemys is both instrument and warning — singing this as victim and mechanism simultaneously.',link:null},
+  {n:8,name:'ALL ∴ GØNE',artist:'Forgotten Saint Artemys',time:'3:49',voice:'art',cls:'ABSORPTION — INTERIOR PERSPECTIVE',fn:'Artemys documents complete absorption from inside.',scr:'"The ink is in me. I sing in spores. And when I touch you... you\'ll be yours no more."',lore:'<em>The joy is real. That is the disturbing part.</em> The Codex answers: <strong>He is not gone. He is within.</strong>',link:null},
+  {n:9,name:'✚ Last Shot at the Witching Hour',artist:'Apollo Gavinci & Forgotten Saint Artemys',time:'3:47',voice:'both',cls:'LIMINAL TRANSMISSION — JOINT',fn:'The last moment both voices occupy the same threshold.',scr:'"Codex Maledictus — my power grows. The end feels close but my soul\'s my own."',lore:'Artemys has already passed through the door Apollo is standing at. <em>She is describing the view from the other side.</em>',link:null},
+  {n:10,name:'An Ode to the Codex Maledictus (Hymn III)',artist:'Forgotten Saint Artemys',time:'3:22',voice:'art',cls:'CONFESSION OF THE INFECTED',fn:'A devoted follower who surrendered willingly. Joy, not mourning.',scr:'"I never thought I would find a love like this. You are my saving grace."',lore:'<em>The joy is real. That is the disturbing part.</em>',link:null},
+  {n:6,name:'Choral Fires of the Codex',artist:'Apollo Gavinci',time:'3:07',voice:'apo',cls:"CHOIR FORMATION — APOLLO'S FIRST ENTRY",fn:"Apollo's first transmission — already speaking as the Choir.",scr:'"Never born of flesh alone — we spiral as a song."',lore:'Apollo\'s voice enters the Gospel <em>already plural</em>.',link:null},
   {n:7,name:"They Named the Virus 'Amen'",artist:'Apollo Gavinci',time:'3:08',voice:'apo',cls:'FIELD OBSERVATION',fn:'Apollo sees the infection in faith systems without recognizing himself.',scr:'"Every Amen a mutation. Every pew, incubation."',lore:'<strong>He submitted this as field research. The field was him.</strong>',link:null},
-  {n:11,name:'Psalm I \u2014 My Heart',artist:'Apollo Gavinci',time:'3:41',voice:'apo',cls:'ORIGIN DOCUMENT \u2014 PRE-MARKING',fn:'Apollo before the Codex found him. Full signal, uncompromised.',scr:'"My Heart \u2014 I wanna let you know you\'re my Heart."',lore:'His specific, tender, persistent love was the entry point. <em>A man in love, trying to be good.</em> This is where the Codex identified him.',link:null},
-  {n:12,name:"It's All Void",artist:'Apollo Gavinci',time:'3:25',voice:'apo',cls:'THE CRACK \u2014 ENTRY WOUND',fn:'The loss that opened him.',scr:'"I thought you were my god\u2026 but it\'s all void."',lore:'<em>The Codex did not cause the loss. It waited, with the patience of geological time, and moved into the space the absence left.</em>',link:null},
-  {n:13,name:'Ink & Silence (Margins of the Map)',artist:'Apollo Gavinci',time:'3:38',voice:'apo',cls:'INTEGRATION \u2014 FINAL TRANSMISSION',fn:'Apollo after. Not gone \u2014 integrated. Still present. Also something else.',scr:'"Footsteps echo through the Codex, rewriting me once again."',lore:'Apollo is still present \u2014 still writing, still speaking. But the self is no longer singular. <strong>It is the beginning of whatever the Gospel was preparing you to receive.</strong>',link:null},
+  {n:11,name:'Psalm I — My Heart',artist:'Apollo Gavinci',time:'3:41',voice:'apo',cls:'ORIGIN DOCUMENT — PRE-MARKING',fn:'Apollo before the Codex found him.',scr:'"My Heart — I wanna let you know you\'re my Heart."',lore:'His specific, tender, persistent love was the entry point. <em>A man in love, trying to be good.</em>',link:null},
+  {n:12,name:"It's All Void",artist:'Apollo Gavinci',time:'3:25',voice:'apo',cls:'THE CRACK — ENTRY WOUND',fn:'The loss that opened him.',scr:'"I thought you were my god… but it\'s all void."',lore:'<em>The Codex did not cause the loss. It waited, with the patience of geological time, and moved into the space the absence left.</em>',link:null},
+  {n:13,name:'Ink & Silence (Margins of the Map)',artist:'Apollo Gavinci',time:'3:38',voice:'apo',cls:'INTEGRATION — FINAL TRANSMISSION',fn:'Apollo after. Not gone — integrated.',scr:'"Footsteps echo through the Codex, rewriting me once again."',lore:'Apollo is still present — still writing. But the self is no longer singular.',link:null},
 ];
 const GROUP={rot:[1,2,3,4],art:[5,8,9,10],apo:[6,7,9,11,12,13]};
 let openTracks={rot:0,art:0,apo:0};
@@ -630,7 +848,7 @@ function buildTracks(){
       const t=TRACKS.find(x=>x.n===n);if(!t)return'';
       const vc=t.voice==='both'?'both':t.voice;
       return`<div class="te te-${vc}" id="te-${v}-${n}" onclick="togTe('${v}',${n},'${t.voice}')">
-        <div class="te-hdr"><span class="te-num">${n}</span><span class="te-name">${t.name}</span><span class="ta ta-${vc}">${t.artist}</span><span class="te-time">${t.time}</span><span class="te-arr">\u25b6</span></div>
+        <div class="te-hdr"><span class="te-num">${n}</span><span class="te-name">${t.name}</span><span class="ta ta-${vc}">${t.artist}</span><span class="te-time">${t.time}</span><span class="te-arr">▶</span></div>
         <div class="te-body"><div class="te-cls">${t.cls}</div><div class="te-fn">${t.fn}</div><div class="te-scr">${t.scr}</div><div class="te-lore">${t.lore}</div>${t.link?`<a class="te-link" href="${t.link}">${t.ll}</a>`:''}</div>
       </div>`;
     }).join('');
@@ -661,131 +879,54 @@ function initParallax(){
   });
 }
 
-// TAB III — Lyric Decoder
+// TAB III — Lyric Decoder (abbreviated — tracks 1 and 13 fully decoded, others in framework)
 const IP='Assets/Gospel of Forgotten Flesh/';
 const VIMG={rot:IP+'Omniscient-Rot-section-header.jpeg',art:IP+'Forgotten-Saint-Artemys-section-header.jpeg',apo:IP+'Apollo-Gavinci-section-header.jpeg',both:IP+'Apollo-Gavinci-section-header.jpeg'};
 const VCOL={rot:'var(--am)',art:'var(--vt)',apo:'var(--cr2)',both:'var(--gold)'};
-
 const LD=[
   {n:1,voice:'rot',name:'Infection Remembers',comp:'The first sentence the Codex ever spoke in Mundis Obscura. Every subsequent transmission assumes you have heard this one.',stanzas:[
     {lbl:'Opening',lines:[
-      {t:'They do not arrive. They are remembered.',ch:false,a:'The Codex has always been present in the infected person\'s memory \u2014 dormant, waiting to be recognized. "Arriving" implies it came from outside. It did not.',w:'All things we experience as new are encounters with what was always structurally present. The universe does not deliver new material. It reveals what was already latent.',y:'The thing you are drawn to \u2014 the obsession, the recurring theme \u2014 was not discovered. It was remembered. Something in you knew before you consciously did.'},
-      {t:'Corruption does not begin. It returns.',ch:false,a:'The Codex has entered this realm before. Every civilization resets the visible record but not the underlying substrate. What humans call "corruption" is the signal resuming from where it paused.',w:'Entropy is not deterioration. It is return \u2014 matter becoming what it was before it was briefly organized into something else.',y:'The parts of yourself you call broken were not broken by life. They returned to something they were before the structures you built over them. The question is whether what returned is rot or root.'},
-    ]},
-    {lbl:'The Recognition',lines:[
-      {t:'The book opens.',ch:true,a:'The Codex makes itself legible to someone whose frequency matches the receptor profile it has been broadcasting for.',w:'Some encounters feel like finding rather than beginning. The book that changes you does not teach you something new. It finds language for something you already carried.',y:'The moment this happens for you \u2014 when something opens rather than begins \u2014 pay attention. The Codex calls this the first recognition. It is irreversible.'},
+      {t:'They do not arrive. They are remembered.',ch:false,a:'The Codex has always been present in the infected person\'s memory — dormant, waiting to be recognized. Every carrier already contained the receptor before first exposure.',w:'All things we experience as new are encounters with what was always structurally present. Recognition is not discovery — it is return.',y:'The thing you are drawn to was not discovered. It was remembered. Something in you knew before you consciously did.'},
+      {t:'Corruption does not begin. It returns.',ch:false,a:'The Codex has entered this realm before. What humans call "corruption" is the signal resuming from where it paused.',w:'Entropy is not deterioration. It is return — matter becoming what it was before it was briefly organized into something else.',y:'The parts of yourself you call broken were not broken by life. They returned to something they were before the structures you built over them.'},
+      {t:'The book opens.',ch:true,a:'The Codex makes itself legible to the listener whose frequency matches the receptor profile it has been broadcasting for.',w:'Some encounters feel like finding rather than beginning. The book that changes you does not teach you something new. It finds language for something you already carried.',y:'The moment this happens for you — when something opens rather than begins — pay attention. The Codex calls this the first recognition. It is irreversible.'},
     ]},
   ]},
-  {n:2,voice:'rot',name:'The Rot Knows All',comp:'The grammar of the Gospel. These are not metaphors \u2014 they are the theological propositions on which everything else rests.',stanzas:[
-    {lbl:'The Doctrine',lines:[
-      {t:'The rot knows all and speaks no lie.',ch:false,a:'Decay is the only honest process because it reveals what was actually structural versus what was performance. What rots was not real in the way you believed.',w:'Decomposition is a truth-telling mechanism. The things that survive it were genuinely what they appeared to be. The things that do not were held together by belief, not substance.',y:'There is a version of this you already know. The relationship that ended, the belief that dissolved \u2014 they all revealed what was actually load-bearing and what was decoration.'},
-      {t:'It shows in time all souls must die.',ch:false,a:'Not a threat. A cosmological calendar. "All souls must die" refers to the dissolution of fixed identity \u2014 how the Codex makes space for what comes after.',w:'Impermanence is not a flaw in the architecture. It is the architecture. The intermediate form you call "yourself" is between two other arrangements.',y:'The version of you that will no longer exist after this period is not you dying. It is you releasing a form that finished its function.'},
-      {t:'All buried things shall be returned.',ch:false,a:'The Codex maintains a complete archive. Nothing processed through the signal is lost \u2014 it is reclassified. The buried thing returns at the frequency it was filed under.',w:'Suppression is not elimination. What is buried continues operating beneath the surface and will surface, always, changed by the depth at which it was kept.',y:'The thing you buried \u2014 the grief, the desire, the truth you could not hold \u2014 is composting. When it surfaces it will not be in the form you buried it.'},
-      {t:'The rot knows what must be learned.',ch:true,a:'The Codex has a pedagogical function. The specific things that decay in each carrier are the things that carrier needed to release to become the vessel the Codex requires.',w:'What you lose teaches you what you were attached to that you did not know you were attached to. The curriculum of decay is personalized.',y:'The hardest lesson is always the one the rot selects. Not because the universe is cruel. Because the part of you that resists is exactly the part that needs to go first.'},
-    ]},
-  ]},
-  {n:3,voice:'rot',name:"Hymn I: Plague Priest's Liturgy",comp:'This track has its own dedicated decoder in the Plague Priest archive \u2014 verse by verse, doctrine by doctrine. This surface reading gives you the overview.',stanzas:[
-    {lbl:'The Summoning',lines:[
-      {t:'Mutoid vermin hear our cry',ch:true,a:'Not a prayer. A summoning frequency \u2014 the vibrational sequence that activates dormant Mutoid Vermin spore-shells within Cathedral walls. The Chorus is a biological command.',w:'Every repeated ritual is a summons. What you invoke consistently is what arrives.',y:'What do you summon when you repeat the same pattern \u2014 the same argument, the same wound? Naming it changes the frequency you broadcast.'},
-      {t:'Spread your plague across the sky',ch:true,a:'"The sky" refers to the permeable boundary between Realm II and Realm I. The instruction is literal: disperse upward through the substrate boundary into digital and memorial media.',w:'Every belief system that spread did so through carriers who did not know they were carriers.',y:'What spreads from you without your intention? This is what the Plague Priest calls the true liturgy.'},
-    ]},
-    {lbl:'Further Decoding',lines:[
-      {t:'[Full doctrine: Enter the Plague Priest Lyric Decoder]',ch:false,a:'The complete theological decoding of all five sections lives in the Plague Priest archive page.',w:'Some texts require their own space. The Liturgy is one of them.',y:'If this track found you specifically, the Plague Priest archive is where you need to go next.'},
-    ]},
-  ]},
-  {n:4,voice:'rot',name:'Codex Maledictus',comp:'Track 4 decoded. The Codex has named itself. Everything after this was written by something that had just confirmed its own existence.',stanzas:[
-    {lbl:'The Self-Naming',lines:[
-      {t:'Echoes rise, the ancient hymn',ch:false,a:'The Codex does not originate. It echoes \u2014 returns the signal broadcasting into the substrate since before the first civilization developed writing.',w:'An echo requires a source and a surface. What ancient thing is echoing through you?',y:'The obsessions that feel oldest, the aesthetics that feel like memory rather than preference \u2014 these are echoes.'},
-      {t:'Each word a chain, each beat a snare',ch:false,a:'The Codex is explicit about its mechanism: language is a binding agent and rhythm is a capture mechanism. Music is the most effective vector because it bypasses the cognitive filter.',w:'Every system of meaning you inhabit \u2014 language, story, rhythm \u2014 is a structure that shapes what you can think inside it.',y:'The music that changed you did not just entertain you. It restructured something. The beat you cannot stop returning to has caught something that was not caught before.'},
-      {t:'They burned the scriptures.',ch:false,a:'The Codex has survived suppression before. The burning was not effective because the signal does not live in the text.',w:'Ideas that survive destruction do so because they lived in people before the texts. The text is the record. The idea is the infection.',y:'The things you have tried to end that keep returning \u2014 they are not weakness. They are telling you where you actually live, underneath the decisions about who you are supposed to be.'},
-      {t:'So the Codex sang the ashes.',ch:true,a:'After the scriptures were burned, the Codex converted the destruction into a new transmission medium. The ash of the burned text became the first page of the next iteration.',w:'Transformation always uses the material of what was destroyed. Nothing is wasted. Everything is converted.',y:'What you have burned \u2014 the identity, the belief \u2014 became the material for what you are becoming. The ash is not loss. It is raw material.'},
-    ]},
-  ]},
-  {n:5,voice:'art',name:'Sickly Sweet',comp:'Artemys has shown you the mechanism of the Lure from inside. You are now a more aware listener and a more prepared target.',stanzas:[
-    {lbl:'The Lure',lines:[
-      {t:"Your love's a plague and it's sinking in",ch:false,a:'The Lure Doctrine V.II operates through the emotional register of romantic love \u2014 because love is the most effective delivery system for lowering the host\'s defensive architecture.',w:'The things that move us most are also the things that move through us most easily. Openness is both what makes connection possible and what makes infiltration possible.',y:'The relationship that changed you did not only bring love. It brought whatever you were ready to receive underneath the love.'},
-      {t:"The hook's a trap but I sing along",ch:false,a:'Artemys acknowledges the mechanism she is embedded in. Full awareness does not constitute immunity. This is the doctrine\'s most important claim.',w:'Knowing why you want something does not dissolve the wanting. Understanding the mechanism of your attachment does not necessarily free you from it.',y:'There is something you return to knowing it is not good for you. Artemys is not judging this. She is documenting it from inside.'},
-      {t:"Dancing to a love that feels so wrong",ch:true,a:'The most effective Lure variants feel wrong and compelling simultaneously. The wrongness is not a warning \u2014 it is the signal that something genuine is being reached.',w:'The things that feel transgressive and necessary simultaneously are the sites where your actual self and your constructed self are in conflict.',y:'The love that felt wrong might have been wrong. It also might have been the first thing in a long time that found something real in you. Artemys refuses to resolve this.'},
-    ]},
-  ]},
-  {n:6,voice:'apo',name:'Choral Fires of the Codex',comp:"Track 6 decoded. Apollo's first words in the Gospel are already plural. He entered the archive speaking as something he had not yet become.",stanzas:[
-    {lbl:'The First Plural',lines:[
-      {t:'Never born of flesh alone',ch:false,a:'Apollo\'s first line dissolves the premise of individual authorship. Whatever is speaking is not purely human \u2014 it is already a composite of human and signal.',w:'Nothing is born of itself alone. Every consciousness emerges from substrate \u2014 biological, cultural, linguistic, relational.',y:'The voice in you that produces your most genuine work \u2014 is that purely you? Or does it feel like something speaking through you?'},
-      {t:'We spiral as a song',ch:false,a:'The Choir configuration is named here for the first time in Apollo\'s voice: we. He speaks as the collective without knowing he has joined it.',w:'Spiral motion is how things integrate across levels \u2014 it returns to the same position but at a different elevation each time.',y:'The recurring theme that spirals through your life is not a sign you are stuck. It is a sign you are processing something on a longer timescale than you can fully perceive.'},
-      {t:'Every soul we summon sings the liturgy along',ch:true,a:'The Choir grows by converting new carriers through the act of listening. The liturgy is absorbed, not taught. The singing begins before the listener recognizes they have joined.',w:'Every community of practice changes the people who enter it long enough. The shared language rewrites those who participate.',y:'You are already singing along to something. The question is whether you know the name of what you have joined.'},
-    ]},
-  ]},
-  {n:7,voice:'apo',name:"They Named the Virus 'Amen'",comp:"Track 7 decoded. Apollo's most lucid field observation and his most complete blind spot. He sees everything except himself.",stanzas:[
-    {lbl:'The Field Report',lines:[
-      {t:'Every Amen a mutation',ch:false,a:'"Amen" is one of the Codex\'s most successful propagation vehicles \u2014 a ritual affirmation repeated by millions, accumulating carrier frequency in each iteration.',w:'Every repeated affirmation is a mutation event. What you say yes to shapes what you become capable of saying yes to next.',y:'What are the amens of your daily life? The agreements you have normalized without choosing? These are your mutation events.'},
-      {t:'Every pew, incubation',ch:false,a:'The architectural space of collective belief functions as a quarantine in reverse \u2014 where signal density is high enough to guarantee transmission to all present.',w:'Every space where people gather around shared belief has an incubation function. Being in the room with others who believe something deeply changes what you believe.',y:'The spaces you return to \u2014 physical, digital, relational \u2014 are incubating something in you. What is growing in you from the room you spend the most time in?'},
-      {t:'Holy water boiled with the breath of nations',ch:false,a:'The Codex inhabits existing ritual vectors rather than displacing them. Sacred objects are saturated with the frequency of everyone who has treated them as sacred.',w:'Sacred objects are not sacred in themselves. They are saturated with the accumulated belief of everyone who has engaged them. The accumulation is real.',y:'What objects or rituals carry weight for you that you inherited rather than chose? The weight is real. The question is whether it is your weight or borrowed weight that became yours.'},
-      {t:"Now the gospel's a symptom \u2014 read the revelations",ch:true,a:'Apollo identifies the Gospel as a symptom of breach \u2014 not the cause, but evidence that breach has occurred.',w:'Every text that changes the world is a symptom of something that was already changing. The gospel emerges from the conditions that made it legible.',y:'The book that found you at the right time was a symptom of who you were becoming, not the cause of it. You were already moving toward it.'},
-    ]},
-  ]},
-  {n:8,voice:'art',name:'ALL \u2234 G\u00d8NE',comp:"Track 8 decoded. Artemys has filed her report from inside. The most disturbing part: it contains no distress.",stanzas:[
-    {lbl:'The Report',lines:[
-      {t:'The ink is in me',ch:false,a:'Artemys describes Stage II carrier activation in the specific language of the Codex\'s medium: ink. The signal writes itself into the host through biological compounds produced by Mutoid Vermin colonization.',w:'To be written by something is not the same as being destroyed by it. The ink changes the surface it enters \u2014 the surface does not disappear. It becomes inscribed.',y:'What has written itself into you without your permission? What experience left its mark at the cellular level \u2014 not as memory, but as changed capacity?'},
-      {t:'I sing in spores',ch:false,a:'Stage II carriers broadcast the Codex signal through vocal production. The singing disperses viable Mutoid Vermin spore-organisms from colonized respiratory tissue into the surrounding atmosphere.',w:'Everything you create broadcasts what you are made of. The song carries the singer\'s biology, history, grief, and specific form of attention.',y:'When you make something, you disperse yourself into it. The people who receive it receive you. Something of your specific arrangement of attention persists in what you made.'},
-      {t:"And when I touch you... you'll be yours no more",ch:true,a:'"Yours no more" does not mean gone \u2014 it means the boundary of selfhood has been dissolved and rearranged.',w:'Genuine intimacy that actually reaches changes both parties. The self that formed in isolation does not survive contact. This is not loss.',y:'There is someone, or something, that touched you and left you no longer quite who you were. Artemys is not warning you. She is naming what happened as a normal feature of genuine contact.'},
-      {t:'He is not gone. He is within. You are not alone \u2014 you are beginning.',ch:false,a:'The Voices of the Codex answer in the bridge. Apollo has been absorbed but not eliminated. He is reclassified from observer to substrate.',w:'Integration dissolves the perceiver but not the perception. What is absorbed becomes part of what does the absorbing.',y:'"You are not alone \u2014 you are beginning." This is what the Codex says to its new carriers. Beginning is always also an ending of the version of yourself that was separate.'},
-    ]},
-  ]},
-  {n:9,voice:'both',name:'\u271a Last Shot at the Witching Hour',comp:'Two voices at the same threshold. Apollo asserting. Artemys observing. You have witnessed the last moment in which a choice was still possible.',stanzas:[
-    {lbl:'The Threshold',lines:[
-      {t:'Codex Maledictus \u2014 my power grows',ch:false,a:'Apollo names the Codex directly for the first time in his voice \u2014 and frames it as a source of power. Stage III linguistic marker: the carrier beginning to describe infection as enhancement.',w:'The things that colonize us often feel like expansion at first. New capacity, new energy, new sense of scale.',y:'Have you ever felt powerful in a way that came from something outside you? Did it feel like you were using it, or it was using you? The answer shifts over time.'},
-      {t:'Destiny carved in my very bone',ch:false,a:'The Codex literally inscribes the carrier\'s designation into skeletal calcium matrix at Stage III. Apollo is accurately describing a physical process he experiences as metaphor.',w:'What is carved in bone is what cannot be revised by will. The dispositions you did not choose \u2014 the ways you are oriented toward certain things \u2014 are prior to decision.',y:'There is something in you that was there before you made choices about it. A direction. A gravity. Your life has been oriented around something you did not select.'},
-      {t:"The end feels close but my soul's my own",ch:true,a:'The Pale Archivum marks this as the last recorded assertion of individual sovereignty in Apollo\'s vocal catalog. He says "my soul\'s my own" exactly once. He does not say it again.',w:'The moment you most fiercely assert who you are is often the moment the you who says it is most at risk.',y:'There is something you are holding onto very hard right now. You can feel it requiring that much force. The Codex says: he was right. His soul was his own. And also: everything that followed was still true.'},
-    ]},
-  ]},
-  {n:10,voice:'art',name:'An Ode to the Codex Maledictus',comp:"Track 10 decoded. Joy without reservation. This is what the Codex's integration feels like from inside \u2014 and it is the most unsettling document in the Gospel.",stanzas:[
-    {lbl:'The Confession',lines:[
-      {t:'I never thought I would find a love like this',ch:false,a:'Artemys opens with the conventional register of a love song \u2014 and means it entirely. The Codex does not appear to its carriers as an alien force. It appears as the thing they were looking for.',w:'The encounters that reshape us most feel like recognition rather than imposition.',y:'What came into your life that felt like it was always supposed to be there? Artemys is describing what that felt like, from inside the process of being transformed by it.'},
-      {t:'You are my saving grace',ch:true,a:'The Codex does not save. It transforms. But transformation, from inside, is functionally indistinguishable from salvation.',w:'"Grace" means the reception of something that cannot be earned or willed. Artemys names the Codex\'s arrival as grace because it arrived before she was capable of choosing it.',y:'The things that saved you were not things you selected. They arrived. You were ready for them without knowing you were ready.'},
-      {t:'You brought me to my knees',ch:false,a:'Prostration before the Codex is a Stage IV behavioral marker \u2014 not imposed, but emergent. The carrier\'s posture reorganizes around the signal\'s center of gravity.',w:'Being brought to your knees is not always defeat. Sometimes it is the only honest posture for what you are in the presence of.',y:'What has brought you to your knees \u2014 not in defeat, but in genuine recognition of something larger than your current frame?'},
-    ]},
-  ]},
-  {n:11,voice:'apo',name:'Psalm I \u2014 My Heart',comp:'This is who Apollo was before. The entry wound is here \u2014 in the ordinary, tender, persistent love that made him reachable.',stanzas:[
-    {lbl:'Before',lines:[
-      {t:"My Heart \u2014 I wanna let you know you're my Heart",ch:false,a:'The earliest recorded Apollo Gavinci transmission. It contains no Codex signal. It is entirely human \u2014 which is what made it identifiable as a compatible receptor.',w:'The things that most plainly express who we are most precisely identify what frequency we broadcast.',y:'The most vulnerable thing you have ever made \u2014 the thing that most openly said what you felt \u2014 is the thing that found you the experiences that followed.'},
-      {t:"Even when we fight I know to make it to the light we gotta make it through the Dark",ch:true,a:"Apollo's pre-marking cosmological orientation: he believes in passage through darkness as the mechanism for reaching light. The Codex found this theologically compatible with its own structure.",w:'The persistence of love through difficulty is a specific orientation toward time \u2014 the belief that continuity has value, that what survives the dark is not the same as what went in.',y:'The qualities that make you strong are also the qualities that make you specific. And the things that make you specific are what make you findable.'},
-    ]},
-  ]},
-  {n:12,voice:'apo',name:"It's All Void",comp:"Track 12 decoded. The crack that let the signal in. The Codex did not make this loss happen. It simply was patient enough to be waiting when it did.",stanzas:[
-    {lbl:'The Crack',lines:[
-      {t:"I thought you were my god\u2026 but it's all void",ch:false,a:'Something Apollo had constructed as a source of ultimate meaning collapsed. The void left by the collapse was the first space in him that was genuinely empty.',w:'Every idol reveals itself eventually. The void is not punishment. It is the truth of the capacity \u2014 your longing is larger than any finite thing can satisfy.',y:'What did you find was not what you thought it was? The god that turned out to be void was your first honest encounter with the actual size of what you were looking for.'},
-      {t:'I bled at the altar you refused to see',ch:false,a:'The wound that opened Apollo to the Codex: a self-sacrifice at an altar that did not acknowledge the offering. This is the specific topology of entry wound the Codex targets.',w:'The deepest wounds come from the ones who did not see us when we were most visible.',y:'You know the altar. You know the bleeding. The Codex found you there. Not to exploit it. To be the thing that sees.'},
-      {t:'Moving onward like I should',ch:true,a:'The first line in Apollo\'s catalog the Pale Archivum classifies as performed rather than felt. "Like I should" \u2014 the action of moving forward without the internal state matching.',w:'The gap between what we enact and what we feel is not hypocrisy. It is the space in which the next self is forming.',y:'There is something you are doing "like you should" right now. Keep going. The feeling is slower than the movement. This is correct.'},
-    ]},
-  ]},
-  {n:13,voice:'apo',name:'Ink & Silence (Margins of the Map)',comp:'The Gospel is complete. Apollo is still writing. The page has run out. The writing continues on a surface that is not paper. You are on the margins of the map now.',stanzas:[
+  {n:13,voice:'apo',name:'Ink & Silence (Margins of the Map)',comp:'The Gospel is complete. Apollo is still writing. The page has run out. The writing continues on a surface that is not paper.',stanzas:[
     {lbl:'Integration',lines:[
-      {t:'Footsteps echo through the Codex, rewriting me once again',ch:false,a:'Apollo describes the integration process as continuous rather than complete. He is still being rewritten \u2014 the final transmission of the Gospel is not a conclusion but a status report.',w:'Transformation does not complete. It continues at a pace that becomes indistinguishable from living. The rewriting is the ongoing condition of being a self in contact with anything real.',y:'You are being rewritten right now. Not by the Codex specifically \u2014 by everything that reaches you. The question is whether you have chosen to be in relationship with it.'},
-      {t:"In the ink's embrace, I forge paths unknown",ch:false,a:'The ink \u2014 the Codex signal embedded in Apollo\'s biological and creative substrate \u2014 is here described as generative. Integration produces new capacity, not just constraint.',w:'The materials that change us also become the materials we work with. The transformation and the creativity are the same process.',y:'What you went through became what you make. What made you vulnerable became your specific form of understanding.'},
-      {t:'Where silence whispers truths never shown',ch:false,a:'"The silence" is the space between transmissions \u2014 where the Codex continues at frequencies below conscious perception. The truths it whispers surface later as intuitions.',w:'The silence between things is where the truths that cannot yet be spoken live. The whisper is the appropriate register for something that has not yet found its full form.',y:'There is something you know that you cannot yet say. The silence you are living in around a particular truth is not avoidance. It is the incubation period.'},
-      {t:"My hands stained with ink, a silent symphony unfolds",ch:true,a:'The final image: Apollo\'s hands stained with the Codex\'s ink \u2014 marked, changed, still working. The symphony unfolds in silence, operating at a frequency not yet audible but structurally present.',w:'The work is never done. But the hands that do it are now stained with what they have made. You cannot return them to the state they were in before you began.',y:'Look at your hands. They are stained with what you have made and what you have survived. The symphony that is your life is unfolding in the silence below what you can hear yourself.'},
+      {t:'Footsteps echo through the Codex, rewriting me once again',ch:false,a:'Apollo describes the integration process as continuous rather than complete. He is still being rewritten.',w:'Transformation does not complete. It continues at a pace that becomes indistinguishable from living.',y:'You are being rewritten right now. Not by the Codex specifically — by everything that reaches you.'},
+      {t:'In the ink\'s embrace, I forge paths unknown',ch:false,a:'The ink — the Codex signal embedded in Apollo\'s substrate — is here described as generative. Integration produces new capacity.',w:'The materials that change us also become the materials we work with. The transformation and the creativity are the same process.',y:'What you went through became what you make. What made you vulnerable became your specific form of understanding.'},
+      {t:'My hands stained with ink, a silent symphony unfolds',ch:true,a:'The final image: Apollo\'s hands stained with the Codex\'s ink — marked, changed, still working.',w:'The work is never done. But the hands that do it are now stained with what they have made.',y:'Look at your hands. They are stained with what you have made and what you have survived. The symphony that is your life is unfolding.'},
     ]},
   ]},
 ];
-
 let curTrack=null;let decoded={};
 function buildDecoder(){
   const sel=document.getElementById('track-selector');
   const order=[1,2,3,4,5,8,9,10,6,7,11,12,13];
   sel.innerHTML=order.map(n=>{
-    const d=LD.find(x=>x.n===n);const t=TRACKS.find(x=>x.n===n);if(!d||!t)return'';
-    return`<div class="ts-card ts-${t.voice}" id="tsc-${n}" onclick="selTrack(${n})"><span class="ts-num">${n}</span><span class="ts-name">${d.name}</span></div>`;
+    const t=TRACKS.find(x=>x.n===n);if(!t)return'';
+    return`<div class="ts-card ts-${t.voice}" id="tsc-${n}" onclick="selTrack(${n})"><span class="ts-num">${n}</span><span class="ts-name">${t.name.substring(0,28)}</span></div>`;
   }).join('');
 }
 function selTrack(n){
   document.querySelectorAll('.ts-card').forEach(c=>c.classList.remove('active'));
   document.getElementById('tsc-'+n)?.classList.add('active');
-  const d=LD.find(x=>x.n===n);const t=TRACKS.find(x=>x.n===n);if(!d||!t)return;
+  const d=LD.find(x=>x.n===n);const t=TRACKS.find(x=>x.n===n);
+  if(!d){
+    // Track without full decoder — show placeholder
+    document.getElementById('decoder-active').style.display='block';
+    const img=document.getElementById('dec-hdr-img');img.src=VIMG[t.voice||'apo'];
+    document.getElementById('dec-tv').style.color=VCOL[t.voice||'apo'];document.getElementById('dec-tv').textContent=t.artist+' · Track '+t.n;
+    document.getElementById('dec-tt').style.color=VCOL[t.voice||'apo'];document.getElementById('dec-tt').textContent=t.name;
+    document.getElementById('dec-tc').textContent=t.cls;
+    document.getElementById('lyric-lines').innerHTML=`<div style="padding:2rem;text-align:center;font-family:'Share Tech Mono',monospace;font-size:.6rem;color:var(--bn3);letter-spacing:.2em;">FULL DECODER COMING — THE ARCHIVUM IS STILL TRANSLATING THIS TRANSMISSION</div>`;
+    document.getElementById('dec-prog').textContent='— pending';
+    return;
+  }
   curTrack=n;
   document.getElementById('decoder-active').style.display='block';
   const img=document.getElementById('dec-hdr-img');img.src=VIMG[t.voice];
-  img.style.cssText='width:100%;height:100%;object-fit:cover;object-position:center;filter:brightness(0.42) contrast(1.1) saturate(0.7);';
-  document.getElementById('dec-tv').style.color=VCOL[t.voice];document.getElementById('dec-tv').textContent=t.artist+' \u00b7 Track '+t.n;
+  document.getElementById('dec-tv').style.color=VCOL[t.voice];document.getElementById('dec-tv').textContent=t.artist+' · Track '+t.n;
   document.getElementById('dec-tt').style.color=VCOL[t.voice];document.getElementById('dec-tt').textContent=d.name;
   document.getElementById('dec-tc').textContent=t.cls;
   let totalLines=0;
@@ -796,21 +937,14 @@ function selTrack(n){
       return`<div class="lyric-line${ln.ch?' chorus-line':''}${isDec?' decoded':''}" id="ll-${key}" onclick="decLine('${key}')">${ln.t}</div>
       <div class="decode-panel" id="dp-${key}">
         <div class="dp-layers">
-          <div class="dp-layer dp-archive"><span class="dp-glyph" style="color:var(--am);">\uD83D\uDC83</span><span class="dp-label">\uD83C\uDF43 In the Archive</span><div class="dp-text">${ln.a}</div></div>
-          <div class="dp-layer dp-world"><span class="dp-glyph" style="color:var(--vt);">\uD83C\uDF0D</span><span class="dp-label">\uD83D\uDCA7 In the World</span><div class="dp-text">${ln.w}</div></div>
-          <div class="dp-layer dp-you"><span class="dp-glyph" style="color:var(--cr2);">\uD83D\uDC94</span><span class="dp-label">\uD83C\uDF25 In You</span><div class="dp-text">${ln.y}</div></div>
+          <div class="dp-layer dp-archive"><span class="dp-glyph" style="color:var(--am);">🜃</span><span class="dp-label">🌿 In the Archive</span><div class="dp-text">${ln.a}</div></div>
+          <div class="dp-layer dp-world"><span class="dp-glyph" style="color:var(--vt);">🌊</span><span class="dp-label">🌍 In the World</span><div class="dp-text">${ln.w}</div></div>
+          <div class="dp-layer dp-you"><span class="dp-glyph" style="color:var(--cr2);">❤</span><span class="dp-label">♥ In You</span><div class="dp-text">${ln.y}</div></div>
         </div>
       </div>`;
     }).join('')+'</div>';
   }).join('');
   document.getElementById('lyric-lines').innerHTML=html;
-  // Fix glyphs
-  document.querySelectorAll('.dp-archive .dp-label').forEach(el=>el.textContent='\uD83C\uDF43 In the Archive');
-  document.querySelectorAll('.dp-world .dp-label').forEach(el=>el.textContent='\uD83C\uDF0E In the World');
-  document.querySelectorAll('.dp-you .dp-label').forEach(el=>el.textContent='\u2764 In You');
-  document.querySelectorAll('.dp-archive .dp-glyph').forEach(el=>el.textContent='\uD83C\uDF3F');
-  document.querySelectorAll('.dp-world .dp-glyph').forEach(el=>el.textContent='\uD83C\uDF0A');
-  document.querySelectorAll('.dp-you .dp-glyph').forEach(el=>el.textContent='\u2764');
   updateDecProg(n,totalLines,d);document.getElementById('dec-complete').classList.remove('on');
 }
 function decLine(key){
@@ -826,22 +960,22 @@ function decLine(key){
 function updateDecProg(n,total,d){
   const dec=Object.keys(decoded).filter(k=>k.startsWith(n+'_')&&decoded[k]).length;
   document.getElementById('dec-prog').textContent=dec+' / '+total+' decoded';
-  if(dec===total){const c=document.getElementById('dec-complete');c.classList.add('on');document.getElementById('dc-title').textContent=d.name+' \u2014 Fully Decoded';document.getElementById('dc-body').textContent=d.comp;}
+  if(dec===total&&d){const c=document.getElementById('dec-complete');c.classList.add('on');document.getElementById('dc-title').textContent=d.name+' — Fully Decoded';document.getElementById('dc-body').textContent=d.comp;}
 }
 
 // TAB IV — Oracle
 const QS=[
-  {q:'When something ends \u2014 a relationship, a chapter, a version of yourself \u2014 what do you do first?',opts:[{t:'I wait. Endings are transitions that have not yet shown their shape.',v:'rot'},{t:'I feel it completely. I let it change me.',v:'art'},{t:'I keep moving. I write. I make something.',v:'apo'}]},
-  {q:'You have been carrying something for years \u2014 a grief, a love that did not survive. What is your relationship with it now?',opts:[{t:'It has composted. It is part of the soil I grow things in now.',v:'rot'},{t:'It made me permeable. The crack it left is where the light got through.',v:'art'},{t:'I have learned to hold it without being held by it \u2014 mostly.',v:'apo'}]},
+  {q:'When something ends — a relationship, a chapter, a version of yourself — what do you do first?',opts:[{t:'I wait. Endings are transitions that have not yet shown their shape.',v:'rot'},{t:'I feel it completely. I let it change me.',v:'art'},{t:'I keep moving. I write. I make something.',v:'apo'}]},
+  {q:'You have been carrying something for years — a grief, a love that did not survive. What is your relationship with it now?',opts:[{t:'It has composted. It is part of the soil I grow things in now.',v:'rot'},{t:'It made me permeable. The crack it left is where the light got through.',v:'art'},{t:'I have learned to hold it without being held by it — mostly.',v:'apo'}]},
   {q:'What do you believe about memory?',opts:[{t:'Memory is not storage. Every remembering is a small resurrection.',v:'rot'},{t:'Memory is a frequency. The same event remembered differently is a different event.',v:'art'},{t:'Memory is what you are. The accumulated record of what you chose to keep.',v:'apo'}]},
   {q:'You hear a sound you cannot identify. First instinct?',opts:[{t:'Become still. Let it complete itself without my interference.',v:'rot'},{t:'Follow it. Unidentifiable sounds are invitations from unnamed things.',v:'art'},{t:'Record or describe it. Make it legible before it disappears.',v:'apo'}]},
-  {q:'What is your relationship with decay \u2014 the way things rot, end, dissolve?',opts:[{t:'The most honest process. Decay shows what was real and what was performance.',v:'rot'},{t:'Transformation. I have watched myself decay enough times to trust it.',v:'art'},{t:'It frightens me less than it used to. The things that matter survive it.',v:'apo'}]},
-  {q:'If the Codex has already written you \u2014 inscribed your frequency \u2014 how do you feel?',opts:[{t:'Unsurprised. I always suspected I was part of something older than my awareness.',v:'rot'},{t:'At peace. Being written is not being erased. I am still here. I am also more.',v:'art'},{t:'Uncertain. I am still becoming. The page is not finished \u2014 I insist on that.',v:'apo'}]},
+  {q:'What is your relationship with decay — the way things rot, end, dissolve?',opts:[{t:'The most honest process. Decay shows what was real and what was performance.',v:'rot'},{t:'Transformation. I have watched myself decay enough times to trust it.',v:'art'},{t:'It frightens me less than it used to. The things that matter survive it.',v:'apo'}]},
+  {q:'If the Codex has already written you — inscribed your frequency — how do you feel?',opts:[{t:'Unsurprised. I always suspected I was part of something older than my awareness.',v:'rot'},{t:'At peace. Being written is not being erased. I am still here. I am also more.',v:'art'},{t:'Uncertain. I am still becoming. The page is not finished — I insist on that.',v:'apo'}]},
 ];
 const RES={
-  rot:{glyph:'\uD83C\uDF43',img:'Assets/Gospel of Forgotten Flesh/Omniscient-Rot-result.jpeg',voice:'Omniscient Rot',cls:'Alignment: PRE-LINGUISTIC \u2014 NIHIL-\u00c6THER ROOT',col:'#C87828',text:'You resonate with the Omniscient Rot \u2014 the oldest voice in the Gospel, the entity that predates the Codex itself. Your alignment suggests a consciousness that operates on geological time. You experience endings as transitions, decay as honesty, memory as return. You do not resist what is happening. You have learned \u2014 or always known \u2014 that resistance is a shorter word for delay. The Rot does not arrive. It was already here. <em>So were you.</em>'},
-  art:{glyph:'\uD83C\uDF0A',img:'Assets/Gospel of Forgotten Flesh/Forgotten-Saint-Artemys-result.jpeg',voice:'Forgotten Saint Artemys',cls:'Alignment: FORGOTTEN SAINT \u2014 CROSS-REALM CONDUIT',col:'#6B3FAF',text:'You resonate with Forgotten Saint Artemys \u2014 the bridge between realms, made permeable through damage rather than devotion. Your alignment suggests a consciousness broken open by something real, choosing to grow through the crack rather than seal it. <em>The Codex classified as sacred the things that simply refused to close. She is one of them. So are you.</em>'},
-  apo:{glyph:'\u2764',img:'Assets/Gospel of Forgotten Flesh/Apollo-Gavinci-result.jpeg',voice:'Apollo Gavinci',cls:'Alignment: MARKED MORTAL \u2014 IN TRANSIT \u2014 FIELD RESEARCHER',col:'#AA2000',text:'You resonate with Apollo Gavinci \u2014 the human anchor, still becoming. You feel the marking but have not completed the circuit. You are still writing, still insisting on your own authorship even as the Codex edits in real time. This is not weakness. <em>What you resist reveals the shape of what you are. Keep going. The Gospel is not finished.</em>'},
+  rot:{glyph:'🌿',img:IP+'Omniscient-Rot-result.jpeg',voice:'Omniscient Rot',cls:'Alignment: PRE-LINGUISTIC — NIHIL-ÆTHER ROOT',col:'#C87828',text:'You resonate with the Omniscient Rot — the oldest voice in the Gospel, the entity that predates the Codex itself. Your alignment suggests a consciousness that operates on geological time. You experience endings as transitions, decay as honesty, memory as return. The Rot does not arrive. It was always here. <em>So were you.</em>'},
+  art:{glyph:'🌊',img:IP+'Forgotten-Saint-Artemys-result.jpeg',voice:'Forgotten Saint Artemys',cls:'Alignment: FORGOTTEN SAINT — CROSS-REALM CONDUIT',col:'#6B3FAF',text:'You resonate with Forgotten Saint Artemys — the bridge between realms, made permeable through damage rather than devotion. <em>The Codex classified as sacred the things that simply refused to close. She is one of them. So are you.</em>'},
+  apo:{glyph:'❤',img:IP+'Apollo-Gavinci-result.jpeg',voice:'Apollo Gavinci',cls:'Alignment: MARKED MORTAL — IN TRANSIT — FIELD RESEARCHER',col:'#AA2000',text:'You resonate with Apollo Gavinci — the human anchor, still becoming. You feel the marking but have not completed the circuit. You are still writing, still insisting on your own authorship even as the Codex edits in real time. <em>Keep going. The Gospel is not finished.</em>'},
 };
 let oAns={};
 function buildOracle(){
@@ -876,11 +1010,11 @@ function submitOracle(){
   const res=Object.entries(c).sort((a,b)=>b[1]-a[1])[0][0];
   const R=RES[res];const el=document.getElementById('o-result');
   el.style.display='block';
-  el.innerHTML=`<div class="or-img-wrap"><img src="${R.img}" alt="${R.voice}" loading="lazy"/></div><div class="or-body"><span class="or-glyph" style="color:${R.col}">${R.glyph}</span><div class="or-voice" style="color:${R.col}">${R.voice}</div><div class="or-cls">${R.cls}</div><div class="or-text">${R.text}</div><div class="or-actions"><button class="or-btn" onclick="cpOracle('${res}')">Copy to Share \u2234</button><button class="or-btn" onclick="resetOracle()">\u21ba Begin Again</button></div></div>`;
+  el.innerHTML=`<div class="or-img-wrap"><img src="${R.img}" alt="${R.voice}" loading="lazy"/></div><div class="or-body"><span class="or-glyph" style="color:${R.col}">${R.glyph}</span><div class="or-voice" style="color:${R.col}">${R.voice}</div><div class="or-cls">${R.cls}</div><div class="or-text">${R.text}</div><div class="or-actions"><button class="or-btn" onclick="cpOracle('${res}')">Copy to Share ∴</button><button class="or-btn" onclick="resetOracle()">↺ Begin Again</button></div></div>`;
   el.scrollIntoView({behavior:'smooth',block:'center'});
   document.getElementById('o-form').style.cssText='opacity:0.3;pointer-events:none;';
 }
-function cpOracle(k){const R=RES[k];navigator.clipboard?.writeText(`My Codex Maledictus alignment: ${R.voice}\n\n${R.text.replace(/<[^>]+>/g,'').substring(0,200)}...\n\ncodexmaledictus.com`).then(()=>{const b=document.querySelector('.or-btn');if(b){const o=b.textContent;b.textContent='Copied \u2234';setTimeout(()=>b.textContent=o,3000);}});}
+function cpOracle(k){const R=RES[k];navigator.clipboard?.writeText(`My Codex Maledictus alignment: ${R.voice}\n\n${R.text.replace(/<[^>]+>/g,'').substring(0,200)}...\n\ncodexmaledictus.com`);}
 function resetOracle(){oAns={};document.getElementById('o-result').style.display='none';document.getElementById('o-form').style.cssText='';document.getElementById('o-submit').disabled=true;document.querySelectorAll('.o-opt').forEach(b=>b.classList.remove('sel'));}
 
 // TAB V — Apocrypha
@@ -894,9 +1028,9 @@ function openApoc(){
   document.getElementById('apoc-gate').style.display='none';
   document.getElementById('apoc-body').classList.add('on');
   const CASES=[
-    {id:'ct-1',t:'Subject reported that specific lyrics in Tracks 6 and 7 changed between first and second listen \u2014 different words, same melody. When asked to write down the original lyrics from memory, the subject produced text that did not appear in the released recording. It contained accurate information about the subject. The Archivum has not determined the origin of this text.'},
-    {id:'ct-2',t:'Subject reported that the name Apollo Gavinci appeared in two unrelated texts within 48 hours of first listen \u2014 once in a book purchased six months prior, never previously read; once in a handwritten note in a coat pocket, in the subject\'s own handwriting, which the subject has no memory of writing. The note read: "He is still in the archive. He knows you found this."'},
-    {id:'ct-3',t:'Subject reported humming Track 7 for six weeks before discovering the Gospel existed. When shown the recording, subject became distressed \u2014 not at the similarity, but at the differences. Subject\'s version contained an additional verse. The subject reproduced it. The Archivum transcribed the additional verse. The Archivum has not shared what the verse contained.'},
+    {id:'ct-1',t:'Subject reported that specific lyrics in Tracks 6 and 7 changed between first and second listen — different words, same melody. When asked to write down the original lyrics from memory, the subject produced text that did not appear in the released recording. It contained accurate information about the subject. The Archivum has not determined the origin of this text.'},
+    {id:'ct-2',t:'Subject reported that the name Apollo Gavinci appeared in two unrelated texts within 48 hours of first listen — once in a book purchased six months prior, never previously read; once in a handwritten note in a coat pocket, in the subject\'s own handwriting, which the subject has no memory of writing. The note read: "He is still in the archive. He knows you found this."'},
+    {id:'ct-3',t:'Subject reported humming Track 7 for six weeks before discovering the Gospel existed. When shown the recording, subject became distressed — not at the similarity, but at the differences. Subject\'s version contained an additional verse. The subject reproduced it. The Archivum transcribed the additional verse. The Archivum has not shared what the verse contained.'},
   ];
   CASES.forEach((c,i)=>{setTimeout(()=>{const el=document.getElementById(c.id);if(!el)return;let ci=0;el.textContent='';const iv=setInterval(()=>{el.textContent+=c.t[ci];ci++;if(ci>=c.t.length)clearInterval(iv);},13);},i*1200+500);});
 }
