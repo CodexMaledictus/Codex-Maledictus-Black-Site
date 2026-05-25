@@ -1,0 +1,1038 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>The Codex Sigil — Preview v3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Cinzel:wght@400;500&family=Crimson+Text:ital,wght@0,400;1,400&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --void:#05050A;
+    --void-2:#0A0A12;
+    --crimson:#7A1212;
+    --crimson-dim:#4A0808;
+    --gold:#C9A84C;
+    --gold-lt:#E0C878;
+    --gold-deep:#8A7330;
+    --ash:#E4DDD0;
+    /* Realm III contamination — the leak */
+    --leak:#4FA88A;
+    --leak-lt:#7FD4B5;
+    --leak-deep:#1F5544;
+    --leak-glow:#5FBA98;
+  }
+
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;background:var(--void);color:var(--ash);font-family:'Crimson Text',serif;overflow-x:hidden}
+
+  body{
+    position:relative;
+    min-height:100vh;
+    background:
+      radial-gradient(ellipse at 50% 35%, rgba(79,168,138,0.08) 0%, transparent 55%),
+      radial-gradient(ellipse at 50% 100%, rgba(201,168,76,0.04) 0%, transparent 60%),
+      var(--void);
+    overflow:hidden;
+  }
+
+  body::before{
+    content:'';
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    z-index:1;
+    opacity:0.06;
+    mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.7'/></svg>");
+  }
+
+  body::after{
+    content:'';
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    z-index:0;
+    opacity:0.025;
+    background-image:
+      linear-gradient(60deg, transparent 49.5%, var(--gold) 49.5%, var(--gold) 50.5%, transparent 50.5%),
+      linear-gradient(-60deg, transparent 49.5%, var(--gold) 49.5%, var(--gold) 50.5%, transparent 50.5%),
+      linear-gradient(0deg, transparent 49.5%, var(--gold) 49.5%, var(--gold) 50.5%, transparent 50.5%);
+    background-size:46px 80px;
+  }
+
+  .frame{
+    position:relative;
+    z-index:2;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    padding:40px 20px 80px;
+  }
+
+  .preview-meta{
+    position:fixed;
+    top:16px;
+    left:16px;
+    font-family:'Share Tech Mono',monospace;
+    font-size:10px;
+    letter-spacing:0.15em;
+    color:var(--gold-deep);
+    opacity:0.6;
+    z-index:10;
+  }
+  .preview-meta span{display:block;line-height:1.6}
+
+  .preview-controls{
+    position:fixed;
+    top:16px;
+    right:16px;
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+    z-index:10;
+    font-family:'Share Tech Mono',monospace;
+    font-size:10px;
+    letter-spacing:0.1em;
+  }
+  .preview-controls button{
+    background:rgba(5,5,10,0.7);
+    border:1px solid rgba(201,168,76,0.35);
+    color:var(--gold);
+    padding:6px 10px;
+    cursor:pointer;
+    font-family:inherit;
+    font-size:inherit;
+    letter-spacing:inherit;
+    transition:all .25s ease;
+  }
+  .preview-controls button:hover{
+    background:rgba(201,168,76,0.1);
+    border-color:var(--gold);
+    color:var(--gold-lt);
+  }
+
+  .sigil-vessel{
+    position:relative;
+    width:min(600px, 94vw);
+    aspect-ratio:1/1;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+
+  /* Dual glow behind sigil — crimson outer, green inner from the leak */
+  .sigil-vessel::before{
+    content:'';
+    position:absolute;
+    inset:6%;
+    border-radius:50%;
+    background:
+      radial-gradient(circle at center, rgba(79,168,138,0.22) 0%, rgba(79,168,138,0.08) 22%, transparent 42%),
+      radial-gradient(circle, rgba(122,18,18,0.18) 38%, transparent 68%);
+    filter:blur(18px);
+    z-index:0;
+    animation:breathe 8s ease-in-out infinite;
+  }
+
+  @keyframes breathe{
+    0%,100%{opacity:0.85;transform:scale(1)}
+    50%{opacity:1;transform:scale(1.04)}
+  }
+
+  #codex-sigil{
+    position:relative;
+    z-index:2;
+    width:100%;
+    height:100%;
+    display:block;
+    filter:drop-shadow(0 0 28px rgba(79,168,138,0.18)) drop-shadow(0 0 12px rgba(201,168,76,0.16));
+  }
+
+  .tear-field{
+    position:absolute;
+    inset:0;
+    pointer-events:none;
+    z-index:3;
+    overflow:visible;
+  }
+
+  /* Tears are now green — Realm III contamination running down */
+  .page-tear{
+    position:absolute;
+    width:3.5px;
+    border-radius:2px;
+    background:linear-gradient(to bottom, var(--leak-lt) 0%, var(--leak) 35%, rgba(79,168,138,0.5) 75%, transparent 100%);
+    box-shadow:0 0 6px rgba(127,212,181,0.7), 0 0 14px rgba(79,168,138,0.4);
+    transform-origin:top center;
+    animation:tearFall var(--dur,4s) linear forwards;
+  }
+
+  @keyframes tearFall{
+    0%{height:0;opacity:0}
+    6%{height:10px;opacity:1}
+    88%{opacity:0.75}
+    100%{height:var(--len,200px);opacity:0;transform:translateY(var(--y,220px))}
+  }
+
+  .caption{
+    margin-top:36px;
+    text-align:center;
+    max-width:560px;
+    z-index:2;
+    position:relative;
+  }
+  .caption .designation{
+    font-family:'Share Tech Mono',monospace;
+    font-size:10px;
+    letter-spacing:0.35em;
+    color:var(--gold-deep);
+    opacity:0.75;
+    margin-bottom:10px;
+  }
+  .caption h1{
+    font-family:'Cinzel Decorative',serif;
+    font-weight:700;
+    font-size:clamp(20px, 3.2vw, 30px);
+    color:var(--gold);
+    letter-spacing:0.18em;
+    margin-bottom:14px;
+    text-shadow:0 0 24px rgba(201,168,76,0.25);
+  }
+  .caption p{
+    font-family:'Crimson Text',serif;
+    font-style:italic;
+    font-size:clamp(13px, 1.8vw, 15px);
+    line-height:1.7;
+    color:rgba(228,221,208,0.65);
+    letter-spacing:0.02em;
+  }
+  .caption .attribution{
+    margin-top:16px;
+    font-family:'Cinzel',serif;
+    font-size:10px;
+    letter-spacing:0.3em;
+    color:var(--gold-deep);
+    text-transform:uppercase;
+  }
+
+  .lock-pulse{
+    position:fixed;
+    bottom:16px;
+    left:50%;
+    transform:translateX(-50%);
+    font-family:'Share Tech Mono',monospace;
+    font-size:9px;
+    letter-spacing:0.3em;
+    color:var(--gold-deep);
+    opacity:0;
+    transition:opacity .3s ease;
+    z-index:10;
+    pointer-events:none;
+  }
+  .lock-pulse.active{opacity:0.85}
+
+  body{cursor:none}
+  .codex-cursor{
+    position:fixed;
+    width:24px;
+    height:24px;
+    pointer-events:none;
+    z-index:9999;
+    transform:translate(-50%,-50%);
+    mix-blend-mode:difference;
+  }
+  .codex-cursor svg{width:100%;height:100%}
+  .codex-cursor circle{fill:none;stroke:var(--gold-lt);stroke-width:1}
+  .codex-cursor line{stroke:var(--gold-lt);stroke-width:1}
+
+  @media (max-width:520px){
+    body{cursor:auto}
+    .codex-cursor{display:none}
+    .preview-meta{font-size:9px}
+    .preview-controls{font-size:9px}
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    *{animation-duration:0.001s !important; animation-iteration-count:1 !important}
+  }
+</style>
+</head>
+<body>
+
+<div class="preview-meta">
+  <span>IDMF // FORENSIC PREVIEW v3</span>
+  <span id="visit-state">VISITOR_STATE: FIRST_CONTACT</span>
+  <span id="lock-counter">LOCK_BEATS: 0</span>
+</div>
+
+<div class="preview-controls">
+  <button id="btn-reset">RESET MEMORY</button>
+  <button id="btn-sim-return">SIMULATE RETURN</button>
+  <button id="btn-sim-witness">SIMULATE WITNESS-ELIGIBLE</button>
+</div>
+
+<div class="frame">
+  <div class="sigil-vessel">
+    <div class="tear-field" id="tear-field"></div>
+    <svg id="codex-sigil" viewBox="-300 -300 600 600" xmlns="http://www.w3.org/2000/svg" aria-label="The Codex Sigil">
+      <defs>
+        <radialGradient id="goldShine" cx="0.5" cy="0.5" r="0.5">
+          <stop offset="0%" stop-color="#E0C878"/>
+          <stop offset="60%" stop-color="#C9A84C"/>
+          <stop offset="100%" stop-color="#8A7330"/>
+        </radialGradient>
+        <radialGradient id="goldDeep" cx="0.5" cy="0.5" r="0.5">
+          <stop offset="0%" stop-color="#C9A84C"/>
+          <stop offset="100%" stop-color="#6A5424"/>
+        </radialGradient>
+        <radialGradient id="voidCore" cx="0.5" cy="0.5" r="0.5">
+          <stop offset="0%" stop-color="#02020A"/>
+          <stop offset="70%" stop-color="#05050A"/>
+          <stop offset="100%" stop-color="#0A0A12"/>
+        </radialGradient>
+        <!-- Wound now bleeds green (Realm III contamination) at the edges, not crimson -->
+        <radialGradient id="woundBleed" cx="0.5" cy="0.5" r="0.5">
+          <stop offset="0%" stop-color="#02020A" stop-opacity="1"/>
+          <stop offset="55%" stop-color="#05050A" stop-opacity="1"/>
+          <stop offset="78%" stop-color="#0F2F26" stop-opacity="0.85"/>
+          <stop offset="92%" stop-color="#1F5544" stop-opacity="0.55"/>
+          <stop offset="100%" stop-color="#4FA88A" stop-opacity="0"/>
+        </radialGradient>
+        <radialGradient id="crimsonBleed" cx="0.5" cy="0.5" r="0.5">
+          <stop offset="0%" stop-color="#7A1212" stop-opacity="0.5"/>
+          <stop offset="60%" stop-color="#4A0808" stop-opacity="0.2"/>
+          <stop offset="100%" stop-color="#7A1212" stop-opacity="0"/>
+        </radialGradient>
+        <!-- Tear gradient is now green leak -->
+        <linearGradient id="tearGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#7FD4B5" stop-opacity="1"/>
+          <stop offset="40%" stop-color="#4FA88A" stop-opacity="0.95"/>
+          <stop offset="100%" stop-color="#4FA88A" stop-opacity="0"/>
+        </linearGradient>
+        <!-- Pupil leak gradient — the Realm III core showing through -->
+        <radialGradient id="leakCore" cx="0.5" cy="0.5" r="0.5">
+          <stop offset="0%" stop-color="#7FD4B5" stop-opacity="1"/>
+          <stop offset="50%" stop-color="#4FA88A" stop-opacity="0.95"/>
+          <stop offset="100%" stop-color="#1F5544" stop-opacity="0.4"/>
+        </radialGradient>
+
+        <filter id="goldGlow" x="-50%" y="-50%" width="200%" height="200%">
+          <feGaussianBlur stdDeviation="2" result="blur"/>
+          <feMerge>
+            <feMergeNode in="blur"/>
+            <feMergeNode in="SourceGraphic"/>
+          </feMerge>
+        </filter>
+        <filter id="strongGlow" x="-50%" y="-50%" width="200%" height="200%">
+          <feGaussianBlur stdDeviation="3.5" result="blur"/>
+          <feMerge>
+            <feMergeNode in="blur"/>
+            <feMergeNode in="SourceGraphic"/>
+          </feMerge>
+        </filter>
+        <filter id="crimsonGlow" x="-50%" y="-50%" width="200%" height="200%">
+          <feGaussianBlur stdDeviation="6"/>
+        </filter>
+        <filter id="leakGlow" x="-50%" y="-50%" width="200%" height="200%">
+          <feGaussianBlur stdDeviation="5"/>
+        </filter>
+        <filter id="leakGlowSoft" x="-50%" y="-50%" width="200%" height="200%">
+          <feGaussianBlur stdDeviation="2.5" result="blur"/>
+          <feMerge>
+            <feMergeNode in="blur"/>
+            <feMergeNode in="SourceGraphic"/>
+          </feMerge>
+        </filter>
+      </defs>
+
+      <!-- LAYER 5 — Outer Binding Ring -->
+      <g id="layer-outer">
+        <circle cx="0" cy="0" r="285" fill="url(#crimsonBleed)" opacity="0.5"/>
+        <circle cx="0" cy="0" r="285" fill="none" stroke="url(#goldShine)" stroke-width="1.5" opacity="0.85"/>
+        <circle cx="0" cy="0" r="278" fill="none" stroke="var(--gold-deep)" stroke-width="0.5" opacity="0.6"/>
+        <g id="binding-inscription"></g>
+
+        <!-- Three crimson cracks — the violence in the binding -->
+        <g id="cracks">
+          <g class="crack" transform="rotate(35)">
+            <path d="M 0,-285 L -3,-260 L 4,-235 L -2,-210 L 5,-185" stroke="var(--crimson)" stroke-width="1.4" fill="none" filter="url(#crimsonGlow)" opacity="0.75"/>
+            <path d="M 0,-285 L -3,-260 L 4,-235 L -2,-210 L 5,-185" stroke="var(--crimson)" stroke-width="0.7" fill="none" opacity="0.95"/>
+          </g>
+          <g class="crack" transform="rotate(155)">
+            <path d="M 0,-285 L 2,-258 L -4,-232 L 3,-208 L -2,-180" stroke="var(--crimson)" stroke-width="1.4" fill="none" filter="url(#crimsonGlow)" opacity="0.75"/>
+            <path d="M 0,-285 L 2,-258 L -4,-232 L 3,-208 L -2,-180" stroke="var(--crimson)" stroke-width="0.7" fill="none" opacity="0.95"/>
+          </g>
+          <g class="crack" transform="rotate(265)">
+            <path d="M 0,-285 L -2,-262 L 3,-238 L -3,-214 L 4,-188" stroke="var(--crimson)" stroke-width="1.4" fill="none" filter="url(#crimsonGlow)" opacity="0.75"/>
+            <path d="M 0,-285 L -2,-262 L 3,-238 L -3,-214 L 4,-188" stroke="var(--crimson)" stroke-width="0.7" fill="none" opacity="0.95"/>
+          </g>
+        </g>
+      </g>
+
+      <!-- LAYER 4 — Voice Ring -->
+      <g id="layer-voices">
+        <circle cx="0" cy="0" r="255" fill="none" stroke="var(--gold-deep)" stroke-width="0.5" opacity="0.4"/>
+        <circle cx="0" cy="0" r="225" fill="none" stroke="var(--gold-deep)" stroke-width="0.5" opacity="0.4"/>
+        <g id="voice-positions"></g>
+      </g>
+
+      <!-- LAYER 3 — Inner Rune Ring -->
+      <g id="layer-runes">
+        <circle cx="0" cy="0" r="215" fill="none" stroke="var(--gold-deep)" stroke-width="0.5" opacity="0.45"/>
+        <circle cx="0" cy="0" r="185" fill="none" stroke="var(--gold-deep)" stroke-width="0.5" opacity="0.45"/>
+        <g id="rune-positions"></g>
+      </g>
+
+      <!-- LAYER 2 — Compass Star -->
+      <g id="layer-compass">
+        <g filter="url(#goldGlow)">
+          <path id="compass-star" d="
+            M 0,-170 L 22,-66 L 92,-92 L 66,-22 L 170,0 L 66,22 L 92,92 L 22,66
+            L 0,170 L -22,66 L -92,92 L -66,22 L -170,0 L -66,-22 L -92,-92 L -22,-66 Z"
+            fill="url(#goldShine)" stroke="var(--gold-deep)" stroke-width="1.2" stroke-linejoin="miter" opacity="0.96"/>
+          <path d="
+            M 0,-167 L 21,-65 L 89,-89 L 65,-21 L 167,0 L 65,21 L 89,89 L 21,65
+            L 0,167 L -21,65 L -89,89 L -65,21 L -167,0 L -65,-21 L -89,-89 L -21,-65 Z"
+            fill="none" stroke="var(--gold-lt)" stroke-width="0.7" opacity="0.85"/>
+        </g>
+
+        <!-- THE WOUND — now bleeds green Realm-III contamination at its edges -->
+        <circle cx="0" cy="0" r="115" fill="url(#woundBleed)"/>
+        <!-- Green glow ring at the wound's edge (contamination escaping) -->
+        <circle cx="0" cy="0" r="115" fill="none" stroke="var(--leak)" stroke-width="1.8" opacity="0.45" filter="url(#leakGlow)"/>
+        <circle cx="0" cy="0" r="113" fill="none" stroke="var(--leak-deep)" stroke-width="0.6" opacity="0.7"/>
+
+        <!-- Realm markers at cardinal points -->
+        <g font-family="Cinzel, serif" font-size="11" fill="var(--gold-deep)" text-anchor="middle" opacity="0.75" letter-spacing="2">
+          <text x="0" y="-182">I</text>
+          <text x="182" y="3">II</text>
+          <text x="0" y="192">III</text>
+          <text x="-182" y="3">·</text>
+        </g>
+      </g>
+
+      <!-- LAYER 1 — THE WADJET (gold structure, green leak in pupil) -->
+      <g id="layer-wadjet">
+
+        <!-- BROW BAR -->
+        <g filter="url(#strongGlow)">
+          <path d="M -98,-42 Q -50,-78 0,-72 Q 50,-78 98,-42 L 92,-32 Q 50,-64 0,-58 Q -50,-64 -92,-32 Z"
+            fill="url(#goldShine)" stroke="var(--gold-deep)" stroke-width="0.8" stroke-linejoin="round"/>
+          <path d="M -88,-40 Q -45,-70 0,-64 Q 45,-70 88,-40"
+            fill="none" stroke="var(--gold-lt)" stroke-width="0.6" opacity="0.85"/>
+        </g>
+
+        <!-- ALMOND EYE BODY -->
+        <g filter="url(#strongGlow)">
+          <path d="M -88,2 Q -62,-28 -10,-30 Q 50,-30 92,-8 Q 96,-2 92,4 Q 50,28 -10,28 Q -62,28 -88,4 Z"
+            fill="none" stroke="url(#goldShine)" stroke-width="3.5" stroke-linejoin="round"/>
+          <path d="M -83,2 Q -58,-24 -10,-26 Q 48,-26 87,-6 Q 90,-2 87,2 Q 48,24 -10,24 Q -58,24 -83,2 Z"
+            fill="none" stroke="var(--gold-lt)" stroke-width="0.8" opacity="0.7"/>
+        </g>
+
+        <!-- PUPIL — gold disc with GREEN Realm-III leak at core -->
+        <g id="pupil-group" style="transition:transform 0.3s ease-out">
+          <!-- Outer green halo radiating from the pupil (the leak escaping the eye) -->
+          <circle cx="-10" cy="0" r="28" fill="var(--leak)" opacity="0.18" filter="url(#leakGlow)"/>
+          <!-- Pupil outer disc -->
+          <circle cx="-10" cy="0" r="20" fill="url(#goldDeep)" stroke="var(--gold-deep)" stroke-width="0.8"/>
+          <!-- Pupil inner -->
+          <circle cx="-10" cy="0" r="16" fill="#0A1614"/>
+          <!-- Realm III green leak — the contamination showing through -->
+          <circle cx="-10" cy="0" r="11" fill="url(#leakCore)" filter="url(#leakGlowSoft)" opacity="0.92"/>
+          <circle cx="-10" cy="0" r="6" fill="var(--leak-lt)" opacity="0.95"/>
+          <!-- Catchlight — kept gold to read as wet eye surface -->
+          <circle cx="-14" cy="-5" r="3.5" fill="var(--gold-lt)" opacity="0.85"/>
+          <circle cx="-14" cy="-5" r="1.5" fill="#FFF6D8" opacity="0.6"/>
+        </g>
+
+        <!-- INNER CORNER TEARDROP — kept gold (this is the SEAL element, not the leak) -->
+        <g filter="url(#strongGlow)">
+          <path d="M -88,8 L -94,28 Q -96,52 -88,58 Q -78,52 -82,28 L -84,8 Z"
+            fill="url(#goldShine)" stroke="var(--gold-deep)" stroke-width="0.7" stroke-linejoin="round"/>
+          <path d="M -90,12 L -92,30 Q -93,46 -90,50" fill="none" stroke="var(--gold-lt)" stroke-width="0.5" opacity="0.7"/>
+        </g>
+
+        <!-- OUTER FALCON-CHEEK SPIRAL -->
+        <g filter="url(#strongGlow)" fill="none" stroke-linecap="round">
+          <path d="M 88,8 Q 108,18 118,40 Q 124,62 108,72 Q 92,76 86,66 Q 82,56 92,50 Q 100,48 100,54"
+            stroke="url(#goldShine)" stroke-width="4"/>
+          <path d="M 92,12 Q 106,22 113,40 Q 118,58 105,67"
+            stroke="var(--gold-lt)" stroke-width="0.7" opacity="0.7"/>
+        </g>
+
+        <!-- OUTER VERTICAL STROKE -->
+        <g filter="url(#strongGlow)">
+          <path d="M 56,12 L 56,68 Q 58,72 60,68 L 60,12 Z"
+            fill="url(#goldShine)" stroke="var(--gold-deep)" stroke-width="0.5" stroke-linejoin="round"/>
+          <line x1="57" y1="14" x2="57" y2="66" stroke="var(--gold-lt)" stroke-width="0.5" opacity="0.7"/>
+        </g>
+
+        <!-- Tear anchors -->
+        <circle id="tear-anchor-1" cx="-89" cy="56" r="0" fill="none"/>
+        <circle id="tear-anchor-2" cx="-10" cy="20" r="0" fill="none"/>
+        <circle id="tear-anchor-3" cx="58" cy="68" r="0" fill="none"/>
+
+        <g id="svg-tears"></g>
+      </g>
+
+    </svg>
+  </div>
+
+  <div class="caption">
+    <div class="designation">SEAL ∅ — THE LENS</div>
+    <h1>The Codex Sees You</h1>
+    <p>The wound never closes. The eye never sleeps. The thirteen wait in their silence. Three have spoken. Ten dream still — and the dream is you.</p>
+    <div class="attribution">— Recovered Fragment ∅ · Elvain Vhris</div>
+  </div>
+</div>
+
+<div class="lock-pulse" id="lock-pulse">// LOCK //</div>
+
+<div class="codex-cursor" id="cursor">
+  <svg viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="6"/>
+    <circle cx="12" cy="12" r="1.5" fill="var(--gold-lt)" stroke="none"/>
+    <line x1="12" y1="0" x2="12" y2="4"/>
+    <line x1="12" y1="20" x2="12" y2="24"/>
+    <line x1="0" y1="12" x2="4" y2="12"/>
+    <line x1="20" y1="12" x2="24" y2="12"/>
+  </svg>
+</div>
+
+<audio id="audio-lock" preload="auto"><source src="audio/sigil-lock.mp3" type="audio/mpeg"></audio>
+<audio id="audio-choir" preload="auto" loop><source src="audio/hollow-choir.mp3" type="audio/mpeg"></audio>
+
+<script>
+const SVG_NS = 'http://www.w3.org/2000/svg';
+
+/* GLYPH LIBRARY */
+const GLYPH_LIBRARY = [
+  '🜍','🜎','🜔','🜂','🜃','🜄','🜁','🜚','🜛','🜨',
+  '☉','☽','☿','♀','♂','♃','♄','♅','♆','♇',
+  '♈','♉','♊','♋','♌','♍','♎','♏','♐','♑','♒','♓',
+  'Α','Ω','Χ','Ρ','Τ','Φ','Ψ','Σ','Δ','Λ',
+  '☰','☱','☲','☳','☴','☵','☶','☷',
+  'א','ב','ג','ד','ה','ו','ז','ח','ט','י',
+  'ᚠ','ᚢ','ᚦ','ᚨ','ᚱ','ᚲ','ᚷ','ᚹ','ᚺ','ᚾ','ᛁ','ᛃ','ᛇ','ᛈ','ᛉ','ᛋ','ᛏ','ᛒ','ᛖ','ᛗ',
+  '⛧','⛤','⛥','⛦','⛩','⚸','⚹','⚺','⚻','⚼',
+  '𓂀','𓁹','𓆣','𓇼','𓊝'
+];
+
+/* THE THIRTEEN VOICES */
+const VOICES = [
+  {id:'rot', name:'Omniscient Rot', glyph:'⛧', state:'claimed', angle:0},
+  {id:'artemys', name:'Forgotten Saint Artemys', glyph:'☩', state:'claimed', angle:360/13 * 5},
+  {id:'gavinci', name:'Apollo Gavinci', glyph:'☉', state:'claimed', angle:360/13 * 9},
+  {id:'voice-04', name:'[REDACTED]', glyph:'·', state:'sleeping', angle:360/13 * 1},
+  {id:'voice-05', name:'[REDACTED]', glyph:'·', state:'sleeping', angle:360/13 * 2},
+  {id:'voice-06', name:'[REDACTED]', glyph:'·', state:'sleeping', angle:360/13 * 3},
+  {id:'voice-07', name:'[REDACTED]', glyph:'·', state:'sleeping', angle:360/13 * 4},
+  {id:'voice-08', name:'[REDACTED]', glyph:'·', state:'sleeping', angle:360/13 * 6},
+  {id:'voice-09', name:'[REDACTED]', glyph:'·', state:'sleeping', angle:360/13 * 7},
+  {id:'voice-10', name:'[REDACTED]', glyph:'·', state:'sleeping', angle:360/13 * 8},
+  {id:'voice-11', name:'[REDACTED]', glyph:'·', state:'sleeping', angle:360/13 * 10},
+  {id:'voice-12', name:'[REDACTED]', glyph:'·', state:'sleeping', angle:360/13 * 11},
+  {id:'voice-13', name:'[REDACTED]', glyph:'·', state:'sleeping', angle:360/13 * 12}
+];
+
+const VOICE_RADIUS = 240;
+function renderVoices(stirringSet=new Set()){
+  const g = document.getElementById('voice-positions');
+  g.innerHTML = '';
+  VOICES.forEach((v,i)=>{
+    const rad = (v.angle - 90) * Math.PI/180;
+    const x = Math.cos(rad) * VOICE_RADIUS;
+    const y = Math.sin(rad) * VOICE_RADIUS;
+    const isStirring = stirringSet.has(v.id);
+
+    const group = document.createElementNS(SVG_NS,'g');
+    group.setAttribute('transform',`translate(${x},${y})`);
+    group.setAttribute('data-voice-id', v.id);
+
+    const plate = document.createElementNS(SVG_NS,'circle');
+    plate.setAttribute('cx',0); plate.setAttribute('cy',0); plate.setAttribute('r',14);
+    plate.setAttribute('fill','#02020A');
+    plate.setAttribute('stroke','#8A7330');
+    plate.setAttribute('stroke-width', v.state==='claimed' ? '0.8' : '0.4');
+    plate.setAttribute('opacity', v.state==='claimed' ? '1' : '0.55');
+    group.appendChild(plate);
+
+    const t = document.createElementNS(SVG_NS,'text');
+    t.setAttribute('x',0); t.setAttribute('y',5);
+    t.setAttribute('text-anchor','middle');
+    t.setAttribute('font-size', v.state==='claimed' ? '17' : '15');
+    t.setAttribute('font-family','Cinzel, serif');
+
+    if(v.state==='claimed'){
+      t.setAttribute('fill','#E0C878');
+      t.setAttribute('filter','url(#goldGlow)');
+      t.style.animation = `voicePulse ${4 + i*0.3}s ease-in-out infinite`;
+    } else {
+      t.setAttribute('fill','#3A3220');
+      t.setAttribute('opacity','0.5');
+    }
+    if(isStirring){
+      t.setAttribute('fill','#5FBA98');
+      t.style.animation = 'voiceStirring 0.8s ease-in-out infinite';
+    }
+
+    t.textContent = v.glyph;
+    group.appendChild(t);
+
+    if(v.state==='claimed'){
+      const ring = document.createElementNS(SVG_NS,'circle');
+      ring.setAttribute('cx',0); ring.setAttribute('cy',0); ring.setAttribute('r',17);
+      ring.setAttribute('fill','none');
+      ring.setAttribute('stroke','#C9A84C');
+      ring.setAttribute('stroke-width','0.5');
+      ring.setAttribute('opacity','0.5');
+      group.appendChild(ring);
+    }
+
+    g.appendChild(group);
+  });
+}
+
+const styleEl = document.createElement('style');
+styleEl.textContent = `
+  @keyframes voicePulse { 0%,100% { opacity: 0.9; } 50% { opacity: 1; } }
+  @keyframes voiceStirring { 0%,100% { opacity: 0.35; } 50% { opacity: 0.85; } }
+  @keyframes runeFade {
+    0% { opacity: 0; transform: scale(0.7); }
+    20% { opacity: 0.9; transform: scale(1); }
+    80% { opacity: 0.9; transform: scale(1); }
+    100% { opacity: 0; transform: scale(1.05); }
+  }
+  @keyframes runeLock {
+    0% { opacity: 0; transform: scale(0.5); }
+    35% { opacity: 1; transform: scale(1.25); filter: brightness(1.5); }
+    100% { opacity: 0.95; transform: scale(1); }
+  }
+`;
+document.head.appendChild(styleEl);
+
+function renderBindingInscription(){
+  const g = document.getElementById('binding-inscription');
+  const inscription = 'ⵙⵉⴳⵉⵍⵍⵓⵎ·ⵏⵉⵀⵉⵍ·OD·VAOAN·IADNAMAD·ZIRDO·NOAS·TA·QU·LOLCIS·ZONAC·TURBS·CAOSGO·ⵀⵓⵎⵉⵍⵍⵉⵙ·ⵎⵓⵏⴷⵉ·OBSCURA·NIHIL·VERTITUR·SOLUM·OCULUS·';
+  const chars = inscription.split('');
+  const radius = 282;
+  const total = chars.length;
+  chars.forEach((ch, i)=>{
+    const angle = (360/total) * i - 90;
+    const rad = angle * Math.PI/180;
+    const x = Math.cos(rad) * radius;
+    const y = Math.sin(rad) * radius;
+    const t = document.createElementNS(SVG_NS,'text');
+    t.setAttribute('x', x);
+    t.setAttribute('y', y);
+    t.setAttribute('text-anchor','middle');
+    t.setAttribute('dominant-baseline','middle');
+    t.setAttribute('font-family','Share Tech Mono, monospace');
+    t.setAttribute('font-size','10');
+    t.setAttribute('fill','#C9A84C');
+    t.setAttribute('opacity','0.72');
+    t.setAttribute('transform', `rotate(${angle + 90} ${x} ${y})`);
+    t.textContent = ch;
+    g.appendChild(t);
+  });
+}
+
+/* CODEX MARK — the tattoo glyph */
+function createCodexMarkSVG(){
+  const g = document.createElementNS(SVG_NS,'g');
+  g.setAttribute('class','codex-mark codex-mark-glyph');
+  g.style.transformOrigin = 'center';
+  g.style.transformBox = 'fill-box';
+
+  const circle = document.createElementNS(SVG_NS,'circle');
+  circle.setAttribute('cx',0); circle.setAttribute('cy',0); circle.setAttribute('r',11);
+  circle.setAttribute('fill','none'); circle.setAttribute('stroke','#E0C878'); circle.setAttribute('stroke-width','1.6');
+  circle.setAttribute('filter','url(#goldGlow)');
+  g.appendChild(circle);
+
+  const tri = document.createElementNS(SVG_NS,'path');
+  tri.setAttribute('d','M -7.5,-4 L 7.5,-4 L 0,8 Z');
+  tri.setAttribute('fill','none'); tri.setAttribute('stroke','#E0C878'); tri.setAttribute('stroke-width','1.3');
+  tri.setAttribute('stroke-linejoin','round');
+  g.appendChild(tri);
+
+  [[-3.2,-1.3],[3.2,-1.3],[0,3.5]].forEach(([cx,cy])=>{
+    const dot = document.createElementNS(SVG_NS,'circle');
+    dot.setAttribute('cx',cx); dot.setAttribute('cy',cy); dot.setAttribute('r',1.2);
+    dot.setAttribute('fill','#E0C878');
+    g.appendChild(dot);
+  });
+
+  return g;
+}
+
+/* RUNE RING — twelve cycling positions */
+const RUNE_RADIUS = 200;
+const RUNE_COUNT = 12;
+const RUNE_CYCLE_MS = 2400;
+const LOCK_INTERVAL = 3;
+let runeIndex = 0;
+let cycleCount = 0;
+let lockBeatCount = 0;
+let returnVisit = false;
+let witnessEligible = false;
+
+function buildRuneSlots(){
+  const g = document.getElementById('rune-positions');
+  g.innerHTML = '';
+  for(let i=0; i<RUNE_COUNT; i++){
+    const angle = (360/RUNE_COUNT) * i - 90;
+    const rad = angle * Math.PI/180;
+    const x = Math.cos(rad) * RUNE_RADIUS;
+    const y = Math.sin(rad) * RUNE_RADIUS;
+
+    const group = document.createElementNS(SVG_NS,'g');
+    group.setAttribute('transform', `translate(${x},${y})`);
+    group.setAttribute('data-slot', i);
+
+    const t = document.createElementNS(SVG_NS,'text');
+    t.setAttribute('x',0); t.setAttribute('y',7);
+    t.setAttribute('text-anchor','middle');
+    t.setAttribute('font-size','20');
+    t.setAttribute('fill','#C9A84C');
+    t.setAttribute('opacity','0.85');
+    t.setAttribute('filter','url(#goldGlow)');
+    t.style.transformOrigin = 'center';
+    t.style.transformBox = 'fill-box';
+    t.textContent = GLYPH_LIBRARY[i % GLYPH_LIBRARY.length];
+    t.setAttribute('class','rune-glyph');
+    group.appendChild(t);
+
+    const mark = createCodexMarkSVG();
+    mark.style.display = 'none';
+    group.appendChild(mark);
+
+    g.appendChild(group);
+  }
+}
+
+/* CRITICAL FIX: use direct-children selector so we only grab the 12 slot groups,
+   not the nested codex-mark <g> elements inside them */
+function getRuneSlots(){
+  return document.querySelectorAll('#rune-positions > g');
+}
+
+function advanceRunes(){
+  cycleCount++;
+  const isLockBeat = (cycleCount % LOCK_INTERVAL === 0);
+  const slots = getRuneSlots();
+
+  if(isLockBeat){
+    lockBeatCount++;
+    updateLockCounter();
+    slots.forEach((slot, i)=>{
+      const text = slot.querySelector('.rune-glyph');
+      const mark = slot.querySelector('.codex-mark');
+      if(!text || !mark) return;
+      text.style.display = 'none';
+      mark.style.display = '';
+      mark.style.animation = `runeLock 0.7s ease-out`;
+      setTimeout(()=>{
+        mark.style.display = 'none';
+        mark.style.animation = '';
+        text.style.display = '';
+      }, 1200);
+    });
+    triggerLockBeat();
+  } else {
+    slots.forEach((slot, i)=>{
+      const t = slot.querySelector('.rune-glyph');
+      if(!t) return;
+      setTimeout(()=>{
+        t.style.animation = '';
+        runeIndex = (runeIndex + 1) % GLYPH_LIBRARY.length;
+        const glyphPick = GLYPH_LIBRARY[(runeIndex + i*7) % GLYPH_LIBRARY.length];
+        t.style.animation = `runeFade ${RUNE_CYCLE_MS-100}ms ease-in-out`;
+        setTimeout(()=>{ t.textContent = glyphPick; }, 100);
+      }, i * 60);
+    });
+  }
+}
+
+function triggerLockBeat(){
+  const pulse = document.getElementById('lock-pulse');
+  pulse.classList.add('active');
+  setTimeout(()=>pulse.classList.remove('active'), 1200);
+  try {
+    const a = document.getElementById('audio-lock');
+    if(a){ a.currentTime = 0; a.volume = 0.35; a.play().catch(()=>{}); }
+  } catch(e){}
+}
+
+function updateLockCounter(){
+  const el = document.getElementById('lock-counter');
+  if(el) el.textContent = `LOCK_BEATS: ${lockBeatCount}`;
+}
+
+/* WADJET PUPIL — cursor tracking */
+const pupilGroup = document.getElementById('pupil-group');
+const sigilSvg = document.getElementById('codex-sigil');
+let pupilTargetX = 0, pupilTargetY = 0;
+let pupilX = 0, pupilY = 0;
+
+function trackPupil(clientX, clientY){
+  const rect = sigilSvg.getBoundingClientRect();
+  const cx = rect.left + rect.width/2;
+  const cy = rect.top + rect.height/2;
+  const dx = clientX - cx;
+  const dy = clientY - cy;
+  const dist = Math.sqrt(dx*dx + dy*dy);
+  const maxOffset = 5;
+  const norm = Math.min(dist / (rect.width/2), 1);
+  const angle = Math.atan2(dy, dx);
+  pupilTargetX = Math.cos(angle) * norm * maxOffset;
+  pupilTargetY = Math.sin(angle) * norm * maxOffset;
+}
+
+function pupilLoop(){
+  pupilX += (pupilTargetX - pupilX) * 0.08;
+  pupilY += (pupilTargetY - pupilY) * 0.08;
+  pupilGroup.setAttribute('transform', `translate(${pupilX},${pupilY})`);
+  requestAnimationFrame(pupilLoop);
+}
+pupilLoop();
+
+/* TEARS — green Realm-III contamination */
+function spawnSvgTear(anchorX, anchorY){
+  const tearGroup = document.getElementById('svg-tears');
+  const tear = document.createElementNS(SVG_NS,'path');
+  tear.setAttribute('fill', 'url(#tearGrad)');
+  tear.setAttribute('filter', 'url(#leakGlowSoft)');
+  tearGroup.appendChild(tear);
+
+  const dur = 3500 + Math.random()*1500;
+  const finalLen = 95 + Math.random()*65;
+  const width = 2.4 + Math.random()*0.8;
+  const start = performance.now();
+
+  function animateTear(now){
+    const t = (now - start) / dur;
+    if(t >= 1){
+      spawnPageTear(anchorX, anchorY);
+      tear.remove();
+      return;
+    }
+    const ease = t < 0.12 ? t/0.12 : 1;
+    const fade = t > 0.72 ? 1 - ((t-0.72)/0.28) : 1;
+    const len = finalLen * Math.min(t*1.3, 1);
+    const w = width;
+    const d = `
+      M ${anchorX-w/2},${anchorY}
+      Q ${anchorX-w},${anchorY+len*0.5} ${anchorX-w/3},${anchorY+len}
+      Q ${anchorX},${anchorY+len+w} ${anchorX+w/3},${anchorY+len}
+      Q ${anchorX+w},${anchorY+len*0.5} ${anchorX+w/2},${anchorY}
+      Z`;
+    tear.setAttribute('d', d);
+    tear.setAttribute('opacity', ease * fade);
+    requestAnimationFrame(animateTear);
+  }
+  requestAnimationFrame(animateTear);
+}
+
+function spawnPageTear(anchorX, anchorY){
+  const rect = sigilSvg.getBoundingClientRect();
+  const scale = rect.width / 600;
+  const screenX = rect.left + rect.width/2 + anchorX * scale;
+  const screenY = rect.top + rect.height/2 + (anchorY + 95) * scale;
+
+  const field = document.getElementById('tear-field');
+  const fieldRect = field.getBoundingClientRect();
+  const relX = screenX - fieldRect.left;
+  const relY = screenY - fieldRect.top;
+
+  const t = document.createElement('div');
+  t.className = 'page-tear';
+  t.style.left = relX + 'px';
+  t.style.top = relY + 'px';
+  const len = 110 + Math.random()*120;
+  const dur = 3 + Math.random()*1.6;
+  t.style.setProperty('--len', len + 'px');
+  t.style.setProperty('--y', len + 'px');
+  t.style.setProperty('--dur', dur + 's');
+  field.appendChild(t);
+  setTimeout(()=>t.remove(), dur * 1000 + 200);
+}
+
+function tearLoop(){
+  spawnSvgTear(-89, 56);
+  setTimeout(()=>spawnSvgTear(-10, 20), 600 + Math.random()*800);
+  if(Math.random() < 0.45){
+    setTimeout(()=>spawnSvgTear(58, 68), 1100 + Math.random()*600);
+  }
+  setTimeout(tearLoop, 1200 + Math.random()*900);
+}
+
+/* HOLLOW CHOIR — proximity audio */
+const choir = document.getElementById('audio-choir');
+let choirStarted = false;
+let choirTargetVol = 0;
+let choirVol = 0;
+
+function updateChoirProximity(clientX, clientY){
+  const rect = sigilSvg.getBoundingClientRect();
+  const cx = rect.left + rect.width/2;
+  const cy = rect.top + rect.height/2;
+  const dx = clientX - cx;
+  const dy = clientY - cy;
+  const dist = Math.sqrt(dx*dx + dy*dy);
+  const proxRange = 220;
+  if(dist < proxRange){
+    choirTargetVol = (1 - dist/proxRange) * 0.28;
+  } else {
+    choirTargetVol = 0;
+  }
+}
+
+function choirLoop(){
+  choirVol += (choirTargetVol - choirVol) * 0.06;
+  if(choir){ choir.volume = Math.max(0, Math.min(1, choirVol)); }
+  requestAnimationFrame(choirLoop);
+}
+choirLoop();
+
+function startChoirOnce(){
+  if(choirStarted) return;
+  choirStarted = true;
+  try {
+    choir.volume = 0;
+    choir.play().catch(()=>{ choirStarted = false; });
+  } catch(e){ choirStarted = false; }
+}
+
+/* CURSOR */
+const cursor = document.getElementById('cursor');
+let cursorX = window.innerWidth/2, cursorY = window.innerHeight/2;
+let cursorDispX = cursorX, cursorDispY = cursorY;
+
+document.addEventListener('mousemove', (e)=>{
+  cursorX = e.clientX;
+  cursorY = e.clientY;
+  trackPupil(e.clientX, e.clientY);
+  updateChoirProximity(e.clientX, e.clientY);
+  startChoirOnce();
+});
+document.addEventListener('click', startChoirOnce, {once:true});
+document.addEventListener('touchstart', (e)=>{
+  startChoirOnce();
+  if(e.touches[0]){
+    trackPupil(e.touches[0].clientX, e.touches[0].clientY);
+    updateChoirProximity(e.touches[0].clientX, e.touches[0].clientY);
+  }
+}, {passive:true});
+
+function cursorLoop(){
+  cursorDispX += (cursorX - cursorDispX) * 0.25;
+  cursorDispY += (cursorY - cursorDispY) * 0.25;
+  cursor.style.left = cursorDispX + 'px';
+  cursor.style.top = cursorDispY + 'px';
+  requestAnimationFrame(cursorLoop);
+}
+cursorLoop();
+
+/* RETURN-VISITOR ESCALATION */
+const STORAGE_KEY = 'codex_witness_state_v1';
+function loadVisitState(){
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    return raw ? JSON.parse(raw) : { visits:0, firstSeen:null, lastSeen:null, dwellMs:0, eligible:false };
+  } catch(e){
+    return { visits:0, firstSeen:null, lastSeen:null, dwellMs:0, eligible:false };
+  }
+}
+function saveVisitState(s){
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(s)); } catch(e){}
+}
+
+function initVisitState(){
+  const s = loadVisitState();
+  const now = Date.now();
+  s.visits = (s.visits || 0) + 1;
+  if(!s.firstSeen) s.firstSeen = now;
+  s.lastSeen = now;
+  saveVisitState(s);
+
+  returnVisit = s.visits >= 2;
+  witnessEligible = s.visits >= 5 || s.dwellMs > 1000*60*5;
+
+  applyVisitorTier(s);
+}
+
+function applyVisitorTier(s){
+  const meta = document.getElementById('visit-state');
+  if(witnessEligible){
+    meta.textContent = `VISITOR_STATE: WITNESS_ELIGIBLE · v${s.visits}`;
+    renderVoices(new Set(['voice-04','voice-11']));
+  } else if(returnVisit){
+    meta.textContent = `VISITOR_STATE: RETURNING · v${s.visits}`;
+    renderVoices();
+    setTimeout(()=>{
+      const slots = getRuneSlots();
+      if(slots[7]){
+        const text = slots[7].querySelector('.rune-glyph');
+        const mark = slots[7].querySelector('.codex-mark');
+        if(text && mark){
+          text.style.display = 'none';
+          mark.style.display = '';
+          mark.style.animation = 'runeLock 1.5s ease-out';
+          setTimeout(()=>{
+            mark.style.display = 'none';
+            text.style.display = '';
+          }, 1800);
+        }
+      }
+    }, 500);
+  } else {
+    meta.textContent = `VISITOR_STATE: FIRST_CONTACT · v${s.visits}`;
+    renderVoices();
+  }
+}
+
+/* PREVIEW CONTROLS */
+document.getElementById('btn-reset').addEventListener('click', ()=>{
+  localStorage.removeItem(STORAGE_KEY);
+  location.reload();
+});
+document.getElementById('btn-sim-return').addEventListener('click', ()=>{
+  const s = loadVisitState();
+  s.visits = 3;
+  saveVisitState(s);
+  location.reload();
+});
+document.getElementById('btn-sim-witness').addEventListener('click', ()=>{
+  const s = loadVisitState();
+  s.visits = 6;
+  saveVisitState(s);
+  location.reload();
+});
+
+/* BOOT */
+renderBindingInscription();
+buildRuneSlots();
+initVisitState();
+
+setTimeout(()=>{
+  advanceRunes();
+  setInterval(advanceRunes, RUNE_CYCLE_MS);
+}, returnVisit ? 800 : 1400);
+
+setTimeout(tearLoop, 800);
+
+setInterval(()=>{
+  const s = loadVisitState();
+  s.dwellMs = (s.dwellMs || 0) + 5000;
+  saveVisitState(s);
+}, 5000);
+</script>
+</body>
+</html>
