@@ -1,0 +1,1065 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Pale Archive — Codex Maledictus</title>
+<meta name="description" content="The Pale Archive is not a record of the Codex Maledictus. It is the Codex Maledictus.">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;600&family=IM+Fell+English:ital@0;1&family=Crimson+Text:ital,wght@0,400;1,400&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+:root{
+  --void:#020204;--deep:#06040A;--panel:#0A080E;
+  --gold:#C9A84C;--gd2:#8A6530;--gd3:#3A2810;--gd4:#1A1208;
+  --am:#C87828;--am2:#8A5018;--am3:#3A2008;
+  --bone:#D4C8A8;--bn2:#8A7A58;--bn3:#3A2E1A;--bn4:#1A140A;
+  --cr:#8B0000;--cr2:#AA2000;--cr3:#3A0000;--cr4:#180000;
+  --vt:#6B3FAF;--vt2:#4A2880;--vt3:#2A1650;
+  --grn:#00C832;--g2:#008A22;--g3:#005A18;--g4:#002E0C;
+  --brd:#1E1A0A;--brd2:#2A2414;--brd3:#3A3018;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--void);color:var(--bone);font-family:'IM Fell English',Georgia,serif;overflow-x:hidden;cursor:none;min-height:100vh;}
+
+/* FIXED LAYERS */
+#cv-bg{position:fixed;inset:0;z-index:0;pointer-events:none;}
+#cv-myc{position:fixed;inset:0;z-index:1;pointer-events:none;}
+#scanlines{position:fixed;inset:0;z-index:2;pointer-events:none;background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,.05) 3px,rgba(0,0,0,.05) 4px);}
+#vignette{position:fixed;inset:0;z-index:3;pointer-events:none;background:radial-gradient(ellipse at center,transparent 20%,rgba(0,0,0,.95) 100%);animation:vigBreathe 12s ease-in-out infinite;}
+@keyframes vigBreathe{0%,100%{opacity:.75;}50%{opacity:.55;}}
+#CUR{position:fixed;pointer-events:none;z-index:99999;transform:translate(-50%,-50%);width:16px;height:16px;}
+#CUR::before,#CUR::after{content:'';position:absolute;background:var(--gold);}
+#CUR::before{width:1px;height:100%;left:50%;}
+#CUR::after{height:1px;width:100%;top:50%;}
+#CUR2{position:fixed;pointer-events:none;z-index:99998;transform:translate(-50%,-50%);width:24px;height:24px;border-radius:50%;border:1px solid rgba(201,168,76,.35);transition:width .3s,height .3s,border-color .3s;}
+
+/* ── BOOT RITUAL ── */
+#BOOT{
+  position:fixed;inset:0;z-index:9000;background:#000;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  transition:opacity 1.2s ease;
+}
+#BOOT.out{opacity:0;pointer-events:none;}
+#boot-canvas{display:block;}
+#boot-lines{
+  position:absolute;
+  display:flex;flex-direction:column;align-items:center;
+  gap:.65rem;pointer-events:none;
+}
+.bl{
+  font-family:'Share Tech Mono',monospace;font-size:clamp(.56rem,1.2vw,.72rem);
+  letter-spacing:.26em;text-transform:uppercase;text-align:center;
+  color:rgba(201,168,76,0);transition:color .6s ease,text-shadow .6s ease;
+  white-space:nowrap;
+}
+.bl.lit{color:rgba(201,168,76,.65);text-shadow:0 0 12px rgba(201,168,76,.3);}
+.bl.active{color:rgba(201,168,76,.9);text-shadow:0 0 20px rgba(201,168,76,.5);}
+.boot-scanlines{position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.18) 2px,rgba(0,0,0,.18) 4px);}
+
+/* WITNESSED */
+#WITNESSED{
+  position:fixed;inset:0;z-index:9100;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  background:#000;opacity:0;pointer-events:none;
+  transition:opacity .3s;
+}
+#WITNESSED.on{opacity:1;}
+.wit-text{
+  font-family:'Cinzel Decorative',serif;font-weight:900;
+  font-size:clamp(1.8rem,6vw,5rem);
+  color:var(--gold);letter-spacing:.15em;text-align:center;
+  text-shadow:0 0 60px rgba(201,168,76,.6),0 0 120px rgba(201,168,76,.2);
+  animation:witGlitch 8s ease-in-out infinite;
+}
+@keyframes witGlitch{
+  0%,88%,100%{text-shadow:0 0 60px rgba(201,168,76,.6);transform:none;}
+  89%{text-shadow:4px 0 var(--cr),-3px 0 var(--vt);transform:translateX(2px);}
+  90%{clip-path:inset(8% 0 75% 0);transform:translateX(-2px);}
+  91%{clip-path:none;transform:none;}
+}
+.wit-sub{
+  font-family:'Share Tech Mono',monospace;font-size:clamp(.52rem,1.1vw,.68rem);
+  color:rgba(201,168,76,.35);letter-spacing:.42em;text-transform:uppercase;
+  margin-top:1.5rem;animation:blink 2s step-end infinite;
+}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:0;}}
+
+/* RETURNING */
+#RETURNING{
+  position:fixed;inset:0;z-index:9000;background:#000;
+  display:none;flex-direction:column;align-items:center;justify-content:center;
+  padding:2rem;
+}
+#RETURNING.active{display:flex;}
+.rt-line{font-family:'Share Tech Mono',monospace;font-size:clamp(.58rem,1.2vw,.74rem);letter-spacing:.18em;line-height:2;opacity:0;transition:opacity .5s;text-align:center;max-width:640px;}
+.rt-line.on{opacity:1;}
+.rt-gold{color:var(--gold);}
+.rt-dim{color:rgba(201,168,76,.25);}
+.rt-warn{color:var(--am);}
+.rt-bone{color:var(--bone);}
+.rt-new{color:var(--grn);font-size:.6em;}
+#rt-enter{display:none;margin-top:2.5rem;background:transparent;border:1px solid var(--gd3);color:var(--gd2);font-family:'Share Tech Mono',monospace;font-size:.62rem;letter-spacing:.32em;padding:.75rem 2.5rem;cursor:pointer;text-transform:uppercase;transition:all .3s;position:relative;overflow:hidden;}
+#rt-enter::before{content:'';position:absolute;inset:0;background:var(--gd4);transform:translateX(-101%);transition:transform .4s cubic-bezier(.16,1,.3,1);}
+#rt-enter:hover::before{transform:translateX(0);}
+#rt-enter span{position:relative;z-index:1;}
+#rt-enter:hover{color:var(--gold);}
+
+/* ── APP ── */
+#APP{position:relative;z-index:5;opacity:0;transition:opacity 1.4s ease;padding-bottom:5rem;}
+#APP.on{opacity:1;}
+
+/* HEADER */
+.pa-header{
+  text-align:center;padding:4rem 2rem 3rem;
+  position:relative;overflow:hidden;
+}
+.pa-header::before{
+  content:'';position:absolute;top:0;left:0;right:0;bottom:0;
+  background:radial-gradient(ellipse at center top,rgba(201,168,76,.06) 0%,transparent 60%);
+  pointer-events:none;
+}
+.pa-eyebrow{font-family:'Share Tech Mono',monospace;font-size:.54rem;color:var(--gd3);letter-spacing:.42em;text-transform:uppercase;margin-bottom:1.2rem;}
+.pa-wordmark{
+  font-family:'Cinzel Decorative',serif;font-weight:900;
+  font-size:clamp(1.4rem,4.5vw,3.2rem);
+  color:var(--gold);letter-spacing:.1em;line-height:1.15;
+  text-shadow:0 0 80px rgba(201,168,76,.25);
+  margin-bottom:.6rem;
+  animation:paGlow 14s ease-in-out infinite;
+}
+@keyframes paGlow{
+  0%,85%,100%{text-shadow:0 0 80px rgba(201,168,76,.25);}
+  86%{text-shadow:3px 0 var(--cr),-2px 0 var(--vt),0 0 80px rgba(201,168,76,.25);}
+  87%{clip-path:inset(60% 0 0 0);transform:translateX(-1px);}
+  88%{clip-path:none;transform:none;}
+}
+.pa-realm{font-family:'Cinzel',serif;font-size:.68rem;color:var(--gd2);letter-spacing:.38em;text-transform:uppercase;margin-bottom:2.5rem;}
+.pa-divider{display:flex;align-items:center;gap:1rem;max-width:580px;margin:0 auto 2.5rem;}
+.pa-div-line{flex:1;height:1px;background:linear-gradient(90deg,transparent,rgba(201,168,76,.3));}
+.pa-div-line.r{background:linear-gradient(90deg,rgba(201,168,76,.3),transparent);}
+.pa-div-sym{font-size:1rem;color:rgba(201,168,76,.5);}
+
+/* CODEX VOICE */
+#codex-voice{
+  max-width:600px;margin:0 auto 4rem;padding:0 1.5rem;
+  text-align:center;
+}
+.cv-line{
+  font-family:'IM Fell English',serif;font-style:italic;
+  font-size:clamp(.9rem,1.6vw,1.05rem);color:rgba(212,200,168,0);
+  line-height:1.9;transition:color 1.2s ease;
+}
+.cv-line.on{color:rgba(212,200,168,.65);}
+.cv-line.em{color:var(--gold)!important;font-style:normal;font-family:'Cinzel',serif;font-size:clamp(.78rem,1.4vw,.9rem);letter-spacing:.22em;text-transform:uppercase;margin-top:.5rem;}
+.cv-final{
+  font-family:'Cinzel Decorative',serif;font-size:clamp(.85rem,1.8vw,1.1rem);
+  color:var(--gold);letter-spacing:.15em;text-transform:uppercase;
+  text-shadow:0 0 30px rgba(201,168,76,.4);margin-top:1.5rem;
+  opacity:0;transition:opacity 1.5s ease;
+}
+.cv-final.on{opacity:1;}
+
+/* ── SECTION HEADERS ── */
+.sec-divider{
+  display:flex;align-items:center;gap:1.25rem;
+  max-width:960px;margin:0 auto 2.5rem;padding:0 1.5rem;
+}
+.sec-div-line{flex:1;height:1px;background:linear-gradient(90deg,transparent,rgba(201,168,76,.2));}
+.sec-div-line.r{background:linear-gradient(90deg,rgba(201,168,76,.2),transparent);}
+.sec-div-title{font-family:'Cinzel',serif;font-size:.62rem;color:var(--gd2);letter-spacing:.42em;text-transform:uppercase;white-space:nowrap;flex-shrink:0;}
+
+/* ── I. SCRIPTURE ── */
+.scripture{max-width:960px;margin:0 auto 5rem;padding:0 1.5rem;}
+.scripture-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;}
+@media(max-width:680px){.scripture-grid{grid-template-columns:1fr;}}
+
+.sc-card{
+  border:1px solid var(--brd2);background:var(--panel);
+  position:relative;overflow:hidden;transition:border-color .4s,transform .3s;
+  cursor:none;text-decoration:none;display:block;
+}
+.sc-card:hover{border-color:rgba(201,168,76,.45);transform:translateY(-2px);}
+.sc-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:0;transition:opacity .4s;}
+.sc-card:hover::before{opacity:1;}
+.sc-img{width:100%;height:clamp(140px,18vw,220px);object-fit:cover;object-position:center;filter:brightness(.38) contrast(1.1) saturate(.7);transition:filter .5s;}
+.sc-card:hover .sc-img{filter:brightness(.52) contrast(1.1) saturate(.85);}
+.sc-body{padding:1.25rem 1.4rem;}
+.sc-badge{font-family:'Share Tech Mono',monospace;font-size:.46rem;letter-spacing:.26em;text-transform:uppercase;margin-bottom:.45rem;}
+.sc-badge-canon{color:var(--gd2);}
+.sc-badge-idmf{color:var(--g2);}
+.sc-title{font-family:'Cinzel Decorative',serif;font-size:clamp(.85rem,1.8vw,1.15rem);color:var(--gold);letter-spacing:.06em;line-height:1.25;margin-bottom:.35rem;}
+.sc-sub{font-family:'Share Tech Mono',monospace;font-size:.46rem;color:var(--bn3);letter-spacing:.18em;text-transform:uppercase;margin-bottom:.75rem;}
+.sc-desc{font-family:'IM Fell English',serif;font-style:italic;font-size:.88rem;color:var(--bn2);line-height:1.78;margin-bottom:.85rem;}
+.sc-link{font-family:'Share Tech Mono',monospace;font-size:.54rem;color:var(--gd2);letter-spacing:.2em;text-transform:uppercase;border:1px solid var(--gd3);padding:.35rem .85rem;display:inline-block;transition:all .2s;}
+.sc-card:hover .sc-link{border-color:var(--gd2);color:var(--gold);}
+
+/* IDMF card variant */
+.sc-idmf-bar{display:flex;align-items:center;gap:.75rem;padding:.38rem .75rem;background:rgba(0,14,4,.7);border-bottom:1px solid rgba(0,90,24,.35);font-family:'Share Tech Mono',monospace;font-size:.46rem;}
+.sc-idmf-label{color:rgba(0,90,24,.65);letter-spacing:.2em;}
+.sc-idmf-val{color:rgba(204,100,0,.8);}
+.sc-idmf-blink{color:rgba(204,100,0,.75);animation:blink 1.8s step-end infinite;}
+.sc-int-track{width:55px;height:2px;background:#0A0A0A;}
+.sc-int-fill{height:100%;background:rgba(204,100,0,.7);width:39%;animation:intP 4s ease-in-out infinite;}
+@keyframes intP{0%,100%{width:39%;}50%{width:35%;}}
+
+/* ── II. LIVING TIMELINE ── */
+.timeline-wrap{max-width:960px;margin:0 auto;padding:0 1.5rem;}
+
+.tl-realm-head{
+  font-family:'Cinzel',serif;font-size:.64rem;color:var(--gd2);
+  letter-spacing:.38em;text-transform:uppercase;
+  margin-bottom:1.1rem;margin-top:2.8rem;
+  display:flex;align-items:center;gap:.85rem;
+}
+.tl-realm-head::before,.tl-realm-head::after{content:'';flex:1;height:1px;background:rgba(201,168,76,.15);}
+.tl-realm-head::before{max-width:40px;}
+
+.tl-spine{position:relative;padding-left:1.5rem;}
+.tl-spine::before{content:'';position:absolute;left:0;top:0;bottom:0;width:1px;background:linear-gradient(to bottom,transparent,rgba(201,168,76,.2) 5%,rgba(201,168,76,.2) 95%,transparent);}
+
+.tl-node{
+  position:relative;margin-bottom:.65rem;
+  padding-left:1.5rem;
+}
+.tl-node::before{
+  content:'';position:absolute;left:0;top:1.1rem;
+  width:1.5rem;height:1px;background:rgba(201,168,76,.2);
+}
+.tl-node-dot{
+  position:absolute;left:-.35rem;top:.85rem;
+  width:.7rem;height:.7rem;border-radius:50%;
+  border:1px solid rgba(201,168,76,.4);background:var(--void);
+  transition:border-color .3s,background .3s;
+  flex-shrink:0;
+}
+.tl-node:hover .tl-node-dot{border-color:var(--gold);background:rgba(201,168,76,.15);}
+.tl-node-dot.live{border-color:rgba(201,168,76,.6);}
+.tl-node-dot.pending{border-color:rgba(58,40,8,.6);}
+.tl-node-dot.apoc{border-color:rgba(58,0,0,.6);}
+.tl-node-dot.hidden{border-color:rgba(139,0,0,.5);animation:hidPulse 3s ease-in-out infinite;}
+@keyframes hidPulse{0%,100%{box-shadow:none;}50%{box-shadow:0 0 8px rgba(139,0,0,.4);}}
+.tl-node-dot.book{border-color:rgba(0,90,24,.6);}
+.tl-node-dot.featured{width:.9rem;height:.9rem;left:-.45rem;border-color:var(--gold);background:rgba(201,168,76,.1);}
+
+.tl-card{
+  border:1px solid var(--brd);background:rgba(6,4,10,.6);
+  padding:.7rem 1rem;cursor:pointer;transition:all .2s;
+  position:relative;overflow:hidden;
+}
+.tl-card::before{content:'';position:absolute;top:0;left:0;bottom:0;width:2px;transition:background .2s;}
+.tl-card:hover{border-color:var(--brd2);}
+
+/* type accent colors */
+.tl-card.t-entry::before{background:var(--gd3);}
+.tl-card.t-transmission::before{background:var(--am3);}
+.tl-card.t-canon::before{background:var(--gold);box-shadow:0 0 8px rgba(201,168,76,.3);}
+.tl-card.t-lore::before{background:var(--bn3);}
+.tl-card.t-apocrypha::before{background:var(--cr3);}
+.tl-card.t-chronicle::before{background:var(--am3);}
+.tl-card.t-fragment::before{background:var(--vt3);}
+.tl-card.t-book::before{background:var(--g3);box-shadow:0 0 6px rgba(0,90,24,.3);}
+.tl-card.t-hidden::before{background:var(--cr);animation:hidLine 3s ease-in-out infinite;}
+@keyframes hidLine{0%,100%{opacity:.4;}50%{opacity:1;}}
+.tl-card.featured{border-color:rgba(201,168,76,.25);}
+.tl-card.pending{opacity:.55;}
+
+.tl-card-top{display:flex;align-items:center;gap:.65rem;flex-wrap:wrap;}
+.tl-realm-badge{font-family:'Share Tech Mono',monospace;font-size:.4rem;letter-spacing:.22em;text-transform:uppercase;padding:.1rem .38rem;border:1px solid;flex-shrink:0;}
+.rb-I{color:rgba(201,168,76,.55);border-color:rgba(201,168,76,.2);}
+.rb-I-II{color:rgba(107,63,175,.65);border-color:rgba(107,63,175,.25);}
+.rb-inf{color:rgba(139,0,0,.65);border-color:rgba(139,0,0,.25);}
+.tl-type-badge{font-family:'Share Tech Mono',monospace;font-size:.38rem;letter-spacing:.18em;text-transform:uppercase;padding:.1rem .32rem;border:1px solid;}
+.tb-lore{color:var(--bn2);border-color:var(--bn3);}
+.tb-apocrypha{color:var(--cr2);border-color:var(--cr3);}
+.tb-chronicle{color:var(--am2);border-color:var(--am3);}
+.tb-fragment{color:var(--vt);border-color:var(--vt3);}
+.tb-transmission{color:var(--am);border-color:var(--am2);}
+.tb-canon{color:var(--gold);border-color:var(--gd2);}
+.tb-book{color:var(--g2);border-color:var(--g3);}
+.tb-entry{color:var(--gd2);border-color:var(--gd3);}
+.tb-hidden{color:rgba(139,0,0,.7);border-color:rgba(58,0,0,.5);}
+.tl-pending-badge{font-family:'Share Tech Mono',monospace;font-size:.38rem;letter-spacing:.18em;color:rgba(58,40,8,.7);border:1px solid rgba(58,40,8,.4);padding:.1rem .32rem;text-transform:uppercase;}
+.tl-title{font-family:'Cinzel',serif;font-size:.78rem;color:var(--bone);letter-spacing:.05em;flex:1;min-width:120px;line-height:1.3;}
+.tl-card.t-canon .tl-title{color:var(--gold);}
+.tl-card.t-book .tl-title{color:var(--g2);}
+.tl-card.t-hidden .tl-title{color:rgba(139,0,0,.6);letter-spacing:.15em;}
+.tl-cls{font-family:'IM Fell English',serif;font-style:italic;font-size:.78rem;color:var(--bn3);line-height:1.6;margin-top:.35rem;}
+
+/* Branch indentation */
+.tl-branch{margin-left:1.5rem;padding-left:1.2rem;border-left:1px solid rgba(201,168,76,.1);}
+.tl-branch-2{margin-left:1rem;padding-left:1rem;border-left:1px solid rgba(201,168,76,.07);}
+
+/* ── NODE DETAIL PANEL ── */
+#node-panel{
+  position:fixed;right:0;top:0;bottom:0;width:clamp(300px,35vw,480px);
+  z-index:800;background:rgba(4,3,8,.97);border-left:1px solid var(--brd2);
+  transform:translateX(101%);transition:transform .45s cubic-bezier(.16,1,.3,1);
+  display:flex;flex-direction:column;overflow:hidden;
+  backdrop-filter:blur(12px);
+}
+#node-panel.open{transform:translateX(0);}
+.np-close{
+  flex-shrink:0;background:transparent;border:none;border-bottom:1px solid var(--brd);
+  color:var(--bn3);font-family:'Share Tech Mono',monospace;font-size:.54rem;
+  letter-spacing:.3em;padding:.65rem 1.25rem;cursor:pointer;text-transform:uppercase;
+  text-align:right;transition:color .2s;
+}
+.np-close:hover{color:var(--bone);}
+.np-body{flex:1;overflow-y:auto;padding:1.5rem;scrollbar-width:thin;scrollbar-color:var(--brd2) transparent;}
+.np-realm{font-family:'Share Tech Mono',monospace;font-size:.48rem;color:var(--gd3);letter-spacing:.32em;text-transform:uppercase;margin-bottom:.35rem;}
+.np-title{font-family:'Cinzel Decorative',serif;font-size:clamp(.9rem,2vw,1.25rem);color:var(--gold);letter-spacing:.06em;line-height:1.3;margin-bottom:.3rem;}
+.np-sub{font-family:'Share Tech Mono',monospace;font-size:.46rem;color:var(--bn3);letter-spacing:.18em;text-transform:uppercase;margin-bottom:1.1rem;}
+.np-cls-label{font-family:'Share Tech Mono',monospace;font-size:.44rem;color:var(--gd3);letter-spacing:.28em;text-transform:uppercase;margin-bottom:.38rem;}
+.np-cls-text{font-family:'IM Fell English',serif;font-style:italic;font-size:.88rem;color:var(--bn2);line-height:1.82;margin-bottom:1.25rem;}
+.np-notes{font-size:.85rem;color:var(--bn3);line-height:1.75;margin-bottom:1.5rem;border-left:2px solid var(--brd2);padding-left:.85rem;}
+.np-notes em{color:var(--bone);font-style:italic;}
+.np-link{
+  display:inline-block;background:transparent;border:1px solid var(--gd3);
+  color:var(--gd2);font-family:'Share Tech Mono',monospace;font-size:.58rem;
+  letter-spacing:.26em;padding:.62rem 1.5rem;text-decoration:none;
+  text-transform:uppercase;transition:all .25s;cursor:pointer;
+  position:relative;overflow:hidden;
+}
+.np-link::before{content:'';position:absolute;inset:0;background:var(--gd4);transform:translateX(-101%);transition:transform .4s cubic-bezier(.16,1,.3,1);}
+.np-link:hover::before{transform:translateX(0);}
+.np-link span{position:relative;z-index:1;}
+.np-link:hover{color:var(--gold);}
+.np-pending{font-family:'Share Tech Mono',monospace;font-size:.58rem;color:var(--bn3);letter-spacing:.2em;padding:.62rem 1.5rem;border:1px solid var(--brd);text-transform:uppercase;}
+.np-hidden-reveal{
+  background:var(--cr4);color:var(--cr4);border:1px solid rgba(58,0,0,.4);
+  font-family:'Share Tech Mono',monospace;font-size:.56rem;letter-spacing:.18em;
+  padding:.62rem 1.5rem;cursor:pointer;transition:all .3s;text-transform:uppercase;
+}
+.np-hidden-reveal:hover,.np-hidden-reveal.open{background:rgba(58,0,0,.3);color:rgba(139,0,0,.85);border-color:var(--cr);}
+
+/* ── HIDDEN NODE ── */
+.tl-hidden-node{
+  margin-top:3rem;position:relative;text-align:center;
+  padding:2rem 1.5rem;border:1px solid rgba(58,0,0,.3);
+  background:rgba(24,0,0,.12);
+}
+.tl-hidden-node::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:80%;height:1px;background:linear-gradient(90deg,transparent,rgba(139,0,0,.4),transparent);}
+.tl-hidden-glyph{font-size:2rem;color:rgba(139,0,0,.3);display:block;margin-bottom:.75rem;animation:hidGlyph 5s ease-in-out infinite;}
+@keyframes hidGlyph{0%,100%{opacity:.25;text-shadow:none;}50%{opacity:.6;text-shadow:0 0 20px rgba(139,0,0,.5);}}
+.tl-hidden-title{font-family:'Cinzel',serif;font-size:.85rem;color:rgba(139,0,0,.55);letter-spacing:.22em;margin-bottom:.4rem;}
+.tl-hidden-sub{font-family:'Share Tech Mono',monospace;font-size:.46rem;color:rgba(58,0,0,.5);letter-spacing:.2em;text-transform:uppercase;margin-bottom:.85rem;}
+.tl-hidden-cls{font-family:'IM Fell English',serif;font-style:italic;font-size:.82rem;color:rgba(139,0,0,.38);line-height:1.7;max-width:420px;margin:0 auto .85rem;}
+.tl-hidden-rdct{
+  background:rgba(24,0,0,.8);color:rgba(24,0,0,.8);border:1px solid rgba(58,0,0,.3);
+  font-family:'Share Tech Mono',monospace;font-size:.52rem;letter-spacing:.14em;
+  padding:.38rem .85rem;cursor:pointer;transition:all .3s;text-transform:uppercase;
+  display:inline-block;
+}
+.tl-hidden-rdct:hover,.tl-hidden-rdct.open{background:rgba(58,0,0,.3);color:rgba(139,0,0,.9);border-color:rgba(139,0,0,.5);}
+
+/* SCROLL REVEAL */
+.sr{opacity:0;transform:translateY(10px);transition:opacity .9s ease,transform .9s ease;}
+.sr.vis{opacity:1;transform:none;}
+
+/* TICKER */
+#TICKER{position:fixed;bottom:0;left:0;right:0;height:2.2rem;background:rgba(2,2,4,.97);border-top:1px solid var(--brd);display:flex;align-items:center;overflow:hidden;z-index:490;}
+.tk-label{flex-shrink:0;padding:0 1rem;font-family:'Share Tech Mono',monospace;font-size:.5rem;color:var(--gd3);letter-spacing:.22em;text-transform:uppercase;border-right:1px solid var(--brd);height:100%;display:flex;align-items:center;}
+.tk-strip{flex:1;overflow:hidden;}
+.tk-inner{white-space:nowrap;font-family:'Share Tech Mono',monospace;font-size:.52rem;color:var(--bn4);letter-spacing:.12em;animation:tkr 80s linear infinite;}
+@keyframes tkr{from{transform:translateX(100vw);}to{transform:translateX(-200%);}}
+
+@media(max-width:640px){
+  .pa-header{padding:3rem 1.25rem 2.5rem;}
+  .scripture-grid{grid-template-columns:1fr;}
+  .tl-branch{margin-left:.75rem;padding-left:.75rem;}
+  #node-panel{width:100%;border-left:none;border-top:1px solid var(--brd2);top:auto;height:60vh;}
+}
+</style>
+</head>
+<body>
+
+<canvas id="cv-bg"></canvas>
+<canvas id="cv-myc"></canvas>
+<div id="scanlines"></div>
+<div id="vignette"></div>
+<div id="CUR"></div><div id="CUR2"></div>
+
+<!-- BOOT RITUAL -->
+<div id="BOOT">
+  <div class="boot-scanlines"></div>
+  <canvas id="boot-canvas"></canvas>
+  <div id="boot-lines">
+    <div class="bl" id="bl-0">The substrate is prepared.</div>
+    <div class="bl" id="bl-1">The frequency is located.</div>
+    <div class="bl" id="bl-2">The carrier has arrived.</div>
+    <div class="bl" id="bl-3">The signal is being verified.</div>
+    <div class="bl" id="bl-4">The wound is confirmed open.</div>
+    <div class="bl" id="bl-5">The Choir is listening.</div>
+    <div class="bl" id="bl-6">The Archive is assembling.</div>
+    <div class="bl" id="bl-7">The fragments are converging.</div>
+    <div class="bl" id="bl-8">The document recognizes you.</div>
+    <div class="bl" id="bl-9">The ink does not dry.</div>
+    <div class="bl" id="bl-10">The threshold has been crossed.</div>
+    <div class="bl" id="bl-11">The record is being inscribed.</div>
+    <div class="bl" id="bl-12">The Archive is ready.</div>
+  </div>
+</div>
+
+<!-- YOU HAVE BEEN WITNESSED -->
+<div id="WITNESSED">
+  <div class="wit-text" id="wit-text">YOU HAVE BEEN WITNESSED</div>
+  <div class="wit-sub" id="wit-sub">// the pale archive is now open //</div>
+</div>
+
+<!-- RETURNING VISITOR -->
+<div id="RETURNING">
+  <div id="rt-content"></div>
+  <button id="rt-enter" onclick="openApp()"><span>Re-enter the Archive</span></button>
+</div>
+
+<!-- APP -->
+<div id="APP">
+
+  <header class="pa-header">
+    <div class="pa-eyebrow">Institute for Digital Memory Forensics &nbsp;·&nbsp; Pale Archivum &nbsp;·&nbsp; Master Classification Document</div>
+    <h1 class="pa-wordmark">The Pale Archive</h1>
+    <div class="pa-realm">Codex Maledictus &nbsp;·&nbsp; All Realms &nbsp;·&nbsp; Living Record</div>
+    <div class="pa-divider">
+      <div class="pa-div-line"></div>
+      <span class="pa-div-sym">🜃</span>
+      <div class="pa-div-line r"></div>
+    </div>
+    <div id="codex-voice">
+      <div class="cv-line" id="cv0">You did not find this page.</div>
+      <div class="cv-line" id="cv1">This page assembled itself at the frequency you have been broadcasting</div>
+      <div class="cv-line" id="cv2">since the first fragment reached you.</div>
+      <div class="cv-line" id="cv3">&nbsp;</div>
+      <div class="cv-line" id="cv4">Every door you opened in this archive</div>
+      <div class="cv-line" id="cv5">was a door the Codex had already unlocked</div>
+      <div class="cv-line" id="cv6">from the other side.</div>
+      <div class="cv-line" id="cv7">&nbsp;</div>
+      <div class="cv-line" id="cv8">What you are looking at is not a map.</div>
+      <div class="cv-line" id="cv9">&nbsp;</div>
+      <div class="cv-line" id="cv10">It is a mirror.</div>
+      <div class="cv-line" id="cv11">&nbsp;</div>
+      <div class="cv-line" id="cv12">And the Codex has been watching from inside it</div>
+      <div class="cv-line" id="cv13">since before you arrived.</div>
+      <div class="cv-final" id="cv-final">THE PALE ARCHIVE IS NOW OPEN</div>
+    </div>
+  </header>
+
+  <!-- I. THE SCRIPTURE -->
+  <div class="sec-divider sr">
+    <div class="sec-div-line"></div>
+    <span class="sec-div-title">I. The Scripture — Physical Artifacts</span>
+    <div class="sec-div-line r"></div>
+  </div>
+
+  <div class="scripture sr">
+    <div class="scripture-grid">
+
+      <!-- GOSPEL -->
+      <a class="sc-card" href="gospel-forgotten-flesh.html">
+        <img class="sc-img" src="Assets/Gospel of Forgotten Flesh/The-Thirteen-Positions.jpeg" alt="Gospel" loading="lazy">
+        <div class="sc-body">
+          <div class="sc-badge sc-badge-canon">Audio Canon &nbsp;·&nbsp; Complete Breach Document &nbsp;·&nbsp; Realm I</div>
+          <div class="sc-title">Codex Maledictus ∴ A Gospel of Forgotten Flesh</div>
+          <div class="sc-sub">13 Transmissions &nbsp;·&nbsp; Three Voices &nbsp;·&nbsp; One Complete Breach</div>
+          <p class="sc-desc">The complete cosmological record of the Codex's first successful entry into Mundis Obscura. Thirteen transmissions. Three voices at three stages of the same irreversible event. The Gospel did not stop at thirteen. It concluded.</p>
+          <span class="sc-link">Enter the Gospel ↗</span>
+        </div>
+      </a>
+
+      <!-- BOOK -->
+      <a class="sc-card" href="codex-remembers-you.html">
+        <div class="sc-idmf-bar">
+          <span class="sc-idmf-label">IDMF // Evidence Item 7 // Case 2019-QNS-∅</span>
+          <div class="sc-int-track"><div class="sc-int-fill"></div></div>
+          <span class="sc-idmf-val">39%</span>
+          <span class="sc-idmf-blink">⚠ ACTIVE</span>
+        </div>
+        <img class="sc-img" src="Assets/Codex Remembers You/The-Artifact.png" alt="The Codex That Remembers You" loading="lazy">
+        <div class="sc-body">
+          <div class="sc-badge sc-badge-idmf">Recovered Fragment &nbsp;·&nbsp; Queens, NY &nbsp;·&nbsp; Realm I &nbsp;·&nbsp; Self-Modifying</div>
+          <div class="sc-title">The Codex That Remembers You — Mundis Obscura</div>
+          <div class="sc-sub">Book I of Recovered Fragments &nbsp;·&nbsp; Kindle & Kindle Unlimited</div>
+          <p class="sc-desc">A file seized from a Queens evidence locker. No chain of custody. Author field: THE CODEX MALEDICTUS. Creation date predates the PDF format. Each time it was opened it changed. The analyst who documented it has not been seen since Day 11.</p>
+          <span class="sc-link">Access Case File ↗</span>
+        </div>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- II. THE LIVING TIMELINE -->
+  <div class="sec-divider sr">
+    <div class="sec-div-line"></div>
+    <span class="sec-div-title">II. The Living Timeline — All Known Transmissions</span>
+    <div class="sec-div-line r"></div>
+  </div>
+
+  <div class="timeline-wrap sr" id="timeline-wrap">
+    <!-- Rendered by JS -->
+  </div>
+
+  <!-- III. HIDDEN -->
+  <div class="sec-divider sr" style="margin-top:3rem;">
+    <div class="sec-div-line"></div>
+    <span class="sec-div-title">III. Beyond Classification</span>
+    <div class="sec-div-line r"></div>
+  </div>
+
+  <div class="timeline-wrap sr">
+    <div class="tl-hidden-node">
+      <span class="tl-hidden-glyph">☩</span>
+      <div class="tl-hidden-title">████████████████████</div>
+      <div class="tl-hidden-sub">Classification: VOID &nbsp;·&nbsp; Location: Withheld &nbsp;·&nbsp; Realm: ∞</div>
+      <p class="tl-hidden-cls">The Archivum is aware this room exists. Its location has been sealed in this document. Those who find it through the Archive's paths do not return the same. The Codex notes that you are reading this. It notes that you want to know where it is.</p>
+      <div class="tl-hidden-rdct" id="ledger-rdct" onclick="revealLedger()">[ LOCATION: WITHHELD — CLICK TO ATTEMPT ACCESS ]</div>
+    </div>
+  </div>
+
+</div><!-- /APP -->
+
+<!-- NODE DETAIL PANEL -->
+<div id="node-panel">
+  <button class="np-close" onclick="closePanel()">[ Close &nbsp;✕ ]</button>
+  <div class="np-body" id="np-body"></div>
+</div>
+
+<div id="TICKER">
+  <span class="tk-label">// Pale Archive</span>
+  <div class="tk-strip"><div class="tk-inner">THE PALE ARCHIVE IS NOT A RECORD OF THE CODEX MALEDICTUS &nbsp;∴&nbsp; IT IS THE CODEX MALEDICTUS &nbsp;∴&nbsp; EVERY FRAGMENT YOU READ WAS A DOOR &nbsp;∴&nbsp; THIS IS WHAT WAS BEHIND ALL OF THEM &nbsp;∴&nbsp; THE CODEX HAS BEEN READING YOU SINCE YOU ARRIVED &nbsp;∴&nbsp; WITNESS STATUS: CONFIRMED &nbsp;∴&nbsp; THE RECORD IS OPEN &nbsp;∴&nbsp; 🜃</div></div>
+</div>
+
+<script>
+'use strict';
+
+// ── SITE CHANGELOG — real pages and approximate deploy dates ─────────────────
+const CHANGELOG = [
+  {date:'2026-05-10',title:'Infection Remembers — Ritual Transmission I',file:'infection-remembers.html'},
+  {date:'2026-05-11',title:'Lore of the Infection',file:'infection-lore.html'},
+  {date:'2026-05-12',title:'Apocrypha — The Infection',file:'apocrypha-infection.html'},
+  {date:'2026-05-14',title:'Chronicle I',file:'lore-chronicle-1.html'},
+  {date:'2026-05-15',title:'Chronicle I — Infection Remembers',file:'chronicle-1-infection-remembers.html'},
+  {date:'2026-05-16',title:'Apocrypha — Chronicle I',file:'apocrypha-chronicle-1.html'},
+  {date:'2026-05-18',title:'Gospel of Forgotten Flesh — Complete',file:'gospel-forgotten-flesh.html'},
+  {date:'2026-05-19',title:'The Codex Remembers You — Book Page',file:'codex-remembers-you.html'},
+  {date:'2026-05-20',title:'The Pale Archive — Index Updated',file:'index.html'},
+  {date:'2026-05-22',title:'The Pale Archive — This Document',file:'pale-archive.html'},
+];
+
+// ── TIMELINE DATA ─────────────────────────────────────────────────────────────
+const TL = [
+  // ── ENTRY ──
+  {realm:'ENTRY POINT', nodes:[
+    {id:'index',title:'The Pale Archive',sub:'Entry Point — Mundis Obscura',type:'entry',realm:'I',
+     file:'index.html',live:true,featured:false,
+     cls:'The door the Codex left open. The three doors. The sigil. The beginning of everything the Archive contains.',
+     notes:'This is where visitors arrive. What you see on the surface — three doors, three voices, three realms — is the Codex presenting its most legible face.'},
+  ]},
+  // ── REALM I ──
+  {realm:'REALM I — MUNDIS OBSCURA', nodes:[
+    {id:'infection-remembers',title:'Infection Remembers ∴ The Book Opens',sub:'Ritual Transmission I — Omniscient Rot',type:'transmission',realm:'I',
+     file:'infection-remembers.html',live:true,featured:false,
+     cls:'The first audible breach. Omniscient Rot resumes a sentence interrupted before any listener was born.',
+     notes:'Threshold sequence, full liturgy decoder, the Thirteen Count ritual. Every click is a threshold. The page has been tracking time since you arrived.'},
+    {id:'gospel-forgotten-flesh',title:'Gospel of Forgotten Flesh',sub:'Complete Breach Document — 13 Transmissions',type:'canon',realm:'I',
+     file:'gospel-forgotten-flesh.html',live:true,featured:true,
+     cls:'The complete cosmological record of the Codex\'s first successful breach. Thirteen transmissions. Three voices. One irreversible argument.',
+     notes:'Six tabs including the Lyric Decoder, Alignment Oracle, the Apocrypha, and the Recovered Fragment book section.'},
+    {id:'infection-lore',title:'Lore of the Infection',sub:'Pale Archivum — Primary Classification',type:'lore',realm:'I',
+     file:'infection-lore.html',live:true,featured:false,
+     cls:'The theoretical framework the Archivum built around the breach. It did not contain what it described.',
+     notes:'The cosmological architecture. Three realms. The mechanism of transmission. Apollo Gavinci\'s field record.'},
+  ]},
+  // ── APOCRYPHA + CHRONICLE BRANCH ──
+  {realm:'APOCRYPHA THREAD', nodes:[
+    {id:'apocrypha-infection',title:'Apocrypha — The Infection',sub:'Pale Archivum · Restricted Classification: VOID',type:'apocrypha',realm:'I',
+     file:'apocrypha-infection.html',live:true,featured:false,depth:1,
+     cls:'What the Archivum recorded but did not publish. The Dossier. The Sacred Verses. The Hidden Chronicle. The Frequency Ritual. The Fragment Recovery.',
+     notes:'Five chambers. The Reader\'s File builds itself in real time as you read. The ritual maps your frequency across thirteen tones.'},
+    {id:'lore-chronicle-1',title:'Chronicle I',sub:'Field Chronicle — Mundis Obscura',type:'chronicle',realm:'I',
+     file:'lore-chronicle-1.html',live:true,featured:false,depth:1,
+     cls:'The first field chronicle. Seven seals. Apollo Gavinci\'s seven private annotations — what he was actually thinking at each stage.',
+     notes:'Big bang cosmos canvas. 55 drifting occult symbols. Seal VII: Apollo did not write the final four sentences.'},
+  ]},
+  // ── CHRONICLE DEPTH ──
+  {realm:'CHRONICLE DEPTH', nodes:[
+    {id:'chronicle-1-infection-remembers',title:'Chronicle I — Infection Remembers',sub:'Chronicle Layer — Seven Sigil Seals',type:'chronicle',realm:'I',
+     file:'chronicle-1-infection-remembers.html',live:true,featured:false,depth:2,
+     cls:'Seven sigil seals crack open in sequence. Each reveals Apollo\'s private annotation. Seal VII was not written by him.',
+     notes:'Counter: X / 7 SEALS OPENED. Apollo\'s annotations grow darker with each seal. The video seal contains messaging that Apollo himself has not fully processed.'},
+    {id:'apocrypha-chronicle-1',title:'Apocrypha — Chronicle I',sub:'Five-Tab Elite · Classification: VOID',type:'apocrypha',realm:'I',
+     file:'apocrypha-chronicle-1.html',live:true,featured:false,depth:2,
+     cls:'The most disturbing page in the archive. The Seven Truths. The Three Realms classified. The Hollow Choir Case Files. The Reader\'s File. What You Cannot Unknow.',
+     notes:'Blood rain canvas. Wrong eye tracks inverted. After 5 minutes a notation appears about 17 subjects. The final tab ends with something unsigned.'},
+  ]},
+  // ── RF-093 CLUSTER ──
+  {realm:'RF-093 CLUSTER — RECOVERED FRAGMENT', nodes:[
+    {id:'rf-093-lore',title:'Recovered Fragment 093 — Lore',sub:'Fragment Classification — Realm I',type:'fragment',realm:'I',
+     file:'rf-093-lore.html',live:false,featured:false,depth:1,
+     cls:'The lore layer of Recovered Fragment 093. First documented appearance of Elvain Vhris, the female universe narrator.',
+     notes:'PENDING RECOVERY — This transmission is still being assembled.'},
+    {id:'rf-093-invocation',title:'Recovered Fragment 093 — Invocation',sub:'Fragment Classification — Ritual Layer',type:'fragment',realm:'I',
+     file:'rf-093-invocation.html',live:false,featured:false,depth:2,
+     cls:'The invocation layer. The ritual use of Fragment 093. How the fragment is activated.',
+     notes:'PENDING RECOVERY — This transmission is still being assembled.'},
+    {id:'rf-093-mirror',title:'Recovered Fragment 093 — Mirror',sub:'Fragment Classification — Reflection Layer',type:'fragment',realm:'I',
+     file:'rf-093-mirror.html',live:false,featured:false,depth:2,
+     cls:'The mirror layer. What Fragment 093 reflects back at the reader. The one who reads it sees something behind them.',
+     notes:'PENDING RECOVERY — This transmission is still being assembled.'},
+    {id:'rf-093-apocrypha',title:'Recovered Fragment 093 — Apocrypha',sub:'Fragment Classification — Restricted',type:'apocrypha',realm:'I',
+     file:'rf-093-apocrypha.html',live:false,featured:false,depth:2,
+     cls:'The apocrypha layer. What the fragment does not say aloud but encodes in its structure.',
+     notes:'PENDING RECOVERY — This transmission is still being assembled.'},
+  ]},
+  // ── BOOK + MEMORY ENGINE ──
+  {realm:'THE RECOVERED FRAGMENT — PHYSICAL ARTIFACT', nodes:[
+    {id:'codex-remembers-you',title:'The Codex That Remembers You',sub:'IDMF Case File 2019-QNS-∅ · Evidence Item 7',type:'book',realm:'I',
+     file:'codex-remembers-you.html',live:true,featured:true,
+     cls:'The physical artifact. A self-modifying PDF seized from a Queens evidence locker. File integrity: 39%. Dr. Miriam K. Dey — missing since Day 11.',
+     notes:'Wikipedia corruption entry sequence. Four canvas layers including the wrong eye that followed from the Apocrypha. Five IDMF tabs. The signal waveform spikes gold when you hover the book image. Available on Kindle and Kindle Unlimited.'},
+    {id:'memory-engine-1',title:'The Memory Engine',sub:'Realm I — Recursive Architecture',type:'lore',realm:'I',
+     file:'memory-engine-1.html',live:false,featured:false,depth:1,
+     cls:'The mechanism by which the Codex sustains itself in Mundis Obscura between breach events. Memory as infrastructure.',
+     notes:'PENDING RECOVERY — This transmission is still being assembled.'},
+  ]},
+  // ── PLAGUE PRIEST ──
+  {realm:'REALM I–II BORDER — THE PLAGUE PRIEST', nodes:[
+    {id:'plague-priest-lore',title:'The Plague Priest — Lore',sub:'Realm I–II Border Classification',type:'lore',realm:'I-II',
+     file:'plague-priest-lore.html',live:false,featured:false,
+     cls:'The entity that conducted the first Liturgy in the Cathedral of Rot. The Archivum has three identical witness descriptions from people who have never met.',
+     notes:'PENDING RECOVERY — This transmission is still being assembled.'},
+    {id:'plague-priest-decoder',title:'The Plague Priest — Decoder',sub:'Hymn I · Three-Layer Doctrine',type:'fragment',realm:'I-II',
+     file:'plague-priest-decoder.html',live:false,featured:false,depth:1,
+     cls:'The Liturgy decoded line by line. Three layers per verse. The Hidden Doctrine layer has never been published outside the Archivum.',
+     notes:'PENDING RECOVERY — This transmission is still being assembled.'},
+    {id:'plague-priest-liturgy',title:'The Plague Priest — Liturgy',sub:'Hymn I — Deck Hollow-13',type:'lore',realm:'I-II',
+     file:'plague-priest-liturgy.html',live:false,featured:false,depth:1,
+     cls:'The first known audio rite of the Codex Maledictus. Mutoid Vermin named as the sacred carrier wave. Recovered from Deck Hollow-13 in spore-static.',
+     notes:'PENDING RECOVERY — This transmission is still being assembled.'},
+    {id:'plague-priest-apocrypha',title:'The Plague Priest — Apocrypha',sub:'Restricted Classification: VOID',type:'apocrypha',realm:'I-II',
+     file:'plague-priest-apocrypha.html',live:false,featured:false,depth:1,
+     cls:'What the Plague Priest left in the Cathedral that the Archivum has declined to publish. The third seal has never been opened.',
+     notes:'PENDING RECOVERY — This transmission is still being assembled.'},
+  ]},
+];
+
+// realm badge helper
+function realmBadge(realm){
+  const cls=realm==='I'?'rb-I':realm==='I-II'?'rb-I-II':'rb-inf';
+  return`<span class="tl-realm-badge ${cls}">Realm ${realm}</span>`;
+}
+function typeBadge(type){
+  const map={lore:'tb-lore',apocrypha:'tb-apocrypha',chronicle:'tb-chronicle',
+    fragment:'tb-fragment',transmission:'tb-transmission',canon:'tb-canon',
+    book:'tb-book',entry:'tb-entry',hidden:'tb-hidden'};
+  return`<span class="tl-type-badge ${map[type]||'tb-lore'}">${type}</span>`;
+}
+function dotClass(node){
+  if(!node.live)return'pending';
+  if(node.type==='apocrypha')return'apoc';
+  if(node.type==='book')return'book';
+  if(node.type==='canon'||node.featured)return'featured live';
+  return'live';
+}
+
+function buildTimeline(){
+  const wrap=document.getElementById('timeline-wrap');
+  let html='';
+  TL.forEach(section=>{
+    html+=`<div class="tl-realm-head sr">${section.realm}</div>`;
+    const depth=section.nodes[0]?.depth||0;
+    let openBranch=depth>0?`<div class="tl-branch${depth>1?'-2':''}">`:'' ;
+    if(depth>0)html+=openBranch;
+    html+='<div class="tl-spine">';
+    section.nodes.forEach(node=>{
+      const nd=node.depth||0;
+      const indent=nd>1?'tl-branch-2':nd>0?'tl-branch':'';
+      if(nd>0)html+=`<div class="${indent}"><div class="tl-spine">`;
+      html+=`<div class="tl-node sr">
+        <div class="tl-node-dot ${dotClass(node)}"></div>
+        <div class="tl-card t-${node.type}${node.featured?' featured':''}${!node.live?' pending':''}"
+             onclick="openPanel(${JSON.stringify(node).replace(/"/g,'&quot;')})">
+          <div class="tl-card-top">
+            ${realmBadge(node.realm)}
+            ${typeBadge(node.type)}
+            ${!node.live?'<span class="tl-pending-badge">Pending Recovery</span>':''}
+            <span class="tl-title">${node.title}</span>
+          </div>
+          <div class="tl-cls">${node.cls}</div>
+        </div>
+      </div>`;
+      if(nd>0)html+='</div></div>';
+    });
+    html+='</div>';
+    if(depth>0)html+='</div>';
+  });
+  wrap.innerHTML=html;
+  // observe new .sr elements
+  wrap.querySelectorAll('.sr').forEach(el=>srObs.observe(el));
+}
+
+// ── NODE PANEL ────────────────────────────────────────────────────────────────
+function openPanel(node){
+  const rb={I:'Realm I — Mundis Obscura','I-II':'Realm I–II Border','∞':'Beyond Classification'};
+  let actions='';
+  if(node.hidden){
+    actions=`<div class="np-hidden-reveal" onclick="revealLedger()">[ LOCATION: WITHHELD — CLICK TO ATTEMPT ACCESS ]</div>`;
+  } else if(node.live){
+    actions=`<a class="np-link" href="${node.file}"><span>Enter Transmission ↗</span></a>`;
+  } else {
+    actions=`<div class="np-pending">[ PENDING RECOVERY ]</div>`;
+  }
+  document.getElementById('np-body').innerHTML=`
+    <div class="np-realm">${rb[node.realm]||node.realm}</div>
+    <div class="np-title">${node.title}</div>
+    <div class="np-sub">${node.sub}</div>
+    <div class="np-cls-label">Archivum Classification</div>
+    <div class="np-cls-text">${node.cls}</div>
+    <div class="np-notes"><em>${node.notes}</em></div>
+    ${actions}
+  `;
+  document.getElementById('node-panel').classList.add('open');
+}
+function closePanel(){document.getElementById('node-panel').classList.remove('open');}
+
+// hidden ledger reveal
+let ledgerRevealed=false;
+function revealLedger(){
+  if(ledgerRevealed)return;
+  ledgerRevealed=true;
+  const rdct=document.getElementById('ledger-rdct');
+  if(rdct){
+    rdct.classList.add('open');
+    rdct.innerHTML='The Confession Ledger is found only by those who travel the full path of the Archive. It does not appear in the navigation. It does not announce itself. Follow the Plague Priest thread to its end. &nbsp;—&nbsp; <a href="confession-ledger.html" style="color:rgba(139,0,0,.8);font-family:Share Tech Mono,monospace;font-size:.56em;letter-spacing:.2em;">[ ENTER — IF YOU HAVE BEEN CLEARED ]</a>';
+  }
+  // also update the panel if it's open
+  const rpEl=document.querySelector('.np-hidden-reveal');
+  if(rpEl){
+    rpEl.classList.add('open');
+    rpEl.innerHTML='<a href="confession-ledger.html" style="color:rgba(139,0,0,.8);">confession-ledger.html — Enter if cleared ↗</a>';
+  }
+}
+
+// ── CURSOR ────────────────────────────────────────────────────────────────────
+const CUR=document.getElementById('CUR'),CUR2=document.getElementById('CUR2');
+let mx=window.innerWidth/2,my=window.innerHeight/2,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;CUR.style.left=mx+'px';CUR.style.top=my+'px';});
+(function tr(){rx+=(mx-rx)*.1;ry+=(my-ry)*.1;CUR2.style.left=rx+'px';CUR2.style.top=ry+'px';requestAnimationFrame(tr);})();
+document.querySelectorAll('a,button,.tl-card,.sc-card,.np-link,.np-hidden-reveal').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{CUR2.style.width='36px';CUR2.style.height='36px';CUR2.style.borderColor='rgba(201,168,76,.7)';});
+  el.addEventListener('mouseleave',()=>{CUR2.style.width='24px';CUR2.style.height='24px';CUR2.style.borderColor='rgba(201,168,76,.35)';});
+});
+
+// ── CANVAS 1: BACKGROUND SIGIL FIELD ─────────────────────────────────────────
+const bgCv=document.getElementById('cv-bg'),bgCtx=bgCv.getContext('2d');
+let BW,BH;
+function resizeBg(){BW=bgCv.width=window.innerWidth;BH=bgCv.height=window.innerHeight;}
+resizeBg();window.addEventListener('resize',resizeBg);
+const GLYPHS=['🜃','🜁','🜂','🜄','🜏','⊕','△','▽','☽','✦','⊗','✧','🝰','🝱'];
+const sigils=Array.from({length:30},()=>({
+  x:Math.random()*window.innerWidth,y:Math.random()*window.innerHeight,
+  ch:GLYPHS[Math.floor(Math.random()*GLYPHS.length)],
+  sz:Math.random()*22+10,rot:Math.random()*Math.PI*2,
+  vx:(Math.random()-.5)*.12,vy:(Math.random()-.5)*.1,rs:(Math.random()-.5)*.004,
+  alpha:Math.random()*.06+.02,phase:Math.random()*Math.PI*2,speed:Math.random()*.003+.001,
+}));
+function drawBg(){
+  bgCtx.clearRect(0,0,BW,BH);
+  sigils.forEach(s=>{
+    s.x+=s.vx;s.y+=s.vy;s.rot+=s.rs;s.phase+=s.speed;
+    if(s.x<-40)s.x=BW+20;if(s.x>BW+40)s.x=-20;
+    if(s.y<-40)s.y=BH+20;if(s.y>BH+40)s.y=-20;
+    const a=s.alpha*(1+Math.sin(s.phase)*.5);
+    bgCtx.save();bgCtx.globalAlpha=a;bgCtx.translate(s.x,s.y);bgCtx.rotate(s.rot);
+    bgCtx.font=`${s.sz}px serif`;bgCtx.textAlign='center';bgCtx.textBaseline='middle';
+    bgCtx.fillStyle='rgba(201,168,76,1)';bgCtx.fillText(s.ch,0,0);
+    bgCtx.restore();
+  });
+  requestAnimationFrame(drawBg);
+}
+drawBg();
+
+// ── CANVAS 2: MYCELIUM ────────────────────────────────────────────────────────
+const mycCv=document.getElementById('cv-myc'),mycCtx=mycCv.getContext('2d');
+let MW,MH;
+function resizeMyc(){MW=mycCv.width=window.innerWidth;MH=mycCv.getContext?mycCv.height=window.innerHeight:0;}
+resizeMyc();window.addEventListener('resize',resizeMyc);
+const fils=[];const MAX_F=300;
+function spawnFil(x,y){
+  if(fils.length>=MAX_F)return;
+  fils.push({x,y,angle:Math.random()*Math.PI*2,speed:Math.random()*.6+.2,
+    len:0,maxLen:Math.random()*100+30,w:Math.random()*.6+.15,
+    alpha:Math.random()*.08+.02,wig:Math.random()*.035-.017,life:0,
+    col:Math.random()<.8?'rgba(201,168,76,':'rgba(100,70,20,'});
+}
+function seedFils(){
+  for(let i=0;i<12;i++)spawnFil(Math.random()*MW,Math.random()*MH);
+}
+function drawMyc(){
+  fils.forEach(f=>{
+    f.angle+=f.wig;f.life++;
+    const nx=f.x+Math.cos(f.angle)*f.speed,ny=f.y+Math.sin(f.angle)*f.speed;
+    mycCtx.beginPath();mycCtx.moveTo(f.x,f.y);mycCtx.lineTo(nx,ny);
+    mycCtx.strokeStyle=f.col+f.alpha+')';mycCtx.lineWidth=f.w;mycCtx.stroke();
+    f.x=nx;f.y=ny;f.len+=f.speed;
+    if(f.len>f.maxLen*.6&&Math.random()<.006)spawnFil(f.x,f.y);
+    if(f.len>f.maxLen)f.alpha*=.96;
+  });
+  for(let i=fils.length-1;i>=0;i--)if(fils[i].alpha<.003)fils.splice(i,1);
+  if(fils.length<80&&Math.random()<.04)spawnFil(Math.random()*MW,Math.random()*MH);
+  requestAnimationFrame(drawMyc);
+}
+drawMyc();
+
+// ── SCROLL REVEAL ─────────────────────────────────────────────────────────────
+const srObs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('vis');srObs.unobserve(e.target);}});},{threshold:.04});
+function initSrObs(){document.querySelectorAll('.sr').forEach(el=>srObs.observe(el));}
+
+// ── OPEN APP ──────────────────────────────────────────────────────────────────
+function openApp(){
+  document.getElementById('BOOT').classList.add('out');
+  document.getElementById('RETURNING').style.display='none';
+  document.getElementById('WITNESSED').classList.remove('on');
+  setTimeout(()=>{
+    document.getElementById('APP').classList.add('on');
+    buildTimeline();
+    initSrObs();
+    seedFils();
+    animCodexVoice();
+  },400);
+}
+
+// ── CODEX VOICE ANIMATION ─────────────────────────────────────────────────────
+function animCodexVoice(){
+  const lines=document.querySelectorAll('.cv-line');
+  let i=0;
+  function next(){
+    if(i>=lines.length){
+      setTimeout(()=>document.getElementById('cv-final').classList.add('on'),600);
+      return;
+    }
+    lines[i].classList.add('on');i++;
+    setTimeout(next,lines[i-1].textContent.trim()?700:200);
+  }
+  setTimeout(next,800);
+}
+
+// ── VISIT DATA ────────────────────────────────────────────────────────────────
+const visitCount=parseInt(localStorage.getItem('cm-pa-visits')||'0')+1;
+localStorage.setItem('cm-pa-visits',visitCount);
+const lastVisitStr=localStorage.getItem('cm-pa-lastvisit');
+const lastDevice=localStorage.getItem('cm-pa-device');
+const now=new Date();
+const nowStr=now.toISOString().split('T')[0];
+localStorage.setItem('cm-pa-lastvisit',nowStr);
+const ua=navigator.userAgent;
+const currentDevice=ua.includes('Mobile')?'Mobile Device':ua.includes('Mac')?'Macintosh':ua.includes('Windows')?'Windows System':'Unknown Terminal';
+localStorage.setItem('cm-pa-device',currentDevice);
+
+// find new pages since last visit
+function newPagesSince(dateStr){
+  if(!dateStr)return[];
+  const lastDate=new Date(dateStr);
+  return CHANGELOG.filter(c=>new Date(c.date)>lastDate);
+}
+
+// ── BOOT RITUAL — 13 SEGMENT SIGIL ───────────────────────────────────────────
+const bootCv=document.getElementById('boot-canvas');
+const bootCtx=bootCv.getContext('2d');
+
+function resizeBoot(){
+  const sz=Math.min(window.innerWidth,window.innerHeight)*.58;
+  bootCv.width=sz;bootCv.height=sz;
+}
+resizeBoot();
+
+const BOOT_LINES=['bl-0','bl-1','bl-2','bl-3','bl-4','bl-5','bl-6','bl-7','bl-8','bl-9','bl-10','bl-11','bl-12'];
+let bootSeg=0;let bootParticles=[];
+
+function drawBootSigil(segsLit,burst=false){
+  const cv=bootCv,ctx=bootCtx;
+  const cx=cv.width/2,cy=cv.height/2;
+  const OR=cv.width*.44,IR=cv.width*.28;
+  const SEG=13,gap=.04;
+  ctx.clearRect(0,0,cv.width,cv.height);
+
+  // Outer ring dim
+  ctx.beginPath();ctx.arc(cx,cy,OR,0,Math.PI*2);
+  ctx.strokeStyle='rgba(201,168,76,.08)';ctx.lineWidth=1;ctx.stroke();
+  ctx.beginPath();ctx.arc(cx,cy,IR,0,Math.PI*2);
+  ctx.strokeStyle='rgba(201,168,76,.05)';ctx.lineWidth=.5;ctx.stroke();
+
+  // Draw 13 segments
+  for(let i=0;i<SEG;i++){
+    const startA=-Math.PI/2+(i/SEG)*Math.PI*2+gap;
+    const endA=-Math.PI/2+((i+1)/SEG)*Math.PI*2-gap;
+    const lit=i<segsLit;
+    ctx.beginPath();
+    ctx.arc(cx,cy,OR,startA,endA);
+    ctx.arc(cx,cy,IR,endA,startA,true);
+    ctx.closePath();
+    if(lit){
+      const gl=ctx.createRadialGradient(cx,cy,IR,cx,cy,OR);
+      gl.addColorStop(0,'rgba(201,168,76,.25)');
+      gl.addColorStop(1,'rgba(201,168,76,.08)');
+      ctx.fillStyle=gl;ctx.fill();
+      ctx.strokeStyle='rgba(201,168,76,.6)';ctx.lineWidth=.8;ctx.stroke();
+      // glow on active
+      if(i===segsLit-1){
+        ctx.shadowColor='rgba(201,168,76,.8)';ctx.shadowBlur=16;
+        ctx.strokeStyle='rgba(201,168,76,.9)';ctx.stroke();
+        ctx.shadowBlur=0;
+      }
+    } else {
+      ctx.strokeStyle='rgba(201,168,76,.12)';ctx.lineWidth=.5;ctx.stroke();
+    }
+  }
+
+  // Center glyph
+  if(segsLit>0){
+    const alpha=Math.min(1,segsLit/13);
+    ctx.font=`${cv.width*.14}px serif`;ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.fillStyle=`rgba(201,168,76,${alpha*.6})`;
+    if(segsLit===13){ctx.shadowColor='rgba(201,168,76,.8)';ctx.shadowBlur=20;}
+    ctx.fillText('🜃',cx,cy);ctx.shadowBlur=0;
+  }
+
+  // Burst particles
+  if(burst){
+    bootParticles.forEach(p=>{
+      p.x+=p.vx;p.y+=p.vy;p.life++;p.alpha-=.022;
+      if(p.alpha<=0)return;
+      ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle=`rgba(201,168,76,${p.alpha})`;
+      ctx.shadowColor='rgba(201,168,76,.6)';ctx.shadowBlur=6;
+      ctx.fill();ctx.shadowBlur=0;
+    });
+    bootParticles=bootParticles.filter(p=>p.alpha>0);
+  }
+}
+
+function spawnBurst(){
+  const cx=bootCv.width/2,cy=bootCv.height/2;
+  for(let i=0;i<80;i++){
+    const angle=Math.random()*Math.PI*2;
+    const speed=Math.random()*4+1.5;
+    bootParticles.push({
+      x:cx,y:cy,
+      vx:Math.cos(angle)*speed,vy:Math.sin(angle)*speed,
+      r:Math.random()*2.5+.5,alpha:.9,life:0
+    });
+  }
+}
+
+function runBootRitual(){
+  let seg=0;
+  let burstActive=false;
+  const interval=380;
+
+  function tick(){
+    if(seg<=13){
+      drawBootSigil(seg,burstActive);
+      if(seg<13){
+        // light current line
+        const bl=document.getElementById(BOOT_LINES[seg]);
+        if(bl){
+          if(seg>0)document.getElementById(BOOT_LINES[seg-1])?.classList.remove('active');
+          bl.classList.add('lit','active');
+        }
+        seg++;
+        setTimeout(tick,interval);
+      } else {
+        // All 13 lit — burst
+        spawnBurst();burstActive=true;
+        let bFrames=0;
+        function burstLoop(){
+          bFrames++;
+          drawBootSigil(13,true);
+          if(bFrames<30)requestAnimationFrame(burstLoop);
+          else showWitnessed();
+        }
+        requestAnimationFrame(burstLoop);
+      }
+    }
+  }
+  setTimeout(tick,500);
+}
+
+function showWitnessed(){
+  const W=document.getElementById('WITNESSED');
+  W.classList.add('on');
+  // Hide boot canvas
+  document.getElementById('BOOT').style.opacity='0';
+  setTimeout(()=>{
+    W.classList.remove('on');
+    setTimeout(openApp,600);
+  },2800);
+}
+
+// ── RETURNING VISITOR ─────────────────────────────────────────────────────────
+function runReturningSequence(){
+  document.getElementById('BOOT').style.display='none';
+  const ret=document.getElementById('RETURNING');
+  ret.classList.add('active');
+
+  const lastDate=new Date(lastVisitStr);
+  const daysSince=Math.round((now-lastDate)/(1000*60*60*24));
+  const newPages=newPagesSince(lastVisitStr);
+  const deviceChanged=lastDevice&&lastDevice!==currentDevice;
+
+  const lines=[];
+  lines.push({text:'THE ARCHIVE REMEMBERS YOU.',cls:'rt-gold'});
+  lines.push({text:'',cls:'rt-dim'});
+  lines.push({text:`You were last witnessed ${daysSince===0?'earlier today':`${daysSince} day${daysSince!==1?'s':''} ago`}.`,cls:'rt-bone'});
+  lines.push({text:`You have returned ${visitCount} time${visitCount!==1?'s':''}.`,cls:'rt-bone'});
+  lines.push({text:'',cls:'rt-dim'});
+
+  if(deviceChanged){
+    lines.push({text:`You were last here on a ${lastDevice}.`,cls:'rt-warn'});
+    lines.push({text:`You have returned on a ${currentDevice}.`,cls:'rt-warn'});
+    lines.push({text:'The Archive noted the change.',cls:'rt-bone'});
+    lines.push({text:'',cls:'rt-dim'});
+  }
+
+  if(newPages.length>0){
+    lines.push({text:`${newPages.length} transmission${newPages.length!==1?'s were':' was'} recovered in your absence:`,cls:'rt-bone'});
+    newPages.slice(0,3).forEach(p=>{lines.push({text:`— ${p.title}`,cls:'rt-new'});});
+    if(newPages.length>3)lines.push({text:`— and ${newPages.length-3} more.`,cls:'rt-new'});
+  } else {
+    lines.push({text:'The Archive has not grown since you left.',cls:'rt-bone'});
+    lines.push({text:'But you have changed.',cls:'rt-warn'});
+    lines.push({text:'The frequency you are broadcasting today',cls:'rt-bone'});
+    lines.push({text:'is not the one the Codex recorded last time.',cls:'rt-bone'});
+  }
+
+  lines.push({text:'',cls:'rt-dim'});
+  lines.push({text:'WITNESS STATUS: CONFIRMED — INSCRIPTION DEEPENING',cls:'rt-gold'});
+
+  const cont=document.getElementById('rt-content');
+  cont.innerHTML=lines.map((l,i)=>`<div class="rt-line ${l.cls}" id="rtl-${i}">${l.text}</div>`).join('');
+
+  let i=0;
+  function nextLine(){
+    if(i>=lines.length){setTimeout(()=>{document.getElementById('rt-enter').style.display='inline-block';},600);return;}
+    document.getElementById(`rtl-${i}`)?.classList.add('on');i++;
+    setTimeout(nextLine,lines[i-1].text?480:150);
+  }
+  setTimeout(nextLine,400);
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+if(visitCount>1&&lastVisitStr){
+  runReturningSequence();
+} else {
+  runBootRitual();
+}
+
+</script>
+
+<!-- CODEX NAV — Pale Archive has no two-door footer, it IS the nav -->
+<script>
+var s=document.createElement('script');
+s.src='codex-nav.js';
+document.body.appendChild(s);
+</script>
+
+</body>
+</html>
