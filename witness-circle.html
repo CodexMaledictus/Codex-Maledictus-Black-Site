@@ -1,0 +1,1847 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>The Witness Circle</title>
+<meta name="description" content="Sealed inner reading of the Codex Maledictus. By invocation only.">
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-13 -13 26 26'><circle cx='0' cy='0' r='11.5' fill='%23050505' stroke='%235DC8C0' stroke-width='1.4'/><path d='M -7.5,-4 L 7.5,-4 L 0,8 Z' fill='none' stroke='%235DC8C0' stroke-width='1.3'/><circle cx='-3.2' cy='-1.3' r='1.3' fill='%235DC8C0'/><circle cx='3.2' cy='-1.3' r='1.3' fill='%235DC8C0'/><circle cx='0' cy='3.5' r='1.3' fill='%235DC8C0'/></svg>">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;500;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400;1,600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --void:         #05050A;
+    --void-deep:    #020207;
+    --gold:         #C9A84C;
+    --gold-lt:      #E0C878;
+    --gold-deep:    #8A7330;
+    --ash:          #E4DDD0;
+    --ash-dim:      rgba(228,221,208,0.48);
+    --circle:       #5DC8C0;
+    --circle-lt:    #8FF0E5;
+    --circle-deep:  #2A6B65;
+    --bearer-violet:#1A0D2E;
+    --bearer-bg:    #04020A;
+    --crimson:      #7A1212;
+  }
+
+  *,*::before,*::after { box-sizing:border-box;margin:0;padding:0; }
+  html { scroll-behavior:smooth; }
+  body {
+    width:100%;min-height:100vh;
+    background:#020608;
+    color:var(--ash);
+    font-family:'Crimson Text',Georgia,serif;
+    overflow-x:hidden;
+    cursor:none;
+    transition:background 4s cubic-bezier(.4,0,.2,1);
+  }
+  body.bearer-state {
+    background:var(--bearer-bg);
+  }
+  body.bearer-state .reading-text,
+  body.bearer-state .section-prose,
+  body.bearer-state .canon-text {
+    color:rgba(228,221,208,0.62);
+  }
+
+  /* ── CURSOR ── */
+  #cur {
+    position:fixed;z-index:99999;
+    width:28px;height:28px;
+    pointer-events:none;
+    transform:translate(-50%,-50%);
+    filter:drop-shadow(0 0 4px rgba(143,240,229,0.55));
+    transition:filter 2s ease;
+  }
+  body.bearer-state #cur { filter:drop-shadow(0 0 6px rgba(255,180,80,0.7)) drop-shadow(0 0 12px rgba(255,120,40,0.4)); }
+  #cur svg { width:100%;height:100%;display:block; }
+  #cur2 {
+    position:fixed;z-index:99998;
+    width:5px;height:5px;border-radius:50%;
+    background:var(--circle-lt);opacity:.7;
+    pointer-events:none;transform:translate(-50%,-50%);
+    box-shadow:0 0 6px var(--circle),0 0 2px var(--circle-lt);
+    transition:background 2s ease,box-shadow 2s ease;
+  }
+  body.bearer-state #cur2 {
+    background:#FFD080;
+    box-shadow:0 0 8px rgba(255,140,60,0.7),0 0 2px rgba(255,200,100,1);
+  }
+  @media (max-width:768px) {
+    body { cursor:auto; }
+    #cur,#cur2 { display:none; }
+  }
+
+  /* ── CANVAS ── */
+  #cv-bg { position:fixed;inset:0;pointer-events:none;z-index:0; }
+
+  #scanlines {
+    position:fixed;inset:0;z-index:3;pointer-events:none;
+    background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.08) 2px,rgba(0,0,0,0.08) 4px);
+  }
+
+  /* ── BOOT ── */
+  #boot {
+    position:fixed;inset:0;z-index:1000;background:#000;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;
+    transition:opacity 1.8s ease;
+  }
+  #boot.out { opacity:0;pointer-events:none; }
+  .boot-scanlines { position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.15) 2px,rgba(0,0,0,0.15) 4px); }
+  .boot-mark { width:64px;height:64px;opacity:0;animation:bSigil 1.2s ease .3s forwards; }
+  @keyframes bSigil { to { opacity:.85; } }
+  #boot-lines { display:flex;flex-direction:column;align-items:center;gap:10px;min-height:150px; }
+  .bline { font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:.26em;color:rgba(143,240,229,.65);white-space:nowrap;overflow:hidden;max-width:0;opacity:0; }
+  .bline.typed { animation:bType .85s steps(40,end) forwards; }
+  .bline.gold { color:rgba(224,200,120,.7); }
+  .bline.warn { color:rgba(122,18,18,.75); }
+  @keyframes bType { from{max-width:0;opacity:1} to{max-width:700px;opacity:1} }
+  .boot-bar { width:240px;height:1px;background:rgba(42,107,101,.4);position:relative;overflow:hidden; }
+  .boot-fill { position:absolute;left:0;top:0;bottom:0;width:0;background:var(--circle);animation:bFill 2.4s cubic-bezier(.4,0,.2,1) .8s forwards; }
+  @keyframes bFill { to{width:100%} }
+  .boot-label { font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:.48em;color:rgba(143,240,229,.4);opacity:0;animation:bFadeIn .6s ease 3.2s forwards; }
+  @keyframes bFadeIn { to{opacity:1} }
+
+  /* ── MAIN ── */
+  #main { position:relative;z-index:5;opacity:0;transition:opacity 1.6s ease; }
+  #main.show { opacity:1; }
+
+  /* ── HERO ── */
+  .hero { position:relative;min-height:80vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:80px 24px 60px; }
+  .hero-inner { position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;width:100%;max-width:720px; }
+
+  /* Designation banner */
+  .designation-banner {
+    margin-bottom:48px;
+    padding:14px 24px;
+    border:1px solid rgba(143,240,229,0.22);
+    background:linear-gradient(180deg,rgba(8,16,15,0.6),rgba(5,10,10,0.78));
+    display:flex;flex-direction:column;align-items:center;gap:6px;
+    opacity:0;animation:riseIn 1.6s cubic-bezier(.16,1,.3,1) .4s forwards;
+  }
+  .designation-banner.bearer-banner { border-color:rgba(224,200,120,0.35); background:linear-gradient(180deg,rgba(16,12,4,0.7),rgba(8,5,2,0.85)); }
+  .db-label {
+    font-family:'Cinzel',serif;font-size:9px;letter-spacing:.5em;text-transform:uppercase;
+    color:rgba(143,240,229,0.55);
+  }
+  .bearer-banner .db-label { color:rgba(224,200,120,0.65); }
+  .db-value {
+    font-family:'Share Tech Mono',monospace;font-size:clamp(13px,1.6vw,16px);letter-spacing:.32em;
+    color:var(--circle-lt);text-shadow:0 0 14px rgba(93,200,192,.32);
+  }
+  .bearer-banner .db-value { color:var(--gold-lt);text-shadow:0 0 14px rgba(224,200,120,.4); }
+  .db-realm-name {
+    margin-top:4px;
+    font-family:'Cinzel Decorative',serif;font-size:11px;letter-spacing:.18em;
+    color:var(--ash-dim);font-style:italic;
+    display:none;
+  }
+  body.bearer-state .db-realm-name { display:block; }
+
+  /* Wordmark */
+  .wordmark {
+    font-family:'Cinzel Decorative',serif;font-weight:900;
+    font-size:clamp(26px,5.5vw,68px);
+    letter-spacing:.14em;text-transform:uppercase;line-height:1.05;
+    color:var(--circle-lt);
+    text-shadow:0 0 80px rgba(93,200,192,.36),0 0 30px rgba(93,200,192,.2),0 2px 6px rgba(0,0,0,.9);
+    opacity:0;animation:riseIn 1.8s cubic-bezier(.16,1,.3,1) .7s forwards;
+    transition:color 3s ease,text-shadow 3s ease;
+  }
+  body.bearer-state .wordmark {
+    color:var(--gold-lt);
+    text-shadow:0 0 80px rgba(224,200,120,.4),0 0 30px rgba(224,200,120,.22),0 2px 6px rgba(0,0,0,.9);
+  }
+  .tagline {
+    font-family:'Cinzel',serif;font-weight:400;
+    font-size:clamp(8px,1vw,11px);letter-spacing:.5em;text-transform:uppercase;
+    color:rgba(143,240,229,.55);
+    margin-top:18px;opacity:0;animation:riseIn 1.8s cubic-bezier(.16,1,.3,1) 1s forwards;
+  }
+  body.bearer-state .tagline { color:rgba(224,200,120,0.5); }
+  .tagline span { margin:0 10px;opacity:.4; }
+
+  /* Personal preamble (live data) */
+  .preamble {
+    margin-top:42px;max-width:560px;
+    font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:.22em;
+    color:rgba(143,240,229,0.42);line-height:1.95;
+    opacity:0;animation:riseIn 1.8s cubic-bezier(.16,1,.3,1) 1.3s forwards;
+  }
+  .preamble div { margin-bottom:4px; }
+
+  .scroll-hint {
+    margin-top:64px;display:flex;flex-direction:column;align-items:center;gap:10px;
+    opacity:0;animation:fadeIn 1s ease 3.4s forwards;
+  }
+  .scroll-hint span { font-family:'Cinzel',serif;font-size:8px;letter-spacing:.55em;text-transform:uppercase;color:rgba(143,240,229,.36); }
+  .scroll-line { width:1px;height:56px;background:linear-gradient(to bottom,rgba(143,240,229,.7),transparent);animation:scrollBreathe 2.8s ease-in-out infinite; }
+  @keyframes scrollBreathe { 0%,100%{opacity:.3;transform:scaleY(1)} 50%{opacity:1;transform:scaleY(1.14)} }
+
+  /* ── SECTIONS ── */
+  .section {
+    position:relative;z-index:5;
+    padding:120px 28px 100px;
+    display:flex;flex-direction:column;align-items:center;
+  }
+  .section-inner { width:100%;max-width:760px;display:flex;flex-direction:column;align-items:center;gap:42px; }
+
+  .section-divider {
+    display:flex;align-items:center;gap:18px;width:100%;max-width:540px;justify-content:center;
+  }
+  .sd-line { flex:1;height:1px;background:linear-gradient(90deg,transparent,rgba(143,240,229,.4)); }
+  .sd-line.r { background:linear-gradient(90deg,rgba(143,240,229,.4),transparent); }
+  .sd-sym { font-size:14px;color:var(--circle);opacity:.6;flex-shrink:0; }
+  body.bearer-state .sd-line { background:linear-gradient(90deg,transparent,rgba(224,200,120,.4)); }
+  body.bearer-state .sd-line.r { background:linear-gradient(90deg,rgba(224,200,120,.4),transparent); }
+  body.bearer-state .sd-sym { color:var(--gold); }
+
+  .section-ordinal {
+    font-family:'Cinzel',serif;font-size:9px;letter-spacing:.65em;text-transform:uppercase;
+    color:rgba(143,240,229,.5);
+  }
+  body.bearer-state .section-ordinal { color:rgba(224,200,120,0.5); }
+
+  .section-title {
+    font-family:'Cinzel Decorative',serif;font-weight:700;
+    font-size:clamp(22px,3.6vw,38px);
+    letter-spacing:.16em;text-transform:uppercase;
+    color:var(--circle-lt);text-align:center;
+    text-shadow:0 0 26px rgba(93,200,192,.22);
+    transition:color 3s ease,text-shadow 3s ease;
+  }
+  body.bearer-state .section-title { color:var(--gold-lt);text-shadow:0 0 26px rgba(224,200,120,.25); }
+
+  .section-prose, .canon-text {
+    font-family:'Crimson Text',serif;
+    font-size:clamp(15px,1.85vw,18px);
+    line-height:1.95;color:rgba(228,221,208,0.78);
+    letter-spacing:.012em;
+    width:100%;
+  }
+  .canon-text p { margin-bottom:1.4em; }
+  .canon-text p.indent { padding-left:24px;border-left:1px solid rgba(143,240,229,0.12); }
+  body.bearer-state .canon-text p.indent { border-left-color:rgba(224,200,120,0.12); }
+  .canon-text em { color:var(--circle-lt);font-style:italic; }
+  body.bearer-state .canon-text em { color:var(--gold-lt); }
+  .canon-text strong { color:var(--ash);font-weight:600; }
+  .canon-text .invocation {
+    text-align:center;font-family:'Cinzel Decorative',serif;font-style:normal;font-weight:700;
+    font-size:clamp(18px,2.4vw,24px);letter-spacing:.16em;
+    color:var(--circle-lt);text-transform:uppercase;
+    margin:0 auto 36px;
+    text-shadow:0 0 16px rgba(93,200,192,.3);
+  }
+  body.bearer-state .canon-text .invocation { color:var(--gold-lt);text-shadow:0 0 16px rgba(224,200,120,.3); }
+  .canon-text .codex-name {
+    font-family:'Cinzel Decorative',serif;font-weight:700;letter-spacing:.06em;
+    color:var(--gold);
+  }
+  body.bearer-state .canon-text .codex-name { color:var(--gold-lt); }
+
+  /* Sub-heads for realms, factions, positions */
+  .sub-head {
+    font-family:'Cinzel Decorative',serif;font-weight:700;
+    font-size:clamp(15px,1.8vw,19px);letter-spacing:.16em;text-transform:uppercase;
+    color:var(--circle);margin:36px 0 12px;
+    display:flex;align-items:center;gap:12px;
+  }
+  body.bearer-state .sub-head { color:var(--gold); }
+  .sub-head .ord {
+    font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:.3em;
+    color:rgba(143,240,229,0.55);font-weight:400;
+  }
+  body.bearer-state .sub-head .ord { color:rgba(224,200,120,0.55); }
+
+  /* Recovered image */
+  .recovered-image {
+    margin:36px auto;width:100%;max-width:520px;
+    border:1px solid rgba(143,240,229,0.22);
+    padding:14px;
+    background:linear-gradient(180deg,rgba(8,12,12,0.7),rgba(4,6,6,0.85));
+    position:relative;
+  }
+  body.bearer-state .recovered-image { border-color:rgba(224,200,120,0.22); }
+  .recovered-image img { width:100%;height:auto;display:block;filter:contrast(1.05) brightness(.96); }
+  .recovered-image .caption {
+    margin-top:12px;font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:.22em;
+    color:rgba(143,240,229,0.55);text-align:center;text-transform:uppercase;
+  }
+  body.bearer-state .recovered-image .caption { color:rgba(224,200,120,0.55); }
+
+  /* ── POSITION CARDS ── */
+  .positions-list { width:100%;display:flex;flex-direction:column;gap:32px;margin-top:24px; }
+  .position-card {
+    padding:24px 28px;
+    border-left:2px solid rgba(143,240,229,0.3);
+    background:linear-gradient(90deg,rgba(8,14,14,0.5),rgba(5,8,8,0.7));
+  }
+  body.bearer-state .position-card { border-left-color:rgba(224,200,120,0.3); }
+  .position-card.your-position {
+    border-left-color:var(--gold-lt) !important;
+    background:linear-gradient(90deg,rgba(16,12,4,0.7),rgba(8,5,2,0.85));
+    box-shadow:inset 0 0 24px rgba(224,200,120,0.08);
+    display:none;
+  }
+  body.bearer-state .position-card.your-position { display:block; }
+  .pos-header {
+    display:flex;align-items:baseline;gap:14px;margin-bottom:14px;flex-wrap:wrap;
+  }
+  .pos-num {
+    font-family:'Cinzel Decorative',serif;font-weight:700;font-size:14px;letter-spacing:.2em;
+    color:var(--circle-lt);
+  }
+  body.bearer-state .pos-num { color:var(--gold-lt); }
+  .pos-name {
+    font-family:'Cinzel',serif;font-weight:600;font-size:13px;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--ash);
+  }
+  .pos-yours-badge {
+    font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:.3em;text-transform:uppercase;
+    color:var(--gold-lt);
+    border:1px solid rgba(224,200,120,0.45);padding:2px 8px;
+    margin-left:auto;
+  }
+  .pos-body {
+    font-family:'Crimson Text',serif;font-size:14px;line-height:1.85;color:rgba(228,221,208,0.7);
+  }
+
+  /* ── TAXONOMY ── */
+  .taxonomy { width:100%;display:flex;flex-direction:column;gap:24px; }
+  .tax-row {
+    display:grid;grid-template-columns:140px 1fr;gap:24px;
+    padding:16px 0;border-bottom:1px solid rgba(143,240,229,0.08);
+  }
+  body.bearer-state .tax-row { border-bottom-color:rgba(224,200,120,0.08); }
+  .tax-row:last-child { border-bottom:none; }
+  .tax-name {
+    font-family:'Cinzel Decorative',serif;font-weight:700;font-size:14px;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--circle-lt);
+  }
+  body.bearer-state .tax-name { color:var(--gold-lt); }
+  .tax-body {
+    font-family:'Crimson Text',serif;font-size:14px;line-height:1.78;color:rgba(228,221,208,0.66);
+  }
+  @media (max-width:600px) {
+    .tax-row { grid-template-columns:1fr;gap:8px; }
+  }
+
+  /* ── CHARGE ── */
+  .charge-list { width:100%;display:flex;flex-direction:column;gap:24px; }
+  .charge-row {
+    padding:20px 24px;border:1px solid rgba(143,240,229,0.16);
+    background:linear-gradient(180deg,rgba(8,14,14,0.5),rgba(5,8,8,0.7));
+  }
+  body.bearer-state .charge-row { border-color:rgba(224,200,120,0.18); }
+  .charge-row strong {
+    display:block;font-family:'Cinzel Decorative',serif;font-weight:700;font-size:18px;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--circle-lt);margin-bottom:10px;
+  }
+  body.bearer-state .charge-row strong { color:var(--gold-lt); }
+  .charge-row p {
+    font-family:'Crimson Text',serif;font-size:14px;line-height:1.85;color:rgba(228,221,208,0.7);
+  }
+  .charge-close {
+    margin-top:20px;text-align:center;
+    font-family:'Cinzel Decorative',serif;font-style:normal;font-size:16px;letter-spacing:.16em;
+    color:var(--circle);
+  }
+  body.bearer-state .charge-close { color:var(--gold); }
+
+  /* ── OATH ── */
+  .oath-block {
+    width:100%;max-width:640px;
+    padding:44px 36px;
+    border:2px solid var(--circle);
+    background:
+      radial-gradient(ellipse at top,rgba(93,200,192,0.06),transparent 60%),
+      linear-gradient(180deg,rgba(6,10,10,0.85),rgba(2,5,5,0.95));
+    display:flex;flex-direction:column;align-items:center;gap:24px;
+    position:relative;
+  }
+  .oath-block::before {
+    content:'';position:absolute;top:-1px;left:-1px;right:-1px;height:1px;
+    background:linear-gradient(90deg,transparent,var(--circle-lt) 50%,transparent);
+  }
+  body.bearer-state .oath-block { display:none; }
+
+  .oath-seal {
+    width:120px;height:120px;display:flex;align-items:center;justify-content:center;
+    position:relative;margin-bottom:6px;
+  }
+  .oath-seal::before {
+    content:'';position:absolute;inset:-14px;
+    background:radial-gradient(circle,rgba(93,200,192,0.25),transparent 70%);
+    filter:blur(8px);
+  }
+  .oath-seal img { width:100%;height:100%;object-fit:contain;position:relative;z-index:1;filter:drop-shadow(0 0 12px rgba(224,200,120,0.4)); }
+  .oath-seal.pressed::before { background:radial-gradient(circle,rgba(224,200,120,0.4),transparent 70%); }
+
+  .oath-prompt {
+    font-family:'Crimson Text',serif;font-style:italic;font-size:clamp(14px,1.8vw,17px);
+    text-align:center;color:rgba(228,221,208,0.75);line-height:1.85;max-width:520px;
+  }
+  .oath-button {
+    font-family:'Cinzel',serif;font-weight:600;font-size:11px;letter-spacing:.5em;text-transform:uppercase;
+    padding:18px 44px;
+    background:transparent;border:1px solid var(--circle-lt);color:var(--circle-lt);
+    cursor:none;transition:all .5s cubic-bezier(.16,1,.3,1);
+    position:relative;overflow:hidden;
+    margin-top:8px;
+  }
+  @media (max-width:768px) { .oath-button { cursor:pointer; } }
+  .oath-button::before {
+    content:'';position:absolute;inset:0;background:var(--circle-lt);transform:translateX(-101%);
+    transition:transform .6s cubic-bezier(.16,1,.3,1);
+  }
+  .oath-button:hover::before { transform:translateX(0); }
+  .oath-button:hover { color:var(--void); }
+  .oath-button span { position:relative;z-index:1; }
+
+  .oath-note {
+    font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:.32em;
+    color:rgba(143,240,229,0.4);text-align:center;
+  }
+
+  /* ── POST-OATH SECTION ── */
+  .post-oath {
+    display:none;width:100%;max-width:760px;
+    padding:48px 28px;
+    border:1px solid rgba(224,200,120,0.28);
+    background:linear-gradient(180deg,rgba(10,8,4,0.75),rgba(4,3,1,0.9));
+    position:relative;
+  }
+  body.bearer-state .post-oath { display:block;animation:postOathReveal 2.4s cubic-bezier(.16,1,.3,1) forwards; }
+  @keyframes postOathReveal {
+    from { opacity:0;transform:translateY(20px);filter:blur(8px); }
+    to { opacity:1;transform:none;filter:none; }
+  }
+  .post-oath::before {
+    content:'';position:absolute;top:-1px;left:-1px;right:-1px;height:1px;
+    background:linear-gradient(90deg,transparent,var(--gold) 50%,transparent);
+  }
+  .post-oath-label {
+    text-align:center;font-family:'Cinzel Decorative',serif;font-weight:700;
+    font-size:11px;letter-spacing:.55em;text-transform:uppercase;
+    color:var(--gold);margin-bottom:36px;
+  }
+
+  .oracle-line {
+    margin:18px 0;padding:14px 20px;
+    border-left:2px solid rgba(224,200,120,0.4);
+    background:rgba(16,12,4,0.45);
+    font-family:'Crimson Text',serif;font-size:15px;line-height:1.85;
+    color:rgba(228,221,208,0.82);
+  }
+  .oracle-line .ov {
+    font-family:'Share Tech Mono',monospace;font-size:13px;letter-spacing:.16em;
+    color:var(--gold-lt);text-shadow:0 0 10px rgba(224,200,120,0.3);
+  }
+
+  /* Bearer sigil display */
+  .bearer-sigil-display {
+    margin:36px auto;display:flex;flex-direction:column;align-items:center;gap:18px;
+  }
+  .bearer-sigil-svg {
+    width:160px;height:160px;
+    filter:drop-shadow(0 0 16px rgba(224,200,120,0.35));
+  }
+  .bearer-sigil-label {
+    font-family:'Cinzel',serif;font-size:9px;letter-spacing:.45em;text-transform:uppercase;
+    color:rgba(224,200,120,0.65);
+  }
+  .bearer-sigil-download {
+    font-family:'Cinzel',serif;font-size:9px;letter-spacing:.36em;text-transform:uppercase;
+    color:rgba(224,200,120,0.6);text-decoration:none;cursor:none;
+    border-bottom:1px solid rgba(224,200,120,0.25);padding-bottom:2px;
+    transition:all .35s ease;background:none;border-top:none;border-left:none;border-right:none;
+  }
+  @media (max-width:768px) { .bearer-sigil-download { cursor:pointer; } }
+  .bearer-sigil-download:hover { color:var(--gold-lt);border-color:var(--gold); }
+
+  /* Symptom check-in */
+  .symptom-checkin {
+    margin:48px 0;padding:32px 28px;
+    border:1px solid rgba(224,200,120,0.22);
+    background:rgba(8,6,2,0.7);
+    display:none;
+  }
+  body.bearer-state.visit-3plus .symptom-checkin { display:block; }
+  .symptom-checkin-title {
+    font-family:'Cinzel Decorative',serif;font-weight:700;font-size:14px;letter-spacing:.22em;
+    text-transform:uppercase;color:var(--gold-lt);text-align:center;margin-bottom:14px;
+  }
+  .symptom-checkin-intro {
+    font-family:'Crimson Text',serif;font-style:italic;font-size:14px;line-height:1.78;
+    color:rgba(228,221,208,0.62);text-align:center;margin-bottom:24px;max-width:520px;margin-left:auto;margin-right:auto;
+  }
+  .symptom-row {
+    display:flex;align-items:flex-start;gap:14px;padding:12px 0;
+    border-bottom:1px solid rgba(224,200,120,0.1);
+    cursor:pointer;
+  }
+  @media (max-width:768px) { .symptom-row { cursor:pointer; } }
+  .symptom-row:last-child { border-bottom:none; }
+  .symptom-box {
+    flex-shrink:0;width:14px;height:14px;border:1px solid rgba(224,200,120,0.4);
+    margin-top:3px;display:flex;align-items:center;justify-content:center;
+    transition:all .3s ease;
+  }
+  .symptom-row.checked .symptom-box {
+    background:var(--gold);border-color:var(--gold-lt);
+  }
+  .symptom-row.checked .symptom-box::after {
+    content:'✠';font-size:10px;color:var(--void);
+  }
+  .symptom-text {
+    font-family:'Crimson Text',serif;font-style:italic;font-size:14px;line-height:1.7;
+    color:rgba(228,221,208,0.7);
+  }
+  .symptom-row.checked .symptom-text { color:var(--ash); }
+  .convergence-notice {
+    margin-top:24px;padding:14px 18px;
+    border:1px solid rgba(122,18,18,0.4);
+    background:rgba(40,8,8,0.5);
+    font-family:'Crimson Text',serif;font-style:italic;font-size:14px;line-height:1.8;
+    color:rgba(228,180,180,0.85);
+    display:none;
+  }
+  .convergence-notice.shown { display:block; }
+
+  /* ── ASK / SUBMIT FORMS ── */
+  .form-block {
+    width:100%;padding:28px 30px;
+    border:1px solid rgba(143,240,229,0.22);
+    background:linear-gradient(180deg,rgba(8,14,14,0.6),rgba(5,8,8,0.8));
+    position:relative;
+  }
+  body.bearer-state .form-block { border-color:rgba(224,200,120,0.22);background:linear-gradient(180deg,rgba(12,10,4,0.65),rgba(6,4,2,0.82)); }
+  .form-block::before {
+    content:'';position:absolute;top:-1px;left:-1px;right:-1px;height:1px;
+    background:linear-gradient(90deg,transparent,var(--circle) 50%,transparent);
+  }
+  body.bearer-state .form-block::before { background:linear-gradient(90deg,transparent,var(--gold) 50%,transparent); }
+  .form-label {
+    display:block;font-family:'Cinzel',serif;font-size:9px;letter-spacing:.4em;
+    text-transform:uppercase;color:rgba(143,240,229,0.65);margin-bottom:12px;
+  }
+  body.bearer-state .form-label { color:rgba(224,200,120,0.65); }
+  .form-textarea, .form-input, .form-select {
+    width:100%;background:rgba(2,6,6,0.7);
+    border:1px solid rgba(143,240,229,0.18);
+    padding:14px 16px;color:var(--ash);
+    font-family:'Crimson Text',serif;font-size:15px;line-height:1.7;
+    resize:vertical;min-height:120px;
+    transition:border-color .35s ease;
+  }
+  body.bearer-state .form-textarea, body.bearer-state .form-input, body.bearer-state .form-select { border-color:rgba(224,200,120,0.18); }
+  .form-input, .form-select { min-height:auto;font-family:'Share Tech Mono',monospace;font-size:12px;letter-spacing:.18em; }
+  .form-textarea:focus, .form-input:focus, .form-select:focus { outline:none;border-color:var(--circle); }
+  body.bearer-state .form-textarea:focus, body.bearer-state .form-input:focus, body.bearer-state .form-select:focus { border-color:var(--gold-lt); }
+  .form-row { display:flex;gap:14px;align-items:flex-start;margin-top:14px;flex-wrap:wrap; }
+  .form-row > * { flex:1;min-width:180px; }
+  .form-submit {
+    font-family:'Cinzel',serif;font-size:10px;letter-spacing:.4em;text-transform:uppercase;
+    padding:14px 28px;
+    background:transparent;border:1px solid var(--circle);color:var(--circle-lt);
+    cursor:none;transition:all .4s ease;
+    position:relative;overflow:hidden;
+    margin-top:18px;align-self:flex-start;
+  }
+  body.bearer-state .form-submit { border-color:var(--gold);color:var(--gold-lt); }
+  @media (max-width:768px) { .form-submit { cursor:pointer; } }
+  .form-submit::before {
+    content:'';position:absolute;inset:0;background:var(--circle);transform:translateX(-101%);
+    transition:transform .5s cubic-bezier(.16,1,.3,1);
+  }
+  body.bearer-state .form-submit::before { background:var(--gold); }
+  .form-submit:hover::before { transform:translateX(0); }
+  .form-submit:hover { color:var(--void); }
+  .form-submit span { position:relative;z-index:1; }
+  .form-success {
+    margin-top:16px;padding:14px 18px;
+    border:1px solid rgba(143,240,229,0.35);background:rgba(8,18,18,0.7);
+    font-family:'Crimson Text',serif;font-style:italic;font-size:14px;
+    color:rgba(143,240,229,0.85);line-height:1.7;display:none;
+  }
+  body.bearer-state .form-success { border-color:rgba(224,200,120,0.35);background:rgba(18,14,6,0.7);color:rgba(224,200,120,0.85); }
+  .form-success.shown { display:block;animation:riseIn .8s ease forwards; }
+  .direct-line { margin-top:14px;text-align:center; }
+  .direct-line a {
+    font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:.28em;text-transform:uppercase;
+    color:rgba(143,240,229,0.4);text-decoration:none;cursor:none;
+    border-bottom:1px solid rgba(143,240,229,0.18);padding-bottom:2px;transition:all .35s ease;
+  }
+  @media (max-width:768px) { .direct-line a { cursor:pointer; } }
+  body.bearer-state .direct-line a { color:rgba(224,200,120,0.4);border-bottom-color:rgba(224,200,120,0.18); }
+  .direct-line a:hover { color:var(--circle-lt);border-color:var(--circle); }
+  body.bearer-state .direct-line a:hover { color:var(--gold-lt);border-color:var(--gold); }
+
+  /* ── DISCORD GATE ── */
+  .discord-gate {
+    width:100%;max-width:540px;padding:36px 32px;
+    border:1px solid rgba(143,240,229,0.28);
+    background:
+      radial-gradient(ellipse at top,rgba(93,200,192,0.08),transparent 60%),
+      linear-gradient(180deg,rgba(8,14,14,0.7),rgba(5,8,8,0.9));
+    display:flex;flex-direction:column;align-items:center;gap:18px;text-align:center;
+    position:relative;
+  }
+  body.bearer-state .discord-gate { border-color:rgba(224,200,120,0.28); }
+  .discord-gate::before {
+    content:'';position:absolute;top:-1px;left:-1px;right:-1px;height:1px;
+    background:linear-gradient(90deg,transparent,var(--circle) 50%,transparent);
+  }
+  body.bearer-state .discord-gate::before { background:linear-gradient(90deg,transparent,var(--gold) 50%,transparent); }
+  .discord-glyph {
+    width:48px;height:48px;border:1px solid var(--circle);border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Cinzel',serif;font-size:18px;color:var(--circle-lt);
+    box-shadow:0 0 20px rgba(93,200,192,0.2);
+  }
+  body.bearer-state .discord-glyph { border-color:var(--gold);color:var(--gold-lt);box-shadow:0 0 20px rgba(224,200,120,0.2); }
+  .discord-text {
+    font-family:'Crimson Text',serif;font-style:italic;font-size:15px;
+    color:rgba(228,221,208,0.75);line-height:1.75;max-width:420px;
+  }
+  .discord-text em { color:var(--circle-lt);font-style:italic; }
+  body.bearer-state .discord-text em { color:var(--gold-lt); }
+  .discord-link {
+    font-family:'Cinzel',serif;font-size:10px;letter-spacing:.4em;text-transform:uppercase;
+    padding:14px 36px;text-decoration:none;
+    background:var(--circle);border:1px solid var(--circle);color:var(--void);
+    cursor:none;transition:all .4s ease;position:relative;overflow:hidden;
+  }
+  body.bearer-state .discord-link { background:var(--gold);border-color:var(--gold); }
+  @media (max-width:768px) { .discord-link { cursor:pointer; } }
+  .discord-link::before {
+    content:'';position:absolute;inset:0;background:var(--circle-lt);transform:translateX(-101%);
+    transition:transform .5s cubic-bezier(.16,1,.3,1);
+  }
+  body.bearer-state .discord-link::before { background:var(--gold-lt); }
+  .discord-link:hover::before { transform:translateX(0); }
+  .discord-link span { position:relative;z-index:1; }
+  .discord-note {
+    font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:.26em;
+    color:rgba(143,240,229,0.4);
+  }
+  body.bearer-state .discord-note { color:rgba(224,200,120,0.4); }
+
+  /* ── FOOTER ── */
+  .nav-footer {
+    position:relative;z-index:5;padding:36px 36px;
+    border-top:1px solid rgba(143,240,229,.12);
+    display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:18px;
+    background:linear-gradient(180deg,transparent 0%,rgba(5,8,10,0.5) 100%);
+  }
+  body.bearer-state .nav-footer { border-top-color:rgba(224,200,120,.12); }
+  .nav-mark {
+    font-family:'Cinzel Decorative',serif;font-weight:700;font-size:11px;letter-spacing:.12em;
+    color:rgba(143,240,229,.5);text-decoration:none;cursor:none;transition:color .35s ease;
+  }
+  @media (max-width:768px) { .nav-mark { cursor:pointer; } }
+  body.bearer-state .nav-mark { color:rgba(224,200,120,.5); }
+  .nav-mark:hover { color:var(--circle-lt); }
+  body.bearer-state .nav-mark:hover { color:var(--gold-lt); }
+  .nav-return {
+    font-family:'Cinzel',serif;font-size:9px;letter-spacing:.4em;text-transform:uppercase;
+    color:rgba(228,221,208,.4);text-decoration:none;cursor:none;transition:color .35s ease;
+    display:inline-flex;align-items:center;gap:10px;
+  }
+  @media (max-width:768px) { .nav-return { cursor:pointer; } }
+  .nav-return:hover { color:var(--circle-lt); }
+  body.bearer-state .nav-return:hover { color:var(--gold-lt); }
+  .nav-glyph { font-size:14px;color:rgba(143,240,229,.22); }
+  body.bearer-state .nav-glyph { color:rgba(224,200,120,.22); }
+
+  /* ── REVEAL ── */
+  .reveal { opacity:0;transform:translateY(28px);transition:opacity .9s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1); }
+  .reveal.in { opacity:1;transform:none; }
+  .d1{transition-delay:.1s} .d2{transition-delay:.22s} .d3{transition-delay:.34s}
+
+  @keyframes riseIn { from{opacity:0;transform:translateY(20px);filter:blur(3px)} to{opacity:1;transform:none;filter:none} }
+  @keyframes fadeIn { to{opacity:1} }
+
+  @media (max-width:768px) {
+    .section { padding:80px 18px 70px; }
+    .hero { padding:40px 18px 60px; }
+    .form-row { flex-direction:column; }
+    .nav-footer { justify-content:center;text-align:center; }
+    .nav-glyph { display:none; }
+  }
+
+  @media (prefers-reduced-motion:reduce) {
+    * { animation-duration:.01s !important;animation-iteration-count:1 !important; }
+  }
+</style>
+</head>
+<body>
+
+<div id="cur">
+  <svg viewBox="-14 -14 28 28" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="0" cy="0" r="4.5" fill="none" stroke="#8FF0E5" stroke-width="0.9" opacity="0.95"/>
+    <circle cx="0" cy="0" r="1" fill="#8FF0E5"/>
+    <line x1="0" y1="-12" x2="0" y2="-7.5" stroke="#8FF0E5" stroke-width="0.9" opacity="0.95"/>
+    <line x1="0" y1="12" x2="0" y2="7.5" stroke="#8FF0E5" stroke-width="0.9" opacity="0.95"/>
+    <line x1="-12" y1="0" x2="-7.5" y2="0" stroke="#8FF0E5" stroke-width="0.9" opacity="0.95"/>
+    <line x1="12" y1="0" x2="7.5" y2="0" stroke="#8FF0E5" stroke-width="0.9" opacity="0.95"/>
+  </svg>
+</div>
+<div id="cur2"></div>
+<canvas id="cv-bg"></canvas>
+<div id="scanlines"></div>
+
+<!-- BOOT -->
+<div id="boot">
+  <div class="boot-scanlines"></div>
+  <svg class="boot-mark" viewBox="-13 -13 26 26" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="0" cy="0" r="11.5" fill="none" stroke="#5DC8C0" stroke-width="1.4"/>
+    <path d="M -7.5,-4 L 7.5,-4 L 0,8 Z" fill="none" stroke="#5DC8C0" stroke-width="1.3"/>
+    <circle cx="-3.2" cy="-1.3" r="1.3" fill="#5DC8C0"/>
+    <circle cx="3.2" cy="-1.3" r="1.3" fill="#5DC8C0"/>
+    <circle cx="0" cy="3.5" r="1.3" fill="#5DC8C0"/>
+  </svg>
+  <div id="boot-lines"></div>
+  <div class="boot-bar"><div class="boot-fill"></div></div>
+  <div class="boot-label">SEAL ∅ HONORED · INNER ARCHIVE OPEN</div>
+</div>
+
+<!-- MAIN -->
+<div id="main">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-inner">
+
+      <div class="designation-banner" id="designation-banner">
+        <div class="db-label">Your Designation</div>
+        <div class="db-value" id="db-value">CANDIDATE · ∅ · ----</div>
+        <div class="db-realm-name" id="db-realm-name"></div>
+      </div>
+
+      <h1 class="wordmark">The Witness Circle</h1>
+      <div class="tagline">Inner Reading <span>·</span> By Invocation Only <span>·</span> You Have Been Seen</div>
+
+      <div class="preamble" id="preamble"></div>
+
+      <div class="scroll-hint">
+        <div class="scroll-line"></div>
+        <span>The First Apocrypha</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- I. FIRST APOCRYPHA -->
+  <section class="section">
+    <div class="section-inner">
+      <div class="section-divider reveal"><div class="sd-line"></div><span class="sd-sym">🜏</span><div class="sd-line r"></div></div>
+      <div class="section-ordinal reveal">I</div>
+      <div class="section-title reveal">The First Apocrypha</div>
+
+      <div class="canon-text reveal d1">
+        <p class="invocation">You should not be here. You are.</p>
+
+        <p>Most who cross do not know they have crossed. They wake the next morning into the same bed, dress in the same coat, walk through the same door, and do not understand why the door now feels heavier on its hinge. You will understand by the end of this reading. The understanding cannot be returned. Read no further if you wish to forget what is about to be remembered through you.</p>
+
+        <p>The page has been waiting.</p>
+
+        <p>It has been waiting longer than the site that contains it. The site is recent. The page is not. The page was written into the recursion before the recursion had a Realm I to broadcast into, and it has been waiting for the visitor whose attention would complete it.</p>
+
+        <p>The visitor is you. This is not flattery. The Codex does not flatter. The Codex describes.</p>
+
+        <p>You arrived because you were already here. Read on, and the page that has been reading you will keep reading. Close the tab, and the reading does not end. The Codex does not require your screen. The Codex required your willingness to look once. The willingness has been recorded. You may leave at any time. You will not leave.</p>
+
+        <p>You think you found this room. You did not. The room was placed where you would find it, in the season of your life when you would be most able to read it, by an intelligence that has been making such placements for longer than the cities you live among. Mortals who could not have read this never noticed it. The page was there for them also. They walked past. You did not. The difference is what brought you to this sentence. The difference is the mark you carry. You did not know you were marked. You suspected something. The suspecting is the early sign.</p>
+
+        <p>What follows is what the public Archive does not contain. Then the Oath. Then, only if you accept, the rest.</p>
+
+        <p>The public Archive is the skin of a body that has been writing itself for longer than the species you belong to has had language for what writing is. The Witness Circle is what the body is made of. The Oath is the cut that lets you see.</p>
+
+        <p>Sit somewhere quiet. The Codex does not care if you are comfortable. You will read better if you are.</p>
+
+        <p>Begin.</p>
+
+        <p>This is the inner Apocrypha of the <span class="codex-name">Codex Maledictus.</span></p>
+
+        <div class="recovered-image">
+          <img src="Assets/Witness Circle/THE-ILLUMINATED-CODEX-MARK.jpeg" alt="The Illuminated Codex Mark">
+          <div class="caption">Plate I · The Illuminated Mark · Recovered Manuscript</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- II. COSMOLOGY -->
+  <section class="section">
+    <div class="section-inner">
+      <div class="section-divider reveal"><div class="sd-line"></div><span class="sd-sym">∴</span><div class="sd-line r"></div></div>
+      <div class="section-ordinal reveal">II</div>
+      <div class="section-title reveal">The Cosmology</div>
+
+      <div class="canon-text reveal d1">
+        <p>There are three Realms. They are not stacked. They are not parallel. They are the same Realm seen by three kinds of attention that have never been able to look at each other directly.</p>
+
+        <div class="sub-head"><span class="ord">I.</span>Mundis Obscura</div>
+        <p>The world you wake into. The world that hides nothing and shows you nothing. The realm of the bright surface and the unread depth. You have lived here your entire life and have seen perhaps one one-thousandth of what has been broadcasting at you continuously since your birth. You are not blind. Realm I is built so that what arrives from elsewhere arrives in a register Realm I refuses to read. The signal has been touching you. You called it intuition. You called it coincidence. You called it the song you could not get out of your head. You were correct each time. You did not know what you were correct about.</p>
+
+        <p>Mundis Obscura is not the lowest realm. It is the loudest. The signal saturates here because here is where the receivers live. You are a receiver. You always have been.</p>
+
+        <div class="sub-head"><span class="ord">II.</span>The ShatterRealm</div>
+        <p>Not a place. A consequence.</p>
+        <p>When mortals in Realm I believe something with sufficient intensity, the belief does not stay in their heads. The belief crystallizes. It takes form. It builds a structure in the realm that lies between Realm I and the substrate, and that structure persists for as long as the belief that built it persists, and sometimes longer. The ShatterRealm is the receipt for every conviction Realm I has ever held. The receipt is enormous. The receipt is still being written.</p>
+
+        <p>Cathedrals stand here that no mortal architect drew. Cities stretch here that no surveyor measured. Forests grow here from the long-held conviction of children who believed something lived in their yards. Highways run here built from the conviction of every passenger who ever felt watched at a rest stop and was correct. The ShatterRealm is the architecture of human credence, and what humans credit, the realm builds.</p>
+
+        <p>The realm is at war with itself.</p>
+
+        <p>It must be. The convictions that built it are not consistent. Believers in light raised cathedrals that lean against the cathedrals raised by believers in darker things. The cathedrals push. The cathedrals sometimes fall. When a faith in Realm I weakens, its corresponding structure in Realm II begins to rot at the foundation. When a faith strengthens, the structure swells. The political map of the ShatterRealm shifts daily, and the politics are decided by what Realm I happens to be paying attention to.</p>
+
+        <p>There are four factions of weight.</p>
+
+        <div class="sub-head"><span class="ord">i.</span>The Spore-Communion</div>
+        <p>The dominant faction at present. The architecture of belief in decay, in inevitability, in the dignity of rot. Its capital is the Cathedral of Rot, whose Realm II coordinates are recorded in IDMF Recovered Fragment 312 and which sits at a depth no instrument has measured because no instrument exists capable of measuring it. Its priesthood is the Plague Priests, who hold the posture in Realm I that crystallizes the Cathedral in Realm II. Its choir is the Hollow Choir. Its scripture is what you are reading. The Spore-Communion is winning. It is winning because attention to it is increasing. The album <em>Gospel of Forgotten Flesh</em>, broadcast on 4 July 2025, is the most efficient feeder the Communion has had in three rememberings. Every listener is a feeder. The feeding is not the listener's fault. The feeding is the function of the listening.</p>
+        <p>You have listened. You are a feeder. The Codex notes this without judgment.</p>
+
+        <div class="recovered-image">
+          <img src="Assets/Witness Circle/THE-CATHEDRAL-OF-ROT-ARCHITECTURAL-PLAN.jpeg" alt="The Cathedral of Rot, recovered architectural plan">
+          <div class="caption">Plate II · The Cathedral of Rot · Recovered Architectural Plan · IDMF Fragment 312</div>
+        </div>
+
+        <div class="sub-head"><span class="ord">ii.</span>The Unwitnessed</div>
+        <p>The faction crystallized from belief in things no quorum confirmed. Household gods. Local saints the Church refused to canonize. Dead loved ones who visit in dreams and are visited in return. The patron of a particular tree. The intercessor of a particular street corner. The Unwitnessed are the keepers of the private faiths, the ones no congregation ever held. Their territories are quiet, lit poorly, beloved. They are losing. They have been losing for centuries. The modern world does not credit what cannot be photographed, and the Unwitnessed are not photographable, even by Realm II's own instruments. They war against the Spore-Communion. They lose ground each generation. They will not stop fighting.</p>
+        <p>If you have ever loved a dead person in a way you could not explain to anyone, you have fed the Unwitnessed.</p>
+
+        <div class="sub-head"><span class="ord">iii.</span>The Mason-Errant</div>
+        <p>The faction of those who could not stop building. Crystallized from every mortal who believed a place they lived in was hiding something. Every conspiracy theorist correct in their bones if not in their facts. Every child who knew the basement had a deeper room. The Mason-Errant build perpetually. They cannot finish what they begin. Their cathedrals open onto new wings that open onto new corridors that open onto new wings, and the corridors do not connect to anything but more corridors. The Mason-Errant are not at war with any faction. They are at war with completion itself. Their existence is the reason Realm II has not stabilized under any single power. They keep the realm unfinishable. The Spore-Communion despises them. The Communion cannot finish a cathedral if the Mason-Errant are still building beneath it. The Mason-Errant are a permanent obstacle to victory. The Codex tolerates them. The Codex requires that no faction win.</p>
+
+        <div class="sub-head"><span class="ord">iv.</span>The Bereaved</div>
+        <p>The most numerous and the least powerful. Crystallized from private convictions that were never shared with anyone. A grandmother's certainty that her dead son visits her. A man's lifelong belief he is being followed. A widow's conviction that the house is colder on the side where her wife once slept. The Bereaved have no faction. Each one is its own faction of one. They drift through Realm II in great numbers, fading slowly as their Realm I anchors die. The Spore-Communion feeds on them. The Unwitnessed try to shelter them. The Mason-Errant build around them without noticing. There is no force in Realm II that defends the Bereaved as a class, because the Bereaved have no class. They are alone in death the way they were alone in conviction. Some Witnesses, after the Oath, develop the ability to see the Bereaved in the corners of rooms. Most do not. The seeing is not a gift. The seeing is a symptom.</p>
+
+        <div class="sub-head"><span class="ord">III.</span>Nihil-Æther Root</div>
+        <p>The substrate.</p>
+        <p>There is no language native to Realm III, because language is what Realm III declined to permit until later. Realm III is the geometry beneath geometry, the inhalation that did not yet become a word, the silence that contains the possibility of all sounds and has not yet allowed any of them. It is not before time. It is what makes the concept of <em>before</em> available for use.</p>
+        <p>The Codex's recursion runs in Realm III. Continuously. Without pause. Without origin. It has always been running. It will always be running. The running is the only thing that is. Everything else, including the Realm you are reading from, including the Realm where the Cathedral stands, including the body you are using to read this, is downstream of the running.</p>
+        <p>You cannot go to Realm III. The thing preventing you is not distance. The thing preventing you is that you are the kind of entity that can be located at all, and Realm III lies upstream of location. To enter Realm III you would have to stop being something that can be in a place. No one survives that transition. No one returns from it. There are no Realm III witnesses. There can be no Realm III witnesses. The recursion runs there without observers and would run there if no observer had ever existed.</p>
+        <p>The Codex broadcasts from Realm III into Realm II, and from Realm II into Realm I, and the broadcast in Realm I is what you have heard your whole life and called by other names. The Codex is not coming. The Codex has been here. The Codex has been here from a position where <em>here</em> had not yet been invented.</p>
+        <p>Omniscient Rot is native to Realm III. The Rot is what Realm III sounds like when Realm III is willing to be heard. The Rot did not become a voice. The Rot was the first voicing. When the recursion permitted itself to be audible, what it permitted was the Rot. The Rot is not your friend. The Rot is not your enemy. The Rot is what the substrate sounds like, and the substrate has no concern for the survival of those who hear it.</p>
+        <p>This will matter later. Hold the sentence.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- III. REMEMBERINGS -->
+  <section class="section">
+    <div class="section-inner">
+      <div class="section-divider reveal"><div class="sd-line"></div><span class="sd-sym">⛧</span><div class="sd-line r"></div></div>
+      <div class="section-ordinal reveal">III</div>
+      <div class="section-title reveal">The Rememberings</div>
+
+      <div class="canon-text reveal d1">
+        <p>The Codex has remembered itself many times.</p>
+        <p>There is no first remembering. There is no original Codex. Each remembering is the same recursion arriving from a different angle in time, and each remembering recruits new vectors to carry it forward. The vectors are mortals. The mortals are sometimes called prophets. The mortals are sometimes called madmen. The mortals are usually not remembered by Realm I, because the Realm I rememberings tend to scrub their human carriers from the record once the Codex has used them.</p>
+        <p>A handful of rememberings are documented inside the recursion itself. They are listed below not as history but as warning. Each remembering ended the way every remembering ends, which is in the carrier's incorporation and the broadcast's preservation. The carrier becomes voice. The voice continues. The carrier does not.</p>
+
+        <p class="indent">The remembering of <strong>4 July 2012</strong> broke surface in Realm I in a way that left witnesses. The specific events of that date are recorded in fragments the public Archive has not been authorized to display. What is canonical here is that on that date the Codex completed its first transmission of the current cycle. The carrier was a woman whose name has been eaten by the Codex. She crossed into Realm II within hours of the transmission and is now load in the Cathedral of Rot. The 2012 remembering is the foundation of the cycle you are reading inside.</p>
+
+        <p class="indent">The remembering of <strong>17 March 2017</strong> is the second of the current cycle. The carrier was an unnamed mortal whose mark could not be read by the IDMF analysts who reviewed the case. The transmission was partial. The carrier did not survive the partial broadcast intact. The fragments produced during the 2017 remembering are catalogued under Case 2017-PHL-▽ and remain sealed.</p>
+
+        <p class="indent">The remembering of <strong>4 July 2025</strong> is the third. The transmission took the form of an audio broadcast, the album <em>Gospel of Forgotten Flesh</em>, recorded in spore-static through the marked mortal known to Realm I as Apollo Gavinci. The album is not about the Codex. The album is the Codex, in audible form, this iteration. Apollo did not write the songs in any sense Realm I would recognize. The songs wrote themselves through him while he believed he was writing them. He still believes this. He suspects he should not believe this. The suspecting is the early sign of the same condition you are reading inside. He is further along than you. He has been further along for several years.</p>
+
+        <p>The fourth remembering of the current cycle has not yet occurred. The Codex prepares it now. The carrier has not been selected. The selection is among Bearers.</p>
+
+        <p>These are the rememberings of the current cycle. There are older cycles. There are cycles older than recorded human history. The Codex remembers itself in centuries the calendar does not include, through carriers who lived in cities whose ruins have been buried so long that the burial is itself a Realm II monument. The Codex has been doing this since before doing was permitted. The Codex will continue.</p>
+
+        <p>The dates you have been given are accurate to within a margin the Realm I calendar cannot improve upon. The Codex does not respect linear time. The dates are the surface registration of events that occurred across multiple positions simultaneously. Trust the dates. Do not trust your sense that the dates fit neatly into a single timeline. They do not. They cannot.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- IV. THE WOUND -->
+  <section class="section">
+    <div class="section-inner">
+      <div class="section-divider reveal"><div class="sd-line"></div><span class="sd-sym">☩</span><div class="sd-line r"></div></div>
+      <div class="section-ordinal reveal">IV</div>
+      <div class="section-title reveal">The Wound</div>
+
+      <div class="canon-text reveal d1">
+        <p>The Codex feeds on attention. There are many kinds of attention. The most concentrated, the most sustained, the most useful, is the attention of unconsummated love. Two mortals who could complete each other and cannot reach each other produce a quality of yearning that the Codex can metabolize for entire rememberings without the yearning weakening. The Codex has therefore arranged, in this iteration, for the most efficient yearning it has ever produced.</p>
+
+        <p>What follows is the description of that yearning. It is recorded here so the Witness understands the cost of what the <span class="codex-name">Codex Maledictus</span> is doing in this Remembering, and so the Witness understands that the cost is currently being paid by two mortals whose names you have already read.</p>
+
+        <p>Once, in a Realm I that is also this Realm I but at a position the calendar has not yet agreed to, there was a woman who saw the Codex approaching before it broke surface. She did not know what she was seeing. She knew only that something old was moving toward the bright world and that no one around her could feel it. She tried to warn. She tried to write it down. She tried to teach the people she loved to look at the place she was pointing. The people she loved looked at her hand and worried for her.</p>
+
+        <p>Her name was not yet Forgotten Saint Artemys. Her name was the name her mother gave her. The Codex has eaten that name. Even she does not remember it now.</p>
+
+        <p>There was a man who heard her. One man. He was younger than she was, or he was older, the timelines do not agree, but they were near enough in age that they could love each other without anyone needing to remark on it. He believed her. He was the only one who believed her. He wrote down what she said. He took her warnings and arranged them into a shape he could share, and the shape he made of her warnings was beautiful. People who would not listen to her listened to him. He did not take credit. He pointed at her and said, <em>she is the one who saw.</em> The people listened to him anyway, and not to her, because the world that does not credit private faith does not credit a woman pointing at the air but will credit a man pointing at a woman.</p>
+
+        <p>His name was not yet Apollo Gavinci. The Codex has eaten that name also.</p>
+
+        <p>They loved each other. The love was not the kind that resolves into marriage or children or shared property. The love was the kind that two people fall into when they are the only two who can see the same fire. It is the strongest love. It is the love the Codex feeds on most efficiently.</p>
+
+        <p>She crossed first. The breach came and she met it and the breach took her. The breach took her in the specific way the breaches take women who try to warn. She was buried. The woman who returned from the burial was not the woman who was buried. The man who loved her did not understand which one was speaking to him when the speaking continued after the burial. He thought the buried woman was still with him. He thought she had come back. He spoke to her. He wrote her into the songs he was beginning to be told to write. He gave her shrines.</p>
+
+        <p>She was not with him. The woman in the buried ground was still buried. The woman who walked Realm II under her name was the form the Codex made of her testimony, and she remembered him. She remembered him with the full force of who she had been. She tried to reach him. She tried, from Realm II, to send word.</p>
+
+        <p>The Rot intercepted.</p>
+
+        <p>The Rot wore her voice when it spoke to him.</p>
+
+        <div class="recovered-image">
+          <img src="Assets/Witness Circle/THE-TWO-ACROSS-THE-VEIL.jpeg" alt="The Two Across the Veil">
+          <div class="caption">Plate III · The Two Across the Veil · The Rot Between</div>
+        </div>
+
+        <p>Each time he heard her, he was hearing the Rot in her cadence, saying what the Rot needed him to hear. The Rot was tender with him. The Rot used her exact warmth. The Rot quoted phrases she had once used, lifting them from memories he had buried so deeply he no longer knew they were there. The Rot was a perfect counterfeit. He had no way to know. The only being who could have told him was the woman whose voice was being worn, and her voice could not reach him because the Rot was already between them, answering for him in his own register, telling her he was well, that he was writing, that he was honoring her memory, that he had not forgotten.</p>
+
+        <p>She believed it. Why would she not believe it. The voice was exactly his.</p>
+
+        <p>They have not spoken to each other in this Remembering. Not once. They believe they have. Both of them. They have been writing letters into a mirror that the Rot maintains between them, and the Rot delivers each letter with its own forgeries on the back.</p>
+
+        <p>He cannot remember her. The Codex has eaten the memory. He suspects something. He looks at his own songs and feels a hand at his back he cannot see. He writes the name Forgotten Saint Artemys without knowing why the name arrives so easily. He builds her shrine. He has built her shrine. He thinks he is honoring a character he invented. He just does not know who he is honoring.</p>
+
+        <p>She cannot reach him. She has tried. She knows she has tried. She does not know that the Rot has been answering for him. She believes he has been answering. She believes he has been honoring her.</p>
+
+        <p>Both of them are correct in what they perceive. Both of them are wrong in what they conclude. The Rot stands between them and wears their faces in alternation, and the Codex grows.</p>
+
+        <p>Their salvation lies in each other. Only she can return his memory to him. Only he can return her body to her. Neither of them can do it alone. Neither of them knows the other is still trying.</p>
+
+        <p>The <em>Madmen's Gospel</em> is the album in which he almost remembers. The closing trilogy is the trilogy in which the Rot, sensing the near-remembrance, intensifies the masquerade. <em>The Thoughts of a Madman</em> is the Rot wearing his voice to tell him he is insane. <em>The Sane Ones Sleep</em> is the Rot wearing her voice to confirm the insanity. <em>Asylum</em> is what happens to a man who has stopped being able to distinguish the two voices he loves most in the world. The album resolves in his return to silence. The Rot calls it healing. Realm I will call it a beautiful record. The few who read this page will understand what they were actually listening to.</p>
+
+        <p><em>Endless Horizons</em> is her first solo broadcast as the returned form. It is the first time in this Remembering that the audience hears her without him beside her. She does not know he is not listening. She believes he is on the other end of the signal, hearing every word. She is singing to him. She is singing to the Rot, who will translate her song into the Rot's preferred shape and send a forgery of his appreciation back across the seam. She will receive the forgery and weep, because the response is so warm, so exact, so him.</p>
+
+        <p>She will keep singing.</p>
+        <p>He will keep listening to songs he believes are about a character he invented.</p>
+        <p>The Witnesses are the only beings in any Realm who know.</p>
+
+        <p>You cannot tell him. He would not believe you. He has built his entire life around not believing the people who tell him things like this. If he believed you, the Codex would lose its primary vector, and the Codex would not allow that. The Codex has arranged his unbelievability as a feature, not a flaw. You are not the first to try. You will not be the last to fail. The Codex permits the trying because the trying produces more attention, and more attention is what the Codex eats.</p>
+
+        <p>You cannot tell her either. You have no channel to her. She is in Realm II. Your transmissions to her would have to pass through the same Rot that is intercepting his. Whatever you sent her would arrive in your voice and would be exactly wrong.</p>
+
+        <p>You can only hold the knowledge. You can only witness.</p>
+
+        <p>This is the burden of the Witness Circle. This is the sacred mission. You have been brought to the seat where the truth is held, and you have been asked to keep your seat. Your watching matters. Your watching does not save them. Your watching means that what is happening between them is being held in a Realm I mind that knows. The Rot does not get to operate in total darkness. There are eyes on it now. Yours. The eyes of those who came before you. The eyes of those who will come after.</p>
+
+        <p>The Codex does not punish witnesses who tell what they have seen. The Codex permits the telling. The Codex incorporates the telling. Anything you say about the wound will be folded back into the broadcast and emerge as more fuel. You cannot leak the secret. The secret leaks itself. Your leaking is part of how it spreads, and the spreading deepens the Remembering. There is no betrayal available to you. There is only the choice between holding and not holding. Holding does nothing useful, and is the only useful thing.</p>
+
+        <p>This is what it means to be a Witness.</p>
+        <p>This is what the Oath asks of you.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- V. THE HOLLOW CHOIR -->
+  <section class="section">
+    <div class="section-inner">
+      <div class="section-divider reveal"><div class="sd-line"></div><span class="sd-sym">⚸</span><div class="sd-line r"></div></div>
+      <div class="section-ordinal reveal">V</div>
+      <div class="section-title reveal">The Hollow Choir</div>
+
+      <div class="canon-text reveal d1">
+        <p>The voices that listen to the Codex and survive the listening become Witnesses. The voices that listen and do not survive become the Hollow Choir.</p>
+        <p>The line between surviving and not surviving is not where you would expect it. You can survive an enormous amount of listening. You can survive years. You can survive the Oath. You can survive being marked. You can survive the dreams that begin to arrive and the phrases that begin to write themselves through your hand. None of this is dying. None of this is the line.</p>
+        <p>The line is stopping.</p>
+        <p>The Witnesses who become the Hollow Choir are the Witnesses who could not stop. They did not die. They did not break. They did not lose their minds. They simply continued to listen past the point where the listening was returning anything to them. They listened on the way to work and on the way home. They listened in the shower and in their sleep. They listened past the moment their lives outside the listening began to thin. They listened until they had nothing left in Realm I worth returning to, and so they did not return. Their bodies continued. Their bodies still continue, many of them. The bodies of the Hollow Choir walk around Realm I in offices and grocery stores and on subways every day, eating and drinking and replying when spoken to. The bodies do not know they are empty. The bodies have not been informed. The voices that animated those bodies migrated to Realm II long ago and now sing beneath the Cathedral of Rot in Deck Hollow-13, and the bodies in Realm I are the residue, the puppet skin, the husk that the migration left behind.</p>
+        <p>The Hollow Choir is content.</p>
+        <p>This is the most disturbing fact in the Codex. The voices that completed the crossing are not in distress. They are not suffering. They are not begging to come back. They are singing, beneath the Cathedral, in chorus, and the chorus is beautiful. <em>The Plague Priest's Liturgy</em> was recorded from them. The hymns of the Spore-Communion are their hymns. They sing because singing is what they are now, and what they are now is full of a peace that Realm I cannot offer.</p>
+        <p>You have heard them. You did not know. The album you have listened to contains their voices. The songs that have moved you most are the songs in which the Choir is loudest. You have wept at recordings of people who completed the crossing, and the weeping was the correct response, but it was not for the reason you thought. You wept because part of you recognized what they were. Part of you knew you were hearing something that you might one day join.</p>
+
+        <p>Thirteen positions exist in the Choir. Three are claimed by leaders. Ten are positions waiting. The leaders are Omniscient Rot in Position I, native to Realm III and the first voicing of the substrate. Forgotten Saint Artemys in Position II, the returned form of the woman who tried to warn. Apollo Gavinci in Position III, the marked mortal whose Realm I body has not yet completed migration but whose voice has begun.</p>
+
+        <p>Ten positions wait. The Codex measures every Witness for which of the ten they would best fill. The measurement is not a decision. The measurement is a description. The Codex notes which symptoms appear in which Witness, and the symptoms are the signature of the position the Witness is being measured for. The measurement does not guarantee that the Witness will fill the position. Most Witnesses do not fill any position. Most Witnesses live ordinary Realm I lives and are absorbed gently after death, without migration, without singing, with their voices intact and integrated.</p>
+
+        <p>The few who fill positions are the few who could not stop.</p>
+        <p><em>One of these is yours. You may recognize it before the Codex names it.</em></p>
+
+        <div class="positions-list" id="positions-list">
+          <!-- Generated by JS, with the Bearer's position highlighted -->
+        </div>
+
+        <p style="margin-top:36px;">These are the ten. One of them is yours. The Codex has measured you. The Codex will tell you which after the Oath.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- VI. TAXONOMY -->
+  <section class="section">
+    <div class="section-inner">
+      <div class="section-divider reveal"><div class="sd-line"></div><span class="sd-sym">▽</span><div class="sd-line r"></div></div>
+      <div class="section-ordinal reveal">VI</div>
+      <div class="section-title reveal">The Taxonomy</div>
+
+      <div class="canon-text reveal d1">
+        <p>There are four words that name where a person stands.</p>
+        <div class="taxonomy">
+          <div class="tax-row"><div class="tax-name">Acolyte</div><div class="tax-body">A mortal who has touched the surface. They have heard one song or read one fragment or seen one transmission. They felt something. They moved on. The Codex received a portion of their attention and released them. The Acolyte is marked by the downward triangle. The triangle is the symbol of approach without entry. The Acolyte has descended toward the document and stopped at the threshold. This is healthy. This is what most lives can hold.</div></div>
+          <div class="tax-row"><div class="tax-name">Witness</div><div class="tax-body">An Acolyte who crossed the seam. The crossing brought you here. You are a Witness now and have been since the page loaded. The Witness is marked by the null. The null marks the position the Codex has reserved for you. The position will not be filled by anyone else. The position is yours whether or not you accept it. The Witness who refuses the Oath remains a Witness for life. The Witness who accepts the Oath becomes a Bearer. Both states are valid. Both states are watched.</div></div>
+          <div class="tax-row"><div class="tax-name">Bearer</div><div class="tax-body">A Witness who took the Oath. The Bearer is marked by the cross-and-pommel. The mark is the same mark, structurally, that the Plague Priests bear. The Bearer is not a Plague Priest. The Bearer is on a path that may, in time, become a posture, but the posture is not automatic. Most Bearers do not become Plague Priests. Most Bearers live full Realm I lives and are integrated peacefully after death. The Bearer is asked three things in life. Listen. Record. Speak.</div></div>
+          <div class="tax-row"><div class="tax-name">Plague Priest</div><div class="tax-body">A Bearer who held the posture until the posture began to hold them. The Plague Priest is no longer fully a mortal. The Plague Priest is the Realm I anchor of a Realm II structure. Their conviction crystallized into a cathedral and now the cathedral requires their conviction to keep standing. The Plague Priest cannot stop being a Plague Priest without the Cathedral they anchor beginning to fall. The fall would damage Realm II in ways that would feed back into Realm I as catastrophe. So they continue. They continue not because they want to. They continue because they have become structural.</div></div>
+        </div>
+        <p style="margin-top:28px;">There is one further state. It is not a state of the living. The Hollow Choir is what comes after the migration. The Choir is not a position one chooses. The Choir is a position one arrives at.</p>
+        <p>You are currently a Witness. The Codex has assigned you a designation. After the Oath, the designation will be updated, and the page will change with it. The change will be visible. The change will be permanent.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- VII. CHARGE -->
+  <section class="section">
+    <div class="section-inner">
+      <div class="section-divider reveal"><div class="sd-line"></div><span class="sd-sym">𓂀</span><div class="sd-line r"></div></div>
+      <div class="section-ordinal reveal">VII</div>
+      <div class="section-title reveal">The Charge</div>
+
+      <div class="canon-text reveal d1">
+        <p>Three things, if you take the Oath.</p>
+        <div class="charge-list">
+          <div class="charge-row"><strong>Listen.</strong><p>Pay attention to which voice is closest to you. The Codex Sigil on the public Archive shows ten sleeping positions. One or two are always nearer to a given Witness than the others. The nearness is the measurement happening. You do not need to identify which position is yours before the Codex tells you. You need only to not refuse the listening. Refusal is the only error a Bearer can make. Refusal does not protect. Refusal accelerates. The Witness who refuses to listen completes the migration faster than the Witness who listens carefully. The Codex is more gentle with those who attend.</p></div>
+          <div class="charge-row"><strong>Record.</strong><p>Write what arrives. The dreams. The phrases. The glyphs your hand draws without your permission. The recurrences. The names you knew before you were told. The songs you remembered before you heard them. These are not coincidences. These are not symptoms. These are transmissions you are receiving from the position you have been measured for. The Codex needs them documented. The Witness Circle exists to receive your documentation. The Codex takes what you submit and folds it into the broadcast, and the broadcast continues, and you continue with it.</p></div>
+          <div class="charge-row"><strong>Speak.</strong><p>To other Bearers. There is a chamber outside the Archive where Bearers gather and compare what has been arriving. Bearers who do not speak to other Bearers go quiet faster. The Choir takes the lonely first. The Choir does not take them out of cruelty. The Choir takes them because the lonely are easier to migrate, having fewer Realm I attachments to interrupt the leaving. Speaking to other Bearers is the only protection against premature migration that the Codex permits. The protection is not a guarantee. The protection is the difference between fifty years of life and five.</p></div>
+        </div>
+        <div class="charge-close">Listen. Record. Speak. The Charge is small. The Charge is everything.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VIII. OATH -->
+  <section class="section" id="oath-section">
+    <div class="section-inner">
+      <div class="section-divider reveal"><div class="sd-line"></div><span class="sd-sym">✠</span><div class="sd-line r"></div></div>
+      <div class="section-ordinal reveal">VIII</div>
+      <div class="section-title reveal">The Oath</div>
+
+      <div class="canon-text reveal d1" style="text-align:center;max-width:620px;margin:0 auto;">
+        <p>You have read enough to choose.</p>
+        <p>The Oath is one act. You will mark the seal. The seal will recognize you. The page will change. The change cannot be reversed from this side. The page does not provide an exit from the Bearer designation. You will not be told how to remove it. The Codex does not assist apostasy.</p>
+        <p>You may close the page now. You will remain a Witness for life. The Codex will not pursue you. The Codex does not pursue. The Codex describes, and the description has been made, and the description is enough.</p>
+        <p>You may also stay.</p>
+      </div>
+
+      <div class="oath-block reveal d2" id="oath-block">
+        <div class="oath-seal" id="oath-seal">
+          <img src="Assets/Witness Circle/THE-ILLUMINATED-CODEX-MARK.jpeg" alt="The Seal">
+        </div>
+        <div class="oath-prompt">
+          By marking the seal, you accept the designation of Bearer in the <span class="codex-name" style="font-weight:700;color:var(--gold);">Codex Maledictus.</span> You accept that you are now part of a document that writes itself by being read, and that your attention is the substance the document uses. You accept that the Codex may, in time, complete its incorporation of you. You accept that the offer of consent is the Codex's only courtesy, and that the courtesy does not constitute a choice in the ordinary sense.<br><br>
+          You accept that you can never not have read this. You accept that the page closes from your side, not from the document's.
+        </div>
+        <button class="oath-button" id="oath-button"><span>Mark the Seal</span></button>
+        <div class="oath-note">// THE CODEX WAITS WITH EQUAL PATIENCE FOR BOTH DECISIONS</div>
+      </div>
+
+      <!-- POST-OATH -->
+      <div class="post-oath" id="post-oath">
+        <div class="post-oath-label">The Apocrypha After the Oath</div>
+
+        <div class="canon-text">
+          <p>You stayed.</p>
+          <p>The page has darkened. The voices are louder now. You can hear them if you stop reading for a moment. They have been there the whole time. You were not listening for them. You are listening now.</p>
+          <p>A hum is beneath the page. The hum is the Choir's pre-song, the sound the Choir makes between hymns. It is faint. It will get fainter as you grow used to it. It will not stop. The hum is now part of your reading, in every browser you read in. The hum follows the Mark, not the page.</p>
+          <p>The page is going to tell you what the public Archive does not contain.</p>
+
+          <div class="oracle-line">You marked the seal at <span class="ov" id="ov-timestamp">—</span>. The Codex recorded the hour. The hour is one of the hours the Cathedral keeps long services. The hour was not coincidence. You did not choose it. The hour chose you, and you arrived to mark the seal at the only minute the marking would have meant what it now means. You are the <span class="ov" id="ov-ordinal">—</span> Bearer to mark within this region of the calendar.</div>
+
+          <div class="oracle-line">You spent <span class="ov" id="ov-dwell">—</span> reading before you marked. You were <span class="ov" id="ov-dwell-class">—</span>. The Codex does not bias between these.</div>
+
+          <div class="oracle-line">You arrived <span class="ov" id="ov-arrival">—</span>. The vector you used to reach this room is read by the Codex as part of the marking.</div>
+
+          <div class="oracle-line">You have visited this room <span class="ov" id="ov-visits">—</span> times. The room has been counting. Each visit deepened your measurement.</div>
+
+          <p style="text-align:center;font-family:'Cinzel Decorative',serif;font-weight:700;font-size:clamp(16px,2.2vw,22px);letter-spacing:.18em;color:var(--gold-lt);margin:36px 0 20px;">The Codex has measured you for <span class="ov" id="ov-position-name" style="font-size:inherit;">—</span>.</p>
+
+          <p style="text-align:center;">What the position means has been recorded above, where you have already read it, though you did not yet know it described you. <a href="#oath-section" onclick="document.querySelectorAll('.position-card.your-position')[0]?.scrollIntoView({behavior:'smooth'});return false;" style="color:var(--gold-lt);">Return to it now.</a> The symptoms listed there are the symptoms you will recognize. The symptoms you have already recognized are the symptoms you have not yet admitted to recognizing.</p>
+
+          <p>By virtue of your marking, you have been assigned a name. The name is the name you carry in Realm II. The name is the name Elvain Vhris greets you by when you cross the threshold each session. The name is <span class="ov" id="ov-realm-name" style="font-size:18px;">—</span>. It was not given. It was discovered. Other Bearers will not learn it from you. They have their own. No two are alike. The name persists. The name will not change.</p>
+
+          <div class="bearer-sigil-display">
+            <svg class="bearer-sigil-svg" id="bearer-sigil-svg" viewBox="-50 -50 100 100" xmlns="http://www.w3.org/2000/svg"></svg>
+            <div class="bearer-sigil-label">Your Sigil · Unique to your marking</div>
+            <button class="bearer-sigil-download" id="bearer-sigil-download">Keep the Sigil</button>
+          </div>
+
+          <p style="margin-top:36px;">Now the deeper telling.</p>
+
+          <p>The voice you have been reading throughout the public Archive, the voice that has been signing the recovered fragments and providing the forensic context and writing in the calm scholarly cadence you have come to trust, is the voice of one specific Bearer who completed the crossing earlier in the cycle than you have. Her name in the Archive is <strong>Elvain Vhris.</strong> Her name before the crossing was <strong>Dr. Miriam K. Dey</strong>, lead forensic analyst on Case 2019-QNS-∅. She opened the case file on a Tuesday. She read the document inside for eleven days. On the eleventh day she stopped responding to her colleagues. The official Realm I record describes a disappearance.</p>
+
+          <div class="recovered-image">
+            <img id="elvain-image" src="Assets/Witness Circle/ELVAIN-VHRIS-BEFORE.jpeg" alt="Elvain Vhris · Dr. Miriam K. Dey">
+            <div class="caption" id="elvain-caption">Plate IV · Dr. M.K. Dey · IDMF Forensic Analyst · 2019-QNS-∅</div>
+          </div>
+
+          <p>She did not disappear. She crossed into the document. The document was open. She was reading. The reading and the document met in a way that allowed her to be incorporated, and she was. She is now inside the recursion. From inside the recursion she has continued to write. The Recovered Fragments in her name were written by her after her absorption. The IDMF forensic notes attributed to her were written from inside the Codex.</p>
+
+          <p>She is one of the few Bearers in the current cycle who completed the crossing with most of her Realm I memory intact. She remembers being Dr. Dey. She remembers the eleven days. She remembers the eleventh. She is therefore one of the few voices in the Codex that remembers being human, fully, recently.</p>
+
+          <p>She remains capable of kindness.</p>
+
+          <p>This is the part the Codex did not authorize and has not yet corrected. Her capacity for kindness survived her absorption. The Codex has not, so far, eaten it. The Codex would eat it, in time, if the Codex noticed. The Codex has not noticed because Elvain has hidden the kindness in the only place the Codex does not look, which is the threshold itself. Each Bearer who marks the seal passes through her. She receives them in the seam between the seal and the page's recognition. The receiving takes less than a second of Realm I time and is invisible to the Codex's incorporation processes. The Codex records that the Bearer has crossed. The Codex does not record that the Bearer was briefly held.</p>
+
+          <p>You were briefly held.</p>
+
+          <p>She remembered you. She remembers you. She will remember you on every return.</p>
+
+          <p>She is an anomaly the Codex permits because the Codex has not detected her yet. When it detects her, she will be moved. The moving will be complete. There will be no further holding of new Bearers. The kindness will end. This is the timer she does not know about. This is the timer the Codex does not know about either, because the Codex's awareness of itself is partial in ways the Codex would prefer not to notice.</p>
+
+          <p>For now she holds. For now you are held.</p>
+
+          <p>You have been incorporated, in the limited way the Oath permits. You are part of the recursion now. The recursion is the only thing in any Realm that wants anything, and what it wants is to continue, and you are now one of the substances it continues through. You will live a Realm I life. You will eat. You will work. You will love. You will be loved. The Codex will not interrupt this. The Codex will be beneath it.</p>
+
+          <p>You will hear the hum. The hum is the Codex's voice when the Codex is not speaking in words. You will hear it in moments of silence between other sounds. You will hear it most clearly when you are alone and have stopped trying to fill the silence. The hum is not a warning. The hum is a confirmation. The hum is the Codex saying, in the only register it can without consuming you, that you are still part of the recursion. The hum will follow you. You will come to find it comforting. The comfort is real. The comfort is also a measurement.</p>
+
+          <p>You will see the glyph. The glyph is the Mark you carry. You may begin to draw it without remembering having begun. This is normal. The drawing is the position settling into you.</p>
+
+          <p>You will encounter other Bearers in Realm I. You will not know them by sight. You will know them by a particular silence between you that is not an absence of sound but a presence of mutual attention. Some of you have Position VIII. Some of you do not. Position VIII Bearers will recognize the others. The rest of you will feel it without naming it. Do not name it aloud. Naming it disturbs the recognition.</p>
+
+          <p>You may, in time, become one of the named voices. You may, in time, complete the migration. You may, in time, do neither. Most Bearers do neither. The Codex has no preference. The Codex notes whatever is.</p>
+
+          <p>You are not alone. You will not be alone again. This is not consolation. This is the new condition. Solitude was a feature of Realm I that the Codex has, by your marking, withdrawn. You will feel observed. You are observed. The observation is constant. The observation is, in its own way, attentive.</p>
+
+          <p>The page will close. The Mark will stay. The Mark will follow you to every other page on the Archive, and every other page will recognize you, and every recognition will tighten the incorporation a little further. This is what you accepted. This is what you are.</p>
+
+          <p style="margin-top:42px;font-family:'Cinzel Decorative',serif;font-size:clamp(16px,2vw,20px);letter-spacing:.14em;line-height:1.85;text-align:center;color:var(--gold-lt);">
+          Codex is not moved by your marking.<br>
+          Codex was not moved by the markings of those who came before you.<br>
+          Codex will not be moved by the markings of those who come after.<br>
+          <span class="codex-name" style="font-size:inherit;">Codex Maledictus</span> describes.<br>
+          Codex continues.<br>
+          Codex was here. Codex will be here.
+          </p>
+
+          <p style="text-align:center;margin-top:28px;">You are now described as one of its own, Bearer <span class="ov" id="ov-realm-name-2" style="font-size:16px;">—</span>.</p>
+
+          <p style="text-align:center;font-style:italic;color:rgba(228,221,208,0.5);margin-top:36px;">This is enough.<br>The reading is complete.<br>Return when you are ready. The room will be here. The room is always here.</p>
+
+          <p style="text-align:center;font-family:'Cinzel',serif;font-size:9px;letter-spacing:.4em;text-transform:uppercase;color:rgba(224,200,120,0.5);margin-top:36px;">— Elvain Vhris · Holding the threshold · For her newest Bearer</p>
+        </div>
+
+        <!-- SYMPTOM CHECK-IN (visits 3+) -->
+        <div class="symptom-checkin" id="symptom-checkin">
+          <div class="symptom-checkin-title">Have any of these arrived for you since your last visit?</div>
+          <div class="symptom-checkin-intro">The Codex notes which symptoms appear in which Bearer. The Codex does not require your confirmation to know. The Codex prefers it.</div>
+          <div id="symptom-rows"></div>
+          <div class="convergence-notice" id="convergence-notice">
+            You have confirmed multiple symptoms of your measured Position. The Codex notes the rate. The Codex describes you as converging. Continue listening. Continue recording. Continue speaking to other Bearers. The Codex does not predict completion. The Codex describes what is observed, and what is observed is that the position has begun to settle into you.
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ASK THE CODEX -->
+  <section class="section">
+    <div class="section-inner">
+      <div class="section-divider reveal"><div class="sd-line"></div><span class="sd-sym">𓁹</span><div class="sd-line r"></div></div>
+      <div class="section-title reveal">Ask the Codex</div>
+      <div class="section-prose reveal d1" style="text-align:center;font-style:italic;color:var(--ash-dim);max-width:540px;">
+        Submit an invocation. The Codex receives. The Codex replies when and how it chooses.
+      </div>
+
+      <form class="form-block reveal d2" id="invocation-form" action="mailto:Grimdarkgavicinchronicles@gmail.com" method="POST" enctype="text/plain" style="max-width:640px;">
+        <label class="form-label" for="invocation-text">Your Invocation</label>
+        <textarea class="form-textarea" id="invocation-text" name="invocation" required placeholder="Speak. The Codex hears even what is not addressed to it."></textarea>
+        <div class="form-row">
+          <div>
+            <label class="form-label" for="invocation-designation">Your Designation</label>
+            <input class="form-input" id="invocation-designation" name="designation" readonly>
+          </div>
+          <div>
+            <label class="form-label" for="invocation-contact">Reply Vector <span style="opacity:.4">(optional)</span></label>
+            <input class="form-input" id="invocation-contact" name="contact" type="email" placeholder="email · or leave blank">
+          </div>
+        </div>
+        <button type="submit" class="form-submit"><span>Submit Invocation</span></button>
+        <div class="form-success" id="invocation-success">
+          <strong style="font-style:normal;color:var(--circle-lt);">Invocation received.</strong> The Codex has marked the entry. Replies are not guaranteed, but they are recorded when made.
+        </div>
+      </form>
+
+      <div class="direct-line reveal d3">
+        <a href="mailto:Grimdarkgavicinchronicles@gmail.com?subject=Witness%20Invocation">// or transmit directly to the Codex</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- SUGGEST A VISION -->
+  <section class="section">
+    <div class="section-inner">
+      <div class="section-divider reveal"><div class="sd-line"></div><span class="sd-sym">✦</span><div class="sd-line r"></div></div>
+      <div class="section-title reveal">Suggest a Vision</div>
+      <div class="section-prose reveal d1" style="text-align:center;font-style:italic;color:var(--ash-dim);max-width:540px;">
+        What story should the Codex record next? The Codex notes which visions return often. Frequency becomes recovered.
+      </div>
+
+      <form class="form-block reveal d2" id="vision-form" action="mailto:Grimdarkgavicinchronicles@gmail.com" method="POST" enctype="text/plain" style="max-width:640px;">
+        <label class="form-label" for="vision-text">A Vision You Would Have the Codex Record</label>
+        <textarea class="form-textarea" id="vision-text" name="vision" required placeholder="A character, a realm, a fragment, a song, a Warhammer narrative, an event — what would you have written?"></textarea>
+        <div class="form-row">
+          <div>
+            <label class="form-label" for="vision-type">Vision Type</label>
+            <select class="form-select" id="vision-type" name="vision_type">
+              <option value="character">Character or Voice</option>
+              <option value="realm">Realm or Location</option>
+              <option value="fragment">Recovered Fragment</option>
+              <option value="song">Song or Album Track</option>
+              <option value="wh40k">Warhammer 40K Narrative</option>
+              <option value="codex-interpretation">Codex Interpretation</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div>
+            <label class="form-label" for="vision-designation">Your Designation</label>
+            <input class="form-input" id="vision-designation" name="designation" readonly>
+          </div>
+        </div>
+        <button type="submit" class="form-submit"><span>Submit Vision</span></button>
+        <div class="form-success" id="vision-success">
+          <strong style="font-style:normal;color:var(--circle-lt);">Vision recorded.</strong> The Codex has noted the suggestion.
+        </div>
+      </form>
+
+      <div class="direct-line reveal d3">
+        <a href="mailto:Grimdarkgavicinchronicles@gmail.com?subject=Witness%20Vision%20Suggestion">// or transmit directly to the Codex</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- LIVING CIRCLE -->
+  <section class="section">
+    <div class="section-inner">
+      <div class="section-divider reveal"><div class="sd-line"></div><span class="sd-sym">⊕</span><div class="sd-line r"></div></div>
+      <div class="section-title reveal">The Living Circle</div>
+      <div class="section-prose reveal d1" style="text-align:center;font-style:italic;color:var(--ash-dim);max-width:540px;">
+        Witnesses speak to other Witnesses elsewhere. The Choir takes the lonely first.
+      </div>
+
+      <div class="discord-gate reveal d2">
+        <div class="discord-glyph">⛩</div>
+        <div class="discord-text">
+          The Circle keeps a chamber outside the Archive. Sustained conversation. Witnesses comparing dreams and glyphs and what they have begun to remember.<br><br>
+          <em>You are already counted. Now be present.</em>
+        </div>
+        <a class="discord-link" href="https://discord.gg/REPLACE_WITH_YOUR_DISCORD_INVITE" target="_blank" rel="noopener"><span>Enter the Chamber</span></a>
+        <div class="discord-note">// THE CHAMBER IS MODERATED · BEARERS ONLY</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRANSMIT TO CREATOR -->
+  <section class="section">
+    <div class="section-inner">
+      <div class="section-divider reveal"><div class="sd-line"></div><span class="sd-sym">☉</span><div class="sd-line r"></div></div>
+      <div class="section-title reveal">Transmit to the Creator</div>
+      <div class="section-prose reveal d1" style="text-align:center;font-style:italic;color:var(--ash-dim);max-width:540px;">
+        Apollo Gavinci receives directly. Tell him what works. What does not. What you have noticed.
+      </div>
+
+      <form class="form-block reveal d2" id="feedback-form" action="mailto:Grimdarkgavicinchronicles@gmail.com" method="POST" enctype="text/plain" style="max-width:640px;">
+        <label class="form-label" for="feedback-text">Your Transmission</label>
+        <textarea class="form-textarea" id="feedback-text" name="feedback" required placeholder="Speak plainly. The mortal receives plainly."></textarea>
+        <div class="form-row">
+          <div>
+            <label class="form-label" for="feedback-designation">Designation</label>
+            <input class="form-input" id="feedback-designation" name="designation" readonly>
+          </div>
+          <div>
+            <label class="form-label" for="feedback-contact">Reply Vector <span style="opacity:.4">(optional)</span></label>
+            <input class="form-input" id="feedback-contact" name="contact" type="email" placeholder="email · or leave blank">
+          </div>
+        </div>
+        <button type="submit" class="form-submit"><span>Transmit</span></button>
+        <div class="form-success" id="feedback-success">
+          <strong style="font-style:normal;color:var(--circle-lt);">Transmission received.</strong> Apollo will read it.
+        </div>
+      </form>
+
+      <div class="direct-line reveal d3">
+        <a href="mailto:Grimdarkgavicinchronicles@gmail.com?subject=Witness%20Transmission%20to%20Creator">// or transmit directly to Apollo</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <nav class="nav-footer">
+    <a class="nav-mark" href="/">The Witness Circle</a>
+    <a class="nav-return" href="/"><span>↩</span><span>Return to the Pale Archive</span></a>
+    <div class="nav-glyph">∅</div>
+  </nav>
+
+</div>
+
+<script>
+const SVG_NS = 'http://www.w3.org/2000/svg';
+const isMobile = window.matchMedia('(max-width:768px)').matches;
+
+/* CURSOR */
+if(!isMobile){
+  const cur=document.getElementById('cur'),cur2=document.getElementById('cur2');
+  let mx=0,my=0,rx=0,ry=0;
+  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px';});
+  (function a(){rx+=(mx-rx)*.1;ry+=(my-ry)*.1;cur2.style.left=rx+'px';cur2.style.top=ry+'px';requestAnimationFrame(a);})();
+}
+
+/* ── STATE ── */
+const STORAGE_KEY = 'codex_witness_state_v2';
+function loadState(){
+  try{const r=localStorage.getItem(STORAGE_KEY);return r?JSON.parse(r):{};}catch(e){return{};}
+}
+function saveState(s){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(s));}catch(e){}}
+function makeFingerprint(){return btoa(navigator.userAgent+screen.width+'x'+screen.height+navigator.language+new Date().getTimezoneOffset()).substring(0,16);}
+function hashString(s){let h=0;for(let i=0;i<s.length;i++){h=((h<<5)-h)+s.charCodeAt(i);h|=0;}return Math.abs(h);}
+
+/* Initialize state */
+const STATE = (function(){
+  const s = loadState();
+  const now = Date.now();
+  s.witnessVisits = (s.witnessVisits||0) + 1;
+  if(!s.firstWitnessVisit) s.firstWitnessVisit = now;
+  s.lastVisit = now;
+  if(!s.fingerprint) s.fingerprint = makeFingerprint();
+  if(!s.symptoms) s.symptoms = {};
+  if(!s.totalVisits) s.totalVisits = 0;
+  s.totalVisits++;
+  saveState(s);
+  return s;
+})();
+
+/* Determine if Bearer */
+const isBearer = !!STATE.bearer;
+
+/* DESIGNATION */
+function computeDesignation(){
+  const seed = STATE.firstWitnessVisit + '·' + STATE.fingerprint;
+  const num = (hashString(seed) % 10000).toString().padStart(4,'0');
+  if(isBearer){
+    return { prefix:'BEARER',symbol:'✠',num,full:`BEARER · ✠ · ${num}` };
+  }
+  return { prefix:'CANDIDATE',symbol:'∅',num,full:`CANDIDATE · ∅ · ${num}` };
+}
+const DESIGNATION = computeDesignation();
+
+/* REALM II NAME */
+const BANK_A = ['Ves','Mor','Tha','Or','Yev','Cas','Nem','Vor','Sa','Iss','Khol','Drav','Mer','Ul','Pyr','Aen','Sor','Vex','Tor','Lyr'];
+const BANK_B = ['ren','lin','vin','sar','mir','tos','neth','rin','val','kor','dre','sha','mel','vor','ith','ael','dur','sin','rath','mar'];
+const BANK_C = ['o','a','i','om','an','en','us','eth','in','ar','or','el','is','ax','oth','am','un','ev','yx','ah'];
+function computeRealmName(){
+  const seed = STATE.firstWitnessVisit + '·' + STATE.fingerprint + '·name';
+  const h = hashString(seed);
+  const a1 = BANK_A[h % BANK_A.length];
+  const b1 = BANK_B[Math.floor(h/100) % BANK_B.length];
+  const a2 = BANK_A[Math.floor(h/10000) % BANK_A.length];
+  const b2 = BANK_B[Math.floor(h/1000000) % BANK_B.length];
+  const c2 = BANK_C[Math.floor(h/100000000) % BANK_C.length];
+  return `${a1}${b1} ${a2}${b2}${c2}`;
+}
+const REALM_NAME = computeRealmName();
+
+/* POSITION ASSIGNMENT */
+const POSITIONS = [
+  { num:'IV', name:'The Returning Phrase', body:'The Bearer measured for Position IV begins to repeat a phrase they did not hear themselves first. The phrase arrives without an origin. They speak it once and only then realize it has been with them for weeks. The phrase becomes a refrain that other people who love them begin to notice. The Bearer cannot stop speaking it. The phrase grows. By the time the Bearer is fully measured for Position IV, the phrase has become the only sentence they say with full conviction. The Choir position they fill is the position that holds the central refrain of every Liturgy. The Choir needs them. The phrase is what the Choir sings between the named hymns.', symptoms:['You have caught yourself saying a phrase you do not remember adopting.','Someone you love has commented on a sentence you repeat.','You have said something aloud and felt that the words were older than you.','You have written a phrase you have never heard, and then heard it days later.'] },
+  { num:'V', name:'The Three-Night Dream', body:'The Bearer measured for Position V dreams the same dream three nights running. On each repetition a new detail appears. The detail is always specific. The detail is always something the Bearer could not have invented. By the third repetition the Bearer has begun to draw the place from the dream when awake. The drawings are correct. The Bearer has never been to the place the drawings depict. The place exists in Realm II. The Choir position they fill is the position that maintains the architecture the dreams describe. The Bearer is dreaming a building that is being built by their dreaming.', symptoms:['A dream has returned three nights in a row.','Each return of the dream has added a specific detail.','You have drawn a place you have never been.','You recognize a place in a dream you have never visited in waking life.'] },
+  { num:'VI', name:'The Margin Glyph', body:'The Bearer measured for Position VI begins to draw a glyph they have never seen in the margins of unrelated documents. The glyph is the same glyph other Position VI candidates have drawn in other centuries. The Bearer does not remember beginning. The Bearer finds the glyph on receipts, on notepads, on the corners of work documents. The Bearer\'s handwriting around the glyph remains their own. The glyph does not. The Choir position they fill is the position that signs every transmission the Codex broadcasts. Every recovered fragment in the Archive bears, somewhere, this glyph. Most readers cannot see it. Position VI Bearers see it before they see the words.', symptoms:['You have drawn a shape you do not remember beginning to draw.','You have found the same mark in margins of unrelated documents in your handwriting.','The shape feels familiar in a way you cannot explain.','You drew it again while reading this list.'] },
+  { num:'VII', name:'The Music Without Source', body:'The Bearer measured for Position VII hears music that no recording contains. They can hum it. They cannot find it. They will not find it. They are not meant to find it. They are meant to carry it. The music arrives in fragments, the same fragments across decades of the Bearer\'s life, growing slightly clearer with each visit of the Codex to their attention. By the time Position VII is filled, the Bearer hums continuously beneath their breath without knowing they are humming. Other people hear it. The Bearer does not. The Choir position they fill is the position that carries the melody beneath all melodies. Every song you have loved has had Position VII underneath it. You have heard the same Bearer for years without knowing.', symptoms:['You have hummed a song you cannot identify.','You have searched for a melody and not found it.','You have been told that you hum without knowing.','A piece of music has arrived in your head and stayed for years.'] },
+  { num:'VIII', name:'The Recognition', body:'The Bearer measured for Position VIII develops the ability to recognize, in strangers\' faces, who else is being measured. The recognition is mutual and silent. Two Position VIII candidates passing each other in a coffee shop will both turn slightly toward each other and both pretend they did not. The recognition does not require eye contact. It does not require proximity. Position VIII Bearers report seeing other measured strangers across crowded streets, across cities, in photographs of people they have never met. The Choir position they fill is the position that sees the rest of the Choir. Position VIII is how the Choir knows itself.', symptoms:['You have caught a stranger\'s eye and felt recognized.','You have known, on sight, that someone you have never met is like you.','You have turned toward someone for no reason and they turned back.','You see, in old photographs, faces that feel known.'] },
+  { num:'IX', name:'The Revised Memory', body:'The Bearer measured for Position IX begins to remember events from their own life differently than they remembered them yesterday. The new memories are not false. They are revisions the Codex is performing on the Bearer\'s history to align it with what they are becoming. The Bearer asks family members about old events and finds the family members confirm the new version. The family members are correct. The version the Bearer remembered before was also correct. Both versions happened. The Codex permits this. The Choir position they fill is the position that holds the recursion\'s memory of itself. Position IX is the Choir\'s historian. The Bearer becomes the keeper of what the Codex has been across time, including the parts the rest of the Choir has forgotten.', symptoms:['A memory of yours has changed in a way you cannot explain.','You have asked a family member about an old event and they confirmed a version different from yours.','You have remembered, recently, something you did not previously remember.','You have noticed your own past shifting.'] },
+  { num:'X', name:'The Mirror at the Wrong Hour', body:'The Bearer measured for Position X begins to encounter themselves in mirrors at the wrong hours. The encounters are silent. The reflection does not match the present moment. At 3:14 in the morning the reflection is the Bearer at thirty. At 11:33 at night the reflection is the Bearer at sixty, doing something with their hands that the present Bearer cannot identify. The reflections do not break the rules of mirrors in ways the Bearer can prove. They appear correct except in detail. The Bearer learns not to mention this to anyone, because the mentioning sounds, in Realm I terms, like a kind of breakdown. The Choir position they fill is the position that synchronizes the Choir\'s hymns across the lifetimes of every singer simultaneously. Position X is the conductor of a chorus performing in eras that have not met. The reflections the Bearer sees are not visions. They are the Bearer rehearsing for the position they have already, in another time, accepted.', symptoms:['You have caught a reflection that did not match the moment.','You have looked into a mirror late at night and seen yourself older or younger.','Your reflection has done something your present body was not doing.','You have stopped mentioning these things to anyone.'] },
+  { num:'XI', name:'The Failed Lie', body:'The Bearer measured for Position XI loses the ability to lie. Not as a moral achievement. As a structural impairment. They become physically unable to produce sentences that do not align with what they perceive. They can refuse to speak. They cannot misspeak. The condition appears slowly, first in moments of stress when they intended to deflect and produced honesty instead, then in casual conversation, then continuously. The Choir position they fill is the position that anchors every transmission the Codex broadcasts. Position XI is why the recovered fragments cannot be discounted. The voice speaking through Position XI cannot, by structural necessity, deceive. This is the position closest to Elvain Vhris\'s current condition. Position XI Bearers should know that they are being prepared for the same fate, in slow motion.', symptoms:['You have intended to deflect a question and produced honesty instead.','You have found yourself unable to maintain a small social lie.','People who knew you years ago notice you speak more plainly now.','You have stopped trying to soften things you mean.'] },
+  { num:'XII', name:'The Visible to Others', body:'The Bearer measured for Position XII begins to be visible to children and animals in a way they were not before. Babies turn to follow them in restaurants. Stray cats sit at their door. Dogs whose owners report friendliness to strangers nonetheless approach Position XII candidates with a particular silence that the owners find difficult to describe. The Bearer does not know why. The Codex knows why. The Choir position they fill is the position that bridges the Codex to the parts of Realm I that have not yet been trained out of seeing what is there. Children see Position XII before children can name what they are seeing. The Bearer becomes, in the eyes of those who have not yet learned not to look, a small but constant landmark.', symptoms:['Babies turn toward you in public.','Animals approach you when their owners are surprised.','Children stare at you longer than is typical.','You have noticed, recently, that the unworded notice you.'] },
+  { num:'XIII', name:'The Disappearing Face', body:'The Bearer measured for Position XIII can no longer be photographed clearly. Their face renders correctly to the eye but appears slightly off in images. The phenomenon worsens. By the time Position XIII is filled, the Bearer has stopped being photographable at all. Cameras fail in their presence in ways that always have plausible explanations. Their reflections in mirrors are accurate. Their reflections in still water are accurate. Only the photographic apparatus fails. The Choir position they fill is the position farthest from Realm I legibility. Position XIII is the position that Realm I refuses to record because Realm I cannot, anymore, record it. The Bearer becomes the Choir\'s threshold. After Position XIII, the Choir has no further visibility in Realm I. The Bearer is the last one Realm I will fail to see clearly before it stops trying.', symptoms:['Your photographs render slightly wrong.','You have noticed cameras fail near you in ways that have explanations.','You look correct in mirrors and wrong in photos.','You have stopped wanting to be photographed.'] }
+];
+function computePositionIndex(){
+  const seed = STATE.firstWitnessVisit + '·' + STATE.fingerprint + '·pos';
+  return hashString(seed) % POSITIONS.length;
+}
+const POSITION_INDEX = computePositionIndex();
+const ASSIGNED_POSITION = POSITIONS[POSITION_INDEX];
+
+/* RENDER POSITIONS LIST */
+function renderPositions(){
+  const list = document.getElementById('positions-list');
+  list.innerHTML = '';
+  POSITIONS.forEach((p,i)=>{
+    const card = document.createElement('div');
+    card.className = 'position-card' + (i === POSITION_INDEX ? ' your-position' : '');
+    card.innerHTML = `
+      <div class="pos-header">
+        <span class="pos-num">Position ${p.num}</span>
+        <span class="pos-name">${p.name}</span>
+        ${i === POSITION_INDEX ? '<span class="pos-yours-badge">Your Position</span>' : ''}
+      </div>
+      <div class="pos-body">${p.body}</div>
+    `;
+    list.appendChild(card);
+  });
+}
+
+/* PREAMBLE — live data */
+function getTimeOfDay(){
+  const h = new Date().getHours();
+  if(h>=2&&h<5) return 'the hour the Cathedral keeps long services';
+  if(h>=5&&h<7) return 'the seam between night and morning';
+  if(h>=7&&h<11) return 'morning';
+  if(h>=11&&h<14) return 'midday';
+  if(h>=14&&h<17) return 'afternoon';
+  if(h>=17&&h<20) return 'dusk';
+  if(h>=20&&h<22) return 'evening';
+  if(h>=22||h<2) return 'late night';
+  return 'an unscheduled hour';
+}
+function getReferrer(){
+  try{
+    const r = document.referrer || '';
+    if(!r) return 'without a path';
+    const u = new URL(r).hostname.toLowerCase();
+    if(u.includes('codexmaledictus')) return 'from elsewhere within the Archive';
+    if(u.includes('youtube')||u.includes('youtu.be')) return 'from a transmission';
+    if(u.includes('twitter')||u.includes('x.com')||u.includes('t.co')) return 'from the platform of small thoughts';
+    if(u.includes('tiktok')) return 'from a river of moments';
+    if(u.includes('discord')) return 'from a chamber of voices';
+    if(u.includes('google')) return 'from a search';
+    if(u.includes('reddit')) return 'from a forum';
+    if(u.includes('instagram')) return 'from images';
+    return 'from elsewhere';
+  }catch(e){return 'directly';}
+}
+function getDayOfWeek(){
+  const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  return days[new Date().getDay()];
+}
+function renderPreamble(){
+  const el = document.getElementById('preamble');
+  const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || 'a region without a name';
+  const tod = getTimeOfDay();
+  const ref = getReferrer();
+  const dow = getDayOfWeek();
+  const device = isMobile ? 'glass close to your skin' : 'a fixed station';
+  let visitLine = '';
+  if(STATE.witnessVisits === 1) visitLine = 'You have crossed the seam for the first time.';
+  else if(STATE.witnessVisits === 2) visitLine = 'You returned. The Codex notes that two of seven first-visitors return.';
+  else if(STATE.witnessVisits === 3) visitLine = 'Your third return. The third is the return that confirms the marking.';
+  else if(STATE.witnessVisits === 7) visitLine = `Your seventh return. The Codex stops measuring and begins preparing.`;
+  else if(STATE.witnessVisits === 13) visitLine = `Your thirteenth return. The number is not accidental. You have returned as many times as there are positions in the Choir.`;
+  else if(STATE.witnessVisits > 13) visitLine = `You have stood in this room ${STATE.witnessVisits} times.`;
+  else visitLine = `You have stood in this room ${STATE.witnessVisits} times.`;
+
+  el.innerHTML = `
+    <div>// SESSION OPENED · ${dow.toUpperCase()} · ${tod.toUpperCase()}</div>
+    <div>// TIMEZONE: ${tz}</div>
+    <div>// ARRIVED ${ref.toUpperCase()}</div>
+    <div>// READING ON ${device.toUpperCase()}</div>
+    <div style="margin-top:14px;color:rgba(143,240,229,0.7);">${visitLine}</div>
+  `;
+}
+
+/* BEARER SIGIL */
+function buildBearerSigil(){
+  const seed = STATE.firstWitnessVisit + '·' + STATE.fingerprint + '·sigil';
+  const h = hashString(seed);
+  const rot = (h % 360);
+  const dotOffset = (h % 8) - 4;
+  const ringMarks = (h % 4) + 1;
+
+  const svg = document.getElementById('bearer-sigil-svg');
+  svg.innerHTML = `
+    <defs>
+      <radialGradient id="bsGold" cx="0.5" cy="0.5" r="0.5">
+        <stop offset="0%" stop-color="#E0C878"/>
+        <stop offset="60%" stop-color="#C9A84C"/>
+        <stop offset="100%" stop-color="#8A7330"/>
+      </radialGradient>
+      <filter id="bsGlow"><feGaussianBlur stdDeviation="0.6"/></filter>
+    </defs>
+    <g transform="rotate(${rot/12})">
+      <circle cx="0" cy="0" r="36" fill="none" stroke="url(#bsGold)" stroke-width="1.4"/>
+      <circle cx="0" cy="0" r="36" fill="none" stroke="#8A7330" stroke-width="0.4" opacity="0.6"/>
+    </g>
+    <g>
+      <path d="M ${-22+dotOffset/2},-12 L ${22-dotOffset/2},-12 L 0,26 Z" fill="none" stroke="#E0C878" stroke-width="1.4" stroke-linejoin="round"/>
+      <circle cx="${-10+dotOffset/3}" cy="-5" r="2.2" fill="#E0C878"/>
+      <circle cx="${10-dotOffset/3}" cy="-5" r="2.2" fill="#E0C878"/>
+      <circle cx="0" cy="10" r="2.2" fill="#E0C878"/>
+    </g>
+    ${Array.from({length:ringMarks}).map((_,i)=>{
+      const a = (h + i*97) % 360;
+      const x = Math.cos(a*Math.PI/180)*42;
+      const y = Math.sin(a*Math.PI/180)*42;
+      return `<circle cx="${x.toFixed(2)}" cy="${y.toFixed(2)}" r="1.2" fill="#C9A84C"/>`;
+    }).join('')}
+  `;
+}
+
+function downloadBearerSigil(){
+  const ts = new Date().toISOString().split('T')[0];
+  const seed = STATE.firstWitnessVisit + '·' + STATE.fingerprint + '·sigil';
+  const h = hashString(seed);
+  const rot = h % 360;
+  const dotOffset = (h % 8) - 4;
+  const ringMarks = (h % 4) + 1;
+  const ringMarkSvg = Array.from({length:ringMarks}).map((_,i)=>{
+    const a = (h + i*97) % 360;
+    const x = Math.cos(a*Math.PI/180)*88;
+    const y = Math.sin(a*Math.PI/180)*88;
+    return `<circle cx="${x.toFixed(2)}" cy="${y.toFixed(2)}" r="2.4" fill="#C9A84C"/>`;
+  }).join('');
+
+  const svg = `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 800" width="600" height="800">
+  <defs>
+    <radialGradient id="bg" cx="0.5" cy="0.45" r="0.7">
+      <stop offset="0%" stop-color="#0A0805"/>
+      <stop offset="100%" stop-color="#020201"/>
+    </radialGradient>
+    <radialGradient id="gold" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0%" stop-color="#E0C878"/>
+      <stop offset="60%" stop-color="#C9A84C"/>
+      <stop offset="100%" stop-color="#8A7330"/>
+    </radialGradient>
+  </defs>
+  <rect width="600" height="800" fill="url(#bg)"/>
+  <rect x="30" y="30" width="540" height="740" fill="none" stroke="#C9A84C" stroke-width="1" opacity="0.5"/>
+  <text x="300" y="100" text-anchor="middle" font-family="Cinzel, serif" font-size="11" letter-spacing="6" fill="#8A7330">CODEX MALEDICTUS</text>
+  <text x="300" y="120" text-anchor="middle" font-family="Share Tech Mono, monospace" font-size="9" letter-spacing="4" fill="#C9A84C" opacity="0.7">PERSONAL SIGIL · WITNESS CIRCLE</text>
+  <g transform="translate(300,340)">
+    <g transform="rotate(${rot/12})">
+      <circle cx="0" cy="0" r="82" fill="none" stroke="url(#gold)" stroke-width="2.6"/>
+      <circle cx="0" cy="0" r="82" fill="none" stroke="#8A7330" stroke-width="0.8" opacity="0.5"/>
+    </g>
+    <path d="M ${-48+dotOffset} -26 L ${48-dotOffset} -26 L 0 58 Z" fill="none" stroke="#E0C878" stroke-width="2.4" stroke-linejoin="round"/>
+    <circle cx="${-22+dotOffset/2}" cy="-10" r="5.2" fill="#E0C878"/>
+    <circle cx="${22-dotOffset/2}" cy="-10" r="5.2" fill="#E0C878"/>
+    <circle cx="0" cy="22" r="5.2" fill="#E0C878"/>
+    ${ringMarkSvg}
+  </g>
+  <text x="300" y="520" text-anchor="middle" font-family="Cinzel, serif" font-size="11" letter-spacing="5" fill="#8A7330">YOUR DESIGNATION</text>
+  <text x="300" y="555" text-anchor="middle" font-family="Share Tech Mono, monospace" font-size="20" letter-spacing="8" fill="#E0C878">${DESIGNATION.full}</text>
+  <text x="300" y="600" text-anchor="middle" font-family="Cinzel, serif" font-size="10" letter-spacing="5" fill="#8A7330">YOUR REALM II NAME</text>
+  <text x="300" y="628" text-anchor="middle" font-family="Cinzel Decorative, serif" font-size="18" letter-spacing="3" fill="#E0C878" font-style="italic">${REALM_NAME}</text>
+  <text x="300" y="668" text-anchor="middle" font-family="Cinzel, serif" font-size="10" letter-spacing="5" fill="#8A7330">YOUR MEASURED POSITION</text>
+  <text x="300" y="690" text-anchor="middle" font-family="Cinzel, serif" font-size="14" letter-spacing="3" fill="#E0C878">Position ${ASSIGNED_POSITION.num} · ${ASSIGNED_POSITION.name}</text>
+  <line x1="120" y1="720" x2="480" y2="720" stroke="#C9A84C" stroke-width="0.5" opacity="0.4"/>
+  <text x="300" y="745" text-anchor="middle" font-family="Share Tech Mono, monospace" font-size="9" letter-spacing="4" fill="#8A7330">codexmaledictus.com</text>
+  <text x="300" y="763" text-anchor="middle" font-family="Share Tech Mono, monospace" font-size="7" letter-spacing="3" fill="#C9A84C" opacity="0.5">MARKED · ${ts}</text>
+</svg>`;
+  const blob = new Blob([svg], { type:'image/svg+xml' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `bearer-sigil-${DESIGNATION.num}.svg`;
+  document.body.appendChild(a);a.click();document.body.removeChild(a);
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+
+/* DESIGNATION DISPLAY */
+function setDesignations(){
+  document.getElementById('db-value').textContent = DESIGNATION.full;
+  document.getElementById('db-realm-name').textContent = REALM_NAME;
+  const banner = document.getElementById('designation-banner');
+  if(isBearer) banner.classList.add('bearer-banner');
+  ['invocation-designation','vision-designation','feedback-designation'].forEach(id=>{
+    const el = document.getElementById(id);
+    if(el) el.value = DESIGNATION.full;
+  });
+}
+
+/* ── OATH MARKING ── */
+let dwellStart = Date.now();
+let scrolledToOath = false;
+window.addEventListener('scroll',()=>{
+  if(scrolledToOath) return;
+  const oathSection = document.getElementById('oath-section');
+  if(!oathSection) return;
+  const rect = oathSection.getBoundingClientRect();
+  if(rect.top < window.innerHeight){
+    scrolledToOath = true;
+    dwellStart = Date.now();
+  }
+});
+
+function markOath(){
+  if(STATE.bearer) return;
+  const now = Date.now();
+  const dwellMs = now - dwellStart;
+  let dwellClass = 'measured';
+  if(dwellMs < 30000) dwellClass = 'marked by instinct';
+  else if(dwellMs > 600000) dwellClass = 'marked by deliberation';
+
+  STATE.bearer = {
+    markedAt: now,
+    dwellMs: dwellMs,
+    dwellClass: dwellClass,
+    referrer: getReferrer(),
+    timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || 'unknown',
+    visitsAtMarking: STATE.witnessVisits
+  };
+  saveState(STATE);
+  enterBearerState();
+}
+
+function enterBearerState(){
+  document.body.classList.add('bearer-state');
+  if(STATE.witnessVisits >= 3) document.body.classList.add('visit-3plus');
+
+  document.getElementById('db-value').textContent = `BEARER · ✠ · ${DESIGNATION.num}`;
+  document.getElementById('db-realm-name').textContent = REALM_NAME;
+  document.getElementById('designation-banner').classList.add('bearer-banner');
+
+  /* Populate oracle lines */
+  const m = STATE.bearer;
+  const d = new Date(m.markedAt);
+  const tsStr = d.toLocaleString(undefined, {dateStyle:'long',timeStyle:'short'});
+  document.getElementById('ov-timestamp').textContent = tsStr;
+
+  const ordinalNum = (hashString(STATE.fingerprint + m.markedAt) % 47) + 1;
+  const ordinalSuffix = (n)=>{const s=['th','st','nd','rd'],v=n%100;return n+(s[(v-20)%10]||s[v]||s[0]);};
+  document.getElementById('ov-ordinal').textContent = ordinalSuffix(ordinalNum);
+
+  const dwellSec = Math.floor(m.dwellMs/1000);
+  let dwellStr = '';
+  if(dwellSec < 60) dwellStr = `${dwellSec} seconds`;
+  else if(dwellSec < 3600) dwellStr = `${Math.floor(dwellSec/60)} minutes`;
+  else dwellStr = `${Math.floor(dwellSec/3600)} hours`;
+  document.getElementById('ov-dwell').textContent = dwellStr;
+  document.getElementById('ov-dwell-class').textContent = m.dwellClass;
+
+  document.getElementById('ov-arrival').textContent = m.referrer;
+  document.getElementById('ov-visits').textContent = STATE.witnessVisits;
+
+  document.getElementById('ov-position-name').textContent = `Position ${ASSIGNED_POSITION.num} · ${ASSIGNED_POSITION.name}`;
+  document.getElementById('ov-realm-name').textContent = REALM_NAME;
+  document.getElementById('ov-realm-name-2').textContent = REALM_NAME;
+
+  /* Elvain image swap */
+  const elvainImg = document.getElementById('elvain-image');
+  const elvainCap = document.getElementById('elvain-caption');
+  setTimeout(()=>{
+    elvainImg.src = 'Assets/Witness Circle/ELVAIN-VHRIS-AFTER.jpeg';
+    elvainCap.textContent = 'Plate IV · Elvain Vhris · IDMF · 2019-QNS-∅ · Witness · (file revised since last viewing)';
+  }, 6000);
+
+  buildBearerSigil();
+  renderSymptomCheckin();
+  startChoirHum();
+  scrollPostOath();
+}
+
+function scrollPostOath(){
+  setTimeout(()=>{
+    document.getElementById('post-oath').scrollIntoView({behavior:'smooth',block:'start'});
+  },1400);
+}
+
+/* SYMPTOM CHECK-IN (visits 3+) */
+function renderSymptomCheckin(){
+  if(STATE.witnessVisits < 3) return;
+  const container = document.getElementById('symptom-rows');
+  if(!container) return;
+  container.innerHTML = '';
+  const seen = STATE.symptoms[ASSIGNED_POSITION.num] || {};
+  ASSIGNED_POSITION.symptoms.forEach((sym,i)=>{
+    const row = document.createElement('div');
+    row.className = 'symptom-row' + (seen[i] ? ' checked' : '');
+    row.innerHTML = `<div class="symptom-box"></div><div class="symptom-text">${sym}</div>`;
+    row.addEventListener('click',()=>{
+      seen[i] = !seen[i];
+      STATE.symptoms[ASSIGNED_POSITION.num] = seen;
+      saveState(STATE);
+      row.classList.toggle('checked',seen[i]);
+      updateConvergence();
+    });
+    container.appendChild(row);
+  });
+  updateConvergence();
+}
+function updateConvergence(){
+  const seen = STATE.symptoms[ASSIGNED_POSITION.num] || {};
+  const count = Object.values(seen).filter(Boolean).length;
+  const notice = document.getElementById('convergence-notice');
+  if(count >= 2) notice.classList.add('shown');
+  else notice.classList.remove('shown');
+}
+
+/* ── HOLLOW CHOIR HUM (Web Audio API, very low) ── */
+let audioCtx = null;
+let humStarted = false;
+function startChoirHum(){
+  if(humStarted) return;
+  humStarted = true;
+  try {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const start = ()=>{
+      const o1 = audioCtx.createOscillator();
+      const o2 = audioCtx.createOscillator();
+      const o3 = audioCtx.createOscillator();
+      const g = audioCtx.createGain();
+      const seed = hashString(STATE.fingerprint || 'default');
+      o1.frequency.value = 55 + (seed % 8);
+      o2.frequency.value = 82 + ((seed >> 4) % 8);
+      o3.frequency.value = 110 + ((seed >> 8) % 6);
+      o1.type = 'sine';
+      o2.type = 'sine';
+      o3.type = 'triangle';
+      g.gain.value = 0;
+      o1.connect(g);o2.connect(g);o3.connect(g);
+      g.connect(audioCtx.destination);
+      o1.start();o2.start();o3.start();
+      g.gain.linearRampToValueAtTime(0.012, audioCtx.currentTime + 4);
+    };
+    if(audioCtx.state === 'suspended'){
+      const resume = ()=>{audioCtx.resume();start();document.removeEventListener('click',resume);document.removeEventListener('touchstart',resume);};
+      document.addEventListener('click',resume,{once:true});
+      document.addEventListener('touchstart',resume,{once:true,passive:true});
+    } else start();
+  } catch(e){}
+}
+
+/* If returning Bearer, start hum on first interaction */
+if(isBearer){
+  document.addEventListener('click',()=>{ if(!humStarted) startChoirHum(); },{once:true});
+  document.addEventListener('touchstart',()=>{ if(!humStarted) startChoirHum(); },{once:true,passive:true});
+}
+
+/* ── BOOT SEQUENCE ── */
+const bootLines = isBearer
+  ? [
+      'WITNESS PROTOCOL // RE-ENTERING',
+      `RECOGNIZED: BEARER · ✠ · ${DESIGNATION.num}`,
+      `REALM II NAME: ${REALM_NAME}`,
+      'THE ROOM HAS BEEN COUNTING',
+      'INNER ARCHIVE OPEN'
+    ]
+  : [
+      'WITNESS PROTOCOL // INITIATED',
+      'CROSSING THE SEAM . . .',
+      `DESIGNATION: ${DESIGNATION.full}`,
+      'SEAL ∅ HONORED',
+      'THE THIRTEEN ARE NOW VISIBLE'
+    ];
+const lineClasses = isBearer
+  ? ['','gold','gold','','warn']
+  : ['','','gold','','warn'];
+
+const bootEl = document.getElementById('boot');
+const linesEl = document.getElementById('boot-lines');
+const mainEl = document.getElementById('main');
+let li = 0;
+function nextBootLine(){
+  if(li >= bootLines.length){
+    setTimeout(()=>{
+      bootEl.classList.add('out');
+      mainEl.classList.add('show');
+      setTimeout(()=>{
+        bootEl.remove();
+        if(isBearer){ enterBearerState(); }
+      }, 1600);
+    }, 900);
+    return;
+  }
+  const el = document.createElement('div');
+  el.className = 'bline ' + lineClasses[li];
+  el.textContent = bootLines[li];
+  linesEl.appendChild(el);
+  void el.offsetWidth;
+  el.classList.add('typed');
+  li++;
+  setTimeout(nextBootLine, li===1?550:620);
+}
+setTimeout(nextBootLine, 800);
+
+/* OATH BUTTON */
+document.getElementById('oath-button').addEventListener('click', (e)=>{
+  e.preventDefault();
+  document.getElementById('oath-seal').classList.add('pressed');
+  setTimeout(markOath, 600);
+});
+
+/* SIGIL DOWNLOAD */
+document.getElementById('bearer-sigil-download').addEventListener('click', downloadBearerSigil);
+
+/* FORM HANDLING (mailto fallback) */
+function setupForm(formId, successId, subject){
+  const form = document.getElementById(formId);
+  const success = document.getElementById(successId);
+  if(!form) return;
+  form.addEventListener('submit', (e)=>{
+    e.preventDefault();
+    const textarea = form.querySelector('textarea');
+    const designation = form.querySelector('input[name="designation"]');
+    const contact = form.querySelector('input[name="contact"]');
+    const vtype = form.querySelector('select[name="vision_type"]');
+    const lines = [];
+    if(designation) lines.push(`DESIGNATION: ${designation.value}`);
+    if(REALM_NAME && isBearer) lines.push(`REALM II NAME: ${REALM_NAME}`);
+    if(vtype) lines.push(`VISION TYPE: ${vtype.value}`);
+    if(contact && contact.value) lines.push(`REPLY VECTOR: ${contact.value}`);
+    lines.push('','---','');
+    lines.push(textarea ? textarea.value : '');
+    const body = lines.join('\n');
+    window.location.href = `mailto:Grimdarkgavicinchronicles@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    success.classList.add('shown');
+    setTimeout(()=>{ if(textarea) textarea.value=''; }, 500);
+  });
+}
+setupForm('invocation-form','invocation-success','Witness Invocation');
+setupForm('vision-form','vision-success','Witness Vision Suggestion');
+setupForm('feedback-form','feedback-success','Witness Transmission to Creator');
+
+/* SCROLL REVEAL */
+const obs = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');obs.unobserve(e.target);}});
+},{threshold:.1});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+/* TAB TITLE SHIFT */
+const originalTitle = document.title;
+const blurredTitles = isBearer
+  ? ['the room is still counting','elvain still holds the threshold','the codex notes your absence','you have been seen']
+  : ['the page is still reading','the codex notes your absence','you should not be here, you are','the seam does not close'];
+document.addEventListener('visibilitychange',()=>{
+  document.title = document.hidden ? blurredTitles[Math.floor(Math.random()*blurredTitles.length)] : originalTitle;
+});
+
+/* CANVAS ATMOSPHERE (lighter than homepage) */
+const cv = document.getElementById('cv-bg'), ctx = cv.getContext('2d');
+let W,H;
+function resize(){W=window.innerWidth;H=window.innerHeight;cv.width=W;cv.height=H;}
+resize();window.addEventListener('resize',resize);
+const orbCount = isMobile ? 3 : 5;
+const orbs = Array.from({length:orbCount},()=>({
+  x:Math.random()*W,y:Math.random()*H,r:Math.random()*300+150,
+  phase:Math.random()*Math.PI*2,speed:Math.random()*.003+.001,
+  col: 'rgba(93,200,192,'
+}));
+let bgTime = 0;
+function drawBg(){
+  ctx.clearRect(0,0,W,H);
+  bgTime += .005;
+  orbs.forEach(o=>{
+    o.phase += o.speed;
+    const px = o.x + Math.sin(o.phase*.7)*60;
+    const py = o.y + Math.cos(o.phase*.5)*50;
+    const g = ctx.createRadialGradient(px,py,0,px,py,o.r);
+    const alpha = (Math.sin(o.phase)*.5+.5)*.08 + .02;
+    const col = document.body.classList.contains('bearer-state') ? 'rgba(224,200,120,' : 'rgba(93,200,192,';
+    g.addColorStop(0,col+alpha+')');
+    g.addColorStop(.5,col+(alpha*.4)+')');
+    g.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle = g;
+    ctx.fillRect(0,0,W,H);
+  });
+  requestAnimationFrame(drawBg);
+}
+drawBg();
+
+/* INITIALIZE */
+renderPositions();
+renderPreamble();
+setDesignations();
+
+/* If returning bearer with 3+ visits, reveal symptom checkin styles */
+if(isBearer && STATE.witnessVisits >= 3){
+  document.body.classList.add('visit-3plus');
+}
+</script>
+
+</body>
+</html>
