@@ -1001,11 +1001,44 @@ function unlockSection(id){
   if(!el)return;
   unlockedSet.add(id);
   el.classList.add('unlocking');
-  spawnWhisper('a sealed passage has opened');
+  spawnWhisper('a sealed passage has opened — scroll up to read it');
+  // Briefly draw the visitor's eye back to the unlocked section
+  const rect=el.getBoundingClientRect();
+  const sectionAboveViewport = rect.bottom < 0;
+  if(sectionAboveViewport){
+    // Section is above the current viewport — offer a gentle pulse banner
+    showUnlockBanner(el);
+  }
   setTimeout(()=>{
     el.classList.remove('unlocking','redacted');
     el.classList.add('unlocked');
   }, 2500);
+}
+
+// Floating banner that points the visitor back to an unlocked passage
+function showUnlockBanner(targetEl){
+  // Remove any existing banner
+  const existing=document.getElementById('unlock-banner');
+  if(existing)existing.remove();
+  const banner=document.createElement('div');
+  banner.id='unlock-banner';
+  banner.style.cssText='position:fixed;top:1rem;left:50%;transform:translateX(-50%) translateY(-20px);z-index:600;background:rgba(3,3,5,0.95);border:1px solid var(--gold-lt);padding:.65rem 1.2rem;font-family:\'IM Fell English SC\',serif;font-size:.7rem;letter-spacing:.32em;text-transform:uppercase;color:var(--gold-lt);cursor:none;opacity:0;transition:all .5s cubic-bezier(.16,1,.3,1);text-align:center;box-shadow:0 0 24px rgba(212,180,92,0.35);backdrop-filter:blur(6px);';
+  banner.innerHTML='⛤ &nbsp; A sealed passage has opened &nbsp; ↑';
+  document.body.appendChild(banner);
+  requestAnimationFrame(()=>{banner.style.opacity='1';banner.style.transform='translateX(-50%) translateY(0)';});
+  banner.addEventListener('click',()=>{
+    targetEl.scrollIntoView({behavior:'smooth',block:'center'});
+    banner.style.opacity='0';
+    setTimeout(()=>banner.remove(),600);
+  });
+  // Auto-dismiss after 8 seconds if not clicked
+  setTimeout(()=>{
+    if(banner.parentNode){
+      banner.style.opacity='0';
+      banner.style.transform='translateX(-50%) translateY(-20px)';
+      setTimeout(()=>banner.remove(),600);
+    }
+  },8000);
 }
 
 window.addEventListener('scroll',()=>{
@@ -1204,8 +1237,20 @@ function initPage(){
 // ════════════════════════════════════════════════════════════
 // LITURGY / DOCTRINE TOGGLE
 // ════════════════════════════════════════════════════════════
-function togDoc(el){el.classList.toggle('open');}
 const openedLines=new Set();
+const SIGIL_TARGET=13; // 13 segments — canonical Choir count
+const SIGIL_REQUIRED=13; // verses required to fully complete
+
+function togDoc(el){
+  el.classList.toggle('open');
+  if(el.classList.contains('open') && !openedLines.has(el)){
+    openedLines.add(el);
+    el.classList.add('opened-once');
+    RM.lines=openedLines.size;
+    updateReception();
+    advanceSigil(openedLines.size);
+  }
+}
 function togLit(el){
   document.querySelectorAll('.lit-line.open').forEach(l=>{if(l!==el)l.classList.remove('open');});
   el.classList.toggle('open');
@@ -1298,12 +1343,17 @@ function drawSigil(segs){
   }
 }
 function advanceSigil(count){
-  sigilSegments=Math.min(count,13);
+  sigilSegments=Math.min(count,SIGIL_TARGET);
   drawSigil(sigilSegments);
-  document.getElementById('rsw-count').textContent=`${sigilSegments} / 13`;
-  if(sigilSegments>=13){
+  const countEl=document.getElementById('rsw-count');
+  countEl.textContent=`${sigilSegments} / ${SIGIL_TARGET}`;
+  if(sigilSegments>=SIGIL_TARGET){
     document.getElementById('rsw-download').classList.add('shown');
+    countEl.style.color='var(--gold-lt)';
     spawnWhisper('the sigil is complete. it is yours.');
+  } else if(sigilSegments>=10){
+    // Hint that they're close
+    countEl.title=`${SIGIL_TARGET-sigilSegments} verse${SIGIL_TARGET-sigilSegments!==1?'s':''} remain. The Liturgy is unsealed in three stages.`;
   }
 }
 document.getElementById('rsw-download').addEventListener('click',downloadSigil);
