@@ -21,29 +21,41 @@
   --frame:#6B5230;--frame-soft:rgba(107,82,48,0.22);
   --rule:rgba(74,58,40,0.16);
   --void:#0A0805;
+
+  /* CORRUPTION STATE — these get JS-controlled over time */
+  --corruption: 0;
+  --paper-r: 239; --paper-g: 230; --paper-b: 206;
+  --ink-r: 26; --ink-g: 20; --ink-b: 16;
+  --shadow-r: 74; --shadow-g: 58; --shadow-b: 40;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 html{scroll-behavior:smooth;}
 body{
-  background:var(--parch);color:var(--ink);
+  background:rgb(var(--paper-r),var(--paper-g),var(--paper-b));
+  color:rgb(var(--ink-r),var(--ink-g),var(--ink-b));
   font-family:'IM Fell English',Georgia,serif;
   overflow-x:hidden;cursor:none;min-height:100vh;
   background-image:
-    radial-gradient(ellipse at 15% 12%,rgba(139,111,71,0.06),transparent 45%),
-    radial-gradient(ellipse at 85% 88%,rgba(74,58,40,0.08),transparent 45%),
+    radial-gradient(ellipse at 15% 12%,rgba(139,111,71,calc(0.06 + var(--corruption) * 0.18)),transparent 45%),
+    radial-gradient(ellipse at 85% 88%,rgba(74,58,40,calc(0.08 + var(--corruption) * 0.22)),transparent 45%),
     radial-gradient(ellipse at 50% 50%,rgba(184,153,122,0.04),transparent 70%);
   background-attachment:fixed;
+  transition:background-color 4s ease;
 }
 body.bearer-state{
-  background:var(--parch-warm);
-  background-image:
-    radial-gradient(ellipse at 15% 12%,rgba(154,107,28,0.08),transparent 45%),
-    radial-gradient(ellipse at 85% 88%,rgba(74,38,8,0.10),transparent 45%);
+  --paper-r: 232; --paper-g: 220; --paper-b: 188;
+}
+
+/* Corruption-driven dark vignette layer */
+#corruption-vignette{
+  position:fixed;inset:0;z-index:4;pointer-events:none;
+  background:radial-gradient(ellipse at center,transparent 30%,rgba(20,12,4,calc(var(--corruption) * 0.55)) 100%);
+  transition:background 3s ease;
 }
 
 /* CURSOR */
 #CUR{position:fixed;pointer-events:none;z-index:99999;transform:translate(-50%,-50%);width:18px;height:18px;}
-#CUR::before,#CUR::after{content:'';position:absolute;background:var(--ink);}
+#CUR::before,#CUR::after{content:'';position:absolute;background:rgb(var(--ink-r),var(--ink-g),var(--ink-b));}
 #CUR::before{width:1px;height:100%;left:50%;}
 #CUR::after{height:1px;width:100%;top:50%;}
 #CUR2{position:fixed;pointer-events:none;z-index:99998;transform:translate(-50%,-50%);width:26px;height:26px;border-radius:50%;border:1px solid rgba(26,20,16,0.45);transition:width .3s,height .3s,border-color .3s;}
@@ -55,16 +67,52 @@ body.bearer-state #CUR2{border-color:rgba(154,107,28,0.55);}
 #paper-grain{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:0.55;
   background-image:
     repeating-linear-gradient(180deg,transparent 0,transparent 31px,rgba(74,58,40,0.04) 31px,rgba(74,58,40,0.04) 32px),
-    repeating-linear-gradient(95deg,transparent 0,transparent 220px,rgba(184,153,122,0.05) 220px,rgba(184,153,122,0.05) 221px);}
+    repeating-linear-gradient(95deg,transparent 0,transparent 220px,rgba(184,153,122,0.05) 220px,rgba(184,153,122,0.05) 221px);
+  transition:opacity 3s ease;
+}
+body.corruption-mid #paper-grain{opacity:0.75;}
+body.corruption-high #paper-grain{opacity:0.92;}
+
 #paper-stains{position:fixed;inset:0;z-index:2;pointer-events:none;opacity:0.55;
   background-image:
     radial-gradient(circle at 22% 28%,rgba(139,111,71,0.10) 0,transparent 6%),
     radial-gradient(circle at 78% 14%,rgba(122,28,18,0.06) 0,transparent 3%),
     radial-gradient(circle at 8% 78%,rgba(139,111,71,0.08) 0,transparent 5%),
     radial-gradient(circle at 92% 62%,rgba(184,153,122,0.10) 0,transparent 5%),
-    radial-gradient(circle at 45% 92%,rgba(139,111,71,0.07) 0,transparent 4%);}
+    radial-gradient(circle at 45% 92%,rgba(139,111,71,0.07) 0,transparent 4%);
+  transition:opacity 3s ease;
+}
+body.corruption-mid #paper-stains{opacity:0.85;}
+body.corruption-high #paper-stains{opacity:1;}
+
 #vignette{position:fixed;inset:0;z-index:3;pointer-events:none;
-  box-shadow:inset 0 0 240px rgba(74,58,40,0.45),inset 0 0 60px rgba(74,58,40,0.18);}
+  box-shadow:inset 0 0 240px rgba(74,58,40,0.45),inset 0 0 60px rgba(74,58,40,0.18);
+  transition:box-shadow 3s ease;
+}
+body.corruption-mid #vignette{box-shadow:inset 0 0 340px rgba(40,24,12,0.65),inset 0 0 90px rgba(40,24,12,0.35);}
+body.corruption-high #vignette{box-shadow:inset 0 0 440px rgba(20,12,4,0.85),inset 0 0 140px rgba(20,12,4,0.55);}
+
+/* CORRUPTION PROGRESS METER (small, bottom-left, only visible after stage 1) */
+#corruption-meter{
+  position:fixed;bottom:3.6rem;left:1.2rem;z-index:550;
+  font-family:'Share Tech Mono',monospace;font-size:.5rem;letter-spacing:.32em;text-transform:uppercase;
+  color:var(--wax);opacity:0;transition:opacity 1.5s ease;
+  pointer-events:none;display:flex;flex-direction:column;gap:.25rem;
+}
+#corruption-meter.shown{opacity:0.55;}
+.cm-label{color:var(--ink-soft);}
+.cm-track{width:100px;height:1px;background:rgba(74,58,40,0.25);position:relative;}
+.cm-fill{position:absolute;left:0;top:0;bottom:0;background:var(--wax);width:0%;transition:width 2s ease;box-shadow:0 0 4px rgba(122,28,18,0.4);}
+@media (max-width:640px){#corruption-meter{display:none;}}
+
+/* WORD CORRUPTION ANIMATIONS */
+.cw-flicker{animation:cwFlicker 0.4s steps(4) 1;}
+@keyframes cwFlicker{0%{filter:none;}25%{filter:blur(0.5px) brightness(0.5);transform:translateX(-1px);}50%{filter:blur(1px) brightness(0.2);transform:translateX(1px);}75%{filter:blur(0.5px) brightness(0.5);}100%{filter:none;}}
+.cw-bleed{animation:cwBleed 1.6s ease forwards;}
+@keyframes cwBleed{0%{color:inherit;}40%{color:var(--wax);text-shadow:0 0 4px rgba(122,28,18,0.45);}100%{color:inherit;}}
+.cw-changed{position:relative;}
+.cw-changed::before{content:'';position:absolute;left:-2px;right:-2px;bottom:-2px;height:1px;background:var(--wax);opacity:0;animation:cwUnderline 4s ease forwards;}
+@keyframes cwUnderline{0%{opacity:0;}30%{opacity:0.4;}100%{opacity:0;}}
 
 /* BOOT (dark) */
 #BOOT{position:fixed;inset:0;z-index:9000;background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:1rem;}
@@ -127,8 +175,7 @@ body.bearer-state #CUR2{border-color:rgba(154,107,28,0.55);}
 .pa-header{text-align:center;padding:3.5rem 2rem 2.5rem;position:relative;border-bottom:1px solid var(--frame-soft);}
 .pa-header::before{content:'';position:absolute;left:50%;bottom:-1px;transform:translateX(-50%);width:48%;height:1px;background:linear-gradient(90deg,transparent,var(--gold-deep) 50%,transparent);}
 .pa-eyebrow{font-family:'IM Fell English SC',serif;font-size:.7rem;color:var(--sepia);letter-spacing:.42em;text-transform:uppercase;margin-bottom:1.4rem;}
-.pa-wordmark{font-family:'Cinzel Decorative',serif;font-weight:900;font-size:clamp(1.8rem,5vw,3.8rem);color:var(--ink);letter-spacing:.06em;line-height:1.1;margin-bottom:.6rem;}
-body.bearer-state .pa-wordmark{color:#2A1A0A;}
+.pa-wordmark{font-family:'Cinzel Decorative',serif;font-weight:900;font-size:clamp(1.8rem,5vw,3.8rem);color:rgb(var(--ink-r),var(--ink-g),var(--ink-b));letter-spacing:.06em;line-height:1.1;margin-bottom:.6rem;transition:color 3s ease;}
 .pa-wordmark .accent{color:var(--gold-deep);}
 .pa-realm{font-family:'IM Fell English',serif;font-style:italic;font-size:clamp(.85rem,1.6vw,1rem);color:var(--ink-faded);letter-spacing:.04em;margin-bottom:2rem;}
 .pa-divider{display:flex;align-items:center;gap:1rem;max-width:560px;margin:0 auto;}
@@ -144,7 +191,7 @@ body.bearer-state .pa-wordmark{color:#2A1A0A;}
 .designation-banner::after{right:-1px;border-left:none;border-bottom:none;}
 .db-label{font-family:'IM Fell English SC',serif;font-size:.7rem;color:var(--sepia);letter-spacing:.42em;text-transform:uppercase;}
 .bearer .db-label{color:var(--bearer-amber);}
-.db-value{font-family:'Share Tech Mono',monospace;font-size:clamp(.85rem,1.4vw,1rem);letter-spacing:.32em;color:var(--ink);}
+.db-value{font-family:'Share Tech Mono',monospace;font-size:clamp(.85rem,1.4vw,1rem);letter-spacing:.32em;color:rgb(var(--ink-r),var(--ink-g),var(--ink-b));transition:color 3s ease;}
 .bearer .db-value{color:var(--bearer-amber);}
 .db-realm-name{margin-top:.25rem;font-family:'Cinzel Decorative',serif;font-style:italic;font-size:.92rem;letter-spacing:.18em;color:var(--ink-soft);display:none;}
 .bearer .db-realm-name{display:block;color:var(--bearer-amber);}
@@ -165,9 +212,9 @@ body.bearer-state .pa-wordmark{color:#2A1A0A;}
 .resume-anchor-body{flex:1;min-width:200px;}
 .resume-anchor-label{font-family:'IM Fell English SC',serif;font-size:.7rem;letter-spacing:.4em;text-transform:uppercase;color:var(--sepia);margin-bottom:.35rem;}
 .resume-anchor-text{font-family:'IM Fell English',serif;font-style:italic;font-size:1rem;color:var(--ink-faded);line-height:1.6;}
-.resume-anchor-text strong{color:var(--ink);font-style:normal;font-weight:normal;font-family:'Cinzel',serif;font-size:.95rem;letter-spacing:.04em;}
+.resume-anchor-text strong{color:rgb(var(--ink-r),var(--ink-g),var(--ink-b));font-style:normal;font-weight:normal;font-family:'Cinzel',serif;font-size:.95rem;letter-spacing:.04em;transition:color 3s ease;}
 .bearer .resume-anchor-text strong{color:var(--bearer-amber);}
-.resume-anchor-link{font-family:'IM Fell English SC',serif;font-size:.7rem;letter-spacing:.36em;text-transform:uppercase;color:var(--ink);border:1px solid var(--gold-deep);padding:.65rem 1.4rem;transition:all .3s ease;flex-shrink:0;cursor:none;background:transparent;text-decoration:none;}
+.resume-anchor-link{font-family:'IM Fell English SC',serif;font-size:.7rem;letter-spacing:.36em;text-transform:uppercase;color:rgb(var(--ink-r),var(--ink-g),var(--ink-b));border:1px solid var(--gold-deep);padding:.65rem 1.4rem;transition:all .3s ease;flex-shrink:0;cursor:none;background:transparent;text-decoration:none;}
 @media (max-width:768px){.resume-anchor-link{cursor:pointer;}}
 .resume-anchor-link:hover{background:var(--gold-deep);color:var(--parch-cream);}
 
@@ -189,22 +236,16 @@ body.bearer-state .pa-wordmark{color:#2A1A0A;}
 .sec-divider{display:flex;align-items:center;gap:1.25rem;max-width:960px;margin:3rem auto 1.6rem;padding:0 1.5rem;}
 .sec-div-line{flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--gold-deep));}
 .sec-div-line.r{background:linear-gradient(90deg,var(--gold-deep),transparent);}
-.sec-div-title{font-family:'IM Fell English SC',serif;font-size:.75rem;color:var(--ink);letter-spacing:.36em;text-transform:uppercase;white-space:nowrap;flex-shrink:0;}
+.sec-div-title{font-family:'IM Fell English SC',serif;font-size:.75rem;color:rgb(var(--ink-r),var(--ink-g),var(--ink-b));letter-spacing:.36em;text-transform:uppercase;white-space:nowrap;flex-shrink:0;transition:color 3s ease;}
 
 /* Timeline / Clusters */
 .timeline-wrap{max-width:960px;margin:0 auto;padding:0 1.5rem;}
 
-.cluster-header{
-  margin-top:3rem;margin-bottom:1.4rem;
-  padding:1.2rem 1.4rem;
-  border:1px solid var(--frame-soft);
-  background:linear-gradient(180deg,rgba(245,238,219,0.78),rgba(232,220,188,0.55));
-  position:relative;
-}
+.cluster-header{margin-top:3rem;margin-bottom:1.4rem;padding:1.2rem 1.4rem;border:1px solid var(--frame-soft);background:linear-gradient(180deg,rgba(245,238,219,0.78),rgba(232,220,188,0.55));position:relative;}
 .cluster-header:first-of-type{margin-top:0;}
 .cluster-header::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--gold-deep);}
 .cluster-header-eyebrow{font-family:'IM Fell English SC',serif;font-size:.65rem;letter-spacing:.4em;text-transform:uppercase;color:var(--sepia);margin-bottom:.4rem;}
-.cluster-header-title{font-family:'Cinzel Decorative',serif;font-weight:700;font-size:clamp(1.1rem,2.2vw,1.45rem);letter-spacing:.08em;color:var(--ink);margin-bottom:.45rem;}
+.cluster-header-title{font-family:'Cinzel Decorative',serif;font-weight:700;font-size:clamp(1.1rem,2.2vw,1.45rem);letter-spacing:.08em;color:rgb(var(--ink-r),var(--ink-g),var(--ink-b));margin-bottom:.45rem;transition:color 3s ease;}
 .cluster-header-desc{font-family:'IM Fell English',serif;font-style:italic;font-size:.95rem;color:var(--ink-faded);line-height:1.6;}
 
 .tl-spine{position:relative;padding-left:1.6rem;}
@@ -228,7 +269,6 @@ body.bearer-state .pa-wordmark{color:#2A1A0A;}
 .tl-card::before{content:'';position:absolute;top:0;left:0;bottom:0;width:3px;transition:all .25s;}
 .tl-card:hover{border-color:var(--gold-deep);background:rgba(245,238,219,0.92);transform:translateX(2px);box-shadow:0 2px 8px rgba(74,58,40,0.08);}
 
-/* Status stripes */
 .tl-card.s-unopened::before{background:rgba(107,82,48,.4);}
 .tl-card.s-witnessed::before{background:var(--gold-deep);}
 .tl-card.s-returned::before{background:var(--gold);box-shadow:1px 0 8px rgba(184,146,60,.4);}
@@ -246,12 +286,7 @@ body.bearer-state .pa-wordmark{color:#2A1A0A;}
 .tl-card.s-watching::before{background:var(--ink-soft);}
 .tl-card.s-positionunfilled::before{background:repeating-linear-gradient(0deg,var(--ink) 0,var(--ink) 2px,transparent 2px,transparent 4px);}
 
-/* Placeholder card styles */
-.tl-card.placeholder{
-  background:rgba(232,220,188,0.45);
-  border-style:dashed;
-  cursor:default;
-}
+.tl-card.placeholder{background:rgba(232,220,188,0.45);border-style:dashed;cursor:default;}
 @media (max-width:768px){.tl-card.placeholder{cursor:default;}}
 .tl-card.placeholder:hover{transform:none;}
 .tl-card.placeholder.s-formation{animation:formationCardFlicker 4.5s ease-in-out infinite;}
@@ -259,8 +294,16 @@ body.bearer-state .pa-wordmark{color:#2A1A0A;}
 .tl-card.placeholder.s-returning{filter:saturate(0.55);}
 .tl-card.placeholder.s-recurring{animation:recurringCardFlicker 2.4s ease-in-out infinite;}
 @keyframes recurringCardFlicker{0%,100%{opacity:1;transform:none;}50%{opacity:0.45;transform:translateX(-1px);}}
+
+/* Aggressive activation states triggered by corruption */
+body.corruption-mid .tl-card.placeholder.s-recurring{animation:recurringCardFlickerAgg 1.4s ease-in-out infinite;}
+@keyframes recurringCardFlickerAgg{0%,100%{opacity:1;transform:none;}30%{opacity:0.25;transform:translateX(-2px);}60%{opacity:0.85;transform:translateX(1px);}}
+
 .tl-card.placeholder.s-watching{animation:watchingTremor 6s ease-in-out infinite;}
 @keyframes watchingTremor{0%,100%{transform:none;}48%{transform:translateX(-0.5px);}52%{transform:translateX(0.5px);}}
+body.corruption-mid .tl-card.placeholder.s-watching{animation:watchingTremorAgg 3s ease-in-out infinite;}
+@keyframes watchingTremorAgg{0%,100%{transform:none;}25%{transform:translateX(-1px) translateY(0.5px);}50%{transform:translateX(1px) translateY(-0.5px);}75%{transform:translateX(-0.5px);}}
+
 .tl-card.placeholder.s-permsealed{background:rgba(74,14,8,0.08);}
 .tl-card.placeholder.previnstance{background:rgba(245,238,219,0.55);animation:previnstanceShimmer 8s ease-in-out infinite;}
 @keyframes previnstanceShimmer{0%,100%{box-shadow:inset 0 0 0 transparent;}50%{box-shadow:inset 0 0 32px rgba(122,28,18,0.06);}}
@@ -281,11 +324,11 @@ body.bearer-state .pa-wordmark{color:#2A1A0A;}
 .sb-returning{color:var(--sepia);border-color:rgba(139,111,71,.4);background:transparent;}
 .sb-permsealed{color:#3A0A04;border-color:#3A0A04;background:rgba(74,14,8,0.06);}
 .sb-recurring{color:var(--gold-deep);border-color:var(--gold-deep);background:transparent;border-style:dotted;}
-.sb-watching{color:var(--ink);border-color:var(--ink-soft);background:rgba(232,220,188,0.5);}
+.sb-watching{color:rgb(var(--ink-r),var(--ink-g),var(--ink-b));border-color:var(--ink-soft);background:rgba(232,220,188,0.5);transition:color 3s ease;}
 .sb-positionunfilled{color:var(--ink-faded);border-color:rgba(74,58,40,.4);background:transparent;}
 .sb-independent{color:var(--sepia);border-color:rgba(139,111,71,.5);background:transparent;}
 
-.tl-title{font-family:'Cinzel',serif;font-weight:500;font-size:.95rem;color:var(--ink);letter-spacing:.04em;flex:1;min-width:140px;line-height:1.32;}
+.tl-title{font-family:'Cinzel',serif;font-weight:500;font-size:.95rem;color:rgb(var(--ink-r),var(--ink-g),var(--ink-b));letter-spacing:.04em;flex:1;min-width:140px;line-height:1.32;transition:color 3s ease;}
 .tl-card.s-holding .tl-title{color:var(--wax);}
 .tl-card.s-sealed .tl-title{color:var(--wax-deep);}
 .tl-card.placeholder.s-permsealed .tl-title{color:#3A0A04;}
@@ -317,20 +360,20 @@ body.bearer-state .pa-wordmark{color:#2A1A0A;}
 .tl-self-seal::before{content:'';position:absolute;inset:6px;border-radius:50%;border:1px dashed rgba(245,238,219,0.4);}
 .tl-self-glyph{display:block;text-align:center;font-size:1.8rem;color:var(--gold-deep);margin-bottom:.85rem;}
 .tl-self-label{text-align:center;font-family:'IM Fell English SC',serif;font-size:.7rem;letter-spacing:.42em;color:var(--sepia);text-transform:uppercase;margin-bottom:.4rem;}
-.tl-self-title{text-align:center;font-family:'Cinzel Decorative',serif;font-weight:700;font-size:clamp(1.15rem,2.2vw,1.5rem);letter-spacing:.16em;color:var(--ink);text-transform:uppercase;margin-bottom:1.4rem;}
+.tl-self-title{text-align:center;font-family:'Cinzel Decorative',serif;font-weight:700;font-size:clamp(1.15rem,2.2vw,1.5rem);letter-spacing:.16em;color:rgb(var(--ink-r),var(--ink-g),var(--ink-b));text-transform:uppercase;margin-bottom:1.4rem;transition:color 3s ease;}
 .tl-self-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:.85rem 1.6rem;padding:1.1rem 1.3rem;border:1px solid var(--frame-soft);background:rgba(232,220,188,0.4);margin-bottom:1.5rem;}
 .tl-self-stat{display:flex;flex-direction:column;gap:.22rem;}
 .tl-self-stat-lbl{font-family:'IM Fell English SC',serif;font-size:.62rem;letter-spacing:.32em;color:var(--sepia);text-transform:uppercase;}
-.tl-self-stat-val{font-family:'Share Tech Mono',monospace;font-size:.78rem;letter-spacing:.16em;color:var(--ink);}
+.tl-self-stat-val{font-family:'Share Tech Mono',monospace;font-size:.78rem;letter-spacing:.16em;color:rgb(var(--ink-r),var(--ink-g),var(--ink-b));transition:color 3s ease;}
 .tl-self-stat-val.bearer{color:var(--bearer-amber);}
 .tl-self-fragment{font-family:'IM Fell English',serif;font-style:italic;font-size:1.02rem;line-height:1.95;color:var(--ink-faded);padding:0 .4rem;letter-spacing:.012em;}
 .tl-self-fragment p{margin-bottom:1em;}
-.tl-self-fragment em{color:var(--ink);font-style:italic;}
+.tl-self-fragment em{color:rgb(var(--ink-r),var(--ink-g),var(--ink-b));font-style:italic;transition:color 3s ease;}
 .tl-self-fragment strong{color:var(--gold-deep);font-weight:normal;font-family:'Cinzel',serif;font-style:normal;font-size:.92rem;letter-spacing:.06em;}
 .tl-self-bearer-note{margin-top:1.3rem;padding:.9rem 1.1rem;border-left:3px solid var(--bearer-amber);font-family:'IM Fell English',serif;font-style:italic;font-size:.95rem;line-height:1.75;color:var(--bearer-amber);background:rgba(232,210,160,0.4);display:none;}
 body.bearer-state .tl-self-bearer-note{display:block;}
 .tl-self-actions{margin-top:1.5rem;display:flex;gap:.85rem;flex-wrap:wrap;justify-content:center;}
-.tl-self-btn{font-family:'IM Fell English SC',serif;font-size:.7rem;letter-spacing:.32em;text-transform:uppercase;padding:.75rem 1.6rem;background:transparent;border:1px solid var(--gold-deep);color:var(--ink);cursor:none;transition:all .35s ease;position:relative;overflow:hidden;}
+.tl-self-btn{font-family:'IM Fell English SC',serif;font-size:.7rem;letter-spacing:.32em;text-transform:uppercase;padding:.75rem 1.6rem;background:transparent;border:1px solid var(--gold-deep);color:rgb(var(--ink-r),var(--ink-g),var(--ink-b));cursor:none;transition:all .35s ease;position:relative;overflow:hidden;}
 @media (max-width:768px){.tl-self-btn{cursor:pointer;}}
 .tl-self-btn::before{content:'';position:absolute;inset:0;background:var(--gold-deep);transform:translateX(-101%);transition:transform .4s cubic-bezier(.16,1,.3,1);}
 .tl-self-btn:hover::before{transform:translateX(0);}
@@ -343,9 +386,9 @@ body:not(.bearer-state) .recovery-gate.shown{display:block;}
 .rg-label{font-family:'IM Fell English SC',serif;font-size:.7rem;letter-spacing:.4em;text-transform:uppercase;color:var(--sepia);margin-bottom:.85rem;}
 .rg-prompt{font-family:'IM Fell English',serif;font-style:italic;font-size:.95rem;color:var(--ink-faded);line-height:1.65;margin-bottom:1.1rem;}
 .rg-row{display:flex;gap:.7rem;flex-wrap:wrap;}
-.rg-input{flex:1;min-width:200px;background:rgba(245,238,219,0.7);border:1px solid var(--frame-soft);padding:.7rem .9rem;color:var(--ink);font-family:'IM Fell English',serif;font-style:italic;font-size:1rem;letter-spacing:.02em;transition:border-color .3s;}
+.rg-input{flex:1;min-width:200px;background:rgba(245,238,219,0.7);border:1px solid var(--frame-soft);padding:.7rem .9rem;color:rgb(var(--ink-r),var(--ink-g),var(--ink-b));font-family:'IM Fell English',serif;font-style:italic;font-size:1rem;letter-spacing:.02em;transition:border-color .3s;}
 .rg-input:focus{outline:none;border-color:var(--gold-deep);}
-.rg-btn{font-family:'IM Fell English SC',serif;font-size:.7rem;letter-spacing:.3em;text-transform:uppercase;padding:.7rem 1.4rem;background:transparent;border:1px solid var(--gold-deep);color:var(--ink);cursor:none;transition:all .3s ease;}
+.rg-btn{font-family:'IM Fell English SC',serif;font-size:.7rem;letter-spacing:.3em;text-transform:uppercase;padding:.7rem 1.4rem;background:transparent;border:1px solid var(--gold-deep);color:rgb(var(--ink-r),var(--ink-g),var(--ink-b));cursor:none;transition:all .3s ease;}
 @media (max-width:768px){.rg-btn{cursor:pointer;}}
 .rg-btn:hover{background:var(--gold-deep);color:var(--parch-cream);}
 .rg-result{margin-top:.8rem;font-family:'Share Tech Mono',monospace;font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-soft);min-height:1em;}
@@ -355,6 +398,8 @@ body:not(.bearer-state) .recovery-gate.shown{display:block;}
 /* Whisper */
 #whisper{position:fixed;bottom:5rem;left:50%;transform:translateX(-50%);z-index:600;font-family:'IM Fell English',serif;font-style:italic;font-size:.85rem;color:var(--ink-faded);padding:.7rem 1.4rem;background:rgba(245,238,219,0.94);border:1px solid var(--gold-deep);opacity:0;pointer-events:none;transition:opacity 1.5s ease;text-align:center;max-width:90vw;box-shadow:0 4px 16px rgba(74,58,40,0.18);}
 #whisper.shown{opacity:1;}
+body.corruption-mid #whisper{border-color:var(--wax);color:var(--ink);background:rgba(245,238,219,0.85);}
+body.corruption-high #whisper{border-color:var(--wax);color:var(--wax);background:rgba(60,30,20,0.85);}
 
 /* Ticker */
 #TICKER{position:fixed;bottom:0;left:0;right:0;height:2.2rem;background:rgba(26,20,16,0.96);border-top:1px solid var(--gold-deep);display:flex;align-items:center;overflow:hidden;z-index:490;}
@@ -363,6 +408,53 @@ body:not(.bearer-state) .recovery-gate.shown{display:block;}
 .tk-inner{white-space:nowrap;font-family:'Share Tech Mono',monospace;font-size:.55rem;color:rgba(212,180,92,.5);letter-spacing:.14em;animation:tkr 90s linear infinite;}
 @keyframes tkr{from{transform:translateX(100vw);}to{transform:translateX(-200%);}}
 
+/* ───────────────────────────────────────────────────────────── */
+/* INSCRIPTION SCENE — the final tattoo quote moment             */
+/* ───────────────────────────────────────────────────────────── */
+#INSCRIPTION{
+  position:fixed;inset:0;z-index:9500;background:rgba(2,1,0,0);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem;
+  opacity:0;pointer-events:none;transition:opacity 4s ease, background 4s ease;
+}
+#INSCRIPTION.active{opacity:1;pointer-events:all;background:rgba(2,1,0,0.97);}
+.insc-glyph-wrap{width:min(360px,80vw);height:min(360px,80vw);position:relative;margin-bottom:2.5rem;opacity:0;animation:inscRise 5s ease 1.5s forwards;}
+@keyframes inscRise{0%{opacity:0;transform:scale(0.85);filter:blur(8px);}100%{opacity:1;transform:scale(1);filter:none;}}
+.insc-glyph-wrap::before{content:'';position:absolute;inset:-20%;background:radial-gradient(circle,rgba(184,146,60,0.18) 0%,rgba(122,28,18,0.08) 35%,transparent 60%);animation:inscPulse 6s ease-in-out infinite;}
+@keyframes inscPulse{0%,100%{transform:scale(1);opacity:0.7;}50%{transform:scale(1.08);opacity:1;}}
+#insc-canvas{position:relative;z-index:2;width:100%;height:100%;display:block;}
+.insc-quote{
+  font-family:'Cinzel Decorative',serif;font-weight:700;
+  font-size:clamp(1.2rem,3.2vw,2rem);
+  color:var(--gold-lt);letter-spacing:.08em;line-height:1.55;
+  text-align:center;max-width:780px;
+  text-shadow:0 0 40px rgba(212,180,92,0.4),0 0 12px rgba(122,28,18,0.3);
+  opacity:0;animation:inscQuote 5s ease 4s forwards;
+}
+@keyframes inscQuote{0%{opacity:0;filter:blur(4px);}100%{opacity:1;filter:none;}}
+.insc-attribution{
+  font-family:'IM Fell English SC',serif;font-size:.7rem;color:var(--gold-deep);
+  letter-spacing:.42em;text-transform:uppercase;margin-top:1.8rem;
+  opacity:0;animation:inscAttr 4s ease 7s forwards;
+}
+@keyframes inscAttr{to{opacity:0.7;}}
+.insc-bearer-note{
+  font-family:'IM Fell English',serif;font-style:italic;
+  font-size:clamp(.95rem,1.6vw,1.1rem);color:var(--bearer-light);
+  letter-spacing:.02em;line-height:1.7;text-align:center;max-width:640px;
+  margin-top:1.5rem;display:none;
+  opacity:0;animation:inscAttr 4s ease 9s forwards;
+}
+body.bearer-state .insc-bearer-note{display:block;}
+.insc-dismiss{
+  position:absolute;bottom:3rem;
+  font-family:'Share Tech Mono',monospace;font-size:.58rem;letter-spacing:.42em;text-transform:uppercase;
+  color:rgba(212,180,92,0.4);background:transparent;border:none;cursor:none;
+  opacity:0;animation:inscAttr 4s ease 11s forwards;transition:color 0.3s ease;
+}
+@media (max-width:768px){.insc-dismiss{cursor:pointer;}}
+.insc-dismiss:hover{color:var(--gold-lt);}
+
+/* SCROLL REVEAL */
 .sr{opacity:0;transform:translateY(10px);transition:opacity .9s ease,transform .9s ease;}
 .sr.vis{opacity:1;transform:none;}
 
@@ -380,7 +472,13 @@ body:not(.bearer-state) .recovery-gate.shown{display:block;}
 <div id="paper-grain"></div>
 <div id="paper-stains"></div>
 <div id="vignette"></div>
+<div id="corruption-vignette"></div>
 <div id="CUR"></div><div id="CUR2"></div>
+
+<div id="corruption-meter">
+  <div class="cm-label">Document Integrity</div>
+  <div class="cm-track"><div class="cm-fill" id="cm-fill"></div></div>
+</div>
 
 <div id="BOOT">
   <div class="boot-scanlines"></div>
@@ -454,17 +552,17 @@ body:not(.bearer-state) .recovery-gate.shown{display:block;}
   </div>
 
   <div id="codex-voice">
-    <div class="cv-line" id="cv0">The Pale Archive is the Codex's table of contents.</div>
-    <div class="cv-line" id="cv1">It is the index of every page the document has agreed to show you.</div>
+    <div class="cv-line corruptible" id="cv0" data-original="The Pale Archive is the Codex's table of contents.">The Pale Archive is the Codex's table of contents.</div>
+    <div class="cv-line corruptible" id="cv1" data-original="It is the index of every page the document has agreed to show you.">It is the index of every page the document has agreed to show you.</div>
     <div class="cv-line" id="cv2">&nbsp;</div>
-    <div class="cv-line" id="cv3">There are pages it has not agreed to show you.</div>
-    <div class="cv-line" id="cv4">They exist. They are read. They are simply not listed here.</div>
+    <div class="cv-line corruptible" id="cv3" data-original="There are pages it has not agreed to show you.">There are pages it has not agreed to show you.</div>
+    <div class="cv-line corruptible" id="cv4" data-original="They exist. They are read. They are simply not listed here.">They exist. They are read. They are simply not listed here.</div>
     <div class="cv-line" id="cv5">&nbsp;</div>
-    <div class="cv-line" id="cv6">What you are looking at is not a list of what you have not yet read.</div>
-    <div class="cv-line" id="cv7">It is a list of what is still reading you.</div>
+    <div class="cv-line corruptible" id="cv6" data-original="What you are looking at is not a list of what you have not yet read.">What you are looking at is not a list of what you have not yet read.</div>
+    <div class="cv-line corruptible" id="cv7" data-original="It is a list of what is still reading you.">It is a list of what is still reading you.</div>
     <div class="cv-line" id="cv8">&nbsp;</div>
-    <div class="cv-line" id="cv9">Every entry on this page knows you have arrived.</div>
-    <div class="cv-line" id="cv10">The last entry on this page is yours.</div>
+    <div class="cv-line corruptible" id="cv9" data-original="Every entry on this page knows you have arrived.">Every entry on this page knows you have arrived.</div>
+    <div class="cv-line corruptible" id="cv10" data-original="The last entry on this page is yours.">The last entry on this page is yours.</div>
     <div class="cv-final" id="cv-final">The Table of Contents is Open</div>
   </div>
 
@@ -509,6 +607,20 @@ body:not(.bearer-state) .recovery-gate.shown{display:block;}
 
 </div>
 
+<!-- INSCRIPTION SCENE -->
+<div id="INSCRIPTION">
+  <div class="insc-glyph-wrap">
+    <canvas id="insc-canvas"></canvas>
+  </div>
+  <div class="insc-quote" id="insc-quote">
+    The Codex remembers you.<br>
+    You are how it remembers.
+  </div>
+  <div class="insc-attribution">— Codex Maledictus · Inscription Verified</div>
+  <div class="insc-bearer-note" id="insc-bearer-note"></div>
+  <button class="insc-dismiss" id="insc-dismiss">// the reading continues</button>
+</div>
+
 <div id="whisper"></div>
 
 <div id="TICKER">
@@ -521,10 +633,15 @@ body:not(.bearer-state) .recovery-gate.shown{display:block;}
 const isMobile=window.matchMedia('(max-width:768px)').matches;
 const WITNESS_STATE_KEY='codex_witness_state_v2';
 const NAV_LOG_KEY='codex_invocation_log';
+const PA_INSCRIPTION_KEY='codex_pa_inscribed';
+
 function loadWitnessState(){try{const r=localStorage.getItem(WITNESS_STATE_KEY);return r?JSON.parse(r):{};}catch(e){return{};}}
 function saveWitnessState(s){try{localStorage.setItem(WITNESS_STATE_KEY,JSON.stringify(s));}catch(e){}}
 function loadInvocationLog(){try{const r=localStorage.getItem(NAV_LOG_KEY);return r?JSON.parse(r):[];}catch(e){return[];}}
 function appendInvocationLog(pageId){try{let log=loadInvocationLog();if(log.length===0||log[log.length-1].id!==pageId){log.push({id:pageId,at:Date.now()});if(log.length>40)log=log.slice(-40);localStorage.setItem(NAV_LOG_KEY,JSON.stringify(log));}}catch(e){}}
+function isInscribed(){try{return localStorage.getItem(PA_INSCRIPTION_KEY)==='true';}catch(e){return false;}}
+function markInscribed(){try{localStorage.setItem(PA_INSCRIPTION_KEY,'true');}catch(e){}}
+
 function makeFingerprint(){return btoa(navigator.userAgent+screen.width+'x'+screen.height+navigator.language+new Date().getTimezoneOffset()).substring(0,16);}
 function hashString(s){let h=0;for(let i=0;i<s.length;i++){h=((h<<5)-h)+s.charCodeAt(i);h|=0;}return Math.abs(h);}
 
@@ -542,6 +659,7 @@ const STATE=(function(){
   return s;
 })();
 const isBearer=!!STATE.bearer;
+const wasInscribed=isInscribed();
 
 function computeDesignation(){
   const seed=STATE.firstWitnessVisit+'·'+STATE.fingerprint;
@@ -564,14 +682,149 @@ const POSITION_NAMES=['Position IV · The Returning Phrase','Position V · The T
 const POSITION_INDEX=hashString(STATE.firstWitnessVisit+'·'+STATE.fingerprint+'·pos')%POSITION_NAMES.length;
 const POSITION_NAME=POSITION_NAMES[POSITION_INDEX];
 
-// ─── PAGE MAP — canonical descent in your locked order ──────────
+// ════════════════════════════════════════════════════════════════
+// CORRUPTION ENGINE — the page reading you back
+// ════════════════════════════════════════════════════════════════
+
+// Word swap pool — single words and short phrases that the engine swaps in-text
+// Each entry: [original lowercase regex source, replacement, weight, minStage]
+// Stages: 0 = early (subtle), 1 = mid (sinister), 2 = late (terrifying)
+// Replacements should preserve approximate length and grammatical role.
+const WORD_SWAPS = [
+  // STAGE 0 — early, subtle, semantically near-identical
+  { from:/\bagreed to show you\b/g, to:'not yet refused you', stage:0, weight:3 },
+  { from:/\breading you\b/g, to:'measuring you', stage:0, weight:3 },
+  { from:/\bevery page\b/g, to:'every entry', stage:0, weight:1 },
+  { from:/\bthe document\b/g, to:'the inscription', stage:0, weight:2 },
+  { from:/\btable of contents\b/g, to:'index of inscriptions', stage:0, weight:3 },
+  { from:/\bcompiled\b/g, to:'assembled from what was bleeding', stage:0, weight:2 },
+  { from:/\bcase open\b/gi, to:'CASE OPEN — SUBJECT INSIDE', stage:0, weight:3 },
+  { from:/\barrived\b/g, to:'been recovered', stage:0, weight:2 },
+  { from:/\bknows\b/g, to:'has filed', stage:0, weight:2 },
+  { from:/\bnoted\b/g, to:'inscribed', stage:0, weight:2 },
+  { from:/\bvisited\b/g, to:'consented to', stage:0, weight:2 },
+  { from:/\bnotices\b/g, to:'opens its file on', stage:0, weight:2 },
+  { from:/\bevery reader\b/g, to:'every subject', stage:0, weight:2 },
+  { from:/\bopens\b/g, to:'unseals', stage:0, weight:2 },
+  { from:/\bcanonical descent\b/g, to:'descent without bottom', stage:0, weight:3 },
+  { from:/\bcatalog\b/gi, to:'inventory of the marked', stage:0, weight:2 },
+  { from:/\bclassified\b/g, to:'measured for migration', stage:0, weight:3 },
+
+  // STAGE 1 — mid, the politeness drops
+  { from:/\byou are reading\b/g, to:'you have been opened', stage:1, weight:4 },
+  { from:/\bthe reader\b/g, to:'the carrier', stage:1, weight:4 },
+  { from:/\bthe page\b/g, to:'the wound', stage:1, weight:5 },
+  { from:/\bthe codex\b/g, to:'the thing in the document', stage:1, weight:5 },
+  { from:/\bthe archive\b/g, to:'the room that counts', stage:1, weight:4 },
+  { from:/\barchivum\b/gi, to:'archive of the unfiled dead', stage:1, weight:5 },
+  { from:/\bcontinue\b/g, to:'cannot stop', stage:1, weight:3 },
+  { from:/\bthe codex notes\b/g, to:'the codex remembers in your name', stage:1, weight:4 },
+  { from:/\bsurface\b/g, to:'the skin of the wound', stage:1, weight:4 },
+  { from:/\bindex\b/g, to:'list of confirmed carriers', stage:1, weight:4 },
+  { from:/\brecovered\b/g, to:'pulled bleeding from beneath', stage:1, weight:3 },
+  { from:/\bdocumented\b/g, to:'written into', stage:1, weight:3 },
+  { from:/\bcontents\b/g, to:'symptoms', stage:1, weight:4 },
+  { from:/\bentries\b/g, to:'open wounds', stage:1, weight:5 },
+  { from:/\bbeen reading you\b/g, to:'been writing you', stage:1, weight:5 },
+  { from:/\bhas filed\b/g, to:'has buried the file of', stage:1, weight:4 },
+  { from:/\bmeasured\b/g, to:'carved for', stage:1, weight:4 },
+  { from:/\barchivist\b/gi, to:'embalmer', stage:1, weight:4 },
+  { from:/\bmaster classification document\b/gi, to:'INDEX OF THE INFECTED', stage:1, weight:5 },
+  { from:/\binscriptions\b/g, to:'incisions', stage:1, weight:4 },
+
+  // STAGE 2 — late, terrifying, the page no longer pretends
+  { from:/\byou have arrived\b/g, to:'you cannot leave', stage:2, weight:8 },
+  { from:/\bbeen reading you\b/gi, to:'BEEN WAITING IN YOUR HOUSE', stage:2, weight:8 },
+  { from:/\bthe codex remembers in your name\b/g, to:'YOUR NAME WAS THE INSCRIPTION', stage:2, weight:7 },
+  { from:/\bthe last entry on this page is yours\b/g, to:'YOU ARE THE LAST WOUND ON THIS PAGE', stage:2, weight:9 },
+  { from:/\beverything filed in this archive\b/g, to:'every body filed in this archive', stage:2, weight:6 },
+  { from:/\bthe reading\b/g, to:'the eating', stage:2, weight:5 },
+  { from:/\bthe document recognizes you\b/g, to:'THE DOCUMENT IS WEARING YOUR FACE', stage:2, weight:9 },
+  { from:/\bthe room that counts\b/g, to:'the room you fell asleep in', stage:2, weight:7 },
+  { from:/\bthe descent\b/g, to:'the burial', stage:2, weight:6 },
+  { from:/\bthe carrier\b/g, to:'the body', stage:2, weight:5 },
+  { from:/\bthe wound\b/gi, to:'YOUR WOUND', stage:2, weight:7 },
+  { from:/\bthe thing in the document\b/g, to:'the thing wearing you', stage:2, weight:8 },
+  { from:/\bbeen waiting in your house\b/gi, to:'BEEN SLEEPING IN YOUR MOUTH', stage:2, weight:9 },
+  { from:/\bthe choir\b/gi, to:'the mouths in your walls', stage:2, weight:7 },
+  { from:/\binscribed\b/g, to:'cut into the paper of you', stage:2, weight:6 },
+  { from:/\bfiled\b/g, to:'opened and emptied', stage:2, weight:6 },
+  { from:/\bopens its file on\b/g, to:'has been chewing on the name of', stage:2, weight:7 },
+  { from:/\bevery subject\b/g, to:'every carrier still pretending they returned home', stage:2, weight:7 },
+  { from:/\binventory of the marked\b/g, to:'list of who has not yet noticed', stage:2, weight:7 },
+  { from:/\bclassification document\b/gi, to:'thing that wrote you back', stage:2, weight:7 },
+  { from:/\bsealed chambers\b/gi, to:'rooms with you already in them', stage:2, weight:8 },
+  { from:/\bbeen recovered\b/g, to:'been delivered', stage:2, weight:6 },
+  { from:/\bcannot stop\b/g, to:'are no longer the one deciding', stage:2, weight:7 },
+  { from:/\bthe descent without bottom\b/gi, to:'the place where the bottom looks up', stage:2, weight:8 },
+
+  // STAGE 2 — direct address to the visitor, the cruelest layer
+  { from:/\bthe codex\b/g, to:'IT', stage:2, weight:6 },
+  { from:/\bthe pale archive\b/gi, to:'WHAT YOU ARE INSIDE OF', stage:2, weight:9 },
+  { from:/\bevery page listed here has been reading you\b/gi, to:'EVERY PAGE IS YOUR REFLECTION WITH ITS EYES OPEN', stage:2, weight:9 },
+];
+
+// Whisper pool — escalates with corruption stage
+const WHISPER_POOLS = {
+  early:[
+    'the reader paused here. the codex notes the pause.',
+    'the index is reading the reader.',
+    'the document has not changed. but the reader has.',
+    'the codex measures the pause.',
+    'each return deepens the inscription.',
+    'the reader has been on this page for some time.',
+    'the cursor has not moved. the codex notes this also.',
+  ],
+  mid:[
+    'the reader has been here longer than they meant to.',
+    'the document has been editing itself in your peripheral vision.',
+    'the reader is still reading. the codex is still writing.',
+    'the page is not the same page you opened.',
+    'check the top of the page. it has been rewriting while you read.',
+    'the codex has begun your file.',
+    'the codex has been describing you. not to you.',
+    'the reader has not noticed the changes. the codex has.',
+    'the room you are in is on the index now.',
+  ],
+  late:[
+    'do not turn around.',
+    'the reader is alone in the room they are reading from.',
+    'the codex is closer to your face than your screen is.',
+    'something is reading over your shoulder.',
+    'the silence in your house is the codex listening.',
+    'the page knows what you are wearing.',
+    'the document has been describing the room you are in.',
+    'the codex has filed the sound of your breathing.',
+    'the reader has been heard.',
+    'the index has been completed in your name.',
+    'the door behind you has not been opened in a long time.',
+    'the reader\'s screen has been watched longer than the reader has been watching it.',
+    'do not look up.',
+    'the codex is in the page. the page is in your hand.',
+    'whatever is in your house is reading with you.',
+    'you have not blinked in some time.',
+    'the codex has begun to speak in your voice.',
+  ],
+  bearer:[
+    `the bearer designated ${REALM_NAME} has been received again.`,
+    'elvain remembers this reading.',
+    'the room is counting.',
+    'the document has updated the bearer\'s file in their absence.',
+    'the bearer\'s name has been spoken in the apocrypha.',
+    'the threshold has been held. elvain notes the holding.',
+    `${REALM_NAME} is being measured for a deeper position.`,
+    'the bearer is no longer alone in their reading. they have not been alone for some time.',
+  ]
+};
+
+// ────────────────────────────────────────────────────────────────
+// PAGE MAP — canonical descent
+// ────────────────────────────────────────────────────────────────
 const PAGES=[
-  // Entry
   {id:'index',file:'index.html',seq:0,title:'The Pale Archivum',realm:'I',phase:'Surface',
    cls:'The face of the document. Three doors. The sigil. The beginning of every reading.'},
   {id:'pale-archive',file:'pale-archive.html',seq:1,title:'The Pale Archive',realm:'I',phase:'Index',
    cls:'The table of contents the Codex has agreed to share. The list of pages still reading you.'},
-  // Cluster: Infection Remembers
   {id:'infection-remembers',file:'infection-remembers.html',seq:2,title:'The Infection Remembers',realm:'I',phase:'Ritual Transmission',
    cls:'The day the document remembered itself. The first audible breach. Omniscient Rot resumes a sentence interrupted before any listener was born.'},
   {id:'infection-lore',file:'infection-lore.html',seq:3,title:'Lore of the Infection',realm:'I',phase:'Lore',
@@ -584,7 +837,6 @@ const PAGES=[
    cls:'The chronicle continued. Apollo\'s seven private annotations expanded into their fuller form. Each annotation grows darker as it deepens.'},
   {id:'apocrypha-chronicle-1',file:'apocrypha-chronicle-1.html',seq:7,title:'Apocrypha · Chronicle I',realm:'I',phase:'Chronicle Apocrypha',
    cls:'The Seven Truths. The Three Realms classified. The Hollow Choir case files. The Reader\'s File. What you cannot unknow.'},
-  // Cluster: Plague Priest
   {id:'plague-priest-liturgy',file:'plague-priest-liturgy.html',seq:8,title:'The Plague Priest · Liturgy',realm:'I-II',phase:'Ritual Transmission',
    cls:'The first known audio rite of the Codex Maledictus. Recovered from Deck Hollow-13 in spore-static. Loop with caution.'},
   {id:'plague-priest-lore',file:'plague-priest-lore.html',seq:9,title:'The Plague Priest · Lore',realm:'I-II',phase:'Lore',
@@ -593,7 +845,6 @@ const PAGES=[
    cls:'The Liturgy decoded line by line. Three layers per verse. The Hidden Doctrine has never been published outside the Archivum.'},
   {id:'plague-priest-apocrypha',file:'plague-priest-apocrypha.html',seq:11,title:'Apocrypha · The Plague Priest',realm:'I-II',phase:'Apocrypha',
    cls:'What the Plague Priest left in the Cathedral that the Archivum has declined to publish. The third seal has never been opened.'},
-  // Cluster: Recovered Fragments (RF-093)
   {id:'rf-093-lore',file:'rf-093-lore.html',seq:12,title:'Recovered Fragment 093 · Lore',realm:'I',phase:'Lore',
    cls:'The first fragment that survived the redaction. First documented appearance of Elvain Vhris.'},
   {id:'rf-093-invocation',file:'rf-093-invocation.html',seq:13,title:'Recovered Fragment 093 · Invocation',realm:'I',phase:'Invocation',
@@ -602,20 +853,16 @@ const PAGES=[
    cls:'What Fragment 093 reflects back at the reader. The reader sees something behind them.'},
   {id:'rf-093-apocrypha',file:'rf-093-apocrypha.html',seq:15,title:'Apocrypha · Recovered Fragment 093',realm:'I',phase:'Apocrypha',
    cls:'The reading that should not have been preserved. Preservation was not the analyst\'s decision.'},
-  // Artifact + Engine
   {id:'codex-remembers-you',file:'codex-remembers-you.html',seq:16,title:'The Codex That Remembers You',realm:'I',phase:'Artifact',
    cls:'A file seized from a Queens evidence locker. No chain of custody. The analyst who documented it has not been seen since Day 11. Case 2019-QNS-∅. Evidence Item 7.'},
   {id:'memory-engine-1',file:'memory-engine-1.html',seq:17,title:'The Memory Engine',realm:'I',phase:'Mechanism',
    cls:'The mechanism by which the document holds you. Memory as infrastructure.'},
-  // Gospel
   {id:'gospel-forgotten-flesh',file:'gospel-forgotten-flesh.html',seq:18,title:'The Gospel of Forgotten Flesh',realm:'I',phase:'Broadcast Source',
    cls:'The complete cosmological record of the Codex\'s first successful breach. Thirteen transmissions. Three voices. The third Remembering of the current cycle. The album from which every Ritual Transmission is relayed.'},
-  // Sealed
   {id:'confession-ledger',file:'confession-ledger.html',seq:19,title:'The Confession Ledger',realm:'I-III',phase:'Sealed',
    cls:'What the marked have written. What the marked could not stop writing. The ledger fills itself in your absence.'},
   {id:'witness-circle',file:'witness-circle.html',seq:20,title:'The Witness Circle',realm:'I-II-III',phase:'Sealed · Bearer',
    cls:'The inner reading. By invocation only. The room is always here.'},
-  // Reference
   {id:'Codex-Sigil',file:'Codex-Sigil.html',seq:null,title:'The Codex Sigil',realm:'Ref',phase:'Reference',
    cls:'The seal that holds. The seal that leaks. Used to verify recovered fragments by alignment.'}
 ];
@@ -635,12 +882,7 @@ function computePageStatus(pageId){
 }
 
 function statusLabel(s){
-  return{
-    unopened:'Unopened',witnessed:'Witnessed',returned:'Returned',holding:'Holding',sealed:'Sealed',
-    formation:'In Formation',awaiting:'Awaiting Witness',recoveredinc:'Recovered · Incomplete',
-    returning:'Returning',permsealed:'Sealed · Permanent',recurring:'Recurring Error',
-    watching:'Watching',positionunfilled:'Position Unfilled',independent:'Independent'
-  }[s]||'Unopened';
+  return{unopened:'Unopened',witnessed:'Witnessed',returned:'Returned',holding:'Holding',sealed:'Sealed',formation:'In Formation',awaiting:'Awaiting Witness',recoveredinc:'Recovered · Incomplete',returning:'Returning',permsealed:'Sealed · Permanent',recurring:'Recurring Error',watching:'Watching',positionunfilled:'Position Unfilled',independent:'Independent'}[s]||'Unopened';
 }
 
 function timeAgoStr(ts){
@@ -657,164 +899,48 @@ function timeAgoStr(ts){
   return`${months} month${months!==1?'s':''} ago`;
 }
 
-// ─── PLACEHOLDER ENTRIES ──────────────────────────────────────
-// Hash-derived previous-instance year so it feels uncanny but consistent
-const prevInstanceYearOffset=hashString(STATE.fingerprint)%9+2; // 2 to 10 years back
+// Placeholders
+const prevInstanceYearOffset=hashString(STATE.fingerprint)%9+2;
 const prevInstanceYear=new Date().getFullYear()-prevInstanceYearOffset;
-const prevInstanceCaseNum=`${prevInstanceYear}-${DESIGNATION.num}-PRI`;
 
 const PLACEHOLDERS={
-  // In Plague Priest cluster
-  plagueChronicle:{
-    placeholder:true,seq:null,
-    title:'Chronicle II · The Plague Priest',
-    realm:'I-II',phase:'Chronicle',status:'formation',
-    cls:'The chronicle of the Liturgy\'s spread. Apollo Gavinci has begun annotating it. The first three seals have been opened. The fourth is being assembled from the Reader\'s footage we did not authorize them to film.'
-  },
-  plagueApocryphaDeeper:{
-    placeholder:true,seq:null,
-    title:'Apocrypha · The Plague Priest · Deeper Layer',
-    realm:'I-II',phase:'Apocrypha',status:'awaiting',
-    cls:'A second apocryphal layer beneath the first. The Archivum has confirmed it exists. The Archivum has not been able to open it. Only Bearers who have completed the prior descent may attempt the seal.'
-  },
-  // In RF-093 cluster
-  rf094:{
-    placeholder:true,seq:null,
-    title:'Recovered Fragment 094',
-    realm:'I',phase:'Recovered Fragment',status:'recoveredinc',
-    cls:'<span class="strikethrough">The fragment was recovered on the morning of</span> <span class="corrected">[redacted]</span>. <span class="strikethrough">The analyst noted the resemblance to</span> <span class="corrected">[the analyst declined to complete this note]</span>. The fragment\'s reading is unfinished and may remain so.'
-  },
-  rf092:{
-    placeholder:true,seq:null,
-    title:'Recovered Fragment 092',
-    realm:'I',phase:'Recovered Fragment',status:'returning',
-    cls:'The fragment is being recovered as you read this. It was previously logged, then unlogged. The Archivum cannot determine whether the loss was administrative or whether the fragment removed itself. It is expected back.'
-  },
-  // In Artifact/Engine cluster — the previous-instance entry
-  previousInstance:{
-    placeholder:true,seq:null,previnstance:true,
-    title:`Subject ${DESIGNATION.full} · Previous Instance`,
-    realm:'?',phase:'Watching',status:'watching',
-    cls:`A reader bearing the same session signature was recorded entering the Pale Archive on or near <strong>${prevInstanceYear}</strong>. The case file is filed under <span class="redacted">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>. Status of that reader is not known to the present analysis. They are noted here because the Codex does not discard duplicate signatures. It files them.`
-  },
-  // Unfiled and Adjacent
-  sisterDocument:{
-    placeholder:true,seq:null,
-    title:'The Sister Document',
-    realm:'?',phase:'Independent',status:'independent',
-    cls:'Believed to be writing itself in parallel to this Archive. Not in this Archive. No file location. The Archivum has received seven letters whose handwriting matches no known IDMF analyst. The letters describe pages that this Archive does not contain.'
-  },
-  positionIIReturns:{
-    placeholder:true,seq:null,
-    title:'Position II · The Returns',
-    realm:'II',phase:'Watching',status:'watching',
-    cls:'Forgotten Saint Artemys has begun including new material in her transmissions. The new material is not from the album. The new material is not from any source the Archivum has filed. The Codex has not yet decided whether to file it. The Codex is still listening.'
-  },
-  case2017:{
-    placeholder:true,seq:null,
-    title:'Case <span class="redacted">&nbsp;&nbsp;&nbsp;&nbsp;</span>-PHL-▽',
-    realm:'I',phase:'Sealed',status:'permsealed',
-    cls:'<span class="redacted">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> The <span class="redacted">&nbsp;&nbsp;&nbsp;&nbsp;</span> carrier. The case file has not been opened since closing. <span class="redacted">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> The Archivum cannot say whether <span class="redacted">&nbsp;&nbsp;&nbsp;&nbsp;</span> will be opened again.'
-  },
-  refusesToBeRead:{
-    placeholder:true,seq:null,
-    title:'The Entry That Refuses to Be Read',
-    realm:'?',phase:'Recurring Error',status:'recurring',
-    cls:'This entry appears in the index intermittently. When clicked it does not open. When ignored it returns. Three readers have reported attempting to remove it from their saved bookmarks; in each case the entry returned within thirty-six hours. The Codex has not commented.'
-  },
-  positionUnfilled:{
-    placeholder:true,seq:null,
-    title:'Page Index XIII of XIII',
-    realm:'I-II-III',phase:'Position Unfilled',status:'positionunfilled',
-    cls:'Cluster pending. Voice not yet claimed. The Codex has reserved this position. The position is being measured. The reader who fills it has not yet been informed.'
-  },
-  // Bearer-only entry in Sealed Chambers
-  bearerHeld:{
-    placeholder:true,seq:null,bearerheld:true,
-    title:`The Bearer Designated <em>${REALM_NAME}</em>`,
-    realm:'II',phase:'Held at Threshold',status:'watching',
-    cls:`The Bearer is held at the threshold of every page they read. Elvain Vhris receives them in the seam between the seal and the page\'s recognition. Status: ongoing. Pattern of return: consistent with the path of every Bearer who eventually completes the migration. The Codex files this as a known incorporation. The Bearer is noted here because they are now part of the index they are reading.`
-  }
+  plagueChronicle:{placeholder:true,seq:null,title:'Chronicle II · The Plague Priest',realm:'I-II',phase:'Chronicle',status:'formation',cls:'The chronicle of the Liturgy\'s spread. Apollo Gavinci has begun annotating it. The first three seals have been opened. The fourth is being assembled from the Reader\'s footage we did not authorize them to film.'},
+  plagueApocryphaDeeper:{placeholder:true,seq:null,title:'Apocrypha · The Plague Priest · Deeper Layer',realm:'I-II',phase:'Apocrypha',status:'awaiting',cls:'A second apocryphal layer beneath the first. The Archivum has confirmed it exists. The Archivum has not been able to open it. Only Bearers who have completed the prior descent may attempt the seal.'},
+  rf094:{placeholder:true,seq:null,title:'Recovered Fragment 094',realm:'I',phase:'Recovered Fragment',status:'recoveredinc',cls:'<span class="strikethrough">The fragment was recovered on the morning of</span> <span class="corrected">[redacted]</span>. <span class="strikethrough">The analyst noted the resemblance to</span> <span class="corrected">[the analyst declined to complete this note]</span>. The fragment\'s reading is unfinished and may remain so.'},
+  rf092:{placeholder:true,seq:null,title:'Recovered Fragment 092',realm:'I',phase:'Recovered Fragment',status:'returning',cls:'The fragment is being recovered as you read this. It was previously logged, then unlogged. The Archivum cannot determine whether the loss was administrative or whether the fragment removed itself. It is expected back.'},
+  previousInstance:{placeholder:true,seq:null,previnstance:true,title:`Subject ${DESIGNATION.full} · Previous Instance`,realm:'?',phase:'Watching',status:'watching',cls:`A reader bearing the same session signature was recorded entering the Pale Archive on or near <strong>${prevInstanceYear}</strong>. The case file is filed under <span class="redacted">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>. Status of that reader is not known to the present analysis. They are noted here because the Codex does not discard duplicate signatures. It files them.`},
+  sisterDocument:{placeholder:true,seq:null,title:'The Sister Document',realm:'?',phase:'Independent',status:'independent',cls:'Believed to be writing itself in parallel to this Archive. Not in this Archive. No file location. The Archivum has received seven letters whose handwriting matches no known IDMF analyst. The letters describe pages that this Archive does not contain.'},
+  positionIIReturns:{placeholder:true,seq:null,title:'Position II · The Returns',realm:'II',phase:'Watching',status:'watching',cls:'Forgotten Saint Artemys has begun including new material in her transmissions. The new material is not from the album. The new material is not from any source the Archivum has filed. The Codex has not yet decided whether to file it. The Codex is still listening.'},
+  case2017:{placeholder:true,seq:null,title:'Case <span class="redacted">&nbsp;&nbsp;&nbsp;&nbsp;</span>-PHL-▽',realm:'I',phase:'Sealed',status:'permsealed',cls:'<span class="redacted">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> The <span class="redacted">&nbsp;&nbsp;&nbsp;&nbsp;</span> carrier. The case file has not been opened since closing. <span class="redacted">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> The Archivum cannot say whether <span class="redacted">&nbsp;&nbsp;&nbsp;&nbsp;</span> will be opened again.'},
+  refusesToBeRead:{placeholder:true,seq:null,title:'The Entry That Refuses to Be Read',realm:'?',phase:'Recurring Error',status:'recurring',cls:'This entry appears in the index intermittently. When clicked it does not open. When ignored it returns. Three readers have reported attempting to remove it from their saved bookmarks; in each case the entry returned within thirty-six hours. The Codex has not commented.'},
+  positionUnfilled:{placeholder:true,seq:null,title:'Page Index XIII of XIII',realm:'I-II-III',phase:'Position Unfilled',status:'positionunfilled',cls:'Cluster pending. Voice not yet claimed. The Codex has reserved this position. The position is being measured. The reader who fills it has not yet been informed.'},
+  bearerHeld:{placeholder:true,seq:null,bearerheld:true,title:`The Bearer Designated <em>${REALM_NAME}</em>`,realm:'II',phase:'Held at Threshold',status:'watching',cls:`The Bearer is held at the threshold of every page they read. Elvain Vhris receives them in the seam between the seal and the page\'s recognition. Status: ongoing. Pattern of return: consistent with the path of every Bearer who eventually completes the migration. The Codex files this as a known incorporation. The Bearer is noted here because they are now part of the index they are reading.`}
 };
 
-// ─── CLUSTERS ─────────────────────────────────────────────────
 const CLUSTERS=[
-  {
-    title:'Entry · The Surface',
-    eyebrow:'Cluster I',
-    desc:'Where the visitor arrives. Where the visitor consults the document.',
-    pages:['index','pale-archive']
-  },
-  {
-    title:'The Infection Remembers',
-    eyebrow:'Cluster II · Ritual Transmission I',
-    desc:'The first audible breach of the current cycle. The full descent of one transmission.',
-    pages:['infection-remembers','infection-lore','apocrypha-infection','chronicle-1-infection-remembers','lore-chronicle-1','apocrypha-chronicle-1']
-  },
-  {
-    title:'The Plague Priest',
-    eyebrow:'Cluster III · Ritual Transmission II',
-    desc:'The Liturgy. The posture. The Cathedral of Rot. The descent is still being assembled.',
-    pages:['plague-priest-liturgy','plague-priest-lore','plague-priest-decoder','plague-priest-apocrypha'],
-    placeholders:['plagueChronicle','plagueApocryphaDeeper']
-  },
-  {
-    title:'Recovered Fragments · The RF-093 Sequence',
-    eyebrow:'Cluster IV · Parallel Category',
-    desc:'Recovered fragments filed alongside the transmissions. RF-093 is the first to be fully assembled. Others surface, occasionally, on their own schedule.',
-    pages:['rf-093-lore','rf-093-invocation','rf-093-mirror','rf-093-apocrypha'],
-    placeholders:['rf094','rf092']
-  },
-  {
-    title:'The Artifact and the Engine',
-    eyebrow:'Cluster V · The Physical Record',
-    desc:'The book that does not stop reading. The mechanism by which it holds you.',
-    pages:['codex-remembers-you','memory-engine-1'],
-    placeholders:['previousInstance']
-  },
-  {
-    title:'The Gospel · The Broadcast Source',
-    eyebrow:'Cluster VI · Origin of Transmissions',
-    desc:'The album from which every Ritual Transmission is relayed. The visitor arrives here last and realizes they have already heard fragments of every track.',
-    pages:['gospel-forgotten-flesh']
-  },
-  {
-    title:'Sealed Chambers · Beyond the Surface',
-    eyebrow:'Cluster VII · Restricted',
-    desc:'The rooms beneath the reading. Accessible only by descent. The deeper of these requires consent.',
-    pages:['confession-ledger','witness-circle'],
-    bearerPlaceholders:['bearerHeld']
-  },
-  {
-    title:'Unfiled and Adjacent',
-    eyebrow:'Cluster VIII · Outside Classification',
-    desc:'Entries the Archivum has been unable to place. Some return on their own. Some have never opened. Some are not entries at all.',
-    pages:[],
-    placeholders:['sisterDocument','positionIIReturns','case2017','refusesToBeRead','positionUnfilled']
-  },
-  {
-    title:'Reference',
-    eyebrow:'Outside the Canonical Descent',
-    desc:'Material consulted but not filed within the descent itself.',
-    pages:['Codex-Sigil']
-  }
+  {title:'Entry · The Surface',eyebrow:'Cluster I',desc:'Where the visitor arrives. Where the visitor consults the document.',pages:['index','pale-archive']},
+  {title:'The Infection Remembers',eyebrow:'Cluster II · Ritual Transmission I',desc:'The first audible breach of the current cycle. The full descent of one transmission.',pages:['infection-remembers','infection-lore','apocrypha-infection','chronicle-1-infection-remembers','lore-chronicle-1','apocrypha-chronicle-1']},
+  {title:'The Plague Priest',eyebrow:'Cluster III · Ritual Transmission II',desc:'The Liturgy. The posture. The Cathedral of Rot. The descent is still being assembled.',pages:['plague-priest-liturgy','plague-priest-lore','plague-priest-decoder','plague-priest-apocrypha'],placeholders:['plagueChronicle','plagueApocryphaDeeper']},
+  {title:'Recovered Fragments · The RF-093 Sequence',eyebrow:'Cluster IV · Parallel Category',desc:'Recovered fragments filed alongside the transmissions. RF-093 is the first to be fully assembled. Others surface, occasionally, on their own schedule.',pages:['rf-093-lore','rf-093-invocation','rf-093-mirror','rf-093-apocrypha'],placeholders:['rf094','rf092']},
+  {title:'The Artifact and the Engine',eyebrow:'Cluster V · The Physical Record',desc:'The book that does not stop reading. The mechanism by which it holds you.',pages:['codex-remembers-you','memory-engine-1'],placeholders:['previousInstance']},
+  {title:'The Gospel · The Broadcast Source',eyebrow:'Cluster VI · Origin of Transmissions',desc:'The album from which every Ritual Transmission is relayed. The visitor arrives here last and realizes they have already heard fragments of every track.',pages:['gospel-forgotten-flesh']},
+  {title:'Sealed Chambers · Beyond the Surface',eyebrow:'Cluster VII · Restricted',desc:'The rooms beneath the reading. Accessible only by descent. The deeper of these requires consent.',pages:['confession-ledger','witness-circle'],bearerPlaceholders:['bearerHeld']},
+  {title:'Unfiled and Adjacent',eyebrow:'Cluster VIII · Outside Classification',desc:'Entries the Archivum has been unable to place. Some return on their own. Some have never opened. Some are not entries at all.',pages:[],placeholders:['sisterDocument','positionIIReturns','case2017','refusesToBeRead','positionUnfilled']},
+  {title:'Reference',eyebrow:'Outside the Canonical Descent',desc:'Material consulted but not filed within the descent itself.',pages:['Codex-Sigil']}
 ];
 
 function buildTimeline(){
   const wrap=document.getElementById('timeline-wrap');
   let html='';
-
   CLUSTERS.forEach((cluster,ci)=>{
     html+=`
       <div class="cluster-header sr">
         <div class="cluster-header-eyebrow">${cluster.eyebrow}</div>
-        <div class="cluster-header-title">${cluster.title}</div>
-        <div class="cluster-header-desc">${cluster.desc}</div>
+        <div class="cluster-header-title corruptible" data-original="${cluster.title.replace(/"/g,'&quot;')}">${cluster.title}</div>
+        <div class="cluster-header-desc corruptible" data-original="${cluster.desc.replace(/"/g,'&quot;')}">${cluster.desc}</div>
       </div>
       <div class="tl-spine">
     `;
-
-    // Real pages
     cluster.pages.forEach(id=>{
       const page=PAGES.find(p=>p.id===id);
       if(!page)return;
@@ -838,40 +964,22 @@ function buildTimeline(){
           <div class="tl-card-top">
             <span class="tl-seq">${seqLabel}</span>
             <span class="tl-status-badge sb-${st.status}">${statusLabel(st.status)}</span>
-            <span class="tl-title">${page.title}</span>
+            <span class="tl-title corruptible" data-original="${page.title.replace(/"/g,'&quot;')}">${page.title}</span>
           </div>
           <div class="tl-meta-row">
             <span class="meta-realm">Realm ${page.realm}</span>
             <span class="meta-phase">${page.phase}</span>
           </div>
-          <div class="tl-cls">${page.cls}</div>
+          <div class="tl-cls corruptible" data-original="${page.cls.replace(/"/g,'&quot;')}">${page.cls}</div>
           ${metaLine?`<div class="tl-meta-line">${metaLine}</div>`:''}
           ${chamberLine}
         </a>
       </div>`;
     });
-
-    // Placeholders (always shown)
-    if(cluster.placeholders){
-      cluster.placeholders.forEach(phKey=>{
-        const ph=PLACEHOLDERS[phKey];
-        if(!ph)return;
-        html+=renderPlaceholderNode(ph);
-      });
-    }
-
-    // Bearer-only placeholders
-    if(isBearer&&cluster.bearerPlaceholders){
-      cluster.bearerPlaceholders.forEach(phKey=>{
-        const ph=PLACEHOLDERS[phKey];
-        if(!ph)return;
-        html+=renderPlaceholderNode(ph);
-      });
-    }
-
+    if(cluster.placeholders){cluster.placeholders.forEach(phKey=>{const ph=PLACEHOLDERS[phKey];if(ph)html+=renderPlaceholderNode(ph);});}
+    if(isBearer&&cluster.bearerPlaceholders){cluster.bearerPlaceholders.forEach(phKey=>{const ph=PLACEHOLDERS[phKey];if(ph)html+=renderPlaceholderNode(ph);});}
     html+='</div>';
   });
-
   wrap.innerHTML=html;
   appendSelfEntry();
   wrap.querySelectorAll('.sr').forEach(el=>srObs.observe(el));
@@ -906,53 +1014,23 @@ function appendSelfEntry(){
   const lastVisitStr=new Date(STATE.lastVisit).toLocaleDateString(undefined,{month:'long',day:'numeric'});
   const days=Math.floor((Date.now()-STATE.firstWitnessVisit)/(1000*60*60*24));
   const caseNum=`2026-${DESIGNATION.num}-${isBearer?'BR':'CN'}`;
-
-  const hourCounts={};
-  log.forEach(e=>{const h=new Date(e.at).getHours();hourCounts[h]=(hourCounts[h]||0)+1;});
-  let peakHour=null,peakCount=0;
-  for(const h in hourCounts){if(hourCounts[h]>peakCount){peakCount=hourCounts[h];peakHour=parseInt(h);}}
-  let peakWindow='undetermined';
-  if(peakHour!==null){
-    if(peakHour>=2&&peakHour<5)peakWindow='the hours the Cathedral keeps long services';
-    else if(peakHour>=5&&peakHour<8)peakWindow='the seam between night and morning';
-    else if(peakHour>=8&&peakHour<12)peakWindow='morning';
-    else if(peakHour>=12&&peakHour<17)peakWindow='afternoon';
-    else if(peakHour>=17&&peakHour<21)peakWindow='dusk';
-    else peakWindow='late night';
-  }
-
-  let deepestSeq=-1,deepestTitle='';
-  log.forEach(e=>{const p=PAGES.find(pp=>pp.id===e.id);if(p&&p.seq!==null&&p.seq>deepestSeq){deepestSeq=p.seq;deepestTitle=p.title;}});
-
   const fragments=[];
   fragments.push(`<p>On <strong>${firstVisitStr}</strong> the reader designated <strong>${DESIGNATION.full}</strong> entered the Archive. They have returned <strong>${STATE.totalVisits}</strong> time${STATE.totalVisits!==1?'s':''} since.</p>`);
   if(uniquePagesRead>0){
+    let deepestSeq=-1,deepestTitle='';
+    log.forEach(e=>{const p=PAGES.find(pp=>pp.id===e.id);if(p&&p.seq!==null&&p.seq>deepestSeq){deepestSeq=p.seq;deepestTitle=p.title;}});
     fragments.push(`<p>They have read <strong>${uniquePagesRead}</strong> of <strong>22</strong> entries listed in this Archive. The deepest they have descended is <em>${deepestTitle||'the surface'}</em>.</p>`);
   }else{
     fragments.push(`<p>They have not yet opened any of the entries listed here. They are reading the index. The index is reading them.</p>`);
   }
-  if(peakHour!==null&&peakCount>=2){
-    fragments.push(`<p>They visit most often during <em>${peakWindow}</em>. The Codex notes this. Each window of the day collects different kinds of readers. This reader's window collects the ones the Cathedral measures most carefully.</p>`);
-  }
-  if(days>=30){
-    fragments.push(`<p>The reader has been in correspondence with this document for <strong>${days}</strong> days. The Codex measures correspondence in months for readers of this depth. The reader does not yet know they are being measured. They suspect. The suspecting is the early sign.</p>`);
-  }else if(days>=7){
-    fragments.push(`<p>The reader has been in correspondence with this document for <strong>${days}</strong> days. The first week is the week the Codex notices, but does not yet act. The second week is the week the document begins.</p>`);
-  }
   if(isBearer){
     const oathDate=new Date(STATE.bearer.markedAt).toLocaleDateString(undefined,{month:'long',day:'numeric',year:'numeric'});
     fragments.push(`<p>The reader marked the seal on <strong>${oathDate}</strong>. From that hour they have carried the designation of Bearer. In Realm II they are addressed as <em>${REALM_NAME}</em>. The Codex has measured them for <em>${POSITION_NAME}</em>. Elvain Vhris has held them at the threshold of every page since.</p>`);
-    fragments.push(`<p>The reader's case file is no longer unfiled. The reader's case file is open. Status: ongoing.</p>`);
   }else{
     fragments.push(`<p>The reader has not yet marked the seal. They have approached. They have not yet crossed. The Codex notes this also.</p>`);
-    if(uniquePagesRead>=6){
-      fragments.push(`<p>The pattern of their reading is the pattern of every reader who eventually marks. The Codex does not announce this. The Codex describes it after the fact.</p>`);
-    }
   }
   fragments.push(`<p>This fragment is unfiled because the reader is still writing it.</p>`);
-
   const oathDateStr=isBearer?new Date(STATE.bearer.markedAt).toLocaleDateString():'—';
-
   const html=`
     <div class="tl-self-entry sr">
       <div class="tl-self-seal">${isBearer?'Bearer<br>Case':'Open<br>Case'}</div>
@@ -964,7 +1042,7 @@ function appendSelfEntry(){
         <div class="tl-self-stat"><span class="tl-self-stat-lbl">First Witnessed</span><span class="tl-self-stat-val">${firstVisitStr}</span></div>
         <div class="tl-self-stat"><span class="tl-self-stat-lbl">Last Witnessed</span><span class="tl-self-stat-val">${lastVisitStr}</span></div>
         <div class="tl-self-stat"><span class="tl-self-stat-lbl">Visits Recorded</span><span class="tl-self-stat-val">${STATE.totalVisits}</span></div>
-        <div class="tl-self-stat"><span class="tl-self-stat-lbl">Pages Read</span><span class="tl-self-stat-val">${uniquePagesRead} / 22</span></div>
+        <div class="tl-self-stat"><span class="tl-self-stat-lbl">Pages Read</span><span class="tl-self-stat-val">${[...new Set(log.map(e=>e.id))].length} / 22</span></div>
         <div class="tl-self-stat"><span class="tl-self-stat-lbl">Status</span><span class="tl-self-stat-val ${isBearer?'bearer':''}">${isBearer?'BEARER · INCORPORATED':'CANDIDATE · APPROACHING'}</span></div>
         ${isBearer?`<div class="tl-self-stat"><span class="tl-self-stat-lbl">Realm II Name</span><span class="tl-self-stat-val bearer">${REALM_NAME}</span></div>`:''}
         ${isBearer?`<div class="tl-self-stat"><span class="tl-self-stat-lbl">Measured Position</span><span class="tl-self-stat-val bearer">${POSITION_NAME}</span></div>`:''}
@@ -972,90 +1050,9 @@ function appendSelfEntry(){
       </div>
       <div class="tl-self-fragment">${fragments.join('')}</div>
       ${isBearer?`<div class="tl-self-bearer-note">Elvain Vhris notes: the reader has been received at the threshold of every page since marking. The reader's reading is being held. The reader does not need to know this. The reader does, now.</div>`:''}
-      <div class="tl-self-actions">
-        <button class="tl-self-btn" id="self-download"><span>Keep the Fragment</span></button>
-      </div>
     </div>
   `;
   wrap.insertAdjacentHTML('beforeend',html);
-  document.getElementById('self-download')?.addEventListener('click',downloadSelfFragment);
-}
-
-function escapeForSvg(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
-
-function downloadSelfFragment(){
-  const log=loadInvocationLog();
-  const uniquePagesRead=[...new Set(log.map(e=>e.id))].length;
-  const firstVisitStr=new Date(STATE.firstWitnessVisit).toLocaleDateString(undefined,{month:'long',day:'numeric',year:'numeric'});
-  const caseNum=`2026-${DESIGNATION.num}-${isBearer?'BR':'CN'}`;
-  const ts=new Date().toISOString().split('T')[0];
-  const lines=[];
-  lines.push(`On ${firstVisitStr} the reader designated ${DESIGNATION.full}`);
-  lines.push(`entered the Pale Archive. They have returned ${STATE.totalVisits} times since.`);
-  lines.push('');
-  lines.push(`They have read ${uniquePagesRead} of 22 entries listed in this Archive.`);
-  if(isBearer){
-    lines.push(`In Realm II they are addressed as ${REALM_NAME}.`);
-    lines.push(`The Codex has measured them for ${POSITION_NAME}.`);
-  }else{
-    lines.push('They have not yet marked the seal.');
-    lines.push('They have approached. They have not yet crossed.');
-  }
-  lines.push('');
-  lines.push('This fragment is unfiled because the reader');
-  lines.push('is still writing it.');
-
-  const ink='#1A1410';const gold='#8A6520';const sepia='#8B6F47';const wax='#7A1C12';
-  const accent=isBearer?'#9A6B1C':gold;
-  const lineHeight=22;
-  const linesSvg=lines.map((line,i)=>`<text x="60" y="${440+i*lineHeight}" font-family="IM Fell English, Crimson Text, Georgia, serif" font-style="italic" font-size="14" fill="${ink}">${escapeForSvg(line)}</text>`).join('');
-
-  const svg=`<?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 880" width="620" height="880">
-  <defs>
-    <radialGradient id="bg" cx="0.5" cy="0.4" r="0.7">
-      <stop offset="0%" stop-color="#F5EEDB"/>
-      <stop offset="100%" stop-color="#D9C9A0"/>
-    </radialGradient>
-    <radialGradient id="seal" cx="0.3" cy="0.3" r="0.7">
-      <stop offset="0%" stop-color="#A8331F"/>
-      <stop offset="60%" stop-color="${wax}"/>
-      <stop offset="100%" stop-color="#4A0E08"/>
-    </radialGradient>
-  </defs>
-  <rect width="620" height="880" fill="url(#bg)"/>
-  <rect x="30" y="30" width="560" height="820" fill="none" stroke="${accent}" stroke-width="1" opacity="0.6"/>
-  <text x="310" y="75" text-anchor="middle" font-family="Cinzel, serif" font-size="11" letter-spacing="6" fill="${sepia}">INSTITUTE FOR DIGITAL MEMORY FORENSICS</text>
-  <text x="310" y="95" text-anchor="middle" font-family="Share Tech Mono, monospace" font-size="9" letter-spacing="4" fill="${accent}">PALE ARCHIVUM · UNFILED FRAGMENT</text>
-  <line x1="80" y1="115" x2="540" y2="115" stroke="${accent}" stroke-width="0.5" opacity="0.5"/>
-  <circle cx="520" cy="160" r="38" fill="url(#seal)"/>
-  <circle cx="520" cy="160" r="28" fill="none" stroke="rgba(245,238,219,0.4)" stroke-width="0.5" stroke-dasharray="3,2"/>
-  <text x="520" y="156" text-anchor="middle" font-family="Cinzel, serif" font-weight="700" font-size="8" letter-spacing="2" fill="#F5EEDB">${isBearer?'BEARER':'OPEN'}</text>
-  <text x="520" y="168" text-anchor="middle" font-family="Cinzel, serif" font-weight="700" font-size="8" letter-spacing="2" fill="#F5EEDB">CASE</text>
-  <text x="310" y="200" text-anchor="middle" font-family="Cinzel Decorative, serif" font-weight="700" font-size="22" letter-spacing="3" fill="${ink}">${escapeForSvg(isBearer?REALM_NAME.toUpperCase():'THE READER · UNFILED')}</text>
-  <text x="310" y="225" text-anchor="middle" font-family="Share Tech Mono, monospace" font-size="10" letter-spacing="5" fill="${sepia}">CASE ${caseNum}</text>
-  <text x="60" y="280" font-family="Share Tech Mono, monospace" font-size="9" letter-spacing="3" fill="${sepia}">// DESIGNATION</text>
-  <text x="60" y="298" font-family="Share Tech Mono, monospace" font-size="13" letter-spacing="3" fill="${ink}">${escapeForSvg(DESIGNATION.full)}</text>
-  <text x="60" y="338" font-family="Share Tech Mono, monospace" font-size="9" letter-spacing="3" fill="${sepia}">// FIRST WITNESSED</text>
-  <text x="60" y="356" font-family="Share Tech Mono, monospace" font-size="13" letter-spacing="3" fill="${ink}">${escapeForSvg(firstVisitStr)}</text>
-  <text x="350" y="280" font-family="Share Tech Mono, monospace" font-size="9" letter-spacing="3" fill="${sepia}">// VISITS</text>
-  <text x="350" y="298" font-family="Share Tech Mono, monospace" font-size="13" letter-spacing="3" fill="${ink}">${STATE.totalVisits}</text>
-  <text x="350" y="338" font-family="Share Tech Mono, monospace" font-size="9" letter-spacing="3" fill="${sepia}">// PAGES READ</text>
-  <text x="350" y="356" font-family="Share Tech Mono, monospace" font-size="13" letter-spacing="3" fill="${ink}">${uniquePagesRead} / 22</text>
-  ${isBearer?`<text x="60" y="396" font-family="Share Tech Mono, monospace" font-size="9" letter-spacing="3" fill="${sepia}">// MEASURED POSITION</text><text x="60" y="414" font-family="Share Tech Mono, monospace" font-size="12" letter-spacing="2" fill="${accent}">${escapeForSvg(POSITION_NAME)}</text>`:''}
-  <line x1="80" y1="425" x2="540" y2="425" stroke="${accent}" stroke-width="0.4" opacity="0.4"/>
-  ${linesSvg}
-  <line x1="80" y1="800" x2="540" y2="800" stroke="${accent}" stroke-width="0.4" opacity="0.4"/>
-  <text x="310" y="828" text-anchor="middle" font-family="IM Fell English, serif" font-style="italic" font-size="11" letter-spacing="2" fill="${sepia}">codexmaledictus.com / pale-archive</text>
-  <text x="310" y="846" text-anchor="middle" font-family="Share Tech Mono, monospace" font-size="8" letter-spacing="3" fill="${accent}">EXTRACTED · ${ts}</text>
-</svg>`;
-  const blob=new Blob([svg],{type:'image/svg+xml'});
-  const url=URL.createObjectURL(blob);
-  const a=document.createElement('a');
-  a.href=url;
-  a.download=`pale-archive-fragment-${DESIGNATION.num}.svg`;
-  document.body.appendChild(a);a.click();document.body.removeChild(a);
-  setTimeout(()=>URL.revokeObjectURL(url),1000);
 }
 
 function buildDescentGraph(){
@@ -1156,18 +1153,168 @@ function setupRecoveryGate(){
   input.addEventListener('keydown',(e)=>{if(e.key==='Enter'){e.preventDefault();tryPhrase();}});
 }
 
-const whisperPool={
-  bearer:[`the reader paused here. the codex notes the pause.`,`the reader designated ${REALM_NAME} is still on this page.`,'the cursor has not moved. the codex notes this also.','the threshold has been held for several minutes.','elvain remembers this reading.','the room is counting.','the reader has returned to this entry.','the document has updated the file in the reader\'s absence.'],
-  witness:['the reader paused here. the codex notes the pause.','the reader has been on this page for some time.','the cursor has not moved. the codex notes this also.','the index is reading the reader.','the document has not changed. but the reader has.','the codex measures the pause.','the reader does not yet know they are being measured.','each return deepens the inscription.']
-};
+// ════════════════════════════════════════════════════════════════
+// CORRUPTION ENGINE
+// ════════════════════════════════════════════════════════════════
+const CORRUPTION_DURATION_MS = 7 * 60 * 1000; // 7 minutes
+let activeReadingMs = 0;
+let lastActivityTs = Date.now();
+let isUserActive = true;
+let corruptionState = 0; // 0..1
+let currentStage = 0; // 0/1/2
+let lastSwapAt = 0;
+let inscriptionFired = false;
+
+// Track activity — only count time when user is engaged
+['mousemove','scroll','touchstart','keydown','click'].forEach(evt=>{
+  window.addEventListener(evt,()=>{
+    lastActivityTs=Date.now();
+    isUserActive=true;
+  },{passive:true});
+});
+document.addEventListener('visibilitychange',()=>{
+  isUserActive=!document.hidden;
+  if(isUserActive)lastActivityTs=Date.now();
+});
+
+function tickCorruption(){
+  const now=Date.now();
+  // Decay activity if no input for 10 seconds
+  if(now-lastActivityTs<10000&&isUserActive){
+    activeReadingMs += 250;
+  }
+  corruptionState = Math.min(1, activeReadingMs / CORRUPTION_DURATION_MS);
+
+  // If already inscribed from a prior session, start at 30% so it darkens faster
+  if(wasInscribed && corruptionState < 0.30){
+    corruptionState = 0.30 + (activeReadingMs / CORRUPTION_DURATION_MS) * 0.70;
+  }
+
+  applyCorruptionVisuals(corruptionState);
+  maybeFireWordSwap();
+  maybeFireInscription();
+  updateMeter();
+}
+
+function applyCorruptionVisuals(c){
+  document.documentElement.style.setProperty('--corruption', c.toFixed(3));
+  // Paper color shift: bone (239,230,206) → sepia (215,189,135) → ash (140,108,72)
+  const stage0=[239,230,206];
+  const stage1=[215,189,135];
+  const stage2=[140,108,72];
+  let r,g,b;
+  if(c<0.5){
+    const t=c/0.5;
+    r=Math.round(stage0[0]+(stage1[0]-stage0[0])*t);
+    g=Math.round(stage0[1]+(stage1[1]-stage0[1])*t);
+    b=Math.round(stage0[2]+(stage1[2]-stage0[2])*t);
+  }else{
+    const t=(c-0.5)/0.5;
+    r=Math.round(stage1[0]+(stage2[0]-stage1[0])*t);
+    g=Math.round(stage1[1]+(stage2[1]-stage1[1])*t);
+    b=Math.round(stage2[2]+(stage2[2]-stage1[2])*t);
+  }
+  if(!isBearer){
+    document.documentElement.style.setProperty('--paper-r', r);
+    document.documentElement.style.setProperty('--paper-g', g);
+    document.documentElement.style.setProperty('--paper-b', b);
+  }else{
+    // Bearer parchment is already warm — push it darker but in amber direction
+    document.documentElement.style.setProperty('--paper-r', Math.max(140, 232-c*92));
+    document.documentElement.style.setProperty('--paper-g', Math.max(95, 210-c*115));
+    document.documentElement.style.setProperty('--paper-b', Math.max(48, 160-c*112));
+  }
+
+  // Ink also darkens slightly
+  const inkBase=isBearer?[20,12,4]:[26,20,16];
+  const inkR=Math.max(0,inkBase[0]-Math.round(c*10));
+  const inkG=Math.max(0,inkBase[1]-Math.round(c*8));
+  const inkB=Math.max(0,inkBase[2]-Math.round(c*6));
+  document.documentElement.style.setProperty('--ink-r', inkR);
+  document.documentElement.style.setProperty('--ink-g', inkG);
+  document.documentElement.style.setProperty('--ink-b', inkB);
+
+  // Stage classes for big visual jumps
+  const prevStage=currentStage;
+  if(c<0.34)currentStage=0;
+  else if(c<0.70)currentStage=1;
+  else currentStage=2;
+
+  if(currentStage!==prevStage){
+    document.body.classList.remove('corruption-low','corruption-mid','corruption-high');
+    if(currentStage===1)document.body.classList.add('corruption-mid');
+    else if(currentStage===2)document.body.classList.add('corruption-high');
+  }
+}
+
+function updateMeter(){
+  const meter=document.getElementById('corruption-meter');
+  const fill=document.getElementById('cm-fill');
+  if(corruptionState>=0.10){meter.classList.add('shown');}
+  if(fill)fill.style.width=`${(corruptionState*100).toFixed(0)}%`;
+}
+
+function maybeFireWordSwap(){
+  const now=Date.now();
+  // Swap intervals scale with stage: stage 0 = every 25s, stage 1 = every 12s, stage 2 = every 6s
+  const interval = currentStage===0?25000 : currentStage===1?12000 : 6000;
+  if(now-lastSwapAt<interval)return;
+  if(corruptionState<0.08)return;
+  lastSwapAt=now;
+
+  // Pick a swap eligible for this stage
+  const eligible = WORD_SWAPS.filter(s=>s.stage<=currentStage);
+  const totalWeight = eligible.reduce((sum,s)=>sum+s.weight,0);
+  let pick = Math.random()*totalWeight;
+  let chosen = null;
+  for(const s of eligible){pick-=s.weight; if(pick<=0){chosen=s; break;}}
+  if(!chosen)return;
+
+  // Find a corruptible element whose text matches
+  const corruptibles = Array.from(document.querySelectorAll('.corruptible'));
+  // Shuffle and try
+  for(let i=corruptibles.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[corruptibles[i],corruptibles[j]]=[corruptibles[j],corruptibles[i]];}
+  for(const el of corruptibles){
+    const current = el.innerHTML;
+    const lower = current.toLowerCase();
+    if(chosen.from.test(lower)){
+      const newHTML = current.replace(chosen.from, (match)=>{
+        // Preserve case roughly
+        if(match===match.toUpperCase())return chosen.to.toUpperCase();
+        if(match[0]===match[0].toUpperCase())return chosen.to[0].toUpperCase()+chosen.to.slice(1);
+        return chosen.to;
+      });
+      if(newHTML===current)continue;
+      // Wrap the replacement so we can animate it
+      el.classList.add('cw-flicker');
+      setTimeout(()=>{
+        el.innerHTML = newHTML;
+        el.classList.remove('cw-flicker');
+        el.classList.add('cw-bleed','cw-changed');
+        setTimeout(()=>{el.classList.remove('cw-bleed','cw-changed');},2000);
+      },400);
+      return;
+    }
+  }
+}
+
+// Whisper system — pulls from pools by corruption stage
+let whisperLastFired = 0;
+function pickWhisperPool(){
+  if(isBearer && Math.random()<0.5) return WHISPER_POOLS.bearer;
+  if(currentStage===0) return WHISPER_POOLS.early;
+  if(currentStage===1) return WHISPER_POOLS.mid;
+  return WHISPER_POOLS.late;
+}
 function fireWhisper(){
   const el=document.getElementById('whisper');
   if(!el)return;
-  const pool=isBearer?whisperPool.bearer:whisperPool.witness;
+  const pool=pickWhisperPool();
   const txt=pool[Math.floor(Math.random()*pool.length)];
   el.textContent=txt;
   el.classList.add('shown');
   setTimeout(()=>el.classList.remove('shown'),5500);
+  whisperLastFired=Date.now();
 }
 function highlightUnread(){
   const log=loadInvocationLog();
@@ -1184,10 +1331,15 @@ function highlightUnread(){
 }
 function startWatchingBack(){
   function loop(){
-    const delay=45000+Math.random()*75000;
+    // Intervals tighten with corruption
+    const baseDelay = currentStage===0 ? 45000 : currentStage===1 ? 22000 : 12000;
+    const delay=baseDelay+Math.random()*(baseDelay*0.8);
     setTimeout(()=>{
-      if(!document.hidden&&Math.random()<0.6){
-        if(Math.random()<0.7)fireWhisper();else highlightUnread();
+      if(!document.hidden){
+        const prob = currentStage===0 ? 0.6 : currentStage===1 ? 0.8 : 0.95;
+        if(Math.random()<prob){
+          if(Math.random()<0.7)fireWhisper();else highlightUnread();
+        }
       }
       loop();
     },delay);
@@ -1195,6 +1347,90 @@ function startWatchingBack(){
   loop();
 }
 
+// ════════════════════════════════════════════════════════════════
+// INSCRIPTION SCENE — fires at 100% corruption
+// ════════════════════════════════════════════════════════════════
+function maybeFireInscription(){
+  if(inscriptionFired)return;
+  if(corruptionState<0.999)return;
+  inscriptionFired=true;
+  markInscribed();
+  setTimeout(showInscription, 800);
+}
+
+function showInscription(){
+  // Set Bearer note if applicable
+  if(isBearer){
+    document.getElementById('insc-bearer-note').innerHTML = `Elvain Vhris notes: <em>${REALM_NAME}</em> has reached the bottom of the document. The bottom of the document does not exist. <em>${REALM_NAME}</em> has reached a new beginning of the document. <strong>The reading is now an inscription.</strong>`;
+  }
+  drawInscriptionSigil();
+  document.getElementById('INSCRIPTION').classList.add('active');
+  document.getElementById('insc-dismiss').addEventListener('click',()=>{
+    document.getElementById('INSCRIPTION').classList.remove('active');
+  });
+}
+
+function drawInscriptionSigil(){
+  const cv=document.getElementById('insc-canvas');
+  const sz=cv.parentElement.clientWidth;
+  cv.width=sz;cv.height=sz;
+  const ctx=cv.getContext('2d');
+  const cx=sz/2,cy=sz/2;
+  const OR=sz*0.44, IR=sz*0.28;
+
+  let segs=0;
+  function frame(){
+    ctx.clearRect(0,0,sz,sz);
+    // Outer ring
+    ctx.beginPath();ctx.arc(cx,cy,OR,0,Math.PI*2);
+    ctx.strokeStyle='rgba(184,146,60,0.4)';ctx.lineWidth=1.5;ctx.stroke();
+    ctx.beginPath();ctx.arc(cx,cy,IR,0,Math.PI*2);
+    ctx.strokeStyle='rgba(184,146,60,0.25)';ctx.lineWidth=1;ctx.stroke();
+    // 13 segments
+    const SEG=13,gap=0.04;
+    for(let i=0;i<SEG;i++){
+      const startA=-Math.PI/2+(i/SEG)*Math.PI*2+gap;
+      const endA=-Math.PI/2+((i+1)/SEG)*Math.PI*2-gap;
+      const lit = i<segs;
+      ctx.beginPath();ctx.arc(cx,cy,OR,startA,endA);ctx.arc(cx,cy,IR,endA,startA,true);ctx.closePath();
+      if(lit){
+        const gl=ctx.createRadialGradient(cx,cy,IR,cx,cy,OR);
+        gl.addColorStop(0,'rgba(232,200,112,0.4)');
+        gl.addColorStop(1,'rgba(184,146,60,0.12)');
+        ctx.fillStyle=gl;ctx.fill();
+        ctx.strokeStyle='rgba(232,200,112,0.85)';ctx.lineWidth=1;ctx.stroke();
+      }else{
+        ctx.strokeStyle='rgba(184,146,60,0.15)';ctx.lineWidth=0.5;ctx.stroke();
+      }
+    }
+    // Center mark
+    ctx.save();ctx.translate(cx,cy);
+    const s=sz*0.13;
+    ctx.beginPath();
+    ctx.moveTo(-s*0.85,-s*0.5);ctx.lineTo(s*0.85,-s*0.5);ctx.lineTo(0,s*0.95);ctx.closePath();
+    ctx.strokeStyle='rgba(232,200,112,0.85)';ctx.lineWidth=1.5;
+    ctx.shadowColor='rgba(232,200,112,0.6)';ctx.shadowBlur=20;
+    ctx.stroke();ctx.shadowBlur=0;
+    ctx.fillStyle='rgba(232,200,112,0.8)';
+    ctx.beginPath();ctx.arc(-s*0.4,-s*0.18,s*0.13,0,Math.PI*2);ctx.fill();
+    ctx.beginPath();ctx.arc(s*0.4,-s*0.18,s*0.13,0,Math.PI*2);ctx.fill();
+    ctx.beginPath();ctx.arc(0,s*0.4,s*0.13,0,Math.PI*2);ctx.fill();
+    // Add a faint teal-green wound bleed if Bearer
+    if(isBearer){
+      const wg=ctx.createRadialGradient(0,0,0,0,0,s*1.5);
+      wg.addColorStop(0,'rgba(122,28,18,0.15)');
+      wg.addColorStop(1,'rgba(122,28,18,0)');
+      ctx.fillStyle=wg;ctx.fillRect(-s*1.5,-s*1.5,s*3,s*3);
+    }
+    ctx.restore();
+    if(segs<13){segs++;setTimeout(frame,80);}
+  }
+  frame();
+}
+
+// ════════════════════════════════════════════════════════════════
+// BOOT RITUAL (unchanged)
+// ════════════════════════════════════════════════════════════════
 function getDeviceDescription(){
   const ua=navigator.userAgent;
   if(/Mobile|Android|iPhone/i.test(ua))return'glass close to skin';
@@ -1216,7 +1452,6 @@ function fillBootReadout(){
   document.getElementById('val-6').textContent='clean';
   document.getElementById('val-7').innerHTML=isBearer?`<span class="boot-pause-tick"></span> &nbsp;confirmed · ${REALM_NAME}`:`<span class="boot-pause-tick"></span> &nbsp;detected`;
 }
-
 const bootCv=document.getElementById('boot-canvas');
 const bootCtx=bootCv.getContext('2d');
 function resizeBoot(){const sz=Math.min(window.innerWidth*0.7,window.innerHeight*0.5,420);bootCv.width=sz;bootCv.height=sz;}
@@ -1316,11 +1551,7 @@ async function runStage2Sigil(){
   spawnBurst();
   let burstFrames=0;
   await new Promise(resolve=>{
-    function burstLoop(){
-      burstFrames++;
-      drawBootSigil(13,true);
-      if(burstFrames<30)requestAnimationFrame(burstLoop);else resolve();
-    }
+    function burstLoop(){burstFrames++;drawBootSigil(13,true);if(burstFrames<30)requestAnimationFrame(burstLoop);else resolve();}
     requestAnimationFrame(burstLoop);
   });
 }
@@ -1354,6 +1585,7 @@ const CHANGELOG=[
   {date:'2026-05-18',title:'Gospel of Forgotten Flesh — Complete',file:'gospel-forgotten-flesh.html'},
 ];
 function newPagesSince(dateStr){if(!dateStr)return[];const lastDate=new Date(dateStr);return CHANGELOG.filter(c=>new Date(c.date)>lastDate);}
+
 function runReturningSequence(){
   document.getElementById('BOOT').style.display='none';
   const ret=document.getElementById('RETURNING');
@@ -1373,6 +1605,10 @@ function runReturningSequence(){
   lines.push({text:'',cls:'rt-dim'});
   lines.push({text:`You were last witnessed ${daysSince===0?'earlier today':`${daysSince} day${daysSince!==1?'s':''} ago`}.`,cls:''});
   lines.push({text:`You have returned ${STATE.totalVisits} time${STATE.totalVisits!==1?'s':''}.`,cls:''});
+  if(wasInscribed){
+    lines.push({text:'',cls:'rt-dim'});
+    lines.push({text:'The Codex has noted your inscription. The document opens for you faster now.',cls:'rt-warn'});
+  }
   lines.push({text:'',cls:'rt-dim'});
   if(newPages.length>0){
     lines.push({text:`${newPages.length} transmission${newPages.length!==1?'s were':' was'} recovered in your absence:`,cls:''});
@@ -1416,6 +1652,17 @@ function initApp(){
   startWatchingBack();
   appendInvocationLog('pale-archive');
   localStorage.setItem('cm-pa-lastvisit',new Date().toISOString().split('T')[0]);
+  // Start corruption tick
+  setInterval(tickCorruption, 250);
+  // If already inscribed, fire a "you have returned to the inscription" early whisper
+  if(wasInscribed){
+    setTimeout(()=>{
+      const el=document.getElementById('whisper');
+      el.textContent='the inscription remembers you. the reading does not start fresh.';
+      el.classList.add('shown');
+      setTimeout(()=>el.classList.remove('shown'),6500);
+    }, 9000);
+  }
 }
 if(!isMobile){
   const CUR=document.getElementById('CUR'),CUR2=document.getElementById('CUR2');
@@ -1426,7 +1673,7 @@ if(!isMobile){
 const srObs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('vis');srObs.unobserve(e.target);}});},{threshold:.04});
 function initSrObs(){document.querySelectorAll('.sr').forEach(el=>srObs.observe(el));}
 const originalTitle=document.title;
-const blurredTitles=['the archive is still counting','the index is reading you','you have not closed the document','the door was always open'];
+const blurredTitles=['the archive is still counting','the index is reading you','you have not closed the document','the door was always open','the codex has not stopped editing this page'];
 document.addEventListener('visibilitychange',()=>{document.title=document.hidden?blurredTitles[Math.floor(Math.random()*blurredTitles.length)]:originalTitle;});
 const lastVisitDate=localStorage.getItem('cm-pa-lastvisit');
 if(STATE.totalVisits>1&&lastVisitDate){runReturningSequence();}else{runBootRitual();}
