@@ -241,6 +241,113 @@
     .apocrypha-text em { color:var(--gold-lt);font-style:italic; }
     .apocrypha-note { font-family:'Cinzel',serif;font-size:9px;letter-spacing:.38em;text-transform:uppercase;color:rgba(122,18,18,.75); }
 
+    /* ── THE THRESHOLD · The Archivum Asks ── */
+    .threshold-block {
+      max-width:620px;margin:46px auto 0;
+      padding:24px 28px 22px;
+      border:1px solid rgba(201,168,76,0.22);
+      background:linear-gradient(180deg, rgba(10,8,14,0.55), rgba(5,5,10,0.85));
+      position:relative;
+      opacity:0;animation:riseIn 1.8s cubic-bezier(.16,1,.3,1) 2.25s forwards;
+      text-align:center;
+    }
+    .threshold-block::before {
+      content:'';position:absolute;top:-1px;left:-1px;right:-1px;height:1px;
+      background:linear-gradient(90deg, transparent, var(--gold) 50%, transparent);
+      opacity:0.65;
+    }
+    .threshold-label {
+      display:flex;align-items:center;justify-content:center;gap:10px;
+      font-family:'Cinzel',serif;font-size:9px;letter-spacing:.5em;
+      text-transform:uppercase;color:rgba(201,168,76,0.7);
+      margin-bottom:16px;
+    }
+    .threshold-label .th-glyph {
+      display:inline-block;width:6px;height:6px;border-radius:50%;
+      background:var(--gold);
+      box-shadow:0 0 8px var(--gold);
+      flex-shrink:0;
+      animation:rPulse 2.4s ease-in-out infinite;
+    }
+    .threshold-prompt {
+      font-family:'Crimson Text',serif;font-style:italic;
+      font-size:clamp(16px,2vw,20px);
+      line-height:1.7;color:rgba(228,221,208,0.85);
+      letter-spacing:.02em;margin-bottom:18px;
+    }
+    .threshold-prompt strong {
+      color:var(--gold-lt);font-style:normal;font-weight:600;
+      letter-spacing:.04em;
+    }
+    .threshold-choices {
+      display:flex;flex-direction:column;gap:10px;
+      margin-top:8px;
+    }
+    .threshold-choice {
+      font-family:'Cinzel',serif;font-weight:500;font-size:11px;
+      letter-spacing:.22em;text-transform:uppercase;
+      padding:14px 22px;
+      background:transparent;
+      border:1px solid rgba(201,168,76,0.28);
+      color:rgba(228,221,208,0.82);
+      cursor:none;position:relative;overflow:hidden;
+      transition:all .5s cubic-bezier(.16,1,.3,1);
+      text-align:center;width:100%;
+    }
+    @media (max-width:768px) { .threshold-choice { cursor:pointer; } }
+    .threshold-choice::before {
+      content:'';position:absolute;inset:0;
+      background:rgba(201,168,76,0.08);
+      transform:translateX(-101%);
+      transition:transform .5s cubic-bezier(.16,1,.3,1);
+    }
+    .threshold-choice:hover::before { transform:translateX(0); }
+    .threshold-choice:hover {
+      border-color:rgba(201,168,76,0.75);
+      color:var(--gold-lt);
+    }
+    .threshold-choice .tc-label { position:relative;z-index:1; }
+    .threshold-response {
+      margin-top:0;padding-top:0;
+      border-top:1px solid rgba(201,168,76,0.15);
+      font-family:'Crimson Text',serif;font-style:italic;
+      font-size:clamp(14px,1.8vw,17px);
+      line-height:1.8;color:rgba(228,221,208,0.7);
+      letter-spacing:.015em;
+      max-height:0;overflow:hidden;opacity:0;
+      transition:max-height .9s cubic-bezier(.16,1,.3,1),
+                 opacity .9s ease,
+                 padding-top .9s ease,
+                 margin-top .9s ease;
+    }
+    .threshold-response.shown {
+      max-height:400px;opacity:1;
+      margin-top:18px;padding-top:16px;
+    }
+    .threshold-response strong { color:var(--ash);font-style:normal;font-weight:600; }
+    .threshold-response em { color:var(--gold-lt);font-style:italic; }
+    .threshold-cta {
+      display:inline-block;margin-top:16px;
+      font-family:'Cinzel',serif;font-weight:600;font-size:10px;
+      letter-spacing:.4em;text-transform:uppercase;
+      padding:13px 32px;
+      background:var(--gold);
+      border:1px solid var(--gold);
+      color:var(--void);
+      text-decoration:none;cursor:none;
+      position:relative;overflow:hidden;
+      transition:all .5s cubic-bezier(.16,1,.3,1);
+    }
+    @media (max-width:768px) { .threshold-cta { cursor:pointer; } }
+    .threshold-cta::before {
+      content:'';position:absolute;inset:0;
+      background:var(--gold-lt);
+      transform:translateX(-101%);
+      transition:transform .5s cubic-bezier(.16,1,.3,1);
+    }
+    .threshold-cta:hover::before { transform:translateX(0); }
+    .threshold-cta-label { position:relative;z-index:1; }
+
     /* ── THREE DOORS (original tight button style restored) ── */
     .doors-row { display:flex;gap:14px;margin-top:50px;opacity:0;animation:riseIn 1.8s cubic-bezier(.16,1,.3,1) 2.5s forwards;flex-wrap:wrap;justify-content:center; }
 
@@ -596,6 +703,36 @@
           </div>
         </div>
 
+        <!-- THE THRESHOLD · The Archivum Asks -->
+        <div class="threshold-block">
+          <div class="threshold-label">
+            <span class="th-glyph"></span>
+            <span>The Archivum Asks</span>
+            <span class="th-glyph"></span>
+          </div>
+          <div class="threshold-prompt">
+            Before the doors, a question. <br />
+            <strong>How did you arrive at this document?</strong>
+          </div>
+          <div class="threshold-choices" id="threshold-choices">
+            <button class="threshold-choice" data-choice="accident">
+              <span class="tc-label">By accident</span>
+            </button>
+            <button class="threshold-choice" data-choice="pointed">
+              <span class="tc-label">Something pointed me here</span>
+            </button>
+            <button class="threshold-choice" data-choice="specific">
+              <span class="tc-label">I am looking for something specific</span>
+            </button>
+          </div>
+          <div class="threshold-response" id="threshold-response">
+            <div id="threshold-response-text"></div>
+            <a class="threshold-cta" id="threshold-cta" href="pale-archive.html">
+              <span class="threshold-cta-label">Consult the Pale Archive ↗</span>
+            </a>
+          </div>
+        </div>
+
         <div class="divider" style="margin-top:46px;margin-bottom:28px;opacity:0;animation:riseIn 1.8s cubic-bezier(.16,1,.3,1) 2s forwards">
           <div class="div-line"></div><span class="div-sym">🜏</span><div class="div-line r"></div>
         </div>
@@ -741,6 +878,7 @@
     <nav class="nav-footer">
       <div class="nav-mark">Codex Maledictus</div>
       <div class="nav-links">
+        <a class="nav-link" href="pale-archive.html">The Pale Archive</a>
         <a class="nav-link" href="gospel-forgotten-flesh.html">The Gospel</a>
         <a class="nav-link" href="infection-remembers.html">The Lore</a>
         <a class="nav-link" href="apocrypha-infection.html">Apocrypha</a>
@@ -1472,6 +1610,37 @@
   setDesignations();
   setTimeout(()=>{advanceRunes();setInterval(advanceRunes,RUNE_CYCLE_MS);}, returnVisit ? 1000 : 1600);
   setTimeout(tearLoop, 1000);
+
+  /* ── THE THRESHOLD ── */
+  const THRESHOLD_RESPONSES = {
+    accident: `Accidents are how the Codex prefers to be found. The reader who arrives without trying arrives most completely. Begin where it has begun for the others who arrived without searching. <em>The index is open.</em>`,
+    pointed: `The pointing is documented. The pointer is also documented. The Codex would like to know which entry pointed you — but the index will tell you before you tell it. <em>Begin where the others were also pointed.</em>`,
+    specific: `The Codex is also looking for something specific. There is a reasonable chance you are the same thing it is looking for. The index will tell you what it has filed. <em>You may find each other there.</em>`
+  };
+  document.querySelectorAll('.threshold-choice').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const choice = btn.getAttribute('data-choice');
+      const resp = document.getElementById('threshold-response');
+      const respText = document.getElementById('threshold-response-text');
+      if (!resp || !respText) return;
+      respText.innerHTML = THRESHOLD_RESPONSES[choice] || THRESHOLD_RESPONSES.accident;
+      resp.classList.add('shown');
+      document.querySelectorAll('.threshold-choice').forEach(other => {
+        if (other !== btn) other.style.opacity = '0.45';
+      });
+      btn.style.borderColor = 'rgba(201,168,76,0.75)';
+      btn.style.color = 'var(--gold-lt)';
+    });
+  });
+
+  /* ── REGISTER WITH CODEX NAV ── */
+  if (typeof initCodexNav === 'function') {
+    initCodexNav('index');
+  } else {
+    window.addEventListener('load', () => {
+      if (typeof initCodexNav === 'function') initCodexNav('index');
+    });
+  }
   </script>
 
   <script src="codex-nav.js" defer></script>
