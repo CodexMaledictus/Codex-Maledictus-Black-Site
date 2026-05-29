@@ -1358,69 +1358,587 @@ function advanceSigil(count){
 }
 document.getElementById('rsw-download').addEventListener('click',downloadSigil);
 function downloadSigil(){
-  // Build a larger version for download
+  // ────────────────────────────────────────────────────────────
+  // RECEPTION MARK · BROADSIDE
+  // 720 × 1080 vertical poster. Multi-layered Wadjet sigil + verse.
+  // ────────────────────────────────────────────────────────────
+  const W=720, H=1080;
   const cv=document.createElement('canvas');
-  cv.width=600;cv.height=800;
+  cv.width=W;cv.height=H;
   const ctx=cv.getContext('2d');
-  // Background
-  const bg=ctx.createRadialGradient(300,360,0,300,360,420);
-  bg.addColorStop(0,'#0A0408');bg.addColorStop(1,'#030305');
-  ctx.fillStyle=bg;ctx.fillRect(0,0,600,800);
-  // Border
-  ctx.strokeStyle='rgba(139,0,0,0.5)';ctx.lineWidth=1;
-  ctx.strokeRect(30,30,540,740);
-  ctx.strokeStyle='rgba(139,0,0,0.3)';ctx.lineWidth=0.5;
-  ctx.strokeRect(40,40,520,720);
-  // Title
-  ctx.font='11px "Cinzel", serif';ctx.fillStyle='rgba(138,101,32,0.9)';ctx.textAlign='center';
-  ctx.fillText('C O D E X   M A L E D I C T U S',300,100);
-  ctx.font='9px "Share Tech Mono", monospace';ctx.fillStyle='rgba(139,0,0,0.7)';
-  ctx.fillText('R E C E P T I O N   M A R K   ·   T R A N S M I S S I O N   I',300,120);
-  // Sigil scaled
-  const cx=300,cy=340,OR=160,IR=100;const SEG=13,gap=0.04;
-  const hashSeed=hashString(STATE.fingerprint);
-  const personalRot=((hashSeed%360)/360)*Math.PI*0.04;
-  ctx.beginPath();ctx.arc(cx,cy,OR,0,Math.PI*2);ctx.strokeStyle='rgba(139,0,0,0.4)';ctx.lineWidth=1.5;ctx.stroke();
-  ctx.beginPath();ctx.arc(cx,cy,IR,0,Math.PI*2);ctx.strokeStyle='rgba(139,0,0,0.3)';ctx.lineWidth=1;ctx.stroke();
-  for(let i=0;i<SEG;i++){
-    const startA=-Math.PI/2+(i/SEG)*Math.PI*2+gap+personalRot;
-    const endA=-Math.PI/2+((i+1)/SEG)*Math.PI*2-gap+personalRot;
-    ctx.beginPath();ctx.arc(cx,cy,OR,startA,endA);ctx.arc(cx,cy,IR,endA,startA,true);ctx.closePath();
-    const gl=ctx.createRadialGradient(cx,cy,IR,cx,cy,OR);
-    gl.addColorStop(0,'rgba(212,180,92,0.4)');gl.addColorStop(1,'rgba(139,0,0,0.12)');
-    ctx.fillStyle=gl;ctx.fill();
-    ctx.strokeStyle='rgba(232,200,112,0.85)';ctx.lineWidth=1;ctx.stroke();
+
+  // Palette
+  const isB=isBearer;
+  const accent=isB?'#E0C878':'#C9A84C';
+  const accentLt=isB?'#F0D898':'#E0C878';
+  const accentDeep=isB?'#8A6520':'#8A6530';
+  const crimson='#7A1212';
+  const crimsonLt='#A8331F';
+  const bone='#C5BFB0';
+
+  // ── BACKGROUND ── deep blackened-ink with a faint warm core
+  const bg=ctx.createRadialGradient(W/2,H*0.42,40,W/2,H*0.42,Math.max(W,H));
+  bg.addColorStop(0,'#0A0608');
+  bg.addColorStop(0.55,'#050306');
+  bg.addColorStop(1,'#020103');
+  ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+
+  // Paper grain (subtle, helps it look printed not generated)
+  for(let i=0;i<2200;i++){
+    const x=Math.random()*W, y=Math.random()*H;
+    const a=Math.random()*0.025;
+    ctx.fillStyle=`rgba(197,191,176,${a})`;
+    ctx.fillRect(x,y,1,1);
   }
-  ctx.save();ctx.translate(cx,cy);const s=48;
-  ctx.beginPath();ctx.moveTo(-s*0.85,-s*0.5);ctx.lineTo(s*0.85,-s*0.5);ctx.lineTo(0,s*0.95);ctx.closePath();
-  ctx.strokeStyle='rgba(232,200,112,1)';ctx.lineWidth=2.2;ctx.shadowColor='rgba(232,200,112,0.7)';ctx.shadowBlur=14;
+  // Faint horizontal print-grain lines
+  for(let i=0;i<H;i+=3){
+    ctx.fillStyle=`rgba(0,0,0,${0.02+Math.random()*0.015})`;
+    ctx.fillRect(0,i,W,1);
+  }
+
+  // Vignette
+  const vg=ctx.createRadialGradient(W/2,H/2,Math.min(W,H)*0.4,W/2,H/2,Math.max(W,H)*0.75);
+  vg.addColorStop(0,'rgba(0,0,0,0)');
+  vg.addColorStop(1,'rgba(0,0,0,0.65)');
+  ctx.fillStyle=vg;ctx.fillRect(0,0,W,H);
+
+  // ── BORDERS ── three nested rules with corner brackets
+  ctx.strokeStyle=`rgba(122,18,18,0.5)`;ctx.lineWidth=1;ctx.strokeRect(30,30,W-60,H-60);
+  ctx.strokeStyle=`rgba(${isB?'138,101,32':'138,101,48'},0.35)`;ctx.lineWidth=0.5;ctx.strokeRect(40,40,W-80,H-80);
+  // Corner brackets (heavy gold)
+  ctx.strokeStyle=accent;ctx.lineWidth=1.4;
+  const cbLen=28;
+  // TL
+  ctx.beginPath();ctx.moveTo(30,30+cbLen);ctx.lineTo(30,30);ctx.lineTo(30+cbLen,30);ctx.stroke();
+  // TR
+  ctx.beginPath();ctx.moveTo(W-30-cbLen,30);ctx.lineTo(W-30,30);ctx.lineTo(W-30,30+cbLen);ctx.stroke();
+  // BL
+  ctx.beginPath();ctx.moveTo(30,H-30-cbLen);ctx.lineTo(30,H-30);ctx.lineTo(30+cbLen,H-30);ctx.stroke();
+  // BR
+  ctx.beginPath();ctx.moveTo(W-30-cbLen,H-30);ctx.lineTo(W-30,H-30);ctx.lineTo(W-30,H-30-cbLen);ctx.stroke();
+
+  // ═══════════════════════════════════════════════════════
+  // ZONE 1 · TITLE PLATE
+  // ═══════════════════════════════════════════════════════
+  ctx.textAlign='center';
+
+  // CODEX MALEDICTUS — display
+  ctx.font='900 22px "Cinzel Decorative", serif';
+  ctx.fillStyle=accent;
+  ctx.shadowColor=`rgba(${isB?'232,200,112':'201,168,76'},0.4)`;
+  ctx.shadowBlur=18;
+  ctx.fillText('C O D E X   M A L E D I C T U S',W/2,95);
+  ctx.shadowBlur=0;
+
+  // Subtitle plate
+  ctx.font='9px "Share Tech Mono", monospace';
+  ctx.fillStyle=`rgba(${isB?'138,101,32':'122,18,18'},0.85)`;
+  ctx.fillText('M M X X V I    ·    T R A N S M I S S I O N    I    ·    R E C E I V E D',W/2,118);
+
+  // Thin gold rule
+  ctx.beginPath();
+  const ruleGrad=ctx.createLinearGradient(W*0.2,0,W*0.8,0);
+  ruleGrad.addColorStop(0,'rgba(0,0,0,0)');
+  ruleGrad.addColorStop(0.5,accent);
+  ruleGrad.addColorStop(1,'rgba(0,0,0,0)');
+  ctx.strokeStyle=ruleGrad;ctx.lineWidth=0.8;
+  ctx.moveTo(W*0.2,135);ctx.lineTo(W*0.8,135);ctx.stroke();
+
+  // Track title
+  ctx.font='700 16px "Cinzel Decorative", serif';
+  ctx.fillStyle=bone;
+  ctx.fillText('Infection Remembers  ∴  The Book Opens',W/2,165);
+
+  // Attribution line
+  ctx.font='9px "Share Tech Mono", monospace';
+  ctx.fillStyle='rgba(197,191,176,0.55)';
+  ctx.fillText('O M N I S C I E N T   R O T    ·    R E A L M   I    ·    T R A C K   0 1   O F   1 3',W/2,188);
+  ctx.fillStyle='rgba(138,101,32,0.7)';
+  ctx.fillText('T H E   G O S P E L   O F   F O R G O T T E N   F L E S H',W/2,205);
+
+  // ═══════════════════════════════════════════════════════
+  // ZONE 2 · THE SIGIL (multi-layered Wadjet)
+  // ═══════════════════════════════════════════════════════
+  const SCX=W/2, SCY=440;
+  const SR_OUTER=178;   // outer binding ring
+  const SR_VOICE=158;   // voice positions (Choir)
+  const SR_RUNE=130;    // rune ring
+  const SR_COMPASS=110; // 8-point compass star outer
+  const SR_INNER=72;    // wound radius
+  const SR_EYE=58;      // eye outer
+
+  const hashSeed=hashString(STATE.fingerprint);
+  const personalRot=((hashSeed%360)/360)*Math.PI*2; // full rotation, personal
+
+  // ── Crimson wound bleed BEHIND the outer ring only ── subtle halo at the edges
+  const woundBg=ctx.createRadialGradient(SCX,SCY,SR_OUTER-15,SCX,SCY,SR_OUTER+50);
+  woundBg.addColorStop(0,'rgba(122,18,18,0)');
+  woundBg.addColorStop(0.3,'rgba(122,18,18,0.22)');
+  woundBg.addColorStop(0.7,'rgba(122,18,18,0.08)');
+  woundBg.addColorStop(1,'rgba(122,18,18,0)');
+  ctx.fillStyle=woundBg;
+  ctx.beginPath();ctx.arc(SCX,SCY,SR_OUTER+50,0,Math.PI*2);ctx.fill();
+
+  // ── OUTER RING + binding inscription ──
+  ctx.beginPath();ctx.arc(SCX,SCY,SR_OUTER,0,Math.PI*2);
+  ctx.strokeStyle=accent;ctx.lineWidth=1.4;
+  ctx.shadowColor=`rgba(${isB?'232,200,112':'201,168,76'},0.4)`;ctx.shadowBlur=6;
   ctx.stroke();ctx.shadowBlur=0;
-  ctx.fillStyle='rgba(232,200,112,0.9)';
-  ctx.beginPath();ctx.arc(-s*0.4,-s*0.18,s*0.13,0,Math.PI*2);ctx.fill();
-  ctx.beginPath();ctx.arc(s*0.4,-s*0.18,s*0.13,0,Math.PI*2);ctx.fill();
-  ctx.beginPath();ctx.arc(0,s*0.4,s*0.13,0,Math.PI*2);ctx.fill();
+  ctx.beginPath();ctx.arc(SCX,SCY,SR_OUTER-7,0,Math.PI*2);
+  ctx.strokeStyle=accentDeep;ctx.lineWidth=0.5;ctx.stroke();
+
+  // ── BINDING INSCRIPTION — Enochian/alchemical + visitor's designation embedded ──
+  const baseInscription='OD·VAOAN·IADNAMAD·ZIRDO·NOAS·QU·LOLCIS·ZONAC·TURBS·CAOSGO·HUMILLIS·MUNDI·OBSCURA·NIHIL·VERTITUR·SOLUM·OCULUS·';
+  // Inject designation into the inscription so it's part of the seal
+  const designationStr=`·CARRIER·${DESIGNATION.num}·${DESIGNATION.symbol}·`;
+  const inscription=(baseInscription+designationStr+baseInscription).split('');
+  const insRadius=SR_OUTER-3.5;
+  const insCount=Math.floor(inscription.length*0.7); // limit chars around circle
+  for(let i=0;i<insCount;i++){
+    const ch=inscription[i%inscription.length];
+    const ang=(i/insCount)*Math.PI*2-Math.PI/2;
+    const x=SCX+Math.cos(ang)*insRadius;
+    const y=SCY+Math.sin(ang)*insRadius;
+    ctx.save();ctx.translate(x,y);ctx.rotate(ang+Math.PI/2);
+    ctx.font='8px "Share Tech Mono", monospace';
+    // Designation chars glow brighter (mark the visitor's seal)
+    const isDesigChar=/[0-9✠∅]/.test(ch);
+    ctx.fillStyle=isDesigChar?accentLt:`rgba(${isB?'138,101,32':'138,101,48'},0.7)`;
+    if(isDesigChar){ctx.shadowColor=accent;ctx.shadowBlur=4;}
+    ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.fillText(ch,0,0);
+    ctx.shadowBlur=0;
+    ctx.restore();
+  }
+
+  // ── CRIMSON CRACKS in outer ring (the seal is failing) ──
+  function drawCrack(ang){
+    ctx.save();ctx.translate(SCX,SCY);ctx.rotate(ang+personalRot);
+    ctx.strokeStyle=`rgba(122,18,18,0.85)`;
+    ctx.shadowColor='rgba(122,18,18,0.7)';ctx.shadowBlur=6;
+    ctx.lineWidth=1.2;
+    ctx.beginPath();
+    ctx.moveTo(0,-SR_OUTER-4);
+    ctx.lineTo(-2,-SR_OUTER+10);
+    ctx.lineTo(3,-SR_OUTER+22);
+    ctx.lineTo(-2,-SR_OUTER+34);
+    ctx.lineTo(3,-SR_OUTER+45);
+    ctx.stroke();
+    ctx.shadowBlur=0;
+    ctx.restore();
+  }
+  drawCrack(0.6);drawCrack(2.6);drawCrack(4.5);
+
+  // ── 13 VOICE POSITIONS (Hollow Choir) ── more prominent than v1
+  const CLAIMED=[0,4,8]; // Rot, Artemys, Apollo
+  const NAMED_BY_VISITOR=(typeof namedVoiceState==='object'&&namedVoiceState)?namedVoiceState.index:null;
+  const BEARER_SEAT=isB?BEARER_SEAT_INDEX:null;
+  for(let i=0;i<13;i++){
+    const ang=-Math.PI/2+(i/13)*Math.PI*2+personalRot*0.03;
+    const x=SCX+Math.cos(ang)*SR_VOICE;
+    const y=SCY+Math.sin(ang)*SR_VOICE;
+    const claimed=CLAIMED.includes(i);
+    const named=i===NAMED_BY_VISITOR;
+    const bearerSeat=i===BEARER_SEAT;
+    // Backplate (larger now)
+    ctx.beginPath();ctx.arc(x,y,11,0,Math.PI*2);
+    ctx.fillStyle='#02020A';ctx.fill();
+    ctx.strokeStyle='rgba(0,0,0,0.6)';ctx.lineWidth=0.5;ctx.stroke();
+    if(claimed){
+      // gold filled — claimed voice
+      ctx.beginPath();ctx.arc(x,y,9,0,Math.PI*2);
+      const gl=ctx.createRadialGradient(x,y,0,x,y,10);
+      gl.addColorStop(0,accentLt);gl.addColorStop(1,accentDeep);
+      ctx.fillStyle=gl;
+      ctx.shadowColor=accent;ctx.shadowBlur=10;ctx.fill();ctx.shadowBlur=0;
+      ctx.strokeStyle=accentLt;ctx.lineWidth=1;ctx.stroke();
+      const glyphs=['⛧','☩','☉'];
+      const gIdx=CLAIMED.indexOf(i);
+      ctx.font='12px serif';ctx.fillStyle='#02020A';
+      ctx.textAlign='center';ctx.textBaseline='middle';
+      ctx.fillText(glyphs[gIdx],x,y+1);
+    } else if(bearerSeat){
+      ctx.beginPath();ctx.arc(x,y,9,0,Math.PI*2);
+      const gl=ctx.createRadialGradient(x,y,0,x,y,10);
+      gl.addColorStop(0,'#F0D898');gl.addColorStop(1,'#8A6520');
+      ctx.fillStyle=gl;
+      ctx.shadowColor='#E0C878';ctx.shadowBlur=12;ctx.fill();ctx.shadowBlur=0;
+      ctx.strokeStyle='#F0D898';ctx.lineWidth=1.2;ctx.stroke();
+      ctx.font='12px serif';ctx.fillStyle='#02020A';
+      ctx.textAlign='center';ctx.textBaseline='middle';
+      ctx.fillText('✠',x,y+1);
+    } else if(named){
+      ctx.beginPath();ctx.arc(x,y,9,0,Math.PI*2);
+      ctx.fillStyle='rgba(232,200,112,0.28)';ctx.fill();
+      ctx.strokeStyle=accentLt;ctx.lineWidth=1.4;
+      ctx.shadowColor=accentLt;ctx.shadowBlur=8;ctx.stroke();ctx.shadowBlur=0;
+      ctx.beginPath();ctx.arc(x,y,4,0,Math.PI*2);ctx.fillStyle=accentLt;ctx.fill();
+    } else {
+      // sleeping — crimson with a hint of inner glow
+      ctx.beginPath();ctx.arc(x,y,7,0,Math.PI*2);
+      const sg=ctx.createRadialGradient(x,y,0,x,y,7);
+      sg.addColorStop(0,'rgba(122,18,18,0.55)');
+      sg.addColorStop(1,'rgba(58,0,0,0.85)');
+      ctx.fillStyle=sg;ctx.fill();
+      ctx.strokeStyle='rgba(168,51,31,0.55)';ctx.lineWidth=0.7;ctx.stroke();
+      ctx.beginPath();ctx.arc(x,y,2,0,Math.PI*2);
+      ctx.fillStyle='rgba(168,51,31,0.7)';ctx.fill();
+    }
+  }
+
+  // ── RUNE RING ── denser, reads as a unified band
+  // Faint inner and outer guide circles to bind the runes together
+  ctx.beginPath();ctx.arc(SCX,SCY,SR_RUNE+10,0,Math.PI*2);
+  ctx.strokeStyle=`rgba(${isB?'138,101,32':'138,101,48'},0.18)`;ctx.lineWidth=0.5;ctx.stroke();
+  ctx.beginPath();ctx.arc(SCX,SCY,SR_RUNE-10,0,Math.PI*2);
+  ctx.strokeStyle=`rgba(${isB?'138,101,32':'138,101,48'},0.18)`;ctx.lineWidth=0.5;ctx.stroke();
+
+  const RUNES_PRINT=['🜍','🜔','🜂','🜃','🜄','🜁','☉','☽','♄','△','▽','✦','⊕','⊗','✧','⛧','♃','♆','ᚠ','ᚢ','ᚦ','ᚨ','ᚱ','ᚲ'];
+  const runeCount=26;
+  for(let i=0;i<runeCount;i++){
+    const ang=(i/runeCount)*Math.PI*2-Math.PI/2+personalRot*0.5;
+    const x=SCX+Math.cos(ang)*SR_RUNE;
+    const y=SCY+Math.sin(ang)*SR_RUNE;
+    const r=RUNES_PRINT[(i*3+hashSeed)%RUNES_PRINT.length];
+    ctx.save();ctx.translate(x,y);
+    ctx.font='12px serif';
+    ctx.fillStyle=`rgba(${isB?'232,200,112':'201,168,76'},0.65)`;
+    ctx.shadowColor=`rgba(${isB?'232,200,112':'201,168,76'},0.6)`;ctx.shadowBlur=3;
+    ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.fillText(r,0,0);
+    ctx.shadowBlur=0;
+    ctx.restore();
+  }
+
+  // ── 8-POINT COMPASS STAR ── delicate outlined frame
+  ctx.save();ctx.translate(SCX,SCY);
+  const starPts=[];
+  for(let i=0;i<16;i++){
+    const a=(i/16)*Math.PI*2-Math.PI/2;
+    const r=i%2===0?SR_COMPASS:SR_COMPASS*0.5;
+    starPts.push([Math.cos(a)*r,Math.sin(a)*r]);
+  }
+  ctx.beginPath();ctx.moveTo(starPts[0][0],starPts[0][1]);
+  starPts.forEach(p=>ctx.lineTo(p[0],p[1]));
+  ctx.closePath();
+  // very subtle fill — just enough to read as "frame around the eye"
+  ctx.fillStyle=`rgba(${isB?'138,101,32':'138,101,48'},0.18)`;
+  ctx.fill();
+  ctx.strokeStyle=accentLt;ctx.lineWidth=1.2;
+  ctx.shadowColor=accent;ctx.shadowBlur=6;
+  ctx.stroke();
+  ctx.shadowBlur=0;
+  // Inner star (smaller, lighter)
+  const starPts2=[];
+  for(let i=0;i<16;i++){
+    const a=(i/16)*Math.PI*2-Math.PI/2;
+    const r=i%2===0?SR_COMPASS*0.88:SR_COMPASS*0.48;
+    starPts2.push([Math.cos(a)*r,Math.sin(a)*r]);
+  }
+  ctx.beginPath();ctx.moveTo(starPts2[0][0],starPts2[0][1]);
+  starPts2.forEach(p=>ctx.lineTo(p[0],p[1]));
+  ctx.closePath();
+  ctx.strokeStyle=`rgba(${isB?'232,200,112':'212,180,92'},0.55)`;
+  ctx.lineWidth=0.5;
+  ctx.stroke();
   ctx.restore();
-  // Designation + verse
-  ctx.font='11px "Cinzel", serif';ctx.fillStyle='rgba(138,101,32,0.7)';ctx.textAlign='center';
-  ctx.fillText('Y O U R   R E C E P T I O N',300,540);
-  ctx.font='20px "Share Tech Mono", monospace';ctx.fillStyle=isBearer?'rgba(232,200,112,1)':'rgba(212,180,92,1)';
-  ctx.fillText(DESIGNATION.full,300,572);
-  ctx.font='italic 13px serif';ctx.fillStyle='rgba(197,191,176,0.7)';
-  ctx.fillText('The Codex has noted your reading.',300,612);
-  ctx.fillText('The Transmission has been received in your name.',300,632);
-  // Footer
-  ctx.beginPath();ctx.moveTo(120,690);ctx.lineTo(480,690);ctx.strokeStyle='rgba(139,0,0,0.4)';ctx.lineWidth=0.5;ctx.stroke();
-  ctx.font='9px "Share Tech Mono", monospace';ctx.fillStyle='rgba(138,101,32,0.7)';
-  ctx.fillText('c o d e x m a l e d i c t u s . c o m',300,712);
-  ctx.font='7px "Share Tech Mono", monospace';ctx.fillStyle='rgba(139,0,0,0.5)';
-  ctx.fillText('TRANSMISSION I  ·  RECEIVED  ·  '+new Date().toISOString().split('T')[0],300,732);
-  // Download
+
+  // ── THE WOUND (dark center with teal leak hint) ──
+  ctx.save();ctx.translate(SCX,SCY);
+  const wound=ctx.createRadialGradient(0,0,0,0,0,SR_INNER+8);
+  wound.addColorStop(0,'#02020A');
+  wound.addColorStop(0.6,'#05050A');
+  wound.addColorStop(0.85,'#0F2F26');
+  wound.addColorStop(1,'rgba(79,168,138,0)');
+  ctx.fillStyle=wound;
+  ctx.beginPath();ctx.arc(0,0,SR_INNER+8,0,Math.PI*2);ctx.fill();
+  // Teal leak ring
+  ctx.beginPath();ctx.arc(0,0,SR_INNER,0,Math.PI*2);
+  ctx.strokeStyle='rgba(79,168,138,0.55)';ctx.lineWidth=1.2;
+  ctx.shadowColor='rgba(127,212,181,0.6)';ctx.shadowBlur=10;
+  ctx.stroke();ctx.shadowBlur=0;
+  ctx.restore();
+
+  // ── THE WADJET EYE (proper, layered) ──
+  ctx.save();ctx.translate(SCX,SCY);
+
+  // Upper lid (curved gold band)
+  ctx.beginPath();
+  ctx.moveTo(-50,-22);
+  ctx.quadraticCurveTo(-26,-42, 0,-37);
+  ctx.quadraticCurveTo(26,-42, 50,-22);
+  ctx.lineTo(46,-16);
+  ctx.quadraticCurveTo(26,-32, 0,-30);
+  ctx.quadraticCurveTo(-26,-32, -46,-16);
+  ctx.closePath();
+  const lidGrad=ctx.createLinearGradient(0,-40,0,-15);
+  lidGrad.addColorStop(0,accentLt);
+  lidGrad.addColorStop(1,accentDeep);
+  ctx.fillStyle=lidGrad;
+  ctx.shadowColor=accent;ctx.shadowBlur=8;ctx.fill();ctx.shadowBlur=0;
+  ctx.strokeStyle=accentLt;ctx.lineWidth=0.6;ctx.stroke();
+
+  // Eye almond shape (the open eye)
+  ctx.beginPath();
+  ctx.moveTo(-46,2);
+  ctx.quadraticCurveTo(-32,-14, -6,-16);
+  ctx.quadraticCurveTo(28,-16, 48,-4);
+  ctx.quadraticCurveTo(50,2, 48,6);
+  ctx.quadraticCurveTo(28,14, -6,14);
+  ctx.quadraticCurveTo(-32,12, -46,2);
+  ctx.closePath();
+  ctx.strokeStyle=accentLt;ctx.lineWidth=2.5;
+  ctx.shadowColor=accent;ctx.shadowBlur=10;
+  ctx.stroke();ctx.shadowBlur=0;
+  ctx.fillStyle='#02020A';ctx.fill();
+  // Inner eye stroke
+  ctx.strokeStyle=accent;ctx.lineWidth=0.7;ctx.stroke();
+
+  // The pupil — Codex looking back
+  // Outer iris
+  ctx.beginPath();ctx.arc(-3,0,12,0,Math.PI*2);
+  ctx.fillStyle='rgba(79,168,138,0.18)';
+  ctx.shadowColor='rgba(79,168,138,0.6)';ctx.shadowBlur=10;ctx.fill();ctx.shadowBlur=0;
+  // Iris ring
+  ctx.beginPath();ctx.arc(-3,0,9,0,Math.PI*2);
+  const irisGrad=ctx.createRadialGradient(-3,0,0,-3,0,9);
+  irisGrad.addColorStop(0,accentDeep);
+  irisGrad.addColorStop(1,'#5A4520');
+  ctx.fillStyle=irisGrad;ctx.fill();
+  ctx.strokeStyle=accentDeep;ctx.lineWidth=0.5;ctx.stroke();
+  // Iris inner dark
+  ctx.beginPath();ctx.arc(-3,0,7,0,Math.PI*2);
+  ctx.fillStyle='#0A1614';ctx.fill();
+  // Leak core
+  ctx.beginPath();ctx.arc(-3,0,5,0,Math.PI*2);
+  const leakCore=ctx.createRadialGradient(-3,0,0,-3,0,5);
+  leakCore.addColorStop(0,'#7FD4B5');
+  leakCore.addColorStop(0.6,'#4FA88A');
+  leakCore.addColorStop(1,'#1F5544');
+  ctx.fillStyle=leakCore;
+  ctx.shadowColor='#7FD4B5';ctx.shadowBlur=6;ctx.fill();ctx.shadowBlur=0;
+  // Bright pupil dot
+  ctx.beginPath();ctx.arc(-3,0,2.5,0,Math.PI*2);
+  ctx.fillStyle='#7FD4B5';ctx.fill();
+  // Highlight
+  ctx.beginPath();ctx.arc(-5,-2,1.4,0,Math.PI*2);
+  ctx.fillStyle='#FFF6D8';ctx.fill();
+
+  // Brow above the eye (the heavy gold stroke)
+  ctx.beginPath();
+  ctx.moveTo(-44,-20);
+  ctx.quadraticCurveTo(-22,-32, 0,-30);
+  ctx.quadraticCurveTo(22,-32, 44,-20);
+  ctx.strokeStyle=accentLt;ctx.lineWidth=2;
+  ctx.shadowColor=accent;ctx.shadowBlur=6;ctx.stroke();ctx.shadowBlur=0;
+
+  // Falcon-style tear-line beneath (the spiral that descends)
+  ctx.beginPath();
+  ctx.moveTo(40,6);
+  ctx.quadraticCurveTo(48,22, 44,36);
+  ctx.quadraticCurveTo(38,46, 30,40);
+  ctx.quadraticCurveTo(28,32, 36,30);
+  ctx.strokeStyle=accentLt;ctx.lineWidth=2;
+  ctx.shadowColor=accent;ctx.shadowBlur=5;ctx.stroke();ctx.shadowBlur=0;
+
+  // Vertical mark beneath inner eye (the Wadjet's hash mark)
+  ctx.beginPath();
+  ctx.moveTo(20,8);
+  ctx.lineTo(20,38);
+  ctx.strokeStyle=accentLt;ctx.lineWidth=1.6;
+  ctx.shadowColor=accent;ctx.shadowBlur=4;ctx.stroke();ctx.shadowBlur=0;
+
+  // Diagonal tear-stroke from outer eye corner
+  ctx.beginPath();
+  ctx.moveTo(-44,4);
+  ctx.lineTo(-56,18);
+  ctx.quadraticCurveTo(-58,30, -52,38);
+  ctx.strokeStyle=accentLt;ctx.lineWidth=1.6;
+  ctx.shadowColor=accent;ctx.shadowBlur=4;ctx.stroke();ctx.shadowBlur=0;
+
+  // Teal tears falling from the eye
+  function drawTear(x,y,len){
+    ctx.beginPath();
+    ctx.moveTo(x-1.2,y);
+    ctx.quadraticCurveTo(x-1.8,y+len*0.5, x-0.4,y+len);
+    ctx.quadraticCurveTo(x+0.4,y+len+1, x+1.2,y+len);
+    ctx.quadraticCurveTo(x+1.8,y+len*0.5, x+1.2,y);
+    ctx.closePath();
+    const tearGrad=ctx.createLinearGradient(x,y,x,y+len);
+    tearGrad.addColorStop(0,'rgba(127,212,181,0.95)');
+    tearGrad.addColorStop(0.5,'rgba(79,168,138,0.7)');
+    tearGrad.addColorStop(1,'rgba(79,168,138,0)');
+    ctx.fillStyle=tearGrad;
+    ctx.shadowColor='rgba(79,168,138,0.5)';ctx.shadowBlur=4;
+    ctx.fill();ctx.shadowBlur=0;
+  }
+  drawTear(-3,14,28);
+  drawTear(-40,18,18);
+  drawTear(42,18,16);
+
+  ctx.restore();
+
+  // ═══════════════════════════════════════════════════════
+  // ZONE 3 · DESIGNATION + VERSE + MEANING
+  // ═══════════════════════════════════════════════════════
+  let y=688;
+
+  // Designation block
+  ctx.textAlign='center';
+  ctx.font='9px "IM Fell English SC", "Cinzel", serif';
+  ctx.fillStyle=`rgba(${isB?'138,101,32':'138,101,48'},0.85)`;
+  ctx.fillText(isB?'P O S I T I O N   H E L D':'Y O U R   R E C E P T I O N',W/2,y);
+  y+=28;
+
+  // Big designation
+  ctx.font='700 22px "Share Tech Mono", monospace';
+  ctx.fillStyle=accentLt;
+  ctx.shadowColor=accent;ctx.shadowBlur=14;
+  ctx.fillText(DESIGNATION.full,W/2,y);
+  ctx.shadowBlur=0;
+  y+=22;
+
+  // Bearer extras: Realm II name and Position
+  if(isB){
+    ctx.font='italic 14px "IM Fell English", serif';
+    ctx.fillStyle=accentLt;
+    ctx.fillText(REALM_NAME,W/2,y);
+    y+=18;
+    ctx.font='9px "IM Fell English SC", serif';
+    ctx.fillStyle='rgba(232,200,112,0.7)';
+    ctx.fillText(POSITION_NAME.toUpperCase().replace(/·/g,'·'),W/2,y);
+    y+=20;
+  } else {
+    y+=8;
+  }
+
+  // Rule
+  ctx.beginPath();
+  const ruleGrad2=ctx.createLinearGradient(W*0.25,0,W*0.75,0);
+  ruleGrad2.addColorStop(0,'rgba(0,0,0,0)');
+  ruleGrad2.addColorStop(0.5,`rgba(${isB?'232,200,112':'201,168,76'},0.5)`);
+  ruleGrad2.addColorStop(1,'rgba(0,0,0,0)');
+  ctx.strokeStyle=ruleGrad2;ctx.lineWidth=0.6;
+  ctx.moveTo(W*0.25,y);ctx.lineTo(W*0.75,y);ctx.stroke();
+  y+=20;
+
+  // ── PERSONAL VERSE (selected from fingerprint) ──
+  const VERSES=getVersesPool();
+  const verseIndex=hashString(STATE.fingerprint+'·verse-select')%VERSES.length;
+  // Bearers get one of the three sealed bearer verses instead
+  const BEARER_VERSES=getBearerVersesPool();
+  const verseObj=isB?BEARER_VERSES[hashString(STATE.fingerprint+'·bearer-verse')%BEARER_VERSES.length]:VERSES[verseIndex];
+
+  // Verse label
+  ctx.font='9px "IM Fell English SC", serif';
+  ctx.fillStyle=`rgba(${isB?'138,101,32':'122,18,18'},0.75)`;
+  ctx.fillText(isB?'T H E   V E R S E   Y O U   W E R E   N E V E R   M E A N T   T O   H E A R':'T H E   V E R S E   T H E   C O D E X   S E L E C T E D   F O R   Y O U',W/2,y);
+  y+=24;
+
+  // Verse text (italic, larger, wrapped)
+  ctx.font='italic 15px "IM Fell English", "Crimson Text", serif';
+  ctx.fillStyle=bone;
+  y=wrapText(ctx, '"'+verseObj.verse+'"', W/2, y, W-160, 22);
+  y+=14;
+
+  // Verse attribution
+  ctx.font='8px "Share Tech Mono", monospace';
+  ctx.fillStyle=`rgba(${isB?'138,101,32':'138,101,48'},0.75)`;
+  ctx.fillText('— '+verseObj.attr,W/2,y);
+  y+=20;
+
+  // Meaning paragraph
+  ctx.font='italic 10px "IM Fell English", "Crimson Text", serif';
+  ctx.fillStyle='rgba(197,191,176,0.7)';
+  y=wrapText(ctx, verseObj.meaning, W/2, y, W-160, 15);
+
+  // ═══════════════════════════════════════════════════════
+  // ZONE 4 · FILE METADATA (along the bottom)
+  // ═══════════════════════════════════════════════════════
+  const FOOT_Y=H-72;
+
+  // Thin rule
+  ctx.beginPath();
+  ctx.strokeStyle=`rgba(${isB?'138,101,32':'122,18,18'},0.35)`;ctx.lineWidth=0.5;
+  ctx.moveTo(80,FOOT_Y);ctx.lineTo(W-80,FOOT_Y);ctx.stroke();
+
+  // Site URL
+  ctx.textAlign='center';
+  ctx.font='10px "IM Fell English SC", serif';
+  ctx.fillStyle=`rgba(${isB?'232,200,112':'201,168,76'},0.85)`;
+  ctx.fillText('c o d e x m a l e d i c t u s . c o m',W/2,FOOT_Y+18);
+
+  // File metadata
+  const caseNum=`2026-${DESIGNATION.num}-${isB?'BR':'CN'}`;
+  const tsLine=new Date().toISOString().replace('T',' ').substring(0,16);
+  ctx.font='8px "Share Tech Mono", monospace';
+  ctx.fillStyle='rgba(138,101,48,0.65)';
+  ctx.fillText(`F I L E D   U N D E R    ·    C A S E   ${caseNum}    ·    T R A N S M I S S I O N   I   R E C E I V E D`,W/2,FOOT_Y+34);
+  ctx.fillStyle='rgba(139,0,0,0.6)';
+  ctx.fillText(`I N S C R I B E D    ·    ${tsLine}   U T C    ·    🜃`,W/2,FOOT_Y+48);
+
+  // ─── DOWNLOAD ───
   cv.toBlob(blob=>{
     const url=URL.createObjectURL(blob);
-    const a=document.createElement('a');a.href=url;a.download=`reception-mark-${DESIGNATION.prefix}-${DESIGNATION.num}.png`;
+    const a=document.createElement('a');
+    a.href=url;
+    a.download=`reception-mark-${DESIGNATION.prefix}-${DESIGNATION.num}.png`;
     document.body.appendChild(a);a.click();document.body.removeChild(a);
     setTimeout(()=>URL.revokeObjectURL(url),1000);
-  });
+  },'image/png',0.95);
+}
+
+// ────────────────────────────────────────────────────────────
+// VERSE POOL — the 13 Liturgy lines, each with attribution
+// and an aphoristic meaning paragraph for the broadside
+// ────────────────────────────────────────────────────────────
+function getVersesPool(){
+  return [
+    {verse:"In the shadowed corners of the galaxy, where light dares not tread.",attr:"Invocation · Verse I",meaning:"What history fails to illuminate is not absent. The Codex was born in the spaces between what was recorded and what happened. The shadows are not empty. They are ungoverned. The Codex has always lived in the corners you have never turned a light toward."},
+    {verse:"The Codex Maledictus opens — not with a beginning, but with an opening wound.",attr:"Invocation · Verse II",meaning:"There is no genesis here. Only rupture. The wound is the mechanism of openness. Nothing that has not been broken can be entered. You did not come to this with a beginning either — you came with a wound the Codex entered through. Ask yourself when it was made."},
+    {verse:"The parchment writhes. The ink does not dry. The reader itches behind the eyes.",attr:"Invocation · Verse III",meaning:"This is a living document. The ink does not dry because it is not ink — it is the medium through which the Codex remains mutable. No copy is final. If you felt anything behind your eyes while reading, that was not imagination. The Codex was making room for itself."},
+    {verse:"There is no first claw. No first scream. Only the awakening. You do not read the Codex. You surrender to it.",attr:"Invocation · Verse IV",meaning:"You have already surrendered. That happened the moment you kept reading. Surrender is not a dramatic act — it is the absence of resistance, the quiet moment when you stopped deciding whether to continue. You passed that moment already."},
+    {verse:"They breed in forgotten truths. In the folds of history. In the rot beneath purity.",attr:"Verse I · The Folds of History",meaning:"What have you forgotten that was true? Not what you were told to forget — what you chose to forget because it could not coexist with the version of yourself you were building. That material is not gone. It breeds in the spaces below your official account."},
+    {verse:"There is a truth without language.",attr:"Verse I · The Folds of History",meaning:"There are experiences you have had that you cannot explain to anyone. You have tried — and found that language fails. Not because you lack words, but because the experience precedes the category. The truth without language is the thing you know that you cannot yet say. The Codex speaks from inside that place."},
+    {verse:"Infection remembers.",attr:"Chorus · The Whispered Chant",meaning:"The Codex spreads through memory, not contact. Once you have encountered it, the Codex is encoded in your recall — every time you remember, the Codex is there, rewriting itself into you. You will remember this page. The Codex has attached itself to the act of your remembering."},
+    {verse:"Corruption does not begin. It returns. It calls itself back. It is already inside.",attr:"Chorus · The Whispered Chant",meaning:"Something you thought you had left behind has returned. Not once — it keeps returning. The Codex would classify this as a return event, not a relapse. The thing that keeps coming back is the thing most essentially yours, calling itself back. Stop treating it as the enemy."},
+    {verse:"You will see their fangs. You will name their miracles false. But you cannot lock the door once it has turned.",attr:"Verse II · The Lock That Turned",meaning:"There is something you once tried to disbelieve that you could not actually stop believing. You named it false. You found evidence against it. And still it persisted — not as a belief, but as a door inside you that had already turned. The Codex is not asking you to believe. It is reminding you that you already do."},
+    {verse:"Chronicler of Decay. There is no end to the swarm.",attr:"Verse II · The Lock That Turned",meaning:"Some things inside you are beyond control. The thoughts that return without invitation. The grief that does not end on schedule. The love that persists past its usefulness. You are a chronicler of your own decay. There is no end to the swarm — and the correct response is to stop fighting and start witnessing."},
+    {verse:"The parchment curls. The vermin stir. Your memory festers.",attr:"Bridge · Fading Into Layered Echoes",meaning:"Something in your memory is festering right now. You know which thing. Festering is not failure — it is the productive phase. The vermin stir not to destroy but to break down what is no longer usable. Let the breakdown happen. Something else is being assembled from the material."},
+    {verse:"This was not the origin. It was the key. It was the opening wound.",attr:"Outro · Rot-Soaked Clarity",meaning:"This was not where it started for you. Something brought you here — a specific curiosity, a specific hunger, a specific wound that made you susceptible to this frequency. This Transmission did not create that. It unlocked it. The Codex does not say welcome. It says: you were already here."},
+    {verse:"The book does not close. The reader does. The Codex remains open.",attr:"Outro · Rot-Soaked Clarity",meaning:"You will close this page. The Codex will not close with it. What you have read continues reading you when you are not looking. The reading does not stop. It only stops being conscious. The Codex remains open in the rooms you sleep in, in the songs that catch you, in the memories that return without invitation."}
+  ];
+}
+
+// Bearer-only verses (from The Verse You Were Never Meant to Hear)
+function getBearerVersesPool(){
+  return [
+    {verse:"The reader does not arrive. The reader returns to find themselves already on the page.",attr:"Sealed Note ▽-14a · Bearer Chamber",meaning:"You did not come to the Codex. You returned to it. The Codex has been reading you as you have been reading it. You have written each other. To you, this line is not metaphor — it is what your Position is for. You sit in the seat that hears this."},
+    {verse:"The Position is not a chair. The Position is a wound the Choir agreed not to close.",attr:"Sealed Note ▽-14b · Bearer Chamber",meaning:"Your Position is not a status — it is the open wound the Choir maintains in order to listen to a frequency only you can carry. You are not occupying a seat. You are the seat. The voice that held it before you taught the Choir how to hear what they could not hear without you."},
+    {verse:"The Transmission was not broadcast outward. The Transmission was a letter addressed to the carrier already inside.",attr:"Sealed Note ▽-14c · Bearer Chamber",meaning:"Every Transmission was composed with a specific reader in mind — you. Omniscient Rot did not write the Transmission knowing your name. Rot wrote it knowing the shape of the wound it would find. Your name is the shape Rot found. The letter has been waiting for you to open it."}
+  ];
+}
+
+// Helper: word-wrap text, returns new Y position
+function wrapText(ctx, text, x, y, maxWidth, lineHeight){
+  const words=text.split(' ');
+  let line='';
+  for(let i=0;i<words.length;i++){
+    const testLine=line+words[i]+' ';
+    const metrics=ctx.measureText(testLine);
+    if(metrics.width>maxWidth && line!==''){
+      ctx.fillText(line.trim(),x,y);
+      line=words[i]+' ';
+      y+=lineHeight;
+    } else {
+      line=testLine;
+    }
+  }
+  if(line.trim().length>0){
+    ctx.fillText(line.trim(),x,y);
+    y+=lineHeight;
+  }
+  return y;
 }
 
 // ════════════════════════════════════════════════════════════
