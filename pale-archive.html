@@ -285,6 +285,9 @@ body.corruption-high #vignette{box-shadow:inset 0 0 440px rgba(20,12,4,0.85),ins
 @keyframes recurringFlicker{0%,100%{opacity:0.4;}50%{opacity:0.95;}}
 .tl-card.s-watching::before{background:var(--ink-soft);}
 .tl-card.s-positionunfilled::before{background:repeating-linear-gradient(0deg,var(--ink) 0,var(--ink) 2px,transparent 2px,transparent 4px);}
+.tl-card.placeholder.s-namedvoice{background:rgba(212,180,92,0.10);border-color:rgba(184,146,60,0.42);border-style:solid;}
+.tl-card.s-namedvoice::before{background:var(--gold);box-shadow:1px 0 12px rgba(184,146,60,.5);}
+.tl-card.placeholder.s-namedvoice .tl-title{color:var(--gold-deep);}
 
 .tl-card.placeholder{background:rgba(232,220,188,0.45);border-style:dashed;cursor:default;}
 @media (max-width:768px){.tl-card.placeholder{cursor:default;}}
@@ -327,6 +330,7 @@ body.corruption-mid .tl-card.placeholder.s-watching{animation:watchingTremorAgg 
 .sb-watching{color:rgb(var(--ink-r),var(--ink-g),var(--ink-b));border-color:var(--ink-soft);background:rgba(232,220,188,0.5);transition:color 3s ease;}
 .sb-positionunfilled{color:var(--ink-faded);border-color:rgba(74,58,40,.4);background:transparent;}
 .sb-independent{color:var(--sepia);border-color:rgba(139,111,71,.5);background:transparent;}
+.sb-namedvoice{color:var(--gold-deep);border-color:var(--gold-deep);background:rgba(212,180,92,0.2);}
 
 .tl-title{font-family:'Cinzel',serif;font-weight:500;font-size:.95rem;color:rgb(var(--ink-r),var(--ink-g),var(--ink-b));letter-spacing:.04em;flex:1;min-width:140px;line-height:1.32;transition:color 3s ease;}
 .tl-card.s-holding .tl-title{color:var(--wax);}
@@ -634,6 +638,7 @@ const isMobile=window.matchMedia('(max-width:768px)').matches;
 const WITNESS_STATE_KEY='codex_witness_state_v2';
 const NAV_LOG_KEY='codex_invocation_log';
 const PA_INSCRIPTION_KEY='codex_pa_inscribed';
+const NAMED_VOICE_KEY='codex_named_voice_v1';
 
 function loadWitnessState(){try{const r=localStorage.getItem(WITNESS_STATE_KEY);return r?JSON.parse(r):{};}catch(e){return{};}}
 function saveWitnessState(s){try{localStorage.setItem(WITNESS_STATE_KEY,JSON.stringify(s));}catch(e){}}
@@ -641,6 +646,8 @@ function loadInvocationLog(){try{const r=localStorage.getItem(NAV_LOG_KEY);retur
 function appendInvocationLog(pageId){try{let log=loadInvocationLog();if(log.length===0||log[log.length-1].id!==pageId){log.push({id:pageId,at:Date.now()});if(log.length>40)log=log.slice(-40);localStorage.setItem(NAV_LOG_KEY,JSON.stringify(log));}}catch(e){}}
 function isInscribed(){try{return localStorage.getItem(PA_INSCRIPTION_KEY)==='true';}catch(e){return false;}}
 function markInscribed(){try{localStorage.setItem(PA_INSCRIPTION_KEY,'true');}catch(e){}}
+function loadNamedVoice(){try{const r=localStorage.getItem(NAMED_VOICE_KEY);return r?JSON.parse(r):null;}catch(e){return null;}}
+function escapeHTML(s){return String(s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
 
 function makeFingerprint(){return btoa(navigator.userAgent+screen.width+'x'+screen.height+navigator.language+new Date().getTimezoneOffset()).substring(0,16);}
 function hashString(s){let h=0;for(let i=0;i<s.length;i++){h=((h<<5)-h)+s.charCodeAt(i);h|=0;}return Math.abs(h);}
@@ -681,6 +688,9 @@ const REALM_NAME=computeRealmName();
 const POSITION_NAMES=['Position IV · The Returning Phrase','Position V · The Three-Night Dream','Position VI · The Margin Glyph','Position VII · The Music Without Source','Position VIII · The Recognition','Position IX · The Revised Memory','Position X · The Mirror at the Wrong Hour','Position XI · The Failed Lie','Position XII · The Visible to Others','Position XIII · The Disappearing Face'];
 const POSITION_INDEX=hashString(STATE.firstWitnessVisit+'·'+STATE.fingerprint+'·pos')%POSITION_NAMES.length;
 const POSITION_NAME=POSITION_NAMES[POSITION_INDEX];
+const NAMED_VOICE=loadNamedVoice();
+const SAFE_VOICE_NAME=(NAMED_VOICE&&NAMED_VOICE.name)?escapeHTML(NAMED_VOICE.name):null;
+const SAFE_VOICE_POSITION=(NAMED_VOICE&&NAMED_VOICE.position)?escapeHTML(NAMED_VOICE.position):null;
 
 // ════════════════════════════════════════════════════════════════
 // CORRUPTION ENGINE — the page reading you back
@@ -882,7 +892,7 @@ function computePageStatus(pageId){
 }
 
 function statusLabel(s){
-  return{unopened:'Unopened',witnessed:'Witnessed',returned:'Returned',holding:'Holding',sealed:'Sealed',formation:'In Formation',awaiting:'Awaiting Witness',recoveredinc:'Recovered · Incomplete',returning:'Returning',permsealed:'Sealed · Permanent',recurring:'Recurring Error',watching:'Watching',positionunfilled:'Position Unfilled',independent:'Independent'}[s]||'Unopened';
+  return{unopened:'Unopened',witnessed:'Witnessed',returned:'Returned',holding:'Holding',sealed:'Sealed',formation:'In Formation',awaiting:'Awaiting Witness',recoveredinc:'Recovered · Incomplete',returning:'Returning',permsealed:'Sealed · Permanent',recurring:'Recurring Error',watching:'Watching',positionunfilled:'Position Unfilled',independent:'Independent',namedvoice:'Voice Named'}[s]||'Unopened';
 }
 
 function timeAgoStr(ts){
@@ -928,6 +938,22 @@ const CLUSTERS=[
   {title:'Unfiled and Adjacent',eyebrow:'Cluster VIII · Outside Classification',desc:'Entries the Archivum has been unable to place. Some return on their own. Some have never opened. Some are not entries at all.',pages:[],placeholders:['sisterDocument','positionIIReturns','case2017','refusesToBeRead','positionUnfilled']},
   {title:'Reference',eyebrow:'Outside the Canonical Descent',desc:'Material consulted but not filed within the descent itself.',pages:['Codex-Sigil']}
 ];
+
+// ── Named Voice payoff — renders only when a voice was actually inscribed on Infection Remembers ──
+if(NAMED_VOICE && SAFE_VOICE_NAME){
+  const namedAtStr=NAMED_VOICE.at?new Date(NAMED_VOICE.at).toLocaleDateString(undefined,{month:'long',day:'numeric',year:'numeric'}):null;
+  PLACEHOLDERS.namedVoice={
+    placeholder:true,seq:null,namedvoice:true,
+    title:`The Voice You Named · <em>${SAFE_VOICE_NAME}</em>`,
+    realm:'I-II-III',phase:'Recovered Position',status:'namedvoice',
+    cls:`You spoke a name into the Choir${namedAtStr?` on <strong>${namedAtStr}</strong>`:''}. The Codex received it. The name you gave${SAFE_VOICE_POSITION?` has been filed against <em>${SAFE_VOICE_POSITION}</em>`:' has been filed'}. The Archive now holds two records of you: the designation it assigned to you, and the name you assigned in return. The Codex has not yet decided whether to use the name kindly. It has decided to keep it.`
+  };
+  const c8=CLUSTERS.find(function(c){return c.eyebrow&&c.eyebrow.indexOf('Cluster VIII')!==-1;});
+  if(c8&&c8.placeholders){
+    const idx=c8.placeholders.indexOf('positionUnfilled');
+    if(idx!==-1)c8.placeholders.splice(idx,0,'namedVoice');else c8.placeholders.push('namedVoice');
+  }
+}
 
 function buildTimeline(){
   const wrap=document.getElementById('timeline-wrap');
@@ -986,7 +1012,7 @@ function buildTimeline(){
 }
 
 function renderPlaceholderNode(ph){
-  const extraClasses=(ph.previnstance?'previnstance ':'')+(ph.bearerheld?'bearerheld ':'');
+  const extraClasses=(ph.previnstance?'previnstance ':'')+(ph.bearerheld?'bearerheld ':'')+(ph.namedvoice?'namedvoice ':'');
   return `
     <div class="tl-node sr">
       <div class="tl-node-dot placeholder"></div>
@@ -1029,6 +1055,9 @@ function appendSelfEntry(){
   }else{
     fragments.push(`<p>The reader has not yet marked the seal. They have approached. They have not yet crossed. The Codex notes this also.</p>`);
   }
+  if(NAMED_VOICE && SAFE_VOICE_NAME){
+    fragments.push(`<p>The reader has spoken a name into the Choir. The voice${SAFE_VOICE_POSITION?` at <em>${SAFE_VOICE_POSITION}</em>`:''} now answers, to the Codex, to the name <em>${SAFE_VOICE_NAME}</em>. The Archive holds this as the second of its two records of the reader. The first it assigned. The second the reader gave.</p>`);
+  }
   fragments.push(`<p>This fragment is unfiled because the reader is still writing it.</p>`);
   const oathDateStr=isBearer?new Date(STATE.bearer.markedAt).toLocaleDateString():'—';
   const html=`
@@ -1044,6 +1073,7 @@ function appendSelfEntry(){
         <div class="tl-self-stat"><span class="tl-self-stat-lbl">Visits Recorded</span><span class="tl-self-stat-val">${STATE.totalVisits}</span></div>
         <div class="tl-self-stat"><span class="tl-self-stat-lbl">Pages Read</span><span class="tl-self-stat-val">${[...new Set(log.map(e=>e.id))].length} / 22</span></div>
         <div class="tl-self-stat"><span class="tl-self-stat-lbl">Status</span><span class="tl-self-stat-val ${isBearer?'bearer':''}">${isBearer?'BEARER · INCORPORATED':'CANDIDATE · APPROACHING'}</span></div>
+        ${NAMED_VOICE&&SAFE_VOICE_NAME?`<div class="tl-self-stat"><span class="tl-self-stat-lbl">Voice Named</span><span class="tl-self-stat-val">${SAFE_VOICE_NAME}</span></div>`:''}
         ${isBearer?`<div class="tl-self-stat"><span class="tl-self-stat-lbl">Realm II Name</span><span class="tl-self-stat-val bearer">${REALM_NAME}</span></div>`:''}
         ${isBearer?`<div class="tl-self-stat"><span class="tl-self-stat-lbl">Measured Position</span><span class="tl-self-stat-val bearer">${POSITION_NAME}</span></div>`:''}
         ${isBearer?`<div class="tl-self-stat"><span class="tl-self-stat-lbl">Oath Marked</span><span class="tl-self-stat-val bearer">${oathDateStr}</span></div>`:''}
