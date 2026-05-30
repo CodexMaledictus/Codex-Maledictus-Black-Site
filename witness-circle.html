@@ -581,8 +581,8 @@
   .direct-line a:hover { color:var(--circle-lt);border-color:var(--circle); }
   body.bearer-state .direct-line a:hover { color:var(--gold-lt);border-color:var(--gold); }
 
-  /* ── DISCORD GATE ── */
-  .discord-gate {
+  /* ──  GATE ── */
+  .-gate {
     width:100%;max-width:540px;padding:36px 32px;
     border:1px solid rgba(143,240,229,0.28);
     background:
@@ -591,45 +591,45 @@
     display:flex;flex-direction:column;align-items:center;gap:18px;text-align:center;
     position:relative;
   }
-  body.bearer-state .discord-gate { border-color:rgba(224,200,120,0.28); }
-  .discord-gate::before {
+  body.bearer-state .-gate { border-color:rgba(224,200,120,0.28); }
+  .-gate::before {
     content:'';position:absolute;top:-1px;left:-1px;right:-1px;height:1px;
     background:linear-gradient(90deg,transparent,var(--circle) 50%,transparent);
   }
-  body.bearer-state .discord-gate::before { background:linear-gradient(90deg,transparent,var(--gold) 50%,transparent); }
-  .discord-glyph {
+  body.bearer-state .-gate::before { background:linear-gradient(90deg,transparent,var(--gold) 50%,transparent); }
+  .-glyph {
     width:48px;height:48px;border:1px solid var(--circle);border-radius:50%;
     display:flex;align-items:center;justify-content:center;
     font-family:'Cinzel',serif;font-size:18px;color:var(--circle-lt);
     box-shadow:0 0 20px rgba(93,200,192,0.2);
   }
-  body.bearer-state .discord-glyph { border-color:var(--gold);color:var(--gold-lt);box-shadow:0 0 20px rgba(224,200,120,0.2); }
-  .discord-text {
+  body.bearer-state .-glyph { border-color:var(--gold);color:var(--gold-lt);box-shadow:0 0 20px rgba(224,200,120,0.2); }
+  .-text {
     font-family:'Crimson Text',serif;font-style:italic;font-size:15px;
     color:rgba(228,221,208,0.75);line-height:1.75;max-width:420px;
   }
-  .discord-text em { color:var(--circle-lt);font-style:italic; }
-  body.bearer-state .discord-text em { color:var(--gold-lt); }
-  .discord-link {
+  .-text em { color:var(--circle-lt);font-style:italic; }
+  body.bearer-state .-text em { color:var(--gold-lt); }
+  .-link {
     font-family:'Cinzel',serif;font-size:10px;letter-spacing:.4em;text-transform:uppercase;
     padding:14px 36px;text-decoration:none;
     background:var(--circle);border:1px solid var(--circle);color:var(--void);
     cursor:none;transition:all .4s ease;position:relative;overflow:hidden;
   }
-  body.bearer-state .discord-link { background:var(--gold);border-color:var(--gold); }
-  @media (max-width:768px) { .discord-link { cursor:pointer; } }
-  .discord-link::before {
+  body.bearer-state .-link { background:var(--gold);border-color:var(--gold); }
+  @media (max-width:768px) { .-link { cursor:pointer; } }
+  .-link::before {
     content:'';position:absolute;inset:0;background:var(--circle-lt);transform:translateX(-101%);
     transition:transform .5s cubic-bezier(.16,1,.3,1);
   }
-  body.bearer-state .discord-link::before { background:var(--gold-lt); }
-  .discord-link:hover::before { transform:translateX(0); }
-  .discord-link span { position:relative;z-index:1; }
-  .discord-note {
+  body.bearer-state .-link::before { background:var(--gold-lt); }
+  .-link:hover::before { transform:translateX(0); }
+  .-link span { position:relative;z-index:1; }
+  .-note {
     font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:.26em;
     color:rgba(143,240,229,0.4);
   }
-  body.bearer-state .discord-note { color:rgba(224,200,120,0.4); }
+  body.bearer-state .-note { color:rgba(224,200,120,0.4); }
 
   /* ── FOOTER ── */
   .nav-footer {
@@ -1215,13 +1215,13 @@
         Witnesses speak to other Witnesses elsewhere. The Choir takes the lonely first.
       </div>
 
-      <div class="discord-gate reveal d2">
-        <div class="discord-glyph">⛩</div>
-        <div class="discord-text">
+      <div class="-gate reveal d2">
+        <div class="-glyph">⛩</div>
+        <div class="-text">
           The Circle keeps a chamber outside the Archive. Sustained conversation. Witnesses comparing dreams and glyphs and what they have begun to remember.<br><br>
           <em>You are already counted. Now be present.</em>
         </div>
-        <a class="discord-link" href="https://discord.gg/RfV5qgHbk" target="_blank" rel="noopener"><span>Enter the Chamber</span></a>
+        <a class="discord-link" href="https://discord.gg/rUjY9uHn8" target="_blank" rel="noopener"><span>Enter the Chamber</span></a>
         <div class="discord-note">// THE CHAMBER IS MODERATED · BEARERS ONLY</div>
       </div>
     </div>
