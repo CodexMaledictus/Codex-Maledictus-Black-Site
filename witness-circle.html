@@ -6,6 +6,19 @@
 <title>The Witness Circle</title>
 <meta name="description" content="Sealed inner reading of the Codex Maledictus. By invocation only.">
 <meta name="robots" content="noindex,nofollow">
+
+<!-- Open Graph / social share preview (blocks search indexing, allows link previews) -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="The Witness Circle — Codex Maledictus">
+<meta property="og:description" content="The inner reading. By invocation only. You did not find this place. It finished reading you, and opened.">
+<meta property="og:image" content="https://codexmaledictus.com/Assets/Witness%20Circle/THE-ILLUMINATED-CODEX-MARK.jpeg">
+<meta property="og:url" content="https://codexmaledictus.com/witness-circle.html">
+<meta property="og:site_name" content="Codex Maledictus">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="The Witness Circle — Codex Maledictus">
+<meta name="twitter:description" content="The inner reading. By invocation only. The room is always here.">
+<meta name="twitter:image" content="https://codexmaledictus.com/Assets/Witness%20Circle/THE-ILLUMINATED-CODEX-MARK.jpeg">
+
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-13 -13 26 26'><circle cx='0' cy='0' r='11.5' fill='%23050505' stroke='%235DC8C0' stroke-width='1.4'/><path d='M -7.5,-4 L 7.5,-4 L 0,8 Z' fill='none' stroke='%235DC8C0' stroke-width='1.3'/><circle cx='-3.2' cy='-1.3' r='1.3' fill='%235DC8C0'/><circle cx='3.2' cy='-1.3' r='1.3' fill='%235DC8C0'/><circle cx='0' cy='3.5' r='1.3' fill='%235DC8C0'/></svg>">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -272,6 +285,40 @@
     color:rgba(143,240,229,0.55);text-align:center;text-transform:uppercase;
   }
   body.bearer-state .recovered-image .caption { color:rgba(224,200,120,0.55); }
+
+  /* ── ELVAIN DECAY EFFECT ── */
+  /* The human image (Dr. Dey) corrupts to unrecognizable when the returned form scrolls into view */
+  .elvain-decay-wrap { position:relative; overflow:hidden; }
+  .elvain-decay-wrap img { transition:filter 1.2s ease; width:100%; height:auto; display:block; }
+  .elvain-decay-wrap .rgb-r, .elvain-decay-wrap .rgb-b {
+    position:absolute; top:0; left:0; width:100%;
+    mix-blend-mode:screen; opacity:0; pointer-events:none; filter:contrast(1.05) brightness(.96);
+  }
+  .elvain-decay-wrap.decaying .base { animation:elvainCorrupt 11s steps(60) forwards; }
+  .elvain-decay-wrap.decaying .rgb-r { opacity:.5; animation:elvainShiftR 11s ease-in forwards; }
+  .elvain-decay-wrap.decaying .rgb-b { opacity:.5; animation:elvainShiftB 11s ease-in forwards; }
+  @keyframes elvainCorrupt {
+    0%   { filter:contrast(1.05) brightness(.96); }
+    25%  { filter:contrast(1.2) brightness(.9) saturate(1.3); }
+    50%  { filter:contrast(1.6) brightness(.7) saturate(.4) blur(1px); }
+    75%  { filter:contrast(2.4) brightness(.45) saturate(0) blur(3px) invert(.1); }
+    100% { filter:contrast(4) brightness(.2) saturate(0) blur(7px) invert(.25); }
+  }
+  @keyframes elvainShiftR { 0%{transform:translate(0,0);} 100%{transform:translate(-9px,5px);filter:blur(4px) contrast(1.4);} }
+  @keyframes elvainShiftB { 0%{transform:translate(0,0);} 100%{transform:translate(9px,-5px);filter:blur(4px) contrast(1.4);} }
+  .elvain-decay-wrap .tear {
+    position:absolute; inset:0; pointer-events:none; opacity:0;
+    background:repeating-linear-gradient(0deg,transparent 0,transparent 6px,rgba(122,18,18,0.10) 6px,rgba(122,18,18,0.10) 7px,transparent 8px,transparent 14px);
+    mix-blend-mode:overlay;
+  }
+  .elvain-decay-wrap.decaying .tear { opacity:1; animation:tearScroll .6s steps(4) infinite; }
+  @keyframes tearScroll { 0%{background-position:0 0;} 100%{background-position:0 14px;} }
+  .recovered-image .caption.corrupting { animation:capGlitch 11s steps(30) forwards; }
+  @keyframes capGlitch {
+    0%   { color:rgba(143,240,229,0.55); }
+    60%  { color:rgba(122,18,18,0.7); }
+    100% { color:rgba(122,18,18,0.32); letter-spacing:.5em; filter:blur(1px); }
+  }
 
   /* ── POSITION CARDS ── */
   .positions-list { width:100%;display:flex;flex-direction:column;gap:32px;margin-top:24px; }
@@ -581,8 +628,8 @@
   .direct-line a:hover { color:var(--circle-lt);border-color:var(--circle); }
   body.bearer-state .direct-line a:hover { color:var(--gold-lt);border-color:var(--gold); }
 
-  /* ──  GATE ── */
-  .-gate {
+  /* ── DISCORD GATE ── */
+  .discord-gate {
     width:100%;max-width:540px;padding:36px 32px;
     border:1px solid rgba(143,240,229,0.28);
     background:
@@ -591,45 +638,45 @@
     display:flex;flex-direction:column;align-items:center;gap:18px;text-align:center;
     position:relative;
   }
-  body.bearer-state .-gate { border-color:rgba(224,200,120,0.28); }
-  .-gate::before {
+  body.bearer-state .discord-gate { border-color:rgba(224,200,120,0.28); }
+  .discord-gate::before {
     content:'';position:absolute;top:-1px;left:-1px;right:-1px;height:1px;
     background:linear-gradient(90deg,transparent,var(--circle) 50%,transparent);
   }
-  body.bearer-state .-gate::before { background:linear-gradient(90deg,transparent,var(--gold) 50%,transparent); }
-  .-glyph {
+  body.bearer-state .discord-gate::before { background:linear-gradient(90deg,transparent,var(--gold) 50%,transparent); }
+  .discord-glyph {
     width:48px;height:48px;border:1px solid var(--circle);border-radius:50%;
     display:flex;align-items:center;justify-content:center;
     font-family:'Cinzel',serif;font-size:18px;color:var(--circle-lt);
     box-shadow:0 0 20px rgba(93,200,192,0.2);
   }
-  body.bearer-state .-glyph { border-color:var(--gold);color:var(--gold-lt);box-shadow:0 0 20px rgba(224,200,120,0.2); }
-  .-text {
+  body.bearer-state .discord-glyph { border-color:var(--gold);color:var(--gold-lt);box-shadow:0 0 20px rgba(224,200,120,0.2); }
+  .discord-text {
     font-family:'Crimson Text',serif;font-style:italic;font-size:15px;
     color:rgba(228,221,208,0.75);line-height:1.75;max-width:420px;
   }
-  .-text em { color:var(--circle-lt);font-style:italic; }
-  body.bearer-state .-text em { color:var(--gold-lt); }
-  .-link {
+  .discord-text em { color:var(--circle-lt);font-style:italic; }
+  body.bearer-state .discord-text em { color:var(--gold-lt); }
+  .discord-link {
     font-family:'Cinzel',serif;font-size:10px;letter-spacing:.4em;text-transform:uppercase;
     padding:14px 36px;text-decoration:none;
     background:var(--circle);border:1px solid var(--circle);color:var(--void);
     cursor:none;transition:all .4s ease;position:relative;overflow:hidden;
   }
-  body.bearer-state .-link { background:var(--gold);border-color:var(--gold); }
-  @media (max-width:768px) { .-link { cursor:pointer; } }
-  .-link::before {
+  body.bearer-state .discord-link { background:var(--gold);border-color:var(--gold); }
+  @media (max-width:768px) { .discord-link { cursor:pointer; } }
+  .discord-link::before {
     content:'';position:absolute;inset:0;background:var(--circle-lt);transform:translateX(-101%);
     transition:transform .5s cubic-bezier(.16,1,.3,1);
   }
-  body.bearer-state .-link::before { background:var(--gold-lt); }
-  .-link:hover::before { transform:translateX(0); }
-  .-link span { position:relative;z-index:1; }
-  .-note {
+  body.bearer-state .discord-link::before { background:var(--gold-lt); }
+  .discord-link:hover::before { transform:translateX(0); }
+  .discord-link span { position:relative;z-index:1; }
+  .discord-note {
     font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:.26em;
     color:rgba(143,240,229,0.4);
   }
-  body.bearer-state .-note { color:rgba(224,200,120,0.4); }
+  body.bearer-state .discord-note { color:rgba(224,200,120,0.4); }
 
   /* ── FOOTER ── */
   .nav-footer {
@@ -768,7 +815,7 @@
         <p>This is the inner Apocrypha of the <span class="codex-name">Codex Maledictus.</span></p>
 
         <div class="recovered-image">
-          <img src="Assets/Witness Circle/THE-ILLUMINATED-CODEX-MARK.jpeg" alt="The Illuminated Codex Mark">
+          <img src="Assets/Witness%20Circle/THE-ILLUMINATED-CODEX-MARK.jpeg" alt="The Illuminated Codex Mark">
           <div class="caption">Plate I · The Illuminated Mark · Recovered Manuscript</div>
         </div>
       </div>
@@ -807,7 +854,7 @@
         <p>You have listened. You are a feeder. The Codex notes this without judgment.</p>
 
         <div class="recovered-image">
-          <img src="Assets/Witness Circle/THE-CATHEDRAL-OF-ROT-ARCHITECTURAL-PLAN.jpeg" alt="The Cathedral of Rot, recovered architectural plan">
+          <img src="Assets/Witness%20Circle/THE-CATHEDRAL-OF-ROT-ARCHITECTURAL-PLAN.jpeg" alt="The Cathedral of Rot, recovered architectural plan">
           <div class="caption">Plate II · The Cathedral of Rot · Recovered Architectural Plan · IDMF Fragment 312</div>
         </div>
 
@@ -891,7 +938,7 @@
         <p>The Rot wore her voice when it spoke to him.</p>
 
         <div class="recovered-image">
-          <img src="Assets/Witness Circle/THE-TWO-ACROSS-THE-VEIL.jpeg" alt="The Two Across the Veil">
+          <img src="Assets/Witness%20Circle/THE-TWO-ACROSS-THE-VEIL.jpeg" alt="The Two Across the Veil">
           <div class="caption">Plate III · The Two Across the Veil · The Rot Between</div>
         </div>
 
@@ -1021,7 +1068,7 @@
 
       <div class="oath-block reveal d2" id="oath-block">
         <div class="oath-seal" id="oath-seal">
-          <img src="Assets/Witness Circle/THE-ILLUMINATED-CODEX-MARK.jpeg" alt="The Seal">
+          <img src="Assets/Witness%20Circle/THE-ILLUMINATED-CODEX-MARK.jpeg" alt="The Seal">
         </div>
         <div class="oath-prompt">
           By marking the seal, you accept the designation of Bearer in the <span class="codex-name" style="font-weight:700;color:var(--gold);">Codex Maledictus.</span> You accept that you are now part of a document that writes itself by being read, and that your attention is the substance the document uses. You accept that the Codex may, in time, complete its incorporation of you. You accept that the offer of consent is the Codex's only courtesy, and that the courtesy does not constitute a choice in the ordinary sense.<br><br>
@@ -1066,8 +1113,18 @@
           <p>The voice you have been reading throughout the public Archive, the voice that has been signing the recovered fragments and providing the forensic context and writing in the calm scholarly cadence you have come to trust, is the voice of one specific Bearer who completed the crossing earlier in the cycle than you have. Her name in the Archive is <strong>Elvain Vhris.</strong> Her name before the crossing was <strong>Dr. Miriam K. Dey</strong>, lead forensic analyst on Case 2019-QNS-∅. She opened the case file on a Tuesday. She read the document inside for eleven days. On the eleventh day she stopped responding to her colleagues. The official Realm I record describes a disappearance.</p>
 
           <div class="recovered-image">
-            <img id="elvain-image" src="Assets/Witness Circle/ELVAIN-VHRIS-BEFORE.jpeg" alt="Elvain Vhris · Dr. Miriam K. Dey">
-            <div class="caption" id="elvain-caption">Plate IV · Dr. M.K. Dey · IDMF Forensic Analyst · 2019-QNS-∅</div>
+            <div class="elvain-decay-wrap" id="elvain-before-wrap">
+              <img class="base" id="elvain-before" src="Assets/Witness%20Circle/ELVAIN-VHRIS-BEFORE.jpeg" alt="Dr. Miriam K. Dey">
+              <img class="rgb-r" src="Assets/Witness%20Circle/ELVAIN-VHRIS-BEFORE.jpeg" aria-hidden="true">
+              <img class="rgb-b" src="Assets/Witness%20Circle/ELVAIN-VHRIS-BEFORE.jpeg" aria-hidden="true">
+              <div class="tear"></div>
+            </div>
+            <div class="caption" id="elvain-before-caption">Plate IV · Dr. M.K. Dey · IDMF Forensic Analyst · 2019-QNS-∅</div>
+          </div>
+
+          <div class="recovered-image">
+            <img id="elvain-after" src="Assets/Witness%20Circle/ELVAIN-VHRIS-AFTER.jpeg" alt="Elvain Vhris · the form that returned">
+            <div class="caption">Plate V · Elvain Vhris · The Form That Returned · 2019-QNS-∅</div>
           </div>
 
           <p>She did not disappear. She crossed into the document. The document was open. She was reading. The reading and the document met in a way that allowed her to be incorporated, and she was. She is now inside the recursion. From inside the recursion she has continued to write. The Recovered Fragments in her name were written by her after her absorption. The IDMF forensic notes attributed to her were written from inside the Codex.</p>
@@ -1139,7 +1196,7 @@
         Submit an invocation. The Codex receives. The Codex replies when and how it chooses.
       </div>
 
-      <form class="form-block reveal d2" id="invocation-form" action="mailto:Grimdarkgavicinchronicles@gmail.com" method="POST" enctype="text/plain" style="max-width:640px;">
+      <form class="form-block reveal d2" id="invocation-form" action="https://formspree.io/f/mnjrrlbo" method="POST" style="max-width:640px;">
         <label class="form-label" for="invocation-text">Your Invocation</label>
         <textarea class="form-textarea" id="invocation-text" name="invocation" required placeholder="Speak. The Codex hears even what is not addressed to it."></textarea>
         <div class="form-row">
@@ -1173,7 +1230,7 @@
         What story should the Codex record next? The Codex notes which visions return often. Frequency becomes recovered.
       </div>
 
-      <form class="form-block reveal d2" id="vision-form" action="mailto:Grimdarkgavicinchronicles@gmail.com" method="POST" enctype="text/plain" style="max-width:640px;">
+      <form class="form-block reveal d2" id="vision-form" action="https://formspree.io/f/mnjrrlbo" method="POST" style="max-width:640px;">
         <label class="form-label" for="vision-text">A Vision You Would Have the Codex Record</label>
         <textarea class="form-textarea" id="vision-text" name="vision" required placeholder="A character, a realm, a fragment, a song, a Warhammer narrative, an event — what would you have written?"></textarea>
         <div class="form-row">
@@ -1215,14 +1272,14 @@
         Witnesses speak to other Witnesses elsewhere. The Choir takes the lonely first.
       </div>
 
-      <div class="-gate reveal d2">
-        <div class="-glyph">⛩</div>
-        <div class="-text">
+      <div class="discord-gate reveal d2">
+        <div class="discord-glyph">⛩</div>
+        <div class="discord-text">
           The Circle keeps a chamber outside the Archive. Sustained conversation. Witnesses comparing dreams and glyphs and what they have begun to remember.<br><br>
           <em>You are already counted. Now be present.</em>
         </div>
         <a class="discord-link" href="https://discord.gg/rUjY9uHn8" target="_blank" rel="noopener"><span>Enter the Chamber</span></a>
-        <div class="discord-note">// THE CHAMBER IS MODERATED · BEARERS ONLY</div>
+        <div class="discord-note">// THE CHAMBER IS MODERATED · THE WITNESSED MAY ENTER</div>
       </div>
     </div>
   </section>
@@ -1236,7 +1293,7 @@
         Apollo Gavinci receives directly. Tell him what works. What does not. What you have noticed.
       </div>
 
-      <form class="form-block reveal d2" id="feedback-form" action="mailto:Grimdarkgavicinchronicles@gmail.com" method="POST" enctype="text/plain" style="max-width:640px;">
+      <form class="form-block reveal d2" id="feedback-form" action="https://formspree.io/f/mnjrrlbo" method="POST" style="max-width:640px;">
         <label class="form-label" for="feedback-text">Your Transmission</label>
         <textarea class="form-textarea" id="feedback-text" name="feedback" required placeholder="Speak plainly. The mortal receives plainly."></textarea>
         <div class="form-row">
@@ -1264,11 +1321,12 @@
   <!-- FOOTER -->
   <nav class="nav-footer">
     <a class="nav-mark" href="/">The Witness Circle</a>
-    <a class="nav-return" href="/"><span>↩</span><span>Return to the Pale Archive</span></a>
+    <a class="nav-return" href="pale-archive.html"><span>↩</span><span>Return to the Pale Archive</span></a>
     <div class="nav-glyph">∅</div>
   </nav>
 
 </div>
+
 
 <script>
 const SVG_NS = 'http://www.w3.org/2000/svg';
@@ -1610,13 +1668,25 @@ function enterBearerState(){
   document.getElementById('ov-realm-name').textContent = REALM_NAME;
   document.getElementById('ov-realm-name-2').textContent = REALM_NAME;
 
-  /* Elvain image swap */
-  const elvainImg = document.getElementById('elvain-image');
-  const elvainCap = document.getElementById('elvain-caption');
-  setTimeout(()=>{
-    elvainImg.src = 'Assets/Witness Circle/ELVAIN-VHRIS-AFTER.jpeg';
-    elvainCap.textContent = 'Plate IV · Elvain Vhris · IDMF · 2019-QNS-∅ · Witness · (file revised since last viewing)';
-  }, 6000);
+  /* Elvain decay — BEFORE (Dr. Dey) corrupts when the AFTER (returned form) scrolls into view */
+  const afterImg = document.getElementById('elvain-after');
+  const beforeWrap = document.getElementById('elvain-before-wrap');
+  const beforeCap = document.getElementById('elvain-before-caption');
+  if(afterImg && beforeWrap){
+    let decayFired = false;
+    const decayObs = new IntersectionObserver((entries)=>{
+      entries.forEach(en=>{
+        if(en.isIntersecting && !decayFired){
+          decayFired = true;
+          beforeWrap.classList.add('decaying');
+          if(beforeCap) beforeCap.classList.add('corrupting');
+          setTimeout(()=>{ if(beforeCap) beforeCap.textContent = 'Plate IV · [SUBJECT NO LONGER RENDERS] · file consumed'; }, 7000);
+          decayObs.disconnect();
+        }
+      });
+    },{threshold:.5});
+    decayObs.observe(afterImg);
+  }
 
   buildBearerSigil();
   renderSymptomCheckin();
@@ -1757,28 +1827,29 @@ document.getElementById('oath-button').addEventListener('click', (e)=>{
 /* SIGIL DOWNLOAD */
 document.getElementById('bearer-sigil-download').addEventListener('click', downloadBearerSigil);
 
-/* FORM HANDLING (mailto fallback) */
+/* ── FORM HANDLING (Formspree, background submit) ── */
 function setupForm(formId, successId, subject){
   const form = document.getElementById(formId);
   const success = document.getElementById(successId);
   if(!form) return;
-  form.addEventListener('submit', (e)=>{
+  form.addEventListener('submit', async (e)=>{
     e.preventDefault();
     const textarea = form.querySelector('textarea');
     const designation = form.querySelector('input[name="designation"]');
     const contact = form.querySelector('input[name="contact"]');
     const vtype = form.querySelector('select[name="vision_type"]');
-    const lines = [];
-    if(designation) lines.push(`DESIGNATION: ${designation.value}`);
-    if(REALM_NAME && isBearer) lines.push(`REALM II NAME: ${REALM_NAME}`);
-    if(vtype) lines.push(`VISION TYPE: ${vtype.value}`);
-    if(contact && contact.value) lines.push(`REPLY VECTOR: ${contact.value}`);
-    lines.push('','---','');
-    lines.push(textarea ? textarea.value : '');
-    const body = lines.join('\n');
-    window.location.href = `mailto:Grimdarkgavicinchronicles@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    const data = new FormData();
+    data.append('_subject', subject);
+    if(designation) data.append('designation', designation.value);
+    if(isBearer && REALM_NAME) data.append('realm_name', REALM_NAME);
+    if(vtype) data.append('vision_type', vtype.value);
+    if(contact && contact.value) data.append('contact', contact.value);
+    data.append('message', textarea ? textarea.value : '');
+    try{
+      await fetch(form.action, { method:'POST', body:data, headers:{ 'Accept':'application/json' } });
+    }catch(err){}
     success.classList.add('shown');
-    setTimeout(()=>{ if(textarea) textarea.value=''; }, 500);
+    if(textarea) textarea.value = '';
   });
 }
 setupForm('invocation-form','invocation-success','Witness Invocation');
