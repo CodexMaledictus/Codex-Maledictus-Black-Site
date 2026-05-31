@@ -721,8 +721,71 @@
     .nav-glyph { display:none; }
   }
 
+  /* ── ATTUNE / AUDIO ── */
+  .attune-glyph {
+    position:fixed; right:22px; bottom:22px; z-index:200;
+    width:44px; height:44px; border-radius:50%;
+    border:1px solid rgba(143,240,229,0.4);
+    background:radial-gradient(circle,rgba(8,16,15,0.9),rgba(4,8,8,0.95));
+    display:flex; align-items:center; justify-content:center;
+    cursor:none; transition:border-color 2.5s ease, box-shadow .6s ease, opacity .8s ease;
+    box-shadow:0 0 0 rgba(93,200,192,0);
+    animation:attunePulse 3.4s ease-in-out infinite;
+  }
+  @media (max-width:768px){ .attune-glyph{ cursor:pointer; right:16px; bottom:16px; } }
+  body.bearer-state .attune-glyph { border-color:rgba(224,200,120,0.45); }
+  .attune-glyph svg { width:20px; height:20px; display:block; }
+  .attune-glyph .wave { stroke:var(--circle-lt); transition:stroke 2.5s ease; }
+  body.bearer-state .attune-glyph .wave { stroke:var(--gold-lt); }
+  .attune-glyph.playing { animation:none; box-shadow:0 0 18px rgba(93,200,192,0.35); }
+  body.bearer-state .attune-glyph.playing { box-shadow:0 0 18px rgba(224,200,120,0.4); }
+  @keyframes attunePulse {
+    0%,100%{ box-shadow:0 0 0 rgba(93,200,192,0); border-color:rgba(143,240,229,0.3); }
+    50%{ box-shadow:0 0 14px rgba(93,200,192,0.28); border-color:rgba(143,240,229,0.6); }
+  }
+  .attune-glyph .muted-line {
+    position:absolute; width:26px; height:1.4px; background:var(--circle-lt);
+    transform:rotate(-45deg); opacity:0; transition:opacity .4s ease;
+  }
+  body.bearer-state .attune-glyph .muted-line { background:var(--gold-lt); }
+  .attune-glyph.playing .muted-line { opacity:0; }
+  .attune-glyph.silenced .muted-line { opacity:0.9; }
+
+  /* The canon nudge */
+  .attune-nudge {
+    position:fixed; right:22px; bottom:78px; z-index:200;
+    max-width:280px; text-align:right;
+    opacity:0; transform:translateY(8px); pointer-events:none;
+    transition:opacity 1.4s ease, transform 1.4s ease;
+  }
+  @media (max-width:768px){ .attune-nudge{ right:16px; bottom:70px; max-width:72vw; } }
+  .attune-nudge.shown { opacity:1; transform:none; pointer-events:auto; }
+  .attune-nudge .nudge-whisper {
+    font-family:'Crimson Text',serif; font-style:italic;
+    font-size:13.5px; line-height:1.6; color:rgba(143,240,229,0.7);
+    margin-bottom:10px; text-shadow:0 0 12px rgba(0,0,0,0.8);
+  }
+  body.bearer-state .attune-nudge .nudge-whisper { color:rgba(224,200,120,0.72); }
+  .attune-nudge .nudge-yes {
+    display:inline-block; font-family:'Cinzel',serif; font-size:9px; letter-spacing:.34em;
+    text-transform:uppercase; color:var(--circle-lt); cursor:none;
+    border-bottom:1px solid rgba(143,240,229,0.4); padding-bottom:3px;
+    transition:color .35s ease, border-color .35s ease;
+  }
+  @media (max-width:768px){ .attune-nudge .nudge-yes{ cursor:pointer; font-size:10px; } }
+  body.bearer-state .attune-nudge .nudge-yes { color:var(--gold-lt); border-bottom-color:rgba(224,200,120,0.4); }
+  .attune-nudge .nudge-yes:hover { color:#fff; border-color:var(--circle-lt); }
+  .attune-nudge .nudge-no {
+    display:block; margin-top:10px;
+    font-family:'Share Tech Mono',monospace; font-size:8px; letter-spacing:.22em;
+    color:rgba(143,240,229,0.32); cursor:none; transition:color .35s ease;
+  }
+  @media (max-width:768px){ .attune-nudge .nudge-no{ cursor:pointer; } }
+  .attune-nudge .nudge-no:hover { color:rgba(143,240,229,0.55); }
+
   @media (prefers-reduced-motion:reduce) {
     * { animation-duration:.01s !important;animation-iteration-count:1 !important; }
+    .attune-glyph { animation:none; }
   }
 </style>
 </head>
@@ -742,7 +805,21 @@
 <canvas id="cv-bg"></canvas>
 <div id="scanlines"></div>
 
+<!-- ATTUNE / AUDIO -->
+<div class="attune-nudge" id="attune-nudge">
+  <div class="nudge-whisper">There is a sound beneath this page. There has always been. Most never tune to it.</div>
+  <span class="nudge-yes" id="nudge-yes">Attune to the frequency</span>
+  <span class="nudge-no" id="nudge-no">// or read on in silence</span>
+</div>
+<div class="attune-glyph" id="attune-glyph" title="Attune to the frequency" aria-label="Attune to the frequency">
+  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path class="wave" d="M4 12 Q6 7 8 12 T12 12 T16 12 T20 12" stroke-width="1.4" stroke-linecap="round"/>
+  </svg>
+  <div class="muted-line"></div>
+</div>
+
 <!-- BOOT -->
+
 <div id="boot">
   <div class="boot-scanlines"></div>
   <svg class="boot-mark" viewBox="-13 -13 26 26" xmlns="http://www.w3.org/2000/svg">
@@ -1688,6 +1765,9 @@ function enterBearerState(){
     decayObs.observe(afterImg);
   }
 
+  /* deepen the frequency on crossing */
+  audioDeepenForOath();
+
   buildBearerSigil();
   renderSymptomCheckin();
   startChoirHum();
@@ -1903,8 +1983,90 @@ function drawBg(){
 }
 drawBg();
 
-/* INITIALIZE */
-renderPositions();
+/* ── ATTUNE / AUDIO SYSTEM ── */
+const AUDIO_SRC = 'Assets/Audio/Witness%20Circle/Witness-Circle-Audio.mp3';
+const ATTUNE_KEY = 'codex_attuned_v1';
+const A_BASE_VOL = 0.32, A_OATH_VOL = 0.46, A_FADE_MS = 4000;
+let audioEl = null, audioIsPlaying = false, audioFadeTimer = null, oathDeepened = false;
+
+function audioMake(){
+  if(audioEl) return;
+  audioEl = new Audio(AUDIO_SRC);
+  audioEl.loop = true;          // seamless loop
+  audioEl.volume = 0;
+  audioEl.preload = 'auto';
+}
+function audioFadeTo(target, ms){
+  if(!audioEl) return;
+  if(audioFadeTimer) clearInterval(audioFadeTimer);
+  const startVol = audioEl.volume, t0 = Date.now();
+  audioFadeTimer = setInterval(()=>{
+    const k = Math.min(1,(Date.now()-t0)/ms);
+    audioEl.volume = Math.max(0,Math.min(1, startVol + (target-startVol)*k));
+    if(k>=1){ clearInterval(audioFadeTimer); audioFadeTimer=null; if(target===0 && audioEl){ audioEl.pause(); } }
+  },40);
+}
+function attuneStart(){
+  audioMake();
+  const targetVol = (document.body.classList.contains('bearer-state') ? A_OATH_VOL : A_BASE_VOL);
+  audioEl.play().then(()=>{
+    audioIsPlaying = true;
+    glyph.classList.add('playing'); glyph.classList.remove('silenced');
+    audioFadeTo(targetVol, A_FADE_MS);
+    try{ localStorage.setItem(ATTUNE_KEY,'1'); }catch(e){}
+    nudgeHide();
+  }).catch(()=>{ /* browser blocked; user can tap glyph */ });
+}
+function attuneSilence(){
+  audioIsPlaying = false;
+  glyph.classList.remove('playing'); glyph.classList.add('silenced');
+  audioFadeTo(0, 1500);
+}
+function attuneToggle(){
+  if(audioIsPlaying) attuneSilence();
+  else attuneStart();
+}
+function audioDeepenForOath(){
+  oathDeepened = true;
+  if(audioIsPlaying) audioFadeTo(A_OATH_VOL, 3000);
+}
+
+const glyph = document.getElementById('attune-glyph');
+const nudge = document.getElementById('attune-nudge');
+const nudgeYes = document.getElementById('nudge-yes');
+const nudgeNo = document.getElementById('nudge-no');
+let nudgeTimer = null;
+function nudgeShow(){
+  if(!nudge) return;
+  nudge.classList.add('shown');
+  nudgeTimer = setTimeout(nudgeHide, 12000);  // self-dismiss after 12s
+}
+function nudgeHide(){
+  if(!nudge) return;
+  if(nudgeTimer){ clearTimeout(nudgeTimer); nudgeTimer=null; }
+  nudge.classList.remove('shown');
+}
+if(glyph) glyph.addEventListener('click', attuneToggle);
+if(nudgeYes) nudgeYes.addEventListener('click', attuneStart);
+if(nudgeNo) nudgeNo.addEventListener('click', nudgeHide);
+
+/* Show the canon nudge a few seconds after the page settles.
+   If they have attuned before, skip the nudge — the Codex does not ask twice. */
+function initAttune(){
+  let attunedBefore = false;
+  try{ attunedBefore = localStorage.getItem(ATTUNE_KEY)==='1'; }catch(e){}
+  if(attunedBefore){
+    // quietly resume on a first interaction (browser autoplay rule)
+    const resume = ()=>{ if(!audioIsPlaying) attuneStart(); document.removeEventListener('click',resume); document.removeEventListener('touchstart',resume); };
+    document.addEventListener('click',resume,{once:true});
+    document.addEventListener('touchstart',resume,{once:true,passive:true});
+  } else {
+    // first-timer: offer the frequency after the page has settled
+    setTimeout(nudgeShow, isBearer ? 3500 : 6500);
+  }
+}
+
+
 renderPreamble();
 setDesignations();
 
@@ -1912,6 +2074,9 @@ setDesignations();
 if(isBearer && STATE.witnessVisits >= 3){
   document.body.classList.add('visit-3plus');
 }
+
+/* Start the attune/audio system */
+initAttune();
 </script>
 
 </body>
