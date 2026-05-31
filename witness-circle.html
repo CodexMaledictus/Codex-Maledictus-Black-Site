@@ -721,71 +721,81 @@
     .nav-glyph { display:none; }
   }
 
-  /* ── ATTUNE / AUDIO ── */
-  .attune-glyph {
-    position:fixed; right:22px; bottom:22px; z-index:200;
-    width:44px; height:44px; border-radius:50%;
-    border:1px solid rgba(143,240,229,0.4);
-    background:radial-gradient(circle,rgba(8,16,15,0.9),rgba(4,8,8,0.95));
+  /* ── ATTUNE / THE BREATHING SIGIL ── */
+  .attune-sigil {
+    position:fixed; right:24px; bottom:24px; z-index:200;
+    width:52px; height:52px;
     display:flex; align-items:center; justify-content:center;
-    cursor:none; transition:border-color 2.5s ease, box-shadow .6s ease, opacity .8s ease;
-    box-shadow:0 0 0 rgba(93,200,192,0);
-    animation:attunePulse 3.4s ease-in-out infinite;
+    cursor:none; background:none; border:none; padding:0;
   }
-  @media (max-width:768px){ .attune-glyph{ cursor:pointer; right:16px; bottom:16px; } }
-  body.bearer-state .attune-glyph { border-color:rgba(224,200,120,0.45); }
-  .attune-glyph svg { width:20px; height:20px; display:block; }
-  .attune-glyph .wave { stroke:var(--circle-lt); transition:stroke 2.5s ease; }
-  body.bearer-state .attune-glyph .wave { stroke:var(--gold-lt); }
-  .attune-glyph.playing { animation:none; box-shadow:0 0 18px rgba(93,200,192,0.35); }
-  body.bearer-state .attune-glyph.playing { box-shadow:0 0 18px rgba(224,200,120,0.4); }
-  @keyframes attunePulse {
-    0%,100%{ box-shadow:0 0 0 rgba(93,200,192,0); border-color:rgba(143,240,229,0.3); }
-    50%{ box-shadow:0 0 14px rgba(93,200,192,0.28); border-color:rgba(143,240,229,0.6); }
-  }
-  .attune-glyph .muted-line {
-    position:absolute; width:26px; height:1.4px; background:var(--circle-lt);
-    transform:rotate(-45deg); opacity:0; transition:opacity .4s ease;
-  }
-  body.bearer-state .attune-glyph .muted-line { background:var(--gold-lt); }
-  .attune-glyph.playing .muted-line { opacity:0; }
-  .attune-glyph.silenced .muted-line { opacity:0.9; }
+  @media (max-width:768px){ .attune-sigil{ cursor:pointer; right:18px; bottom:18px; width:48px; height:48px; } }
+  .attune-sigil svg { width:100%; height:100%; display:block; overflow:visible; }
 
-  /* The canon nudge */
-  .attune-nudge {
-    position:fixed; right:22px; bottom:78px; z-index:200;
-    max-width:280px; text-align:right;
-    opacity:0; transform:translateY(8px); pointer-events:none;
-    transition:opacity 1.4s ease, transform 1.4s ease;
+  /* sigil strokes/fills */
+  .attune-sigil .sg-ring,
+  .attune-sigil .sg-tri { stroke:var(--circle-lt); fill:none; transition:stroke 2.5s ease, opacity 1.2s ease; }
+  .attune-sigil .sg-dot { fill:var(--circle-lt); transition:fill 2.5s ease, opacity 1.2s ease; }
+  body.bearer-state .attune-sigil .sg-ring,
+  body.bearer-state .attune-sigil .sg-tri { stroke:var(--gold-lt); }
+  body.bearer-state .attune-sigil .sg-dot { fill:var(--gold-lt); }
+
+  /* glow aura behind the sigil */
+  .attune-sigil .sg-aura {
+    fill:var(--circle); opacity:0; transition:opacity 1.4s ease, fill 2.5s ease;
   }
-  @media (max-width:768px){ .attune-nudge{ right:16px; bottom:70px; max-width:72vw; } }
-  .attune-nudge.shown { opacity:1; transform:none; pointer-events:auto; }
-  .attune-nudge .nudge-whisper {
+  body.bearer-state .attune-sigil .sg-aura { fill:var(--gold); }
+
+  /* DORMANT: faint, slow breathing */
+  .attune-sigil .sg-core { transform-origin:center; transform-box:fill-box;
+    animation:sigilBreath 5.5s ease-in-out infinite; opacity:.5; transition:opacity 1.2s ease; }
+  @keyframes sigilBreath {
+    0%,100% { transform:scale(0.94); opacity:.42; }
+    50%     { transform:scale(1.02); opacity:.62; }
+  }
+
+  /* ATTUNED: brighter, fuller breath, aura blooms */
+  .attune-sigil.playing .sg-core { animation:sigilBreathDeep 4s ease-in-out infinite; opacity:.95; }
+  .attune-sigil.playing .sg-aura { opacity:.22; animation:sigilAura 4s ease-in-out infinite; }
+  @keyframes sigilBreathDeep {
+    0%,100% { transform:scale(0.97); opacity:.85; }
+    50%     { transform:scale(1.06); opacity:1; }
+  }
+  @keyframes sigilAura {
+    0%,100% { opacity:.12; }
+    50%     { opacity:.30; }
+  }
+
+  /* SILENCED: dimmed, breath slows nearly to stillness */
+  .attune-sigil.silenced .sg-core { animation:sigilBreath 8s ease-in-out infinite; opacity:.3; }
+  .attune-sigil.silenced .sg-aura { opacity:0; }
+
+  /* THE INSCRIPTION — rises beside the sigil on hover / on state change */
+  .attune-inscription {
+    position:fixed; right:88px; bottom:30px; z-index:200;
+    max-width:300px; text-align:right;
+    opacity:0; transform:translateX(10px); pointer-events:none;
+    transition:opacity 1s ease, transform 1s ease;
+  }
+  @media (max-width:768px){ .attune-inscription{ right:74px; bottom:24px; max-width:62vw; } }
+  .attune-inscription.shown { opacity:1; transform:none; }
+  .attune-inscription .insc-line {
     font-family:'Crimson Text',serif; font-style:italic;
-    font-size:13.5px; line-height:1.6; color:rgba(143,240,229,0.7);
-    margin-bottom:10px; text-shadow:0 0 12px rgba(0,0,0,0.8);
+    font-size:14.5px; line-height:1.55; color:rgba(143,240,229,0.82);
+    text-shadow:0 0 14px rgba(0,0,0,0.9), 0 0 22px rgba(0,0,0,0.7);
   }
-  body.bearer-state .attune-nudge .nudge-whisper { color:rgba(224,200,120,0.72); }
-  .attune-nudge .nudge-yes {
-    display:inline-block; font-family:'Cinzel',serif; font-size:9px; letter-spacing:.34em;
-    text-transform:uppercase; color:var(--circle-lt); cursor:none;
-    border-bottom:1px solid rgba(143,240,229,0.4); padding-bottom:3px;
-    transition:color .35s ease, border-color .35s ease;
+  body.bearer-state .attune-inscription .insc-line { color:rgba(224,200,120,0.85); }
+  .attune-inscription .insc-line.sub {
+    font-size:11px; color:rgba(143,240,229,0.5); margin-top:4px;
+    font-family:'Share Tech Mono',monospace; font-style:normal; letter-spacing:.12em;
   }
-  @media (max-width:768px){ .attune-nudge .nudge-yes{ cursor:pointer; font-size:10px; } }
-  body.bearer-state .attune-nudge .nudge-yes { color:var(--gold-lt); border-bottom-color:rgba(224,200,120,0.4); }
-  .attune-nudge .nudge-yes:hover { color:#fff; border-color:var(--circle-lt); }
-  .attune-nudge .nudge-no {
-    display:block; margin-top:10px;
-    font-family:'Share Tech Mono',monospace; font-size:8px; letter-spacing:.22em;
-    color:rgba(143,240,229,0.32); cursor:none; transition:color .35s ease;
-  }
-  @media (max-width:768px){ .attune-nudge .nudge-no{ cursor:pointer; } }
-  .attune-nudge .nudge-no:hover { color:rgba(143,240,229,0.55); }
+  body.bearer-state .attune-inscription .insc-line.sub { color:rgba(224,200,120,0.5); }
+
+  /* The first-arrival nudge: same inscription, shown automatically once */
+  .attune-inscription.nudge-auto { pointer-events:auto; }
 
   @media (prefers-reduced-motion:reduce) {
     * { animation-duration:.01s !important;animation-iteration-count:1 !important; }
-    .attune-glyph { animation:none; }
+    .attune-sigil .sg-core { animation:none !important; }
   }
 </style>
 </head>
@@ -805,20 +815,26 @@
 <canvas id="cv-bg"></canvas>
 <div id="scanlines"></div>
 
-<!-- ATTUNE / AUDIO -->
-<div class="attune-nudge" id="attune-nudge">
-  <div class="nudge-whisper">There is a sound beneath this page. There has always been. Most never tune to it.</div>
-  <span class="nudge-yes" id="nudge-yes">Attune to the frequency</span>
-  <span class="nudge-no" id="nudge-no">// or read on in silence</span>
+<!-- ATTUNE / THE BREATHING SIGIL -->
+<div class="attune-inscription" id="attune-inscription">
+  <div class="insc-line" id="insc-main">The frequency is already here.</div>
+  <div class="insc-line sub" id="insc-sub">you have simply not been listening</div>
 </div>
-<div class="attune-glyph" id="attune-glyph" title="Attune to the frequency" aria-label="Attune to the frequency">
-  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path class="wave" d="M4 12 Q6 7 8 12 T12 12 T16 12 T20 12" stroke-width="1.4" stroke-linecap="round"/>
+<button class="attune-sigil silenced" id="attune-sigil" aria-label="Attune to the frequency" title="Attune to the frequency">
+  <svg viewBox="-30 -30 60 60" xmlns="http://www.w3.org/2000/svg">
+    <circle class="sg-aura" cx="0" cy="0" r="26"/>
+    <g class="sg-core">
+      <circle class="sg-ring" cx="0" cy="0" r="22" stroke-width="1.5"/>
+      <path class="sg-tri" d="M -13,-7 L 13,-7 L 0,15 Z" stroke-width="1.5" stroke-linejoin="round"/>
+      <circle class="sg-dot" cx="-5.5" cy="-2.5" r="2.2"/>
+      <circle class="sg-dot" cx="5.5" cy="-2.5" r="2.2"/>
+      <circle class="sg-dot" cx="0" cy="6.5" r="2.2"/>
+    </g>
   </svg>
-  <div class="muted-line"></div>
-</div>
+</button>
 
 <!-- BOOT -->
+
 
 <div id="boot">
   <div class="boot-scanlines"></div>
@@ -1770,7 +1786,6 @@ function enterBearerState(){
 
   buildBearerSigil();
   renderSymptomCheckin();
-  startChoirHum();
   scrollPostOath();
 }
 
@@ -1810,45 +1825,8 @@ function updateConvergence(){
   else notice.classList.remove('shown');
 }
 
-/* ── HOLLOW CHOIR HUM (Web Audio API, very low) ── */
-let audioCtx = null;
-let humStarted = false;
-function startChoirHum(){
-  if(humStarted) return;
-  humStarted = true;
-  try {
-    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    const start = ()=>{
-      const o1 = audioCtx.createOscillator();
-      const o2 = audioCtx.createOscillator();
-      const o3 = audioCtx.createOscillator();
-      const g = audioCtx.createGain();
-      const seed = hashString(STATE.fingerprint || 'default');
-      o1.frequency.value = 55 + (seed % 8);
-      o2.frequency.value = 82 + ((seed >> 4) % 8);
-      o3.frequency.value = 110 + ((seed >> 8) % 6);
-      o1.type = 'sine';
-      o2.type = 'sine';
-      o3.type = 'triangle';
-      g.gain.value = 0;
-      o1.connect(g);o2.connect(g);o3.connect(g);
-      g.connect(audioCtx.destination);
-      o1.start();o2.start();o3.start();
-      g.gain.linearRampToValueAtTime(0.012, audioCtx.currentTime + 4);
-    };
-    if(audioCtx.state === 'suspended'){
-      const resume = ()=>{audioCtx.resume();start();document.removeEventListener('click',resume);document.removeEventListener('touchstart',resume);};
-      document.addEventListener('click',resume,{once:true});
-      document.addEventListener('touchstart',resume,{once:true,passive:true});
-    } else start();
-  } catch(e){}
-}
+/* ── (Oscillator hum retired — the instrumental track is now the page's only sound) ── */
 
-/* If returning Bearer, start hum on first interaction */
-if(isBearer){
-  document.addEventListener('click',()=>{ if(!humStarted) startChoirHum(); },{once:true});
-  document.addEventListener('touchstart',()=>{ if(!humStarted) startChoirHum(); },{once:true,passive:true});
-}
 
 /* ── BOOT SEQUENCE ── */
 const bootLines = isBearer
@@ -1983,11 +1961,41 @@ function drawBg(){
 }
 drawBg();
 
-/* ── ATTUNE / AUDIO SYSTEM ── */
-const AUDIO_SRC = 'Assets/Audio/Witness%20Circle/Witness-Circle-Audio.mp3';
+/* ── ATTUNE / AUDIO SYSTEM (the breathing sigil) ── */
+const AUDIO_SRC = 'Audio/Witness%20Circle/Witness-Circle-Audio.mp3';
 const ATTUNE_KEY = 'codex_attuned_v1';
 const A_BASE_VOL = 0.32, A_OATH_VOL = 0.46, A_FADE_MS = 4000;
 let audioEl = null, audioIsPlaying = false, audioFadeTimer = null, oathDeepened = false;
+
+const sigil = document.getElementById('attune-sigil');
+const inscription = document.getElementById('attune-inscription');
+const inscMain = document.getElementById('insc-main');
+const inscSub = document.getElementById('insc-sub');
+let inscTimer = null, hasAttunedBefore = false;
+
+/* Four-state scripture — the sigil speaks where the reader is in the descent */
+function inscriptionFor(kind){
+  const bearer = document.body.classList.contains('bearer-state');
+  if(bearer) return { main:'You are inside it now.', sub:'you always were' };
+  if(kind === 'attuned') return { main:'You are listening now.', sub:'' };
+  if(hasAttunedBefore) return { main:'You have heard it before.', sub:'it did not stop when you left' };
+  return { main:'The frequency is already here.', sub:'you have simply not been listening' };
+}
+function inscriptionShow(kind, hold){
+  if(!inscription) return;
+  const t = inscriptionFor(kind);
+  inscMain.textContent = t.main;
+  inscSub.textContent = t.sub;
+  inscSub.style.display = t.sub ? 'block' : 'none';
+  inscription.classList.add('shown');
+  if(inscTimer) clearTimeout(inscTimer);
+  if(hold) inscTimer = setTimeout(()=>inscription.classList.remove('shown'), hold);
+}
+function inscriptionHide(){
+  if(!inscription) return;
+  if(inscTimer){ clearTimeout(inscTimer); inscTimer=null; }
+  inscription.classList.remove('shown');
+}
 
 function audioMake(){
   if(audioEl) return;
@@ -2011,15 +2019,15 @@ function attuneStart(){
   const targetVol = (document.body.classList.contains('bearer-state') ? A_OATH_VOL : A_BASE_VOL);
   audioEl.play().then(()=>{
     audioIsPlaying = true;
-    glyph.classList.add('playing'); glyph.classList.remove('silenced');
+    if(sigil){ sigil.classList.add('playing'); sigil.classList.remove('silenced'); }
     audioFadeTo(targetVol, A_FADE_MS);
     try{ localStorage.setItem(ATTUNE_KEY,'1'); }catch(e){}
-    nudgeHide();
-  }).catch(()=>{ /* browser blocked; user can tap glyph */ });
+    inscriptionShow('attuned', 4000);   // "You are listening now." then fades
+  }).catch(()=>{ /* browser blocked; the sigil tap will start it */ });
 }
 function attuneSilence(){
   audioIsPlaying = false;
-  glyph.classList.remove('playing'); glyph.classList.add('silenced');
+  if(sigil){ sigil.classList.remove('playing'); sigil.classList.add('silenced'); }
   audioFadeTo(0, 1500);
 }
 function attuneToggle(){
@@ -2031,38 +2039,27 @@ function audioDeepenForOath(){
   if(audioIsPlaying) audioFadeTo(A_OATH_VOL, 3000);
 }
 
-const glyph = document.getElementById('attune-glyph');
-const nudge = document.getElementById('attune-nudge');
-const nudgeYes = document.getElementById('nudge-yes');
-const nudgeNo = document.getElementById('nudge-no');
-let nudgeTimer = null;
-function nudgeShow(){
-  if(!nudge) return;
-  nudge.classList.add('shown');
-  nudgeTimer = setTimeout(nudgeHide, 12000);  // self-dismiss after 12s
+/* Sigil interactions: tap toggles; hover reveals the inscription */
+if(sigil){
+  sigil.addEventListener('click', attuneToggle);
+  if(!isMobile){
+    sigil.addEventListener('mouseenter', ()=>{ inscriptionShow(audioIsPlaying?'attuned':'invite', 0); });
+    sigil.addEventListener('mouseleave', ()=>{ inscriptionHide(); });
+  }
 }
-function nudgeHide(){
-  if(!nudge) return;
-  if(nudgeTimer){ clearTimeout(nudgeTimer); nudgeTimer=null; }
-  nudge.classList.remove('shown');
-}
-if(glyph) glyph.addEventListener('click', attuneToggle);
-if(nudgeYes) nudgeYes.addEventListener('click', attuneStart);
-if(nudgeNo) nudgeNo.addEventListener('click', nudgeHide);
 
-/* Show the canon nudge a few seconds after the page settles.
-   If they have attuned before, skip the nudge — the Codex does not ask twice. */
+/* Start the attune/audio system.
+   First-timers: the sigil offers the frequency once after the page settles.
+   Returning attuned: the Codex does not ask twice — quiet resume on first interaction. */
 function initAttune(){
-  let attunedBefore = false;
-  try{ attunedBefore = localStorage.getItem(ATTUNE_KEY)==='1'; }catch(e){}
-  if(attunedBefore){
-    // quietly resume on a first interaction (browser autoplay rule)
+  try{ hasAttunedBefore = localStorage.getItem(ATTUNE_KEY)==='1'; }catch(e){}
+  if(hasAttunedBefore){
     const resume = ()=>{ if(!audioIsPlaying) attuneStart(); document.removeEventListener('click',resume); document.removeEventListener('touchstart',resume); };
     document.addEventListener('click',resume,{once:true});
     document.addEventListener('touchstart',resume,{once:true,passive:true});
   } else {
-    // first-timer: offer the frequency after the page has settled
-    setTimeout(nudgeShow, isBearer ? 3500 : 6500);
+    // the canon invitation, surfaced once, then receding to wait by the sigil
+    setTimeout(()=>{ inscriptionShow('invite', 11000); }, isBearer ? 3500 : 6500);
   }
 }
 
