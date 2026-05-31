@@ -458,9 +458,99 @@ body.bearer-state .insc-bearer-note{display:block;}
 @media (max-width:768px){.insc-dismiss{cursor:pointer;}}
 .insc-dismiss:hover{color:var(--gold-lt);}
 
-/* SCROLL REVEAL */
-.sr{opacity:0;transform:translateY(10px);transition:opacity .9s ease,transform .9s ease;}
-.sr.vis{opacity:1;transform:none;}
+/* ─────────────────────────────────────────────── */
+/* THE SEALED WITNESS CIRCLE CARD — lore, not link  */
+/* ─────────────────────────────────────────────── */
+.tl-card.sealed-circle{
+  cursor:none;position:relative;
+  border-color:rgba(122,28,18,0.5);
+  background:linear-gradient(180deg,rgba(40,12,8,0.10),rgba(20,6,4,0.06));
+  transition:all .5s ease;
+}
+@media (max-width:768px){.tl-card.sealed-circle{cursor:pointer;}}
+.tl-card.sealed-circle::before{background:var(--wax-deep) !important;box-shadow:1px 0 14px rgba(122,28,18,0.5);}
+.tl-card.sealed-circle:hover{
+  border-color:var(--wax);
+  background:linear-gradient(180deg,rgba(60,16,10,0.16),rgba(30,8,5,0.10));
+  transform:translateX(2px);
+  box-shadow:0 2px 18px rgba(74,14,8,0.18);
+}
+.tl-card.sealed-circle .tl-title{color:var(--wax);}
+.sealed-wax{
+  position:absolute;top:50%;right:1rem;transform:translateY(-50%) rotate(-7deg);
+  width:46px;height:46px;border-radius:50%;flex-shrink:0;
+  background:radial-gradient(circle at 32% 30%,var(--wax-lt),var(--wax) 52%,var(--wax-deep) 92%);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Cinzel Decorative',serif;font-weight:700;font-size:1.1rem;color:rgba(245,238,219,0.85);
+  box-shadow:0 3px 7px rgba(74,14,8,0.4),inset 0 -2px 5px rgba(74,14,8,0.6),inset 0 2px 4px rgba(200,80,60,0.3);
+  pointer-events:none;transition:transform .5s ease,opacity .5s ease;
+}
+.sealed-wax::before{content:'';position:absolute;inset:5px;border-radius:50%;border:1px dashed rgba(245,238,219,0.35);}
+.tl-card.sealed-circle.broken .sealed-wax{transform:translateY(-50%) rotate(-7deg) scale(0);opacity:0;}
+@media (max-width:640px){.sealed-wax{display:none;}}
+
+/* The inscription that unfurls when the seal is touched */
+.seal-inscription{
+  max-height:0;overflow:hidden;
+  transition:max-height 1.6s cubic-bezier(.16,1,.3,1);
+  border-left:2px solid transparent;
+}
+.seal-inscription.open{max-height:600px;border-left-color:var(--wax);margin-top:.9rem;}
+.seal-inscription-inner{
+  padding:1.1rem 1.3rem;background:rgba(20,8,5,0.06);
+}
+.si-latin{
+  font-family:'Cinzel Decorative',serif;font-weight:700;
+  font-size:clamp(.95rem,1.9vw,1.25rem);letter-spacing:.12em;line-height:1.7;
+  color:var(--wax);text-transform:uppercase;text-align:center;
+  text-shadow:0 0 18px rgba(122,28,18,0.25);
+  opacity:0;transition:opacity 1.4s ease .3s;
+}
+.seal-inscription.open .si-latin{opacity:1;}
+.si-gloss{
+  font-family:'IM Fell English',serif;font-style:italic;
+  font-size:.95rem;line-height:1.75;color:var(--ink-faded);
+  text-align:center;margin-top:1rem;
+  opacity:0;transition:opacity 1.4s ease .8s;
+}
+.seal-inscription.open .si-gloss{opacity:1;}
+.si-gloss .em{color:var(--wax);font-style:normal;}
+.si-divider{
+  width:40%;height:1px;margin:1.1rem auto;
+  background:linear-gradient(90deg,transparent,var(--wax),transparent);
+  opacity:0;transition:opacity 1.4s ease 1.1s;
+}
+.seal-inscription.open .si-divider{opacity:0.6;}
+.si-glyphs{
+  text-align:center;margin-bottom:1.3rem;
+  opacity:0;transition:opacity 1.6s ease .2s;
+}
+.seal-inscription.open .si-glyphs{opacity:0.92;}
+.theban-row{width:min(320px,80%);height:auto;overflow:visible;
+  filter:drop-shadow(0 0 10px rgba(122,28,18,0.35));}
+.theban-strokes path{
+  stroke-dasharray:200;stroke-dashoffset:200;
+}
+.seal-inscription.open .theban-strokes path{
+  animation:thebanCarve 2.4s ease forwards .4s;
+}
+@keyframes thebanCarve{to{stroke-dashoffset:0;}}
+.si-enochian{
+  font-family:'Cinzel Decorative',serif;font-weight:700;
+  font-size:clamp(.85rem,1.7vw,1.05rem);letter-spacing:.34em;
+  color:var(--wax);text-align:center;text-transform:uppercase;
+  margin-top:.3rem;text-shadow:0 0 16px rgba(122,28,18,0.3);
+  opacity:0;transition:opacity 1.4s ease 1.3s;
+}
+.seal-inscription.open .si-enochian{opacity:1;}
+.si-enochian-gloss{
+  font-family:'Share Tech Mono',monospace;font-size:.56rem;letter-spacing:.4em;text-transform:uppercase;
+  color:var(--sepia);text-align:center;margin-top:.5rem;
+  opacity:0;transition:opacity 1.4s ease 1.7s;
+}
+.seal-inscription.open .si-enochian-gloss{opacity:0.7;}
+
+
 
 @media(max-width:640px){
   .pa-header{padding:2.5rem 1.25rem 2rem;}
@@ -983,6 +1073,58 @@ function buildTimeline(){
         chamberLine=`<a class="tl-chamber-door" href="${page.file}#post-oath">Bearer Chamber · The Apocrypha After the Oath</a>`;
       }
       const seqLabel=page.seq===null?'REF':String(page.seq).padStart(2,'0');
+      // ── THE WITNESS CIRCLE: sealed unless the reader has crossed ──
+      // Bearers earned entry and keep their working link. Everyone else meets the seal:
+      // the card does not open; it speaks, in the document's own Latin, and points inward.
+      if(page.id==='witness-circle' && !isBearer){
+        html+=`
+        <div class="tl-node sr">
+          <div class="tl-node-dot sealed${featured?' featured':''}"></div>
+          <div class="tl-card sealed-circle s-sealed${featured?' featured':''}" id="sealed-circle-card" role="button" tabindex="0" aria-label="The Witness Circle — sealed">
+            <div class="sealed-wax">✠</div>
+            <div class="tl-card-top">
+              <span class="tl-seq">${seqLabel}</span>
+              <span class="tl-status-badge sb-sealed">Sealed</span>
+              <span class="tl-title corruptible" data-original="${page.title.replace(/"/g,'&quot;')}">${page.title}</span>
+            </div>
+            <div class="tl-meta-row">
+              <span class="meta-realm">Realm ${page.realm}</span>
+              <span class="meta-phase">${page.phase}</span>
+            </div>
+            <div class="tl-cls corruptible" data-original="${page.cls.replace(/"/g,'&quot;')}">${page.cls}</div>
+            <div class="seal-inscription" id="seal-inscription">
+              <div class="seal-inscription-inner">
+                <div class="si-glyphs" aria-hidden="true">
+                  <svg viewBox="0 0 420 70" class="theban-row" xmlns="http://www.w3.org/2000/svg">
+                    <g class="theban-strokes" fill="none" stroke="var(--wax)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                      <!-- W -->
+                      <path d="M14,16 q-6,2 -5,12 q1,9 9,9 q7,0 8,-9 q1,9 8,9 q8,0 9,-9 q1,-10 -5,-12 M37,28 q3,18 -4,30"/>
+                      <!-- I -->
+                      <path d="M78,18 q9,-3 9,8 q0,7 -7,7 q-6,0 -6,-6 M86,26 l1,28 q0,8 -8,8"/>
+                      <!-- T -->
+                      <path d="M120,16 l22,0 M131,16 l0,30 q0,9 9,9 q7,0 7,-7"/>
+                      <!-- N -->
+                      <path d="M178,52 l0,-26 q0,-10 9,-10 q9,0 9,10 l0,20 q0,10 8,10 M196,30 l10,0"/>
+                      <!-- E -->
+                      <path d="M242,20 q9,-4 11,5 q2,8 -7,9 q-7,1 -6,-6 M251,28 l2,22 q1,9 -7,11"/>
+                      <!-- S -->
+                      <path d="M292,18 l16,2 l-14,14 l16,2 l-13,16 q-2,7 6,9"/>
+                      <!-- S -->
+                      <path d="M344,18 l16,2 l-14,14 l16,2 l-13,16 q-2,7 6,9"/>
+                    </g>
+                  </svg>
+                </div>
+                <div class="si-latin">Desine quaerere.<br>Inveniēris.</div>
+                <div class="si-gloss">Stop searching. <span class="em">You will be found.</span> This is the only kindness the document offers, and it offers it once: the room is not reached by the ones who look for it. It is reached by the ones it has finished reading. You were spared the looking. Do not waste the mercy.</div>
+                <div class="si-divider"></div>
+                <div class="si-enochian">OL · SONF · VORSG</div>
+                <div class="si-enochian-gloss">i reign over you</div>
+              </div>
+            </div>
+          </div>
+        </div>`;
+        return;
+      }
       html+=`
       <div class="tl-node sr">
         <div class="tl-node-dot ${st.status}${featured?' featured':''}"></div>
@@ -1670,10 +1812,35 @@ document.getElementById('rt-enter').addEventListener('click',async ()=>{
   initApp();
 });
 
+function wireSealedCircle(){
+  const card=document.getElementById('sealed-circle-card');
+  if(!card)return;
+  const insc=document.getElementById('seal-inscription');
+  let opened=false;
+  function touchSeal(){
+    if(opened)return;
+    opened=true;
+    card.classList.add('broken');           // wax seal breaks
+    if(insc)insc.classList.add('open');      // inscription unfurls
+    // a whisper, in keeping with the page's voice
+    setTimeout(()=>{
+      const el=document.getElementById('whisper');
+      if(el){
+        el.textContent='the door has no handle on this side. it never did.';
+        el.classList.add('shown');
+        setTimeout(()=>el.classList.remove('shown'),6000);
+      }
+    },1400);
+  }
+  card.addEventListener('click',touchSeal);
+  card.addEventListener('keydown',(e)=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();touchSeal();}});
+}
+
 function initApp(){
   applyBearerState();
   setDesignations();
   buildTimeline();
+  wireSealedCircle();
   buildResumeAnchor();
   buildDescentGraph();
   initSrObs();
