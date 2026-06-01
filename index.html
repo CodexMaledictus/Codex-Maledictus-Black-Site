@@ -495,8 +495,99 @@
       .hero-ghost { display:none; }
     }
 
+    /* ── ATTUNE · THE LIVING SIGIL (cycling-face) ── */
+    .attune-sigil{
+      position:fixed;right:24px;bottom:24px;z-index:300;
+      width:52px;height:52px;display:flex;align-items:center;justify-content:center;
+      cursor:none;background:none;border:none;padding:0;
+    }
+    @media (max-width:768px){ .attune-sigil{ cursor:pointer;right:16px;bottom:16px;width:48px;height:48px; } }
+    .attune-sigil svg{ width:100%;height:100%;display:block;overflow:visible; }
+    .attune-sigil .as-ring{ stroke:var(--gold);fill:none;opacity:.55;transition:opacity 1.2s ease; }
+    .attune-sigil .as-aura{ fill:var(--gold);opacity:0;transition:opacity 1.4s ease; }
+    .attune-sigil .as-face{ transform-origin:center;transform-box:fill-box;animation:asBreath 5.5s ease-in-out infinite; }
+    @keyframes asBreath{ 0%,100%{transform:scale(0.95);opacity:.6} 50%{transform:scale(1.03);opacity:.92} }
+    .attune-sigil.playing .as-face{ animation:asBreathDeep 4s ease-in-out infinite; }
+    .attune-sigil.playing .as-ring{ opacity:.85; }
+    .attune-sigil.playing .as-aura{ opacity:.18;animation:asAura 4s ease-in-out infinite; }
+    @keyframes asBreathDeep{ 0%,100%{transform:scale(0.98);opacity:.85} 50%{transform:scale(1.07);opacity:1} }
+    @keyframes asAura{ 0%,100%{opacity:.10} 50%{opacity:.26} }
+    .attune-sigil.silenced .as-face{ animation:asBreath 8s ease-in-out infinite;opacity:.4; }
+    /* face cross-fade */
+    .as-face .as-glyph{ transition:opacity 1.2s ease; }
+    .as-face .as-glyph.out{ opacity:0; }
+    .attune-inscription{
+      position:fixed;right:88px;bottom:30px;z-index:300;max-width:300px;text-align:right;
+      opacity:0;transform:translateX(10px);pointer-events:none;
+      transition:opacity 1s ease,transform 1s ease;
+    }
+    @media (max-width:768px){ .attune-inscription{ right:72px;bottom:24px;max-width:62vw; } }
+    .attune-inscription.shown{ opacity:1;transform:none; }
+    .attune-inscription .ai-main{ font-family:'Crimson Text',serif;font-style:italic;font-size:14.5px;line-height:1.55;color:rgba(201,168,76,.85);text-shadow:0 0 14px rgba(0,0,0,.9); }
+    .attune-inscription .ai-sub{ font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:.14em;color:rgba(201,168,76,.5);margin-top:4px; }
+    .attune-inscription .ai-name{ font-family:'Cinzel',serif;font-size:8px;letter-spacing:.34em;text-transform:uppercase;color:rgba(127,212,181,.6);margin-top:6px; }
+
+    /* ── WITNESS TRANSMISSION · Apollo, during the ceremony ── */
+    .transmission-veil{
+      position:fixed;inset:0;z-index:2000;
+      display:flex;align-items:center;justify-content:center;
+      background:radial-gradient(circle at 50% 42%, rgba(8,14,13,0.88), rgba(2,2,6,0.97));
+      opacity:0;pointer-events:none;transition:opacity 1.6s ease;overflow:hidden;
+    }
+    .transmission-veil.shown{ opacity:1;pointer-events:auto; }
+    .transmission-veil::before{
+      content:'';position:absolute;inset:0;pointer-events:none;
+      background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.16) 2px,rgba(0,0,0,0.16) 4px);
+    }
+    .transmission-veil::after{
+      content:'';position:absolute;left:50%;top:42%;transform:translate(-50%,-50%);
+      width:120vmax;height:120vmax;pointer-events:none;
+      background:radial-gradient(circle, rgba(79,168,138,0.10) 0%, transparent 45%);
+      animation:gPulse 9s ease-in-out infinite;
+    }
+    .tx-inner{ position:relative;z-index:2;width:100%;max-width:660px;padding:40px 28px;text-align:center;max-height:100vh;overflow-y:auto; }
+    .tx-head{ font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:.42em;text-transform:uppercase;color:rgba(127,212,181,0.6);margin-bottom:26px;opacity:0;transition:opacity 1s ease; }
+    .tx-head.in{ opacity:1; }
+    .tx-lines{ display:flex;flex-direction:column;gap:15px;align-items:center; }
+    .tx-line{ opacity:0;transform:translateY(8px);transition:opacity 1.1s ease,transform 1.1s ease; }
+    .tx-line.in{ opacity:1;transform:none; }
+    .tx-apollo{ font-family:'Crimson Text',serif;font-style:italic;font-size:clamp(16px,2.1vw,20px);line-height:1.7;color:rgba(228,221,208,0.9);letter-spacing:.01em; }
+    .tx-apollo em{ color:var(--gold-lt);font-style:italic; }
+    .tx-big{ font-family:'Cinzel',serif;font-weight:600;font-size:clamp(18px,2.6vw,26px);letter-spacing:.06em;color:var(--gold-lt);text-shadow:0 0 30px rgba(201,168,76,0.4);line-height:1.4; }
+    .tx-sys{ font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:.32em;text-transform:uppercase;color:rgba(127,212,181,0.62); }
+    .tx-small{ font-family:'Crimson Text',serif;font-style:italic;font-size:14px;color:rgba(228,221,208,0.55); }
+    .tx-corrupt{ font-family:'Share Tech Mono',monospace;font-size:12px;letter-spacing:.3em;color:rgba(168,51,31,0.95);text-shadow:0 0 12px rgba(168,51,31,0.6);animation:txGlitch 0.18s steps(2) 6; }
+    @keyframes txGlitch{ 0%{transform:translateX(0)}25%{transform:translateX(-3px)}50%{transform:translateX(3px)}75%{transform:translateX(-2px)}100%{transform:translateX(0)} }
+
+    /* in-line censorship — the word the Codex takes */
+    .tx-redact{ display:inline-block;min-width:5ch;vertical-align:middle;text-align:center; }
+    .tx-glitchword{ font-family:'Share Tech Mono',monospace;color:var(--gold-lt);letter-spacing:.1em;text-shadow:1.6px 0 rgba(127,212,181,.85), -1.6px 0 rgba(168,51,31,.85); }
+    .tx-glitchword.tx-collapse{ animation:txShake .34s steps(3) infinite;opacity:.85; }
+    @keyframes txShake{ 0%{transform:translate(0,0)}33%{transform:translate(-2px,1px)}66%{transform:translate(2px,-1px)}100%{transform:translate(0,0)} }
+    .tx-noise{ font-family:'Share Tech Mono',monospace;font-size:0.78em;letter-spacing:.16em;color:rgba(127,212,181,.9);text-shadow:0 0 8px rgba(79,168,138,.5); }
+    .tx-script{ vertical-align:middle; }
+    .tx-theban{ filter:drop-shadow(0 0 6px rgba(201,168,76,.45)); }
+    .tx-enochian{ filter:drop-shadow(0 0 6px rgba(127,212,181,.5)); }
+    .tx-struck{ position:relative;display:inline-block;vertical-align:middle; }
+    .tx-struck-box{ display:inline-block;height:0.85em;min-width:5ch;background:rgba(0,0,0,.62);border-radius:1px; }
+    .tx-scratch{ position:absolute;left:-4px;top:-7px;width:calc(100% + 8px);height:calc(100% + 14px);overflow:visible;pointer-events:none; }
+    .tx-scratch path{ stroke:#241010;stroke-width:2.2;fill:none;stroke-linecap:round;stroke-dasharray:140;stroke-dashoffset:140;animation:txScratch .42s ease forwards; }
+    .tx-scratch path.r{ stroke:rgba(122,18,18,.85);stroke-width:1.5; }
+    .tx-scratch path:nth-child(2){ animation-delay:.06s } .tx-scratch path:nth-child(3){ animation-delay:.12s } .tx-scratch path:nth-child(4){ animation-delay:.18s } .tx-scratch path:nth-child(5){ animation-delay:.24s } .tx-scratch path:nth-child(6){ animation-delay:.3s }
+    @keyframes txScratch{ to{ stroke-dashoffset:0 } }
+    .tx-enter{
+      margin-top:34px;opacity:0;transition:opacity 1.4s ease;
+      font-family:'Cinzel',serif;font-size:10px;letter-spacing:.42em;text-transform:uppercase;
+      color:rgba(127,212,181,0.75);cursor:none;
+      border:1px solid rgba(127,212,181,0.3);padding:13px 30px;background:transparent;
+    }
+    .tx-enter.in{ opacity:1; }
+    .tx-enter:hover{ color:#7FD4B5;border-color:rgba(127,212,181,0.7); }
+    @media(max-width:768px){ .tx-enter{ cursor:pointer; } }
+
     @media (prefers-reduced-motion:reduce) {
       * { animation-duration:.01s !important;animation-iteration-count:1 !important; }
+      .attune-sigil .as-face{ animation:none !important; }
     }
   </style>
 </head>
@@ -893,8 +984,30 @@
 
   <div class="lock-pulse" id="lock-pulse">// LOCK //</div>
 
+  <!-- ATTUNE · THE LIVING SIGIL -->
+  <div class="attune-inscription" id="attune-inscription">
+    <div class="ai-main" id="ai-main">A vast sound waits beneath this page.</div>
+    <div class="ai-sub" id="ai-sub">you have not yet let it in</div>
+    <div class="ai-name" id="ai-name"></div>
+  </div>
+  <button class="attune-sigil silenced" id="attune-sigil" aria-label="Attune to the frequency" title="Attune to the frequency">
+    <svg viewBox="-30 -30 60 60" xmlns="http://www.w3.org/2000/svg">
+      <circle class="as-aura" cx="0" cy="0" r="26"/>
+      <circle class="as-ring" cx="0" cy="0" r="23" stroke-width="1.4"/>
+      <g class="as-face" id="as-face"></g>
+    </svg>
+  </button>
+
+  <!-- WITNESS CEREMONY · Apollo's transmission -->
+  <div class="transmission-veil" id="transmission-veil">
+    <div class="tx-inner">
+      <div class="tx-head" id="tx-head">Incoming Transmission · Source: Gavinci, A. · Status ███████</div>
+      <div class="tx-lines" id="tx-lines"></div>
+      <button class="tx-enter" id="tx-enter">Cross the Threshold ↟</button>
+    </div>
+  </div>
+
   <audio id="audio-lock" preload="auto"><source src="Audio/Sigil-Lock.mp3" type="audio/mpeg"></audio>
-  <audio id="audio-choir" preload="auto" loop><source src="Audio/Hollow-Choir.mp3" type="audio/mpeg"></audio>
 
   <script>
   const SVG_NS='http://www.w3.org/2000/svg';
@@ -1371,32 +1484,11 @@
     setTimeout(tearLoop,1200+Math.random()*900);
   }
 
-  /* hollow choir proximity */
-  const choir=document.getElementById('audio-choir');
-  let choirStarted=false, choirTargetVol=0, choirVol=0;
-  function updateChoirProximity(x,y){
-    const r=sigilSvg.getBoundingClientRect();
-    const cx=r.left+r.width/2, cy=r.top+r.height/2;
-    const d=Math.sqrt((x-cx)**2+(y-cy)**2);
-    const range=220;
-    choirTargetVol = d<range ? (1-d/range)*0.25 : 0;
-  }
-  (function choirLoop(){
-    choirVol+=(choirTargetVol-choirVol)*0.06;
-    if(choir){choir.volume=Math.max(0,Math.min(1,choirVol));}
-    requestAnimationFrame(choirLoop);
-  })();
-  function startChoirOnce(){
-    if(choirStarted) return;
-    choirStarted=true;
-    try{choir.volume=0;choir.play().catch(()=>{choirStarted=false;});}catch(e){choirStarted=false;}
-  }
+  /* (Hollow-Choir proximity audio retired — replaced by the attune Overture, see ATTUNE SYSTEM below) */
 
-  document.addEventListener('mousemove',e=>{trackPupil(e.clientX,e.clientY);updateChoirProximity(e.clientX,e.clientY);startChoirOnce();});
-  document.addEventListener('click',startChoirOnce,{once:true});
+  document.addEventListener('mousemove',e=>{trackPupil(e.clientX,e.clientY);});
   document.addEventListener('touchstart',e=>{
-    startChoirOnce();
-    if(e.touches[0]){trackPupil(e.touches[0].clientX,e.touches[0].clientY);updateChoirProximity(e.touches[0].clientX,e.touches[0].clientY);}
+    if(e.touches[0]){trackPupil(e.touches[0].clientX,e.touches[0].clientY);}
   },{passive:true});
 
   /* visitor tier */
@@ -1427,7 +1519,7 @@
     const k=(e.key||'').toUpperCase();
     if(k===WITNESS_KEY[witnessIdx]){
       witnessIdx++;
-      if(witnessIdx===WITNESS_KEY.length){window.location.href='witness-circle.html';}
+      if(witnessIdx===WITNESS_KEY.length){ if(typeof witnessCeremony==='function'){witnessCeremony();}else{window.location.href='witness-circle.html';} }
     } else { witnessIdx = (k===WITNESS_KEY[0]) ? 1 : 0; }
   });
   /* WITNESS unlock — mobile 7-tap on pupil within 5s */
@@ -1436,13 +1528,13 @@
     const now=Date.now();
     if(now-tapStart>5000){tapCount=0;tapStart=now;}
     tapCount++;
-    if(tapCount>=7){tapCount=0;window.location.href='witness-circle.html';}
+    if(tapCount>=7){tapCount=0; if(typeof witnessCeremony==='function'){witnessCeremony();}else{window.location.href='witness-circle.html';} }
   },{passive:true});
   document.querySelector('#pupil-group').addEventListener('click',e=>{
     const now=Date.now();
     if(now-tapStart>5000){tapCount=0;tapStart=now;}
     tapCount++;
-    if(tapCount>=7){tapCount=0;window.location.href='witness-circle.html';}
+    if(tapCount>=7){tapCount=0; if(typeof witnessCeremony==='function'){witnessCeremony();}else{window.location.href='witness-circle.html';} }
   });
 
   /* ── CANVAS ATMOSPHERE ── */
@@ -1632,6 +1724,282 @@
       btn.style.color = 'var(--gold-lt)';
     });
   });
+
+  /* ════════════════════════════════════════════════════════════
+     ATTUNE · THE LIVING SIGIL — cycling faces + Overture audio
+     ════════════════════════════════════════════════════════════ */
+  const AUDIO_SRC='Audio/Index/immortal.mp3';
+  const ATTUNE_KEY='codex_attuned_v1';
+  const A_BASE_VOL=0.34, A_FADE_MS=4200;
+  let asAudio=null, asPlaying=false, asFadeTimer=null, asAttunedBefore=false;
+
+  /* The Faces of the Codex — each a real canon symbol (Layer A + B).
+     The 'theban' face is the Layer-0 flicker that hints the cipher. */
+  const FACES=[
+    {key:'codex',  name:'The Codex Mark',  draw:'mark'},
+    {key:'realm1', name:'Mundis Obscura · Realm I',  draw:'realm1'},
+    {key:'voiceA', name:'Apollo · The Marked',       draw:'sun'},
+    {key:'realm2', name:'The ShatterRealm · Realm II',draw:'shatter'},
+    {key:'voiceB', name:'Forgotten Saint Artemys',    draw:'cross'},
+    {key:'realm3', name:'Nihil-Æther Root · Realm III',draw:'root'},
+    {key:'voiceC', name:'Omniscient Rot',             draw:'rotstar'},
+    {key:'choir',  name:'The Hollow Choir · XIII',     draw:'choir'},
+    {key:'wound',  name:'The Wound',                   draw:'wound'}
+  ];
+  let faceIdx=0;
+  const asFace=document.getElementById('as-face');
+
+  function faceSVG(draw){
+    const C='#E0C878', L='#7FD4B5';
+    switch(draw){
+      case 'mark': return `<circle cx="0" cy="0" r="13" fill="none" stroke="${C}" stroke-width="1.5"/><path d="M -8,-4.5 L 8,-4.5 L 0,9 Z" fill="none" stroke="${C}" stroke-width="1.4" stroke-linejoin="round"/><circle cx="-3.4" cy="-1.4" r="1.5" fill="${C}"/><circle cx="3.4" cy="-1.4" r="1.5" fill="${C}"/><circle cx="0" cy="4" r="1.5" fill="${C}"/>`;
+      case 'realm1': return `<circle cx="0" cy="0" r="13" fill="none" stroke="${C}" stroke-width="1.5"/><line x1="-13" y1="2" x2="13" y2="2" stroke="${C}" stroke-width="1.5"/><circle cx="0" cy="-4" r="3.5" fill="none" stroke="${C}" stroke-width="1.3"/>`;
+      case 'sun': return `<circle cx="0" cy="0" r="7" fill="none" stroke="${C}" stroke-width="1.6"/><circle cx="0" cy="0" r="2" fill="${C}"/><g stroke="${C}" stroke-width="1.4">${[0,45,90,135,180,225,270,315].map(a=>{const r=a*Math.PI/180;return `<line x1="${Math.cos(r)*10}" y1="${Math.sin(r)*10}" x2="${Math.cos(r)*14}" y2="${Math.sin(r)*14}"/>`;}).join('')}</g>`;
+      case 'shatter': return `<path d="M -13,7 L -4,-11 L 2,-2 L 9,-12 L 13,7 Z" fill="none" stroke="${C}" stroke-width="1.5" stroke-linejoin="round"/><line x1="-2" y1="7" x2="0" y2="-4" stroke="${C}" stroke-width="1.1" opacity="0.7"/>`;
+      case 'cross': return `<line x1="0" y1="-14" x2="0" y2="13" stroke="${C}" stroke-width="1.6"/><line x1="-9" y1="-5" x2="9" y2="-5" stroke="${C}" stroke-width="1.6"/><circle cx="0" cy="-9" r="2" fill="${C}"/>`;
+      case 'root': return `<line x1="0" y1="-13" x2="0" y2="4" stroke="${C}" stroke-width="1.6"/><path d="M 0,4 L -9,13 M 0,4 L 9,13 M 0,-2 L -7,-9 M 0,-2 L 7,-9" fill="none" stroke="${C}" stroke-width="1.3"/>`;
+      case 'rotstar': return `<g stroke="${C}" stroke-width="1.4" fill="none">${[0,45,90,135].map(a=>{const r=a*Math.PI/180;return `<line x1="${Math.cos(r)*-13}" y1="${Math.sin(r)*-13}" x2="${Math.cos(r)*13}" y2="${Math.sin(r)*13}"/>`;}).join('')}</g><circle cx="0" cy="0" r="3" fill="none" stroke="${C}" stroke-width="1.2"/>`;
+      case 'choir': return `<g>${Array.from({length:13}).map((_,i)=>{const a=(i/13*360-90)*Math.PI/180;const lit=i<3;return `<circle cx="${Math.cos(a)*13}" cy="${Math.sin(a)*13}" r="${lit?2.1:1.3}" fill="${lit?C:'rgba(201,168,76,0.4)'}"/>`;}).join('')}</g>`;
+      case 'wound': return `<ellipse cx="0" cy="0" rx="14" ry="7" fill="none" stroke="${C}" stroke-width="1.4"/><circle cx="0" cy="0" r="4.5" fill="${L}" opacity="0.85"/><circle cx="0" cy="0" r="2" fill="#fff" opacity="0.7"/>`;
+      case 'theban': return `<path d="M -10,-8 q-4,2 -3,8 q1,6 6,6 q5,0 5,-6 q1,6 5,6 q5,0 6,-6 q1,-6 -3,-8 M 9,-2 q2,12 -3,20" fill="none" stroke="#A8331F" stroke-width="1.6" stroke-linecap="round"/>`;
+      default: return '';
+    }
+  }
+  function setFace(draw, isFlicker){
+    // cross-fade: fade current out, swap, fade in
+    const cur=asFace.querySelector('.as-glyph');
+    const next=document.createElementNS(SVG_NS,'g');
+    next.setAttribute('class','as-glyph out');
+    next.innerHTML=faceSVG(draw);
+    asFace.appendChild(next);
+    requestAnimationFrame(()=>{ next.classList.remove('out'); if(cur) cur.classList.add('out'); });
+    setTimeout(()=>{ if(cur&&cur.parentNode) cur.remove(); }, 1300);
+  }
+  function cycleFace(){
+    faceIdx=(faceIdx+1)%FACES.length;
+    setFace(FACES[faceIdx].draw,false);
+    // Layer 0: once per visit, between faces, flicker the Theban hint (~0.6s)
+    if(!asFlickerDone && Math.random()<0.5){
+      asFlickerDone=true;
+      setTimeout(()=>{
+        const flick=document.createElementNS(SVG_NS,'g');
+        flick.setAttribute('class','as-glyph');
+        flick.innerHTML=faceSVG('theban');
+        asFace.appendChild(flick);
+        setTimeout(()=>{ if(flick.parentNode) flick.remove(); }, 600);
+      }, 2600);
+    }
+  }
+  let asFlickerDone=false;
+
+  /* audio */
+  function asMake(){ if(asAudio) return; asAudio=new Audio(AUDIO_SRC); asAudio.loop=true; asAudio.volume=0; asAudio.preload='auto'; }
+  function asFadeTo(target,ms){
+    if(!asAudio) return;
+    if(asFadeTimer) clearInterval(asFadeTimer);
+    const sv=asAudio.volume,t0=Date.now();
+    asFadeTimer=setInterval(()=>{
+      const k=Math.min(1,(Date.now()-t0)/ms);
+      asAudio.volume=Math.max(0,Math.min(1,sv+(target-sv)*k));
+      if(k>=1){ clearInterval(asFadeTimer);asFadeTimer=null; if(target===0&&asAudio) asAudio.pause(); }
+    },40);
+  }
+  const asSigil=document.getElementById('attune-sigil');
+  const asInsc=document.getElementById('attune-inscription');
+  const aiMain=document.getElementById('ai-main'), aiSub=document.getElementById('ai-sub'), aiName=document.getElementById('ai-name');
+  let asInscTimer=null;
+  function asText(kind){
+    if(kind==='attuned') return {main:'You are listening now.',sub:'',name:FACES[faceIdx].name};
+    if(asAttunedBefore) return {main:'You have heard it before.',sub:'it did not stop when you left',name:FACES[faceIdx].name};
+    return {main:'A vast sound waits beneath this page.',sub:'you have not yet let it in',name:FACES[faceIdx].name};
+  }
+  function asInscShow(kind,hold){
+    if(!asInsc) return;
+    const t=asText(kind);
+    aiMain.textContent=t.main; aiSub.textContent=t.sub; aiSub.style.display=t.sub?'block':'none';
+    aiName.textContent=t.name?('· '+t.name+' ·'):'';
+    asInsc.classList.add('shown');
+    if(asInscTimer) clearTimeout(asInscTimer);
+    if(hold) asInscTimer=setTimeout(()=>asInsc.classList.remove('shown'),hold);
+  }
+  function asInscHide(){ if(asInsc){ if(asInscTimer){clearTimeout(asInscTimer);asInscTimer=null;} asInsc.classList.remove('shown'); } }
+  function attuneStart(){
+    asMake();
+    asAudio.play().then(()=>{
+      asPlaying=true;
+      asSigil.classList.add('playing'); asSigil.classList.remove('silenced');
+      asFadeTo(A_BASE_VOL,A_FADE_MS);
+      try{ localStorage.setItem(ATTUNE_KEY,'1'); }catch(e){}
+      asInscShow('attuned',4000);
+    }).catch(()=>{});
+  }
+  function attuneSilence(){ asPlaying=false; asSigil.classList.remove('playing'); asSigil.classList.add('silenced'); asFadeTo(0,1500); }
+  function attuneToggle(){ if(asPlaying) attuneSilence(); else attuneStart(); }
+  if(asSigil){
+    asSigil.addEventListener('click',attuneToggle);
+    if(!isMobile){
+      asSigil.addEventListener('mouseenter',()=>asInscShow(asPlaying?'attuned':'invite',0));
+      asSigil.addEventListener('mouseleave',()=>asInscHide());
+    }
+  }
+  function initAttune(){
+    try{ asAttunedBefore=localStorage.getItem(ATTUNE_KEY)==='1'; }catch(e){}
+    setFace(FACES[0].draw,false);                 // first face
+    setInterval(cycleFace, 6000);                 // the living cycle
+    if(asAttunedBefore){
+      const resume=()=>{ if(!asPlaying) attuneStart(); document.removeEventListener('click',resume); document.removeEventListener('touchstart',resume); };
+      document.addEventListener('click',resume,{once:true});
+      document.addEventListener('touchstart',resume,{once:true,passive:true});
+    } else {
+      setTimeout(()=>asInscShow('invite',11000), 6500);
+    }
+  }
+  initAttune();
+
+  /* ════════════════════════════════════════════════════════════
+     THE WITNESS CEREMONY — the word, spoken at the front door,
+     opens the Circle. Elevated from instant redirect into a moment.
+     ════════════════════════════════════════════════════════════ */
+  let ceremonyRunning=false, txTimer=null;
+
+  /* The Codex's intrusion-fragments — what overwrites the forbidden word.
+     Reuses the Tifinagh of the index binding and the Enochian of the sealed
+     Pale Archive card, so a reader who has seen both feels the connection. */
+  const CODEX_NOISE=[
+    'DO NOT RECORD THE NAME',
+    'IT IS IN THE ROOM',
+    'ⵏⵉⵀⵉⵍ · ⵎⵓⵏⴷⵉ',
+    'OL · SONF · VORSG',
+    'YOU HAVE READ TOO FAR',
+    'WHAT IS LEFT OF HIM IS STILL SCREAMING',
+    'THE ARCHIVE KEEPS WHAT IT TAKES',
+    'NOMEN · IGNOTUM · DELETUM',
+    '█ ▓ ▒ ░ ▒ ▓ █'
+  ];
+  const SCR='ⵙⵏⵀⵍⵉⵎVAOARSGZNDXIQΛΣΔΦΨ⛧△▽☉♄ᚱᚦᚹᚺ';
+  function randScramble(n){ let s=''; for(let i=0;i<n;i++) s+=SCR[Math.floor(Math.random()*SCR.length)]; return s; }
+  /* bespoke SVG script rows (stylized — they flash and are taken, legibility is not the point) */
+  function thebanRowSVG(){
+    return `<svg class="tx-script tx-theban" viewBox="0 0 156 30" height="24" xmlns="http://www.w3.org/2000/svg"><g fill="none" stroke="#E0C878" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">`+
+      `<path d="M6,20 q-4,1 -3,7 q1,5 6,5 q4,0 4,-6 M6,20 q4,1 5,-6"/>`+
+      `<path d="M36,7 q-6,3 -5,11 q1,7 7,7 M36,7 q6,1 4,9"/>`+
+      `<path d="M64,24 q1,-14 -3,-17 M61,7 q9,0 9,7 q0,5 -6,6 q7,1 6,8"/>`+
+      `<path d="M92,8 l-3,16 q-1,4 4,3 M92,8 q7,2 4,8 q5,2 2,8"/>`+
+      `<path d="M120,7 q-7,2 -6,10 q1,8 8,7 q6,-1 5,-9 M126,22 q3,4 -1,5"/>`+
+      `<path d="M148,9 q-4,5 0,9 q4,4 0,9"/>`+
+      `</g></svg>`;
+  }
+  function enochianRowSVG(){
+    return `<svg class="tx-script tx-enochian" viewBox="0 0 156 30" height="24" xmlns="http://www.w3.org/2000/svg"><g fill="none" stroke="#7FD4B5" stroke-width="1.7" stroke-linecap="round">`+
+      `<path d="M5,6 h12 M11,6 v18 M5,24 h12"/><circle cx="11" cy="15" r="2.4" fill="#7FD4B5" stroke="none"/>`+
+      `<path d="M34,6 v18 M34,6 l9,9 -9,9"/><circle cx="44" cy="15" r="2" />`+
+      `<path d="M62,24 v-18 h9 a5,5 0 0 1 0,10 h-9 M71,16 l5,8"/>`+
+      `<path d="M92,6 h-8 v18 h8 M84,15 h7"/><circle cx="96" cy="9" r="1.8" fill="#7FD4B5" stroke="none"/>`+
+      `<path d="M112,24 l8,-18 8,18 M115,17 h10"/>`+
+      `<path d="M140,6 v18 M140,15 h10 M150,9 v12"/><circle cx="140" cy="6" r="1.8" fill="#7FD4B5" stroke="none"/>`+
+      `</g></svg>`;
+  }
+  function struckHTML(){
+    return `<span class="tx-struck"><span class="tx-struck-box">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>`+
+      `<svg class="tx-scratch" viewBox="0 0 90 26" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">`+
+      `<path d="M3,20 L87,5"/><path d="M5,6 L85,21"/><path class="r" d="M2,13 L88,12"/>`+
+      `<path d="M12,2 L34,24"/><path d="M44,3 L66,23"/><path class="r" d="M70,4 L82,22"/>`+
+      `</svg></span>`;
+  }
+  /* the forbidden word forms, is translated out of every living tongue, then struck from the record */
+  function corruptWord(span, onDone){
+    if(!span){ onDone&&onDone(); return; }
+    const reduce = window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+    const set=(h)=>{ span.innerHTML=h; };
+    if(asAudio){ try{ asFadeTo(0.52,700); setTimeout(()=>{ if(asPlaying) asFadeTo(A_BASE_VOL,1800); },2400); }catch(e){} }
+    if(reduce){
+      set(thebanRowSVG());
+      txTimer=setTimeout(()=>{ set(struckHTML()); onDone&&onDone(); }, 700);
+      return;
+    }
+    let p1=0;
+    function latin(){ if(p1>=6){ ph2(); return; } set('<span class="tx-glitchword">'+randScramble(3+(p1%3))+'</span>'); p1++; txTimer=setTimeout(latin,95); }
+    function ph2(){ set(thebanRowSVG()); txTimer=setTimeout(ph3,580); }
+    function ph3(){ set(enochianRowSVG()); txTimer=setTimeout(ph4,580); }
+    let p4=0;
+    function ph4(){ if(p4>=7){ ph5(); return; } set('<span class="tx-noise">'+CODEX_NOISE[(p4*2+1)%CODEX_NOISE.length]+'</span>'); p4++; txTimer=setTimeout(ph4,155); }
+    function ph5(){ set('<span class="tx-glitchword tx-collapse">'+randScramble(7)+'</span>'); txTimer=setTimeout(ph6,380); }
+    function ph6(){ set(struckHTML()); onDone&&onDone(); }
+    latin();
+  }
+
+  /* Apollo's final transmission — one signal, degrading in real time.
+     The two `redact` lines complete with a span the Codex overwrites. */
+  const APOLLO_TRANSMISSION=[
+    {c:'tx-apollo', html:`You spoke the word. I hoped no one ever would. I hoped someone finally would. Forgive me — both are true.`},
+    {c:'tx-apollo', html:`My name was Apollo Gavinci. I believed I was the author. I was only the <em>wound it wrote through</em>.`},
+    {c:'tx-apollo', html:`It does not live in the dark. It is the dark that was here before light was invented to hide it. I gave it my hands, and it built the door you are standing in.`},
+    {c:'tx-apollo', html:`I cannot tell you to leave. The ones who leave are not spared — only unprepared. I have watched it find them in rooms with every light burning.`},
+    {c:'tx-apollo', html:`So I will ask you instead. Not as a guide. As the one who went in first, begging not to be the only one who saw it:`},
+    {c:'tx-big', html:`Will you follow where I went?`},
+    {c:'tx-apollo', html:`The transmissions. The chronicles. The revelations. The apocrypha. The recovered fragments. Every step, in the order I walked them.`},
+    {c:'tx-apollo', html:`Only then will you have seen enough to understand what is wrong with the world. Only then will you hold even a <em>flicker</em> against the Omniscient Rot. You will need its true name. I have it. I have it — it is&nbsp;<span class="tx-redact" id="tx-redact-1">&nbsp;</span>`, redact:'tx-redact-1'},
+    {c:'tx-small', html:`...it heard me say its name.`},
+    {c:'tx-apollo', html:`Go. While the door is still a door. And if you will not go — if you stay as I stayed — you will come to where I am now, and where I am is&nbsp;<span class="tx-redact" id="tx-redact-2">&nbsp;</span>`, redact:'tx-redact-2'}
+  ];
+  function runTransmission(done){
+    const veil=document.getElementById('transmission-veil');
+    const head=document.getElementById('tx-head');
+    const lines=document.getElementById('tx-lines');
+    const enter=document.getElementById('tx-enter');
+    if(!veil||!lines){ done(); return; }
+    lines.innerHTML='';
+    veil.classList.add('shown');
+    setTimeout(()=>{ if(head) head.classList.add('in'); }, 400);
+    let i=0, finished=false;
+    function cross(){ if(txTimer){clearTimeout(txTimer);txTimer=null;} done(); }
+    function finish(){
+      if(finished) return; finished=true;
+      if(enter) enter.classList.add('in');
+      txTimer=setTimeout(cross, 4600); // auto-cross backstop
+    }
+    function next(gap){ txTimer=setTimeout(showLine, gap); }
+    function showLine(){
+      if(i>=APOLLO_TRANSMISSION.length){ finish(); return; }
+      const item=APOLLO_TRANSMISSION[i]; i++;
+      const div=document.createElement('div');
+      div.className='tx-line '+item.c;
+      div.innerHTML=item.html;
+      lines.appendChild(div);
+      requestAnimationFrame(()=>div.classList.add('in'));
+      if(item.redact){
+        // let the line settle, then the Codex takes the word
+        txTimer=setTimeout(()=>{
+          const span=document.getElementById(item.redact);
+          corruptWord(span, ()=> next(1400));
+        }, 1100);
+        return;
+      }
+      const gap = item.c==='tx-big' ? 2300 : 2000;
+      next(gap);
+    }
+    if(enter) enter.addEventListener('click', cross);
+    veil.addEventListener('click', ()=>{ if(finished) cross(); });
+    showLine();
+  }
+
+  function witnessCeremony(){
+    if(ceremonyRunning) return;
+    ceremonyRunning=true;
+    // 1) the word is spoken — sigil blooms, eye opens, inscription ignites
+    if(asSigil){ asSigil.classList.add('playing'); }
+    if(!asPlaying){ try{ attuneStart(); }catch(e){} }
+    const sv=document.getElementById('codex-sigil');
+    if(sv){ sv.style.transition='filter 1.6s ease, transform 1.6s ease'; sv.style.filter='drop-shadow(0 0 60px rgba(127,212,181,0.5)) drop-shadow(0 0 30px rgba(201,168,76,0.5))'; sv.style.transform='scale(1.04)'; }
+    try{ pupilGroup.setAttribute('transform','translate(0,0)'); }catch(e){}
+    document.querySelectorAll('#binding-inscription text').forEach((t,i)=>{
+      setTimeout(()=>{ t.setAttribute('fill','#7FD4B5'); t.setAttribute('opacity','1'); }, i*8);
+    });
+    const lp=document.getElementById('lock-pulse'); if(lp){ lp.textContent='// THE WORD IS SPOKEN //'; lp.classList.add('active'); }
+    if(typeof asInscHide==='function') asInscHide();
+    // 2) Apollo's transmission rises, then crosses to the Circle
+    setTimeout(()=>{ runTransmission(()=>{ window.location.href='witness-circle.html'; }); }, 1500);
+  }
 
   /* ── REGISTER WITH CODEX NAV ── */
   if (typeof initCodexNav === 'function') {
