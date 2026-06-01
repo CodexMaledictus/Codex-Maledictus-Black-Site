@@ -559,6 +559,37 @@ body.bearer-state .insc-bearer-note{display:block;}
   .resume-anchor-link{text-align:center;}
   .tl-self-seal{top:-20px;right:20px;width:56px;height:56px;font-size:.55rem;}
 }
+/* ─── ATTUNE — THE BREATHING SIGIL (Pale Archive tone) ─── */
+.attune-sigil{
+  position:fixed;right:24px;bottom:3.4rem;z-index:560;
+  width:50px;height:50px;display:flex;align-items:center;justify-content:center;
+  cursor:none;background:none;border:none;padding:0;
+}
+@media (max-width:768px){.attune-sigil{cursor:pointer;right:16px;bottom:3rem;width:46px;height:46px;}}
+.attune-sigil svg{width:100%;height:100%;display:block;overflow:visible;}
+.attune-sigil .sg-ring,.attune-sigil .sg-tri{stroke:var(--gold-deep);fill:none;transition:stroke 2s ease,opacity 1.2s ease;}
+.attune-sigil .sg-dot{fill:var(--gold-deep);transition:fill 2s ease,opacity 1.2s ease;}
+body.bearer-state .attune-sigil .sg-ring,body.bearer-state .attune-sigil .sg-tri{stroke:var(--bearer-amber);}
+body.bearer-state .attune-sigil .sg-dot{fill:var(--bearer-amber);}
+.attune-sigil .sg-aura{fill:var(--gold);opacity:0;transition:opacity 1.4s ease;}
+.attune-sigil .sg-core{transform-origin:center;transform-box:fill-box;animation:sigilBreath 5.5s ease-in-out infinite;opacity:.55;}
+@keyframes sigilBreath{0%,100%{transform:scale(0.94);opacity:.45;}50%{transform:scale(1.02);opacity:.66;}}
+.attune-sigil.playing .sg-core{animation:sigilBreathDeep 4.2s ease-in-out infinite;opacity:.95;}
+.attune-sigil.playing .sg-aura{opacity:.20;animation:sigilAura 4.2s ease-in-out infinite;}
+@keyframes sigilBreathDeep{0%,100%{transform:scale(0.97);opacity:.85;}50%{transform:scale(1.06);opacity:1;}}
+@keyframes sigilAura{0%,100%{opacity:.10;}50%{opacity:.26;}}
+.attune-sigil.silenced .sg-core{animation:sigilBreath 8s ease-in-out infinite;opacity:.32;}
+.attune-sigil.silenced .sg-aura{opacity:0;}
+.attune-inscription{
+  position:fixed;right:86px;bottom:3.7rem;z-index:560;max-width:300px;text-align:right;
+  opacity:0;transform:translateX(10px);pointer-events:none;transition:opacity 1s ease,transform 1s ease;
+}
+@media (max-width:768px){.attune-inscription{right:70px;bottom:3.2rem;max-width:60vw;}}
+.attune-inscription.shown{opacity:1;transform:none;}
+.attune-inscription .insc-line{font-family:'IM Fell English',serif;font-style:italic;font-size:14px;line-height:1.55;color:var(--ink-faded);text-shadow:0 0 14px rgba(245,238,219,0.9);}
+body.bearer-state .attune-inscription .insc-line{color:var(--bearer-amber);}
+.attune-inscription .insc-line.sub{font-size:10.5px;color:var(--sepia);margin-top:4px;font-family:'Share Tech Mono',monospace;font-style:normal;letter-spacing:.12em;}
+@media (prefers-reduced-motion:reduce){.attune-sigil .sg-core{animation:none !important;}}
 </style>
 </head>
 <body>
@@ -714,6 +745,24 @@ body.bearer-state .insc-bearer-note{display:block;}
   <div class="insc-bearer-note" id="insc-bearer-note"></div>
   <button class="insc-dismiss" id="insc-dismiss">// the reading continues</button>
 </div>
+
+<!-- ATTUNE — THE BREATHING SIGIL -->
+<div class="attune-inscription" id="attune-inscription">
+  <div class="insc-line" id="insc-main">The archive has a sound.</div>
+  <div class="insc-line sub" id="insc-sub">it has been making it the whole time</div>
+</div>
+<button class="attune-sigil silenced" id="attune-sigil" aria-label="Attune to the frequency" title="Attune to the frequency">
+  <svg viewBox="-30 -30 60 60" xmlns="http://www.w3.org/2000/svg">
+    <circle class="sg-aura" cx="0" cy="0" r="26"/>
+    <g class="sg-core">
+      <circle class="sg-ring" cx="0" cy="0" r="22" stroke-width="1.5"/>
+      <path class="sg-tri" d="M -13,-7 L 13,-7 L 0,15 Z" stroke-width="1.5" stroke-linejoin="round"/>
+      <circle class="sg-dot" cx="-5.5" cy="-2.5" r="2.2"/>
+      <circle class="sg-dot" cx="5.5" cy="-2.5" r="2.2"/>
+      <circle class="sg-dot" cx="0" cy="6.5" r="2.2"/>
+    </g>
+  </svg>
+</button>
 
 <div id="whisper"></div>
 
@@ -1416,6 +1465,7 @@ function applyCorruptionVisuals(c){
     document.body.classList.remove('corruption-low','corruption-mid','corruption-high');
     if(currentStage===1)document.body.classList.add('corruption-mid');
     else if(currentStage===2)document.body.classList.add('corruption-high');
+    if(typeof audioDeepenWithCorruption==='function')audioDeepenWithCorruption();
   }
 }
 
@@ -1822,6 +1872,16 @@ function wireSealedCircle(){
     opened=true;
     card.classList.add('broken');           // wax seal breaks
     if(insc)insc.classList.add('open');      // inscription unfurls
+    // The Codex does not ask. Touching the seal summons the frequency from beneath.
+    try{
+      if(typeof audioIsPlaying!=='undefined' && audioIsPlaying){
+        // already attuned — the document answers the transgression by swelling
+        if(typeof audioFadeTo==='function' && typeof A_DEEP_VOL!=='undefined') audioFadeTo(A_DEEP_VOL, 3500);
+      } else if(typeof attuneStart==='function'){
+        // silent — the sound rises, gently, called up by the touch
+        attuneStart();
+      }
+    }catch(e){}
     // a whisper, in keeping with the page's voice
     setTimeout(()=>{
       const el=document.getElementById('whisper');
@@ -1834,6 +1894,86 @@ function wireSealedCircle(){
   }
   card.addEventListener('click',touchSeal);
   card.addEventListener('keydown',(e)=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();touchSeal();}});
+}
+
+// ════════════════════════════════════════════════════════════════
+// ATTUNE / AUDIO SYSTEM — the breathing sigil
+// ════════════════════════════════════════════════════════════════
+const AUDIO_SRC='Audio/Pale%20Archive/pale-archive-audio.mp3';
+const ATTUNE_KEY='codex_attuned_v1';
+const A_BASE_VOL=0.34, A_DEEP_VOL=0.48, A_FADE_MS=4000;
+let audioEl=null, audioIsPlaying=false, audioFadeTimer=null;
+let attuneHasBefore=false;
+const sigil=document.getElementById('attune-sigil');
+const attuneInsc=document.getElementById('attune-inscription');
+const inscMain=document.getElementById('insc-main');
+const inscSub=document.getElementById('insc-sub');
+let attuneInscTimer=null;
+
+function attuneTextFor(kind){
+  if(isBearer)return{main:'You are inside it now.',sub:'you always were'};
+  if(kind==='attuned')return{main:'You are listening now.',sub:''};
+  if(attuneHasBefore)return{main:'You have heard it before.',sub:'it did not stop when you left'};
+  return{main:'The archive has a sound.',sub:'it has been making it the whole time'};
+}
+function attuneInscShow(kind,hold){
+  if(!attuneInsc)return;
+  const t=attuneTextFor(kind);
+  if(inscMain)inscMain.textContent=t.main;
+  if(inscSub){inscSub.textContent=t.sub;inscSub.style.display=t.sub?'block':'none';}
+  attuneInsc.classList.add('shown');
+  if(attuneInscTimer)clearTimeout(attuneInscTimer);
+  if(hold)attuneInscTimer=setTimeout(()=>attuneInsc.classList.remove('shown'),hold);
+}
+function attuneInscHide(){if(attuneInsc){if(attuneInscTimer){clearTimeout(attuneInscTimer);attuneInscTimer=null;}attuneInsc.classList.remove('shown');}}
+
+function audioMake(){if(audioEl)return;audioEl=new Audio(AUDIO_SRC);audioEl.loop=true;audioEl.volume=0;audioEl.preload='auto';}
+function audioFadeTo(target,ms){
+  if(!audioEl)return;
+  if(audioFadeTimer)clearInterval(audioFadeTimer);
+  const sv=audioEl.volume,t0=Date.now();
+  audioFadeTimer=setInterval(()=>{
+    const k=Math.min(1,(Date.now()-t0)/ms);
+    audioEl.volume=Math.max(0,Math.min(1,sv+(target-sv)*k));
+    if(k>=1){clearInterval(audioFadeTimer);audioFadeTimer=null;if(target===0&&audioEl)audioEl.pause();}
+  },40);
+}
+function attuneStart(){
+  audioMake();
+  const target=(corruptionState>0.5)?A_DEEP_VOL:A_BASE_VOL;
+  audioEl.play().then(()=>{
+    audioIsPlaying=true;
+    if(sigil){sigil.classList.add('playing');sigil.classList.remove('silenced');}
+    audioFadeTo(target,A_FADE_MS);
+    try{localStorage.setItem(ATTUNE_KEY,'1');}catch(e){}
+    attuneInscShow('attuned',4000);
+  }).catch(()=>{});
+}
+function attuneSilence(){
+  audioIsPlaying=false;
+  if(sigil){sigil.classList.remove('playing');sigil.classList.add('silenced');}
+  audioFadeTo(0,1500);
+}
+function attuneToggle(){if(audioIsPlaying)attuneSilence();else attuneStart();}
+// the document darkens; the sound deepens with it
+function audioDeepenWithCorruption(){if(audioIsPlaying&&corruptionState>0.5)audioFadeTo(A_DEEP_VOL,6000);}
+
+if(sigil){
+  sigil.addEventListener('click',attuneToggle);
+  if(!isMobile){
+    sigil.addEventListener('mouseenter',()=>attuneInscShow(audioIsPlaying?'attuned':'invite',0));
+    sigil.addEventListener('mouseleave',()=>attuneInscHide());
+  }
+}
+function initAttune(){
+  try{attuneHasBefore=localStorage.getItem(ATTUNE_KEY)==='1';}catch(e){}
+  if(attuneHasBefore){
+    const resume=()=>{if(!audioIsPlaying)attuneStart();document.removeEventListener('click',resume);document.removeEventListener('touchstart',resume);};
+    document.addEventListener('click',resume,{once:true});
+    document.addEventListener('touchstart',resume,{once:true,passive:true});
+  }else{
+    setTimeout(()=>attuneInscShow('invite',11000), isBearer?4000:7000);
+  }
 }
 
 function initApp(){
@@ -1851,6 +1991,8 @@ function initApp(){
   localStorage.setItem('cm-pa-lastvisit',new Date().toISOString().split('T')[0]);
   // Start corruption tick
   setInterval(tickCorruption, 250);
+  // Start the attune / audio system (the breathing sigil)
+  initAttune();
   // If already inscribed, fire a "you have returned to the inscription" early whisper
   if(wasInscribed){
     setTimeout(()=>{
