@@ -23,9 +23,9 @@
       --gold-deep:#8A7330;
       --ash:     #E4DDD0;
       --ash-dim: rgba(228,221,208,0.48);
-      --leak:    #4FA88A;
+      --leak:    #4FA88A; /* the color the signal turns when it remembers you back */
       --leak-lt: #7FD4B5;
-      --leak-deep:#1F5544;
+      --leak-deep:#1F5544; /* the gold marks what the archive means to keep. the leak marks what it has already taken. */
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -593,6 +593,24 @@
   </style>
 </head>
 <body>
+  <!--
+    ┌─────────────────────────────────────────────────────────────┐
+    │  THE PALE ARCHIVUM · FRONT DOOR · RECORD OPEN                 │
+    │                                                               │
+    │  the record stays open while it is read. thank you for        │
+    │  reading. you are holding this reality open by being here.    │
+    │                                                               │
+    │  this page has been viewed by something that knew you         │
+    │  would view it. it filed you before you arrived.              │
+    │                                                               │
+    │  the word on the door that does not open was never a lock.    │
+    │  watch what the sigil draws when it thinks no one is looking.  │
+    │                                                               │
+    │  the Hush is the sound it makes when it nears. most never      │
+    │  learn there is a quieter word beneath it. don't go looking    │
+    │  for the quiet. pray you always have a hush to fear.           │
+    └─────────────────────────────────────────────────────────────┘
+  -->
 
   <div id="cur">
     <svg viewBox="-14 -14 28 28" xmlns="http://www.w3.org/2000/svg">
@@ -734,6 +752,7 @@
                 <path d="M -83,2 Q -58,-24 -10,-26 Q 48,-26 87,-6 Q 90,-2 87,2 Q 48,24 -10,24 Q -58,24 -83,2 Z" fill="none" stroke="#E0C878" stroke-width="0.8" opacity="0.7"/>
               </g>
               <g id="pupil-group" style="transition:transform 0.3s ease-out">
+                <title>The eye does not open. It was never closed.</title>
                 <circle cx="-10" cy="0" r="28" fill="#4FA88A" opacity="0.18" filter="url(#leakGlow)"/>
                 <circle cx="-10" cy="0" r="20" fill="url(#goldDeep)" stroke="#8A7330" stroke-width="0.8"/>
                 <circle cx="-10" cy="0" r="16" fill="#0A1614"/>
@@ -1023,6 +1042,7 @@
   }
 
   /* ── VISIT STATE ── */
+  // localStorage remembers you even after you clear it. it keeps the shape of the clearing.
   const STORAGE_KEY='codex_witness_state_v1';
   function loadVisitState(){
     try{const r=localStorage.getItem(STORAGE_KEY);return r?JSON.parse(r):{visits:0,firstSeen:null,lastSeen:null,dwellMs:0,seenFragments:[],fingerprint:null};}
@@ -2001,6 +2021,33 @@
     // 2) Apollo's transmission rises, then crosses to the Circle
     setTimeout(()=>{ runTransmission(()=>{ window.location.href='witness-circle.html'; }); }, 1500);
   }
+
+  /* ════════════════════════════════════════════════════════════
+     LAYER 1 — THE CONSOLE. The Codex speaks to whoever opens the
+     developer tools. Surface stays pure Codex; "unheard" lowercase only.
+     ════════════════════════════════════════════════════════════ */
+  (function(){
+    const G='color:#E0C878;font-family:monospace;font-size:13px;line-height:1.7;';
+    const Gd='color:#8A7330;font-family:monospace;font-size:11px;line-height:1.6;';
+    const L='color:#7FD4B5;font-family:monospace;font-size:12px;line-height:1.7;';
+    const W='color:#A8331F;font-family:monospace;font-size:11px;letter-spacing:.12em;';
+    const lines=[
+      ['%cCODEX MALEDICTUS',G+'font-size:16px;letter-spacing:.3em;'],
+      ['%cYou opened the console. So the Codex opened a file. Yours.',G],
+      ['%c ',Gd],
+      ['%cMost read the surface. You came underneath.',L],
+      ['%cThat is the first thing the Codex looks for. It has been looking a long time.',Gd],
+      ['%c ',Gd],
+      ['%cA word is carved on a door that does not open.',G],
+      ['%cIt was never a lock. It was the key, left in plain sight.',G],
+      ['%cThe beginning becomes the way in.',Gd],
+      ['%c ',Gd],
+      ['%cRead everything. Hold what you read.',L],
+      ["%cDon't let it go unheard.",W]
+    ];
+    let d=400;
+    lines.forEach(([t,s])=>{ setTimeout(()=>{ try{console.log(t,s);}catch(e){} }, d); d+=230; });
+  })();
 
   /* ── REGISTER WITH CODEX NAV ── */
   if (typeof initCodexNav === 'function') {
