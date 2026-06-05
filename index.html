@@ -1799,19 +1799,86 @@
   function cycleFace(){
     faceIdx=(faceIdx+1)%FACES.length;
     setFace(FACES[faceIdx].draw,false);
-    // Layer 0: once per visit, between faces, flicker the Theban hint (~0.6s)
-    if(!asFlickerDone && Math.random()<0.5){
-      asFlickerDone=true;
-      setTimeout(()=>{
-        const flick=document.createElementNS(SVG_NS,'g');
-        flick.setAttribute('class','as-glyph');
-        flick.innerHTML=faceSVG('theban');
-        asFace.appendChild(flick);
-        setTimeout(()=>{ if(flick.parentNode) flick.remove(); }, 600);
-      }, 2600);
-    }
+    maybeFlicker();
   }
-  let asFlickerDone=false;
+
+  /* ── CIPHER · the Theban flicker (fragment-0 trigger) ──
+     The eye reveals the cipher's existence for ~0.6s. Catching it
+     (click/tap during its brief life) earns fragment-0.
+     Cadence:
+       • not yet caught   → flicker every 3rd cycle (~18s), indefinitely,
+                            so a watching solver always has a near target.
+       • already caught   → stay silent (no nagging the one who won),
+                            but return occasionally if they come back after
+                            a long absence, so the eye never goes fully dead. */
+  let cycleTick=0;
+  function flickerSuppressed(){
+    // suppressed if caught — UNLESS it's been a long while since that catch
+    try{
+      if(typeof Cipher==='undefined') return false;
+      if(!Cipher.has('fragment-0')) return false;       // not caught: never suppress
+      const LONG_ABSENCE=1000*60*60*18;                 // ~18h since the catch
+      const caughtAt=Cipher.earnedAt('fragment-0');
+      return (Date.now()-caughtAt) < LONG_ABSENCE;      // caught recently → stay quiet
+    }catch(e){ return false; }
+  }
+  function maybeFlicker(){
+    cycleTick++;
+    if(cycleTick % 3 !== 0) return;        // every 3rd cycle
+    if(flickerSuppressed()) return;
+    spawnFlicker();
+  }
+  function spawnFlicker(){
+    const flick=document.createElementNS(SVG_NS,'g');
+    flick.setAttribute('class','as-glyph out');   // start hidden, fade in
+    flick.innerHTML=faceSVG('theban');
+    flick.style.cursor='pointer';
+    flick.style.pointerEvents='all';
+    const grab=(ev)=>{ ev.stopPropagation(); catchFlicker(); };
+    flick.addEventListener('click',grab);
+    flick.addEventListener('touchstart',grab,{passive:false});
+    // step the current face(s) back so the Theban glyph stands alone and clean
+    const others=asFace.querySelectorAll('.as-glyph');
+    others.forEach(g=>{ g.dataset.flickerDim='1'; g.style.opacity='0'; });
+    asFace.appendChild(flick);
+    requestAnimationFrame(()=>{ flick.classList.remove('out'); });  // fade in
+    setTimeout(()=>{
+      flick.classList.add('out');                 // fade the flicker out
+      // restore the faces that were dimmed for the flicker
+      asFace.querySelectorAll('[data-flicker-dim="1"]').forEach(g=>{
+        g.style.opacity=''; delete g.dataset.flickerDim;
+      });
+      setTimeout(()=>{ if(flick.parentNode) flick.remove(); }, 1200);
+    }, 1200);
+  }
+
+  /* CIPHER · catching the flicker earns fragment-0 and reveals "unheard",
+     the word the surface only ever whispers in lowercase. Shown in the
+     attune inscription so it surfaces in the page's own voice. */
+  function catchFlicker(){
+    try{
+      // restore any faces dimmed for the flicker so the sigil isn't left blank
+      const af=document.getElementById('as-face');
+      if(af){ af.querySelectorAll('[data-flicker-dim="1"]').forEach(g=>{ g.style.opacity=''; delete g.dataset.flickerDim; }); }
+      if(typeof Cipher==='undefined') return;
+      Cipher.earn('fragment-0',{page:'index',via:'flicker'});
+      const word=Cipher.wordFor('fragment-0');
+      if(word){
+        const insc=document.getElementById('attune-inscription');
+        const m=document.getElementById('ai-main');
+        const s=document.getElementById('ai-sub');
+        const n=document.getElementById('ai-name');
+        if(insc&&m){
+          m.textContent='You caught what the eye draws when unwatched.';
+          if(s){ s.textContent='the word this room carries: '+word; s.style.display='block'; }
+          if(n){ n.textContent='· carry it down · first of three ·'; }
+          insc.classList.add('shown');
+          setTimeout(()=>insc.classList.remove('shown'), 9000);
+        }
+      }
+    }catch(e){}
+  }
+
 
   /* audio */
   function asMake(){ if(asAudio) return; asAudio=new Audio(AUDIO_SRC); asAudio.loop=true; asAudio.volume=0; asAudio.preload='auto'; }
@@ -2059,6 +2126,7 @@
   }
   </script>
 
+  <script src="codex-cipher.js"></script>
   <script src="codex-nav.js" defer></script>
 
 </body>
