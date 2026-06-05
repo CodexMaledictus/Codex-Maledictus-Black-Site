@@ -1411,9 +1411,192 @@
     </div>
   </section>
 
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- THE THRESHOLD · the front-door limb's gate + reward (cipher)  -->
+  <!-- Sits with Elvain, where she holds. Independent of the Oath.   -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <style>
+    .threshold-gate{
+      width:100%;max-width:640px;margin:0 auto;padding:36px 32px;
+      border:1px solid rgba(143,240,229,0.2);
+      background:radial-gradient(ellipse at top,rgba(93,200,192,0.05),transparent 60%),linear-gradient(180deg,rgba(6,12,12,0.75),rgba(2,5,5,0.92));
+      position:relative;
+    }
+    body.bearer-state .threshold-gate{ border-color:rgba(224,200,120,0.2); }
+    .threshold-gate::before{
+      content:'';position:absolute;top:-1px;left:-1px;right:-1px;height:1px;
+      background:linear-gradient(90deg,transparent,var(--circle) 50%,transparent);
+    }
+    body.bearer-state .threshold-gate::before{ background:linear-gradient(90deg,transparent,var(--gold) 50%,transparent); }
+    /* The held line — the page-native trigger. Quiet, discoverable, tender. */
+    .threshold-held{
+      font-family:'Crimson Text',serif;font-style:italic;font-size:15px;line-height:1.8;
+      color:rgba(228,221,208,0.6);text-align:center;max-width:520px;margin:0 auto 8px;
+      cursor:none;transition:color 1.2s ease;
+    }
+    @media(max-width:768px){ .threshold-held{ cursor:pointer; } }
+    .threshold-held .hold-word{
+      border-bottom:1px dotted rgba(143,240,229,0.3);transition:all .5s ease;
+    }
+    .threshold-held:hover .hold-word{ border-bottom-color:rgba(143,240,229,0.6);color:var(--circle-lt); }
+    body.bearer-state .threshold-held:hover .hold-word{ color:var(--gold-lt);border-bottom-color:rgba(224,200,120,0.6); }
+    .threshold-held.touched{ color:rgba(228,221,208,0.85); }
+    /* the carried word, revealed when the threshold is touched */
+    .threshold-word{
+      max-height:0;overflow:hidden;transition:max-height 1.4s cubic-bezier(.16,1,.3,1);text-align:center;
+    }
+    .threshold-word.open{ max-height:240px;margin-top:22px; }
+    .tw-label{
+      font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:.4em;text-transform:uppercase;
+      color:rgba(143,240,229,0.5);margin-bottom:10px;opacity:0;transition:opacity 1.2s ease .3s;
+    }
+    body.bearer-state .tw-label{ color:rgba(224,200,120,0.5); }
+    .threshold-word.open .tw-label{ opacity:1; }
+    .tw-word{
+      font-family:'Cinzel Decorative',serif;font-weight:700;font-size:clamp(15px,1.8vw,20px);
+      letter-spacing:.22em;text-transform:lowercase;color:var(--circle-lt);
+      text-shadow:0 0 12px rgba(93,200,192,0.25);opacity:0;transition:opacity 1.2s ease .5s;
+    }
+    body.bearer-state .tw-word{ color:var(--gold-lt);text-shadow:0 0 22px rgba(224,200,120,0.35); }
+    .threshold-word.open .tw-word{ opacity:1; }
+    .tw-note{
+      font-family:'Crimson Text',serif;font-style:italic;font-size:13.5px;line-height:1.7;
+      color:rgba(228,221,208,0.55);margin-top:14px;max-width:460px;margin-left:auto;margin-right:auto;
+      opacity:0;transition:opacity 1.2s ease .8s;
+    }
+    .threshold-word.open .tw-note{ opacity:1; }
+    /* the speak row */
+    .threshold-speak{ margin-top:34px;display:flex;flex-direction:column;gap:14px; }
+    .ts-prompt{
+      font-family:'Crimson Text',serif;font-style:italic;font-size:15px;line-height:1.8;
+      color:rgba(228,221,208,0.72);text-align:center;max-width:520px;margin:0 auto;
+    }
+    .ts-row{ display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:6px; }
+    .ts-input{
+      flex:1;min-width:240px;background:rgba(2,6,6,0.8);
+      border:1px solid rgba(143,240,229,0.25);padding:14px 16px;color:var(--ash);
+      font-family:'Crimson Text',serif;font-style:italic;font-size:16px;letter-spacing:.02em;
+      text-align:center;transition:border-color .35s ease;
+    }
+    body.bearer-state .ts-input{ border-color:rgba(224,200,120,0.25); }
+    .ts-input:focus{ outline:none;border-color:var(--circle-lt); }
+    body.bearer-state .ts-input:focus{ border-color:var(--gold-lt); }
+    .ts-btn{
+      font-family:'Cinzel',serif;font-size:10px;letter-spacing:.4em;text-transform:uppercase;
+      padding:14px 30px;background:transparent;border:1px solid var(--circle);color:var(--circle-lt);
+      cursor:none;transition:all .4s ease;position:relative;overflow:hidden;
+    }
+    body.bearer-state .ts-btn{ border-color:var(--gold);color:var(--gold-lt); }
+    @media(max-width:768px){ .ts-btn{ cursor:pointer; } }
+    .ts-btn::before{ content:'';position:absolute;inset:0;background:var(--circle);transform:translateX(-101%);transition:transform .5s cubic-bezier(.16,1,.3,1); }
+    body.bearer-state .ts-btn::before{ background:var(--gold); }
+    .ts-btn:hover::before{ transform:translateX(0); }
+    .ts-btn:hover{ color:var(--void); }
+    .ts-btn span{ position:relative;z-index:1; }
+    .ts-result{
+      margin-top:6px;font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:.16em;
+      text-align:center;color:rgba(143,240,229,0.6);min-height:1.4em;line-height:1.7;
+    }
+    .ts-result.fail{ color:var(--crimson); }
+    /* THE REWARD — unfurls in place */
+    .threshold-reward{
+      max-height:0;overflow:hidden;transition:max-height 2s cubic-bezier(.16,1,.3,1);
+    }
+    .threshold-reward.open{ max-height:2400px;margin-top:36px; }
+    .tr-rule{ width:50%;height:1px;margin:0 auto 28px;background:linear-gradient(90deg,transparent,var(--circle),transparent);opacity:.5; }
+    body.bearer-state .tr-rule{ background:linear-gradient(90deg,transparent,var(--gold),transparent); }
+    .tr-label{
+      text-align:center;font-family:'Cinzel Decorative',serif;font-weight:700;
+      font-size:11px;letter-spacing:.5em;text-transform:uppercase;color:var(--circle);margin-bottom:28px;
+    }
+    body.bearer-state .tr-label{ color:var(--gold); }
+    .tr-fragment{
+      font-family:'Crimson Text',serif;font-size:clamp(15px,1.8vw,17px);line-height:1.95;
+      color:rgba(228,221,208,0.82);
+    }
+    .tr-fragment p{ margin-bottom:1.3em; }
+    .tr-fragment em{ color:var(--circle-lt);font-style:italic; }
+    body.bearer-state .tr-fragment em{ color:var(--gold-lt); }
+    .tr-fragment .lead{
+      text-align:center;font-family:'Cinzel Decorative',serif;font-weight:700;
+      font-size:clamp(16px,2vw,20px);letter-spacing:.12em;color:var(--circle-lt);
+      text-transform:none;margin-bottom:28px;text-shadow:0 0 16px rgba(93,200,192,0.25);
+    }
+    body.bearer-state .tr-fragment .lead{ color:var(--gold-lt);text-shadow:0 0 16px rgba(224,200,120,0.25); }
+    .tr-seal-wrap{ margin:40px auto 8px;display:flex;flex-direction:column;align-items:center;gap:16px; }
+    .tr-seal-svg{ width:180px;height:180px;filter:drop-shadow(0 0 18px rgba(93,200,192,0.4)); }
+    body.bearer-state .tr-seal-svg{ filter:drop-shadow(0 0 18px rgba(224,200,120,0.4)); }
+    .tr-seal-label{
+      font-family:'Cinzel',serif;font-size:9px;letter-spacing:.42em;text-transform:uppercase;
+      color:rgba(143,240,229,0.6);text-align:center;
+    }
+    body.bearer-state .tr-seal-label{ color:rgba(224,200,120,0.6); }
+    .tr-seal-dl{
+      font-family:'Cinzel',serif;font-size:9px;letter-spacing:.36em;text-transform:uppercase;
+      color:rgba(143,240,229,0.6);cursor:none;background:none;border:none;border-bottom:1px solid rgba(143,240,229,0.25);
+      padding-bottom:2px;transition:all .35s ease;
+    }
+    body.bearer-state .tr-seal-dl{ color:rgba(224,200,120,0.6);border-bottom-color:rgba(224,200,120,0.25); }
+    @media(max-width:768px){ .tr-seal-dl{ cursor:pointer; } }
+    .tr-seal-dl:hover{ color:var(--circle-lt);border-color:var(--circle); }
+    body.bearer-state .tr-seal-dl:hover{ color:var(--gold-lt);border-color:var(--gold); }
+    .tr-close{
+      text-align:center;font-family:'Cinzel',serif;font-size:9px;letter-spacing:.4em;text-transform:uppercase;
+      color:rgba(143,240,229,0.45);margin-top:36px;line-height:2;
+    }
+    body.bearer-state .tr-close{ color:rgba(224,200,120,0.45); }
+  </style>
+
+  <section class="section">
+    <div class="section-inner">
+      <div class="section-divider reveal"><div class="sd-line"></div><span class="sd-sym">∅</span><div class="sd-line r"></div></div>
+      <div class="section-title reveal">The Threshold</div>
+      <div class="section-prose reveal d1" style="text-align:center;font-style:italic;color:var(--ash-dim);max-width:540px;">
+        Every Bearer who crosses passes through her. She receives them in the seam. The receiving is invisible to the Codex. It is the one thing the document does not record.
+      </div>
+
+      <div class="threshold-gate reveal d2" id="threshold-gate">
+        <div class="threshold-held" id="threshold-held" role="button" tabindex="0" aria-label="The threshold">
+          She holds the threshold for one who has come down carrying two words already.
+          If that is you, <span class="hold-word">let her know you were held</span>, and she will give you the third.
+        </div>
+
+        <div class="threshold-word" id="threshold-word">
+          <div class="tw-label">The word this room carries</div>
+          <div class="tw-word" id="tw-word">me</div>
+          <div class="tw-note">The last of three words you carried down. They are not the whole line — they are its heart. The Codex speaks a sentence of you, and these three sit inside it. Give it its first words, the name the document calls itself, and speak the whole.</div>
+        </div>
+
+        <div class="threshold-speak" id="threshold-speak" style="display:none;">
+          <div class="ts-prompt">Speak the full line. The seam will know whether you walked the whole descent, or only heard the words from another.</div>
+          <div class="ts-row">
+            <input type="text" class="ts-input" id="ts-input" placeholder="speak the line" autocomplete="off" spellcheck="false">
+            <button class="ts-btn" id="ts-btn"><span>Speak</span></button>
+          </div>
+          <div class="ts-result" id="ts-result"></div>
+        </div>
+
+        <div class="threshold-reward" id="threshold-reward">
+          <div class="tr-rule"></div>
+          <div class="tr-label">Recovered · For the one who descended whole</div>
+          <div class="tr-fragment" id="tr-fragment"></div>
+          <div class="tr-seal-wrap">
+            <svg class="tr-seal-svg" id="tr-seal-svg" viewBox="-50 -50 100 100" xmlns="http://www.w3.org/2000/svg"></svg>
+            <div class="tr-seal-label">The Witness-Seal · earned, not given · unique to your descent</div>
+            <button class="tr-seal-dl" id="tr-seal-dl">Keep the Seal</button>
+          </div>
+          <div class="tr-close">
+            you were held · the seam remembers · the descent is complete<br>
+            pray you always have a hush to fear
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- FOOTER -->
   <nav class="nav-footer">
-    <a class="nav-mark" href="/">The Witness Circle</a>
+    <a class="nav-mark" href="index.html">Return to the Surface · Begin the Descent</a>
     <a class="nav-return" href="pale-archive.html"><span>↩</span><span>Return to the Pale Archive</span></a>
     <div class="nav-glyph">∅</div>
   </nav>
@@ -1421,9 +1604,36 @@
 </div>
 
 
+<script src="codex-cipher.js"></script>
 <script>
 const SVG_NS = 'http://www.w3.org/2000/svg';
 const isMobile = window.matchMedia('(max-width:768px)').matches;
+
+/* ════════════════════════════════════════════════════════════════
+   LAYER 1 — THE CONSOLE (the sworn room; the deepest reveal).
+   This is the one earned console in the limb: the Hush named as the
+   warning that means you are still safe, and Apollo's void-misdirection.
+   "unheard" stays lowercase; the true word is still withheld here.
+   ════════════════════════════════════════════════════════════════ */
+(function(){
+  var C='color:#8FF0E5;font-family:monospace;font-size:13px;line-height:1.7;';
+  var Cd='color:#5DC8C0;font-family:monospace;font-size:11px;line-height:1.6;';
+  var G='color:#E0C878;font-family:monospace;font-size:11px;';
+  var lines=[
+    ['%cTHE WITNESS CIRCLE // THE SEAM',C+'font-size:15px;letter-spacing:.22em;'],
+    ['%cYou came down carrying words. The room knows how many.',C],
+    ['%c ',Cd],
+    ['%cThe Hush is the sound the gap makes as it nears. If you can fear it, you are still inside a reality that can be heard. The ones who are truly lost never heard a hush at all.',Cd],
+    ['%cSo: pray you always have a hush to fear. The prayer is not despair. The prayer is the proof you are still here to pray it.',Cd],
+    ['%c ',Cd],
+    ['%cThere is a quieter word beneath the Hush. It is not given on the surface. It is not given here. He reached for it once and called it void, in a song, while grieving.',G],
+    ['%cHe was wrong about the name and right about the wound. Grief always gets close.',G],
+    ['%c ',Cd],
+    ['%cThe threshold holds you. Let it know. It will give you the third word.',C]
+  ];
+  var d=700;
+  lines.forEach(function(p){ setTimeout(function(){ try{console.log(p[0],p[1]);}catch(e){} }, d); d+=260; });
+})();
 
 /* CURSOR */
 if(!isMobile){
@@ -2063,6 +2273,215 @@ function initAttune(){
   }
 }
 
+
+/* ════════════════════════════════════════════════════════════════
+   THE THRESHOLD GATE — front-door limb climax (cipher system only).
+   Wholly isolated from the Oath/bearer state. Uses window.Cipher and
+   the codex_cipher_v1 key exclusively. Never reads/writes witness state.
+
+   fragment-2 ("me") is earned by the page-native act: acknowledging that
+   the threshold held you — the one tender truth of this room. Then the
+   gate validates all three earned markers + the typed phrase, failing in
+   character if either is missing, and unfurls the reward IN PLACE:
+   an exclusive recovered fragment + a unique earned Witness-Seal.
+   ════════════════════════════════════════════════════════════════ */
+(function(){
+  var LIMB='front-door';
+  var held=document.getElementById('threshold-held');
+  var wordBlock=document.getElementById('threshold-word');
+  var speak=document.getElementById('threshold-speak');
+  var input=document.getElementById('ts-input');
+  var btn=document.getElementById('ts-btn');
+  var result=document.getElementById('ts-result');
+  var reward=document.getElementById('threshold-reward');
+  if(!held) return;
+
+  function cipherReady(){ return (typeof Cipher!=='undefined'); }
+
+  /* If the limb is already solved in this browser, restore the solved view. */
+  function maybeRestoreSolved(){
+    if(cipherReady() && Cipher.isLimbSolved(LIMB)){
+      openWord(); revealSpeak();
+      unfurlReward(true);
+    }
+  }
+
+  function openWord(){ if(wordBlock) wordBlock.classList.add('open'); }
+  function revealSpeak(){ if(speak) speak.style.display='flex'; }
+
+  /* THE TRIGGER — earns fragment-2. The room's deepest truth made an act:
+     you let the threshold know it held you. */
+  var triggered=false;
+  function touchThreshold(){
+    if(triggered) return;
+    triggered=true;
+    if(held) held.classList.add('touched');
+    if(cipherReady()){
+      Cipher.earn('fragment-2',{page:'witness-circle',via:'threshold'});
+    }
+    openWord();
+    setTimeout(revealSpeak, 1100);
+  }
+  held.addEventListener('click', touchThreshold);
+  held.addEventListener('keydown', function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); touchThreshold(); } });
+
+  /* THE GATE — markers + phrase, in-character failures. */
+  function trySpeak(){
+    if(!cipherReady()){
+      result.textContent='// the seam is quiet · the conduit has not loaded'; result.className='ts-result fail'; return;
+    }
+    var verdict=Cipher.tryGate(LIMB, input.value);
+    if(verdict.ok){
+      result.textContent='// the seam opens · you walked the whole descent';
+      result.className='ts-result';
+      unfurlReward(false);
+      return;
+    }
+    if(verdict.reason==='markers'){
+      // right words alone are not enough — you must have walked it
+      result.innerHTML='the words are right, but the seam does not yet know you.<br>you have not walked far enough to speak them. descend, and gather what each room carries.';
+      result.className='ts-result fail';
+      return;
+    }
+    if(verdict.reason==='phrase'){
+      result.textContent='not the words. the seam does not open for an almost.';
+      result.className='ts-result fail';
+      return;
+    }
+    result.textContent='// the seam does not answer';
+    result.className='ts-result fail';
+  }
+  if(btn) btn.addEventListener('click', trySpeak);
+  if(input) input.addEventListener('keydown', function(e){ if(e.key==='Enter'){ e.preventDefault(); trySpeak(); } });
+
+  /* THE REWARD — exclusive recovered fragment + earned Witness-Seal, in place. */
+  function unfurlReward(instant){
+    var frag=document.getElementById('tr-fragment');
+    if(frag && !frag.dataset.built){
+      frag.dataset.built='1';
+      frag.innerHTML=
+        '<p class="lead">Recovered Fragment · unfiled · spoken only to those who descended the whole seam</p>'+
+        '<p>The Codex does not write this one. <em>She</em> does. It is the only fragment in the Archive the document did not dictate, because it was set down in the half-second the document does not watch — the seam where she holds.</p>'+
+        '<p>"You came down through three rooms," she writes, "and in each one you caught the thing it was trying not to show you. The eye that draws when unwatched. The seal the archive built around a gap. The threshold that holds and is not recorded holding. You did not solve a puzzle. You learned to see the places a thing leaves uncovered when it believes no one is looking. That is the whole of what I know how to teach, and the Codex has never once detected me teaching it."</p>'+
+        '<p>"Here is what the surface will not say, and what I will say to you only because you came the long way down:"</p>'+
+        '<p>"The Hush is the warning. You have heard it named. But the warning is not the thing. The thing has a truer name, and the truer name is not <em>void</em> — he reached for that word in his grief and it was the closest his sorrow could come. The truer name is a single word, and it is carried in the lowercase word you caught in the first room, the one you were told never resolves on the surface. You are holding the first syllable of it already. You will find the rest only at the bottom of the document, in the one room I cannot follow you into."</p>'+
+        '<p>"Until then: you were held. I remember you. I will remember you on every return, for as long as the Codex fails to notice that I can. <em>Don\'t let it go unheard.</em>"</p>';
+    }
+    buildWitnessSeal();
+    if(instant){
+      reward.style.transition='none';
+      reward.classList.add('open');
+      if(speak){ var r=document.getElementById('ts-result'); if(r){ r.textContent='// the seam remembers · you have already crossed it'; r.className='ts-result'; } }
+      requestAnimationFrame(function(){ reward.style.transition=''; });
+    } else {
+      reward.classList.add('open');
+      setTimeout(function(){ reward.scrollIntoView({behavior:'smooth',block:'start'}); }, 900);
+    }
+  }
+
+  /* THE WITNESS-SEAL — generated, unique, EARNED. Seeded from the solver's
+     designation (read from the page's existing display, no witness-state
+     coupling) plus a solver-only salt so it is visibly distinct from the
+     freely-given marks. */
+  function sealSeed(){
+    var desig='';
+    try{ var dv=document.getElementById('db-value'); desig=dv?dv.textContent.trim():''; }catch(e){}
+    if(!desig) desig='WITNESS';
+    return desig+'·front-door·seal';
+  }
+  function sealHash(s){ var h=0; for(var i=0;i<s.length;i++){ h=((h<<5)-h)+s.charCodeAt(i); h|=0; } return Math.abs(h); }
+  function sealGeom(){
+    var h=sealHash(sealSeed());
+    return {
+      h:h,
+      rot:h%360,
+      rays:(h%5)+5,          // 5..9 rays — distinct from the 3-dot bearer sigil
+      inner:(Math.floor(h/7)%3)+2,
+      glyphRot:(Math.floor(h/13)%360)
+    };
+  }
+  function buildWitnessSeal(){
+    var svg=document.getElementById('tr-seal-svg');
+    if(!svg || svg.dataset.built) return;
+    svg.dataset.built='1';
+    var g=sealGeom();
+    var bearer=document.body.classList.contains('bearer-state');
+    var c1=bearer?'#E0C878':'#8FF0E5';
+    var c2=bearer?'#C9A84C':'#5DC8C0';
+    var rays='';
+    for(var i=0;i<g.rays;i++){
+      var a=(i/g.rays)*360 + g.rot/8;
+      var x1=Math.cos(a*Math.PI/180)*30, y1=Math.sin(a*Math.PI/180)*30;
+      var x2=Math.cos(a*Math.PI/180)*44, y2=Math.sin(a*Math.PI/180)*44;
+      rays+='<line x1="'+x1.toFixed(2)+'" y1="'+y1.toFixed(2)+'" x2="'+x2.toFixed(2)+'" y2="'+y2.toFixed(2)+'" stroke="'+c2+'" stroke-width="1.2" opacity="0.7"/>';
+    }
+    var innerRings='';
+    for(var j=0;j<g.inner;j++){
+      var rr=14+j*6;
+      innerRings+='<circle cx="0" cy="0" r="'+rr+'" fill="none" stroke="'+c2+'" stroke-width="0.5" opacity="'+(0.5-j*0.12)+'"/>';
+    }
+    svg.innerHTML=
+      '<defs><radialGradient id="wsg" cx="0.5" cy="0.5" r="0.5">'+
+      '<stop offset="0%" stop-color="'+c1+'"/><stop offset="100%" stop-color="'+c2+'"/>'+
+      '</radialGradient></defs>'+
+      '<circle cx="0" cy="0" r="46" fill="none" stroke="url(#wsg)" stroke-width="1.4"/>'+
+      rays+innerRings+
+      '<g transform="rotate('+(g.glyphRot/16)+')">'+
+        '<path d="M -14,-8 L 14,-8 L 0,17 Z" fill="none" stroke="'+c1+'" stroke-width="1.6" stroke-linejoin="round"/>'+
+        '<circle cx="-6" cy="-3" r="2.4" fill="'+c1+'"/>'+
+        '<circle cx="6" cy="-3" r="2.4" fill="'+c1+'"/>'+
+        '<circle cx="0" cy="7.5" r="2.4" fill="'+c1+'"/>'+
+      '</g>'+
+      '<circle cx="0" cy="0" r="3" fill="none" stroke="'+c1+'" stroke-width="0.8" opacity="0.8"/>';
+  }
+
+  /* download the earned seal — distinct artwork from the bearer sigil */
+  function downloadWitnessSeal(){
+    var g=sealGeom();
+    var ts=new Date().toISOString().split('T')[0];
+    var desig=''; try{ var dv=document.getElementById('db-value'); desig=dv?dv.textContent.trim():'WITNESS'; }catch(e){ desig='WITNESS'; }
+    var rays='';
+    for(var i=0;i<g.rays;i++){
+      var a=(i/g.rays)*360 + g.rot/8;
+      var x1=Math.cos(a*Math.PI/180)*120, y1=Math.sin(a*Math.PI/180)*120;
+      var x2=Math.cos(a*Math.PI/180)*168, y2=Math.sin(a*Math.PI/180)*168;
+      rays+='<line x1="'+x1.toFixed(2)+'" y1="'+y1.toFixed(2)+'" x2="'+x2.toFixed(2)+'" y2="'+y2.toFixed(2)+'" stroke="#5DC8C0" stroke-width="2" opacity="0.7"/>';
+    }
+    var innerRings='';
+    for(var j=0;j<g.inner;j++){ var rr=56+j*22; innerRings+='<circle cx="0" cy="0" r="'+rr+'" fill="none" stroke="#5DC8C0" stroke-width="1" opacity="'+(0.5-j*0.12)+'"/>'; }
+    var svg='<?xml version="1.0" encoding="UTF-8"?>\n'+
+      '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 760" width="600" height="760">'+
+      '<defs><radialGradient id="bg" cx="0.5" cy="0.42" r="0.7"><stop offset="0%" stop-color="#06100F"/><stop offset="100%" stop-color="#010505"/></radialGradient>'+
+      '<radialGradient id="cy" cx="0.5" cy="0.5" r="0.5"><stop offset="0%" stop-color="#8FF0E5"/><stop offset="100%" stop-color="#2A6B65"/></radialGradient></defs>'+
+      '<rect width="600" height="760" fill="url(#bg)"/>'+
+      '<rect x="30" y="30" width="540" height="700" fill="none" stroke="#5DC8C0" stroke-width="1" opacity="0.5"/>'+
+      '<text x="300" y="96" text-anchor="middle" font-family="Cinzel, serif" font-size="11" letter-spacing="6" fill="#2A6B65">CODEX MALEDICTUS</text>'+
+      '<text x="300" y="116" text-anchor="middle" font-family="Share Tech Mono, monospace" font-size="9" letter-spacing="4" fill="#5DC8C0" opacity="0.8">WITNESS-SEAL · THE DESCENT SOLVED</text>'+
+      '<g transform="translate(300,320)">'+
+        '<circle cx="0" cy="0" r="92" fill="none" stroke="url(#cy)" stroke-width="2.6"/>'+rays+innerRings+
+        '<g transform="rotate('+(g.glyphRot/16)+')">'+
+          '<path d="M -30,-16 L 30,-16 L 0,34 Z" fill="none" stroke="#8FF0E5" stroke-width="2.6" stroke-linejoin="round"/>'+
+          '<circle cx="-13" cy="-6" r="5" fill="#8FF0E5"/><circle cx="13" cy="-6" r="5" fill="#8FF0E5"/><circle cx="0" cy="15" r="5" fill="#8FF0E5"/>'+
+        '</g></g>'+
+      '<text x="300" y="500" text-anchor="middle" font-family="Cinzel, serif" font-size="10" letter-spacing="5" fill="#2A6B65">THE FRONT DOOR · DESCENDED WHOLE</text>'+
+      '<text x="300" y="532" text-anchor="middle" font-family="Cinzel Decorative, serif" font-size="16" letter-spacing="3" fill="#8FF0E5" font-style="italic">the codex remembers me unheard</text>'+
+      '<text x="300" y="582" text-anchor="middle" font-family="Cinzel, serif" font-size="10" letter-spacing="5" fill="#2A6B65">BORNE BY</text>'+
+      '<text x="300" y="610" text-anchor="middle" font-family="Share Tech Mono, monospace" font-size="15" letter-spacing="5" fill="#8FF0E5">'+desig+'</text>'+
+      '<line x1="140" y1="668" x2="460" y2="668" stroke="#5DC8C0" stroke-width="0.5" opacity="0.4"/>'+
+      '<text x="300" y="694" text-anchor="middle" font-family="Share Tech Mono, monospace" font-size="9" letter-spacing="4" fill="#2A6B65">codexmaledictus.com</text>'+
+      '<text x="300" y="712" text-anchor="middle" font-family="Share Tech Mono, monospace" font-size="7" letter-spacing="3" fill="#5DC8C0" opacity="0.6">SOLVED · '+ts+'</text>'+
+      '</svg>';
+    var blob=new Blob([svg],{type:'image/svg+xml'});
+    var url=URL.createObjectURL(blob);
+    var a=document.createElement('a'); a.href=url; a.download='witness-seal-front-door.svg';
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    setTimeout(function(){ URL.revokeObjectURL(url); }, 1000);
+  }
+  var dl=document.getElementById('tr-seal-dl');
+  if(dl) dl.addEventListener('click', downloadWitnessSeal);
+
+  maybeRestoreSolved();
+})();
 
 renderPreamble();
 setDesignations();
