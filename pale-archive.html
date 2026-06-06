@@ -2220,37 +2220,44 @@ function wireUnlistedEntry(){
 
   // surface only once the reader has engaged (scrolled into the catalog),
   // never on load — so the room is always seen and understood first.
-  let armed=false;
+  let armed=false, surfaced=false, armTries=0;
+  function trySurface(){
+    if(surfaced) return;
+    if(place()){
+      surfaced=true;
+      // a whisper for a solver already carrying fragment-0
+      try{
+        if(typeof Cipher!=='undefined' && Cipher.has('fragment-0')){
+          const el=document.getElementById('whisper');
+          if(el){ el.textContent='you came down carrying a word. one entry here was never agreed to. it is reading you back.'; el.classList.add('shown'); setTimeout(()=>el.classList.remove('shown'),5600); }
+        }
+      }catch(e){}
+      // begin the drift after the reader has had time to notice the entry
+      setTimeout(drift, 3200);
+    } else if(armTries++ < 40){
+      // no visible sibling cards yet — keep trying until the catalog is in view
+      setTimeout(trySurface, 700);
+    }
+  }
   function arm(){
     if(armed) return;
     const r=wrap.getBoundingClientRect();
-    if(r.top < window.innerHeight*0.6){   // catalog has entered the reading zone
+    if(r.top < window.innerHeight*0.85){   // catalog has entered the reading zone
       armed=true;
-      // first surfacing after a beat of reading, then the slow drift
-      setTimeout(()=>{
-        if(place()){
-          // a whisper for a solver already carrying fragment-0
-          try{
-            if(typeof Cipher!=='undefined' && Cipher.has('fragment-0')){
-              const el=document.getElementById('whisper');
-              if(el){ el.textContent='you came down carrying a word. one entry here was never agreed to. it is reading you back.'; el.classList.add('shown'); setTimeout(()=>el.classList.remove('shown'),5600); }
-            }
-          }catch(e){}
-          // begin the drift after the reader has had time to notice the entry
-          setTimeout(drift, 3200);
-        }
-      }, 1800);
+      setTimeout(trySurface, 1500);
       window.removeEventListener('scroll', arm);
     }
   }
   window.addEventListener('scroll', arm, {passive:true});
   // also arm if the catalog is already in view shortly after load
-  setTimeout(arm, 2500);
+  setTimeout(arm, 2000);
+  // hard fallback: if for any reason arm never fires, surface anyway after a while
+  setTimeout(()=>{ if(!surfaced){ armed=true; trySurface(); } }, 9000);
 
   // relocate SPARINGLY: only if the reader has fully scrolled the entry out of
   // view and the entry hasn't been caught. the archive cannot keep it filed.
   window.__ueRelocate=setInterval(()=>{
-    if(!node || !armed) return;
+    if(!node || !surfaced || resolved) return;
     const r=node.getBoundingClientRect();
     const offscreen = (r.bottom < 0 || r.top > window.innerHeight);
     if(offscreen){
