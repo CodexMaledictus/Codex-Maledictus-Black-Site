@@ -616,7 +616,11 @@
       position:absolute;inset:0;z-index:6;display:flex;align-items:center;justify-content:center;
       pointer-events:none;opacity:0;transition:opacity 1s ease;
     }
-    .artemys-glyph.alive{ opacity:1;pointer-events:auto;cursor:pointer; }
+    /* once she has surfaced the mark at least once, a faint trace remains and
+       the card invites the click at any time (not only during the lit pulse) */
+    .voice-card.cipher-host.glyph-seen { cursor:pointer; }
+    .voice-card.cipher-host.glyph-seen .artemys-glyph{ opacity:.16;pointer-events:auto; }
+    .artemys-glyph.alive{ opacity:1!important;pointer-events:auto;cursor:pointer; }
     .artemys-glyph::before{
       content:'';position:absolute;inset:0;
       background:radial-gradient(ellipse at 50% 42%,rgba(168,51,31,.45),rgba(122,18,18,.18) 40%,transparent 70%);
@@ -1970,7 +1974,7 @@
     const card=document.getElementById('artemys-card');
     const glyph=document.getElementById('artemys-glyph');
     if(!card||!glyph) return;
-    let inView=false, alive=false, tick=0, timer=null;
+    let inView=false, alive=false, tick=0, timer=null, graceUntil=0;
 
     function suppressed(){
       try{
@@ -1984,14 +1988,17 @@
       if(alive||suppressed()) return;
       alive=true;
       card.classList.add('glyph-surfacing');
+      card.classList.add('glyph-seen');   // leaves a faint trace + keeps it clickable after
       // re-trigger carve animation
       glyph.classList.remove('alive'); void glyph.offsetWidth; glyph.classList.add('alive');
-      // hold ~3s, then recede
+      // hold ~3.4s visible, then recede — with a short grace window after so a
+      // click on the fully-formed glyph at the very end still counts
       setTimeout(()=>{
         glyph.classList.remove('alive');
         card.classList.remove('glyph-surfacing');
         alive=false;
-      }, 3000);
+        graceUntil=Date.now()+700;   // brief grace after recede
+      }, 3400);
     }
     function loop(){
       timer=setInterval(()=>{
@@ -2002,13 +2009,21 @@
       }, 6000);
     }
     function catchIt(ev){
-      if(!alive) return;            // only catchable while surfaced
+      // already caught? ignore. otherwise: clicking her card/glyph catches it
+      // ANY time the card is in view — the surfacing is the invitation, not a
+      // reflex gate. no punishing timing window.
+      try{ if(typeof Cipher!=='undefined' && Cipher.has('fragment-0')) return; }catch(e){}
+      if(!inView) return;
       if(ev){ ev.preventDefault(); ev.stopPropagation(); }
       glyph.classList.remove('alive');
       card.classList.remove('glyph-surfacing');
-      alive=false;
+      alive=false; graceUntil=0;
       catchFlicker();               // earns fragment-0 + opens the epic reveal
     }
+    // the WHOLE card is catchable while the glyph is surfaced — clicking the
+    // symbol (or near it) all counts, so the catch is forgiving, not pixel-perfect
+    card.addEventListener('click', catchIt);
+    card.addEventListener('touchstart', catchIt, {passive:false});
     glyph.addEventListener('click', catchIt);
     glyph.addEventListener('touchstart', catchIt, {passive:false});
 
@@ -2033,10 +2048,11 @@
      named or defined on the surface. */
   function catchFlicker(){
     try{
-      if(typeof Cipher==='undefined') return;
-      Cipher.earn('fragment-0',{page:'index',via:'artemys-card'});
-      const word=Cipher.wordFor('fragment-0');
-      if(!word) return;
+      let word='unheard';
+      if(typeof Cipher!=='undefined'){
+        Cipher.earn('fragment-0',{page:'index',via:'artemys-card'});
+        word=Cipher.wordFor('fragment-0')||'unheard';
+      }
 
       const rv=document.getElementById('cipher-reveal');
       const said=document.getElementById('cr-said');
