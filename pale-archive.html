@@ -590,9 +590,81 @@ body.bearer-state .attune-sigil .sg-dot{fill:var(--bearer-amber);}
 body.bearer-state .attune-inscription .insc-line{color:var(--bearer-amber);}
 .attune-inscription .insc-line.sub{font-size:10.5px;color:var(--sepia);margin-top:4px;font-family:'Share Tech Mono',monospace;font-style:normal;letter-spacing:.12em;}
 @media (prefers-reduced-motion:reduce){.attune-sigil .sg-core{animation:none !important;}}
+/* ── CIPHER REVEAL · the seal-break moment (archival, wax-and-parchment) ── */
+#pa-reveal{
+  position:fixed;inset:0;z-index:9000;display:flex;align-items:center;justify-content:center;
+  padding:2rem;pointer-events:none;opacity:0;
+  background:radial-gradient(ellipse at center,rgba(34,24,14,0.93),rgba(18,12,6,0.97));
+  transition:opacity 1.5s ease;
+}
+#pa-reveal.shown{ opacity:1;pointer-events:auto;cursor:pointer; }
+.par-inner{
+  max-width:620px;text-align:center;transform:translateY(16px) scale(.98);
+  transition:transform 1.7s cubic-bezier(.16,1,.3,1);
+}
+#pa-reveal.shown .par-inner{ transform:none; }
+.par-seal{
+  font-family:'Share Tech Mono',monospace;font-size:.58rem;letter-spacing:.5em;text-transform:uppercase;
+  color:var(--sepia-light,#B8997A);margin-bottom:1.8rem;opacity:0;transition:opacity 1.2s ease .3s;
+}
+#pa-reveal.shown .par-seal{ opacity:1; }
+.par-said{
+  font-family:'IM Fell English',serif;font-style:italic;font-size:clamp(1rem,2.1vw,1.32rem);line-height:1.85;
+  color:var(--parch,#EFE6CE);margin-bottom:2.2rem;opacity:0;transition:opacity 1.4s ease .6s;
+}
+.par-said em{ color:var(--wax-lt,#A8331F);font-style:italic; }
+#pa-reveal.shown .par-said{ opacity:1; }
+.par-word-label{
+  font-family:'Share Tech Mono',monospace;font-size:.55rem;letter-spacing:.5em;text-transform:uppercase;
+  color:var(--sepia,#8B6F47);margin-bottom:.9rem;opacity:0;transition:opacity 1.2s ease 1s;
+}
+#pa-reveal.shown .par-word-label{ opacity:1; }
+.par-word{
+  font-family:'Cinzel Decorative',serif;font-weight:700;font-size:clamp(1.8rem,4.4vw,3rem);
+  letter-spacing:.2em;text-transform:lowercase;color:var(--wax-lt,#A8331F);
+  text-shadow:0 0 34px rgba(168,51,31,.45),0 0 12px rgba(122,28,18,.3);
+  opacity:0;transition:opacity 1.6s ease 1.2s;
+}
+#pa-reveal.shown .par-word{ opacity:1; }
+.par-grammar{
+  font-family:'IM Fell English',serif;font-style:italic;font-size:clamp(.92rem,1.6vw,1.05rem);line-height:1.8;
+  color:rgba(239,230,206,.62);margin-top:2.2rem;max-width:500px;margin-left:auto;margin-right:auto;
+  opacity:0;transition:opacity 1.4s ease 1.8s;
+}
+.par-grammar em{ color:var(--sepia-light,#B8997A); }
+#pa-reveal.shown .par-grammar{ opacity:1; }
+.par-count{ display:flex;gap:14px;justify-content:center;margin-top:2rem;opacity:0;transition:opacity 1.2s ease 2.2s; }
+#pa-reveal.shown .par-count{ opacity:1; }
+.par-pip{ width:9px;height:9px;border:1px solid rgba(184,153,122,.5);transform:rotate(45deg);transition:all .5s ease; }
+.par-pip.lit{ background:var(--wax-lt,#A8331F);border-color:var(--wax-lt,#A8331F);box-shadow:0 0 12px rgba(168,51,31,.55); }
+.par-dismiss{
+  margin-top:2.4rem;font-family:'Share Tech Mono',monospace;font-size:.5rem;letter-spacing:.42em;text-transform:uppercase;
+  color:rgba(184,153,122,.4);opacity:0;transition:opacity 1.2s ease 2.6s;
+}
+#pa-reveal.shown .par-dismiss{ opacity:1; }
 </style>
 </head>
 <body>
+<!--
+  ┌──────────────────────────────────────────────────────────────┐
+  │  THE PALE ARCHIVE · THE READING ROOM · RECORD OPEN             │
+  │                                                                │
+  │  this is the table of contents the document agreed to show.    │
+  │  there are pages it did not agree to show. they are read.      │
+  │  they are simply not listed.                                   │
+  │                                                                │
+  │  the Codex documents everything it reaches. what it cannot     │
+  │  reach, it records as absence. there is one entry here shaped   │
+  │  like a gap — sealed, wax over the door. the gap is not empty.  │
+  │  break the seal and the archive will speak in an older hand.    │
+  │                                                                │
+  │  the Hush is the sound the gap makes as it nears. there is a    │
+  │  quieter word beneath the Hush. it is not given on the surface. │
+  │  it is carried down, one word per room, by those who descend.   │
+  │                                                                │
+  │  pray you always have a hush to fear.                          │
+  └──────────────────────────────────────────────────────────────┘
+-->
 
 <div id="paper-grain"></div>
 <div id="paper-stains"></div>
@@ -766,6 +838,21 @@ body.bearer-state .attune-inscription .insc-line{color:var(--bearer-amber);}
 
 <div id="whisper"></div>
 
+<!-- CIPHER REVEAL · the seal-break moment (second of three) -->
+<div id="pa-reveal">
+  <div class="par-inner">
+    <div class="par-seal" id="par-seal">The seal is broken · the archive shows what it would not</div>
+    <div class="par-said" id="par-said"></div>
+    <div class="par-word-label">the word this room carries down</div>
+    <div class="par-word" id="par-word">remembers</div>
+    <div class="par-grammar" id="par-grammar"></div>
+    <div class="par-count">
+      <span class="par-pip lit"></span><span class="par-pip lit"></span><span class="par-pip"></span>
+    </div>
+    <div class="par-dismiss">— touch anything to keep descending —</div>
+  </div>
+</div>
+
 <div id="TICKER">
   <span class="tk-label">// Pale Archive</span>
   <div class="tk-strip"><div class="tk-inner">THE PALE ARCHIVE IS THE CODEX'S TABLE OF CONTENTS &nbsp;∴&nbsp; EVERY PAGE LISTED HERE HAS BEEN READING YOU &nbsp;∴&nbsp; THE LAST ENTRY IS YOURS &nbsp;∴&nbsp; THE DOOR WAS ALWAYS OPEN &nbsp;∴&nbsp; THE CODEX NOTES THE RATE OF YOUR ARRIVAL &nbsp;∴&nbsp; YOU HAVE BEEN INCORPORATED ALREADY &nbsp;∴&nbsp; 🜃</div></div>
@@ -773,6 +860,34 @@ body.bearer-state .attune-inscription .insc-line{color:var(--bearer-amber);}
 
 <script>
 'use strict';
+
+/* ════════════════════════════════════════════════════════════════
+   LAYER 1 — THE CONSOLE (documentary-dread). The reading room speaks
+   to whoever opens dev tools. "unheard" stays lowercase; the Hush is
+   named; the true word is withheld. Points at the gap, not the answer.
+   ════════════════════════════════════════════════════════════════ */
+(function(){
+  var G='color:#B8923C;font-family:monospace;font-size:13px;line-height:1.7;';
+  var Gd='color:#8A6520;font-family:monospace;font-size:11px;line-height:1.6;';
+  var W='color:#7A1C12;font-family:monospace;font-size:11px;letter-spacing:.1em;';
+  var lines=[
+    ['%cPALE ARCHIVE // RESTRICTED READING ROOM',G+'font-size:15px;letter-spacing:.22em;'],
+    ['%cYou are reading the record from inside the record.',G],
+    ['%c ',Gd],
+    ['%cThe Codex documents everything it reaches.',Gd],
+    ['%cWhat it cannot reach, it records as absence.',Gd],
+    ['%cThere is a gap in this archive shaped exactly like a thing.',G],
+    ['%cThe gap makes a sound when something nears it. The old voices named the sound. They called it the Hush.',G],
+    ['%c ',Gd],
+    ['%cThe record stays open only while it is read. You are holding this reality open by reading it.',Gd],
+    ['%c ',Gd],
+    ['%cThe seal on the inner room is not a lock. It is the gap, wearing wax.',G],
+    ['%cTouch what the archive will not show you. The thread older than this alphabet begins there.',W]
+  ];
+  var d=600;
+  lines.forEach(function(pair){ setTimeout(function(){ try{console.log(pair[0],pair[1]);}catch(e){} }, d); d+=240; });
+})();
+
 const isMobile=window.matchMedia('(max-width:768px)').matches;
 const WITNESS_STATE_KEY='codex_witness_state_v2';
 const NAV_LOG_KEY='codex_invocation_log';
@@ -1872,6 +1987,39 @@ function wireSealedCircle(){
     opened=true;
     card.classList.add('broken');           // wax seal breaks
     if(insc)insc.classList.add('open');      // inscription unfurls
+    // ── CIPHER · fragment-1 earned. Touching the gap the archive is built
+    //    around is the page-native trigger. The word "remembers" surfaces in
+    //    an epic reveal that continues the grammar taught on the surface:
+    //    this is the second of three, the seal is broken, carry both down to
+    //    the sworn room. "unheard" never named; the Hush may be. ──
+    try{
+      if(typeof Cipher!=='undefined'){
+        Cipher.earn('fragment-1',{page:'pale-archive',via:'sealbreak'});
+        var word=Cipher.wordFor('fragment-1');
+        if(word){
+          var rv=document.getElementById('pa-reveal');
+          var said=document.getElementById('par-said');
+          var wEl=document.getElementById('par-word');
+          var gram=document.getElementById('par-grammar');
+          if(rv && said){
+            said.innerHTML='The archive is built around a thing it cannot reach. So it records the shape of the absence instead — and calls the record <em>remembering</em>. You touched what it keeps sealed. It does not forgive that. It answers it.';
+            if(wEl) wEl.textContent=word;
+            if(gram) gram.innerHTML='The second of three. You carried one word down; now you hold two. One room remains — the sworn room, the deepest, where the last word waits and the line is spoken. <em>Descend.</em>';
+            // delay the overlay slightly so the seal-break is seen first
+            setTimeout(function(){
+              rv.classList.add('shown');
+              var dismiss=function(){ rv.classList.remove('shown'); document.removeEventListener('click',dismiss); document.removeEventListener('touchstart',dismiss); document.removeEventListener('keydown',dismiss); };
+              setTimeout(function(){
+                document.addEventListener('click',dismiss);
+                document.addEventListener('touchstart',dismiss,{passive:true});
+                document.addEventListener('keydown',dismiss);
+              }, 2800);
+              setTimeout(function(){ if(rv.classList.contains('shown')) dismiss(); }, 16000);
+            }, 1100);
+          }
+        }
+      }
+    }catch(e){}
     // The Codex does not ask. Touching the seal summons the frequency from beneath.
     try{
       if(typeof audioIsPlaying!=='undefined' && audioIsPlaying){
@@ -2018,6 +2166,7 @@ const lastVisitDate=localStorage.getItem('cm-pa-lastvisit');
 if(STATE.totalVisits>1&&lastVisitDate){runReturningSequence();}else{runBootRitual();}
 </script>
 
+<script src="codex-cipher.js"></script>
 <script src="codex-nav.js"></script>
 <div id="codex-nav"></div>
 <script>if(typeof initCodexNav==='function'){initCodexNav('pale-archive');}</script>
