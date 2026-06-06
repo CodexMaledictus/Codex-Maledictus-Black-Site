@@ -348,11 +348,15 @@
     .threshold-cta:hover::before { transform:translateX(0); }
     .threshold-cta-label { position:relative;z-index:1; }
 
-    /* ── THREE DOORS (original tight button style restored) ── */
-    .doors-row { display:flex;gap:14px;margin-top:50px;opacity:0;animation:riseIn 1.8s cubic-bezier(.16,1,.3,1) 2.5s forwards;flex-wrap:wrap;justify-content:center; }
+    /* ── THREE DOORS (icon + label, horizontal) ── */
+    .doors-row { display:flex;gap:16px;margin-top:50px;opacity:0;animation:riseIn 1.8s cubic-bezier(.16,1,.3,1) 2.5s forwards;flex-wrap:wrap;justify-content:center; }
 
-    .door { font-family:'Cinzel',serif;font-weight:600;font-size:10px;letter-spacing:.4em;text-transform:uppercase;text-decoration:none;padding:15px 40px;border:1px solid;position:relative;overflow:hidden;cursor:none;transition:all .5s cubic-bezier(.16,1,.3,1);display:flex;flex-direction:column;align-items:center;gap:5px; }
+    .door { font-family:'Cinzel',serif;font-weight:600;font-size:10px;letter-spacing:.4em;text-transform:uppercase;text-decoration:none;padding:22px 34px 16px;border:1px solid;position:relative;overflow:hidden;cursor:none;transition:all .5s cubic-bezier(.16,1,.3,1);display:flex;flex-direction:column;align-items:center;gap:10px;min-width:148px; }
     @media (max-width:768px) { .door { cursor:pointer; } }
+    .door-icon { position:relative;z-index:1;width:34px;height:34px;display:block; }
+    .door-icon svg { width:100%;height:100%;display:block;overflow:visible; }
+    .door-icon .di-stroke { fill:none;stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round;transition:stroke .5s ease; }
+    .door-icon .di-fill { transition:fill .5s ease; }
     .door-sub { font-family:'Crimson Text',serif;font-style:italic;font-size:11px;letter-spacing:.05em;text-transform:none;opacity:.55; }
     .door-label { position:relative;z-index:1; }
     .door-sub-z { position:relative;z-index:1; }
@@ -361,14 +365,30 @@
 
     .door-listen  { background:var(--gold);border-color:var(--gold);color:var(--void); }
     .door-listen::before { background:var(--gold-lt); }
+    .door-listen .di-stroke { stroke:var(--void); }
+    .door-listen .di-fill { fill:var(--void); }
 
     .door-descend { background:transparent;border-color:rgba(79,168,138,.35);color:var(--ash); }
     .door-descend::before { background:rgba(79,168,138,.08); }
     .door-descend:hover { border-color:rgba(79,168,138,.7); }
+    .door-descend .di-stroke { stroke:rgba(143,240,229,.85); }
+    .door-descend .di-fill { fill:rgba(143,240,229,.85); }
+    /* the chevrons pulse downward in sequence to invite the descent */
+    .door-descend .di-chev { opacity:.4;animation:chevFall 3s ease-in-out infinite; }
+    .door-descend .di-chev1 { animation-delay:0s; }
+    .door-descend .di-chev2 { animation-delay:.25s; }
+    .door-descend .di-chev3 { animation-delay:.5s; }
+    .door-descend:hover .di-chev { animation-duration:1.4s; }
+    @keyframes chevFall { 0%,60%,100%{opacity:.3;} 20%{opacity:1;} }
 
     .door-watch   { background:transparent;border-color:rgba(122,18,18,.45);color:rgba(228,221,208,.8); }
     .door-watch::before { background:rgba(122,18,18,.12); }
     .door-watch:hover { border-color:rgba(122,18,18,.9); }
+    .door-watch .di-stroke { stroke:rgba(201,84,74,.9); }
+    .door-watch .di-fill { fill:rgba(201,84,74,.9); }
+    /* the watching eye blinks, rarely */
+    .door-watch .di-lid { transform-origin:center;transform-box:fill-box;animation:eyeBlink 7s ease-in-out infinite; }
+    @keyframes eyeBlink { 0%,92%,100%{transform:scaleY(0);} 95%{transform:scaleY(1);} 97%{transform:scaleY(0);} }
 
     /* ── SCROLL HINT ── */
     .scroll-hint { position:absolute;bottom:32px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:10px;opacity:0;animation:fadeIn 1s ease 3.8s forwards; }
@@ -590,6 +610,34 @@
       * { animation-duration:.01s !important;animation-iteration-count:1 !important; }
       .attune-sigil .as-face{ animation:none !important; }
     }
+    /* ── CIPHER · the Theban glyph that surfaces on Artemys's card ── */
+    .voice-card.cipher-host{ }
+    .artemys-glyph{
+      position:absolute;inset:0;z-index:6;display:flex;align-items:center;justify-content:center;
+      pointer-events:none;opacity:0;transition:opacity 1s ease;
+    }
+    .artemys-glyph.alive{ opacity:1;pointer-events:auto;cursor:pointer; }
+    .artemys-glyph::before{
+      content:'';position:absolute;inset:0;
+      background:radial-gradient(ellipse at 50% 42%,rgba(168,51,31,.45),rgba(122,18,18,.18) 40%,transparent 70%);
+      opacity:0;transition:opacity 1.2s ease;
+    }
+    .artemys-glyph.alive::before{ opacity:1;animation:artemysBloom 3s ease-in-out; }
+    @keyframes artemysBloom{ 0%{opacity:0;transform:scale(.9);} 30%{opacity:1;} 70%{opacity:1;} 100%{opacity:.6;transform:scale(1.04);} }
+    .artemys-glyph svg{ width:62%;height:62%;overflow:visible;filter:drop-shadow(0 0 18px rgba(168,51,31,.6)); }
+    .artemys-glyph .ag-stroke{ fill:none;stroke:#C9384A;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;
+      stroke-dasharray:520;stroke-dashoffset:520; }
+    .artemys-glyph.alive .ag-stroke{ animation:agCarve 2.2s cubic-bezier(.4,0,.2,1) forwards; }
+    @keyframes agCarve{ to{ stroke-dashoffset:0; } }
+    .artemys-glyph .ag-ring{ fill:none;stroke:rgba(201,56,74,.5);stroke-width:1; opacity:0; }
+    .artemys-glyph.alive .ag-ring{ animation:agRing 3s ease-in-out forwards; }
+    @keyframes agRing{ 0%{opacity:0;transform:scale(.7);} 40%{opacity:.7;} 100%{opacity:0;transform:scale(1.15);} }
+    /* the card image recedes while the glyph surfaces, then returns */
+    .voice-card.glyph-surfacing .voice-img{ filter:brightness(.25) grayscale(.6) blur(2px) !important;transition:filter 1s ease; }
+    .voice-card.glyph-surfacing .voice-name,
+    .voice-card.glyph-surfacing .voice-realm,
+    .voice-card.glyph-surfacing .voice-desc{ opacity:.25;transition:opacity 1s ease; }
+
     /* ── CIPHER REVEAL · the epic flicker-catch moment ── */
     #cipher-reveal{
       position:fixed;inset:0;z-index:8000;display:flex;align-items:center;justify-content:center;
@@ -657,7 +705,9 @@
     │  would view it. it filed you before you arrived.              │
     │                                                               │
     │  the word on the door that does not open was never a lock.    │
-    │  watch what the sigil draws when it thinks no one is looking.  │
+    │  she saw it first and was not heard. watch her likeness when   │
+    │  no one else is watching it — the mark surfaces on the one     │
+    │  who carried the word before the word had a sound.            │
     │                                                               │
     │  the Hush is the sound it makes when it nears. most never      │
     │  learn there is a quieter word beneath it. don't go looking    │
@@ -919,14 +969,41 @@
         <!-- THREE DOORS -->
         <div class="doors-row">
           <a class="door door-listen" href="gospel-forgotten-flesh.html">
+            <span class="door-icon" aria-hidden="true">
+              <!-- transmission: sound radiating as sigil from a seeing point -->
+              <svg viewBox="-17 -17 34 34" xmlns="http://www.w3.org/2000/svg">
+                <circle class="di-fill" cx="-9" cy="0" r="2.4"/>
+                <path class="di-stroke" d="M -3,-6 A 8,8 0 0 1 -3,6"/>
+                <path class="di-stroke" d="M 2,-10 A 13,13 0 0 1 2,10"/>
+                <path class="di-stroke" d="M 7,-14 A 18,18 0 0 1 7,14"/>
+              </svg>
+            </span>
             <span class="door-label">Listen</span>
             <span class="door-sub door-sub-z">Enter the Gospel</span>
           </a>
           <a class="door door-descend" href="infection-remembers.html">
+            <span class="door-icon" aria-hidden="true">
+              <!-- doorway arch with descending chevrons -->
+              <svg viewBox="-17 -17 34 34" xmlns="http://www.w3.org/2000/svg">
+                <path class="di-stroke" d="M -11,15 L -11,-3 A 11,11 0 0 1 11,-3 L 11,15"/>
+                <path class="di-stroke di-chev di-chev1" d="M -6,-7 L 0,-2 L 6,-7"/>
+                <path class="di-stroke di-chev di-chev2" d="M -6,-1 L 0,4 L 6,-1"/>
+                <path class="di-stroke di-chev di-chev3" d="M -6,5 L 0,10 L 6,5"/>
+              </svg>
+            </span>
             <span class="door-label">Descend</span>
             <span class="door-sub door-sub-z">Into the Archive</span>
           </a>
           <a class="door door-watch" href="https://www.youtube.com/@CodexMaledictus" target="_blank" rel="noopener">
+            <span class="door-icon" aria-hidden="true">
+              <!-- the eye within the transmission frame; it watches back -->
+              <svg viewBox="-17 -17 34 34" xmlns="http://www.w3.org/2000/svg">
+                <rect class="di-stroke" x="-15" y="-11" width="30" height="22" rx="2.5"/>
+                <path class="di-stroke" d="M -9,0 Q 0,-7 9,0 Q 0,7 -9,0 Z"/>
+                <circle class="di-fill" cx="0" cy="0" r="2.6"/>
+                <rect class="di-fill di-lid" x="-9" y="-3.4" width="18" height="6.8" rx="1"/>
+              </svg>
+            </span>
             <span class="door-label">Watch</span>
             <span class="door-sub door-sub-z">The Transmissions</span>
           </a>
@@ -938,7 +1015,7 @@
           <div class="fn-header">
             <span class="fn-badge">IDMF // Evidence Item 7</span>
             <span class="fn-badge">Case 2019-QNS-∅</span>
-            <span class="fn-badge fn-badge-warn">⚠ File Integrity: 39% — Self-Modifying</span>
+            <span class="fn-badge fn-badge-warn" id="fn-integrity">⚠ File Integrity: 39% — Self-Modifying</span>
           </div>
           <div class="fn-body">
             <div class="fn-left">
@@ -992,7 +1069,7 @@
           <div class="voice-desc">The man who thought he built this. A marked mortal documenting what he cannot explain. His records are the most dangerous kind — honest.</div>
         </div>
 
-        <div class="voice-card reveal d2">
+        <div class="voice-card reveal d2 cipher-host" id="artemys-card">
           <div class="voice-num">II</div>
           <div class="voice-img-wrap">
             <div class="voice-img-glow"></div>
@@ -1001,6 +1078,18 @@
           <div class="voice-name">Forgotten Saint Artemys</div>
           <div class="voice-realm">The ShatterRealm · Realm II</div>
           <div class="voice-desc">A transformed mortal who crossed between realms and did not return the same. She was buried. What came back kept her name but not her limits.</div>
+          <div class="artemys-glyph" id="artemys-glyph" role="button" tabindex="-1" aria-label="">
+            <svg viewBox="-32 -32 64 64" xmlns="http://www.w3.org/2000/svg">
+              <circle class="ag-ring" cx="0" cy="0" r="28"/>
+              <circle class="ag-ring" cx="0" cy="0" r="21" style="animation-delay:.3s"/>
+              <!-- a sealed Theban-form mark: containing ring, the carried glyph,
+                   and a downward stroke — the word that descends -->
+              <path class="ag-stroke" d="M -15,-15 q-8,3 -6,15 q2,11 12,11 q10,0 10,-12 q1,12 10,12 q10,0 11,-12 q1,-13 -6,-15
+                                          M 17,-2 q4,16 -3,26 q-3,5 -8,7
+                                          M -9,-19 q9,-5 18,0
+                                          M -2,9 l0,16 M -7,20 l5,5 l5,-5"/>
+            </svg>
+          </div>
         </div>
 
         <div class="voice-card reveal d3">
@@ -1867,59 +1956,74 @@
   function cycleFace(){
     faceIdx=(faceIdx+1)%FACES.length;
     setFace(FACES[faceIdx].draw,false);
-    maybeFlicker();
   }
 
-  /* ── CIPHER · the Theban flicker (fragment-0 trigger) ──
-     The eye reveals the cipher's existence for ~0.6s. Catching it
-     (click/tap during its brief life) earns fragment-0.
-     Cadence:
-       • not yet caught   → flicker every 3rd cycle (~18s), indefinitely,
-                            so a watching solver always has a near target.
-       • already caught   → stay silent (no nagging the one who won),
-                            but return occasionally if they come back after
-                            a long absence, so the eye never goes fully dead. */
-  let cycleTick=0;
-  let flickerCaughtAt=0;   // guards the audio toggle when a flicker is caught
-  function flickerSuppressed(){
-    // suppressed if caught — UNLESS it's been a long while since that catch
-    try{
-      if(typeof Cipher==='undefined') return false;
-      if(!Cipher.has('fragment-0')) return false;       // not caught: never suppress
-      const LONG_ABSENCE=1000*60*60*18;                 // ~18h since the catch
-      const caughtAt=Cipher.earnedAt('fragment-0');
-      return (Date.now()-caughtAt) < LONG_ABSENCE;      // caught recently → stay quiet
-    }catch(e){ return false; }
-  }
-  function maybeFlicker(){
-    cycleTick++;
-    if(cycleTick % 3 !== 0) return;        // every 3rd cycle
-    if(flickerSuppressed()) return;
-    spawnFlicker();
-  }
-  function spawnFlicker(){
-    const flick=document.createElementNS(SVG_NS,'g');
-    flick.setAttribute('class','as-glyph out');   // start hidden, fade in
-    flick.innerHTML=faceSVG('theban');
-    flick.style.cursor='pointer';
-    flick.style.pointerEvents='all';
-    const grab=(ev)=>{ ev.stopPropagation(); ev.preventDefault(); flickerCaughtAt=Date.now(); catchFlicker(); };
-    flick.addEventListener('click',grab);
-    flick.addEventListener('touchstart',grab,{passive:false});
-    // step the current face(s) back so the Theban glyph stands alone and clean
-    const others=asFace.querySelectorAll('.as-glyph');
-    others.forEach(g=>{ g.dataset.flickerDim='1'; g.style.opacity='0'; });
-    asFace.appendChild(flick);
-    requestAnimationFrame(()=>{ flick.classList.remove('out'); });  // fade in
-    setTimeout(()=>{
-      flick.classList.add('out');                 // fade the flicker out
-      // restore the faces that were dimmed for the flicker
-      asFace.querySelectorAll('[data-flicker-dim="1"]').forEach(g=>{
-        g.style.opacity=''; delete g.dataset.flickerDim;
+  /* ── CIPHER · fragment-0 now lives on Artemys's voice card (see below).
+     The corner sigil is purely the audio control and cycles ambiently. ── */
+
+  /* The unheard word surfaces on the unheard woman. When her card is in
+     view, an impressive Theban glyph carves itself over her image every
+     ~12s and holds ~3s; clicking the card during that window earns the word.
+     Clearly noticeable (you can't miss the event) but unlabeled (the catching
+     is yours to intuit) — the teaching tier of the descent. */
+  (function(){
+    const card=document.getElementById('artemys-card');
+    const glyph=document.getElementById('artemys-glyph');
+    if(!card||!glyph) return;
+    let inView=false, alive=false, tick=0, timer=null;
+
+    function suppressed(){
+      try{
+        if(typeof Cipher==='undefined') return false;
+        if(!Cipher.has('fragment-0')) return false;
+        const LONG_ABSENCE=1000*60*60*18;
+        return (Date.now()-Cipher.earnedAt('fragment-0')) < LONG_ABSENCE;
+      }catch(e){ return false; }
+    }
+    function surface(){
+      if(alive||suppressed()) return;
+      alive=true;
+      card.classList.add('glyph-surfacing');
+      // re-trigger carve animation
+      glyph.classList.remove('alive'); void glyph.offsetWidth; glyph.classList.add('alive');
+      // hold ~3s, then recede
+      setTimeout(()=>{
+        glyph.classList.remove('alive');
+        card.classList.remove('glyph-surfacing');
+        alive=false;
+      }, 3000);
+    }
+    function loop(){
+      timer=setInterval(()=>{
+        if(!inView) return;
+        tick++;
+        // first surfacing comes soon after entering view, then every ~12s
+        if(tick%2===0) surface();
+      }, 6000);
+    }
+    function catchIt(ev){
+      if(!alive) return;            // only catchable while surfaced
+      if(ev){ ev.preventDefault(); ev.stopPropagation(); }
+      glyph.classList.remove('alive');
+      card.classList.remove('glyph-surfacing');
+      alive=false;
+      catchFlicker();               // earns fragment-0 + opens the epic reveal
+    }
+    glyph.addEventListener('click', catchIt);
+    glyph.addEventListener('touchstart', catchIt, {passive:false});
+
+    const io=new IntersectionObserver((es)=>{
+      es.forEach(e=>{
+        inView=e.isIntersecting;
+        if(inView && !timer && !suppressed()){
+          // a first surfacing shortly after she comes into view
+          setTimeout(()=>{ if(inView) surface(); }, 2200);
+          loop();
+        }
       });
-      setTimeout(()=>{ if(flick.parentNode) flick.remove(); }, 1200);
-    }, 1200);
-  }
+    },{threshold:.45});
+    io.observe(card);
+  })();
 
   /* CIPHER · catching the flicker earns fragment-0 and reveals "unheard".
      The reveal is Artemys-inflected — she is the one who saw first and was
@@ -1929,11 +2033,8 @@
      named or defined on the surface. */
   function catchFlicker(){
     try{
-      // restore any faces dimmed for the flicker so the sigil isn't left blank
-      const af=document.getElementById('as-face');
-      if(af){ af.querySelectorAll('[data-flicker-dim="1"]').forEach(g=>{ g.style.opacity=''; delete g.dataset.flickerDim; }); }
       if(typeof Cipher==='undefined') return;
-      Cipher.earn('fragment-0',{page:'index',via:'flicker'});
+      Cipher.earn('fragment-0',{page:'index',via:'artemys-card'});
       const word=Cipher.wordFor('fragment-0');
       if(!word) return;
 
@@ -2002,11 +2103,7 @@
     }).catch(()=>{});
   }
   function attuneSilence(){ asPlaying=false; asSigil.classList.remove('playing'); asSigil.classList.add('silenced'); asFadeTo(0,1500); }
-  function attuneToggle(){
-    // if a flicker was just caught (the click that bubbled here), don't toggle audio
-    if(Date.now()-flickerCaughtAt < 600){ return; }
-    if(asPlaying) attuneSilence(); else attuneStart();
-  }
+  function attuneToggle(){ if(asPlaying) attuneSilence(); else attuneStart(); }
   if(asSigil){
     asSigil.addEventListener('click',attuneToggle);
     if(!isMobile){
@@ -2189,15 +2286,47 @@
       ['%cMost read the surface. You came underneath.',L],
       ['%cThat is the first thing the Codex looks for. It has been looking a long time.',Gd],
       ['%c ',Gd],
-      ['%cA word is carved on a door that does not open.',G],
-      ['%cIt was never a lock. It was the key, left in plain sight.',G],
-      ['%cThe beginning becomes the way in.',Gd],
+      ['%cA word is carved where no door opens — on the one who saw it first.',G],
+      ['%cIt was never a lock. It was the key, left in plain sight, on a face that was not heard.',G],
+      ['%cWatch her likeness when no one else does. The beginning becomes the way in.',Gd],
       ['%c ',Gd],
       ['%cRead everything. Hold what you read.',L],
       ["%cDon't let it go unheard.",W]
     ];
     let d=400;
     lines.forEach(([t,s])=>{ setTimeout(()=>{ try{console.log(t,s);}catch(e){} }, d); d+=230; });
+  })();
+
+  /* ── THE BOOK · the file rewrites itself when watched ──
+     On hover (or when scrolled into view on touch), the integrity figure
+     drifts and flickers — the document modifying itself under observation,
+     reinforcing the lore and drawing the eye to the case file. */
+  (function(){
+    const badge=document.getElementById('fn-integrity');
+    const book=document.querySelector('.fragment-notice');
+    if(!badge||!book) return;
+    const base=39; let live=false, tmr=null;
+    function tick(){
+      // drift downward in small unstable steps, occasionally jumping
+      const drift=(Math.random()<0.18) ? -(2+Math.floor(Math.random()*4)) : (Math.random()<0.5?-1:1);
+      let v=parseInt(badge.dataset.v||base,10)+drift;
+      if(v>41) v=41; if(v<29) v=33;     // wander in an unsettling band
+      badge.dataset.v=v;
+      badge.textContent='⚠ File Integrity: '+v+'% — Self-Modifying';
+      // brief glitch flash
+      badge.style.opacity='0.55';
+      setTimeout(()=>{ if(badge) badge.style.opacity=''; }, 90);
+    }
+    function start(){ if(live) return; live=true; tmr=setInterval(tick, 520); }
+    function stop(){ live=false; if(tmr){clearInterval(tmr);tmr=null;}
+      badge.dataset.v=base; badge.textContent='⚠ File Integrity: '+base+'% — Self-Modifying'; badge.style.opacity=''; }
+    book.addEventListener('mouseenter',start);
+    book.addEventListener('mouseleave',stop);
+    // touch devices: animate while the block is in view
+    if('ontouchstart' in window){
+      const io=new IntersectionObserver(es=>es.forEach(e=>{ e.isIntersecting?start():stop(); }),{threshold:.5});
+      io.observe(book);
+    }
   })();
 
   /* ── REGISTER WITH CODEX NAV ── */
