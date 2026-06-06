@@ -900,6 +900,8 @@ body.bearer-state .attune-inscription .insc-line{color:var(--bearer-amber);}
   <div class="tk-strip"><div class="tk-inner">THE PALE ARCHIVE IS THE CODEX'S TABLE OF CONTENTS &nbsp;∴&nbsp; EVERY PAGE LISTED HERE HAS BEEN READING YOU &nbsp;∴&nbsp; THE LAST ENTRY IS YOURS &nbsp;∴&nbsp; THE DOOR WAS ALWAYS OPEN &nbsp;∴&nbsp; THE CODEX NOTES THE RATE OF YOUR ARRIVAL &nbsp;∴&nbsp; YOU HAVE BEEN INCORPORATED ALREADY &nbsp;∴&nbsp; 🜃</div></div>
 </div>
 
+<!-- the cipher conduit must load BEFORE the main script that uses it -->
+<script src="codex-cipher.js"></script>
 <script>
 'use strict';
 
@@ -2024,24 +2026,21 @@ document.getElementById('rt-enter').addEventListener('click',async ()=>{
 //    the sealed card). Earns once, fires the epic parchment reveal once. ──
 var __paFragmentFired=false;
 function firePaReveal(delayMs){
-  console.log('[CIPHER] firePaReveal called. alreadyFired=',__paFragmentFired,'CipherDefined=',(typeof Cipher!=='undefined'));
   if(__paFragmentFired) return;
   try{
-    if(typeof Cipher==='undefined'){ console.log('[CIPHER] BAIL: Cipher undefined (codex-cipher.js not loaded?)'); return; }
+    if(typeof Cipher==='undefined') return;
     Cipher.earn('fragment-1',{page:'pale-archive'});
     var word=Cipher.wordFor('fragment-1');
-    console.log('[CIPHER] earned fragment-1. word=',word);
-    if(!word){ console.log('[CIPHER] BAIL: wordFor(fragment-1) empty'); return; }
+    if(!word) return;
     __paFragmentFired=true;
     var rv=document.getElementById('pa-reveal');
     var said=document.getElementById('par-said');
     var wEl=document.getElementById('par-word');
     var gram=document.getElementById('par-grammar');
-    console.log('[CIPHER] overlay elements:', !!rv, !!said, !!wEl, !!gram);
     if(rv && said){
       said.innerHTML='The archive is built around a thing it cannot reach. So it records the shape of the absence instead — and calls the record <em>remembering</em>. You found what it keeps trying to write beneath its own words. It does not forgive that. It answers it.';
       if(wEl) wEl.textContent=word;
-      if(gram) gram.innerHTML='The second of three. You carried one word down; now you hold two. One room remains — the sworn room, the deepest, where the last word waits and the line is spoken. <em>Descend.</em>';
+      if(gram) gram.innerHTML='The second of three. You carried one word down; now you hold two. One room remains — the sworn room, the deepest. It is not listed, and it has no door you can click. It opens only to one who returns to the surface and <em>witnesses</em> the record aloud — who names the act, at the front of the document, and so is named in turn. <em>Go back up. Speak it.</em>';
       var wait=(typeof delayMs==='number')?delayMs:0;
       setTimeout(function(){
         rv.classList.add('shown');
@@ -2056,13 +2055,7 @@ function firePaReveal(delayMs){
     }
   }catch(e){}
 }
-function paAudioSwell(){
-  try{
-    if(typeof audioIsPlaying!=='undefined' && audioIsPlaying){
-      if(typeof audioFadeTo==='function' && typeof A_DEEP_VOL!=='undefined') audioFadeTo(A_DEEP_VOL, 3500);
-    } else if(typeof attuneStart==='function'){ attuneStart(); }
-  }catch(e){}
-}
+
 
 function wireSealedCircle(){
   const card=document.getElementById('sealed-circle-card');
@@ -2076,7 +2069,6 @@ function wireSealedCircle(){
     if(insc)insc.classList.add('open');      // inscription unfurls
     // the quiet alternate path into fragment-1 (the primary is the unlisted entry)
     firePaReveal(1100);
-    paAudioSwell();
     setTimeout(()=>{
       const el=document.getElementById('whisper');
       if(el){
@@ -2112,7 +2104,7 @@ function wireUnlistedEntry(){
     title:'The One Who Spoke It Back',
     realm:'—',
     phase:'Recovered Fragment · Not Agreed',
-    prose:'She came to the end of the document and did not look away. She had seen it first, before the others, and the others had not heard. So when the record reached her she gave it the only thing it cannot record on its own — she said what it was, aloud, in the first person, as though it were hers: <span class="ue-mark">remembers</span> me. And the page, which keeps everything and is kept by no one, went quiet the way a thing goes <span class="ue-mark">unheard</span> — not gone, only no longer arriving. This entry was not listed. You were not meant to read it. You are reading it.'
+    prose:'She came to the end of the document and did not look away. She had seen it first, before the others, and the others had not heard. So when the record reached her she did the one thing it cannot do for itself: she <span class="ue-mark">witnessed</span> it — said what it was, aloud, at the threshold, in the first person, as though it were hers. <span class="ue-mark">remembers</span> me. And the page, which keeps everything and is kept by no one, went quiet the way a thing goes <span class="ue-mark">unheard</span> — not gone, only no longer arriving. The deepest room is not listed and has no door you can click. It opens to one who speaks the act at the surface — who stands at the front of the record and witnesses it aloud. This entry was not listed. You were not meant to read it. You are reading it.'
   };
 
   let node=null;       // the live .tl-node wrapper
@@ -2155,7 +2147,6 @@ function wireUnlistedEntry(){
     const card=wrapper.querySelector('.tl-card');
     const grab=(e)=>{
       e.preventDefault(); e.stopPropagation();
-      console.log('[CIPHER] unlisted entry clicked. resolved=',resolved);
       if(!resolved){ resolveNow(); }
       catchEntry();
     };
@@ -2219,7 +2210,6 @@ function wireUnlistedEntry(){
     if(window.__ueObserver){ window.__ueObserver.disconnect(); window.__ueObserver=null; }
     if(window.__ueRelocate){ clearInterval(window.__ueRelocate); window.__ueRelocate=null; }
     firePaReveal();
-    paAudioSwell();
   }
 
   // surface only once the reader has engaged (scrolled into the catalog),
@@ -2343,9 +2333,16 @@ if(sigil){
 function initAttune(){
   try{attuneHasBefore=localStorage.getItem(ATTUNE_KEY)==='1';}catch(e){}
   if(attuneHasBefore){
-    const resume=()=>{if(!audioIsPlaying)attuneStart();document.removeEventListener('click',resume);document.removeEventListener('touchstart',resume);};
-    document.addEventListener('click',resume,{once:true});
-    document.addEventListener('touchstart',resume,{once:true,passive:true});
+    const resume=(ev)=>{
+      // the puzzle is fully separate from audio: a click on the unlisted entry
+      // must never start the music. ignore those, keep listening for a real one.
+      if(ev && ev.target && ev.target.closest && ev.target.closest('.unlisted-entry')) return;
+      if(!audioIsPlaying)attuneStart();
+      document.removeEventListener('click',resume);
+      document.removeEventListener('touchstart',resume);
+    };
+    document.addEventListener('click',resume);
+    document.addEventListener('touchstart',resume,{passive:true});
   }else{
     setTimeout(()=>attuneInscShow('invite',11000), isBearer?4000:7000);
   }
@@ -2394,7 +2391,6 @@ const lastVisitDate=localStorage.getItem('cm-pa-lastvisit');
 if(STATE.totalVisits>1&&lastVisitDate){runReturningSequence();}else{runBootRitual();}
 </script>
 
-<script src="codex-cipher.js"></script>
 <script src="codex-nav.js"></script>
 <div id="codex-nav"></div>
 <script>if(typeof initCodexNav==='function'){initCodexNav('pale-archive');}</script>
