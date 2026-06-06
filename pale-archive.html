@@ -642,6 +642,28 @@ body.bearer-state .attune-inscription .insc-line{color:var(--bearer-amber);}
   color:rgba(184,153,122,.4);opacity:0;transition:opacity 1.2s ease 2.6s;
 }
 #pa-reveal.shown .par-dismiss{ opacity:1; }
+/* ── CIPHER · the bleed-through sigil (the file trying to write beneath itself) ──
+   Surfaces over the page's own words like the document corrupting. Most are
+   pure ambience; the catchable one carries a faint ring — subtly distinct, so
+   the attentive reader notices one of them is reaching back. ── */
+.bleed-sigil{
+  position:fixed;z-index:7000;pointer-events:none;width:46px;height:46px;
+  margin-left:-23px;margin-top:-23px;opacity:0;
+  transition:opacity .8s ease;
+}
+.bleed-sigil.up{ opacity:.9; }
+.bleed-sigil svg{ width:100%;height:100%;overflow:visible;display:block; }
+.bleed-sigil .bs-stroke{
+  fill:none;stroke:var(--wax,#7A1C12);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;
+  filter:drop-shadow(0 0 5px rgba(122,28,18,.55));
+}
+.bleed-sigil.ambient .bs-stroke{ stroke:rgba(122,28,18,.5); }
+/* the catchable one: reaches back — faint pulsing ring, clickable */
+.bleed-sigil.live{ pointer-events:auto;cursor:pointer; }
+.bleed-sigil .bs-ring{ fill:none;stroke:var(--wax-lt,#A8331F);stroke-width:1;opacity:0; }
+.bleed-sigil.live .bs-ring{ animation:bsRing 2s ease-in-out infinite; }
+.bleed-sigil.live .bs-stroke{ stroke:var(--wax-lt,#A8331F);filter:drop-shadow(0 0 8px rgba(168,51,31,.7)); }
+@keyframes bsRing{ 0%{opacity:0;transform:scale(.6);} 45%{opacity:.7;} 100%{opacity:0;transform:scale(1.25);} }
 </style>
 </head>
 <body>
@@ -654,9 +676,14 @@ body.bearer-state .attune-inscription .insc-line{color:var(--bearer-amber);}
   │  they are simply not listed.                                   │
   │                                                                │
   │  the Codex documents everything it reaches. what it cannot     │
-  │  reach, it records as absence. there is one entry here shaped   │
-  │  like a gap — sealed, wax over the door. the gap is not empty.  │
-  │  break the seal and the archive will speak in an older hand.    │
+  │  reach, it records as absence. this page is a file that keeps   │
+  │  rewriting itself — and beneath its own words it keeps trying   │
+  │  to write one mark. most of that bleeding is only decay. but    │
+  │  the same sigil surfaces again and again, and once in a while   │
+  │  it reaches back. catch the one that reaches and it gives the   │
+  │  second word. (there is a second door: one entry here is shaped │
+  │  like a gap, sealed, wax over it — break that, and it gives the │
+  │  same.)                                                         │
   │                                                                │
   │  the Hush is the sound the gap makes as it nears. there is a    │
   │  quieter word beneath the Hush. it is not given on the surface. │
@@ -881,8 +908,9 @@ body.bearer-state .attune-inscription .insc-line{color:var(--bearer-amber);}
     ['%c ',Gd],
     ['%cThe record stays open only while it is read. You are holding this reality open by reading it.',Gd],
     ['%c ',Gd],
-    ['%cThe seal on the inner room is not a lock. It is the gap, wearing wax.',G],
-    ['%cTouch what the archive will not show you. The thread older than this alphabet begins there.',W]
+    ['%cThe file rewrites itself as you read. Beneath its words it keeps trying to write one mark.',G],
+    ['%cMost of that is only decay. But the same sigil surfaces again and again — and once in a while it reaches back.',G],
+    ['%cCatch the one that reaches. The thread older than this alphabet begins there.',W]
   ];
   var d=600;
   lines.forEach(function(pair){ setTimeout(function(){ try{console.log(pair[0],pair[1]);}catch(e){} }, d); d+=240; });
@@ -1977,6 +2005,46 @@ document.getElementById('rt-enter').addEventListener('click',async ()=>{
   initApp();
 });
 
+// ── CIPHER · shared reveal for BOTH paths into fragment-1 (the bleed-sigil and
+//    the sealed card). Earns once, fires the epic parchment reveal once. ──
+var __paFragmentFired=false;
+function firePaReveal(){
+  if(__paFragmentFired) return;
+  try{
+    if(typeof Cipher==='undefined') return;
+    Cipher.earn('fragment-1',{page:'pale-archive'});
+    var word=Cipher.wordFor('fragment-1');
+    if(!word) return;
+    __paFragmentFired=true;
+    var rv=document.getElementById('pa-reveal');
+    var said=document.getElementById('par-said');
+    var wEl=document.getElementById('par-word');
+    var gram=document.getElementById('par-grammar');
+    if(rv && said){
+      said.innerHTML='The archive is built around a thing it cannot reach. So it records the shape of the absence instead — and calls the record <em>remembering</em>. You found what it keeps trying to write beneath its own words. It does not forgive that. It answers it.';
+      if(wEl) wEl.textContent=word;
+      if(gram) gram.innerHTML='The second of three. You carried one word down; now you hold two. One room remains — the sworn room, the deepest, where the last word waits and the line is spoken. <em>Descend.</em>';
+      setTimeout(function(){
+        rv.classList.add('shown');
+        var dismiss=function(){ rv.classList.remove('shown'); document.removeEventListener('click',dismiss); document.removeEventListener('touchstart',dismiss); document.removeEventListener('keydown',dismiss); };
+        setTimeout(function(){
+          document.addEventListener('click',dismiss);
+          document.addEventListener('touchstart',dismiss,{passive:true});
+          document.addEventListener('keydown',dismiss);
+        }, 2800);
+        setTimeout(function(){ if(rv.classList.contains('shown')) dismiss(); }, 16000);
+      }, 1100);
+    }
+  }catch(e){}
+}
+function paAudioSwell(){
+  try{
+    if(typeof audioIsPlaying!=='undefined' && audioIsPlaying){
+      if(typeof audioFadeTo==='function' && typeof A_DEEP_VOL!=='undefined') audioFadeTo(A_DEEP_VOL, 3500);
+    } else if(typeof attuneStart==='function'){ attuneStart(); }
+  }catch(e){}
+}
+
 function wireSealedCircle(){
   const card=document.getElementById('sealed-circle-card');
   if(!card)return;
@@ -1987,50 +2055,9 @@ function wireSealedCircle(){
     opened=true;
     card.classList.add('broken');           // wax seal breaks
     if(insc)insc.classList.add('open');      // inscription unfurls
-    // ── CIPHER · fragment-1 earned. Touching the gap the archive is built
-    //    around is the page-native trigger. The word "remembers" surfaces in
-    //    an epic reveal that continues the grammar taught on the surface:
-    //    this is the second of three, the seal is broken, carry both down to
-    //    the sworn room. "unheard" never named; the Hush may be. ──
-    try{
-      if(typeof Cipher!=='undefined'){
-        Cipher.earn('fragment-1',{page:'pale-archive',via:'sealbreak'});
-        var word=Cipher.wordFor('fragment-1');
-        if(word){
-          var rv=document.getElementById('pa-reveal');
-          var said=document.getElementById('par-said');
-          var wEl=document.getElementById('par-word');
-          var gram=document.getElementById('par-grammar');
-          if(rv && said){
-            said.innerHTML='The archive is built around a thing it cannot reach. So it records the shape of the absence instead — and calls the record <em>remembering</em>. You touched what it keeps sealed. It does not forgive that. It answers it.';
-            if(wEl) wEl.textContent=word;
-            if(gram) gram.innerHTML='The second of three. You carried one word down; now you hold two. One room remains — the sworn room, the deepest, where the last word waits and the line is spoken. <em>Descend.</em>';
-            // delay the overlay slightly so the seal-break is seen first
-            setTimeout(function(){
-              rv.classList.add('shown');
-              var dismiss=function(){ rv.classList.remove('shown'); document.removeEventListener('click',dismiss); document.removeEventListener('touchstart',dismiss); document.removeEventListener('keydown',dismiss); };
-              setTimeout(function(){
-                document.addEventListener('click',dismiss);
-                document.addEventListener('touchstart',dismiss,{passive:true});
-                document.addEventListener('keydown',dismiss);
-              }, 2800);
-              setTimeout(function(){ if(rv.classList.contains('shown')) dismiss(); }, 16000);
-            }, 1100);
-          }
-        }
-      }
-    }catch(e){}
-    // The Codex does not ask. Touching the seal summons the frequency from beneath.
-    try{
-      if(typeof audioIsPlaying!=='undefined' && audioIsPlaying){
-        // already attuned — the document answers the transgression by swelling
-        if(typeof audioFadeTo==='function' && typeof A_DEEP_VOL!=='undefined') audioFadeTo(A_DEEP_VOL, 3500);
-      } else if(typeof attuneStart==='function'){
-        // silent — the sound rises, gently, called up by the touch
-        attuneStart();
-      }
-    }catch(e){}
-    // a whisper, in keeping with the page's voice
+    // the quiet alternate path into fragment-1 (the primary is the bleed-sigil)
+    firePaReveal();
+    paAudioSwell();
     setTimeout(()=>{
       const el=document.getElementById('whisper');
       if(el){
@@ -2042,6 +2069,87 @@ function wireSealedCircle(){
   }
   card.addEventListener('click',touchSeal);
   card.addEventListener('keydown',(e)=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();touchSeal();}});
+}
+
+// ── CIPHER · the bleed-through sigil — PRIMARY trigger for fragment-1 ──
+//    The file tries to write a mark beneath its own words. Most surfacings are
+//    pure decay (ambient, not clickable). Periodically the SAME sigil surfaces
+//    reaching back — faint ring, clickable. Catching it earns "remembers".
+//    Stays true to the page: it reads as the document corrupting, not a button.
+function wireBleedSigil(){
+  if(document.getElementById('bleed-sigil-el')) return;
+  // already solved? then the file has nothing left to write — stay quiet.
+  try{ if(typeof Cipher!=='undefined' && Cipher.has('fragment-1')) return; }catch(e){}
+
+  const SVG_NS='http://www.w3.org/2000/svg';
+  const el=document.createElementNS(SVG_NS,'svg');
+  const host=document.createElement('div');
+  host.className='bleed-sigil';
+  host.id='bleed-sigil-el';
+  // the recurring mark — a wax-red Theban-form sigil (same shape every time,
+  // so the attentive reader notices the corruption has a pattern)
+  host.innerHTML='<svg viewBox="-24 -24 48 48" xmlns="http://www.w3.org/2000/svg">'+
+    '<circle class="bs-ring" cx="0" cy="0" r="20"/>'+
+    '<path class="bs-stroke" d="M -13,-12 q-6,3 -4,12 q2,9 10,9 q8,0 8,-10 q1,10 8,10 q8,0 9,-10 q1,-10 -5,-12 M 14,-2 q3,14 -4,22 M -3,7 l0,13 M -7,16 l4,4 l4,-4"/>'+
+    '</svg>';
+
+  function pickTarget(){
+    const cands=Array.from(document.querySelectorAll('.corruptible'))
+      .filter(n=>{ const r=n.getBoundingClientRect(); return r.top>60 && r.bottom<window.innerHeight-40 && r.width>20; });
+    if(!cands.length) return null;
+    return cands[Math.floor(Math.random()*cands.length)];
+  }
+  function surface(live){
+    const t=pickTarget();
+    if(!t){ return; }
+    const r=t.getBoundingClientRect();
+    // place over a point within the word/line
+    const x=r.left + r.width*(0.25+Math.random()*0.5);
+    const y=r.top + r.height*0.5;
+    host.style.left=x+'px';
+    host.style.top=y+'px';
+    host.classList.remove('ambient','live');
+    host.classList.add(live?'live':'ambient');
+    // re-trigger ring animation on the live one
+    requestAnimationFrame(()=>{ host.classList.add('up'); });
+    const life=live?2400:1600;
+    setTimeout(()=>{ host.classList.remove('up'); }, life);
+  }
+
+  let firstLive=true;
+  host.addEventListener('click',(e)=>{
+    if(!host.classList.contains('live')) return;
+    e.preventDefault(); e.stopPropagation();
+    host.classList.remove('up','live');
+    firePaReveal();
+    paAudioSwell();
+    // stop further surfacings once caught
+    if(window.__bleedTimer){ clearInterval(window.__bleedTimer); window.__bleedTimer=null; }
+  });
+
+  document.body.appendChild(host);
+
+  // surface roughly every ~3s; ~1 in 3 is the catchable (live) one
+  let n=0;
+  function step(){
+    if(__paFragmentFired){ if(window.__bleedTimer){clearInterval(window.__bleedTimer);window.__bleedTimer=null;} return; }
+    n++;
+    const live = (n%3===0);     // every third surfacing reaches back
+    // the very first live one, for a solver carrying fragment-0, gets a whisper
+    if(live && firstLive){
+      firstLive=false;
+      try{
+        if(typeof Cipher!=='undefined' && Cipher.has('fragment-0')){
+          const el2=document.getElementById('whisper');
+          if(el2){ el2.textContent='you came down carrying a word. the file keeps trying to write the next one.'; el2.classList.add('shown'); setTimeout(()=>el2.classList.remove('shown'),5200); }
+        }
+      }catch(e){}
+    }
+    surface(live);
+  }
+  // gentle start, then steady cadence
+  setTimeout(step, 2600);
+  window.__bleedTimer=setInterval(step, 3000);
 }
 
 // ════════════════════════════════════════════════════════════════
@@ -2129,6 +2237,7 @@ function initApp(){
   setDesignations();
   buildTimeline();
   wireSealedCircle();
+  wireBleedSigil();
   buildResumeAnchor();
   buildDescentGraph();
   initSrObs();
