@@ -590,6 +590,59 @@
       * { animation-duration:.01s !important;animation-iteration-count:1 !important; }
       .attune-sigil .as-face{ animation:none !important; }
     }
+    /* ── CIPHER REVEAL · the epic flicker-catch moment ── */
+    #cipher-reveal{
+      position:fixed;inset:0;z-index:8000;display:flex;align-items:center;justify-content:center;
+      padding:2rem;pointer-events:none;opacity:0;
+      background:radial-gradient(ellipse at center,rgba(8,6,16,0.86),rgba(2,1,5,0.96));
+      transition:opacity 1.4s ease;
+    }
+    #cipher-reveal.shown{ opacity:1;pointer-events:auto;cursor:pointer; }
+    .cr-inner{
+      max-width:640px;text-align:center;transform:translateY(14px) scale(.98);
+      transition:transform 1.6s cubic-bezier(.16,1,.3,1);
+    }
+    #cipher-reveal.shown .cr-inner{ transform:none; }
+    .cr-eye{
+      font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:.5em;text-transform:uppercase;
+      color:rgba(127,212,181,.55);margin-bottom:2rem;opacity:0;transition:opacity 1.2s ease .3s;
+    }
+    #cipher-reveal.shown .cr-eye{ opacity:1; }
+    .cr-said{
+      font-family:'Crimson Text',serif;font-style:italic;font-size:clamp(16px,2.2vw,21px);line-height:1.85;
+      color:rgba(228,221,208,.82);margin-bottom:2.2rem;opacity:0;transition:opacity 1.4s ease .6s;
+    }
+    #cipher-reveal.shown .cr-said{ opacity:1; }
+    .cr-word-label{
+      font-family:'Cinzel',serif;font-size:9px;letter-spacing:.55em;text-transform:uppercase;
+      color:rgba(201,168,76,.6);margin-bottom:.9rem;opacity:0;transition:opacity 1.2s ease 1s;
+    }
+    #cipher-reveal.shown .cr-word-label{ opacity:1; }
+    .cr-word{
+      font-family:'Cinzel Decorative',serif;font-weight:700;font-size:clamp(28px,5vw,52px);
+      letter-spacing:.18em;text-transform:lowercase;color:var(--gold-lt,#E0C878);
+      text-shadow:0 0 40px rgba(201,168,76,.4),0 0 14px rgba(201,168,76,.25);
+      opacity:0;transition:opacity 1.6s ease 1.2s;
+    }
+    #cipher-reveal.shown .cr-word{ opacity:1; }
+    .cr-grammar{
+      font-family:'Crimson Text',serif;font-style:italic;font-size:clamp(14px,1.7vw,16px);line-height:1.8;
+      color:rgba(228,221,208,.6);margin-top:2.2rem;max-width:520px;margin-left:auto;margin-right:auto;
+      opacity:0;transition:opacity 1.4s ease 1.8s;
+    }
+    #cipher-reveal.shown .cr-grammar{ opacity:1; }
+    .cr-count{
+      display:flex;gap:14px;justify-content:center;margin-top:2rem;
+      opacity:0;transition:opacity 1.2s ease 2.2s;
+    }
+    #cipher-reveal.shown .cr-count{ opacity:1; }
+    .cr-pip{ width:9px;height:9px;border:1px solid rgba(201,168,76,.4);transform:rotate(45deg);transition:all .5s ease; }
+    .cr-pip.lit{ background:var(--gold-lt,#E0C878);border-color:var(--gold-lt,#E0C878);box-shadow:0 0 12px rgba(201,168,76,.6); }
+    .cr-dismiss{
+      margin-top:2.4rem;font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:.42em;text-transform:uppercase;
+      color:rgba(127,212,181,.4);opacity:0;transition:opacity 1.2s ease 2.6s;
+    }
+    #cipher-reveal.shown .cr-dismiss{ opacity:1; }
   </style>
 </head>
 <body>
@@ -1003,6 +1056,21 @@
   </div>
 
   <div class="lock-pulse" id="lock-pulse">// LOCK //</div>
+
+  <!-- CIPHER REVEAL · the epic flicker-catch moment (Artemys-inflected) -->
+  <div id="cipher-reveal">
+    <div class="cr-inner">
+      <div class="cr-eye" id="cr-eye">The eye drew what it draws when no one watches</div>
+      <div class="cr-said" id="cr-said"></div>
+      <div class="cr-word-label">the word this room carries</div>
+      <div class="cr-word" id="cr-word">unheard</div>
+      <div class="cr-grammar" id="cr-grammar"></div>
+      <div class="cr-count">
+        <span class="cr-pip lit"></span><span class="cr-pip"></span><span class="cr-pip"></span>
+      </div>
+      <div class="cr-dismiss">— touch anything to keep descending —</div>
+    </div>
+  </div>
 
   <!-- ATTUNE · THE LIVING SIGIL -->
   <div class="attune-inscription" id="attune-inscription">
@@ -1812,6 +1880,7 @@
                             but return occasionally if they come back after
                             a long absence, so the eye never goes fully dead. */
   let cycleTick=0;
+  let flickerCaughtAt=0;   // guards the audio toggle when a flicker is caught
   function flickerSuppressed(){
     // suppressed if caught — UNLESS it's been a long while since that catch
     try{
@@ -1834,7 +1903,7 @@
     flick.innerHTML=faceSVG('theban');
     flick.style.cursor='pointer';
     flick.style.pointerEvents='all';
-    const grab=(ev)=>{ ev.stopPropagation(); catchFlicker(); };
+    const grab=(ev)=>{ ev.stopPropagation(); ev.preventDefault(); flickerCaughtAt=Date.now(); catchFlicker(); };
     flick.addEventListener('click',grab);
     flick.addEventListener('touchstart',grab,{passive:false});
     // step the current face(s) back so the Theban glyph stands alone and clean
@@ -1852,9 +1921,12 @@
     }, 1200);
   }
 
-  /* CIPHER · catching the flicker earns fragment-0 and reveals "unheard",
-     the word the surface only ever whispers in lowercase. Shown in the
-     attune inscription so it surfaces in the page's own voice. */
+  /* CIPHER · catching the flicker earns fragment-0 and reveals "unheard".
+     The reveal is Artemys-inflected — she is the one who saw first and was
+     not heard — and it teaches the limb's grammar overtly but in-voice:
+     this is the first of three, it descends with you, the next room keeps
+     what it will not show. "unheard" stays lowercase; the Unheard is never
+     named or defined on the surface. */
   function catchFlicker(){
     try{
       // restore any faces dimmed for the flicker so the sigil isn't left blank
@@ -1863,18 +1935,26 @@
       if(typeof Cipher==='undefined') return;
       Cipher.earn('fragment-0',{page:'index',via:'flicker'});
       const word=Cipher.wordFor('fragment-0');
-      if(word){
-        const insc=document.getElementById('attune-inscription');
-        const m=document.getElementById('ai-main');
-        const s=document.getElementById('ai-sub');
-        const n=document.getElementById('ai-name');
-        if(insc&&m){
-          m.textContent='You caught what the eye draws when unwatched.';
-          if(s){ s.textContent='the word this room carries: '+word; s.style.display='block'; }
-          if(n){ n.textContent='· carry it down · first of three ·'; }
-          insc.classList.add('shown');
-          setTimeout(()=>insc.classList.remove('shown'), 9000);
-        }
+      if(!word) return;
+
+      const rv=document.getElementById('cipher-reveal');
+      const said=document.getElementById('cr-said');
+      const wordEl=document.getElementById('cr-word');
+      const gram=document.getElementById('cr-grammar');
+      if(rv && said){
+        said.innerHTML='Someone saw it first. She pointed at the air, and the people she loved looked at her hand. She was not heard. The eye keeps what she saw — and shows it only to the one who was also watching when no one else was.';
+        if(wordEl) wordEl.textContent=word;
+        if(gram) gram.innerHTML='This is the first of three. Carry it down. The next room keeps a thing it will not show you — break what is sealed, and it will give you the second. <span style="color:rgba(201,168,76,.7)">Descend.</span>';
+        rv.classList.add('shown');
+        const dismiss=()=>{ rv.classList.remove('shown'); document.removeEventListener('click',dismiss); document.removeEventListener('touchstart',dismiss); document.removeEventListener('keydown',dismiss); };
+        // let the reveal breathe before it can be dismissed
+        setTimeout(()=>{
+          document.addEventListener('click',dismiss);
+          document.addEventListener('touchstart',dismiss,{passive:true});
+          document.addEventListener('keydown',dismiss);
+        }, 2800);
+        // safety auto-hide
+        setTimeout(()=>{ if(rv.classList.contains('shown')) dismiss(); }, 16000);
       }
     }catch(e){}
   }
@@ -1922,7 +2002,11 @@
     }).catch(()=>{});
   }
   function attuneSilence(){ asPlaying=false; asSigil.classList.remove('playing'); asSigil.classList.add('silenced'); asFadeTo(0,1500); }
-  function attuneToggle(){ if(asPlaying) attuneSilence(); else attuneStart(); }
+  function attuneToggle(){
+    // if a flicker was just caught (the click that bubbled here), don't toggle audio
+    if(Date.now()-flickerCaughtAt < 600){ return; }
+    if(asPlaying) attuneSilence(); else attuneStart();
+  }
   if(asSigil){
     asSigil.addEventListener('click',attuneToggle);
     if(!isMobile){
