@@ -2024,17 +2024,20 @@ document.getElementById('rt-enter').addEventListener('click',async ()=>{
 //    the sealed card). Earns once, fires the epic parchment reveal once. ──
 var __paFragmentFired=false;
 function firePaReveal(delayMs){
+  console.log('[CIPHER] firePaReveal called. alreadyFired=',__paFragmentFired,'CipherDefined=',(typeof Cipher!=='undefined'));
   if(__paFragmentFired) return;
   try{
-    if(typeof Cipher==='undefined') return;
+    if(typeof Cipher==='undefined'){ console.log('[CIPHER] BAIL: Cipher undefined (codex-cipher.js not loaded?)'); return; }
     Cipher.earn('fragment-1',{page:'pale-archive'});
     var word=Cipher.wordFor('fragment-1');
-    if(!word) return;
+    console.log('[CIPHER] earned fragment-1. word=',word);
+    if(!word){ console.log('[CIPHER] BAIL: wordFor(fragment-1) empty'); return; }
     __paFragmentFired=true;
     var rv=document.getElementById('pa-reveal');
     var said=document.getElementById('par-said');
     var wEl=document.getElementById('par-word');
     var gram=document.getElementById('par-grammar');
+    console.log('[CIPHER] overlay elements:', !!rv, !!said, !!wEl, !!gram);
     if(rv && said){
       said.innerHTML='The archive is built around a thing it cannot reach. So it records the shape of the absence instead — and calls the record <em>remembering</em>. You found what it keeps trying to write beneath its own words. It does not forgive that. It answers it.';
       if(wEl) wEl.textContent=word;
@@ -2152,6 +2155,7 @@ function wireUnlistedEntry(){
     const card=wrapper.querySelector('.tl-card');
     const grab=(e)=>{
       e.preventDefault(); e.stopPropagation();
+      console.log('[CIPHER] unlisted entry clicked. resolved=',resolved);
       if(!resolved){ resolveNow(); }
       catchEntry();
     };
