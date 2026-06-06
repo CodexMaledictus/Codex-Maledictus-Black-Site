@@ -2023,7 +2023,7 @@ document.getElementById('rt-enter').addEventListener('click',async ()=>{
 // ── CIPHER · shared reveal for BOTH paths into fragment-1 (the bleed-sigil and
 //    the sealed card). Earns once, fires the epic parchment reveal once. ──
 var __paFragmentFired=false;
-function firePaReveal(){
+function firePaReveal(delayMs){
   if(__paFragmentFired) return;
   try{
     if(typeof Cipher==='undefined') return;
@@ -2039,6 +2039,7 @@ function firePaReveal(){
       said.innerHTML='The archive is built around a thing it cannot reach. So it records the shape of the absence instead — and calls the record <em>remembering</em>. You found what it keeps trying to write beneath its own words. It does not forgive that. It answers it.';
       if(wEl) wEl.textContent=word;
       if(gram) gram.innerHTML='The second of three. You carried one word down; now you hold two. One room remains — the sworn room, the deepest, where the last word waits and the line is spoken. <em>Descend.</em>';
+      var wait=(typeof delayMs==='number')?delayMs:0;
       setTimeout(function(){
         rv.classList.add('shown');
         var dismiss=function(){ rv.classList.remove('shown'); document.removeEventListener('click',dismiss); document.removeEventListener('touchstart',dismiss); document.removeEventListener('keydown',dismiss); };
@@ -2048,7 +2049,7 @@ function firePaReveal(){
           document.addEventListener('keydown',dismiss);
         }, 2800);
         setTimeout(function(){ if(rv.classList.contains('shown')) dismiss(); }, 16000);
-      }, 1100);
+      }, wait);
     }
   }catch(e){}
 }
@@ -2070,8 +2071,8 @@ function wireSealedCircle(){
     opened=true;
     card.classList.add('broken');           // wax seal breaks
     if(insc)insc.classList.add('open');      // inscription unfurls
-    // the quiet alternate path into fragment-1 (the primary is the bleed-sigil)
-    firePaReveal();
+    // the quiet alternate path into fragment-1 (the primary is the unlisted entry)
+    firePaReveal(1100);
     paAudioSwell();
     setTimeout(()=>{
       const el=document.getElementById('whisper');
@@ -2145,12 +2146,26 @@ function wireUnlistedEntry(){
     if(txt){
       txt.innerHTML=ENTRY.title.split('').map(c=> c===' ' ? ' ' : '<span class="ue-char">'+c+'</span>').join('');
     }
-    // catch handler
+    // catch handler — the entry is catchable the moment it has surfaced.
+    // the drift is the INVITATION, not a gate: clicking mid-drift snaps the
+    // title into the sigil and fires the reveal. no waiting, no timing window.
     const card=wrapper.querySelector('.tl-card');
-    const grab=(e)=>{ if(!reaching) return; e.preventDefault(); e.stopPropagation(); catchEntry(); };
+    const grab=(e)=>{
+      e.preventDefault(); e.stopPropagation();
+      if(!resolved){ resolveNow(); }
+      catchEntry();
+    };
     card.addEventListener('click',grab);
-    card.addEventListener('keydown',(e)=>{ if((e.key==='Enter'||e.key===' ')&&reaching){ e.preventDefault(); catchEntry(); } });
+    card.addEventListener('keydown',(e)=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); if(!resolved){ resolveNow(); } catchEntry(); } });
+    card.style.cursor='pointer';
     return wrapper;
+  }
+
+  // snap the title fully into the sigil at once (used when caught mid-drift)
+  function resolveNow(){
+    if(!node) return;
+    node.querySelectorAll('.ue-char').forEach(c=>{ c.classList.add('bleeding'); c.style.opacity='0.15'; });
+    resolve();
   }
 
   function visibleCards(){
