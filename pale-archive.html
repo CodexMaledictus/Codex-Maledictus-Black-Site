@@ -950,14 +950,14 @@ body.bearer-state .attune-inscription .insc-line{color:var(--bearer-amber);}
 
 const isMobile=window.matchMedia('(max-width:768px)').matches;
 const WITNESS_STATE_KEY='codex_witness_state_v2';
-const NAV_LOG_KEY='codex_invocation_log';
+const PA_NAV_LOG_KEY='codex_invocation_log';
 const PA_INSCRIPTION_KEY='codex_pa_inscribed';
 const NAMED_VOICE_KEY='codex_named_voice_v1';
 
 function loadWitnessState(){try{const r=localStorage.getItem(WITNESS_STATE_KEY);return r?JSON.parse(r):{};}catch(e){return{};}}
 function saveWitnessState(s){try{localStorage.setItem(WITNESS_STATE_KEY,JSON.stringify(s));}catch(e){}}
-function loadInvocationLog(){try{const r=localStorage.getItem(NAV_LOG_KEY);return r?JSON.parse(r):[];}catch(e){return[];}}
-function appendInvocationLog(pageId){try{let log=loadInvocationLog();if(log.length===0||log[log.length-1].id!==pageId){log.push({id:pageId,at:Date.now()});if(log.length>40)log=log.slice(-40);localStorage.setItem(NAV_LOG_KEY,JSON.stringify(log));}}catch(e){}}
+function loadInvocationLog(){try{const r=localStorage.getItem(PA_NAV_LOG_KEY);return r?JSON.parse(r):[];}catch(e){return[];}}
+function appendInvocationLog(pageId){try{let log=loadInvocationLog();if(log.length===0||log[log.length-1].id!==pageId){log.push({id:pageId,at:Date.now()});if(log.length>40)log=log.slice(-40);localStorage.setItem(PA_NAV_LOG_KEY,JSON.stringify(log));}}catch(e){}}
 function isInscribed(){try{return localStorage.getItem(PA_INSCRIPTION_KEY)==='true';}catch(e){return false;}}
 function markInscribed(){try{localStorage.setItem(PA_INSCRIPTION_KEY,'true');}catch(e){}}
 function loadNamedVoice(){try{const r=localStorage.getItem(NAMED_VOICE_KEY);return r?JSON.parse(r):null;}catch(e){return null;}}
