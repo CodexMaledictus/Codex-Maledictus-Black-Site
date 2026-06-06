@@ -642,28 +642,43 @@ body.bearer-state .attune-inscription .insc-line{color:var(--bearer-amber);}
   color:rgba(184,153,122,.4);opacity:0;transition:opacity 1.2s ease 2.6s;
 }
 #pa-reveal.shown .par-dismiss{ opacity:1; }
-/* ── CIPHER · the bleed-through sigil (the file trying to write beneath itself) ──
-   Surfaces over the page's own words like the document corrupting. Most are
-   pure ambience; the catchable one carries a faint ring — subtly distinct, so
-   the attentive reader notices one of them is reaching back. ── */
-.bleed-sigil{
-  position:fixed;z-index:7000;pointer-events:none;width:46px;height:46px;
-  margin-left:-23px;margin-top:-23px;opacity:0;
-  transition:opacity .8s ease;
+/* ── CIPHER · THE UNLISTED ENTRY (the page the archive did not agree to show) ──
+   A real catalog entry that should not exist surfaces among the others, near
+   wherever the reader is. Its title is corrupted/drifting; as it settles it
+   resolves toward the recurring wax sigil and reaches back. Catching it earns
+   "remembers". It relocates sparingly — only if you leave it and return — the
+   archive unable to keep filed a page it never agreed to list. ── */
+.tl-card.unlisted-entry{
+  border-style:dashed;border-color:rgba(122,28,18,.4);
+  background:rgba(245,238,219,0.5);
+  position:relative;overflow:hidden;
+  animation:unlistedBreathe 5s ease-in-out infinite;
 }
-.bleed-sigil.up{ opacity:.9; }
-.bleed-sigil svg{ width:100%;height:100%;overflow:visible;display:block; }
-.bleed-sigil .bs-stroke{
-  fill:none;stroke:var(--wax,#7A1C12);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;
-  filter:drop-shadow(0 0 5px rgba(122,28,18,.55));
+.tl-card.unlisted-entry::before{ background:var(--wax)!important;box-shadow:1px 0 14px rgba(122,28,18,.5)!important; }
+@keyframes unlistedBreathe{ 0%,100%{border-color:rgba(122,28,18,.32);} 50%{border-color:rgba(168,51,31,.6);} }
+.ue-seq{ color:var(--wax)!important; }
+.ue-badge{ color:var(--wax)!important;border-color:rgba(122,28,18,.4)!important;background:rgba(122,28,18,.05)!important; }
+.ue-title{
+  font-family:'Cinzel Decorative',serif;font-weight:700;letter-spacing:.04em;color:var(--ink);
+  position:relative;transition:color 1s ease;
 }
-.bleed-sigil.ambient .bs-stroke{ stroke:rgba(122,28,18,.5); }
-/* the catchable one: reaches back — faint pulsing ring, clickable */
-.bleed-sigil.live{ pointer-events:auto;cursor:pointer; }
-.bleed-sigil .bs-ring{ fill:none;stroke:var(--wax-lt,#A8331F);stroke-width:1;opacity:0; }
-.bleed-sigil.live .bs-ring{ animation:bsRing 2s ease-in-out infinite; }
-.bleed-sigil.live .bs-stroke{ stroke:var(--wax-lt,#A8331F);filter:drop-shadow(0 0 8px rgba(168,51,31,.7)); }
-@keyframes bsRing{ 0%{opacity:0;transform:scale(.6);} 45%{opacity:.7;} 100%{opacity:0;transform:scale(1.25);} }
+.ue-title .ue-char{ display:inline-block;transition:color .5s ease,opacity .5s ease; }
+.ue-title .ue-char.bleeding{ color:var(--wax);text-shadow:0 0 5px rgba(122,28,18,.5); }
+/* when the entry resolves, its title slot becomes the reaching sigil */
+.ue-sigil-slot{ display:flex;align-items:center;gap:.7rem; }
+.ue-sigil{ width:30px;height:30px;flex:0 0 auto;opacity:0;transition:opacity 1s ease; }
+.ue-sigil svg{ width:100%;height:100%;overflow:visible;display:block; }
+.ue-sigil .ues-stroke{ fill:none;stroke:var(--wax-lt,#A8331F);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 0 6px rgba(168,51,31,.6)); }
+.ue-sigil .ues-ring{ fill:none;stroke:var(--wax-lt,#A8331F);stroke-width:1;opacity:0; }
+.tl-card.unlisted-entry.reaching{ cursor:pointer;border-color:var(--wax-lt);box-shadow:0 0 22px rgba(168,51,31,.28); }
+.tl-card.unlisted-entry.reaching .ue-sigil{ opacity:1; }
+.tl-card.unlisted-entry.reaching .ue-sigil .ues-ring{ animation:uesRing 2s ease-in-out infinite; }
+@keyframes uesRing{ 0%{opacity:0;transform:scale(.6);} 45%{opacity:.7;} 100%{opacity:0;transform:scale(1.25);} }
+.ue-prose{
+  font-family:'IM Fell English',serif;font-style:italic;font-size:.92rem;line-height:1.6;
+  color:var(--ink-faded);margin-top:.5rem;
+}
+.ue-prose .ue-mark{ color:var(--wax);font-style:italic; }
 </style>
 </head>
 <body>
@@ -676,14 +691,14 @@ body.bearer-state .attune-inscription .insc-line{color:var(--bearer-amber);}
   │  they are simply not listed.                                   │
   │                                                                │
   │  the Codex documents everything it reaches. what it cannot     │
-  │  reach, it records as absence. this page is a file that keeps   │
-  │  rewriting itself — and beneath its own words it keeps trying   │
-  │  to write one mark. most of that bleeding is only decay. but    │
-  │  the same sigil surfaces again and again, and once in a while   │
-  │  it reaches back. catch the one that reaches and it gives the   │
-  │  second word. (there is a second door: one entry here is shaped │
-  │  like a gap, sealed, wax over it — break that, and it gives the │
-  │  same.)                                                         │
+  │  reach, it records as absence. there are pages it did not       │
+  │  agree to show you. they are read. they are simply not listed.  │
+  │  yet one of them surfaces in this catalog as you read it —      │
+  │  an entry that should not be here, its name coming apart, the   │
+  │  archive unable to keep it filed. when its title finishes       │
+  │  unmaking itself it reaches back. catch it and it gives the     │
+  │  second word. (there is also a sealed entry, wax over it —      │
+  │  break that, and it gives the same.)                            │
   │                                                                │
   │  the Hush is the sound the gap makes as it nears. there is a    │
   │  quieter word beneath the Hush. it is not given on the surface. │
@@ -908,9 +923,9 @@ body.bearer-state .attune-inscription .insc-line{color:var(--bearer-amber);}
     ['%c ',Gd],
     ['%cThe record stays open only while it is read. You are holding this reality open by reading it.',Gd],
     ['%c ',Gd],
-    ['%cThe file rewrites itself as you read. Beneath its words it keeps trying to write one mark.',G],
-    ['%cMost of that is only decay. But the same sigil surfaces again and again — and once in a while it reaches back.',G],
-    ['%cCatch the one that reaches. The thread older than this alphabet begins there.',W]
+    ['%cThere are pages it did not agree to show you. They are read. They are simply not listed.',G],
+    ['%cYet one surfaces in the catalog as you read it — an entry that should not be here, its name coming apart.',G],
+    ['%cWhen its title finishes unmaking itself, it reaches back. Catch it. The thread older than this alphabet begins there.',W]
   ];
   var d=600;
   lines.forEach(function(pair){ setTimeout(function(){ try{console.log(pair[0],pair[1]);}catch(e){} }, d); d+=240; });
@@ -2071,85 +2086,163 @@ function wireSealedCircle(){
   card.addEventListener('keydown',(e)=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();touchSeal();}});
 }
 
-// ── CIPHER · the bleed-through sigil — PRIMARY trigger for fragment-1 ──
-//    The file tries to write a mark beneath its own words. Most surfacings are
-//    pure decay (ambient, not clickable). Periodically the SAME sigil surfaces
-//    reaching back — faint ring, clickable. Catching it earns "remembers".
-//    Stays true to the page: it reads as the document corrupting, not a button.
-function wireBleedSigil(){
-  if(document.getElementById('bleed-sigil-el')) return;
-  // already solved? then the file has nothing left to write — stay quiet.
+// ── CIPHER · THE UNLISTED ENTRY — PRIMARY trigger for fragment-1 ──
+//    "There are pages it did not agree to show you. They are read. They are
+//    simply not listed." This builds one such page and lets it surface into
+//    the catalog near wherever the reader is. Its title drifts/corrupts, then
+//    resolves into the reaching wax sigil. Catching it earns "remembers".
+//    Its prose seeds the three carried words (unheard / remembers / me) and
+//    foreshadows the final line without ever stating it. Relocates sparingly:
+//    only after the reader has left it behind and returned.
+function wireUnlistedEntry(){
   try{ if(typeof Cipher!=='undefined' && Cipher.has('fragment-1')) return; }catch(e){}
+  const wrap=document.getElementById('timeline-wrap');
+  if(!wrap) return;
 
-  const SVG_NS='http://www.w3.org/2000/svg';
-  const el=document.createElementNS(SVG_NS,'svg');
-  const host=document.createElement('div');
-  host.className='bleed-sigil';
-  host.id='bleed-sigil-el';
-  // the recurring mark — a wax-red Theban-form sigil (same shape every time,
-  // so the attentive reader notices the corruption has a pattern)
-  host.innerHTML='<svg viewBox="-24 -24 48 48" xmlns="http://www.w3.org/2000/svg">'+
-    '<circle class="bs-ring" cx="0" cy="0" r="20"/>'+
-    '<path class="bs-stroke" d="M -13,-12 q-6,3 -4,12 q2,9 10,9 q8,0 8,-10 q1,10 8,10 q8,0 9,-10 q1,-10 -5,-12 M 14,-2 q3,14 -4,22 M -3,7 l0,13 M -7,16 l4,4 l4,-4"/>'+
-    '</svg>';
+  // the recovered fragment — a witness who spoke recognition back to the document.
+  // the three carried words live inside the prose, scattered, never assembled,
+  // never in order. a returning solver sees the final line was seeded here.
+  const ENTRY = {
+    seq:'∅∅',
+    badge:'Unlisted',
+    title:'The One Who Spoke It Back',
+    realm:'—',
+    phase:'Recovered Fragment · Not Agreed',
+    prose:'She came to the end of the document and did not look away. She had seen it first, before the others, and the others had not heard. So when the record reached her she gave it the only thing it cannot record on its own — she said what it was, aloud, in the first person, as though it were hers: <span class="ue-mark">remembers</span> me. And the page, which keeps everything and is kept by no one, went quiet the way a thing goes <span class="ue-mark">unheard</span> — not gone, only no longer arriving. This entry was not listed. You were not meant to read it. You are reading it.'
+  };
 
-  function pickTarget(){
-    const cands=Array.from(document.querySelectorAll('.corruptible'))
-      .filter(n=>{ const r=n.getBoundingClientRect(); return r.top>60 && r.bottom<window.innerHeight-40 && r.width>20; });
-    if(!cands.length) return null;
-    return cands[Math.floor(Math.random()*cands.length)];
-  }
-  function surface(live){
-    const t=pickTarget();
-    if(!t){ return; }
-    const r=t.getBoundingClientRect();
-    // place over a point within the word/line
-    const x=r.left + r.width*(0.25+Math.random()*0.5);
-    const y=r.top + r.height*0.5;
-    host.style.left=x+'px';
-    host.style.top=y+'px';
-    host.classList.remove('ambient','live');
-    host.classList.add(live?'live':'ambient');
-    // re-trigger ring animation on the live one
-    requestAnimationFrame(()=>{ host.classList.add('up'); });
-    const life=live?2400:1600;
-    setTimeout(()=>{ host.classList.remove('up'); }, life);
+  let node=null;       // the live .tl-node wrapper
+  let resolved=false;  // title has finished drifting into the sigil
+  let reaching=false;  // currently catchable
+  let placedSlot=-1;   // index in the card list where we inserted
+  let driftStarted=false;
+
+  function sigilSVG(){
+    return '<span class="ue-sigil" aria-hidden="true"><svg viewBox="-24 -24 48 48" xmlns="http://www.w3.org/2000/svg">'+
+      '<circle class="ues-ring" cx="0" cy="0" r="20"/>'+
+      '<path class="ues-stroke" d="M -13,-12 q-6,3 -4,12 q2,9 10,9 q8,0 8,-10 q1,10 8,10 q8,0 9,-10 q1,-10 -5,-12 M 14,-2 q3,14 -4,22 M -3,7 l0,13 M -7,16 l4,4 l4,-4"/>'+
+      '</svg></span>';
   }
 
-  let firstLive=true;
-  host.addEventListener('click',(e)=>{
-    if(!host.classList.contains('live')) return;
-    e.preventDefault(); e.stopPropagation();
-    host.classList.remove('up','live');
+  function build(){
+    const wrapper=document.createElement('div');
+    wrapper.className='tl-node sr';
+    wrapper.innerHTML=
+      '<div class="tl-node-dot sealed"></div>'+
+      '<div class="tl-card unlisted-entry" role="button" tabindex="0" aria-label="An unlisted entry">'+
+        '<div class="tl-card-top">'+
+          '<span class="tl-seq ue-seq">'+ENTRY.seq+'</span>'+
+          '<span class="tl-status-badge ue-badge">'+ENTRY.badge+'</span>'+
+          '<span class="tl-title ue-title ue-sigil-slot" id="ue-title">'+sigilSVG()+'<span id="ue-title-text"></span></span>'+
+        '</div>'+
+        '<div class="tl-meta-row"><span class="meta-realm">Realm '+ENTRY.realm+'</span><span class="meta-phase">'+ENTRY.phase+'</span></div>'+
+        '<div class="ue-prose">'+ENTRY.prose+'</div>'+
+      '</div>';
+    wrapper.querySelector('.sr')?.classList.add('in');
+    wrapper.classList.add('in');
+    // render the title as drift-able characters
+    const txt=wrapper.querySelector('#ue-title-text');
+    if(txt){
+      txt.innerHTML=ENTRY.title.split('').map(c=> c===' ' ? ' ' : '<span class="ue-char">'+c+'</span>').join('');
+    }
+    // catch handler
+    const card=wrapper.querySelector('.tl-card');
+    const grab=(e)=>{ if(!reaching) return; e.preventDefault(); e.stopPropagation(); catchEntry(); };
+    card.addEventListener('click',grab);
+    card.addEventListener('keydown',(e)=>{ if((e.key==='Enter'||e.key===' ')&&reaching){ e.preventDefault(); catchEntry(); } });
+    return wrapper;
+  }
+
+  function visibleCards(){
+    return Array.from(wrap.querySelectorAll('.tl-node')).filter(n=>{
+      if(n===node) return false;
+      const r=n.getBoundingClientRect();
+      return r.top < window.innerHeight-80 && r.bottom > 100;
+    });
+  }
+  function place(){
+    const vis=visibleCards();
+    if(!vis.length){ return false; }
+    // insert after a random visible card near the reader
+    const anchor=vis[Math.floor(Math.random()*vis.length)];
+    if(!node) node=build();
+    anchor.after(node);
+    driftStarted=false; resolved=false; reaching=false;
+    node.querySelector('.tl-card')?.classList.remove('reaching');
+    // reset title chars to clean
+    node.querySelectorAll('.ue-char').forEach(c=>c.classList.remove('bleeding'));
+    return true;
+  }
+
+  // drift: characters bleed wax-red one by one, then the title gives way to the sigil
+  function drift(){
+    if(!node || resolved) return;
+    const chars=Array.from(node.querySelectorAll('.ue-char'));
+    if(!chars.length){ resolve(); return; }
+    let i=0;
+    const tick=setInterval(()=>{
+      if(!node||resolved){ clearInterval(tick); return; }
+      if(i<chars.length){ chars[i].classList.add('bleeding'); chars[i].style.opacity='0.15'; i++; }
+      else { clearInterval(tick); resolve(); }
+    }, 260);
+  }
+  function resolve(){
+    if(resolved||!node) return;
+    resolved=true; reaching=true;
+    const card=node.querySelector('.tl-card');
+    const txt=node.querySelector('#ue-title-text');
+    if(txt) txt.style.opacity='0';
+    if(card) card.classList.add('reaching');
+  }
+  function catchEntry(){
+    reaching=false;
+    if(node){ const c=node.querySelector('.tl-card'); if(c) c.classList.remove('reaching'); }
+    if(window.__ueObserver){ window.__ueObserver.disconnect(); window.__ueObserver=null; }
+    if(window.__ueRelocate){ clearInterval(window.__ueRelocate); window.__ueRelocate=null; }
     firePaReveal();
     paAudioSwell();
-    // stop further surfacings once caught
-    if(window.__bleedTimer){ clearInterval(window.__bleedTimer); window.__bleedTimer=null; }
-  });
-
-  document.body.appendChild(host);
-
-  // surface roughly every ~3s; ~1 in 3 is the catchable (live) one
-  let n=0;
-  function step(){
-    if(__paFragmentFired){ if(window.__bleedTimer){clearInterval(window.__bleedTimer);window.__bleedTimer=null;} return; }
-    n++;
-    const live = (n%3===0);     // every third surfacing reaches back
-    // the very first live one, for a solver carrying fragment-0, gets a whisper
-    if(live && firstLive){
-      firstLive=false;
-      try{
-        if(typeof Cipher!=='undefined' && Cipher.has('fragment-0')){
-          const el2=document.getElementById('whisper');
-          if(el2){ el2.textContent='you came down carrying a word. the file keeps trying to write the next one.'; el2.classList.add('shown'); setTimeout(()=>el2.classList.remove('shown'),5200); }
-        }
-      }catch(e){}
-    }
-    surface(live);
   }
-  // gentle start, then steady cadence
-  setTimeout(step, 2600);
-  window.__bleedTimer=setInterval(step, 3000);
+
+  // surface only once the reader has engaged (scrolled into the catalog),
+  // never on load — so the room is always seen and understood first.
+  let armed=false;
+  function arm(){
+    if(armed) return;
+    const r=wrap.getBoundingClientRect();
+    if(r.top < window.innerHeight*0.6){   // catalog has entered the reading zone
+      armed=true;
+      // first surfacing after a beat of reading, then the slow drift
+      setTimeout(()=>{
+        if(place()){
+          // a whisper for a solver already carrying fragment-0
+          try{
+            if(typeof Cipher!=='undefined' && Cipher.has('fragment-0')){
+              const el=document.getElementById('whisper');
+              if(el){ el.textContent='you came down carrying a word. one entry here was never agreed to. it is reading you back.'; el.classList.add('shown'); setTimeout(()=>el.classList.remove('shown'),5600); }
+            }
+          }catch(e){}
+          // begin the drift after the reader has had time to notice the entry
+          setTimeout(drift, 3200);
+        }
+      }, 1800);
+      window.removeEventListener('scroll', arm);
+    }
+  }
+  window.addEventListener('scroll', arm, {passive:true});
+  // also arm if the catalog is already in view shortly after load
+  setTimeout(arm, 2500);
+
+  // relocate SPARINGLY: only if the reader has fully scrolled the entry out of
+  // view and the entry hasn't been caught. the archive cannot keep it filed.
+  window.__ueRelocate=setInterval(()=>{
+    if(!node || !armed) return;
+    const r=node.getBoundingClientRect();
+    const offscreen = (r.bottom < 0 || r.top > window.innerHeight);
+    if(offscreen){
+      // move it near where the reader now is, and restart the drift
+      if(place()){ setTimeout(drift, 2600); }
+    }
+  }, 4000);
 }
 
 // ════════════════════════════════════════════════════════════════
@@ -2237,7 +2330,7 @@ function initApp(){
   setDesignations();
   buildTimeline();
   wireSealedCircle();
-  wireBleedSigil();
+  wireUnlistedEntry();
   buildResumeAnchor();
   buildDescentGraph();
   initSrObs();
