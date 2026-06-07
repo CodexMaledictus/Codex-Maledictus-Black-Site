@@ -797,9 +797,53 @@
     * { animation-duration:.01s !important;animation-iteration-count:1 !important; }
     .attune-sigil .sg-core { animation:none !important; }
   }
+
+    /* ── CIPHER REVEAL · the third word, given with full ceremony (teal/gold) ── */
+    #wc-reveal{
+      position:fixed;inset:0;z-index:9000;display:flex;align-items:center;justify-content:center;
+      padding:2rem;pointer-events:none;opacity:0;
+      background:radial-gradient(ellipse at center,rgba(6,16,16,0.93),rgba(2,6,6,0.97));
+      transition:opacity 1.5s ease;
+    }
+    #wc-reveal.shown{ opacity:1;pointer-events:auto;cursor:pointer; }
+    .wcr-inner{ max-width:620px;text-align:center;transform:translateY(16px) scale(.98);transition:transform 1.7s cubic-bezier(.16,1,.3,1); }
+    #wc-reveal.shown .wcr-inner{ transform:none; }
+    .wcr-eye{ font-family:'Share Tech Mono',monospace;font-size:.58rem;letter-spacing:.5em;text-transform:uppercase;color:rgba(143,240,229,.55);margin-bottom:1.8rem;opacity:0;transition:opacity 1.2s ease .3s; }
+    #wc-reveal.shown .wcr-eye{ opacity:1; }
+    .wcr-said{ font-family:'Crimson Text',serif;font-style:italic;font-size:clamp(1rem,2.1vw,1.32rem);line-height:1.85;color:rgba(228,221,208,.85);margin-bottom:2.2rem;opacity:0;transition:opacity 1.4s ease .6s; }
+    .wcr-said em{ color:var(--circle-lt);font-style:italic; }
+    #wc-reveal.shown .wcr-said{ opacity:1; }
+    .wcr-word-label{ font-family:'Cinzel',serif;font-size:.55rem;letter-spacing:.5em;text-transform:uppercase;color:rgba(224,200,120,.6);margin-bottom:.9rem;opacity:0;transition:opacity 1.2s ease 1s; }
+    #wc-reveal.shown .wcr-word-label{ opacity:1; }
+    .wcr-word{ font-family:'Cinzel Decorative',serif;font-weight:700;font-size:clamp(1.8rem,4.4vw,3rem);letter-spacing:.2em;text-transform:lowercase;color:var(--gold-lt);text-shadow:0 0 34px rgba(224,200,120,.4);opacity:0;transition:opacity 1.6s ease 1.2s; }
+    #wc-reveal.shown .wcr-word{ opacity:1; }
+    .wcr-grammar{ font-family:'Crimson Text',serif;font-style:italic;font-size:clamp(.92rem,1.6vw,1.05rem);line-height:1.8;color:rgba(228,221,208,.62);margin-top:2.2rem;max-width:520px;margin-left:auto;margin-right:auto;opacity:0;transition:opacity 1.4s ease 1.8s; }
+    .wcr-grammar em{ color:rgba(143,240,229,.85); }
+    #wc-reveal.shown .wcr-grammar{ opacity:1; }
+    .wcr-count{ display:flex;gap:14px;justify-content:center;margin-top:2rem;opacity:0;transition:opacity 1.2s ease 2.2s; }
+    #wc-reveal.shown .wcr-count{ opacity:1; }
+    .wcr-pip{ width:9px;height:9px;border:1px solid rgba(143,240,229,.5);transform:rotate(45deg);transition:all .5s ease; }
+    .wcr-pip.lit{ background:var(--gold-lt);border-color:var(--gold-lt);box-shadow:0 0 12px rgba(224,200,120,.6); }
+    .wcr-dismiss{ margin-top:2.4rem;font-family:'Share Tech Mono',monospace;font-size:.5rem;letter-spacing:.42em;text-transform:uppercase;color:rgba(143,240,229,.4);opacity:0;transition:opacity 1.2s ease 2.6s; }
+    #wc-reveal.shown .wcr-dismiss{ opacity:1; }
 </style>
 </head>
 <body>
+
+<!-- CIPHER REVEAL · the third word, given with full ceremony (third of three) -->
+<div id="wc-reveal">
+  <div class="wcr-inner">
+    <div class="wcr-eye">The threshold held you · and was held in turn</div>
+    <div class="wcr-said" id="wcr-said"></div>
+    <div class="wcr-word-label">the word this room carries</div>
+    <div class="wcr-word" id="wcr-word">me</div>
+    <div class="wcr-grammar" id="wcr-grammar"></div>
+    <div class="wcr-count">
+      <span class="wcr-pip lit"></span><span class="wcr-pip lit"></span><span class="wcr-pip lit"></span>
+    </div>
+    <div class="wcr-dismiss">— touch anything · then speak the line —</div>
+  </div>
+</div>
 
 <div id="cur">
   <svg viewBox="-14 -14 28 28" xmlns="http://www.w3.org/2000/svg">
@@ -2309,8 +2353,10 @@ function initAttune(){
   function openWord(){ if(wordBlock) wordBlock.classList.add('open'); }
   function revealSpeak(){ if(speak) speak.style.display='flex'; }
 
-  /* THE TRIGGER — earns fragment-2. The room's deepest truth made an act:
-     you let the threshold know it held you. */
+  /* THE TRIGGER — earns fragment-2 (the third word) and gives it the same
+     full ceremony as the other two rooms: an epic reveal with lore, the word,
+     and all three diamonds lit. The gate to speak the whole line appears only
+     AFTER the reveal is dismissed — the giving and the spending are separate. */
   var triggered=false;
   function touchThreshold(){
     if(triggered) return;
@@ -2319,11 +2365,37 @@ function initAttune(){
     if(cipherReady()){
       Cipher.earn('fragment-2',{page:'witness-circle',via:'threshold'});
     }
-    openWord();
-    setTimeout(revealSpeak, 1100);
+    fireWcReveal();
   }
   held.addEventListener('click', touchThreshold);
   held.addEventListener('keydown', function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); touchThreshold(); } });
+
+  function fireWcReveal(){
+    var rv=document.getElementById('wc-reveal');
+    var said=document.getElementById('wcr-said');
+    var gram=document.getElementById('wcr-grammar');
+    if(!rv||!said){ openWord(); setTimeout(revealSpeak,800); return; }   // fallback
+    said.innerHTML='She held the threshold for you — the one thing the Codex cannot do for itself, because to hold is to receive, and receiving is the one act the document does not record. You let her know you were held. So she gives you the last word, the one spoken from <em>inside</em> the record, from the position the marked man holds and cannot know he holds.';
+    gram.innerHTML='Three words, now, carried down through three rooms. They are not a list — they are the heart of one sentence the Codex speaks of you. Give it the name the document calls itself, and <em>speak the whole line.</em>';
+    rv.classList.add('shown');
+    var done=false;
+    var dismiss=function(){
+      if(done) return; done=true;
+      rv.classList.remove('shown');
+      document.removeEventListener('click',dismiss); document.removeEventListener('touchstart',dismiss); document.removeEventListener('keydown',dismiss);
+      // NOW reveal the word inline + the gate, separated from the ceremony
+      openWord();
+      setTimeout(revealSpeak, 700);
+      // bring the gate into view so it's clear what to do next
+      setTimeout(function(){ var t=document.getElementById('threshold-word'); if(t&&t.scrollIntoView) t.scrollIntoView({behavior:'smooth',block:'center'}); }, 900);
+    };
+    setTimeout(function(){
+      document.addEventListener('click',dismiss);
+      document.addEventListener('touchstart',dismiss,{passive:true});
+      document.addEventListener('keydown',dismiss);
+    }, 2800);
+    setTimeout(function(){ if(rv.classList.contains('shown')) dismiss(); }, 16000);
+  }
 
   /* THE GATE — markers + phrase, in-character failures. */
   function trySpeak(){
