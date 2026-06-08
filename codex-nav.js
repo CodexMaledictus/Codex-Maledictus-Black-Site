@@ -1,6 +1,6 @@
 // ============================================================
-// CODEX MALEDICTUS — NAVIGATION BRAIN v4
-// codex-nav.js — lives in repo root, imported by every page
+// CODEX MALEDICTUS, NAVIGATION BRAIN v4
+// codex-nav.js, lives in repo root, imported by every page
 //
 // CHANGES FROM v3:
 //   - customDoors flag: a page that builds its own bespoke descent
@@ -22,11 +22,11 @@
 //     client-side, no network. Restraint preserved: at most one extra line.
 //
 // STATE SHARED WITH PAGES (read-only here):
-//   codex_witness_state_v2  — bearer flag, firstWitnessVisit, totalVisits
-//   codex_invocation_log    — per-room visit log (also written by pages)
+//   codex_witness_state_v2 , bearer flag, firstWitnessVisit, totalVisits
+//   codex_invocation_log   , per-room visit log (also written by pages)
 //   The cipher channel (codex_cipher_v1) is NEVER touched here.
 //
-// CANONICAL DESCENT (22 entries) — unchanged from v3.
+// CANONICAL DESCENT (22 entries), unchanged from v3.
 //
 // TO MARK A PAGE AS HAVING ITS OWN GATE:
 //   Set customDoors:true on its CODEX_MAP entry. The nav will frame it
@@ -111,6 +111,9 @@ const CODEX_MAP = {
   },
 
   // ── 04 · APOCRYPHA ──────────────────────────────────────────
+  // customDoors: this page builds its own in-universe crossing to the
+  // Chronicle (the no-origin reveal extends to Apollo). The nav frames
+  // it but does not render the generic door grid.
   "apocrypha-infection": {
     file:            "apocrypha-infection.html",
     title:           "Apocrypha · The Infection",
@@ -119,10 +122,11 @@ const CODEX_MAP = {
     phase:           "Apocrypha",
     description:     "What the Archivum recorded but did not publish. Five chambers. The Reader's File builds itself in real time.",
     closingWhisper:  "Authorization was never going to arrive.",
+    customDoors:     true,
     pathA:           "chronicle-1-infection-remembers",
-    pathB:           "lore-chronicle-1",
+    pathB:           null,
     labelA:          "Enter the Chronicle",
-    labelB:          "Read the Chronicle Lore",
+    labelB:          null,
     bearerChamber:   null
   },
 
@@ -244,7 +248,7 @@ const CODEX_MAP = {
 
   // ════════════════════════════════════════════════════════════
   // CLUSTER IV · RECOVERED FRAGMENTS · The RF-093 Sequence
-  // (Parallel category — not a Ritual Transmission cluster)
+  // (Parallel category, not a Ritual Transmission cluster)
   // ════════════════════════════════════════════════════════════
 
   // ── 12 · RF LORE ────────────────────────────────────────────
@@ -425,7 +429,7 @@ const CODEX_MAP = {
 };
 
 // ============================================================
-// VOICE TABLES — the realm teaches the verifiability descent, the
+// VOICE TABLES, the realm teaches the verifiability descent, the
 // phase gives the divider its own glyph. (Canon Bible, Part V.)
 // ============================================================
 
@@ -459,7 +463,7 @@ const PHASE_GLYPH = {
 };
 
 // ============================================================
-// STATE — Reads the Witness Circle's localStorage to detect Bearer
+// STATE, Reads the Witness Circle's localStorage to detect Bearer
 // status and the shared visit log. The cipher channel is untouched.
 // ============================================================
 
@@ -519,7 +523,7 @@ function navVisitCount(pageId) {
 }
 
 // ============================================================
-// SILENT SIGNALS — what the nav can know without asking. No
+// SILENT SIGNALS, what the nav can know without asking. No
 // permission prompts, no network. Mirrors the pages' own signal
 // derivation so the nav and the page agree about who you are.
 // ============================================================
@@ -572,7 +576,7 @@ function navSignalWhisper(sig) {
 }
 
 // ============================================================
-// PALETTE — Pulls colors from the page's CSS variables
+// PALETTE, Pulls colors from the page's CSS variables
 // Falls back to gold defaults if a page doesn't define them
 // ============================================================
 
@@ -583,7 +587,7 @@ function navResolvePalette() {
                         path.includes('witness-circle');
   const isPaleArchivePage = path.includes('pale-archive');
 
-  // Pale Archive parchment palette — ink-on-bone aesthetic
+  // Pale Archive parchment palette, ink-on-bone aesthetic
   if (isPaleArchivePage) {
     return {
       accent: '#8A6520', accentDim: 'rgba(138,101,32,0.45)',
@@ -774,7 +778,7 @@ function renderClosingOnly(page, pal) {
 }
 
 // ============================================================
-// SHARED CSS — Injected once per page load
+// SHARED CSS, Injected once per page load
 // ============================================================
 
 (function injectNavStyles() {
