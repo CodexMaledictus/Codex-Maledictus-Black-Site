@@ -73,6 +73,8 @@ const CODEX_MAP = {
   // ════════════════════════════════════════════════════════════
 
   // ── 02 · TRANSMISSION ────────────────────────────────────────
+  // customDoors: this page builds its own forward gate (Continue to the
+  // Lore). Single-line descent, no skip fork. The nav frames it only.
   "infection-remembers": {
     file:            "infection-remembers.html",
     title:           "The Infection Remembers",
@@ -82,9 +84,10 @@ const CODEX_MAP = {
     description:     "The day the document remembered itself. The first audible breach.",
     closingWhisper:  "It is still remembering.",
     pathA:           "infection-lore",
-    pathB:           "apocrypha-infection",
+    pathB:           null,
     labelA:          "Read the Lore",
-    labelB:          "Skip to the Apocrypha",
+    labelB:          null,
+    customDoors:     true,
     bearerChamber:   null
   },
 
