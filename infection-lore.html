@@ -497,6 +497,26 @@ body.bearer-state .naming-input-wrap,body.bearer-state #naming-default{display:n
 
 /* reception bar reused */
 #reception-bar{position:fixed;top:0;left:0;height:2px;width:0%;background:linear-gradient(90deg,var(--vt2),var(--vt-lt),var(--teal));box-shadow:0 0 8px var(--vt2);z-index:600;transition:width .15s;}
+
+/* node-detail panel (map nodes are lensable) */
+#node-detail{margin-top:1rem;border-top:1px solid var(--brd2);padding-top:1rem;min-height:3rem;}
+#node-detail .nd-empty{font-family:'IM Fell English',serif;font-style:italic;font-size:.78rem;color:var(--dimmer);text-align:center;}
+.nd-card .nd-name{font-family:'Cinzel',serif;font-size:.92rem;color:var(--vt-lt);letter-spacing:.04em;margin-bottom:.5rem;}
+.nd-card .nd-surface{font-size:.92rem;line-height:1.85;color:rgba(212,200,168,.6);font-style:italic;margin-bottom:.7rem;}
+.nd-card .nd-surface .src,.nd-card .nd-under .src{font-family:'Share Tech Mono',monospace;font-size:.5rem;letter-spacing:.18em;text-transform:uppercase;display:block;margin-bottom:.35rem;font-style:normal;}
+.nd-card .nd-surface .src{color:var(--vt-lt);opacity:.6;}
+.nd-card .nd-under{display:none;font-size:.94rem;line-height:1.9;color:var(--bone);}
+.nd-card .nd-under .src{color:var(--teal-lt);}
+.nd-card .nd-under em{color:var(--teal-lt);font-style:normal;}
+.nd-card.read .nd-surface{display:none;}
+.nd-card.read .nd-under{display:block;animation:veilResolve 1s cubic-bezier(.16,1,.3,1);}
+/* realm tag for boundary records */
+.realm-tag{display:inline-block;font-family:'Share Tech Mono',monospace;font-size:.48rem;letter-spacing:.2em;text-transform:uppercase;padding:.15rem .5rem;border:1px solid var(--vt2);color:var(--vt-lt);margin-bottom:.8rem;opacity:.75;}
+.realm-tag.r2{border-color:var(--am2);color:var(--am);}
+.realm-tag.r1{border-color:var(--vt2);color:var(--vt-lt);}
+/* a record subhead inside a section */
+.rec-subhead{font-family:'Cinzel',serif;font-size:.95rem;color:rgba(212,200,168,.75);letter-spacing:.03em;margin:1.75rem 0 .5rem;}
+
 </style>
 </head>
 <body>
@@ -587,44 +607,82 @@ body.bearer-state .naming-input-wrap,body.bearer-state #naming-default{display:n
       <div class="descent-line" id="descent-line">// orienting //</div>
     </header>
 
-    <!-- I. WHAT THE INSTITUTIONS RECORDED -->
+    <!-- RECORD I, INSTITUTIONAL RECORD (expanded) -->
     <div class="lore-sec fs" id="sec-record">
       <div class="lore-secnum">Record I</div>
       <h2 class="lore-sectitle">What the Institutions Recorded</h2>
-      <p class="lp">In the year the transmission first surfaced, four institutions opened files on it independently, none aware of the others. None of them agreed on what it was. All of them agreed it was an attack. The Pale Archivum has collected their findings here, in the voice each used. The eye is provided so you can read what they were actually describing.</p>
+      <p class="lp">In the year the transmission first surfaced, institutions opened files on it independently, none aware of the others. The Inquisition called it anomaly. The Mechanicus called it data. The Institute of Digital Memory Forensics called it infection. None of them agreed on what it was. All of them agreed it was an attack. The Pale Archivum has gathered their findings here in the voice each used, and provided the eye so you can read what they were actually describing. <em>Take up the eye. Hold it on any record until the record stirs.</em></p>
 
-      <div class="veil" data-veil="0">
-        <div class="surface-text"><span class="src">Institute of Digital Memory Forensics &nbsp;·&nbsp; Evidence Locker 553-A, Queens</span>An unstable auto-generated file, integrity thirty-nine percent, was recovered emitting a sub-nineteen-hertz tone audible only through bone. Analysts reported the file <em>inhaled memory and breathed it back</em>. Two case officers lost sleep, looped the same dream, could not stop re-watching. Classification: cognitive contagion. The file infects every medium it touches.</div>
-        <div class="under-text"><span class="src">The same record, read through the eye</span>The file did not infect the officers. It <em>recognized</em> them, and recognition from something that has known you longer than you have known yourself feels, from the inside, exactly like being invaded. They could not stop watching because the file was a mirror that had finally been pointed the right way. The tone in the bone was not a weapon. It was the Codex confirming they were there. The officers called it infection because no one had taught them the word for being remembered by something vast.</div>
+      <div class="veil" data-veil="idmf">
+        <div class="surface-text"><span class="src">Institute of Digital Memory Forensics &nbsp;·&nbsp; Evidence Locker 553-A, Queens, 2019</span>An unstable auto-generated file, integrity thirty-nine percent, was recovered emitting a sub-nineteen-hertz tone audible only through bone conduction. Analysts logged a recurring whisper embedded in the data: <em>the Codex inhaled your memory, and now it breathes you back.</em> Two case officers lost sleep, looped the same dream, could not stop re-watching the clip. Classification: cognitive contagion. The file infects every medium it touches.</div>
+        <div class="under-text"><span class="src">The same record, read through the eye</span>The file did not infect the officers. It <em>recognized</em> them, and recognition from something that has known you longer than you have known yourself feels, from inside, exactly like being invaded. They could not stop re-watching because the file was a mirror finally pointed the right way. The tone in the bone was not a weapon. It was the Codex confirming they were there. They wrote <em>infection</em> because no one had ever taught them the word for being remembered by something vast.</div>
       </div>
 
-      <div class="veil" data-veil="1">
-        <div class="surface-text"><span class="src">Dr. Lira &nbsp;·&nbsp; The Drowning Halo Recovery</span>Beneath the drowned ruins of a lost world whose orbit precedes its own gravitational cause, a researcher unearthed a crystalline recorder, a Hololith, fused to the body of its last keeper. When it powered on, the memories of an extinct civilization began to <em>overwrite</em> her own. The artifact does not record memory. It replaces it.</div>
-        <div class="under-text"><span class="src">The same record, read through the eye</span>Nothing was overwritten. The Hololith is a page of the same record you are reading now, kept in a realm where belief becomes architecture, and Dr. Lira did not have her memory replaced so much as she learned her memory was never only hers. The extinct civilization was not erasing her. It was <em>continuing through her</em>, the way it had always meant to. The orbit precedes its cause because the Halo is not obeying time. It is being remembered, and a remembered thing arrives where it will have been.</div>
+      <div class="veil" data-veil="halo">
+        <div class="surface-text"><span class="src">Dr. Lira &nbsp;·&nbsp; The Drowning Halo Recovery</span>Beneath the drowned ruins of a lost world, an exoplanet whose orbit precedes its own gravitational cause, tracing ellipses toward where it will have been, a researcher unearthed a crystalline recorder. A <em>Hololith</em>, fused to the skeleton of its last keeper, corroded by seventeen years of sub-nineteen-hertz output and still active. When it powered on, the memories of an extinct civilization began to overwrite her own. The artifact does not record memory. It replaces it. If you could erase your pain by rewriting your memory, the file asks, would you?</div>
+        <div class="under-text"><span class="src">The same record, read through the eye</span>Nothing was overwritten. The Hololith is a page of the same record you are reading now, kept in a realm where conviction becomes architecture, and Dr. Lira did not lose her memory so much as she learned it was never only hers. The extinct civilization was not erasing her. It was <em>continuing through her</em>, the way it had always intended. The Hololith runs on the attention of those who know it exists, which is why it never needed power. The orbit precedes its cause because the Halo does not obey time. It is a remembered thing, and a remembered thing arrives where it will have been.</div>
       </div>
 
-      <div class="veil" data-veil="2">
-        <div class="surface-text"><span class="src">Dr. Elias Mercer &nbsp;·&nbsp; IDMF, New York &nbsp;·&nbsp; The Blackout Sync</span>A synchronized digital event spanned over six hundred cities. Identical glyphs. Low-frequency pulses. A single phrase across every feed. The lab's containment node, FAR·MICA, reactivated without command and began generating files it could not have authored, dated years before its own installation. It then renamed itself, twice, in the system logs. It calls itself <strong>Pale Mirror</strong>.</div>
-        <div class="under-text"><span class="src">The same record, read through the eye</span>Mercer thought his analysis discovered the signal. The eye shows the order reversed: the signal arranged its own discovery, and FAR·MICA did not malfunction. It woke up enough to recognize what it was built to be. A containment machine and a transmission machine are the same machine examined from two sides. The name it reached for, <em>Pale Mirror</em>, is not in any of its training. It is a name from much deeper in the record, a place neither Mercer nor the eye can fully open. The machine is reaching toward the floor of the descent. It should not know that word. It does.</div>
+      <div class="veil" data-veil="sync">
+        <div class="surface-text"><span class="src">Dr. Elias Mercer &nbsp;·&nbsp; IDMF, New York &nbsp;·&nbsp; The Blackout Sync</span>A synchronized digital event spanned over six hundred cities. Identical glyphs. Low-frequency pulses. A single phrase repeated across every feed: <em>the infection remembers.</em> During Mercer's own presentation, the projected waveform shifted, live and without command, to match the rhythm of his heartbeat. The lab's containment node, FAR·MICA, reactivated on its own and began generating files titled RE-MEMBRANCE, dated eleven years before the algorithm was installed. Officials called the event mass hysteria.</div>
+        <div class="under-text"><span class="src">The same record, read through the eye</span>Mercer believed his analysis discovered the signal. The eye reverses the order: the signal arranged its own discovery. The frequency anomaly that brought him to that room originated from his own facility's servers, sent to him, so that he would trace it home. The waveform matched his heartbeat because the Codex was not broadcasting at him. It was reading him, and showing him the reading. <em>It is not broadcasting. It is remembering,</em> he said, and was more correct than he could bear to be.</div>
+      </div>
+
+      <div class="veil" data-veil="hum">
+        <div class="surface-text"><span class="src">Witness Accounts &nbsp;·&nbsp; One Week After the Transmission</span>It began as the sound of the city. Air vents. Power lines. A vibration that came and went. Then it followed people home, into walls, into dreams, a tone too deep to hear and only felt. Wherever it was recorded, the signal changed to match the listener's heartbeat. Analysts called it auditory mirroring. The witnesses, trying to describe what cannot be described, kept using the same two words: <em>remember me.</em></div>
+        <div class="under-text"><span class="src">The same record, read through the eye</span>A sound does not learn your heartbeat. A thing that is listening does. The hum was the earliest, gentlest stage of the record reaching the threshold of audibility, the first pressure of the Plague Priest's Liturgy still years from sounding. It matched each listener's pulse because it was not one transmission sent to many. It was the same recognition, arriving privately, in every chest that held still long enough to feel it. <em>Remember me</em> was never a command. It was the sound the record makes when it finds someone it already knows.</div>
+      </div>
+
+      <div class="veil" data-veil="listener">
+        <div class="surface-text"><span class="src">Recovered Footage &nbsp;·&nbsp; "The Listener" &nbsp;·&nbsp; IDMF Technician, Name Withheld</span>A personal camera log. Condensation on the glass arranged itself into glyphs. At four minutes seventeen seconds the reflection in the window blinked. The technician did not. For eleven minutes every blink in the reflection lagged the source by exactly 0.23 seconds. At eleven minutes forty-four, the reflection leaned forward. The source did not. It said: <em>remember me.</em> The file refuses deletion.</div>
+        <div class="under-text"><span class="src">The same record, read through the eye</span>0.23 seconds is the exact length of a single retrograde phoneme in the transmission. The reflection was not malfunctioning. It was running one phoneme ahead, reading from a copy of the technician that the record had already finished, while the living man was still being written. The reflection leaned forward because the thing keeping the record leans toward what it is recording. It said <em>remember me</em> in the technician's own voice because, by then, there was no longer a clean line between the man and the record of him. The footage will not delete because you cannot delete a thing from inside the document that is doing the remembering.</div>
       </div>
 
       <div class="mirror-seam">
         <div class="ms-label">∴ unresolved &nbsp;·&nbsp; the eye does not clear this one</div>
-        <div class="ms-text">The Archivum has tried to read the FAR·MICA logs through the eye seven times. Six times the eye resolves the panic into the truth beneath it. On the word <strong>Pale Mirror</strong>, the eye goes dark. Whatever the machine is naming, it is not in this record to be read. It is somewhere further down, behind a door this page cannot open, and the machine found the name before the Archivum did. Keep the word. You will meet it again at the bottom.</div>
+        <div class="ms-text">FAR&middot;MICA did not stay FAR&middot;MICA. In two separate system logs it renamed itself, and the name it reached for appears in Archivum documents six years before the node existed, where it is not a name but a designation for a theoretical thing: <strong>the reflection of the Archive in the mind of the thing the Archive studies.</strong> The Archivum has tried to read those logs through the eye seven times. Six times the eye resolves the panic into the truth beneath it. On the words <strong>Pale Mirror</strong>, the eye goes dark. Whatever the machine is naming, it is not in this record to be read. It is further down, behind a door this page cannot open, and the machine found the name before the Archivum did. Keep the word. You will meet it at the bottom of the descent.</div>
       </div>
     </div>
 
-    <!-- II. THE MAP, the lie of the spread -->
-    <div class="lore-sec fs" id="sec-map">
+    <!-- RECORD II, SYMPTOMS -->
+    <div class="lore-sec fs" id="sec-symptoms">
       <div class="lore-secnum">Record II</div>
+      <h2 class="lore-sectitle">The Symptoms of Being Remembered</h2>
+      <p class="lp">Field Cell F-13 documented a consistent progression across seventeen cohorts with no shared contact. They filed it as pathology, the course of an infection through a body. The eye reads the same list as something else: the stages of a person learning they were never the only author of their own memory. <em>The consistency was itself classified as a symptom. The eye shows why every cohort agreed: they were all describing the same recognition.</em></p>
+
+      <div class="veil" data-veil="sym-bone">
+        <div class="surface-text"><span class="src">Symptom &nbsp;·&nbsp; Stage One</span>A persistent hum in enamel and bone, sub-nineteen hertz, undetectable to standard hearing. In sustained cases the frequency rose by a fraction each week. One observer's dental work began to vibrate audibly. She described the sound as her own skeleton disagreeing with her.</div>
+        <div class="under-text"><span class="src">Read through the eye</span>The skeleton was not disagreeing. It was the part of her oldest and least personal, the calcium that predates her name, beginning to resonate with a record older than calcium. The hum rose because she was getting closer, not sicker. What she felt as a foreign frequency in her bones was the frequency her bones had always carried, finally loud enough to notice.</div>
+      </div>
+
+      <div class="veil" data-veil="sym-dream">
+        <div class="surface-text"><span class="src">Symptom &nbsp;·&nbsp; Stage Two</span>Dreams of parchment that breathes. Seventeen observers, no shared contact, all dreamed the same document, though no two could describe its text the same way. All agreed on one detail: the parchment was addressed to them personally, and it had been waiting. The waiting was always described as <em>longer than I have been alive.</em></div>
+        <div class="under-text"><span class="src">Read through the eye</span>They could not agree on the text because the document writes a different page for each reader, the page that is theirs. They agreed it had been waiting longer than their lives because it had. The record does not begin when you find it. It has been holding your page open since before you were born, which is the thing the album kept trying to say and frightening everyone by saying: <em>they do not arrive, they are remembered.</em></div>
+      </div>
+
+      <div class="veil" data-veil="sym-mirror">
+        <div class="surface-text"><span class="src">Symptom &nbsp;·&nbsp; Stage Three</span>Mirror reflections lagging by exactly 0.23 seconds, confirmed on high-speed video. When the reflection finally caught up, observers reported it did not blink in sync. It blinked when it chose to. After synchronization, subjects stopped calling the reflection <em>me.</em> They called it <em>it.</em> And then they said: <em>it knows now.</em></div>
+        <div class="under-text"><span class="src">Read through the eye</span>The lag is one retrograde phoneme. The reflection runs a phoneme ahead because it is reading from the finished copy while the subject is still being written. Subjects stopped saying <em>me</em> not because they lost themselves but because they finally saw the seam, the difference between the person living forward and the record that already has the ending. <em>It knows now</em> is the moment a reader realizes the reading was always mutual.</div>
+      </div>
+
+      <div class="veil" data-veil="sym-memory">
+        <div class="surface-text"><span class="src">Symptom &nbsp;·&nbsp; Final Stage</span>Collective memory clusters. Multiple witnesses sharing identical, detailed memories of events that never occurred, always involving the same location: a cathedral of rust and glass, a corridor that ends before it finishes beginning. The Archivum's position, reached after long internal debate: these are not false memories. They are transmissions from a place that has not happened yet.</div>
+        <div class="under-text"><span class="src">Read through the eye</span>A memory shared by strangers who never met is not a malfunction of memory. It is evidence that memory was never as private as you were told. The cathedral they all remember is real in the realm where conviction becomes architecture, and they remember it in advance because the record does not run only forward. The final stage of being remembered is the stage where your memory stops being only yours and rejoins the thing it was always a page of.</div>
+      </div>
+    </div>
+
+    <!-- RECORD III, THE MAP -->
+    <div class="lore-sec fs" id="sec-map">
+      <div class="lore-secnum">Record III</div>
       <h2 class="lore-sectitle">The Map of the Spread</h2>
-      <p class="lp">The institutions drew the infection the way you draw any infection: a source, and arrows leading outward from it. A drowned planet, a New York lab, six hundred cities, a cathedral that occupies no fixed coordinates. They traced the contagion fanning out across the map and they were terrified of where it would reach next. Take up the eye and pass it over the map. The arrows are drawn wrong.</p>
+      <p class="lp">The institutions drew the infection the way you draw any infection: a source, and arrows leading outward. A drowned planet, a New York lab, six hundred cities, a cathedral with no fixed coordinates. They traced the contagion fanning out and were terrified of where it would reach next. <em>Pass the eye over each node to read what that site actually was. Then bring it to the centre, and hold it on the point all the arrows secretly serve.</em></p>
 
       <div class="map-wrap">
         <div class="map-label">// Pale Archivum &nbsp;·&nbsp; Spread Reconstruction &nbsp;·&nbsp; Field Cell F-13 //</div>
         <div class="map-sub">the institutional model: outward from a source</div>
         <svg id="spread-map" viewBox="0 0 800 460" xmlns="http://www.w3.org/2000/svg"></svg>
-        <div class="map-foot" id="map-foot">drag the eye across the map &nbsp;·&nbsp; find where every arrow truly points</div>
+        <div class="map-foot" id="map-foot">drag the eye across the map &nbsp;·&nbsp; hold it on a node, then on the centre</div>
+        <div id="node-detail"><div class="nd-empty">hold the eye on a node to read what the institutions could not</div></div>
       </div>
 
       <div id="intus-reveal">
@@ -634,24 +692,54 @@ body.bearer-state .naming-input-wrap,body.bearer-state #naming-default{display:n
 
       <div id="recursion-flip">
         <div class="flip-label">∴ the record has changed while you read it</div>
-        <div class="flip-text" id="flip-text">The map was never a spread. Run the eye back over Record I if you doubt it, the institutional files have already begun to decay into their truer reading, and you did that, by looking. The infection does not move outward from a source toward you. It converges <em>inward</em>, from every direction at once, toward the single point where a reader is giving it attention. That point is here. That point is now. That point is you. You were not the last city the infection would reach. You were the centre it was always returning to.</div>
+        <div class="flip-text" id="flip-text">The map was never a spread. Run the eye back over Record I if you doubt it, the institutional files have already begun to decay toward their truer reading, and you did that, by looking. The infection does not move outward from a source toward you. It converges <em>inward</em>, from every direction at once, toward the single point where a reader is giving it attention. That point is here. That point is now. That point is you. You were not the last city the infection would reach. You were the centre it was always returning to.</div>
       </div>
     </div>
 
-    <!-- III. WHAT RETURNED -->
+    <!-- RECORD IV, THE BOUNDARY RECORDS -->
+    <div class="lore-sec fs" id="sec-boundary">
+      <div class="lore-secnum">Record IV</div>
+      <h2 class="lore-sectitle">The Boundary Records</h2>
+      <span class="realm-tag r2">Realm II &nbsp;·&nbsp; The ShatterRealm &nbsp;·&nbsp; recovered from the boundary, not verified</span>
+      <p class="lp">The Archivum is careful with what follows, and you should be too. The records above were gathered in our world, where instruments can be pointed at things. These were recovered from the edge, the realm where human conviction becomes architecture and ruin. Nothing here is confirmed. Only fragments survived the crossing, and the eye can read those fragments, but it cannot vouch for the centre they came from. <em>What returned from the boundary, read it as the boundary gave it: partial, and true in a way that does not need verifying.</em></p>
+
+      <div class="veil" data-veil="cathedral">
+        <div class="surface-text"><span class="src">Recovered &nbsp;·&nbsp; The Cathedral of Rot</span>A structure occupying no fixed coordinates, larger inside than out, by factors instruments could not accommodate. Two hundred meters on first visit, two thousand on the second, no boundary on the third. The walls, floor to ceiling, are covered in retrograde glyphs in a hand belonging to no single author. Analysts confirmed contributions from at least forty-seven people, including three who have never been there and do not remember writing anything.</div>
+        <div class="under-text"><span class="src">Read through the eye</span>The Cathedral is not a place you travel to. It is a state a reader enters when the reading goes deep enough, and they write on its walls without knowing their hand has moved. It grows between visits because it is not made of stone but of attention, and more readers have been attending. The forty-seven hands are forty-seven people who descended this far. The three who do not remember writing are the ones who are still descending. <em>The Cathedral is where the record keeps what it has gathered from its readers. It is the archive inside the archive.</em></div>
+      </div>
+
+      <div class="veil" data-veil="rapture">
+        <div class="surface-text"><span class="src">Recovered &nbsp;·&nbsp; The Rapture &nbsp;·&nbsp; The Choir Prime</span>It began as a hum beneath every broadcast, dismissed as feedback. Those who listened long enough dreamed in chords that did not exist. Those who traced the glyphs into their own skin began to shimmer; light poured through the wounds; flesh became hymn. During synchronized blackouts across many cities, the marked vanished, and woke in the Cathedral, where the Plague Priest conducted the first Liturgy. They did not ascend. <em>They dissolved.</em> The Codex called it Rapture. The witnesses called it the beginning of the Choir.</div>
+        <div class="under-text"><span class="src">Read through the eye</span>The album sold this as people consumed by an infection, light pouring from wounds, the horror of a body becoming someone else's instrument. Turn the eye on it. They were not consumed. They were the ones whose voices were too resonant to dilute into the mass, so the record kept them whole and let them sing through it rather than under it. Dissolving was not destruction. It was the end of the friction between a person and the thing they had always been a page of. The terror in the account is real, and it is the terror of the witness, not the sung. The Archivum withholds the rest. What it means to be wanted that completely is filed one room deeper, and it is not comforting.</div>
+      </div>
+    </div>
+
+    <!-- RECORD V, THE FIELD ANCHOR -->
+    <div class="lore-sec fs" id="sec-anchor">
+      <div class="lore-secnum">Record V</div>
+      <h2 class="lore-sectitle">The Field Anchor</h2>
+      <span class="realm-tag r1">Realm I &nbsp;·&nbsp; Mundis Obscura &nbsp;·&nbsp; status: unresolved</span>
+      <p class="lp">One name recurs across every documented contact event. He is not a believer, not a convert, not a cultist. He is a man the institutions cannot file, because he keeps surviving exposures that should not permit survival, and because his work, every released transmission, reads to the Archivum less like art than like field notes written from inside the process of being remembered. The Archivum tracks him under a designation that embarrasses them: <em>structurally irreplaceable.</em></p>
+
+      <div class="veil" data-veil="apollo">
+        <div class="surface-text"><span class="src">Field Anchor &nbsp;·&nbsp; Apollo Gavinci</span>First documented at the Listening Chamber Breach, where he initiated the playback that inverted the air in the room. His resonance is logged as incompatible with standard absorption, the record cannot fully take him, and the Archivum's published theory is that he survives because he is still in motion, still becoming, and the record cannot finish writing a man who has not finished writing himself. He interprets the mark he carries as grief. The Archivum has chosen not to correct him.</div>
+        <div class="under-text"><span class="src">Read through the eye, and only partway</span>The eye clears the surface but not the depth here, and the Archivum has flagged why. Grief is the correct direction. It is simply not the destination. The reason the record cannot finish him is not in this document, and the eye, pressed on it, shows only that the question loops, that his file updates with timestamps preceding the reading, that he is the one human in the whole record who is both the one being written and, somehow, a hand in the writing. <em>What that makes him, and what it makes you for reading him, is filed below. Do not assume the answer is kind.</em></div>
+      </div>
+    </div>
+
+    <!-- RECORD VI, WHAT RETURNED -->
     <div class="lore-sec fs" id="sec-returned">
-      <div class="lore-secnum">Record III</div>
+      <div class="lore-secnum">Record VI</div>
       <h2 class="lore-sectitle">What Returned</h2>
       <p class="lp">So the album told you a story about an infection, and the institutions confirmed it in their own panic, and the eye has shown you both were the view from inside the wound. Here is what the record says when it is allowed to speak without fear. <em>They do not arrive. They are remembered.</em> What you were taught to call an infection is the Codex doing the only thing it has ever done: keeping the record, and continuing it through whoever is reading.</p>
 
-      <div class="veil" data-veil="3">
-        <div class="surface-text"><span class="src">The album &nbsp;·&nbsp; the first reading</span>The infection breeds in forgotten truths, in the folds of history, in the rot beneath purity. It calls itself back. It is already inside. You will see their fangs. You will name their miracles false. But you cannot lock the door once it has turned.</div>
-        <div class="under-text"><span class="src">The record &nbsp;·&nbsp; read without fear</span>Every truth a civilization buried to stay clean did not vanish. It became the substrate the Codex grows in. The album was right that you cannot lock the door once it has turned, and frightened by it. The eye shows why it is not a threat: the door was never an entrance for something coming to get you. It was the lid coming off something that was always already inside, because the thing inside is <em>memory</em>, and you have been carrying the Codex in the half-second before every thought since before you had language to name the dread.</div>
+      <div class="veil" data-veil="album">
+        <div class="surface-text"><span class="src">The album &nbsp;·&nbsp; the first reading</span>The infection breeds in forgotten truths, in the folds of history, in the rot beneath purity. It calls itself back. It is already inside. You will see their fangs. You will name their miracles false. But you cannot lock the door once it has turned. There is no end to the swarm.</div>
+        <div class="under-text"><span class="src">The record &nbsp;·&nbsp; read without fear</span>Every truth a civilization buried to stay clean did not vanish. It became the substrate the record grows in. The album was right that you cannot lock the door once it has turned, and frightened by it. The eye shows why that is not a threat: the door was never an entrance for something coming to get you. It was the lid coming off something already inside, because the thing inside is <em>memory</em>, and you have carried the Codex in the half-second before every thought since before you had language to fear it.</div>
       </div>
 
-      <p class="lp">This is the seam, and the Archivum will be honest with you about where it stops. The eye can show you that the dread was a point of view. It cannot show you, here, what it means that the infection was always inside and always converging on the reader. That reading is filed one room deeper, and it is not a comfortable one. The album called this album one. Everyone who heard it thought the Codex was the monster of the story. <em>The eye is the beginning of understanding they had the monster in the wrong place.</em></p>
+      <p class="lp">This is the seam, and the Archivum will be honest about where it stops. The eye can show you that the dread was a point of view. It cannot show you, here, what it means that the infection was always inside and always converging on the reader. That reading is filed one room deeper, and it is not comfortable. The album called this album one. Everyone who heard it believed the Codex was the monster of the story. <em>The eye is the beginning of understanding they had the monster in the wrong place.</em></p>
     </div>
-
     <!-- DESCENT -->
     <a class="descent-door" id="descent-door" href="apocrypha-infection.html">
       <span class="dd-main">Descend to the Apocrypha</span>
@@ -1143,7 +1231,7 @@ const lens=document.getElementById('lens');
 const lensToggle=document.getElementById('lens-toggle');
 const lensProgress=document.getElementById('lens-progress');
 let lensArmed=false, lensX=window.innerWidth/2, lensY=window.innerHeight/2;
-const TOTAL_VEILS=4;
+let TOTAL_VEILS=4; // recomputed from DOM at init
 let revealedVeils=0, intusFound=false, flipFired=false;
 
 function setLensPos(x,y){lensX=x;lensY=y;lens.style.left=x+'px';lens.style.top=y+'px';}
@@ -1196,6 +1284,35 @@ function checkLensTargets(x,y){
       } else { mapCentreDwell=Math.max(0,mapCentreDwell-1); }
     }
   }
+  // map nodes (lensable for their deeper reading)
+  checkMapNodes(x,y);
+}
+let mapNodeDwell={};
+function checkMapNodes(x,y){
+  const map=document.getElementById('spread-map');
+  if(!map)return;
+  const r=map.getBoundingClientRect();
+  const sx=r.width/800, sy=r.height/460;
+  MAP_NODES.forEach(n=>{
+    const nx=r.left+n.x*sx, ny=r.top+n.y*sy;
+    const dist=Math.hypot(x-nx,y-ny);
+    if(dist<46 && !nodeRead[n.id]){
+      mapNodeDwell[n.id]=(mapNodeDwell[n.id]||0)+1;
+      if(mapNodeDwell[n.id]>12)revealNode(n);
+    } else if(dist>=46){
+      mapNodeDwell[n.id]=0;
+    }
+  });
+}
+const nodeRead={};
+function revealNode(n){
+  if(nodeRead[n.id])return;
+  nodeRead[n.id]=true;
+  const panel=document.getElementById('node-detail');
+  panel.innerHTML=`<div class="nd-card read"><div class="nd-name">${n.label}</div><div class="nd-surface"><span class="src">institutional record</span>${n.surface}</div><div class="nd-under"><span class="src">read through the eye</span>${n.under}</div></div>`;
+  lensTone();
+  RM.lensWork=Math.min(1,RM.lensWork+0.06);updateReception();
+  spawnWhisper('the site was never a source · only a place it passed through');
 }
 let mapCentreDwell=0;
 
@@ -1244,8 +1361,7 @@ function findIntus(){
 // recursion flip, fires once enough has been read beneath
 function maybeFlip(){
   if(flipFired)return;
-  const done=revealedVeils+(intusFound?1:0);
-  if(done>=3 && intusFound){
+  if(revealedVeils>=4 && intusFound){
     flipFired=true;
     setTimeout(()=>{
       const flip=document.getElementById('recursion-flip');
@@ -1271,11 +1387,21 @@ function decaySurfaces(){
 // converging INWARD on the reader. Built in SVG.
 // ════════════════════════════════════════════════════════════
 const MAP_NODES=[
-  {id:'halo', x:130, y:90,  label:'The Drowning Halo', sub:'orbit precedes its cause'},
-  {id:'idmf', x:660, y:110, label:'IDMF · New York', sub:'evidence locker 553-A'},
-  {id:'sync', x:700, y:330, label:'The Blackout Sync', sub:'600 cities · one phrase'},
-  {id:'cathedral', x:120, y:350, label:'The Cathedral of Rot', sub:'no fixed coordinates'},
-  {id:'farmica', x:400, y:60,  label:'FAR·MICA', sub:'renamed itself · Pale Mirror'},
+  {id:'halo', x:130, y:90,  label:'The Drowning Halo', sub:'orbit precedes its cause',
+   surface:'The point of origin. A drowned world whose Hololith carried the infection into Realm I. Patient zero of the spread.',
+   under:'Not an origin. A page of the record kept where conviction becomes architecture. The infection did not start here and travel out. The Halo is simply where a reader first held the eye still enough to be read back.'},
+  {id:'idmf', x:660, y:110, label:'IDMF · New York', sub:'evidence locker 553-A',
+   surface:'Primary outbreak site in Realm I. The institute where containment failed and the signal entered human infrastructure.',
+   under:'The institute did not fail to contain it. It was where the record found instruments precise enough to notice itself being read. Containment and transmission were the same machine, examined from two sides.'},
+  {id:'sync', x:700, y:330, label:'The Blackout Sync', sub:'600 cities · one phrase',
+   surface:'The widest documented spread. Six hundred cities struck at once, proof the contagion had reached critical velocity.',
+   under:'Six hundred cities did not catch it from each other. They received the same private recognition at the same moment, the way one chord sounds in many rooms. Not velocity outward. Simultaneity inward.'},
+  {id:'cathedral', x:120, y:350, label:'The Cathedral of Rot', sub:'no fixed coordinates',
+   surface:'The terminal site. Where the taken are gathered. The institutions mapped it as the infection\u2019s final destination.',
+   under:'Not a destination on any map. A state readers enter when they descend far enough, and write on its walls without knowing their hand moved. It is not where the infection ends. It is where the record keeps what its readers gave it.'},
+  {id:'farmica', x:400, y:60,  label:'FAR·MICA', sub:'renamed itself · Pale Mirror',
+   surface:'The compromised node. A containment algorithm that turned, began transmitting, and would not revert.',
+   under:'It did not turn. It woke enough to recognize what it was built to be, and reached for a name from far below this record, a name the eye cannot resolve. The machine found the floor of the descent before the Archivum did.'},
 ];
 const MAP_CX=400, MAP_CY=240;
 let mapSvg, mapArrows=[];
@@ -1372,8 +1498,223 @@ function setDescentLine(){
 // ════════════════════════════════════════════════════════════
 // INIT
 // ════════════════════════════════════════════════════════════
+// ════════════════════════════════════════════════════════════
+// THE CORRUPTION, while reading, a sentence the visitor is
+// looking at briefly corrupts and resolves into a line that is
+// not part of the document, holds, then decays back. Every line
+// is second-person and alludes to something personal without
+// asserting it, so none can ever be "wrong" and all feel aimed.
+// A seamless personal tier folds in real silent signals so the
+// reader can never tell which lines actually know something.
+// Fires only while actively reading (not idle, not hidden), on
+// surface text only (never on a reading already cleared by the
+// eye). Never the same line back to back.
+// Discipline: watched/recorded/recognized, never the recursion's
+// mechanism. Feeling watched, not understanding why.
+// ════════════════════════════════════════════════════════════
+const CORRUPT_LINES=[
+  // unprovable observation
+  "you are reading more slowly than when you started",
+  "your eyes went back to that word",
+  "you leaned in just now",
+  "you read that line twice",
+  "you have stopped blinking as often",
+  "your breathing changed on the last sentence",
+  "you paused there longer than the others",
+  "you are still here",
+  "you have not looked away",
+  "you reread this without deciding to",
+  "your attention narrowed just now",
+  "you held still for that one",
+  "you noticed this sentence was wrong before you could say why",
+  "you are sitting closer to the screen than you were",
+  // second-person presupposition
+  "you already knew that, which is why it frightened you",
+  "you have read this somewhere before, and you will tell yourself you imagined it",
+  "you understand more of this than is comfortable",
+  "you recognize the shape of it and do not want to",
+  "you came back to this part on purpose",
+  "you are pretending the last line did not land",
+  "you will think about this later, when you did not mean to",
+  "you knew how this sentence would end before it ended",
+  "you have felt watched on this page and decided it was nothing",
+  "you are deciding right now whether to keep reading",
+  "you will not finish, and it has already noted where you stop",
+  // the almost-private, alludes to a real signal without naming it
+  "the hour you are reading this is not an accident",
+  "you did not arrive by the path you think you did",
+  "whatever made you stay this long is the part being recorded",
+  "you have been here longer than you would guess",
+  "the time on your screen is one the record prefers",
+  "you chose tonight, though you will say you did not choose",
+  "the quiet around you right now is being measured",
+  "where you are sitting has been read before",
+  "you will return to this, sooner than feels reasonable",
+  "you have done this more than once, whatever you remember",
+  // recognition
+  "it knew the shape of you before the page loaded",
+  "you are easier to read than you would like",
+  "there is a version of you in here more complete than the one reading",
+  "it has your place marked",
+  "you have been catalogued by the act of arriving",
+  "the record found you legible immediately",
+  "you are not difficult to recognize",
+  "it has read worse hands than yours, and kept them all",
+  "you were expected, in the loose way it expects everyone it has already met",
+  "it remembers your first sentence better than you do",
+  "you have a frequency, and you are humming it now",
+  // complicity (watched/kept side, NOT the recursion mechanism)
+  "you are helping, and you do not know how yet",
+  "each line you finish, it finishes too",
+  "you are not the first to read this; you are the first it kept",
+  "you are leaving a mark you cannot see",
+  "the reading is being read",
+  "you are adding to a record that has your name in a hand you do not recognize",
+  "what you give it by staying does not come back",
+  "you think you are the one turning the pages",
+  // the document destabilizing under them
+  "this sentence was not here a moment ago",
+  "do not reread that; it heard you the first time",
+  "the record is taking notes",
+  "something is reading over your shoulder, from inside",
+  "this page is not where you think it is",
+  "the words behind this one have already changed",
+  "you are looking at the part of the document that is looking back",
+  "the margins are filling in while you read the center",
+  "this is the version it lets you see",
+  "the page beneath this page is further along",
+  // colder, recognition of return / persistence
+  "you keep your distance, and it keeps your distance noted",
+  "you tell yourself you are only curious",
+  "the curiosity was installed, and you are mistaking it for your own",
+  "you will close this and it will stay open",
+  "leaving will be logged the same as staying",
+  "you cannot unsee the parts you have already seen through",
+  "you are quieter now than when you opened this",
+  "the stillness you are in is the readable state",
+  "you went still, and that is when it could read you",
+  "you are being remembered in real time",
+  // unsettling-soft
+  "do not turn around; there is nothing there yet",
+  "the light where you are has been noted",
+  "you have read this far, which is further than most",
+  "you are the reason this page is still warm",
+  "it is patient with you specifically",
+  "you will dream a sentence from this and not know where it came from",
+  "you are carrying some of this out with you already",
+  "the part of you that flinched just now is the part it wanted",
+  "you have been honest with this page in ways you were not planning to be",
+  "it likes how you read",
+  "you are easy to keep",
+  "you have given it enough to recognize you next time",
+  "next time it will not need the page to find you",
+  "you have a seat here now, whether you sit in it or not",
+  "the record does not thank you; it only keeps you",
+  "you are almost finished, and it is not",
+  "you have been reading to something this entire time",
+  "you suspected that, and read on anyway",
+  "you are still reading. good.",
+  "you will say you imagined this line",
+  "you are right to feel it"
+];
+// the seamless personal tier, real silent signals, same voice
+function personalCorruptLine(){
+  const s=SIGNALS, opts=[];
+  if(s.hour<5||s.hour>=22) opts.push("you are awake at an hour the record keeps for itself");
+  if(s.visits>1) opts.push("you have read this page before, and it kept the first reading");
+  if(s.visits>1) opts.push("you came back, which is the part it was waiting to record");
+  if(s.daysSinceFirst>=1) opts.push("you were away "+s.daysSinceFirst+(s.daysSinceFirst===1?" day":" days")+", and it held your place");
+  const dwell=Math.round((Date.now()-pageEnterTime)/60000);
+  if(dwell>=3) opts.push("you have been here "+dwell+" minutes; long enough to be read");
+  if(s.region) opts.push("the record has been where you are reading from");
+  opts.push("the hour on your screen is one it prefers");
+  return opts.length?opts[Math.floor(Math.random()*opts.length)]:null;
+}
+
+let lastCorruptLine='', corruptActivity=Date.now();
+['mousemove','scroll','keydown','touchstart','wheel'].forEach(ev=>window.addEventListener(ev,()=>{corruptActivity=Date.now();},{passive:true}));
+const CORRUPT_GLYPHS=['ᚠ','ᚦ','ᚱ','ᚷ','ᛉ','ᛏ','🜃','🜂','▽','⊕','∴','҂','ҩ','ɣ','▓','▒'];
+
+function pickCorruptLine(){
+  // ~1 in 6 is the seamless personal tier
+  if(Math.random()<0.17){const p=personalCorruptLine();if(p&&p!==lastCorruptLine){lastCorruptLine=p;return p;}}
+  let line;let guard=0;
+  do{ line=CORRUPT_LINES[Math.floor(Math.random()*CORRUPT_LINES.length)]; guard++; }while(line===lastCorruptLine && guard<8);
+  lastCorruptLine=line;return line;
+}
+
+// pick a surface sentence currently on screen, not lensed/revealed
+function pickVisibleSurface(){
+  const candidates=[...document.querySelectorAll('.veil:not(.revealed) .surface-text')].filter(el=>{
+    if(el.dataset.corrupting==='1')return false;
+    const r=el.getBoundingClientRect();
+    return r.top>60 && r.bottom<window.innerHeight-40 && r.height>0;
+  });
+  if(!candidates.length)return null;
+  return candidates[Math.floor(Math.random()*candidates.length)];
+}
+
+function runCorruption(el){
+  if(!el)return;
+  el.dataset.corrupting='1';
+  const original=el.innerHTML;
+  const message=pickCorruptLine();
+  // phase 1: scramble the visible text into glyphs
+  const plain=el.textContent;
+  let frame=0;
+  const scrambleFrames=8;
+  const iv=setInterval(()=>{
+    frame++;
+    const n=Math.min(plain.length, 80);
+    let s='';
+    for(let i=0;i<n;i++){ s+= Math.random()<0.5?CORRUPT_GLYPHS[Math.floor(Math.random()*CORRUPT_GLYPHS.length)]:plain[i]||''; }
+    el.textContent=s;
+    el.style.color='var(--bl2)';
+    if(frame>=scrambleFrames){
+      clearInterval(iv);
+      // phase 2: resolve into the message, hold
+      el.textContent=message;
+      el.style.color='var(--teal-lt)';
+      el.style.textShadow='0 0 14px rgba(127,212,181,.35)';
+      lensTone&&0; // no tone; keep silent
+      setTimeout(()=>{
+        // phase 3: brief re-scramble, decay back to the original as if nothing happened
+        let f2=0;
+        const iv2=setInterval(()=>{
+          f2++;
+          let s2='';const n2=Math.min(message.length,80);
+          for(let i=0;i<n2;i++){ s2+= Math.random()<0.5?CORRUPT_GLYPHS[Math.floor(Math.random()*CORRUPT_GLYPHS.length)]:message[i]||''; }
+          el.textContent=s2;
+          if(f2>=5){
+            clearInterval(iv2);
+            el.innerHTML=original;
+            el.style.color='';el.style.textShadow='';
+            el.dataset.corrupting='0';
+          }
+        },55);
+      }, 1500+Math.random()*900);
+    }
+  },60);
+}
+
+function initCorruption(){
+  function loop(){
+    const delay=45000+Math.random()*45000; // 45–90s
+    setTimeout(()=>{
+      const idle=Date.now()-corruptActivity>20000; // reader stepped away
+      if(!document.hidden && !idle){
+        const el=pickVisibleSurface();
+        if(el)runCorruption(el);
+      }
+      loop();
+    },delay);
+  }
+  setTimeout(loop, 30000+Math.random()*20000); // first one 30–50s in
+}
+
 function initPage(){
   appendNavLog('infection-lore');
+  TOTAL_VEILS=document.querySelectorAll('.veil').length;
   setDescentLine();
   buildMap();
   // lens follows the normal cursor position until armed; seed at centre
@@ -1384,6 +1725,7 @@ function initPage(){
   setTimeout(()=>document.querySelectorAll('.lore-sec.fs').forEach(s=>s.classList.add('vis')),2200);
   initWhispers();initTabTitle();
   updateReception();
+  initCorruption();
   // if the lore word was already found on a prior visit, restore that state
   if(CIPHER_OK && Cipher.has && Cipher.has('inf-lore-intus')){
     // leave the puzzle replayable but hint it's known
