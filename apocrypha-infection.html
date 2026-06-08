@@ -260,6 +260,36 @@ body{background:var(--bg);color:var(--ink);font-family:'Crimson Text',serif;over
 .reveal-close.show{opacity:1;}
 .reveal-sign{font-family:'Share Tech Mono',monospace;font-size:.56rem;color:var(--ink3);letter-spacing:.16em;text-align:center;margin-top:1.5rem;font-style:italic;opacity:0;transition:opacity 2s ease;}
 .reveal-sign.show{opacity:.8;}
+
+/* ============================================================
+   THE DESCENT BRIDGE , in-universe crossing to Chronicle I
+   ============================================================ */
+#BRIDGE{max-width:900px;margin:3.5rem auto 0;padding:0 1.5rem;}
+.bridge-rule{height:1px;background:linear-gradient(90deg,transparent,var(--r4),transparent);margin-bottom:2rem;}
+.bridge-eyebrow{font-family:'Share Tech Mono',monospace;font-size:.52rem;color:var(--r4);letter-spacing:.32em;text-transform:uppercase;text-align:center;margin-bottom:1.1rem;}
+.bridge-body{font-family:'Crimson Text',serif;font-size:1.02rem;line-height:1.95;color:var(--ink2);text-align:center;max-width:640px;margin:0 auto 1rem;}
+.bridge-body em{color:var(--ink);font-style:italic;}
+.bridge-body strong{color:var(--red);font-weight:600;font-style:normal;}
+.bridge-sharpen{font-family:'Crimson Text',serif;font-style:italic;font-size:1.05rem;line-height:1.9;color:var(--red);text-align:center;max-width:600px;margin:0 auto 1.75rem;text-shadow:0 0 20px rgba(139,0,0,.25);display:none;}
+.bridge-sharpen.show{display:block;animation:fadeUp 1s ease;}
+.bridge-doors{display:grid;grid-template-columns:1fr;gap:1rem;margin-top:1.75rem;max-width:600px;margin-left:auto;margin-right:auto;}
+.bdoor{display:block;text-decoration:none;border:1px solid var(--brd2);background:var(--panel);padding:1.4rem 1.5rem;position:relative;overflow:hidden;transition:border-color .3s,transform .3s;}
+.bdoor::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--red),transparent);opacity:.4;transition:opacity .3s;}
+.bdoor:hover{transform:translateY(-2px);}
+.bdoor:hover::before{opacity:1;}
+.bdoor.primary{border-color:var(--r4);background:rgba(139,0,0,.05);}
+.bdoor.primary:hover{border-color:var(--red);}
+.bdoor.secondary:hover{border-color:var(--ink3);}
+.bdoor-glyph{font-size:1.6rem;display:block;margin-bottom:.65rem;}
+.bdoor.primary .bdoor-glyph{color:var(--red);}
+.bdoor.secondary .bdoor-glyph{color:var(--ink3);}
+.bdoor-label{font-family:'Share Tech Mono',monospace;font-size:.5rem;letter-spacing:.22em;text-transform:uppercase;margin-bottom:.4rem;}
+.bdoor.primary .bdoor-label{color:var(--r2);}
+.bdoor.secondary .bdoor-label{color:var(--ink3);}
+.bdoor-title{font-family:'Cinzel',serif;font-size:.95rem;color:var(--ink);letter-spacing:.05em;margin-bottom:.5rem;}
+.bdoor-desc{font-size:.92rem;color:var(--ink2);line-height:1.75;}
+.bdoor-arr{font-family:'Share Tech Mono',monospace;font-size:.56rem;color:var(--r4);letter-spacing:.18em;margin-top:.85rem;display:block;}
+.bdoor.secondary .bdoor-arr{color:var(--ink3);}
 </style>
 </head>
 <body>
@@ -585,6 +615,25 @@ body{background:var(--bg);color:var(--ink);font-family:'Crimson Text',serif;over
     <div id="reveal-open"></div>
   </div>
 
+  <!-- THE DESCENT BRIDGE , the no-origin reveal extends to Apollo -->
+  <div id="BRIDGE">
+    <div class="bridge-rule"></div>
+    <div class="bridge-eyebrow">The file is not the only one missing its beginning</div>
+    <p class="bridge-body">You have read what the Archivum keeps on you. No origin. No first contact. You did not arrive here. You <strong>returned</strong>.</p>
+    <p class="bridge-body">There is a man you assume wrote all of this. He believed it too. He sat down to author a mythology and found, seven times, that the words were already his before he chose them, that his own hands finished sentences he had not decided to write. <em>He thought he was reading the Codex. The Codex was reading him.</em> The same gap that is in your file is in his, and he narrated himself falling into it in real time.</p>
+    <p class="bridge-body">It is not only you. That is the next thing the record wants you to know, and it will only let you know it by showing you the author discovering he was a reader.</p>
+    <p class="bridge-sharpen" id="bridge-sharpen">You needed your own file to have no beginning before this would mean anything. Now it does. Go and watch him find out.</p>
+    <div class="bridge-doors">
+      <a class="bdoor primary" href="chronicle-1-infection-remembers.html" onclick="bridgeCross('chronicle')">
+        <span class="bdoor-glyph">🜃</span>
+        <div class="bdoor-label">Chronicle I , The First Breath of Memory</div>
+        <div class="bdoor-title">The Testimony of the One Who Believed He Wrote It</div>
+        <div class="bdoor-desc">Seven seals. Seven private annotations Apollo Gavinci never meant anyone to read. The record of a man learning, line by line, that he did not begin the thing he thought he authored. The proof that the gap in your file is not yours alone.</div>
+        <span class="bdoor-arr">CROSS INTO THE CHRONICLE</span>
+      </a>
+    </div>
+  </div>
+
   <!-- CODEX NAV -->
   <div id="codex-nav" style="max-width:900px;margin:0 auto;"></div>
 
@@ -863,6 +912,7 @@ function unlockReveal(){
   const btn=document.getElementById('snav-reveal');
   if(btn){ btn.classList.remove('locked'); btn.classList.add('unlocked'); }
   obs('The file is complete. Section VI is no longer sealed. The Archivum is finished reading you. You may now read what it wrote. It will not change what it says if you look away.',3);
+  var bs=document.getElementById('bridge-sharpen'); if(bs)bs.classList.add('show');
   if(!ledgerOpen){ ledgerOpen=true; document.getElementById('LEDGER').classList.add('open'); }
 }
 function buildReveal(){
@@ -1402,6 +1452,12 @@ async function recoverFrag(i){
       if(WATCH)obs('Subject completed the circuit. Six of six. The signal received was the signal sent. The Archivum stopped distinguishing between the reader and the read at this timestamp.',3);
     },1200);
   }
+}
+
+// ── THE DESCENT BRIDGE ──────────────────────────────────────
+function bridgeCross(target){
+  if(!WATCH) return;
+  obs('Subject crossed into Chronicle I. They went to read the testimony of the one who believed he wrote the book. The file notes: the reader always thinks they are going to check on someone else.',3);
 }
 
 // ── PAGE INIT ────────────────────────────────────────────────
