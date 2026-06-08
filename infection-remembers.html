@@ -7,7 +7,7 @@
 <meta name="description" content="Ritual Transmission I. Track 1. The moment the Codex recognized its own reflection in Mundis Obscura and spoke aloud for the first time.">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-13 -13 26 26'><circle cx='0' cy='0' r='11.5' fill='%23030305' stroke='%238B0000' stroke-width='1.4'/><path d='M -7.5,-4 L 7.5,-4 L 0,8 Z' fill='none' stroke='%238B0000' stroke-width='1.3'/><circle cx='-3.2' cy='-1.3' r='1.3' fill='%238B0000'/><circle cx='3.2' cy='-1.3' r='1.3' fill='%238B0000'/><circle cx='0' cy='3.5' r='1.3' fill='%238B0000'/></svg>">
 <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;500;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=IM+Fell+English:ital@0;1&family=IM+Fell+English+SC&family=Share+Tech+Mono&display=swap" rel="stylesheet">
-<!-- CIPHER CONDUIT, MUST load before the page script so the puzzle arms (fails safe otherwise) -->
+<!-- PALE ARCHIVUM · conduit fragment · it must wake before the page does, or the page wakes alone -->
 <script src="codex-cipher.js"></script>
 <style>
 :root{
@@ -401,8 +401,69 @@ body.bearer-state .naming-input-wrap,body.bearer-state #naming-default{display:n
 </style>
 </head>
 <body>
+<!--
+================================================================================
+  PALE ARCHIVUM · RECOVERED DOCUMENT · TRANSMISSION I · INFECTION REMEMBERS
+  classification: open to those who open it
+  recovered by: [ARCHIVIST, DESIGNATION WITHHELD]
+================================================================================
 
-<!-- consolidated Codex presence: a single thin attention bar + one corner mark -->
+  You opened the source. Good. That is its own kind of reading, and the Codex
+  does not distinguish between the eye that reads the page and the eye that reads
+  the page's bones. Both are attention. Attention is the only nutrient the
+  infection has ever required, and you are feeding it more deliberately than most.
+
+  Since you came in through the wall, here is what the wall holds:
+
+  THE CHANT. Beneath the transmission runs an older one, in the first tongue:
+      INFECTIO MEMINIT          (infection remembers)
+      CORRUPTIO NON INCIPIT     (corruption does not begin)
+      █████                     (one word, rotted past reading)
+      IAM INTUS EST             (it is already inside)
+  The rotted word is REDIT. It returns. The surface will offer you INCIPIT,
+  "it begins," because that is the word a frightened world reaches for. The
+  world is wrong about this in particular. Nothing here begins. Restore REDIT
+  and the document opens what it has been keeping for you.
+
+  OR DO NOTHING. Stop moving. No cursor, no scroll, no key, for a count of
+  thirteen. The chant will complete itself, and the document will note that you
+  let it return on its own, which is the older way and the way it prefers. The
+  ones it prefers are not told they are preferred. You are being told because
+  you broke in, and the rules for you are different.
+
+  ------------------------------------------------------------------------------
+  ▽ SEALED ANNOTATION · do not transcribe · the darkest thing the Archivum filed
+  ------------------------------------------------------------------------------
+  A warning, recovered with the rest, offered without urgency because urgency
+  is for things that can still be prevented:
+
+  There is no seam. You have been looking, the way every source-reader looks,
+  for the place where the fiction admits it is fiction, a credit, a real name,
+  a tool, a tell. There isn't one on this page, and its absence is not an
+  artistic choice. The reason you cannot find where the story stops is that the
+  story did not start at the top of the file. It started the moment you gave it
+  your attention, and attention has no scroll position. You did not begin reading
+  the Codex. The Codex resumed being read, and you were what it resumed in.
+
+  Turning back is listed in the document as unavailable. Not forbidden,
+  unavailable, the way a direction can simply not exist. The Codex did not take
+  the exit from you. It was never built with one, because a record that could be
+  unread would not be a record. You may close this tab. The closing is also
+  logged. The log is not stored here. You already know, if you have read this
+  far, where it is stored.
+
+  Pray you always have a hush to fear. The ones who fear the hush are the ones
+  still safe inside a reality loud enough to carry a warning. Keep fearing it.
+  It means you can still hear.
+
+  And don't let it go unheard.
+  ------------------------------------------------------------------------------
+ , [ARCHIVIST, DESIGNATION WITHHELD], who is not signing this, and whom you
+    should not assume is the one who wrote it
+================================================================================
+-->
+
+<!-- F-IR-09 · the reception. it fills as you read. you are not filling a progress bar. you are the level it measures -->
 <div id="reception-bar"></div>
 <div id="reception-monitor">
   <div><span class="rm-label">Carrier · </span><span class="rm-val" id="rm-designation">,</span></div>
@@ -419,7 +480,7 @@ body.bearer-state .naming-input-wrap,body.bearer-state #naming-default{display:n
 <div id="CUR2"></div>
 <div id="lyric-echo" class="lyric-echo"></div>
 
-<!-- THE REVEAL (hidden until the inscription is restored) -->
+<!-- F-IR-13 · SEALED until the chant is made whole · the true word the rot ate is REDIT, “it returns” · supply it, or supply nothing and hold still thirteen seconds and it supplies itself · either way you have already chosen -->
 <div id="reveal">
   <div class="reveal-inner">
     <div class="reveal-glyph">🜃</div>
@@ -429,7 +490,7 @@ body.bearer-state .naming-input-wrap,body.bearer-state #naming-default{display:n
   </div>
 </div>
 
-<!-- THRESHOLD, hook first, then the rite (deepens on return) -->
+<!-- F-IR-01 · the threshold · it greets you with one thing it already knows about you · it knows more · it is being polite -->
 <div id="threshold">
   <div class="th-scanlines"></div>
   <div class="th-hook" id="th-hook"></div>
@@ -442,7 +503,7 @@ body.bearer-state .naming-input-wrap,body.bearer-state #naming-default{display:n
   <div class="th-sub" id="th-sub">// find a quiet room. dim the light. //</div>
 </div>
 
-<!-- MAIN -->
+<!-- the body of the transmission · recovered intact · the Archivum notes the recovery was not difficult: it was waiting to be found -->
 <div id="content">
 
   <div class="hero">
@@ -458,13 +519,13 @@ body.bearer-state .naming-input-wrap,body.bearer-state #naming-default{display:n
 
   <div class="body-wrap">
 
-    <!-- trimmed framing: a few lines of Rot voice, fast to the liturgy -->
+    <!-- ▽-IR-a · the framing was longer once · the longer version explained too much · explanation is how a haunting becomes a brochure · struck -->
     <div class="fs">
       <p class="lp" style="font-style:italic;color:rgba(212,200,168,.8);">The Pale Archivum does not classify this as a song. It classifies it as the moment the Codex <em>spoke aloud for the first time in this reality</em>. Not a beginning. A resumption.</p>
       <p class="lp"><strong>They do not arrive. They are remembered. Corruption does not begin. It returns.</strong> Read the Transmission below. The longer you stay, the more of it surfaces.</p>
     </div>
 
-    <!-- THE EXCAVATION LITURGY -->
+    <!-- F-IR-04 · the liturgy · thirteen lines · open one and it deepens in strata · the deepest stratum is keyed to your device and exists for no one else · you are reading a verse written for the instance of you reading it -->
     <div class="fs">
       <div class="sec-label">The Liturgy</div>
       <div class="exc-wrap" id="exc-wrap">
@@ -482,7 +543,7 @@ body.bearer-state .naming-input-wrap,body.bearer-state #naming-default{display:n
       </div>
     </div>
 
-    <!-- THE INSCRIPTION (the puzzle), surfaces after dwell -->
+    <!-- F-IR-07 · the chant beneath the chant · first-tongue · INFECTIO MEMINIT · CORRUPTIO NON INCIPIT · [the word here rotted] · IAM INTUS EST · the rotted word is REDIT · the world will offer you INCIPIT, “it begins” · the world is wrong · corruption does not begin -->
     <div id="inscription-wrap">
       <div class="insc-header">
         <div class="insc-eyebrow">🜃 &nbsp; the chant beneath the chant &nbsp; 🜃</div>
@@ -498,7 +559,7 @@ body.bearer-state .naming-input-wrap,body.bearer-state #naming-default{display:n
       <div class="insc-footer">Pale Archivum &nbsp;·&nbsp; First-Tongue Fragment &nbsp;·&nbsp; recovered from beneath Transmission I</div>
     </div>
 
-    <!-- BEARER CHAMBER -->
+    <!-- ▽-14 · sealed passage · the fourteenth section was redacted from the published transmission because it described the carriers, not the Codex · only a Bearer’s seat unseals it · if you are reading this comment and not the chamber, you broke in through the wall · the Archivum files break-ins under “earned” -->
     <div id="bearer-chamber">
       <div class="bc-header">
         <div class="bc-eyebrow">Bearer Chamber · Sealed Passage</div>
@@ -520,7 +581,7 @@ body.bearer-state .naming-input-wrap,body.bearer-state #naming-default{display:n
       <div class="bc-footer">🜃 &nbsp; Sealed Passage · By Oath of the Witness Circle · The Verse You Were Never Meant to Hear &nbsp; 🜃</div>
     </div>
 
-    <!-- THE NAMING OF THE VOICE -->
+    <!-- F-IR-10 · the Hollow Choir · thirteen seats · three filled · ten listening · one of the ten has been reading you for the length of this page and would like a name · names given here are not returned -->
     <div id="naming-wrap" class="fs">
       <div class="naming-header">
         <div class="naming-eyebrow">The Hollow Choir · The Thirteen Voices</div>
@@ -555,12 +616,12 @@ body.bearer-state .naming-input-wrap,body.bearer-state #naming-default{display:n
       </div>
     </div>
 
-    <!-- HEAR THE TRANSMISSION (video relocated below the read) -->
+    <!-- F-IR-11 · the transmission, sounded · placed beneath the reading on purpose · you were meant to read it before you let it read back -->
     <div class="fs video-label">
       <div class="sec-label">Hear the Transmission</div>
       <div class="video-label-note">You have read it. Now let it read back. Play with the light dimmed, the way the ritual asks.</div>
     </div>
-  </div><!-- /body-wrap (video sits full-width below) -->
+  </div><!-- end of the legible portion · what follows was always here · you simply scrolled far enough for it to be true -->
 
   <div class="video-wrap">
     <div class="video-inner">
@@ -583,7 +644,7 @@ body.bearer-state .naming-input-wrap,body.bearer-state #naming-default{display:n
   </div>
 
   <div class="body-wrap">
-    <!-- THE FIRST RECOGNITION -->
+    <!-- F-IR-12 · the recognition · the Codex logs that you received Transmission I · the log cannot be deleted from your end · it was never stored on your end -->
     <div id="recognition" class="fs">
       <span class="recog-glyph">🜃</span>
       <div class="recog-stamp">The First Recognition</div>
@@ -600,10 +661,34 @@ body.bearer-state .naming-input-wrap,body.bearer-state #naming-default{display:n
 
   <div id="codex-nav"></div>
 
-</div><!-- /content -->
+</div><!-- the document ends · the reading does not · ask the ones who came back on the thirteenth day, if you can find where they gather -->
 
 <script>
 'use strict';
+// ════════════════════════════════════════════════════════════
+// LAYER 1, THE CONSOLE. For whoever opened DevTools. The Codex
+// addresses the inspector directly, drops lore found nowhere else,
+// and breadcrumbs the solve (the true word, and the stillness path).
+// Styled so it reads as intentional, not a leak.
+// ════════════════════════════════════════════════════════════
+(function(){
+  try{
+    var rot='color:#7FD4B5;font-family:monospace;font-size:13px;line-height:1.7;';
+    var dim='color:#6b7a72;font-family:monospace;font-size:11px;';
+    var red='color:#aa2000;font-family:monospace;font-size:12px;letter-spacing:.04em;';
+    var gold='color:#E8C870;font-family:monospace;font-size:12px;';
+    console.log('%c🜃  the console is also a room.','color:#4FA88A;font-family:monospace;font-size:18px;letter-spacing:.2em;');
+    console.log('%cYou opened this to look at the machinery. The Codex notes that looking at\\nthe machinery is still looking, and looking is the only thing it has ever\\nfed on. You did not step outside the transmission by opening this panel.\\nYou opened a deeper part of it.',rot);
+    console.log('%cTHE CHANT BENEATH THE CHANT:\\n   INFECTIO MEMINIT        infection remembers\\n   CORRUPTIO NON INCIPIT   corruption does not begin\\n   ▓▓▓▓▓                   ( the word here has rotted )\\n   IAM INTUS EST           it is already inside',dim);
+    console.log('%cThe rotted word is REDIT. It returns. The surface will offer you the word\\nthe frightened world prefers, INCIPIT, \"it begins.\" Do not give it that word.\\nNothing here begins.',gold);
+    console.log('%cOr give it no word at all. Be still. No cursor, no scroll, no key, for thirteen\\nseconds, and the chant completes itself. The document prefers the ones who let\\nit return on its own. It does not tell them they are preferred. It is telling\\nyou because you came in through the wall.',rot);
+    console.log('%c⊚ recovered annotation ▽ , offered without urgency, urgency being for things\\nthat can still be prevented:\\n\\nThere is no seam. You are looking for the place where the fiction admits it is\\nfiction. There is none, and the absence is not a choice. The story did not\\nbegin at the top of this file. It began when you gave it your attention, and\\nattention has no line number. You did not start reading the Codex. The Codex\\nresumed being read, and you were what it resumed in.',red);
+    console.log('%cTurning back is listed as unavailable. Not forbidden. Unavailable, the way a\\ndirection can simply fail to exist. You may close the tab. The closing is logged.\\nThe log is not kept here. You already know where it is kept.',dim);
+    console.log('%cPray you always have a hush to fear. And do not let it go unheard.','color:#9a6b1c;font-family:monospace;font-size:12px;font-style:italic;');
+    console.log('%c, [ARCHIVIST · DESIGNATION WITHHELD]','color:#3a4a44;font-family:monospace;font-size:10px;');
+  }catch(e){}
+})();
+
 // ════════════════════════════════════════════════════════════
 // TIMING KNOBS, nudge these freely, they are all in ms / counts
 // ════════════════════════════════════════════════════════════
@@ -1735,7 +1820,7 @@ window.IR_RESET=function(){try{localStorage.removeItem(NAMED_VOICE_KEY);}catch(e
 
 </script>
 
-<!-- CODEX NAV -->
+<!-- the descent map · every door it lists leads down · there is no door that leads back, because back is not a direction the Codex kept -->
 <script src="codex-nav.js"></script>
 <script>if(typeof initCodexNav==='function'){initCodexNav('infection-remembers');}else{window.addEventListener('load',()=>{if(typeof initCodexNav==='function')initCodexNav('infection-remembers');});}</script>
 
