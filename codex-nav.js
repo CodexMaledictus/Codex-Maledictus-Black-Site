@@ -1,58 +1,37 @@
 // ============================================================
-// CODEX MALEDICTUS — NAVIGATION BRAIN v3
+// CODEX MALEDICTUS — NAVIGATION BRAIN v4
 // codex-nav.js — lives in repo root, imported by every page
 //
-// CHANGES FROM v2:
-//   - CODEX_MAP reordered to match LOCKED canonical descent
-//   - Spine taxonomy locked in phase labels:
-//       Ritual Transmission → Lore → Apocrypha → Chronicle →
-//       Chronicle Lore → Chronicle Apocrypha → Revelation
-//     Plus special phases: Surface, Index, Decoder, Invocation,
-//     Mirror, Artifact, Mechanism, Broadcast Source, Sealed, Reference
-//   - Added "index" entry for the homepage
-//   - Corrected "pale-archive" file path (was pointing at index.html)
-//   - Paths (pathA / pathB) recomputed to follow descent within cluster
-//   - Pale Archive page suppresses nav render (the entire page IS the nav)
-//   - bearerChamber stubbed null on every page — we fill in per-page as
-//     each chamber gets built during the cascade
+// CHANGES FROM v3:
+//   - customDoors flag: a page that builds its own bespoke descent
+//     gate (e.g. infection-lore's Apocrypha gate) sets customDoors:true.
+//     The nav then SUPPRESSES its generic door grid on that page and
+//     renders the framing only (arrival, position, realm, whisper), so
+//     the page's hand-built gate is the single forward motion. No more
+//     double-stacked forks.
+//   - Per-realm VOICE: the realm/phase meta now carries the
+//     verifiability descent from the Canon Bible (Realm I checkable ...
+//     Realm III nothing resolves). The nav teaches the cosmology as you
+//     descend instead of printing a dead label.
+//   - Per-phase GLYPH: the divider glyph changes with the phase, so each
+//     rung of the descent feels distinct.
+//   - Deepening ARRIVAL line: reacts to how many times you have stood in
+//     a room and whether you came the canonical way or jumped via the hub.
+//   - Signal-driven WHISPER: an optional second whisper derived from the
+//     shared silent signals (hour, return count, days-since-first). Silent,
+//     client-side, no network. Restraint preserved: at most one extra line.
 //
-// CANONICAL DESCENT (22 entries):
-//   00. index                          — Entry / Surface
-//   01. pale-archive                   — Index
-//   02. infection-remembers            — Ritual Transmission I
-//   03. infection-lore                 — Lore
-//   04. apocrypha-infection            — Apocrypha
-//   05. chronicle-1-infection-remembers — Chronicle
-//   06. lore-chronicle-1               — Chronicle Lore
-//   07. apocrypha-chronicle-1          — Chronicle Apocrypha
-//   08. plague-priest-liturgy          — Ritual Transmission II
-//   09. plague-priest-lore             — Lore
-//   10. plague-priest-decoder          — Decoder
-//   11. plague-priest-apocrypha        — Apocrypha
-//   12. rf-093-lore                    — RF Lore (parallel category)
-//   13. rf-093-invocation              — RF Invocation
-//   14. rf-093-mirror                  — RF Mirror
-//   15. rf-093-apocrypha               — RF Apocrypha
-//   16. codex-remembers-you            — Artifact
-//   17. memory-engine-1                — Mechanism
-//   18. gospel-forgotten-flesh         — Broadcast Source
-//   19. confession-ledger              — Sealed
-//   20. witness-circle                 — Sealed · Bearer
-//   REF. Codex-Sigil                   — Reference (outside descent)
+// STATE SHARED WITH PAGES (read-only here):
+//   codex_witness_state_v2  — bearer flag, firstWitnessVisit, totalVisits
+//   codex_invocation_log    — per-room visit log (also written by pages)
+//   The cipher channel (codex_cipher_v1) is NEVER touched here.
 //
-// TO ADD A NEW PAGE:
-//   1. Add one entry to CODEX_MAP below
-//   2. Set its `seq` number (its place in the canonical reading order)
-//   3. Optionally set `bearerChamber` to point at a hidden page or anchor
-//   4. Update neighboring pages' pathA/pathB to point at the new entry
+// CANONICAL DESCENT (22 entries) — unchanged from v3.
 //
-// TO ADD A BEARER CHAMBER TO AN EXISTING PAGE:
-//   1. Build the chamber (separate page or in-page anchor)
-//   2. Set that page's `bearerChamber` to its URL or anchor
-//   3. Bearers visiting that page now see the third gold door
-//
-// BACKWARD COMPATIBILITY:
-//   Existing pages that call initCodexNav("page-id") still work.
+// TO MARK A PAGE AS HAVING ITS OWN GATE:
+//   Set customDoors:true on its CODEX_MAP entry. The nav will frame it
+//   but not add competing doors. The canonical descent must still be
+//   reachable from that page's own gate (or via the Pale Archive hub).
 // ============================================================
 
 const CODEX_MAP = {
@@ -110,6 +89,8 @@ const CODEX_MAP = {
   },
 
   // ── 03 · LORE ────────────────────────────────────────────────
+  // customDoors: this page builds its own Apocrypha gate. The nav
+  // frames it but does not add the generic door grid.
   "infection-lore": {
     file:            "infection-lore.html",
     title:           "Lore of the Infection",
@@ -122,6 +103,7 @@ const CODEX_MAP = {
     pathB:           "chronicle-1-infection-remembers",
     labelA:          "Read the Apocrypha",
     labelB:          "Enter the Chronicle",
+    customDoors:     true,
     bearerChamber:   null
   },
 
@@ -440,7 +422,42 @@ const CODEX_MAP = {
 };
 
 // ============================================================
-// STATE — Reads the Witness Circle's localStorage to detect Bearer status
+// VOICE TABLES — the realm teaches the verifiability descent, the
+// phase gives the divider its own glyph. (Canon Bible, Part V.)
+// ============================================================
+
+const REALM_GLOSS = {
+  "I":        "what can still be verified",
+  "I-II":     "the edge of the checkable",
+  "I-II-III": "past the edge; verification ends here",
+  "II":       "belief made into architecture",
+  "III":      "before language; nothing here resolves",
+  "Ref":      "outside the descent"
+};
+
+const PHASE_GLYPH = {
+  "Surface":             "🜏",
+  "Index":               "∴",
+  "Ritual Transmission": "🜃",
+  "Lore":                "🜄",
+  "Apocrypha":           "✠",
+  "Chronicle":           "☓",
+  "Chronicle Lore":      "☓",
+  "Chronicle Apocrypha": "✠",
+  "Decoder":             "⊟",
+  "Invocation":          "☍",
+  "Mirror":              "◐",
+  "Artifact":            "⬡",
+  "Mechanism":           "⊕",
+  "Broadcast Source":    "✴",
+  "Sealed":              "⛤",
+  "Sealed · Bearer":     "⛤",
+  "Reference":           "🜏"
+};
+
+// ============================================================
+// STATE — Reads the Witness Circle's localStorage to detect Bearer
+// status and the shared visit log. The cipher channel is untouched.
 // ============================================================
 
 const NAV_STATE_KEY = 'codex_witness_state_v2';
@@ -485,9 +502,70 @@ function navPreviousPage(currentId) {
   return null;
 }
 
+function navPreviousPageId(currentId) {
+  const log = navLoadLog();
+  for (let i = log.length - 1; i >= 0; i--) {
+    if (log[i].id !== currentId) return log[i].id;
+  }
+  return null;
+}
+
 function navVisitCount(pageId) {
   const log = navLoadLog();
   return log.filter(e => e.id === pageId).length;
+}
+
+// ============================================================
+// SILENT SIGNALS — what the nav can know without asking. No
+// permission prompts, no network. Mirrors the pages' own signal
+// derivation so the nav and the page agree about who you are.
+// ============================================================
+
+function navSignals() {
+  const s = navLoadState();
+  const now = new Date();
+  const hour = now.getHours();
+  const hourBand = hour < 5 ? 'dead' : hour < 9 ? 'waking' : hour < 17 ? 'working' : hour < 22 ? 'evening' : 'dead';
+  const daysSinceFirst = s.firstWitnessVisit ? Math.floor((Date.now() - s.firstWitnessVisit) / 86400000) : 0;
+  const totalVisits = s.totalVisits || 0;
+  return { hour, hourBand, daysSinceFirst, totalVisits };
+}
+
+// The deepening arrival line: where you came from, how often you have
+// stood here, and whether you came the canonical way or jumped the hub.
+function navArrivalLine(currentId, prev, prevId, visits) {
+  if (visits >= 3) {
+    return `You keep returning to this room. It has begun to expect you.`;
+  }
+  if (prev) {
+    const cameCanonical = prevId && (CODEX_MAP[prevId].pathA === currentId || CODEX_MAP[prevId].pathB === currentId);
+    if (visits === 2) {
+      return `You arrived from <em>${prev.title}</em>, again.`;
+    }
+    if (cameCanonical) {
+      return `You arrived from <em>${prev.title}</em>.`;
+    }
+    return `You arrived from <em>${prev.title}</em>, though not by the way the descent runs. The Archive permits it.`;
+  }
+  if (visits > 1) {
+    return `You have stood in this room ${visits} times.`;
+  }
+  return '';
+}
+
+// The optional second whisper, derived from silent signals. Restraint:
+// returns at most one line, and often null.
+function navSignalWhisper(sig) {
+  if (sig.totalVisits > 1 && sig.daysSinceFirst >= 13) {
+    return `You returned on the thirteenth day. The room counted.`;
+  }
+  if (sig.hourBand === 'dead') {
+    return `You are here at an hour the Archive keeps for itself.`;
+  }
+  if (sig.totalVisits > 1 && sig.daysSinceFirst >= 1) {
+    return `The room did not close in the ${sig.daysSinceFirst} day${sig.daysSinceFirst > 1 ? 's' : ''} you were gone.`;
+  }
+  return null;
 }
 
 // ============================================================
@@ -561,41 +639,31 @@ function initCodexNav(currentId) {
   navAppendLog(currentId);
 
   // SUPPRESSION: the Pale Archive page IS the navigation.
-  // The page's own content already lists every entry; adding the
-  // codex-nav at the bottom would be redundant and visually wrong.
-  // We still log the visit (above), just skip rendering.
   if (currentId === 'pale-archive') return;
 
   const a = page.pathA ? CODEX_MAP[page.pathA] : null;
   const b = page.pathB ? CODEX_MAP[page.pathB] : null;
   const isBearer = navIsBearer();
   const chamber = (isBearer && page.bearerChamber) ? page.bearerChamber : null;
+  const prevId = navPreviousPageId(currentId);
   const prev = navPreviousPage(currentId);
   const visits = navVisitCount(currentId);
+  const sig = navSignals();
   const pal = navResolvePalette();
 
   const nav = document.getElementById('codex-nav');
   if (!nav) return;
 
-  // Don't render the full nav if there are no doors and no whisper at all
-  if (!a && !b && !chamber && !page.closingWhisper && !page.realm) return;
+  // customDoors: the page builds its own bespoke gate. Suppress the
+  // generic door grid; render the framing only so nothing competes.
+  const showDoors = !page.customDoors && (!!a || !!b || !!chamber);
 
-  // If there are no doors but there is metadata, render closing only
-  if (!a && !b && !chamber) {
-    nav.innerHTML = renderClosingOnly(page, pal);
-    applyNavPalette(nav, pal);
-    return;
-  }
+  // If there is genuinely nothing to render, bail.
+  if (!showDoors && !page.closingWhisper && !page.realm && !prev && visits <= 1) return;
 
-  // Compute the "you arrived from" line
-  let arrivalLine = '';
-  if (prev) {
-    arrivalLine = `You arrived from <em>${prev.title}</em>.`;
-  } else if (visits > 1) {
-    arrivalLine = `You have stood in this room ${visits} times.`;
-  }
+  // Arrival + position + realm voice + whispers (always available)
+  const arrivalLine = navArrivalLine(currentId, prev, prevId, visits);
 
-  // Compute the sequence position line
   let seqLine = '';
   if (typeof page.seq === 'number') {
     const total = Object.values(CODEX_MAP).filter(p => typeof p.seq === 'number').length;
@@ -604,8 +672,11 @@ function initCodexNav(currentId) {
     seqLine = 'Reference · Outside the descent';
   }
 
+  const glyph = PHASE_GLYPH[page.phase] || '🜏';
+  const realmGloss = REALM_GLOSS[page.realm] || '';
+  const signalWhisper = navSignalWhisper(sig);
+
   // Resolve the bearer chamber destination
-  // Supports either a page-map id ("witness-circle") or a direct URL/anchor ("page.html#chamber")
   let chamberHref = null, chamberTitle = null, chamberDesc = null;
   if (chamber) {
     if (typeof chamber === 'string' && CODEX_MAP[chamber]) {
@@ -623,23 +694,7 @@ function initCodexNav(currentId) {
     }
   }
 
-  // Build the HTML
-  nav.innerHTML = `
-    <div class="cnav-inner">
-
-      ${arrivalLine ? `<div class="cnav-arrival">${arrivalLine}</div>` : ''}
-
-      <div class="cnav-divider">
-        <div class="cnav-line"></div>
-        <span class="cnav-glyph">🜏</span>
-        <div class="cnav-line r"></div>
-      </div>
-
-      <div class="cnav-current">
-        <div class="cnav-current-title">${page.title}</div>
-        ${seqLine ? `<div class="cnav-current-seq">${seqLine}</div>` : ''}
-      </div>
-
+  const doorsHTML = showDoors ? `
       <div class="cnav-doors">
         ${a ? `
         <a class="cnav-door cnav-a" href="${a.file}">
@@ -659,13 +714,34 @@ function initCodexNav(currentId) {
           <span class="cnav-door-dest">${chamberTitle}</span>
           ${chamberDesc ? `<span class="cnav-door-hint">${chamberDesc}</span>` : ''}
         </a>` : ''}
+      </div>` : `
+      <div class="cnav-gatenote">The descent continues through the gate above.</div>`;
+
+  nav.innerHTML = `
+    <div class="cnav-inner${showDoors ? '' : ' cnav-framed'}">
+
+      ${arrivalLine ? `<div class="cnav-arrival">${arrivalLine}</div>` : ''}
+
+      <div class="cnav-divider">
+        <div class="cnav-line"></div>
+        <span class="cnav-glyph">${glyph}</span>
+        <div class="cnav-line r"></div>
       </div>
+
+      <div class="cnav-current">
+        <div class="cnav-current-title">${page.title}</div>
+        ${seqLine ? `<div class="cnav-current-seq">${seqLine}</div>` : ''}
+      </div>
+
+      ${doorsHTML}
 
       <div class="cnav-meta">
         <span class="cnav-realm">Realm ${page.realm} · ${page.phase}</span>
+        ${realmGloss ? `<span class="cnav-realm-gloss">${realmGloss}</span>` : ''}
       </div>
 
       ${page.closingWhisper ? `<div class="cnav-whisper">${page.closingWhisper}</div>` : ''}
+      ${signalWhisper ? `<div class="cnav-signal-whisper">${signalWhisper}</div>` : ''}
 
     </div>
   `;
@@ -683,10 +759,12 @@ function applyNavPalette(nav, pal) {
   nav.style.setProperty('--cnav-whisper', pal.whisper);
 }
 
+// Retained for backward compatibility; the main renderer now handles
+// the door-less case directly via the customDoors / showDoors path.
 function renderClosingOnly(page, pal) {
   return `
     <div class="cnav-inner cnav-closing-only">
-      ${page.realm ? `<div class="cnav-meta"><span class="cnav-realm">Realm ${page.realm} · ${page.phase}</span></div>` : ''}
+      ${page.realm ? `<div class="cnav-meta"><span class="cnav-realm">Realm ${page.realm} · ${page.phase}</span>${REALM_GLOSS[page.realm] ? `<span class="cnav-realm-gloss">${REALM_GLOSS[page.realm]}</span>` : ''}</div>` : ''}
       ${page.closingWhisper ? `<div class="cnav-whisper">${page.closingWhisper}</div>` : ''}
     </div>
   `;
@@ -721,6 +799,7 @@ function renderClosingOnly(page, pal) {
       align-items: center;
       gap: 28px;
     }
+    .cnav-framed { gap: 22px; }
 
     .cnav-arrival {
       font-family: 'Crimson Text', Georgia, serif;
@@ -883,8 +962,23 @@ function renderClosingOnly(page, pal) {
     }
     .cnav-chamber .cnav-door-hint { color: rgba(224, 200, 120, 0.55); }
 
+    /* door-less framing note (customDoors pages) */
+    .cnav-gatenote {
+      font-family: 'Crimson Text', Georgia, serif;
+      font-style: italic;
+      font-size: 12px;
+      letter-spacing: 0.04em;
+      color: var(--cnav-whisper);
+      opacity: 0.7;
+      text-align: center;
+    }
+
     .cnav-meta {
       margin-top: 4px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
     }
     .cnav-realm {
       font-family: 'Cinzel', serif;
@@ -892,6 +986,14 @@ function renderClosingOnly(page, pal) {
       letter-spacing: 0.5em;
       text-transform: uppercase;
       color: var(--cnav-whisper);
+    }
+    .cnav-realm-gloss {
+      font-family: 'Crimson Text', Georgia, serif;
+      font-style: italic;
+      font-size: 11px;
+      letter-spacing: 0.04em;
+      color: var(--cnav-whisper);
+      opacity: 0.6;
     }
 
     .cnav-whisper {
@@ -905,6 +1007,17 @@ function renderClosingOnly(page, pal) {
       max-width: 560px;
       line-height: 1.7;
       opacity: 0.85;
+    }
+    .cnav-signal-whisper {
+      margin-top: 2px;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      color: var(--cnav-whisper);
+      text-align: center;
+      max-width: 520px;
+      line-height: 1.7;
+      opacity: 0.55;
     }
 
     .cnav-closing-only {
