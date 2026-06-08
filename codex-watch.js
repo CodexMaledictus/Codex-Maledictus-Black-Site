@@ -86,10 +86,16 @@
       leaveAttempts: 0,
       awayMs: 0,
       devtoolsOpen: false,
-      idleTriggered: false
+      idleTriggered: false,
+      selections: 0,            // text the reader highlighted
+      rightClicks: 0,           // tried to inspect / save
+      skimming: false,          // moving fast through, not reading
+      deadHour: false           // arrived in an hour the page keeps for itself
     };
     this._lastMove = Date.now();
     this._awaySince = 0;
+    this._origTitle = (typeof document !== 'undefined' && document.title) || '';
+    this._scrollMarks = [];     // {y, t} for skim-vs-dwell
     this._mem = loadJSON(WATCH_KEY, { firstSeen: null, sessions: 0, lastPage: null });
 
     // the file's claim of priority is UNFALSIFIABLE: the record predates
@@ -102,6 +108,7 @@
 
     this.returning = (this.sig.totalVisits > 1) || (this._mem.sessions > 1) || cipherHas('inf-apoc-seen');
     this.cameFromLore = cipherHas('inf-lore-intus') || cipherHas('inf-lore-flip');
+    this.behavior.deadHour = (this.sig.band === 'dead');
 
     cipherEarn('inf-apoc-seen', { src: this.pageId });
   }
@@ -177,9 +184,18 @@
     }, { passive: true });
 
     // ---- LEAVE DETECTION: the point of no return ----
+    var TAB_AWAY_MSGS = ['the file is still open', 'come back', 'it did not stop reading', 'you are still in the record'];
     document.addEventListener('visibilitychange', function () {
-      if (document.hidden) { self._awaySince = Date.now(); }
-      else if (self._awaySince) {
+      if (document.hidden) {
+        self._awaySince = Date.now();
+        // the tab title speaks to the reader while they are looking elsewhere.
+        // TRUE: the page really did change its own title. they see it in the tab bar.
+        try {
+          var i = Math.min(self.behavior.leaveAttempts, TAB_AWAY_MSGS.length - 1);
+          document.title = '\u{1F753} ' + TAB_AWAY_MSGS[i];
+        } catch (e) {}
+      } else if (self._awaySince) {
+        try { document.title = self._origTitle; } catch (e) {}
         var away = Date.now() - self._awaySince;
         self.behavior.awayMs += away;
         self.behavior.leaveAttempts++;
@@ -196,6 +212,43 @@
         self.observe('Subject moved toward the exit. The Archivum logs the intention, not only the act.', 2);
       }
     });
+
+    // ---- TEXT SELECTION: highlighting a line is recognition behavior ----
+    document.addEventListener('mouseup', function () {
+      var sel = '';
+      try { sel = String(global.getSelection ? global.getSelection() : ''); } catch (e) {}
+      sel = sel.replace(/\s+/g, ' ').trim();
+      if (sel.length >= 4) {
+        self.behavior.selections++;
+        if (self.behavior.selections === 1) {
+          self.observe('Subject selected a passage with the cursor, the way a reader holds a finger under a line they do not trust. The line you held was: "' + (sel.length > 90 ? sel.slice(0, 90) + '...' : sel) + '"', 3);
+        } else if (self.behavior.selections === 3) {
+          self.observe('Subject keeps holding lines still to read them. The file notes which lines. It is keeping the list.', 2);
+        }
+      }
+    });
+
+    // ---- RIGHT-CLICK: trying to inspect or save the page ----
+    document.addEventListener('contextmenu', function () {
+      self.behavior.rightClicks++;
+      if (self.behavior.rightClicks === 1) {
+        self.observe('Subject tried to open the page to look underneath it, or to take a copy. Both are noted. You cannot save a thing that is already saving you.', 3);
+      }
+    });
+
+    // ---- SKIM vs DWELL: fast scrolling is not reading ----
+    var lastY = 0, lastT = Date.now();
+    global.addEventListener('scroll', function () {
+      var now = Date.now(), y = global.scrollY;
+      var dy = Math.abs(y - lastY), dt = now - lastT || 1;
+      var v = dy / dt; // px per ms
+      lastY = y; lastT = now;
+      if (v > 2.4 && !self.seenTexts['__skim']) {
+        self.seenTexts['__skim'] = 1;
+        self.behavior.skimming = true;
+        self.observe('Subject is moving too fast to be reading. The Archivum has seen this before. They always slow down. The page is patient. It has the one thing the reader is pretending not to have: time.', 2);
+      }
+    }, { passive: true });
 
     // ---- DEVTOOLS DETECTION: opening the source is itself behavior ----
     var devOpen = false;
