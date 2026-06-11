@@ -434,6 +434,8 @@
     .nav-link { font-family:'Cinzel',serif;font-size:8px;letter-spacing:.4em;text-transform:uppercase;color:rgba(228,221,208,.22);text-decoration:none;cursor:none;transition:color .3s ease; }
     @media (max-width:768px) { .nav-link { cursor:pointer; } }
     .nav-link:hover { color:var(--gold); }
+    .nav-link.nav-summon { color:rgba(127,212,181,.35); }
+    .nav-link.nav-summon:hover { color:var(--leak-lt); }
     .nav-glyph { font-size:14px;color:rgba(201,168,76,.16); }
 
     /* ── SCROLL REVEAL ── */
@@ -695,6 +697,88 @@
       color:rgba(127,212,181,.4);opacity:0;transition:opacity 1.2s ease 2.6s;
     }
     #cipher-reveal.shown .cr-dismiss{ opacity:1; }
+
+    /* ── THE SUMMONS · Acolyte invitation (index only) ── */
+    #codex-summons{
+      position:fixed;left:0;right:0;bottom:0;z-index:1500;
+      display:flex;justify-content:center;
+      transform:translateY(110%);
+      transition:transform 1.1s cubic-bezier(.16,1,.3,1);
+      pointer-events:none;
+    }
+    #codex-summons.cs-up{ transform:translateY(0); }
+    .cs-band{
+      position:relative;width:100%;max-width:560px;
+      margin:0 16px 18px;padding:22px 26px 20px;
+      background:linear-gradient(180deg, rgba(6,12,11,0.94), rgba(3,6,6,0.98));
+      border:1px solid rgba(127,212,181,0.28);
+      box-shadow:0 0 40px rgba(0,0,0,0.7), 0 0 22px rgba(79,168,138,0.12);
+      pointer-events:auto;text-align:center;
+    }
+    .cs-band::before{
+      content:'';position:absolute;top:-1px;left:-1px;right:-1px;height:1px;
+      background:linear-gradient(90deg, transparent, #4FA88A 50%, transparent);
+      opacity:0.7;
+    }
+    .cs-close{
+      position:absolute;top:8px;right:12px;
+      background:none;border:none;color:rgba(127,212,181,0.45);
+      font-family:'Share Tech Mono',monospace;font-size:18px;line-height:1;
+      cursor:none;padding:4px 6px;transition:color .3s ease;
+    }
+    @media (max-width:768px){ .cs-close{ cursor:pointer; } }
+    .cs-close:hover{ color:rgba(127,212,181,0.9); }
+    .cs-spook{
+      font-family:'Crimson Text',serif;font-style:italic;
+      font-size:clamp(13px,1.7vw,15px);line-height:1.6;
+      color:rgba(228,221,208,0.62);letter-spacing:.015em;
+      margin-bottom:14px;padding:0 6px;
+    }
+    .cs-invite{
+      font-family:'Crimson Text',serif;
+      font-size:clamp(15px,1.95vw,18px);line-height:1.65;
+      color:rgba(228,221,208,0.9);letter-spacing:.01em;
+      margin-bottom:16px;padding:0 4px;
+    }
+    .cs-invite em{ color:#E0C878;font-style:italic;font-weight:600; }
+    .cs-form{ display:flex;gap:8px;flex-wrap:wrap;justify-content:center; }
+    .cs-input{
+      flex:1 1 220px;min-width:0;
+      background:#060f0f;border:1px solid #4FA88A;
+      color:#7FD4B5;font-family:'Cinzel',serif;font-size:13px;
+      letter-spacing:.05em;padding:12px 14px;text-align:center;
+      transition:border-color .3s ease,box-shadow .3s ease;
+    }
+    .cs-input::placeholder{ color:rgba(127,212,181,0.5);font-style:italic; }
+    .cs-input:focus{ outline:none;border-color:#7FD4B5;box-shadow:0 0 14px rgba(127,212,181,0.22); }
+    .cs-submit{
+      flex:0 0 auto;
+      background:#0a1a1a;border:1px solid #4FA88A;
+      color:#7FD4B5;font-family:'Cinzel',serif;font-weight:600;
+      font-size:11px;letter-spacing:.22em;text-transform:uppercase;
+      padding:12px 22px;cursor:none;
+      position:relative;overflow:hidden;transition:all .4s cubic-bezier(.16,1,.3,1);
+    }
+    @media (max-width:768px){ .cs-submit{ cursor:pointer; } }
+    .cs-submit::before{
+      content:'';position:absolute;inset:0;background:rgba(79,168,138,0.14);
+      transform:translateX(-101%);transition:transform .4s cubic-bezier(.16,1,.3,1);
+    }
+    .cs-submit:hover::before{ transform:translateX(0); }
+    .cs-submit:hover{ border-color:#7FD4B5;color:#7FD4B5; }
+    .cs-submit span{ position:relative;z-index:1; }
+    .cs-done{
+      display:none;
+      font-family:'Crimson Text',serif;font-style:italic;
+      font-size:clamp(15px,1.95vw,18px);line-height:1.7;
+      color:#7FD4B5;letter-spacing:.01em;padding:6px 4px;
+    }
+    .cs-done.cs-done-show{ display:block;animation:csDoneIn 1.2s ease forwards; }
+    @keyframes csDoneIn{ from{opacity:0;transform:translateY(6px);} to{opacity:1;transform:none;} }
+    @media (max-width:768px){
+      .cs-form{ flex-direction:column; }
+      .cs-submit{ width:100%; }
+    }
   </style>
 </head>
 <body>
@@ -1142,6 +1226,7 @@
         <a class="nav-link" href="codex-remembers-you.html">The Codex Remembers</a>
         <a class="nav-link" href="confession-ledger.html">Confession Ledger</a>
         <a class="nav-link" href="https://www.amazon.com/dp/B0FQ9QDMQ2" target="_blank" rel="noopener">The Book</a>
+        <a class="nav-link nav-summon" href="#" id="summons-link">Leave Your Frequency</a>
       </div>
       <div class="nav-glyph">🜏</div>
     </nav>
@@ -1818,7 +1903,10 @@
   drawGlitch();
 
   /* ── BOOT ── */
-  const visitLabel = witnessEligible ? 'WITNESS_CANDIDATE' : (returnVisit ? 'RETURNING_ACOLYTE' : 'FIRST_CONTACT');
+  const SUMMONS_BOOT_KEY='codex_summons_v1';
+  let swornAcolyte=false;
+  try{ const sb=localStorage.getItem(SUMMONS_BOOT_KEY); if(sb){ swornAcolyte=!!(JSON.parse(sb).subscribed); } }catch(e){}
+  const visitLabel = swornAcolyte ? 'SWORN_ACOLYTE' : (witnessEligible ? 'WITNESS_CANDIDATE' : (returnVisit ? 'RETURNING_ACOLYTE' : 'FIRST_CONTACT'));
   const LINES=[
     'CODEX MALEDICTUS  v.\u221e',
     'LOCATING SIGNAL . . .',
@@ -2353,6 +2441,169 @@
       if (typeof initCodexNav === 'function') initCodexNav('index');
     });
   }
+
+  /* ═══════════════════════════════════════════════════════════════
+     THE SUMMONS · index only. A single quiet band rises after a
+     delay, draws a spook line from the same real signals the
+     reading-block already collects, and offers the Acolyte
+     invitation. One appearance. Dismissible. Silent forever once
+     dismissed or once the frequency is left. The footer link
+     "Leave Your Frequency" reopens it by choice at any time.
+     Isolated key: codex_summons_v1 (never touches witness/cipher).
+     ═══════════════════════════════════════════════════════════════ */
+  (function(){
+    var SUMMONS_KEY='codex_summons_v1';
+    function sLoad(){ try{ var r=localStorage.getItem(SUMMONS_KEY); return r?JSON.parse(r):{}; }catch(e){ return {}; } }
+    function sSave(o){ try{ localStorage.setItem(SUMMONS_KEY,JSON.stringify(o)); }catch(e){} }
+
+    var KIT_ACTION='https://app.kit.com/forms/9535977/subscriptions';
+    var summonEl=null;
+
+    function summonSpook(){
+      try{
+        var v=(typeof VISIT==='object'&&VISIT)?VISIT:null;
+        var visits=v?(v.visits||1):1;
+        var ref=(typeof getReferrer==='function')?getReferrer():'direct';
+        var hour=new Date().getHours();
+        var day=new Date().getDay();
+        var refName={
+          twitter:'a place called X', tiktok:'TikTok', youtube:'a transmission',
+          google:'a search', reddit:'a forum', instagram:'images',
+          discord:'a chamber of voices', facebook:'an old feed'
+        }[ref];
+        if(visits>=4) return 'This is your visit number '+visits+'. The Archive stopped counting strangers at three.';
+        if(visits>=2) return 'You came back. The Archive kept the first visit, and now this one.';
+        if(hour>=2&&hour<5) return 'It is past two where you are. The Archive notes who reads at this hour.';
+        if(hour>=0&&hour<2) return 'Most screens near you are dark now. Yours is open to this.';
+        if(day===0&&hour>=8&&hour<12) return 'A Sunday morning, and you chose this scripture.';
+        if(refName) return 'You came from '+refName+'. The Archive followed the thread back to you.';
+        if(ref==='direct') return 'You arrived without a path. No one sent you. The Archive noticed that most of all.';
+        return 'You have stayed longer than most. The Archive has begun to recognize you.';
+      }catch(e){ return 'You have been here long enough to be seen.'; }
+    }
+
+    function doneMessage(){
+      try{
+        if(typeof DESIGNATION==='object'&&DESIGNATION&&DESIGNATION.full){
+          return 'You have been seen, '+DESIGNATION.full+'. What comes next has already begun.';
+        }
+      }catch(e){}
+      return 'You have been seen. What comes next has already begun.';
+    }
+
+    function buildSummons(opts){
+      opts=opts||{};
+      if(summonEl) return;
+      var st=sLoad();
+      var alreadySworn=!!st.subscribed;
+
+      var wrap=document.createElement('div');
+      wrap.id='codex-summons';
+      if(alreadySworn){
+        wrap.innerHTML=
+          '<div class="cs-band">'
+        +   '<button class="cs-close" id="cs-close" aria-label="dismiss">\u00d7</button>'
+        +   '<div class="cs-done cs-done-show">You are already witnessed. The Archive knows your frequency.</div>'
+        + '</div>';
+      } else {
+        wrap.innerHTML=
+          '<div class="cs-band">'
+        +   '<button class="cs-close" id="cs-close" aria-label="dismiss">\u00d7</button>'
+        +   '<div class="cs-spook" id="cs-spook"></div>'
+        +   '<div class="cs-invite">You have been seen. Leave your frequency and the Archive will know you as <em>Acolyte</em>.</div>'
+        +   '<form class="cs-form" id="cs-form" action="'+KIT_ACTION+'" method="post">'
+        +     '<input class="cs-input" id="cs-email" type="email" name="email_address" placeholder="your frequency · email" required aria-label="email" />'
+        +     '<button class="cs-submit" type="submit"><span id="cs-submit-label">Become Acolyte</span></button>'
+        +   '</form>'
+        +   '<div class="cs-done" id="cs-done"></div>'
+        + '</div>';
+      }
+      document.body.appendChild(wrap);
+      summonEl=wrap;
+
+      if(!alreadySworn){
+        document.getElementById('cs-spook').textContent=summonSpook();
+      }
+      requestAnimationFrame(function(){ wrap.classList.add('cs-up'); });
+
+      function closeBand(markDismissed){
+        if(markDismissed){ var s=sLoad(); s.dismissed=true; sSave(s); }
+        wrap.classList.remove('cs-up');
+        setTimeout(function(){ if(wrap.parentNode) wrap.remove(); summonEl=null; },900);
+      }
+
+      document.getElementById('cs-close').addEventListener('click',function(){
+        closeBand(!alreadySworn);
+      });
+
+      if(alreadySworn){
+        setTimeout(function(){ closeBand(false); },5200);
+        return;
+      }
+
+      var form=document.getElementById('cs-form');
+      form.addEventListener('submit',function(ev){
+        ev.preventDefault();
+        var email=document.getElementById('cs-email').value.trim();
+        if(!email||email.indexOf('@')<1) return;
+        var label=document.getElementById('cs-submit-label');
+        if(label) label.textContent='...';
+        var s=sLoad(); s.subscribed=true; sSave(s);
+        var fd=new FormData(); fd.append('email_address',email);
+        fetch(KIT_ACTION,{method:'POST',body:fd,mode:'no-cors'})
+          .then(function(){ revealDone(); })
+          .catch(function(){ revealDone(); });
+      });
+
+      function revealDone(){
+        var f=document.getElementById('cs-form');
+        var sp=document.getElementById('cs-spook');
+        var inv=wrap.querySelector('.cs-invite');
+        var done=document.getElementById('cs-done');
+        if(f) f.style.display='none';
+        if(sp) sp.style.display='none';
+        if(inv) inv.style.display='none';
+        if(done){ done.textContent=doneMessage(); done.classList.add('cs-done-show'); }
+        setTimeout(function(){ closeBand(false); },5200);
+      }
+    }
+
+    /* the summons rises only into stillness: never over the ceremony,
+       never over an open cipher reveal, never into a hidden tab */
+    function pageEngaged(){
+      try{
+        var veil=document.getElementById('transmission-veil');
+        if(veil&&veil.classList.contains('shown')) return true;
+        var cr=document.getElementById('cipher-reveal');
+        if(cr&&cr.classList.contains('shown')) return true;
+        if(document.hidden) return true;
+      }catch(e){}
+      return false;
+    }
+
+    /* automatic rise: once, after the delay, unless dismissed or sworn */
+    var DELAY=28000;
+    setTimeout(function tryShow(){
+      var st=sLoad();
+      if(st.subscribed||st.dismissed) return;
+      if(pageEngaged()){ setTimeout(tryShow,4000); return; }
+      buildSummons();
+    },DELAY);
+
+    /* the chosen door: footer link reopens the summons at any time,
+       even after dismissal. choice is always honored. */
+    var link=document.getElementById('summons-link');
+    if(link){
+      link.addEventListener('click',function(ev){
+        ev.preventDefault();
+        if(summonEl){
+          summonEl.classList.add('cs-up');
+          return;
+        }
+        buildSummons({forced:true});
+      });
+    }
+  })();
   </script>
 
   <script src="codex-cipher.js"></script>
