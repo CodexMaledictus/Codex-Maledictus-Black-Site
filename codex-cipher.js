@@ -39,6 +39,31 @@
       // so a solver who assembled the words but not the framing still passes
       accept: ['remembers me unheard', 'codex remembers me unheard'],
       gate: 'witness-circle'
+    },
+
+    /* ── The Infection limb. The Rot's arc. Six pages, six strokes of an
+          ORIGINAL Codex glyph (The Returning Mark), not a phrase. The gate
+          is a drawing gate (codex-sigil.js), so this limb is solved by
+          drawing, not typing — there is no phrase to assemble. The six
+          fragments are earned one per page via each page's native trigger,
+          and each page reveals its WORD as lore-flavor (the three truths
+          the song insists on), even though the gate itself reads the glyph.
+
+          The teaching DECAYS across the arc:
+            inf-0 infection-remembers   stroke 1  taught explicitly
+            inf-1 infection-lore        stroke 2  present, untaught
+            inf-2 apocrypha-infection   stroke 3  sly reminder
+            inf-3 chronicle-1           stroke 4  silent
+            inf-4 lore-chronicle-1      stroke 5  silent
+            inf-5 apocrypha-chronicle-1 stroke 6  the gate (the test)
+       ── */
+    'infection': {
+      fragments: ['inf-0', 'inf-1', 'inf-2', 'inf-3', 'inf-4', 'inf-5'],
+      // glyph-gated: no typed phrase. The gate validates the drawn Returning
+      // Mark (shape + order) in codex-sigil.js, then calls solveLimb.
+      glyph: 'the-returning-mark',
+      phrase: null,
+      gate: 'apocrypha-chronicle-1'
     }
   };
 
@@ -104,7 +129,7 @@
     };
   }
 
-  /* ── gate validation — the heart of the lock.
+  /* ── gate validation — the heart of the lock (PHRASE-gated limbs).
         Returns a structured verdict so the gate can fail IN CHARACTER:
           ok            → all markers present AND phrase correct
           reason:'phrase'  → markers fine, words wrong
@@ -115,7 +140,7 @@
     if (!limb) return { ok: false, reason: 'unknown' };
     var st = limbState(limbId);
     var typed = normPhrase(typedPhrase);
-    var phraseOk = (typed === normPhrase(limb.phrase));
+    var phraseOk = (limb.phrase != null) && (typed === normPhrase(limb.phrase));
     // accept optional alternate phrasings (safety net for close solvers)
     if (!phraseOk && limb.accept) {
       for (var i = 0; i < limb.accept.length; i++) {
@@ -131,6 +156,24 @@
       return { ok: false, reason: 'phrase', found: st.found, total: st.total };
     }
     // Mark the limb solved (banks the Mirror-fragment) and report success.
+    markLimbSolved(limbId);
+    return { ok: true, limb: limbId };
+  }
+
+  /* ── solveLimb , the gate call for GLYPH-gated (or otherwise non-phrase)
+        limbs like the Infection arc. The drawing engine validates the mark
+        (shape + order) and the marker completeness, then calls this to bank
+        the Mirror-fragment. We re-check marker completeness here as a final
+        server-of-record so a caller cannot bank a limb whose six device
+        markers were never earned (anti-leak: a screenshot opens nothing).
+        Returns {ok:true} on bank, or {ok:false,reason:'markers'|'unknown'}. ── */
+  function solveLimb(limbId) {
+    var limb = LIMBS[limbId];
+    if (!limb) return { ok: false, reason: 'unknown' };
+    var st = limbState(limbId);
+    if (!st.complete) {
+      return { ok: false, reason: 'markers', found: st.found, total: st.total };
+    }
     markLimbSolved(limbId);
     return { ok: true, limb: limbId };
   }
@@ -158,15 +201,29 @@
 
   /* ── word reveal helper: a page reveals its word once its fragment is
         earned. Pages decide HOW to show it; this just maps fragment→word
-        so the mapping lives in one place and can't drift. ── */
+        so the mapping lives in one place and can't drift.
+
+        Infection words are the three truths the song insists on, doubled
+        across the six strokes so each page has a word to surface as flavor:
+        the Mark is gate-read, but the WORDS are the lore reward the reader
+        carries. "corruption does not begin it returns" — six words, six
+        pages, in descent order — with the song's two deeper truths
+        ("inside", "remembered") living in the solve fragment, not here. ── */
   var WORD_FOR = {
     'fragment-0': 'unheard',
     'fragment-1': 'remembers',
-    'fragment-2': 'me'
+    'fragment-2': 'me',
+    // Infection limb , one word per page, descent order:
+    'inf-0': 'corruption',
+    'inf-1': 'does',
+    'inf-2': 'not',
+    'inf-3': 'begin',
+    'inf-4': 'it',
+    'inf-5': 'returns'
   };
   function wordFor(fragmentId) { return WORD_FOR[fragmentId] || null; }
 
-  /* ── register additional limbs later (Gospel, Infection, …) ── */
+  /* ── register additional limbs later (Gospel, …) ── */
   function registerLimb(limbId, def) {
     if (!LIMBS[limbId]) LIMBS[limbId] = def;
   }
@@ -181,6 +238,7 @@
     earnedList: earnedList,
     limbState: limbState,
     tryGate: tryGate,
+    solveLimb: solveLimb,
     isLimbSolved: isLimbSolved,
     mirrorFragments: mirrorFragments,
     wordFor: wordFor,
