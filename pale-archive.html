@@ -837,7 +837,7 @@ body.bearer-state .attune-inscription .insc-line{color:var(--bearer-amber);}
     </div>
     <div class="descent-graph-meta">
       <span id="dg-first">First Witnessed: —</span>
-      <span id="dg-pages">Pages Read: 0 / 22</span>
+      <span id="dg-pages">Pages Read: 0 / 23</span>
     </div>
   </div>
 
@@ -1183,9 +1183,11 @@ const PAGES=[
    cls:'The mechanism by which the document holds you. Memory as infrastructure.'},
   {id:'gospel-forgotten-flesh',file:'gospel-forgotten-flesh.html',seq:18,title:'The Gospel of Forgotten Flesh',realm:'I',phase:'Broadcast Source',
    cls:'The complete cosmological record of the Codex\'s first successful breach. Thirteen transmissions. Three voices. The third Remembering of the current cycle. The album from which every Ritual Transmission is relayed.'},
-  {id:'confession-ledger',file:'confession-ledger.html',seq:19,title:'The Confession Ledger',realm:'I-III',phase:'Sealed',
+  {id:'madmens-gospel',file:'madmens-gospel.html',seq:19,title:'The Madmen\'s Gospel',realm:'I',phase:'Broadcast Source',
+   cls:'Gospel II. Three witnesses heard the buried flesh speak, and went mad with comprehension. Fifteen transmissions. The madmen are not broken. They understood.'},
+  {id:'confession-ledger',file:'confession-ledger.html',seq:20,title:'The Confession Ledger',realm:'I-III',phase:'Sealed',
    cls:'What the marked have written. What the marked could not stop writing. The ledger fills itself in your absence.'},
-  {id:'witness-circle',file:'witness-circle.html',seq:20,title:'The Witness Circle',realm:'I-II-III',phase:'Sealed · Bearer',
+  {id:'witness-circle',file:'witness-circle.html',seq:21,title:'The Witness Circle',realm:'I-II-III',phase:'Sealed · Bearer',
    cls:'The inner reading. By invocation only. The room is always here.'},
   {id:'Codex-Sigil',file:'Codex-Sigil.html',seq:null,title:'The Codex Sigil',realm:'Ref',phase:'Reference',
    cls:'The seal that holds. The seal that leaks. Used to verify recovered fragments by alignment.'}
@@ -1247,7 +1249,7 @@ const CLUSTERS=[
   {title:'The Plague Priest',eyebrow:'Cluster III · Ritual Transmission II',desc:'The Liturgy. The posture. The Cathedral of Rot. The descent is still being assembled.',pages:['plague-priest-liturgy','plague-priest-lore','plague-priest-decoder','plague-priest-apocrypha'],placeholders:['plagueChronicle','plagueApocryphaDeeper']},
   {title:'Recovered Fragments · The RF-093 Sequence',eyebrow:'Cluster IV · Parallel Category',desc:'Recovered fragments filed alongside the transmissions. RF-093 is the first to be fully assembled. Others surface, occasionally, on their own schedule.',pages:['rf-093-lore','rf-093-invocation','rf-093-mirror','rf-093-apocrypha'],placeholders:['rf094','rf092']},
   {title:'The Artifact and the Engine',eyebrow:'Cluster V · The Physical Record',desc:'The book that does not stop reading. The mechanism by which it holds you.',pages:['codex-remembers-you','memory-engine-1'],placeholders:['previousInstance']},
-  {title:'The Gospel · The Broadcast Source',eyebrow:'Cluster VI · Origin of Transmissions',desc:'The album from which every Ritual Transmission is relayed. The visitor arrives here last and realizes they have already heard fragments of every track.',pages:['gospel-forgotten-flesh']},
+  {title:'The Gospel · The Broadcast Source',eyebrow:'Cluster VI · Origin of Transmissions',desc:'The album from which every Ritual Transmission is relayed. The visitor arrives here last and realizes they have already heard fragments of every track.',pages:['gospel-forgotten-flesh','madmens-gospel']},
   {title:'Sealed Chambers · Beyond the Surface',eyebrow:'Cluster VII · Restricted',desc:'The rooms beneath the reading. Accessible only by descent. The deeper of these requires consent.',pages:['confession-ledger','witness-circle'],bearerPlaceholders:['bearerHeld']},
   {title:'Unfiled and Adjacent',eyebrow:'Cluster VIII · Outside Classification',desc:'Entries the Archivum has been unable to place. Some return on their own. Some have never opened. Some are not entries at all.',pages:[],placeholders:['sisterDocument','positionIIReturns','case2017','refusesToBeRead','positionUnfilled']},
   {title:'Reference',eyebrow:'Outside the Canonical Descent',desc:'Material consulted but not filed within the descent itself.',pages:['Codex-Sigil']}
@@ -1286,7 +1288,7 @@ function buildTimeline(){
       if(!page)return;
       const st=computePageStatus(id);
       const ago=timeAgoStr(st.last);
-      const featured=page.id==='gospel-forgotten-flesh'||page.id==='codex-remembers-you'||page.id==='witness-circle';
+      const featured=page.id==='gospel-forgotten-flesh'||page.id==='madmens-gospel'||page.id==='codex-remembers-you'||page.id==='witness-circle';
       let metaLine='';
       if(st.status==='witnessed'&&ago)metaLine=`<span>Last witnessed ${ago}</span>`;
       else if(st.status==='returned'&&ago)metaLine=`<span>Returned to ${st.count} times · last ${ago}</span>`;
@@ -1437,7 +1439,7 @@ function appendSelfEntry(){
         <div class="tl-self-stat"><span class="tl-self-stat-lbl">First Witnessed</span><span class="tl-self-stat-val">${firstVisitStr}</span></div>
         <div class="tl-self-stat"><span class="tl-self-stat-lbl">Last Witnessed</span><span class="tl-self-stat-val">${lastVisitStr}</span></div>
         <div class="tl-self-stat"><span class="tl-self-stat-lbl">Visits Recorded</span><span class="tl-self-stat-val">${STATE.totalVisits}</span></div>
-        <div class="tl-self-stat"><span class="tl-self-stat-lbl">Pages Read</span><span class="tl-self-stat-val">${[...new Set(log.map(e=>e.id))].length} / 22</span></div>
+        <div class="tl-self-stat"><span class="tl-self-stat-lbl">Pages Read</span><span class="tl-self-stat-val">${[...new Set(log.map(e=>e.id))].length} / 23</span></div>
         <div class="tl-self-stat"><span class="tl-self-stat-lbl">Status</span><span class="tl-self-stat-val ${isBearer?'bearer':''}">${isBearer?'BEARER · INCORPORATED':'CANDIDATE · APPROACHING'}</span></div>
         ${NAMED_VOICE&&SAFE_VOICE_NAME?`<div class="tl-self-stat"><span class="tl-self-stat-lbl">Voice Named</span><span class="tl-self-stat-val">${SAFE_VOICE_NAME}</span></div>`:''}
         ${isBearer?`<div class="tl-self-stat"><span class="tl-self-stat-lbl">Realm II Name</span><span class="tl-self-stat-val bearer">${REALM_NAME}</span></div>`:''}
@@ -1480,7 +1482,7 @@ function buildDescentGraph(){
   }
   document.getElementById('dg-first').textContent=`First Witnessed: ${new Date(firstTs).toLocaleDateString()}`;
   const uniqueRead=[...new Set(log.map(e=>e.id))].length;
-  document.getElementById('dg-pages').textContent=`Pages Read: ${uniqueRead} / 22`;
+  document.getElementById('dg-pages').textContent=`Pages Read: ${uniqueRead} / 23`;
 }
 
 function buildResumeAnchor(){
@@ -1975,6 +1977,7 @@ async function runBootRitual(){
 }
 
 const CHANGELOG=[
+  {date:'2026-10-30',title:'The Madmen\'s Gospel · Gospel II',file:'madmens-gospel.html'},
   {date:'2026-05-25',title:'The Witness Circle — Sealed Apocrypha',file:'witness-circle.html'},
   {date:'2026-05-22',title:'The Pale Archive — Master Index',file:'pale-archive.html'},
   {date:'2026-05-20',title:'The Pale Archivum — Index Updated',file:'index.html'},

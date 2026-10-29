@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Madmen's Gospel ∴ Gospel II of the Codex Maledictus</title>
+<meta name="description" content="Gospel II of the Codex Maledictus. Three witnesses heard the buried flesh speak, and went mad with comprehension. Fifteen Transmissions, issued October 30, 2026.">
+<meta property="og:title" content="The Madmen's Gospel ∴ Gospel II">
+<meta property="og:description" content="Three witnesses heard the buried flesh speak, and went mad with comprehension.">
+<meta property="og:type" content="music.album">
+<meta property="og:image" content="https://codexmaledictus.com/Assets/Gospel%20of%20Forgotten%20Flesh/Apollo-Gavinci-result.jpeg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%2307080A'/%3E%3Cpath d='M32 8a24 24 0 1 1 -12 3.2' fill='none' stroke='%23B3261E' stroke-width='3'/%3E%3Cpath d='M24 20v24M32 18v28M40 20v24' stroke='%23D9DDD2' stroke-width='3'/%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<script src="codex-cipher.js"></script>
+<!--
+  WARD RECORD ∴ GOSPEL II
+  Filed under the seal of the Hollow Choir.
+  Three statements. One account.
+  Madness is perception, not pathology.
+  If you are reading this, you looked where the page did not ask you to.
+  So did they.
+-->
+<style>
+:root{
+  --void:#07080A;--ward:#0D1210;--ward2:#131A17;
+  --chalk:#D9DDD2;--ash:#9AA39B;--lint:#4A5650;--lint2:#26302B;
+  --bruise:#6B4A82;--bruise2:#A07CC0;
+  --seal:#C8322A;--seal2:#7A1A14;
+  --gold:#C9A84C;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--void);color:var(--chalk);font-family:'Crimson Text',Georgia,serif;font-size:1.08rem;line-height:1.75;overflow-x:hidden;
+  background-image:radial-gradient(ellipse at 50% -10%,rgba(160,124,192,.10),transparent 50%),radial-gradient(ellipse at 10% 70%,rgba(200,50,42,.05),transparent 40%);}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:50;
+  background:repeating-linear-gradient(90deg,transparent 0,transparent 63px,rgba(217,221,210,.018) 63px,rgba(217,221,210,.018) 64px);}
+body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:51;background:radial-gradient(ellipse at center,transparent 35%,rgba(0,0,0,.85) 100%);}
+a{color:inherit;}
+.wrap{position:relative;z-index:2;max-width:900px;margin:0 auto;padding:0 1.25rem;}
+.mono{font-family:'Share Tech Mono',monospace;letter-spacing:.18em;text-transform:uppercase;}
+
+/* intake header */
+.intake{padding:4.5rem 0 2.5rem;text-align:center;}
+.intake .tag{font-size:.62rem;color:var(--ash);opacity:.7;}
+.sigil{width:110px;height:110px;margin:1.8rem auto 1.4rem;display:block;}
+.sigil .ring{stroke:var(--seal);stroke-width:2;fill:none;stroke-dasharray:300;stroke-dashoffset:300;animation:draw 3.2s ease forwards .4s;}
+.sigil .bar{stroke:var(--chalk);stroke-width:2.2;opacity:0;animation:fadein 1s ease forwards;}
+.sigil .bar:nth-of-type(2){animation-delay:1.6s}.sigil .bar:nth-of-type(3){animation-delay:2.1s}.sigil .bar:nth-of-type(4){animation-delay:2.6s}
+@keyframes draw{to{stroke-dashoffset:0}}
+@keyframes fadein{to{opacity:1}}
+h1{font-family:'Cinzel Decorative',serif;font-weight:400;font-size:clamp(1.9rem,6vw,3.6rem);letter-spacing:.06em;line-height:1.15;color:var(--chalk);text-shadow:0 0 40px rgba(160,124,192,.25);}
+h1 .ii{display:block;font-family:'Cinzel',serif;font-size:.32em;letter-spacing:.5em;color:var(--bruise2);margin-bottom:.8rem;}
+.lede{font-style:italic;color:var(--ash);max-width:560px;margin:1.2rem auto 0;font-size:1.15rem;}
+.stamp{display:inline-block;margin-top:1.8rem;border:1px solid var(--seal2);color:var(--seal);padding:.3rem .9rem;font-size:.62rem;transform:rotate(-2deg);}
+
+/* epigraph */
+.epigraph{margin:3rem auto;max-width:620px;text-align:center;font-family:'Cinzel',serif;font-size:clamp(1.05rem,2.6vw,1.45rem);letter-spacing:.04em;color:var(--chalk);}
+.epigraph::before,.epigraph::after{content:'';display:block;width:60px;height:1px;background:var(--lint);margin:1.4rem auto;}
+
+section{margin:4.5rem 0;}
+h2{font-family:'Cinzel',serif;font-weight:400;font-size:.85rem;letter-spacing:.42em;text-transform:uppercase;color:var(--bruise2);margin-bottom:1.6rem;display:flex;align-items:center;gap:1rem;}
+h2::after{content:'';flex:1;height:1px;background:var(--lint2);}
+p+p{margin-top:1rem;}
+.rec{color:var(--chalk);}
+.rec em{color:var(--bruise2);font-style:italic;}
+
+/* three witness files */
+.files{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;}
+@media(max-width:760px){.files{grid-template-columns:1fr;}}
+.file{background:var(--ward);border:1px solid var(--lint2);position:relative;overflow:hidden;}
+.file img{width:100%;aspect-ratio:4/5;object-fit:cover;display:block;filter:grayscale(.55) contrast(1.1) brightness(.62);transition:filter 1.6s ease;}
+.file:hover img,.file.heard img{filter:grayscale(0) contrast(1.05) brightness(.8);}
+.file .body{padding:1rem 1.1rem 1.2rem;}
+.file .no{font-size:.58rem;color:var(--ash);opacity:.65;}
+.file .who{font-family:'Cinzel',serif;font-size:1.05rem;margin:.35rem 0 .2rem;letter-spacing:.05em;}
+.file .act{font-style:italic;color:var(--bruise2);}
+.file .status{margin-top:.8rem;font-size:.6rem;color:var(--seal);}
+.proof{margin-top:1.4rem;text-align:center;color:var(--ash);font-style:italic;}
+
+/* transmissions */
+.roll{list-style:none;border-top:1px solid var(--lint2);}
+.roll li{display:grid;grid-template-columns:3.2rem 1fr auto;gap:.8rem;align-items:baseline;padding:.75rem .25rem;border-bottom:1px solid var(--lint2);transition:background .5s ease,color .5s ease;}
+.roll .n{font-family:'Share Tech Mono',monospace;font-size:.75rem;color:var(--lint);}
+.roll .t{font-size:1.08rem;}
+.roll .v{font-family:'Share Tech Mono',monospace;font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ash);opacity:.7;text-align:right;}
+.roll li.frame .t{font-family:'Cinzel',serif;font-size:.95rem;letter-spacing:.06em;color:var(--ash);}
+.roll li.lit{background:rgba(160,124,192,.08);}
+.roll li.lit .n{color:var(--seal);}
+.roll li.dim{opacity:.32;}
+
+/* threads */
+.threads{display:flex;flex-wrap:wrap;gap:.7rem;margin:0 0 1.4rem;}
+.thread{background:none;border:1px solid var(--lint);color:var(--chalk);font-family:'Crimson Text',serif;font-style:italic;font-size:1rem;padding:.45rem .9rem;cursor:pointer;transition:all .4s ease;}
+.thread:hover,.thread.on{border-color:var(--bruise2);color:var(--bruise2);box-shadow:0 0 18px rgba(160,124,192,.18);}
+.thread-note{min-height:3.2em;color:var(--ash);font-size:.98rem;margin-bottom:1rem;}
+
+/* clauses */
+.clauses{border:1px solid var(--seal2);padding:1.6rem 1.4rem;background:rgba(122,26,20,.06);}
+.clauses .mono{font-size:.6rem;color:var(--seal);display:block;margin-bottom:1rem;}
+.clauses ol{list-style:upper-roman;padding-left:1.8rem;}
+.clauses li{padding:.25rem 0;font-family:'Cinzel',serif;font-size:1rem;letter-spacing:.03em;}
+.caveat{margin-top:1.2rem;font-style:italic;color:var(--ash);}
+
+/* listen */
+.listen{text-align:center;background:var(--ward);border:1px solid var(--lint2);padding:2rem 1.2rem;}
+.listen .when{font-size:.65rem;color:var(--ash);}
+.listen .call{display:inline-block;margin-top:1.1rem;border:1px solid var(--bruise2);color:var(--chalk);text-decoration:none;font-family:'Cinzel',serif;letter-spacing:.2em;font-size:.8rem;text-transform:uppercase;padding:.75rem 1.6rem;transition:all .4s ease;}
+.listen .call:hover{background:rgba(160,124,192,.12);box-shadow:0 0 24px rgba(160,124,192,.2);}
+.listen iframe{width:100%;border:0;margin-top:1.2rem;border-radius:0;}
+
+/* record line + stillness */
+.catalogued{font-size:.62rem;color:var(--ash);text-align:center;margin-top:3rem;}
+.catalogued a{color:var(--bruise2);text-decoration:none;border-bottom:1px solid var(--lint);}
+.catalogued a:hover{border-color:var(--bruise2);}
+#still{position:fixed;left:0;right:0;bottom:2.2rem;text-align:center;z-index:60;pointer-events:none;font-family:'Cinzel',serif;letter-spacing:.3em;font-size:.85rem;color:var(--chalk);opacity:0;transition:opacity 4s ease;}
+#still.on{opacity:.75;}
+.tagline{text-align:center;font-family:'Cinzel',serif;letter-spacing:.18em;color:var(--ash);margin:3.5rem 0 1rem;font-size:.9rem;}
+#codex-nav{margin:2rem 0 4rem;}
+@media(prefers-reduced-motion:reduce){.sigil .ring{animation:none;stroke-dashoffset:0}.sigil .bar{animation:none;opacity:1}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="intake">
+    <span class="tag mono">Ward Record ∴ Gospel II ∴ Sealed by the Hollow Choir</span>
+    <svg class="sigil" viewBox="0 0 100 100" aria-hidden="true">
+      <path class="ring" d="M50 8 A42 42 0 1 1 28 14"/>
+      <line class="bar" x1="38" y1="30" x2="38" y2="70"/>
+      <line class="bar" x1="50" y1="26" x2="50" y2="74"/>
+      <line class="bar" x1="62" y1="30" x2="62" y2="70"/>
+    </svg>
+    <h1><span class="ii">Gospel II</span>The Madmen's Gospel</h1>
+    <p class="lede">Three witnesses heard the buried flesh speak, and went mad with comprehension.</p>
+    <span class="stamp mono">Status: understood</span>
+  </header>
+
+  <p class="epigraph">I heard my name before I ever answered back.</p>
+
+  <section>
+    <h2>The Second Gospel</h2>
+    <div class="rec">
+      <p>The first Gospel was the buried witness. The second is the account of the three witnesses who heard the buried flesh speak, and went mad with comprehension.</p>
+      <p>The title is plural on purpose. In this Gospel, madness is perception, not pathology. <em>The madmen are not broken. They understood.</em></p>
+      <p>It was issued on October 30, 2026, under the seal of the Hollow Choir, in fifteen Transmissions.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>The Three Witnesses</h2>
+    <div class="files">
+      <article class="file">
+        <img src="Assets/Gospel%20of%20Forgotten%20Flesh/Apollo-Gavinci-result.jpeg" alt="A figure of light, seen from behind, one hand raised against the dark" loading="lazy">
+        <div class="body">
+          <span class="no mono">Statement I</span>
+          <div class="who">Apollo Gavinci</div>
+          <div class="act">Plants the doubt.</div>
+          <div class="status mono">Status: comprehending</div>
+        </div>
+      </article>
+      <article class="file">
+        <img src="Assets/Gospel%20of%20Forgotten%20Flesh/Forgotten-Saint-Artemys-result.jpeg" alt="A seated woman in violet, gold light breaking through the cracks in her skin" loading="lazy">
+        <div class="body">
+          <span class="no mono">Statement II</span>
+          <div class="who">Forgotten Saint Artemys</div>
+          <div class="act">Confirms it.</div>
+          <div class="status mono">Status: comprehending</div>
+        </div>
+      </article>
+      <article class="file">
+        <img src="Assets/Gospel%20of%20Forgotten%20Flesh/Omniscient-Rot-result.jpeg" alt="Folded black rock under a starless sky, bent like something breathing" loading="lazy">
+        <div class="body">
+          <span class="no mono">Statement III</span>
+          <div class="who">Asylum</div>
+          <div class="act">Proves it.</div>
+          <div class="status mono">Status: two voices recorded</div>
+        </div>
+      </article>
+    </div>
+    <p class="proof">In <em>Asylum</em>, Apollo and the Omniscient Rot are heard together.</p>
+  </section>
+
+  <section>
+    <h2>The Fifteen Transmissions</h2>
+    <div class="threads" role="group" aria-label="Threads that run through the Gospel">
+      <button class="thread" data-thread="letmein">Let me in</button>
+      <button class="thread" data-thread="light">The light went dark</button>
+      <button class="thread" data-thread="name">My name</button>
+    </div>
+    <p class="thread-note" id="thread-note">Some phrases are not repeated by accident. Follow one.</p>
+    <ol class="roll" id="roll">
+      <li class="frame" data-n="1"><span class="n">I</span><span class="t">Intro (The Witness)</span><span class="v">Opened by Elyon Vhar</span></li>
+      <li data-n="2"><span class="n">II</span><span class="t">Marked For This</span><span class="v"></span></li>
+      <li data-n="3"><span class="n">III</span><span class="t">When The Light Went Dark</span><span class="v"></span></li>
+      <li data-n="4"><span class="n">IV</span><span class="t">Black Sun Heart</span><span class="v"></span></li>
+      <li data-n="5"><span class="n">V</span><span class="t">Burning Up (Madmen's Cut)</span><span class="v"></span></li>
+      <li data-n="6"><span class="n">VI</span><span class="t">Let Me In</span><span class="v"></span></li>
+      <li data-n="7"><span class="n">VII</span><span class="t">Don't Let It In</span><span class="v"></span></li>
+      <li data-n="8"><span class="n">VIII</span><span class="t">The Long Communion</span><span class="v"></span></li>
+      <li data-n="9"><span class="n">IX</span><span class="t">Saint of Ashes (Hotter Than The Sky)</span><span class="v">With Apollo Gavinci</span></li>
+      <li data-n="10"><span class="n">X</span><span class="t">All I Ever Wanted Was Everything</span><span class="v"></span></li>
+      <li class="frame" data-n="11"><span class="n">XI</span><span class="t">Interlude (The Page That Turns Itself)</span><span class="v">The Codex</span></li>
+      <li data-n="12"><span class="n">XII</span><span class="t">Thoughts of a Madman</span><span class="v"></span></li>
+      <li data-n="13"><span class="n">XIII</span><span class="t">The Sane Ones Sleep</span><span class="v"></span></li>
+      <li data-n="14"><span class="n">XIV</span><span class="t">Asylum</span><span class="v">Apollo Gavinci ∴ the Omniscient Rot</span></li>
+      <li class="frame" data-n="15"><span class="n">XV</span><span class="t">Outtro (The Seal)</span><span class="v">Sealed by Elvain Vhris</span></li>
+    </ol>
+  </section>
+
+  <section>
+    <div class="clauses">
+      <span class="mono">Ward rules ∴ as entered in the record</span>
+      <ol>
+        <li>Madness is perception, not pathology.</li>
+        <li>Doubt is planted, confirmed and proven.</li>
+        <li>A conduit can be occupied.</li>
+        <li>What is sealed is not ended.</li>
+      </ol>
+      <p class="caveat">The listener cannot always tell whose voice is singing. The record does not consider this a flaw.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="listen" id="listen">
+      <span class="when mono" id="listen-when">The Gospel is issued October 30, 2026</span>
+      <div id="listen-body">
+        <a class="call" id="listen-call" href="https://distrokid.com/hyperfollow/codexmaledictus/the-madmens-gospel?ref=release" target="_blank" rel="noopener">Be listening when it opens</a>
+      </div>
+    </div>
+  </section>
+
+  <p class="catalogued mono">Catalogued ∴ The Scripture ∴ <a href="https://www.worldanvil.com/w/codex-maledictus-codexmaledictus/a/gospel-ii3A-the-madmen-s-gospel-document" target="_blank" rel="noopener">Gospel II, the public record</a></p>
+  <p class="catalogued mono" style="margin-top:.8rem">Preceded by ∴ <a href="gospel-forgotten-flesh.html">Gospel I, A Gospel of Forgotten Flesh</a></p>
+
+  <p class="tagline">Don't let it go unheard.</p>
+  <div id="codex-nav"></div>
+</div>
+
+<div id="still" aria-hidden="true">The sane ones sleep.</div>
+
+<script>
+(function(){
+  // Release gate. On or after October 30 the pre-save becomes the album.
+  // ALBUM_ID: paste the Spotify album id here on release day to show the player.
+  var ALBUM_ID = '';
+  var ARTIST_URL = 'https://open.spotify.com/artist/1vKFBmWToCei9dCSePXuow';
+  var RELEASE = new Date(2026, 9, 30, 0, 0, 0);
+  if (new Date() >= RELEASE) {
+    document.getElementById('listen-when').textContent = 'Issued ∴ fifteen Transmissions';
+    var body = document.getElementById('listen-body');
+    if (ALBUM_ID) {
+      body.innerHTML = '<iframe height="352" loading="lazy" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" src="https://open.spotify.com/embed/album/' + ALBUM_ID + '?utm_source=generator&theme=0"></iframe>';
+    } else {
+      var a = document.getElementById('listen-call');
+      a.href = ARTIST_URL;
+      a.textContent = 'Hear the three witnesses';
+    }
+  }
+
+  // Threads. Each phrase lights the Transmissions it runs through.
+  var THREADS = {
+    letmein: { tracks:[6,8,9], note:'Let me in runs through Let Me In, returns at the close of The Long Communion, and surfaces again in the bridge of Saint of Ashes. In Let Me In, the voice the listener hears as Artemys is worn by the Rot.' },
+    light:   { tracks:[2,3],   note:'The light went dark appears in Marked For This, and names the third Transmission.' },
+    name:    { tracks:[2,3],   note:'I heard my name before I ever answered back, in the second Transmission, is answered in the third: the dark gave back my name.' }
+  };
+  var rows = document.querySelectorAll('#roll li');
+  var note = document.getElementById('thread-note');
+  var resting = note.textContent;
+  var current = null;
+  document.querySelectorAll('.thread').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var key = btn.dataset.thread;
+      document.querySelectorAll('.thread').forEach(function(b){ b.classList.remove('on'); });
+      if (current === key) {
+        current = null;
+        rows.forEach(function(r){ r.classList.remove('lit','dim'); });
+        note.textContent = resting;
+        return;
+      }
+      current = key;
+      btn.classList.add('on');
+      var t = THREADS[key];
+      rows.forEach(function(r){
+        var on = t.tracks.indexOf(+r.dataset.n) > -1;
+        r.classList.toggle('lit', on);
+        r.classList.toggle('dim', !on);
+      });
+      note.textContent = t.note;
+    });
+  });
+
+  // Witness files come into colour when tapped on a phone.
+  document.querySelectorAll('.file').forEach(function(f){
+    f.addEventListener('click', function(){ f.classList.toggle('heard'); });
+  });
+
+  // Stillness. Thirteen seconds without moving and the ward speaks.
+  var still = document.getElementById('still'), timer;
+  function wake(){ still.classList.remove('on'); clearTimeout(timer); timer = setTimeout(function(){ still.classList.add('on'); }, 13000); }
+  ['mousemove','keydown','scroll','touchstart','click'].forEach(function(e){ window.addEventListener(e, wake, {passive:true}); });
+  wake();
+
+  // Looking away.
+  var title = document.title;
+  document.addEventListener('visibilitychange', function(){ document.title = document.hidden ? 'They understood.' : title; });
+
+  try { console.log('%cI heard my name before I ever answered back.', 'color:#A07CC0;font-family:serif;font-size:14px'); } catch(e){}
+})();
+</script>
+
+<script src="codex-nav.js"></script>
+<script>if(typeof initCodexNav==='function'){initCodexNav('madmens-gospel');}else{window.addEventListener('load',function(){if(typeof initCodexNav==='function')initCodexNav('madmens-gospel');});}</script>
+</body>
+</html>

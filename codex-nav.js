@@ -225,13 +225,23 @@ const CODEX_MAP = {
     phase: "Broadcast Source",
     description: "The album from which every Ritual Transmission is relayed. The third Remembering of the current cycle.",
     closingWhisper: "You have heard them already. You did not know.",
+    pathA: "madmens-gospel", pathB: "confession-ledger",
+    labelA: "Hear the second Gospel", labelB: "Find the Ledger",
+    bearerChamber: null
+  },
+
+  "madmens-gospel": {
+    file: "madmens-gospel.html", title: "The Madmen's Gospel", seq: 19, realm: "I",
+    phase: "Broadcast Source",
+    description: "Gospel II. Three witnesses heard the buried flesh speak, and went mad with comprehension.",
+    closingWhisper: "The sane ones sleep.",
     pathA: "confession-ledger", pathB: "witness-circle",
     labelA: "Find the Ledger", labelB: "Approach the seam",
     bearerChamber: null
   },
 
   "confession-ledger": {
-    file: "confession-ledger.html", title: "The Confession Ledger", seq: 19, realm: "I-III",
+    file: "confession-ledger.html", title: "The Confession Ledger", seq: 20, realm: "I-III",
     phase: "Sealed",
     description: "What the marked have written. What the marked could not stop writing.",
     closingWhisper: "The ledger fills itself in your absence.",
@@ -241,7 +251,7 @@ const CODEX_MAP = {
   },
 
   "witness-circle": {
-    file: "witness-circle.html", title: "The Witness Circle", seq: 20, realm: "I-II-III",
+    file: "witness-circle.html", title: "The Witness Circle", seq: 21, realm: "I-II-III",
     phase: "Sealed · Bearer",
     description: "The inner reading. By invocation only.",
     closingWhisper: "The room is always here.",
@@ -641,7 +651,7 @@ function sealClusterRegister(page) {
   if (q <= 11) return 'liturgical';
   if (q <= 15) return 'enochian';
   if (q <= 17) return 'kabbalistic';
-  if (q === 18) return 'scriptural';
+  if (q === 18 || q === 19) return 'scriptural';
   return 'apophatic';
 }
 
