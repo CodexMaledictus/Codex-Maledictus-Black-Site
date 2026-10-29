@@ -10,7 +10,7 @@
 <meta property="og:type" content="music.album">
 <meta property="og:image" content="https://codexmaledictus.com/Assets/Gospel%20of%20Forgotten%20Flesh/Apollo-Gavinci-result.jpeg">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%2307080A'/%3E%3Cpath d='M32 8a24 24 0 1 1 -12 3.2' fill='none' stroke='%23B3261E' stroke-width='3'/%3E%3Cpath d='M24 20v24M32 18v28M40 20v24' stroke='%23D9DDD2' stroke-width='3'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%2307080A'/%3E%3Cpath d='M32 8a24 24 0 1 1 -12 3.2' fill='none' stroke='%23C8322A' stroke-width='3'/%3E%3Cpath d='M24 20v24M32 18v28M40 20v24' stroke='%23D9DDD2' stroke-width='3'/%3E%3C/svg%3E">
 <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <script src="codex-cipher.js"></script>
 <!--
@@ -18,8 +18,12 @@
   Filed under the seal of the Hollow Choir.
   Three statements. One account.
   Madness is perception, not pathology.
+
   If you are reading this, you looked where the page did not ask you to.
   So did they.
+
+  Patients are reminded that every door on this ward opens from the inside,
+  for anyone who asks it properly. Ask the way the Gospel asks.
 -->
 <style>
 :root{
@@ -31,30 +35,69 @@
 }
 *{margin:0;padding:0;box-sizing:border-box;}
 html{scroll-behavior:smooth;}
-body{background:var(--void);color:var(--chalk);font-family:'Crimson Text',Georgia,serif;font-size:1.08rem;line-height:1.75;overflow-x:hidden;
-  background-image:radial-gradient(ellipse at 50% -10%,rgba(160,124,192,.10),transparent 50%),radial-gradient(ellipse at 10% 70%,rgba(200,50,42,.05),transparent 40%);}
-body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:50;
-  background:repeating-linear-gradient(90deg,transparent 0,transparent 63px,rgba(217,221,210,.018) 63px,rgba(217,221,210,.018) 64px);}
-body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:51;background:radial-gradient(ellipse at center,transparent 35%,rgba(0,0,0,.85) 100%);}
+body{background:var(--void);color:var(--chalk);font-family:'Crimson Text',Georgia,serif;font-size:1.08rem;line-height:1.75;overflow-x:hidden;}
+body.cursor-on, body.cursor-on a, body.cursor-on button{cursor:none;}
+body.locked{overflow:hidden;}
 a{color:inherit;}
-.wrap{position:relative;z-index:2;max-width:900px;margin:0 auto;padding:0 1.25rem;}
 .mono{font-family:'Share Tech Mono',monospace;letter-spacing:.18em;text-transform:uppercase;}
+
+/* ── the ward itself ── */
+#ward{position:fixed;inset:0;z-index:0;pointer-events:none;}
+#scan{position:fixed;inset:0;z-index:1;pointer-events:none;background:repeating-linear-gradient(0deg,transparent 0,transparent 3px,rgba(0,0,0,.18) 3px,rgba(0,0,0,.18) 4px);opacity:.5;}
+#vig{position:fixed;inset:0;z-index:1;pointer-events:none;background:radial-gradient(ellipse at 50% 40%,transparent 30%,rgba(0,0,0,.88) 100%);transition:background 3s ease;}
+body.deep #vig{background:radial-gradient(ellipse at 50% 40%,transparent 18%,rgba(0,0,0,.94) 90%);}
+#tear{position:fixed;left:0;right:0;height:0;z-index:70;pointer-events:none;mix-blend-mode:screen;}
+#tear.on{animation:tear .16s steps(2) 1;}
+@keyframes tear{0%{height:6px;background:rgba(160,124,192,.35);transform:translateX(-14px);}50%{height:2px;background:rgba(200,50,42,.4);transform:translateX(18px);}100%{height:0;}}
+body.jolt .wrap{animation:jolt .18s steps(3) 1;}
+@keyframes jolt{0%{transform:translateX(0)}33%{transform:translateX(-3px)}66%{transform:translateX(2px)}100%{transform:none}}
+
+/* doubled cursor: one hand, two voices */
+#cur,#cur2{position:fixed;z-index:99999;pointer-events:none;transform:translate(-50%,-50%);display:none;}
+body.cursor-on #cur,body.cursor-on #cur2{display:block;}
+#cur{width:15px;height:15px;}
+#cur::before,#cur::after{content:'';position:absolute;background:var(--chalk);}
+#cur::before{width:1px;height:100%;left:50%;}
+#cur::after{height:1px;width:100%;top:50%;}
+#cur2{width:30px;height:30px;border:1px solid rgba(160,124,192,.55);border-radius:50%;transition:border-color .6s ease,width .4s ease,height .4s ease;}
+#cur2.ahead{border-color:rgba(200,50,42,.75);width:22px;height:22px;}
+
+/* ── intake ── */
+#intake{position:fixed;inset:0;z-index:200;background:#040505;display:flex;align-items:center;justify-content:center;padding:1.5rem;transition:opacity 1.4s ease;}
+#intake.gone{opacity:0;pointer-events:none;}
+#intake.shake{animation:jolt .4s steps(4) 1;}
+.intake-box{max-width:520px;width:100%;}
+.intake-line{font-family:'Share Tech Mono',monospace;font-size:.78rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ash);min-height:1.7em;}
+.intake-line.hot{color:var(--seal);}
+.intake-line.pale{color:var(--chalk);}
+.caret::after{content:'▌';animation:blink 1s steps(1) infinite;color:var(--bruise2);}
+@keyframes blink{50%{opacity:0}}
+#admit{margin-top:2rem;background:none;border:1px solid var(--bruise2);color:var(--chalk);font-family:'Cinzel',serif;letter-spacing:.3em;text-transform:uppercase;font-size:.8rem;padding:.85rem 1.8rem;opacity:0;transition:opacity 1s ease,box-shadow .4s ease;cursor:pointer;}
+#admit.on{opacity:1;}
+#admit:hover{box-shadow:0 0 28px rgba(160,124,192,.25);}
+.intake-quiet{margin-top:1.2rem;font-size:.6rem;color:var(--lint);}
+
+.wrap{position:relative;z-index:2;max-width:900px;margin:0 auto;padding:0 1.25rem;}
 
 /* intake header */
 .intake{padding:4.5rem 0 2.5rem;text-align:center;}
 .intake .tag{font-size:.62rem;color:var(--ash);opacity:.7;}
-.sigil{width:110px;height:110px;margin:1.8rem auto 1.4rem;display:block;}
-.sigil .ring{stroke:var(--seal);stroke-width:2;fill:none;stroke-dasharray:300;stroke-dashoffset:300;animation:draw 3.2s ease forwards .4s;}
-.sigil .bar{stroke:var(--chalk);stroke-width:2.2;opacity:0;animation:fadein 1s ease forwards;}
-.sigil .bar:nth-of-type(2){animation-delay:1.6s}.sigil .bar:nth-of-type(3){animation-delay:2.1s}.sigil .bar:nth-of-type(4){animation-delay:2.6s}
+.sigil{width:110px;height:110px;margin:1.8rem auto 1.4rem;display:block;overflow:visible;}
+.sigil .ring{stroke:var(--seal);stroke-width:2;fill:none;stroke-dasharray:300;stroke-dashoffset:300;}
+.sigil .bar{stroke:var(--chalk);stroke-width:2.2;opacity:0;}
+body.admitted .sigil .ring{animation:draw 3.2s ease forwards .4s;}
+body.admitted .sigil .bar{animation:fadein 1s ease forwards;}
+body.admitted .sigil .bar:nth-of-type(2){animation-delay:1.6s}body.admitted .sigil .bar:nth-of-type(3){animation-delay:2.1s}body.admitted .sigil .bar:nth-of-type(4){animation-delay:2.6s}
+.sigil .halo{fill:none;stroke:rgba(160,124,192,.25);stroke-width:1;transform-origin:50px 50px;animation:breathe 6s ease-in-out infinite;}
+@keyframes breathe{0%,100%{transform:scale(1);opacity:.35}50%{transform:scale(1.18);opacity:.08}}
 @keyframes draw{to{stroke-dashoffset:0}}
 @keyframes fadein{to{opacity:1}}
 h1{font-family:'Cinzel Decorative',serif;font-weight:400;font-size:clamp(1.9rem,6vw,3.6rem);letter-spacing:.06em;line-height:1.15;color:var(--chalk);text-shadow:0 0 40px rgba(160,124,192,.25);}
 h1 .ii{display:block;font-family:'Cinzel',serif;font-size:.32em;letter-spacing:.5em;color:var(--bruise2);margin-bottom:.8rem;}
 .lede{font-style:italic;color:var(--ash);max-width:560px;margin:1.2rem auto 0;font-size:1.15rem;}
-.stamp{display:inline-block;margin-top:1.8rem;border:1px solid var(--seal2);color:var(--seal);padding:.3rem .9rem;font-size:.62rem;transform:rotate(-2deg);}
+.stamp{display:inline-block;margin-top:1.8rem;border:1px solid var(--seal2);color:var(--seal);padding:.3rem .9rem;font-size:.62rem;transform:rotate(-2deg);transition:color 1s ease;}
+.designation{display:block;margin-top:1rem;font-size:.58rem;color:var(--lint);}
 
-/* epigraph */
 .epigraph{margin:3rem auto;max-width:620px;text-align:center;font-family:'Cinzel',serif;font-size:clamp(1.05rem,2.6vw,1.45rem);letter-spacing:.04em;color:var(--chalk);}
 .epigraph::before,.epigraph::after{content:'';display:block;width:60px;height:1px;background:var(--lint);margin:1.4rem auto;}
 
@@ -62,70 +105,130 @@ section{margin:4.5rem 0;}
 h2{font-family:'Cinzel',serif;font-weight:400;font-size:.85rem;letter-spacing:.42em;text-transform:uppercase;color:var(--bruise2);margin-bottom:1.6rem;display:flex;align-items:center;gap:1rem;}
 h2::after{content:'';flex:1;height:1px;background:var(--lint2);}
 p+p{margin-top:1rem;}
-.rec{color:var(--chalk);}
 .rec em{color:var(--bruise2);font-style:italic;}
+.reveal{opacity:0;transform:translateY(14px);transition:opacity 1.2s ease,transform 1.2s ease;}
+.reveal.in{opacity:1;transform:none;}
 
-/* three witness files */
+/* witness files */
 .files{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;}
 @media(max-width:760px){.files{grid-template-columns:1fr;}}
-.file{background:var(--ward);border:1px solid var(--lint2);position:relative;overflow:hidden;}
-.file img{width:100%;aspect-ratio:4/5;object-fit:cover;display:block;filter:grayscale(.55) contrast(1.1) brightness(.62);transition:filter 1.6s ease;}
-.file:hover img,.file.heard img{filter:grayscale(0) contrast(1.05) brightness(.8);}
+.file{background:rgba(13,18,16,.88);border:1px solid var(--lint2);position:relative;overflow:hidden;cursor:pointer;}
+.file img{width:100%;aspect-ratio:4/5;object-fit:cover;display:block;filter:grayscale(.85) contrast(1.1) brightness(.5);transition:filter 2.4s ease;}
+.file:hover img,.file.heard img,body.comprehending .file img{filter:grayscale(0) contrast(1.05) brightness(.82);}
 .file .body{padding:1rem 1.1rem 1.2rem;}
 .file .no{font-size:.58rem;color:var(--ash);opacity:.65;}
 .file .who{font-family:'Cinzel',serif;font-size:1.05rem;margin:.35rem 0 .2rem;letter-spacing:.05em;}
 .file .act{font-style:italic;color:var(--bruise2);}
 .file .status{margin-top:.8rem;font-size:.6rem;color:var(--seal);}
+.file .occ{display:none;margin-top:.4rem;font-family:'Share Tech Mono',monospace;font-size:.68rem;letter-spacing:.14em;color:var(--seal);text-transform:uppercase;}
+.file.occupied .who,.file.occupied .act{text-decoration:line-through;text-decoration-color:var(--seal);opacity:.6;}
+.file.occupied .occ{display:block;}
+.file.occupied img{filter:grayscale(.3) contrast(1.2) brightness(.6) hue-rotate(-28deg);}
 .proof{margin-top:1.4rem;text-align:center;color:var(--ash);font-style:italic;}
+.swapping{color:var(--seal)!important;}
 
 /* transmissions */
 .roll{list-style:none;border-top:1px solid var(--lint2);}
-.roll li{display:grid;grid-template-columns:3.2rem 1fr auto;gap:.8rem;align-items:baseline;padding:.75rem .25rem;border-bottom:1px solid var(--lint2);transition:background .5s ease,color .5s ease;}
+.roll li{display:grid;grid-template-columns:3.2rem 1fr auto;gap:.8rem;align-items:baseline;padding:.75rem .25rem;border-bottom:1px solid var(--lint2);transition:background .5s ease,opacity .5s ease;}
 .roll .n{font-family:'Share Tech Mono',monospace;font-size:.75rem;color:var(--lint);}
-.roll .t{font-size:1.08rem;}
 .roll .v{font-family:'Share Tech Mono',monospace;font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ash);opacity:.7;text-align:right;}
 .roll li.frame .t{font-family:'Cinzel',serif;font-size:.95rem;letter-spacing:.06em;color:var(--ash);}
 .roll li.lit{background:rgba(160,124,192,.08);}
 .roll li.lit .n{color:var(--seal);}
 .roll li.dim{opacity:.32;}
-
-/* threads */
 .threads{display:flex;flex-wrap:wrap;gap:.7rem;margin:0 0 1.4rem;}
 .thread{background:none;border:1px solid var(--lint);color:var(--chalk);font-family:'Crimson Text',serif;font-style:italic;font-size:1rem;padding:.45rem .9rem;cursor:pointer;transition:all .4s ease;}
 .thread:hover,.thread.on{border-color:var(--bruise2);color:var(--bruise2);box-shadow:0 0 18px rgba(160,124,192,.18);}
+.thread.asking{animation:asking 2.4s ease-in-out infinite;}
+@keyframes asking{50%{box-shadow:0 0 22px rgba(200,50,42,.35);border-color:var(--seal);}}
 .thread-note{min-height:3.2em;color:var(--ash);font-size:.98rem;margin-bottom:1rem;}
+.thread-note .still-asking{color:var(--seal);font-style:italic;}
 
 /* clauses */
-.clauses{border:1px solid var(--seal2);padding:1.6rem 1.4rem;background:rgba(122,26,20,.06);}
+.clauses{border:1px solid var(--seal2);padding:1.6rem 1.4rem;background:rgba(40,10,8,.35);}
 .clauses .mono{font-size:.6rem;color:var(--seal);display:block;margin-bottom:1rem;}
 .clauses ol{list-style:upper-roman;padding-left:1.8rem;}
 .clauses li{padding:.25rem 0;font-family:'Cinzel',serif;font-size:1rem;letter-spacing:.03em;}
 .caveat{margin-top:1.2rem;font-style:italic;color:var(--ash);}
 
 /* listen */
-.listen{text-align:center;background:var(--ward);border:1px solid var(--lint2);padding:2rem 1.2rem;}
+.listen{text-align:center;background:rgba(13,18,16,.9);border:1px solid var(--lint2);padding:2rem 1.2rem;}
 .listen .when{font-size:.65rem;color:var(--ash);}
 .listen .call{display:inline-block;margin-top:1.1rem;border:1px solid var(--bruise2);color:var(--chalk);text-decoration:none;font-family:'Cinzel',serif;letter-spacing:.2em;font-size:.8rem;text-transform:uppercase;padding:.75rem 1.6rem;transition:all .4s ease;}
 .listen .call:hover{background:rgba(160,124,192,.12);box-shadow:0 0 24px rgba(160,124,192,.2);}
-.listen iframe{width:100%;border:0;margin-top:1.2rem;border-radius:0;}
+.listen iframe{width:100%;border:0;margin-top:1.2rem;}
 
-/* record line + stillness */
 .catalogued{font-size:.62rem;color:var(--ash);text-align:center;margin-top:3rem;}
 .catalogued a{color:var(--bruise2);text-decoration:none;border-bottom:1px solid var(--lint);}
 .catalogued a:hover{border-color:var(--bruise2);}
-#still{position:fixed;left:0;right:0;bottom:2.2rem;text-align:center;z-index:60;pointer-events:none;font-family:'Cinzel',serif;letter-spacing:.3em;font-size:.85rem;color:var(--chalk);opacity:0;transition:opacity 4s ease;}
-#still.on{opacity:.75;}
 .tagline{text-align:center;font-family:'Cinzel',serif;letter-spacing:.18em;color:var(--ash);margin:3.5rem 0 1rem;font-size:.9rem;}
 #codex-nav{margin:2rem 0 4rem;}
-@media(prefers-reduced-motion:reduce){.sigil .ring{animation:none;stroke-dashoffset:0}.sigil .bar{animation:none;opacity:1}}
+
+#still{position:fixed;left:0;right:0;bottom:2.2rem;text-align:center;z-index:60;pointer-events:none;font-family:'Cinzel',serif;letter-spacing:.3em;font-size:.85rem;color:var(--chalk);opacity:0;transition:opacity 4s ease;}
+#still.on{opacity:.75;}
+
+/* the ward observation log */
+#obs{position:fixed;left:1rem;bottom:1rem;z-index:80;width:300px;max-width:calc(100vw - 2rem);font-family:'Share Tech Mono',monospace;}
+#obs-tab{background:rgba(7,8,10,.92);border:1px solid var(--lint2);color:var(--ash);font-family:inherit;font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;padding:.45rem .7rem;cursor:pointer;display:flex;gap:.6rem;align-items:center;}
+#obs-tab .dot{width:6px;height:6px;border-radius:50%;background:var(--seal);box-shadow:0 0 8px var(--seal);animation:blink 2s steps(1) infinite;}
+#obs-tab .n{color:var(--chalk);}
+#obs-list{display:none;background:rgba(7,8,10,.94);border:1px solid var(--lint2);border-top:0;max-height:42vh;overflow:auto;padding:.6rem .7rem;}
+#obs.open #obs-list{display:block;}
+.obs-e{font-size:.66rem;line-height:1.55;color:var(--ash);padding:.35rem 0;border-bottom:1px dashed var(--lint2);letter-spacing:.03em;}
+.obs-e .t{color:var(--lint);margin-right:.4rem;}
+.obs-e.w3{color:var(--chalk);}
+.obs-e.new{animation:newe 2s ease 1;}
+@keyframes newe{0%{background:rgba(200,50,42,.18)}100%{background:transparent}}
+
+#hum{position:fixed;right:1rem;bottom:1rem;z-index:80;background:rgba(7,8,10,.9);border:1px solid var(--lint2);color:var(--ash);font-family:'Share Tech Mono',monospace;font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;padding:.45rem .7rem;cursor:pointer;display:none;}
+body.admitted #hum{display:block;}
+
+/* the asking */
+#veil{position:fixed;inset:0;z-index:300;background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.2rem;padding:1.5rem;text-align:center;opacity:0;pointer-events:none;transition:opacity 1.4s ease;}
+#veil.on{opacity:1;pointer-events:auto;}
+#veil .big{font-family:'Cinzel Decorative',serif;font-size:clamp(2rem,8vw,4.5rem);color:var(--seal);letter-spacing:.08em;opacity:0;transition:opacity 1.2s ease;text-shadow:0 0 30px rgba(200,50,42,.4);}
+#veil .ln{font-family:'Cinzel',serif;font-size:clamp(.95rem,2.6vw,1.3rem);letter-spacing:.12em;color:var(--chalk);opacity:0;transition:opacity 1.6s ease;}
+#veil .ln.cold{font-family:'Share Tech Mono',monospace;font-size:.75rem;letter-spacing:.3em;color:var(--ash);text-transform:uppercase;}
+#veil .on{opacity:1;}
+#veil .big.flick{animation:flick 1.6s steps(1) infinite;}
+@keyframes flick{0%,100%{opacity:1}7%{opacity:.2}9%{opacity:1}54%{opacity:.6}56%{opacity:1}}
+
+@media(max-width:760px){#obs{width:auto;right:5.5rem;}}
+@media(prefers-reduced-motion:reduce){
+  .sigil .ring{animation:none!important;stroke-dashoffset:0}.sigil .bar{animation:none!important;opacity:1}
+  .sigil .halo,.thread.asking,#obs-tab .dot{animation:none}
+  .reveal{opacity:1;transform:none;}
+}
 </style>
 </head>
-<body>
+<body class="locked">
+<canvas id="ward" aria-hidden="true"></canvas>
+<div id="scan" aria-hidden="true"></div>
+<div id="vig" aria-hidden="true"></div>
+<div id="tear" aria-hidden="true"></div>
+<div id="cur" aria-hidden="true"></div><div id="cur2" aria-hidden="true"></div>
+
+<div id="intake" role="dialog" aria-label="Ward intake">
+  <div class="intake-box">
+    <div id="intake-lines"></div>
+    <button id="admit" type="button">Be admitted</button>
+    <div class="intake-quiet mono" id="intake-quiet">Sound on admission. The ward hums.</div>
+  </div>
+</div>
+
+<div id="veil" aria-hidden="true">
+  <div class="big" id="v1">Let me in</div>
+  <div class="ln" id="v2">The voice you heard as Artemys</div>
+  <div class="ln" id="v3">was worn.</div>
+  <div class="ln cold" id="v4">A conduit can be occupied.</div>
+</div>
+
 <div class="wrap">
 
   <header class="intake">
     <span class="tag mono">Ward Record ∴ Gospel II ∴ Sealed by the Hollow Choir</span>
     <svg class="sigil" viewBox="0 0 100 100" aria-hidden="true">
+      <circle class="halo" cx="50" cy="50" r="44"/>
       <path class="ring" d="M50 8 A42 42 0 1 1 28 14"/>
       <line class="bar" x1="38" y1="30" x2="38" y2="70"/>
       <line class="bar" x1="50" y1="26" x2="50" y2="74"/>
@@ -133,12 +236,13 @@ p+p{margin-top:1rem;}
     </svg>
     <h1><span class="ii">Gospel II</span>The Madmen's Gospel</h1>
     <p class="lede">Three witnesses heard the buried flesh speak, and went mad with comprehension.</p>
-    <span class="stamp mono">Status: understood</span>
+    <span class="stamp mono" id="stamp">Status: understood</span>
+    <span class="designation mono" id="desig"></span>
   </header>
 
-  <p class="epigraph">I heard my name before I ever answered back.</p>
+  <p class="epigraph reveal">I heard my name before I ever answered back.</p>
 
-  <section>
+  <section class="reveal">
     <h2>The Second Gospel</h2>
     <div class="rec">
       <p>The first Gospel was the buried witness. The second is the account of the three witnesses who heard the buried flesh speak, and went mad with comprehension.</p>
@@ -147,33 +251,34 @@ p+p{margin-top:1rem;}
     </div>
   </section>
 
-  <section>
+  <section class="reveal">
     <h2>The Three Witnesses</h2>
     <div class="files">
-      <article class="file">
+      <article class="file" id="f-apollo">
         <img src="Assets/Gospel%20of%20Forgotten%20Flesh/Apollo-Gavinci-result.jpeg" alt="A figure of light, seen from behind, one hand raised against the dark" loading="lazy">
         <div class="body">
           <span class="no mono">Statement I</span>
           <div class="who">Apollo Gavinci</div>
-          <div class="act">Plants the doubt.</div>
+          <div class="act" data-act>Plants the doubt.</div>
           <div class="status mono">Status: comprehending</div>
         </div>
       </article>
-      <article class="file">
+      <article class="file" id="f-artemys">
         <img src="Assets/Gospel%20of%20Forgotten%20Flesh/Forgotten-Saint-Artemys-result.jpeg" alt="A seated woman in violet, gold light breaking through the cracks in her skin" loading="lazy">
         <div class="body">
           <span class="no mono">Statement II</span>
-          <div class="who">Forgotten Saint Artemys</div>
-          <div class="act">Confirms it.</div>
-          <div class="status mono">Status: comprehending</div>
+          <div class="who" id="artemys-who">Forgotten Saint Artemys</div>
+          <div class="act" data-act>Confirms it.</div>
+          <div class="occ">Occupied.</div>
+          <div class="status mono" id="artemys-status">Status: comprehending</div>
         </div>
       </article>
-      <article class="file">
+      <article class="file" id="f-asylum">
         <img src="Assets/Gospel%20of%20Forgotten%20Flesh/Omniscient-Rot-result.jpeg" alt="Folded black rock under a starless sky, bent like something breathing" loading="lazy">
         <div class="body">
           <span class="no mono">Statement III</span>
           <div class="who">Asylum</div>
-          <div class="act">Proves it.</div>
+          <div class="act" data-act>Proves it.</div>
           <div class="status mono">Status: two voices recorded</div>
         </div>
       </article>
@@ -181,7 +286,7 @@ p+p{margin-top:1rem;}
     <p class="proof">In <em>Asylum</em>, Apollo and the Omniscient Rot are heard together.</p>
   </section>
 
-  <section>
+  <section class="reveal">
     <h2>The Fifteen Transmissions</h2>
     <div class="threads" role="group" aria-label="Threads that run through the Gospel">
       <button class="thread" data-thread="letmein">Let me in</button>
@@ -195,7 +300,7 @@ p+p{margin-top:1rem;}
       <li data-n="3"><span class="n">III</span><span class="t">When The Light Went Dark</span><span class="v"></span></li>
       <li data-n="4"><span class="n">IV</span><span class="t">Black Sun Heart</span><span class="v"></span></li>
       <li data-n="5"><span class="n">V</span><span class="t">Burning Up (Madmen's Cut)</span><span class="v"></span></li>
-      <li data-n="6"><span class="n">VI</span><span class="t">Let Me In</span><span class="v"></span></li>
+      <li data-n="6"><span class="n">VI</span><span class="t">Let Me In</span><span class="v" id="v-letmein"></span></li>
       <li data-n="7"><span class="n">VII</span><span class="t">Don't Let It In</span><span class="v"></span></li>
       <li data-n="8"><span class="n">VIII</span><span class="t">The Long Communion</span><span class="v"></span></li>
       <li data-n="9"><span class="n">IX</span><span class="t">Saint of Ashes (Hotter Than The Sky)</span><span class="v">With Apollo Gavinci</span></li>
@@ -208,7 +313,7 @@ p+p{margin-top:1rem;}
     </ol>
   </section>
 
-  <section>
+  <section class="reveal">
     <div class="clauses">
       <span class="mono">Ward rules ∴ as entered in the record</span>
       <ol>
@@ -221,8 +326,8 @@ p+p{margin-top:1rem;}
     </div>
   </section>
 
-  <section>
-    <div class="listen" id="listen">
+  <section class="reveal" id="seal-section">
+    <div class="listen">
       <span class="when mono" id="listen-when">The Gospel is issued October 30, 2026</span>
       <div id="listen-body">
         <a class="call" id="listen-call" href="https://distrokid.com/hyperfollow/codexmaledictus/the-madmens-gospel?ref=release" target="_blank" rel="noopener">Be listening when it opens</a>
@@ -239,73 +344,441 @@ p+p{margin-top:1rem;}
 
 <div id="still" aria-hidden="true">The sane ones sleep.</div>
 
+<div id="obs" aria-live="polite">
+  <button id="obs-tab" type="button"><span class="dot"></span><span>Ward observation</span><span class="n" id="obs-n">0</span></button>
+  <div id="obs-list"></div>
+</div>
+<button id="hum" type="button">∴ Hum: on</button>
+
 <script>
 (function(){
-  // Release gate. On or after October 30 the pre-save becomes the album.
-  // ALBUM_ID: paste the Spotify album id here on release day to show the player.
-  var ALBUM_ID = '';
-  var ARTIST_URL = 'https://open.spotify.com/artist/1vKFBmWToCei9dCSePXuow';
-  var RELEASE = new Date(2026, 9, 30, 0, 0, 0);
-  if (new Date() >= RELEASE) {
-    document.getElementById('listen-when').textContent = 'Issued ∴ fifteen Transmissions';
-    var body = document.getElementById('listen-body');
-    if (ALBUM_ID) {
-      body.innerHTML = '<iframe height="352" loading="lazy" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" src="https://open.spotify.com/embed/album/' + ALBUM_ID + '?utm_source=generator&theme=0"></iframe>';
-    } else {
-      var a = document.getElementById('listen-call');
-      a.href = ARTIST_URL;
-      a.textContent = 'Hear the three witnesses';
+  'use strict';
+  var REDUCED = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var MOBILE = /iPhone|iPad|Android|Mobile/i.test(navigator.userAgent) || (window.matchMedia && matchMedia('(pointer: coarse)').matches);
+  var $ = function(id){ return document.getElementById(id); };
+
+  // ── WARD STATE (this room's own chart) ──
+  var KEY = 'codex_ward_v1';
+  function load(){ try{ return JSON.parse(localStorage.getItem(KEY)) || {}; }catch(e){ return {}; } }
+  function save(s){ try{ localStorage.setItem(KEY, JSON.stringify(s)); }catch(e){} }
+  var W = load();
+  W.visits = (W.visits || 0) + 1;
+  if (!W.firstSeen) W.firstSeen = Date.now();
+  W.lastSeen = Date.now();
+  save(W);
+
+  // ── DESIGNATION: the same number the front door gave you, if it gave you one ──
+  function hash(s){ var h=0; for(var i=0;i<s.length;i++){ h=((h<<5)-h)+s.charCodeAt(i); h|=0; } return Math.abs(h); }
+  var front = null; try{ front = JSON.parse(localStorage.getItem('codex_witness_state_v1')); }catch(e){}
+  var seed;
+  if (front && front.firstSeen && front.fingerprint) seed = front.firstSeen + '·' + front.fingerprint;
+  else {
+    var fp = ''; try{ fp = btoa(navigator.userAgent + screen.width + 'x' + screen.height + navigator.language + new Date().getTimezoneOffset()).substring(0,16); }catch(e){}
+    seed = W.firstSeen + '·' + fp;
+  }
+  var NUM = (hash(seed) % 10000).toString().padStart(4,'0');
+  var DESIG = '▽ · ' + NUM;
+  $('desig').textContent = 'Patient ' + DESIG;
+
+  var stamp = $('stamp');
+  var STAMP = W.visits >= 4 ? 'Status: relapsed' : W.visits >= 2 ? 'Status: readmitted' : 'Status: understood';
+  stamp.textContent = STAMP;
+
+  // ── SIGNALS (only things the ward can truly know) ──
+  var now = new Date();
+  var timeStr = now.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+  var weekday = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][now.getDay()];
+  var ua = navigator.userAgent;
+  var device = /iPhone|Android.*Mobile/i.test(ua) ? 'the glass in your hand' : /iPad|Tablet/i.test(ua) ? 'the tablet' : 'the screen in front of you';
+  var hour = now.getHours();
+  var hourNote = hour < 5 ? 'Admitted in the hours the ward keeps for itself.' : hour >= 22 ? 'Admitted after lights out.' : null;
+
+  // ── OBSERVATION LOG ──
+  var obsList = $('obs-list'), obsN = $('obs-n'), seen = {}, count = 0, t0 = Date.now();
+  function obs(text, weight){
+    if (!text || seen[text]) return; seen[text] = 1; count++;
+    var s = Math.round((Date.now() - t0) / 1000);
+    var mm = String(Math.floor(s/60)).padStart(2,'0') + ':' + String(s%60).padStart(2,'0');
+    var e = document.createElement('div');
+    e.className = 'obs-e new' + (weight === 3 ? ' w3' : '');
+    e.innerHTML = '<span class="t">' + mm + '</span>';
+    e.appendChild(document.createTextNode(text));
+    obsList.insertBefore(e, obsList.firstChild);
+    obsN.textContent = count;
+    if (weight === 3 && !MOBILE && !userOpened) {
+      $('obs').classList.add('open');
+      clearTimeout(autoClose); autoClose = setTimeout(function(){ if (!userOpened) $('obs').classList.remove('open'); }, 9000);
     }
   }
+  var userOpened = false, autoClose;
+  $('obs-tab').addEventListener('click', function(){ userOpened = !$('obs').classList.contains('open'); $('obs').classList.toggle('open', userOpened); });
 
-  // Threads. Each phrase lights the Transmissions it runs through.
+  // ── THE INTAKE ──
+  var occupied = !!W.occupied;
+  var lines = W.visits === 1 ? [
+    ['Ward intake ∴ Gospel II', ''],
+    ['Seal: the Hollow Choir', ''],
+    ['Statements on file: III', ''],
+    ['A fourth is being taken.', 'pale'],
+    ['Patient ' + DESIG, 'hot']
+  ] : [
+    ['Ward intake ∴ Gospel II', ''],
+    ['Readmitted. Visit ' + W.visits + ' on the chart.', 'pale'],
+    [occupied ? 'Statement II: occupied.' : 'The ward kept your bed.', occupied ? 'hot' : ''],
+    ['Patient ' + DESIG, 'hot']
+  ];
+  var box = $('intake-lines');
+  function typeLine(text, cls, done){
+    var el = document.createElement('div'); el.className = 'intake-line caret ' + cls; box.appendChild(el);
+    if (REDUCED) { el.textContent = text; el.classList.remove('caret'); return setTimeout(done, 120); }
+    var i = 0;
+    (function step(){
+      el.textContent = text.slice(0, ++i);
+      if (i < text.length) setTimeout(step, 28 + Math.random()*40);
+      else { el.classList.remove('caret'); setTimeout(done, 380); }
+    })();
+  }
+  (function run(i){
+    if (i >= lines.length) { $('admit').classList.add('on'); $('admit').focus({preventScroll:true}); return; }
+    typeLine(lines[i][0], lines[i][1], function(){ run(i+1); });
+  })(0);
+
+  // ── SOUND: a fluorescent hum, generated, never autoplayed ──
+  var AC = null, humGain = null, humOn = true;
+  function startHum(){
+    try{
+      AC = new (window.AudioContext || window.webkitAudioContext)();
+      humGain = AC.createGain(); humGain.gain.value = 0; humGain.connect(AC.destination);
+      [[60,.5],[120,.28],[180,.1]].forEach(function(p){
+        var o = AC.createOscillator(); o.type = 'sine'; o.frequency.value = p[0];
+        var g = AC.createGain(); g.gain.value = p[1]; o.connect(g); g.connect(humGain); o.start();
+      });
+      var lfo = AC.createOscillator(); lfo.frequency.value = .13; var lg = AC.createGain(); lg.gain.value = .006;
+      lfo.connect(lg); lg.connect(humGain.gain); lfo.start();
+      humGain.gain.linearRampToValueAtTime(.022, AC.currentTime + 4);
+    }catch(e){}
+  }
+  function flickerDip(){ if (AC && humGain && humOn) { try{ var t = AC.currentTime; humGain.gain.setValueAtTime(.004, t); humGain.gain.linearRampToValueAtTime(.022, t + .25); }catch(e){} } }
+  function thud(){
+    if (!AC || !humOn) return;
+    try{ var o = AC.createOscillator(), g = AC.createGain(); o.frequency.value = 42; o.type = 'sine';
+      g.gain.setValueAtTime(.12, AC.currentTime); g.gain.exponentialRampToValueAtTime(.0001, AC.currentTime + 2.6);
+      o.connect(g); g.connect(AC.destination); o.start(); o.stop(AC.currentTime + 2.7); }catch(e){}
+  }
+  $('hum').addEventListener('click', function(){
+    humOn = !humOn; this.textContent = '∴ Hum: ' + (humOn ? 'on' : 'off');
+    if (AC && humGain) { try{ humGain.gain.linearRampToValueAtTime(humOn ? .022 : 0, AC.currentTime + .6); }catch(e){} }
+  });
+
+  var admitted = false;
+  $('admit').addEventListener('click', function(){
+    if (admitted) return; admitted = true;
+    $('intake').classList.add('shake');
+    startHum();
+    setTimeout(function(){
+      $('intake').classList.add('gone');
+      setTimeout(function(){ $('intake').style.display = 'none'; }, 1500);
+      document.body.classList.remove('locked'); document.body.classList.add('admitted');
+      if (!MOBILE) document.body.classList.add('cursor-on');
+      afterAdmission();
+    }, 420);
+  });
+
+  function afterAdmission(){
+    obs('Admitted at ' + timeStr + ', ' + weekday + '. The patient came of their own accord.', 2);
+    obs('Observed through ' + device + '.', 1);
+    if (hourNote) obs(hourNote, 2);
+    if (W.visits > 1) obs('Readmitted. ' + W.visits + ' admissions on this chart.', 3);
+    if (occupied) markOccupied(false);
+    startStillness(); startVoices(); startTears();
+  }
+
+  // ── REVEAL ON SCROLL ── (every admission starts at the top of the record)
+  try{ history.scrollRestoration = 'manual'; }catch(e){}
+  try{ scrollTo({top:0, behavior:'instant'}); }catch(e){ scrollTo(0, 0); }
+  var io = 'IntersectionObserver' in window ? new IntersectionObserver(function(es){
+    es.forEach(function(e){ if (e.isIntersecting || e.boundingClientRect.bottom < 0) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, {threshold:.15}) : null;
+  document.querySelectorAll('.reveal').forEach(function(el){ io ? io.observe(el) : el.classList.add('in'); });
+  var sealSeen = false;
+  window.addEventListener('scroll', function(){
+    var max = document.documentElement.scrollHeight - innerHeight;
+    var p = max > 0 ? scrollY / max : 0;
+    document.body.classList.toggle('deep', p > .55);
+    if (!sealSeen && p > .92) { sealSeen = true; obs('Patient reached the seal. Most stop before it.', 2); }
+  }, {passive:true});
+
+  // ── THE DOUBLED CURSOR: one hand, two voices ──
+  if (!MOBILE) {
+    var cur = $('cur'), cur2 = $('cur2'), mx = innerWidth/2, my = innerHeight/2, rx = mx, ry = my, vx = 0, vy = 0, ahead = 0;
+    addEventListener('mousemove', function(e){ vx = e.clientX - mx; vy = e.clientY - my; mx = e.clientX; my = e.clientY; cur.style.left = mx+'px'; cur.style.top = my+'px'; });
+    (function loop(){
+      var tx = mx, ty = my;
+      if (ahead > 0) { tx = mx + vx * 9; ty = my + vy * 9; ahead--; }
+      rx += (tx - rx) * (ahead > 0 ? .22 : .1); ry += (ty - ry) * (ahead > 0 ? .22 : .1);
+      cur2.style.left = rx+'px'; cur2.style.top = ry+'px';
+      cur2.classList.toggle('ahead', ahead > 0);
+      requestAnimationFrame(loop);
+    })();
+    setInterval(function(){ if (admitted && !document.hidden && Math.random() < .5) ahead = 70; }, 17000);
+  }
+
+  // ── THE WARD: walls, tubes, tallies, and what is written on them ──
+  var cv = $('ward'), cx = cv.getContext('2d'), Wd, Ht, DPR = Math.min(devicePixelRatio || 1, 2);
+  var tally = document.createElement('canvas'), tx2 = tally.getContext('2d');
+  var PHRASES = ['let me in','let me in','my name','the light went dark','the dark gave back my name','the sane ones sleep','I heard my name','whose voice','they understood','don’t let it in'];
+  var live = [], flick = 1, strokes = 0;
+  function size(){
+    Wd = innerWidth; Ht = innerHeight;
+    if (!Wd || !Ht) return;
+    cv.width = Wd*DPR; cv.height = Ht*DPR; cv.style.width = Wd+'px'; cv.style.height = Ht+'px';
+    var old = null; if (tally.width) { old = document.createElement('canvas'); old.width = tally.width; old.height = tally.height; old.getContext('2d').drawImage(tally,0,0); }
+    tally.width = Wd*DPR; tally.height = Ht*DPR;
+    if (old) tx2.drawImage(old, 0, 0);
+  }
+  size(); addEventListener('resize', size);
+
+  // a patient counting: strokes in threes, scratched into the wall
+  var group = null;
+  function scratch(){
+    if (!Wd || !Ht) return;
+    if (!group || group.n >= 3) {
+      var side = Math.random() < .5;
+      var x = side ? Math.random() * Wd * .2 : Wd * .8 + Math.random() * Wd * .2;
+      if (Wd < 700) x = Math.random() * Wd;
+      group = { x:x, y: 40 + Math.random() * (Ht - 80), a: (Math.random() - .5) * .25, n: 0 };
+    }
+    var s = 7 * DPR, len = (18 + Math.random()*8) * DPR;
+    var gx = group.x*DPR + group.n * s, gy = group.y*DPR;
+    tx2.save(); tx2.translate(gx, gy); tx2.rotate(group.a);
+    tx2.strokeStyle = 'rgba(217,221,210,' + (.11 + Math.random()*.08) + ')'; tx2.lineWidth = 1.3*DPR; tx2.lineCap = 'round';
+    tx2.beginPath(); tx2.moveTo((Math.random()-.5)*2*DPR, 0); tx2.lineTo((Math.random()-.5)*3*DPR, len); tx2.stroke();
+    tx2.restore();
+    group.n++; strokes++;
+    if (strokes === 39) obs('Thirty-nine marks on the wall since you were admitted. You did not see who made them.', 3);
+  }
+  var startMarks = Math.min(W.visits * 6, 36);
+  for (var i = 0; i < startMarks; i++) scratch();
+
+  function addPhrase(){
+    var max = MOBILE ? 2 : 4; if (live.length >= max) return;
+    var text = PHRASES[Math.floor(Math.random()*PHRASES.length)];
+    var fs = (MOBILE ? 14 : 16) + Math.random() * (MOBILE ? 10 : 22);
+    live.push({ text:text, x: Math.random()*Wd*.85, y: 60 + Math.random()*(Ht-120), fs: fs, a:0, max: .11 + Math.random()*.1, life:0, dur: 380 + Math.random()*300, it: Math.random() < .6 });
+  }
+
+  var frame = 0;
+  function draw(){
+    cx.setTransform(DPR,0,0,DPR,0,0);
+    cx.clearRect(0,0,Wd,Ht);
+    // ward wall: green-black with a light pool from the tubes overhead
+    var g = cx.createRadialGradient(Wd/2, -Ht*.15, 0, Wd/2, -Ht*.15, Ht*1.1);
+    g.addColorStop(0, 'rgba(190,210,195,' + (.11 * flick) + ')');
+    g.addColorStop(.45, 'rgba(60,80,70,' + (.05 * flick) + ')');
+    g.addColorStop(1, 'rgba(0,0,0,0)');
+    cx.fillStyle = g; cx.fillRect(0,0,Wd,Ht);
+    // tile seams
+    cx.strokeStyle = 'rgba(217,221,210,.032)'; cx.lineWidth = 1;
+    for (var x = 0; x < Wd; x += 64) { cx.beginPath(); cx.moveTo(x+.5,0); cx.lineTo(x+.5,Ht); cx.stroke(); }
+    for (var y = 0; y < Ht; y += 64) { cx.beginPath(); cx.moveTo(0,y+.5); cx.lineTo(Wd,y+.5); cx.stroke(); }
+    // three tubes
+    for (var k = 0; k < 3; k++) {
+      var tx = Wd*(.25 + k*.25), tw = Math.min(160, Wd*.16);
+      cx.fillStyle = 'rgba(217,221,210,' + (.16 * flick * (k === 1 ? 1 : .8)) + ')';
+      cx.fillRect(tx - tw/2, 10, tw, 2);
+      var tg = cx.createLinearGradient(0, 12, 0, 120); tg.addColorStop(0, 'rgba(200,220,205,' + (.05*flick) + ')'); tg.addColorStop(1, 'rgba(0,0,0,0)');
+      cx.fillStyle = tg; cx.fillRect(tx - tw, 12, tw*2, 110);
+    }
+    // the tallies
+    if (tally.width && tally.height) { cx.setTransform(1,0,0,1,0,0); cx.drawImage(tally, 0, 0); cx.setTransform(DPR,0,0,DPR,0,0); }
+    // what is written on the walls
+    for (var j = live.length - 1; j >= 0; j--) {
+      var p = live[j]; p.life++;
+      var half = p.dur/2; p.a = p.life < half ? p.max * (p.life/half) : p.max * Math.max(0, (p.dur - p.life)/half);
+      cx.font = (p.it ? 'italic ' : '') + p.fs + 'px "Crimson Text", Georgia, serif';
+      cx.fillStyle = 'rgba(160,124,192,' + p.a + ')';
+      cx.fillText(p.text, p.x, p.y);
+      if (p.text.indexOf('let me in') === 0 && p.a > p.max*.8 && Math.random() < .03) { cx.fillStyle = 'rgba(200,50,42,' + p.a + ')'; cx.fillText(p.text, p.x + 1.5, p.y); }
+      if (p.life >= p.dur) live.splice(j, 1);
+    }
+  }
+  function tick(){
+    requestAnimationFrame(tick);
+    if (!Wd || !Ht) { size(); return; }
+    frame++;
+    // fluorescent flicker: mostly steady, sometimes failing
+    if (Math.random() < .006) { flick = .25; flickerDip(); setTimeout(function(){ flick = 1; }, 70 + Math.random()*90); }
+    if (frame % 150 === 0) addPhrase();
+    if (frame % 300 === 0 && admitted && !document.hidden) scratch();
+    if (frame % 2 === 0) { try{ draw(); }catch(e){} }
+  }
+  if (REDUCED) { addPhrase(); addPhrase(); live.forEach(function(p){ p.life = p.dur/2; }); draw(); }
+  else requestAnimationFrame(tick);
+
+  // ── TEARS: the ward glitches when it is not being watched closely ──
+  function startTears(){
+    if (REDUCED) return;
+    (function next(){
+      setTimeout(function(){
+        if (!document.hidden) {
+          var t = $('tear'); t.style.top = (Math.random()*90) + 'vh'; t.classList.remove('on'); void t.offsetWidth; t.classList.add('on');
+          if (Math.random() < .3) { document.body.classList.add('jolt'); setTimeout(function(){ document.body.classList.remove('jolt'); }, 200); }
+        }
+        next();
+      }, 7000 + Math.random()*11000);
+    })();
+  }
+
+  // ── WHOSE VOICE: captions slip into another witness's hand ──
+  var GLYPH = '▒░∴∅▽✠ᚦ⊗';
+  function scramble(el, to, done){
+    if (REDUCED) { el.textContent = to; return done && done(); }
+    var from = el.textContent, n = 0, steps = 10;
+    el.classList.add('swapping');
+    var iv = setInterval(function(){
+      n++;
+      var len = Math.round(from.length + (to.length - from.length) * (n/steps));
+      var out = ''; for (var i = 0; i < len; i++) out += (Math.random() < n/steps && to[i]) ? to[i] : GLYPH[Math.floor(Math.random()*GLYPH.length)];
+      el.textContent = out;
+      if (n >= steps) { clearInterval(iv); el.textContent = to; el.classList.remove('swapping'); done && done(); }
+    }, 55);
+  }
+  var acts = Array.prototype.slice.call(document.querySelectorAll('[data-act]'));
+  var SWAPS = [
+    function(){ return [acts[0], 'Confirms it.']; },
+    function(){ return [acts[1], 'Plants the doubt.']; },
+    function(){ return [acts[2], 'Plants the doubt.']; },
+    function(){ return [$('artemys-who'), 'The voice you hear as Artemys']; },
+    function(){ return [$('v-letmein'), 'Whose voice?']; }
+  ];
+  var swapping = false, swapsSeen = 0;
+  function startVoices(){
+    (function next(){
+      setTimeout(function(){
+        if (!document.hidden && !swapping) {
+          var pick = SWAPS[Math.floor(Math.random()*SWAPS.length)]();
+          var el = pick[0];
+          if (el && !(occupied && el.id === 'artemys-who')) {
+            var r = el.getBoundingClientRect();
+            if (r.top > 0 && r.bottom < innerHeight) {
+              swapping = true; var orig = el.textContent;
+              scramble(el, pick[1], function(){
+                setTimeout(function(){ scramble(el, orig, function(){ swapping = false; }); }, 3600);
+              });
+              swapsSeen++;
+              if (swapsSeen === 1) obs('A statement on the page changed hands while the patient was looking at it. The patient may not have noticed. The ward did.', 3);
+            }
+          }
+        }
+        next();
+      }, 9000 + Math.random()*12000);
+    })();
+  }
+
+  // ── THREADS ──
   var THREADS = {
     letmein: { tracks:[6,8,9], note:'Let me in runs through Let Me In, returns at the close of The Long Communion, and surfaces again in the bridge of Saint of Ashes. In Let Me In, the voice the listener hears as Artemys is worn by the Rot.' },
     light:   { tracks:[2,3],   note:'The light went dark appears in Marked For This, and names the third Transmission.' },
     name:    { tracks:[2,3],   note:'I heard my name before I ever answered back, in the second Transmission, is answered in the third: the dark gave back my name.' }
   };
-  var rows = document.querySelectorAll('#roll li');
-  var note = document.getElementById('thread-note');
-  var resting = note.textContent;
-  var current = null;
+  var rows = document.querySelectorAll('#roll li'), note = $('thread-note'), resting = note.textContent, current = null;
+  var askTimes = [];
   document.querySelectorAll('.thread').forEach(function(btn){
     btn.addEventListener('click', function(){
       var key = btn.dataset.thread;
-      document.querySelectorAll('.thread').forEach(function(b){ b.classList.remove('on'); });
-      if (current === key) {
-        current = null;
-        rows.forEach(function(r){ r.classList.remove('lit','dim'); });
-        note.textContent = resting;
-        return;
+      if (key === 'letmein') {
+        var t = Date.now(); askTimes = askTimes.filter(function(x){ return t - x < 4000; }); askTimes.push(t);
+        if (askTimes.length >= 3 && !occupied) { askTimes = []; return theAsking(); }
       }
-      current = key;
-      btn.classList.add('on');
-      var t = THREADS[key];
-      rows.forEach(function(r){
-        var on = t.tracks.indexOf(+r.dataset.n) > -1;
-        r.classList.toggle('lit', on);
-        r.classList.toggle('dim', !on);
-      });
-      note.textContent = t.note;
+      document.querySelectorAll('.thread').forEach(function(b){ b.classList.remove('on'); });
+      if (current === key) { current = null; rows.forEach(function(r){ r.classList.remove('lit','dim'); }); note.textContent = resting; return; }
+      current = key; btn.classList.add('on');
+      var th = THREADS[key];
+      rows.forEach(function(r){ var on = th.tracks.indexOf(+r.dataset.n) > -1; r.classList.toggle('lit', on); r.classList.toggle('dim', !on); });
+      note.textContent = th.note;
+      if (key === 'letmein' && !occupied) {
+        var s = document.createElement('span'); s.className = 'still-asking'; s.textContent = ' It is still asking.'; note.appendChild(s);
+        btn.classList.add('asking');
+      }
+      obs('Patient followed the thread: ' + btn.textContent.toLowerCase() + '.', 1);
     });
   });
 
-  // Witness files come into colour when tapped on a phone.
-  document.querySelectorAll('.file').forEach(function(f){
-    f.addEventListener('click', function(){ f.classList.toggle('heard'); });
+  // ── THE ASKING: type it, or ask three times ──
+  var buf = '';
+  addEventListener('keydown', function(e){
+    if (!admitted || occupied || e.key.length !== 1) return;
+    buf = (buf + e.key.toLowerCase()).replace(/[^a-z]/g,'').slice(-7);
+    if (buf === 'letmein') theAsking();
+  });
+  function markOccupied(fresh){
+    occupied = true;
+    $('f-artemys').classList.add('occupied');
+    $('artemys-status').textContent = 'Status: occupied';
+    $('v-letmein').textContent = 'Worn';
+    document.querySelectorAll('.thread').forEach(function(b){ b.classList.remove('asking'); });
+    if (fresh) { W.occupied = Date.now(); save(W); try{ if (window.Cipher && Cipher.earn) Cipher.earn('mg-occupied', {src:'madmens-gospel'}); }catch(e){} }
+  }
+  function theAsking(){
+    if (occupied) return;
+    var v = $('veil'); v.classList.add('on'); document.body.classList.add('locked');
+    thud();
+    var seq = [['v1', 900], ['v2', 3000], ['v3', 4800], ['v4', 6800]];
+    seq.forEach(function(s){ setTimeout(function(){ $(s[0]).classList.add('on'); if (s[0] === 'v1') $('v1').classList.add('flick'); }, REDUCED ? 200 : s[1]); });
+    setTimeout(function(){
+      v.classList.remove('on'); document.body.classList.remove('locked');
+      ['v1','v2','v3','v4'].forEach(function(id){ $(id).classList.remove('on','flick'); });
+      markOccupied(true);
+      $('f-artemys').scrollIntoView({behavior: REDUCED ? 'auto' : 'smooth', block:'center'});
+      obs('Patient asked to be let in. Something else had asked first. Statement II is marked occupied, and stays marked.', 3);
+    }, REDUCED ? 2500 : 10500);
+  }
+
+  // ── STILLNESS: the ward speaks to the one who stops moving ──
+  function startStillness(){
+    var still = $('still'), last = Date.now(), stage = 0;
+    function wake(){ last = Date.now(); if (stage) { still.classList.remove('on'); stamp.textContent = STAMP; stage = 0; } }
+    ['mousemove','keydown','scroll','touchstart','click','wheel'].forEach(function(e){ addEventListener(e, wake, {passive:true}); });
+    setInterval(function(){
+      var idle = Date.now() - last;
+      if (stage < 1 && idle > 13000) { stage = 1; still.classList.add('on'); obs('Patient went still for thirteen seconds. The ward grew quieter around them.', 2); }
+      if (stage < 2 && idle > 26000) { stage = 2; document.body.classList.add('comprehending'); obs('Still longer. The three statements came into colour for the patient. They do that for the ones who stop.', 3); }
+      if (stage < 3 && idle > 39000) { stage = 3; stamp.textContent = 'Status: comprehending'; }
+    }, 1000);
+  }
+  document.querySelectorAll('.file').forEach(function(f){ f.addEventListener('click', function(){ f.classList.toggle('heard'); }); });
+
+  // ── SELECTION: holding a line still ──
+  var sels = 0;
+  document.addEventListener('mouseup', function(){
+    var s = ''; try{ s = String(getSelection()).replace(/\s+/g,' ').trim(); }catch(e){}
+    if (s.length >= 4 && ++sels === 1) obs('Patient held a line still to read it: "' + (s.length > 80 ? s.slice(0,80) + '...' : s) + '"', 3);
   });
 
-  // Stillness. Thirteen seconds without moving and the ward speaks.
-  var still = document.getElementById('still'), timer;
-  function wake(){ still.classList.remove('on'); clearTimeout(timer); timer = setTimeout(function(){ still.classList.add('on'); }, 13000); }
-  ['mousemove','keydown','scroll','touchstart','click'].forEach(function(e){ window.addEventListener(e, wake, {passive:true}); });
-  wake();
+  // ── LOOKING AWAY ──
+  var title = document.title, away = 0, leaves = 0;
+  var AWAY = ['They understood.', 'The sane ones sleep.', 'Let me in.', 'The ward is still awake.'];
+  document.addEventListener('visibilitychange', function(){
+    if (document.hidden) { away = Date.now(); document.title = AWAY[Math.min(leaves, AWAY.length-1)]; }
+    else { document.title = title; leaves++; if (away && admitted) { var s = Math.round((Date.now()-away)/1000); obs('Patient looked away for ' + s + ' second' + (s===1?'':'s') + '. The ward did not.', 2); } }
+  });
 
-  // Looking away.
-  var title = document.title;
-  document.addEventListener('visibilitychange', function(){ document.title = document.hidden ? 'They understood.' : title; });
+  // ── RELEASE GATE ──
+  var ALBUM_ID = ''; // paste the Spotify album id here on release day to show the player
+  var ARTIST_URL = 'https://open.spotify.com/artist/1vKFBmWToCei9dCSePXuow';
+  if (new Date() >= new Date(2026, 9, 30, 0, 0, 0)) {
+    $('listen-when').textContent = 'Issued ∴ fifteen Transmissions';
+    if (ALBUM_ID) $('listen-body').innerHTML = '<iframe height="352" loading="lazy" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" src="https://open.spotify.com/embed/album/' + ALBUM_ID + '?utm_source=generator&theme=0"></iframe>';
+    else { var a = $('listen-call'); a.href = ARTIST_URL; a.textContent = 'Hear the three witnesses'; }
+  }
 
-  try { console.log('%cI heard my name before I ever answered back.', 'color:#A07CC0;font-family:serif;font-size:14px'); } catch(e){}
+  // ── THE CONSOLE ──
+  try{
+    console.log('%cWARD RECORD ∴ GOSPEL II', 'color:#C8322A;font-family:monospace;font-size:16px;letter-spacing:.2em;');
+    console.log('%cI heard my name before I ever answered back.', 'color:#A07CC0;font-family:serif;font-size:14px;font-style:italic;');
+    console.log('%cPatient ' + DESIG + '. Admitted ' + timeStr + '.', 'color:#9AA39B;font-family:monospace;font-size:12px;');
+    console.log('%c( every door on the ward opens for anyone who asks it the way the Gospel asks )', 'color:#4A5650;font-family:monospace;font-size:11px;font-style:italic;');
+  }catch(e){}
 })();
 </script>
 
