@@ -1215,7 +1215,7 @@
             </div>
           </div>
           <div class="fn-ticker">
-            <span>THE CODEX DOES NOT RECORD — IT REMEMBERS &nbsp;∴&nbsp; DR. MIRIAM K. DEY — MISSING — LAST LOCATION: INSIDE THE DOCUMENT &nbsp;∴&nbsp; FILE HAS CHANGED 3 TIMES SINCE THIS SESSION BEGAN &nbsp;∴&nbsp; THE PHRASE YOU REPEAT IS NOT YOURS &nbsp;∴&nbsp; AND NOW IT REMEMBERS YOU &nbsp;∴&nbsp; 🜃</span>
+            <span>THE CODEX DOES NOT RECORD — IT REMEMBERS &nbsp;∴&nbsp; DR. MIRIAM K. DEY — MISSING — LAST LOCATION: INSIDE THE DOCUMENT &nbsp;∴&nbsp; THIS FILE HAS BEEN OPENED <span id="fn-opened" style="all:unset">ONCE</span> ON THIS DEVICE &nbsp;∴&nbsp; THE PHRASE YOU REPEAT IS NOT YOURS &nbsp;∴&nbsp; AND NOW IT REMEMBERS YOU &nbsp;∴&nbsp; 🜃</span>
           </div>
         </div>
 
@@ -1483,6 +1483,20 @@
     {text:`Your screen tells the Codex more than you think. It already knows you are reading this sentence.`, w:4, num:'096'},
     {text:`The Hollow Choir does not speak first. It answers. You have already asked.`, w:4, num:'098'}
   ];
+
+  /* what the other rooms filed on this device comes up to the front door */
+  (function(){
+    const read=k=>{ try{ return JSON.parse(localStorage.getItem(k)); }catch(e){ return null; } };
+    const mirror=read('codex_mirror_v1'), memory=read('codex_memory_v1'), ledger=read('codex_ledger_v1'), ward=read('codex_ward_v1');
+    const add=(num,text)=>FRAGMENTS.push({text,w:16,num});
+    if(mirror&&mirror.lastClass) add('201',`The mirror read you as ${mirror.lastClass}. The Archive has left the entry as it was.`);
+    const n=memory&&memory.filings?memory.filings.length:0;
+    if(n) add('202',`The Engine holds ${n===1?'one filing':n+' filings'} in your hand. It keeps what you took back with the rest.`);
+    if(Array.isArray(ledger)&&ledger.length) add('203',`Your hand is in the Ledger. The ink has not finished with it.`);
+    if(ward&&ward.occupied) add('204',`The ward still lists you. Statement II, occupied.`);
+    if(read('codex_named_voice_v1')) add('205',`You gave a name in the first room. It is still answering to it.`);
+    if(read('codex_still_v1')) add('206',`You waited thirty-nine seconds here once. The eye has not moved since.`);
+  })();
 
   function selectFragment(){
     const tod = timeOfDay();
@@ -1777,7 +1791,10 @@
   const pupilGroup=document.getElementById('pupil-group');
   const sigilSvg=document.getElementById('codex-sigil');
   let pTargetX=0,pTargetY=0,pX=0,pY=0;
+  // whoever waited the full thirty-nine seconds is not followed any more. the eye already has them
+  const eyeHeld=(()=>{ try{ return !!localStorage.getItem('codex_still_v1'); }catch(e){ return false; } })();
   function trackPupil(x,y){
+    if(eyeHeld) return;
     const r=sigilSvg.getBoundingClientRect();
     const cx=r.left+r.width/2, cy=r.top+r.height/2;
     const dx=x-cx, dy=y-cy;
@@ -2087,6 +2104,21 @@
       btn.style.borderColor = 'rgba(201,168,76,0.75)';
       btn.style.color = 'var(--gold-lt)';
     });
+  });
+  /* the arch remembers where you stopped */
+  document.addEventListener('DOMContentLoaded',()=>{
+    try{
+      if(typeof CODEX_ROUTE==='undefined') return;
+      const seen=(JSON.parse(localStorage.getItem('codex_invocation_log'))||[]).map(e=>e.id);
+      let deepest=-1;
+      CODEX_ROUTE.forEach((id,i)=>{ if(seen.includes(id)) deepest=i; });
+      const next=CODEX_ROUTE[deepest+1];
+      if(deepest<0||!next||!CODEX_MAP[next]) return;
+      const arch=document.querySelector('.door-descend');
+      arch.href=CODEX_MAP[next].file;
+      arch.querySelector('.door-label').textContent='Continue';
+      arch.querySelector('.door-sub').textContent=CODEX_MAP[next].title;
+    }catch(e){}
   });
   /* the side door to the list opens the same summons as the footer */
   (function(){
@@ -2558,12 +2590,16 @@
     const badge=document.getElementById('fn-integrity');
     const book=document.querySelector('.fragment-notice');
     if(!badge||!book) return;
-    const base=39; let live=false, tmr=null;
+    // it loses a little more every time this device comes back, and it does not recover
+    const base=Math.max(13,39-(VISIT.visits-1)*2); let live=false, tmr=null;
+    badge.textContent='⚠ File Integrity: '+base+'% — Self-Modifying';
+    const opened=document.getElementById('fn-opened');
+    if(opened&&VISIT.visits>1) opened.textContent=VISIT.visits+' TIMES';
     function tick(){
       // drift downward in small unstable steps, occasionally jumping
       const drift=(Math.random()<0.18) ? -(2+Math.floor(Math.random()*4)) : (Math.random()<0.5?-1:1);
       let v=parseInt(badge.dataset.v||base,10)+drift;
-      if(v>41) v=41; if(v<29) v=33;     // wander in an unsettling band
+      if(v>base+2) v=base+2; if(v<base-10) v=base-6;     // wander in an unsettling band
       badge.dataset.v=v;
       badge.textContent='⚠ File Integrity: '+v+'% — Self-Modifying';
       // brief glitch flash

@@ -768,6 +768,9 @@ function navResolvePalette() {
 // NAV RENDERER, v5
 // ============================================================
 
+// The descent as a walker meets it, door by door. The homepage arch reads this to say where you stopped.
+const CODEX_ROUTE = ['infection-remembers','infection-lore','apocrypha-infection','chronicle-1-infection-remembers','lore-chronicle-1','apocrypha-chronicle-1','codex-remembers-you','memory-engine-1','gospel-forgotten-flesh','madmens-gospel','confession-ledger','witness-circle'];
+
 // Where a room leads outside the descent: the record itself, and the list.
 const SUMMON_RITE = { invite: 'The Cathedral does not announce its rites. Leave an address and the next one will find you.', button: 'Be found', done: 'Entered. The next rite knows where you are.', already: 'Your address is already with the congregation.' };
 const SUMMON_FRAGMENT = { invite: 'Other fragments survive. When one is recovered, the file sends word to whoever left an address.', button: 'Leave it', done: 'Filed. The next fragment knows where you are.', already: 'Your address is already in the file.' };
