@@ -7,6 +7,7 @@
 <meta name="description" content="Chronicle I. Visual scripture. Seven seals. Apollo Gavinci believed he wrote this. The Codex has a different account.">
 <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400;1,600&family=IM+Fell+English:ital@0;1&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <script src="codex-cipher.js"></script>
+<script src="codex-mark.js"></script>
 <script>
 // defined early: onerror can fire before the main inline script parses
 function heroLost(){
@@ -861,6 +862,7 @@ function selectSeal(i){
 let fragmentRevealed=false;
 function openCenterSeal(){
   if(!centerArmed||fragmentRevealed)return; fragmentRevealed=true;
+  if(window.CodexMark)CodexMark.give(3,2500);
   if(WATCH)obs('Subject pressed the center. The eighth seal, the one never drawn and never numbered, the point the other seven were arranged around. It was a door the entire time. The file notes the subject was the one who decided to open it.',3);
   const panel=document.getElementById('seal-reveal');
   panel.className='seal-reveal seal-reveal-anim fragment';

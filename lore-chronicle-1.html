@@ -7,6 +7,7 @@
 <meta name="description" content="The Pale Archivum's classified case file on Apollo Gavinci. Seven stages decoded. The 600 cities. The Testimony Oracle. Clearance: none required. The Archive decides who reads.">
 <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400;1,600&family=IM+Fell+English:ital@0;1&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <script src="codex-cipher.js"></script>
+<script src="codex-mark.js"></script>
 <style>
 :root{
   --void:#070512;--panel:#0C0920;--p2:#110D28;
@@ -754,6 +755,7 @@ function toggleTs(i){
 function revealSelfAnnotation(){
   if(selfAnnotationRevealed)return;
   selfAnnotationRevealed=true;
+  if(window.CodexMark)CodexMark.give(4,2500);
   const el=document.getElementById('self-annotation');
   if(!el)return;
   el.innerHTML=

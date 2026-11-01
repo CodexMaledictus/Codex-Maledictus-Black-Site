@@ -7,6 +7,7 @@
 <meta name="description" content="The Pale Archivum’s sealed file on Chronicle I. Five chambers. The deeper you read, the less the institution is sure of. Some of the black bars are not theirs.">
 <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;600&family=IM+Fell+English:ital@0;1&family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <script src="codex-cipher.js"></script>
+<script src="codex-mark.js"></script>
 <!--
   APOCRYPHA , CHRONICLE I
   This is the sealed archive. The seals are real.
@@ -400,6 +401,7 @@ body{background:var(--void);color:var(--ash);font-family:'Crimson Text',serif;ov
     <!-- THE RETURNING MARK , the Infection limb gate, surfaces with the secret -->
     <div id="sigil-gate">
       <div class="sg-intro">You read the whole file. Six rooms of this arc taught your hand a stroke each, whether or not you noticed being taught. <em>Draw what they taught you.</em> The Mark is the Rot naming itself: a vessel that closes on its own base, and the three things that were always inside it. Six strokes. The order is the doctrine, the vessel before the inside, because nothing is inside a thing not yet sealed.</div>
+      <div class="sg-intro" id="sigil-carry"></div>
       <div id="sigil-mount"></div>
       <div id="sigil-reward">
         <div class="sr-head">RECOVERED FRAGMENT 169 , RELEASED ONLY TO A HAND THAT DREW THE MARK</div>
@@ -848,6 +850,7 @@ function checkUndocument(){
 }
 function revealUndocument(){
   if(undocShown)return;undocShown=true;
+  if(window.CodexMark)CodexMark.give(5,2500);
   const el=document.getElementById('the-undocument');if(!el)return;
   el.innerHTML=
     '<div class="ud-head">UNFILED , SURFACED ONLY FOR A READER WHO OPENED EVERY CHAMBER AND EVERY NOTE</div>'
@@ -892,12 +895,19 @@ function registerInfectionLimb(){
     }
   }catch(e){}
 }
+function showCarried(){
+  var el=document.getElementById('sigil-carry');if(!el||!window.CodexMark)return;
+  var left=CodexMark.missing();
+  if(!left.length){el.textContent='This hand carries all six.';return;}
+  el.innerHTML='This hand carries '+(6-left.length)+' of six. Still holding theirs: '+left.map(function(r){return '<a href="'+r.href+'" style="color:var(--teal);">'+r.name+'</a>';}).join(', ')+'.';
+}
 var sigilArmed=false;
 function armSigilGate(){
   if(sigilArmed)return;sigilArmed=true;
   registerInfectionLimb();
   var gate=document.getElementById('sigil-gate');if(!gate)return;
   gate.classList.add('on');
+  showCarried();
   if(!window.CodexSigil){
     document.getElementById('sigil-mount').innerHTML='<div class="csigil-note">The Mark cannot be drawn here. The drawing engine did not load. Refresh, or descend again when it has.</div>';
     return;

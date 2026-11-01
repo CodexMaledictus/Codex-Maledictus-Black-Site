@@ -9,6 +9,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;500;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=IM+Fell+English:ital@0;1&family=IM+Fell+English+SC&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <!-- PALE ARCHIVUM · conduit fragment · it must wake before the page does, or the page wakes alone -->
 <script src="codex-cipher.js"></script>
+<script src="codex-mark.js"></script>
 <style>
 :root{
   --bg:#030305;--deep:#080508;
@@ -1397,6 +1398,7 @@ function restoreInscription(viaStillness){
   // bank the seed into the real cipher under the infection limb
   seedEarn('remembers');seedEarn('returns');seedEarn('inside');
   if(CIPHER_OK){try{Cipher.earn('inf-inscription-restored',{src:'infection-remembers',via:viaStillness?'stillness':'choice'});}catch(e){}}
+  if(window.CodexMark)CodexMark.give(0,7000);
   // fire the full-page reveal after the lock settles
   setTimeout(()=>fireReveal(viaStillness),1400);
 }

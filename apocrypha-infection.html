@@ -8,6 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400;1,600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <!-- conduit fragment, it must wake before the page, or the page wakes alone and keeps no record of you -->
 <script src="codex-cipher.js"></script>
+<script src="codex-mark.js"></script>
 <!--
   PALE ARCHIVUM , APOCRYPHA LAYER
   You were not supposed to find this. The Codex knew you would.
@@ -1452,6 +1453,7 @@ async function recoverFrag(i){
       document.getElementById('fr-sub').textContent=', Pale Archivum, notation generated at the moment of completion. No archivist filed this note.';
       runGlitch(600,1.5);growMycFromElement(rev);
       if(WATCH)obs('Subject completed the circuit. Six of six. The signal received was the signal sent. The Archivum stopped distinguishing between the reader and the read at this timestamp.',3);
+      if(window.CodexMark)CodexMark.give(2,2500);
     },1200);
   }
 }
