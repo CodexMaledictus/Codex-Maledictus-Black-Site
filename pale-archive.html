@@ -1922,7 +1922,18 @@ function spawnBurst(){
   }
 }
 const BOOT_LINES=['bl-0','bl-1','bl-2','bl-3','bl-4','bl-5','bl-6','bl-7','bl-8','bl-9','bl-10','bl-11','bl-12'];
-function sleep(ms){return new Promise(r=>setTimeout(r,ms));}
+let bootSkip=false,bootWake=[];
+function sleep(ms){if(bootSkip)return Promise.resolve();return new Promise(r=>{const t=setTimeout(r,ms);bootWake.push(()=>{clearTimeout(t);r();});});}
+function hold(ms){return new Promise(r=>setTimeout(r,ms));}
+function armBootSkip(){
+  const hint=document.createElement('div');
+  hint.textContent='// touch or press any key to pass //';
+  hint.style.cssText='position:absolute;left:0;right:0;bottom:6%;text-align:center;font-family:"Share Tech Mono",monospace;font-size:11px;letter-spacing:.14em;color:rgba(212,180,92,.75);opacity:0;transition:opacity 1.2s ease;pointer-events:none;';
+  document.getElementById('BOOT').appendChild(hint);
+  setTimeout(()=>{hint.style.opacity='1';},2500);
+  const pass=()=>{bootSkip=true;bootWake.splice(0).forEach(w=>w());hint.remove();removeEventListener('pointerdown',pass);removeEventListener('keydown',pass);};
+  addEventListener('pointerdown',pass);addEventListener('keydown',pass);
+}
 async function runStage1Readout(){
   document.getElementById('boot-opening').classList.add('on');
   await sleep(900);
@@ -1957,6 +1968,7 @@ async function runStage2Sigil(){
   });
 }
 async function runBootRitual(){
+  armBootSkip();
   fillBootReadout();
   await sleep(400);
   await runStage1Readout();
@@ -1970,11 +1982,12 @@ async function runBootRitual(){
   await sleep(2200);
   document.getElementById('BOOT').classList.add('opening');
   document.getElementById('APP').classList.add('on');
-  await sleep(800);
+  await hold(800);
   W.classList.remove('on');
-  await sleep(1400);
+  await hold(1400);
   document.getElementById('BOOT').remove();
   document.getElementById('WITNESSED').remove();
+  bootSkip=false;
   initApp();
 }
 

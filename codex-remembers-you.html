@@ -799,8 +799,19 @@ drawSig();
 const visits=parseInt(localStorage.getItem('cm-codexy-visits')||'0');
 localStorage.setItem('cm-codexy-visits',visits+1);
 
+// A visitor who has somewhere to be may pass. The file does not mind. It has the time.
+function armOpeningSkip(hintAfter,color){
+  const hint=document.createElement('div');
+  hint.id='opening-pass';hint.textContent='// touch or press any key to pass //';
+  hint.style.cssText='position:fixed;left:0;right:0;bottom:5%;z-index:9999;text-align:center;font-family:"Share Tech Mono",monospace;font-size:11px;letter-spacing:.14em;color:'+color+';opacity:0;transition:opacity 1.2s ease;pointer-events:none;';
+  document.body.appendChild(hint);
+  setTimeout(()=>{hint.style.opacity='1';},hintAfter);
+  const pass=()=>{removeEventListener('pointerdown',pass);removeEventListener('keydown',pass);openApp();};
+  addEventListener('pointerdown',pass);addEventListener('keydown',pass);
+}
 if(visits>=1){
   // RETURNING VISITOR
+  armOpeningSkip(1500,'rgba(0,200,50,.75)');
   document.getElementById('WIKI').style.display='none';
   document.getElementById('RETURN-TERM').classList.add('active');
   const rtSeq=['rt0','','rt1','rt2','rt3','','rt4','rt5','rt6','','rt7','rt8','rt9','','rt10','rt11','rt12'];
@@ -813,6 +824,7 @@ if(visits>=1){
   setTimeout(rtNext,600);
 } else {
   // FIRST VISIT — Wikipedia corruption sequence
+  armOpeningSkip(7000,'rgba(0,200,50,.75)');
   const wikiEl=document.getElementById('WIKI');
   const searchInput=document.getElementById('wiki-search-input');
 
@@ -866,7 +878,10 @@ if(visits>=1){
   }
 }
 
+let appOpened=false;
 function openApp(){
+  if(appOpened)return;appOpened=true;
+  const op=document.getElementById('opening-pass');if(op)op.remove();
   document.getElementById('WIKI').classList.add('out');
   document.getElementById('RETURN-TERM').style.display='none';
   setTimeout(()=>{
