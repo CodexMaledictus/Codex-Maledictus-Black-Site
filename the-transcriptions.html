@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<!--
+  Every source named in this room is real and can be found. Check them. The record would prefer you did.
+-->
+<title>The Transcriptions · Codex Esoterica</title>
+<meta name="description" content="The Transcriptions of Codex Esoterica. Real sources first. Then the Codex reads them back.">
+<meta property="og:title" content="The Transcriptions · Codex Esoterica">
+<meta property="og:description" content="The Transcriptions of Codex Esoterica. Real sources first. Then the Codex reads them back.">
+<meta property="og:type" content="website">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+:root{--void:#05070B;--cold:#12324F;--coldlt:#7FB4DC;--warm:#D9792B;--warmlt:#F0A560;--bone:#DDD8CA;--dim:#A5A69E;}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{background:var(--void);}
+body{min-height:100vh;background-color:var(--void);color:var(--bone);font-family:'Crimson Text',Georgia,serif;overflow-x:hidden;}
+#SKY{position:fixed;inset:0;width:100%;height:100%;z-index:0;display:block;}
+#APP{position:relative;z-index:2;max-width:880px;margin:0 auto;padding:clamp(44px,8vh,90px) 18px 40px;}
+.arrive{font:italic 400 clamp(21px,3.2vw,28px)/1.4 'Crimson Text',serif;max-width:32em;color:var(--warmlt);text-shadow:0 0 12px #000,0 0 3px #000;margin-bottom:46px;}
+.eye{font:400 12px/1.6 'Share Tech Mono',monospace;letter-spacing:.15em;text-transform:uppercase;color:var(--coldlt);text-shadow:0 0 8px #000;}
+h1{font:700 clamp(36px,8vw,68px)/1.08 'Cinzel',serif;color:var(--bone);margin:12px 0 16px;text-shadow:0 0 30px rgba(0,0,0,.9),0 0 40px rgba(217,121,43,.25);}
+.intro{font-size:clamp(19px,2.6vw,22px);line-height:1.5;max-width:34em;margin-bottom:52px;text-shadow:0 0 10px #000,0 0 3px #000;}
+.card{margin-bottom:46px;}
+.catalog{display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px 16px;font:400 12px/1.5 'Share Tech Mono',monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--coldlt);margin-bottom:6px;text-shadow:0 0 6px #000;}
+.card h2{font:500 clamp(20px,3.2vw,27px)/1.25 'Cinzel',serif;margin-bottom:16px;text-shadow:0 0 14px #000;}
+.pair{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(30px,10vw,110px);transition:gap 1.5s cubic-bezier(.2,.7,.2,1);}
+.text{background-color:rgba(5,7,11,.88);padding:18px;font-size:19px;line-height:1.5;border:1px solid;transition:border-color 1.5s;}
+.text.sci{border-color:rgba(127,180,220,.5);}
+.text.old{border-color:rgba(217,121,43,.55);}
+.card.back .pair{gap:0;}
+.card.back .text{border-color:rgba(221,216,202,.3);}
+.lit{display:none;background-color:rgba(5,7,11,.92);border:1px solid rgba(221,216,202,.3);border-top:0;padding:18px;text-align:center;font:italic 400 clamp(22px,3.4vw,29px)/1.35 'Crimson Text',serif;color:var(--warmlt);}
+.card.back .lit{display:block;animation:rise 1.6s ease;}
+@keyframes rise{from{opacity:0}to{opacity:1}}
+.acts{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px;align-items:center;}
+.b{background-color:rgba(5,7,11,.92);color:var(--bone);border:1px solid var(--dim);font:400 13px 'Share Tech Mono',monospace;letter-spacing:.1em;text-transform:uppercase;padding:12px 15px;cursor:pointer;text-decoration:none;display:inline-block;}
+.b:hover,.b:focus-visible{border-color:var(--warmlt);color:var(--warmlt);outline:none;}
+.b.main{border-color:var(--warm);color:var(--warmlt);}
+.out{font:400 13px 'Share Tech Mono',monospace;color:var(--coldlt);text-decoration:none;border-bottom:1px solid rgba(127,180,220,.45);padding:4px 0;background-color:rgba(5,7,11,.7);}
+.out:hover,.out:focus-visible{color:#fff;outline:none;}
+.said{font-size:19px;line-height:1.4;margin-top:12px;background-color:rgba(5,7,11,.82);padding:9px 12px;display:inline-block;}
+#TALLY{display:none;text-align:center;background-color:rgba(5,7,11,.9);border:1px solid var(--warm);padding:26px 18px;margin-bottom:46px;}
+#TALLY.on{display:block;}
+#TALLY p{font-size:21px;}
+#TALLY b{display:block;font:italic 400 clamp(25px,4vw,34px)/1.3 'Crimson Text',serif;color:var(--warmlt);margin-top:8px;}
+.nextcard{background-color:rgba(5,7,11,.86);border:1px dashed var(--coldlt);padding:18px;font-size:20px;margin-bottom:40px;}
+.nextcard span{display:block;font:400 12px 'Share Tech Mono',monospace;letter-spacing:.1em;text-transform:uppercase;color:var(--coldlt);margin-bottom:6px;}
+#summon{background-color:rgba(5,7,11,.86);padding:18px;margin-bottom:40px;}
+.csm-note{font-size:19px;line-height:1.45;margin-bottom:12px;}
+.csm-form{display:flex;flex-wrap:wrap;gap:8px;}
+.csm-input{flex:1 1 180px;min-width:0;background:#020305;border:1px solid var(--dim);color:var(--bone);font:400 16px 'Share Tech Mono',monospace;padding:11px;}
+.csm-input:focus{outline:none;border-color:var(--warmlt);}
+.csm-send{background:transparent;border:1px solid var(--warm);color:var(--warmlt);font:400 12px 'Share Tech Mono',monospace;letter-spacing:.14em;text-transform:uppercase;padding:11px 16px;cursor:pointer;}
+.exit{text-align:center;}
+.exit p{font-size:clamp(21px,3vw,26px);text-shadow:0 0 12px #000,0 0 3px #000;margin-bottom:20px;}
+#DOOR{display:block;text-decoration:none;max-width:320px;margin:0 auto;padding:70px 20px 28px;text-align:center;color:var(--warmlt);border:1px solid var(--warm);border-radius:160px 160px 0 0;background:radial-gradient(ellipse at 50% 110%,rgba(217,121,43,.32),rgba(5,7,11,.94) 66%);transition:box-shadow .7s;}
+#DOOR:hover,#DOOR:focus-visible{box-shadow:0 0 50px rgba(217,121,43,.32);outline:none;}
+#DOOR b{display:block;font:700 26px 'Cinzel',serif;}
+#DOOR small{display:block;margin-top:8px;font:400 12px 'Share Tech Mono',monospace;letter-spacing:.12em;text-transform:uppercase;color:var(--bone);}
+.cat{text-align:center;margin-top:26px;}
+#STILL{position:fixed;left:50%;bottom:26px;transform:translateX(-50%);z-index:5;width:min(560px,calc(100% - 32px));text-align:center;font:italic 400 20px/1.4 'Crimson Text',serif;background-color:rgba(5,7,11,.9);padding:12px 14px;opacity:0;pointer-events:none;transition:opacity 1.4s;}
+#STILL.on{opacity:1;}
+#codex-nav{margin-top:20px;}
+@media(max-width:640px){.pair{grid-template-columns:minmax(0,1fr);gap:34px;}}
+@media(prefers-reduced-motion:reduce){.pair,.text{transition:none}.card.back .lit{animation:none}}
+</style>
+<script>window.va=window.va||function(){(window.vaq=window.vaq||[]).push(arguments);};</script>
+<script defer src="/_vercel/insights/script.js"></script>
+</head>
+<body>
+<canvas id="SKY" aria-hidden="true"></canvas>
+<main id="APP">
+  <p class="arrive">Part of the snow on an old analog television was the oldest light there is.</p>
+  <div class="eye">The sanctioned record · Codex Esoterica · Read by Elvain Vhris and Elyon Vhar</div>
+  <h1>The Transcriptions</h1>
+  <p class="intro">Real sources come first. Then the Codex reads them back. It has never claimed they prove anything. You'll be asked what you think, and your answer will be kept.</p>
+  <div id="CARDS"></div>
+  <section id="TALLY" aria-live="polite"><p id="tally-n"></p><b>The record points. It does not argue.</b></section>
+  <div class="nextcard"><span>005 · In preparation</span>Whether a fear can be passed down.</div>
+  <div id="summon"></div>
+  <section class="exit">
+    <p>Every source above can be checked. Below this, nothing can.</p>
+    <a id="DOOR" data-codex-door href="madmens-gospel.html"><b>Descend</b><small>The Madmen's Gospel</small></a>
+    <p class="cat"><a class="out" href="https://www.worldanvil.com/w/codex-maledictus-codexmaledictus/a/the-transcriptions-document" target="_blank" rel="noopener">Catalogued: The Transcriptions</a></p>
+  </section>
+  <div id="codex-nav"></div>
+</main>
+<div id="STILL" aria-live="polite"></div>
+<script src="codex-summon.js"></script>
+<script>
+(function(){
+'use strict';
+var KEY='codex_transcriptions_v1',WA='https://www.worldanvil.com/w/codex-maledictus-codexmaledictus/a/';
+var REDUCED=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+function load(){try{return JSON.parse(localStorage.getItem(KEY))||{};}catch(e){return {};}}
+function save(o){try{localStorage.setItem(KEY,JSON.stringify(o));}catch(e){}}
+var CARDS=[
+ {n:'001',t:"The Experiment Physics Can't Explain",by:'Elvain Vhris',
+  a:'Fire particles at two slits one at a time and they still build an interference pattern. Measure which slit each one takes, and the pattern goes. John Archibald Wheeler called this a participatory universe.',
+  b:'Helena Blavatsky wrote in Isis Unveiled of "the indestructible tablets of the astral light," stamped with every thought we think and every act we perform. Later Theosophists called it the akashic record.',
+  lit:'and who is reading?',yt:'b_nVM133EB4',wa:'transcription-0013A-the-experiment-physics-can-t-explain-document'},
+ {n:'002',t:"You've Already Heard the Big Bang",by:'Elvain Vhris',
+  a:"In 1964, Arno Penzias and Robert Wilson found a hiss in their antenna at Holmdel that they couldn't remove. They cleaned out the pigeon droppings, and it stayed. It was the cosmic microwave background.",
+  b:'Pseudo-Dionysius taught that God is approached by saying what God is not, until the speech runs out and what remains is silence.',
+  lit:"what's left when everything else has been taken away.",yt:'Vta65ciR2bU',wa:'transcription-0023A-you-ve-already-heard-the-big-bang-document'},
+ {n:'003',t:'The Universe Will Not End. It Will Go Quiet.',by:'Elvain Vhris',
+  a:'William Thomson and Rudolf Clausius gave physics the idea that usable energy runs down, and that the end state is a universe with nothing left to happen.',
+  b:'The Puranas describe pralaya, a dissolution of the worlds. The Stoics described ekpyrosis, in which everything returns to fire.',
+  lit:'people wrote down an ending long before anyone could measure one.',yt:'cOC6-6WcX5A',wa:'transcription-0033A-the-universe-will-not-end-it-will-go-quiet-document'},
+ {n:'004',t:'Your Death Already Exists: The Block Universe',by:'Elyon Vhar',
+  a:'Hermann Weyl wrote in 1949: "The objective world simply is, it does not happen."',
+  b:'Boethius held that eternity sees all of time at once. The Norns sit at the root of the world tree and choose the lives of men.',
+  lit:'seen from outside, it has already happened.',yt:'jmL7Ol6U1Nk',wa:'transcription-0043A-your-death-already-exists-document'}
+];
+var SAID={rhyme:"Filed. You said it, and the record didn't.",coin:"Filed. That's a reading too, and it took you the same two texts to reach it."};
+var file=load();file.v=file.v||{};
+function el(tag,cls,text){var e=document.createElement(tag);if(cls)e.className=cls;if(text!=null)e.textContent=text;return e;}
+var host=document.getElementById('CARDS');
+function link(cls,text,href){var a=el('a',cls,text);a.href=href;a.target='_blank';a.rel='noopener';return a;}
+function tally(){
+  var keys=Object.keys(file.v);if(keys.length<4)return;
+  var r=keys.filter(function(k){return file.v[k]==='rhyme';}).length;
+  document.getElementById('TALLY').classList.add('on');
+  document.getElementById('tally-n').textContent='You called '+r+' of 4 a rhyme.'+(file.returned?' They can’t be changed, and you can still read them.':'');
+}
+CARDS.forEach(function(c){
+  var card=el('article','card');
+  var cat=el('div','catalog');cat.appendChild(el('span',null,'Transcription '+c.n));cat.appendChild(el('span',null,'Read by '+c.by));card.appendChild(cat);
+  card.appendChild(el('h2',null,c.t));
+  var pair=el('div','pair');pair.appendChild(el('div','text sci',c.a));pair.appendChild(el('div','text old',c.b));card.appendChild(pair);
+  card.appendChild(el('div','lit',c.lit));
+  var acts=el('div','acts');card.appendChild(acts);
+  var said=el('div');card.appendChild(said);
+  function links(){acts.appendChild(link('out','Watch the Transcription','https://www.youtube.com/watch?v='+c.yt));acts.appendChild(link('out','Catalogued',WA+c.wa));}
+  function filed(){acts.textContent='';links();said.textContent='';said.appendChild(el('div','said',SAID[file.v[c.n]]));tally();}
+  function verdict(){
+    acts.textContent='';
+    [['rhyme','These rhyme'],['coin','Coincidence']].forEach(function(p){
+      var b=el('button','b',p[1]);b.type='button';
+      b.addEventListener('click',function(){file.v[c.n]=p[0];save(file);filed();});acts.appendChild(b);
+    });
+    links();
+  }
+  if(file.v[c.n]){card.classList.add('back');filed();}
+  else{
+    var rb=el('button','b main','Read it back');rb.type='button';
+    rb.addEventListener('click',function(){card.classList.add('back');verdict();});
+    acts.appendChild(rb);links();
+  }
+  host.appendChild(card);
+});
+if(Object.keys(file.v).length){file.returned=true;}
+tally();
+if(window.CodexSummon)CodexSummon.mount(document.getElementById('summon'),{invite:'The next reading goes out by email to whoever leaves an address. It’s a mailing list, and every email carries the way out.',button:'Leave it',done:'Filed. The next reading knows where you are.',already:'Your address is already on file.'});
+
+// ── THE SKY ── slow mottling in the colors of a microwave sky map. No two frames are quite the same.
+var cv=document.getElementById('SKY'),x=cv.getContext('2d'),W=96,H=60,img,buf=document.createElement('canvas'),bx=buf.getContext('2d');
+buf.width=W;buf.height=H;img=bx.createImageData(W,H);
+function hash(a,b){var s=Math.sin(a*127.1+b*311.7)*43758.5453;return s-Math.floor(s);}
+function noise(a,b){var i=Math.floor(a),j=Math.floor(b),f=a-i,g=b-j;f=f*f*(3-2*f);g=g*g*(3-2*g);return (hash(i,j)*(1-f)+hash(i+1,j)*f)*(1-g)+(hash(i,j+1)*(1-f)+hash(i+1,j+1)*f)*g;}
+// the buffer keeps the screen's shape, so the blotches stay round on a tall phone
+function size(){cv.width=Math.min(innerWidth,900);cv.height=Math.min(innerHeight,900);W=Math.max(40,Math.round(cv.width/8));H=Math.max(40,Math.round(cv.height/8));buf.width=W;buf.height=H;img=bx.createImageData(W,H);}
+function paint(t){
+  var d=img.data,k=0;
+  for(var j=0;j<H;j++)for(var i=0;i<W;i++){
+    var n=noise(i*.16+t*.012,j*.2-t*.008)*.5+noise(i*.38-t*.02,j*.42+t*.016)*.3+noise(i*.8+t*.03,j*.86)*.2;
+    n=(n-.5)*2.6;
+    var r=5,g=7,b=11;
+    if(n>0){r+=n*150;g+=n*70;b+=n*12;}else{r+=-n*12;g+=-n*44;b+=-n*88;}
+    d[k++]=r;d[k++]=g;d[k++]=b;d[k++]=255;
+  }
+  bx.putImageData(img,0,0);
+  x.imageSmoothingEnabled=true;x.drawImage(buf,0,0,cv.width,cv.height);
+  var v=x.createRadialGradient(cv.width/2,cv.height/2,cv.height*.25,cv.width/2,cv.height/2,cv.width*.72);v.addColorStop(0,'rgba(5,7,11,.12)');v.addColorStop(1,'rgba(5,7,11,.82)');x.fillStyle=v;x.fillRect(0,0,cv.width,cv.height);
+}
+var speed=1,clock=Math.random()*400,lastT=performance.now(),lastP=0;
+function frame(now){
+  requestAnimationFrame(frame);
+  if(document.hidden){lastT=now;return;}
+  clock+=(now-lastT)/1000*speed;lastT=now;
+  if(now-lastP<120)return;lastP=now;paint(clock);
+}
+size();addEventListener('resize',function(){size();paint(clock);});
+paint(clock);if(!REDUCED)requestAnimationFrame(frame);
+
+// ── STAYING ── the mottling slows, and the page says what it is
+var still=document.getElementById('STILL'),lastAct=Date.now(),stage=0;
+function wake(){lastAct=Date.now();stage=0;speed=1;still.classList.remove('on');}
+['pointermove','pointerdown','keydown','scroll','touchstart'].forEach(function(n){addEventListener(n,wake,{passive:true});});
+setInterval(function(){
+  if(document.hidden){lastAct=Date.now();return;}
+  var s=(Date.now()-lastAct)/1000;
+  function say(t,sp){still.textContent=t;still.classList.add('on');speed=sp;}
+  if(s>=13&&stage<1){stage=1;say('These are the colors astronomers use for the oldest light.',.6);}
+  if(s>=26&&stage<2){stage=2;say('The light on those maps left before there was anyone to receive it.',.3);}
+  if(s>=39&&stage<3){stage=3;say('You’ve been looking at it for thirty-nine seconds. It has been arriving for 13.8 billion years.',.1);}
+},1000);
+try{console.log('%cthe sources are real. that was never the part you should be worried about.','color:#F0A560;font-family:monospace;');}catch(e){}
+})();
+</script>
+<script src="codex-nav.js"></script>
+<script>if(typeof initCodexNav==='function'){initCodexNav('the-transcriptions');}</script>
+</body>
+</html>

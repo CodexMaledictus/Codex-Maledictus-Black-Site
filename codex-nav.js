@@ -150,6 +150,16 @@ const CODEX_MAP = {
     bearerChamber: null
   },
 
+  "the-transcriptions": {
+    file: "the-transcriptions.html", title: "The Transcriptions", seq: null, realm: "I",
+    phase: "Sanctioned Record",
+    description: "Real sources first. Then the Codex reads them back. Codex Esoterica, Transcriptions 001 to 004.",
+    closingWhisper: "The record points. It does not argue.",
+    pathA: "madmens-gospel", pathB: null,
+    labelA: "Descend", labelB: null,
+    bearerChamber: null
+  },
+
   "the-three-weeks": {
     file: "the-three-weeks.html", title: "The Three Weeks", seq: null, realm: "I-II",
     phase: "Hallway",

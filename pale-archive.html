@@ -1175,6 +1175,8 @@ const PAGES=[
    cls:'The Liturgy decoded line by line. The Hidden Doctrine has never been published outside the Archivum.'},
   {id:'plague-priest-apocrypha',file:'plague-priest-apocrypha.html',seq:7,title:'Apocrypha · The Plague Priest',realm:'I-II',phase:'Apocrypha',
    cls:'What the Plague Priest left in the Cathedral that the Archivum has declined to publish.'},
+  {id:'the-transcriptions',file:'the-transcriptions.html',seq:null,title:'The Transcriptions · Codex Esoterica',realm:'I',phase:'Sanctioned Record',
+   cls:'Real sources first. Then the Codex reads them back. It has never claimed they prove anything.'},
   {id:'the-three-weeks',file:'the-three-weeks.html',seq:null,title:'The Three Weeks · Reception Log',realm:'I-II',phase:'Hallway',
    cls:'June 8 to June 29, 2025. A rite went out. The log was kept to see whether anything would come back.'},
   {id:'rf-093-lore',file:'rf-093-lore.html',seq:15,title:'Recovered Fragment 093 · Lore',realm:'I',phase:'Lore',
@@ -1252,7 +1254,7 @@ const PLACEHOLDERS={
 };
 
 const CLUSTERS=[
-  {title:'Entry · The Surface',eyebrow:'Cluster I',desc:'Where the visitor arrives. Where the visitor consults the document.',pages:['index','pale-archive']},
+  {title:'Entry · The Surface',eyebrow:'Cluster I',desc:'Where the visitor arrives. Where the visitor consults the document.',pages:['index','pale-archive','the-transcriptions']},
   {title:'The Gospel · The Broadcast Source',eyebrow:'Cluster II · Origin of Transmissions',desc:'The albums from which every Ritual Transmission is relayed. The visitor arrives here early, and hears fragments of every track again on the way down.',pages:['gospel-forgotten-flesh','madmens-gospel']},
   {title:'The Plague Priest',eyebrow:'Cluster III · Ritual Transmission III',desc:'The Liturgy. The posture. The Cathedral of Rot. The descent is still being assembled.',pages:['plague-priest-liturgy','plague-priest-lore','plague-priest-decoder','plague-priest-apocrypha','the-three-weeks'],placeholders:['plagueChronicle','plagueApocryphaDeeper']},
   {title:'The Infection Remembers',eyebrow:'Cluster IV · Ritual Transmission I',desc:'The first audible breach of the current cycle. The full descent of one transmission.',pages:['infection-remembers','infection-lore','apocrypha-infection','chronicle-1-infection-remembers','lore-chronicle-1','apocrypha-chronicle-1','memory-engine-1']},
@@ -1998,6 +2000,7 @@ async function runBootRitual(){
 }
 
 const CHANGELOG=[
+  {date:'2026-11-01',title:'The Transcriptions · Codex Esoterica',file:'the-transcriptions.html'},
   {date:'2026-11-01',title:'The Three Weeks · Reception Log',file:'the-three-weeks.html'},
   {date:'2026-11-01',title:'RF-093 Mirror, Memory Engine and Confession Ledger · Rebuilt',file:'rf-093-mirror.html'},
   {date:'2026-10-30',title:'The Madmen\'s Gospel · Gospel II',file:'madmens-gospel.html'},
