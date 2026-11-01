@@ -16,15 +16,15 @@
 <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;600&family=Share+Tech+Mono&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
 <style>
 :root{
-  --ash:#2E2B28;--sky:#6E6C69;--gold:#C9A84C;--gold-lt:#E8CE86;--gd2:#A98644;
+  --ash:#141210;--sky:#17181D;--gold:#C9A84C;--gold-lt:#E8CE86;--gd2:#A98644;
   --silver:#D8D4CC;--s2:#A8A49C;--crimson:#C4372A;--violet:#9B74DC;--ink:#EDE9E0;
 }
 *{margin:0;padding:0;box-sizing:border-box;}
-html,body{width:100%;height:100%;overflow:hidden;background:var(--ash);color:var(--ink);overscroll-behavior:none;}
+html,body{width:100%;height:100%;overflow:hidden;background:#0B0A09;color:var(--ink);overscroll-behavior:none;}
 body.fine{cursor:none;}
 body.fine a,body.fine button,body.fine input{cursor:none;}
 #GL,#FX{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none;}
-#GL{z-index:0;background:linear-gradient(180deg,#6E6C69 0,#57544F 22%,#2E2B28 23%,#191715 100%);}
+#GL{z-index:0;background:linear-gradient(180deg,#0E0F13 0,#1C1A1B 37%,#3A1F12 38%,#14110F 40%,#0B0A09 100%);}
 #FX{z-index:1;}
 #VIG{position:fixed;inset:0;z-index:2;pointer-events:none;background:radial-gradient(ellipse at 50% 58%,transparent 42%,rgba(8,7,6,.62) 100%);}
 #CUR{position:fixed;left:0;top:0;width:18px;height:18px;margin:-9px 0 0 -9px;pointer-events:none;z-index:9999;display:none;}
@@ -202,36 +202,62 @@ var STATUS=['The floor has started keeping you.','A shard answers. It was going 
 // ── THE PLAIN ── drawn live: ash, gold in the cracks, silver where you stayed
 var gl=null,U={},glOK=false,glCv=$('GL'),fx=$('FX'),c2=fx.getContext('2d');
 var VS='attribute vec2 a;void main(){gl_Position=vec4(a,0.,1.);}';
-var FS='precision highp float;uniform vec2 R,M;uniform float T,B,D;uniform vec4 P[9];uniform vec3 W[8];'
+var FS='precision highp float;uniform vec2 R,M;uniform float T,D,C,K,F;uniform vec4 P[9];uniform vec3 W[8];'
 +'float h(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}'
 +'vec2 h2(vec2 p){return fract(sin(vec2(dot(p,vec2(127.1,311.7)),dot(p,vec2(269.5,183.3))))*43758.5453);}'
 +'float n(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix(mix(h(i),h(i+vec2(1,0)),f.x),mix(h(i+vec2(0,1)),h(i+vec2(1,1)),f.x),f.y);}'
-+'float fb(vec2 p){float v=0.,a=.5;for(int i=0;i<4;i++){v+=a*n(p);p=p*2.03+7.1;a*=.5;}return v;}'
++'float fb(vec2 p){float v=0.,a=.5;for(int i=0;i<5;i++){v+=a*n(p);p=p*2.03+7.1;a*=.5;}return v;}'
++'float fc(vec2 p){return .67*n(p)+.33*n(p*2.1+3.);}'
 +'float crack(vec2 p){vec2 i=floor(p),f=fract(p);float a=8.,b=8.;for(int y=-1;y<=1;y++)for(int x=-1;x<=1;x++){vec2 g=vec2(float(x),float(y));vec2 o=g+h2(i+g)-f;float d=dot(o,o);if(d<a){b=a;a=d;}else if(d<b){b=d;}}return sqrt(b)-sqrt(a);}'
-+'float HZ;vec2 pl(vec2 s){float d=max(HZ-s.y,.012);return vec2(s.x/d,1./d)*1.7;}'
-+'float wet(vec2 g){float v=fb(g*.5+T*.06)*.05;for(int i=0;i<8;i++){vec3 w=W[i];if(w.z<0.)continue;float d=length(g-pl(w.xy));v+=sin(d*6.5-w.z*7.)*exp(-d*.42)*exp(-w.z*.9)*.14;}return v;}'
-+'vec3 sky(vec2 s){float c=fb(vec2(s.x*1.4+T*.012,s.y*3.2));return mix(vec3(.46,.455,.44),vec3(.27,.265,.26),smoothstep(-.1,.75,c+(s.y-HZ)*.55));}'
-+'void main(){float mn=min(R.x,R.y);vec2 s=(gl_FragCoord.xy-.5*R)/mn;HZ=(R.y*.28)/mn;vec3 col;'
-+'if(s.y>=HZ){col=sky(s);float haze=exp(-(s.y-HZ)*11.);col=mix(col,vec3(.5,.49,.47),haze*.55);}'
-+'else{vec2 g=pl(s);float depth=HZ-s.y;'
-+'vec2 wg=g+vec2(fb(g*.45),fb(g*.45+5.))*.5;'
-+'float c1=crack(wg*1.05),c2=crack(wg*3.1+3.);'
-+'float tone=fb(g*1.3);vec3 ash=mix(vec3(.105,.097,.09),vec3(.3,.283,.262),tone);'
-+'ash*=.74+.5*smoothstep(0.,.13,c2);ash*=.52+.48*smoothstep(0.,.05,c1);'
-+'float near=exp(-length(g-pl(M))*.38);float tw=1./(1.+7.*depth*depth);'
-+'float pulse=.5+.5*sin(T*.7+fb(g*.5)*9.-length(g-pl(M))*.85);'
-+'float vein=(1.-smoothstep(.0,(.05+.02*near)*tw+.004,c1));float fine=(1.-smoothstep(0.,.028*tw+.003,c2))*.3;'
-+'vec3 gold=vec3(1.,.72,.26)*(vein*(.3+pulse*.55+near*1.5)+fine*(near*1.3+.08));'
-+'ash+=gold;float bloom=exp(-c1*12./tw)*(.05+near*.17);ash+=vec3(.95,.62,.2)*bloom;'
++'float HZ,TOP;vec2 pl(vec2 s){float d=max(HZ-s.y,.012);return vec2(s.x/d,1./d)*1.7;}'
++'float wet(vec2 g){float v=fc(g*.5+T*.06)*.05;for(int i=0;i<8;i++){vec3 w=W[i];if(w.z<0.)continue;float d=length(g-pl(w.xy));v+=sin(d*6.5-w.z*7.)*exp(-d*.42)*exp(-w.z*.9)*.14;}return v;}'
+/* a low ceiling of weather, running to the horizon, lit from under by what is burning on the plain */
++'vec3 weather(vec2 s){float up=max(s.y-HZ,0.)+.075;vec2 q=vec2(s.x/up,1./up)*.2;q.y+=T*.035;q.x+=T*.006;'
++'float w=fb(q*.6);float d=fb(q+w*1.9);float d2=fc((q+w*1.9)*1.02+vec2(.09,-.16));float lit=clamp((d-d2)*4.+.5,0.,1.);'
++'vec3 col=mix(vec3(.012,.014,.02),vec3(.115,.12,.125),smoothstep(.3,.74,d));col+=vec3(.15,.15,.15)*lit*smoothstep(.36,.72,d);'
++'col+=vec3(.42,.17,.05)*exp(-up*8.)*(.3+d*.7);col+=vec3(.055,.03,.022)*exp(-up*2.4);'
++'col*=1.+F*3.2*smoothstep(.22,.7,d);col+=F*vec3(.05,.055,.07);return col;}'
++'void main(){float mn=min(R.x,R.y);vec2 s=(gl_FragCoord.xy-.5*R)/mn;HZ=(R.y*.12)/mn;TOP=.5*R.y/mn;vec3 col;'
++'float ridge=HZ+.022*fc(vec2(s.x*7.,1.))+.009*n(vec2(s.x*31.,4.));'
++'if(s.y>=HZ){col=weather(s);float up=s.y-HZ;float cl=fb(vec2(s.x/(up+.075),1./(up+.075))*.2+vec2(T*.006,T*.035));'
+/* what is in the sky, and it is not the sun. It leans very slightly away from you. */
++'float br=(TOP-HZ);vec2 e=s-vec2(-M.x*.02,HZ+br*.64-M.y*.012);float rr=br*.2;float dd=length(e);float thin=smoothstep(.72,.4,cl);'
++'float cor=exp(-abs(dd-rr)*70.)*.95+exp(-max(dd-rr,0.)*(11./max(br,.2)))*.11;col+=vec3(.82,.84,.8)*cor*thin;'
++'col=mix(col,vec3(.003),smoothstep(rr,rr-.003,dd)*(.3+.7*thin));'
+/* someone is standing on the horizon. It is only easy to see when the sky lights. */
++'if(C>.001){vec2 c=(s-vec2(.1*TOP*0.+.0,HZ))/C;float nk=.8;vec2 hp=c-vec2(0.,nk);float ca=cos(K),sa=sin(K);hp=vec2(ca*hp.x-sa*hp.y,sa*hp.x+ca*hp.y)-vec2(0.,.11);'
++'float head=1.-smoothstep(.9,1.08,length(hp/vec2(.078,.108)));float wd=mix(.1,.2,smoothstep(0.,.74,c.y))*(1.-smoothstep(.74,.82,c.y)*.68);'
++'float body=(1.-smoothstep(wd-.012,wd+.012,abs(c.x)))*step(0.,c.y)*(1.-smoothstep(.8,.86,c.y));float a=max(head,body);col=mix(col,vec3(.007,.007,.009),a*.93);}'
++'if(s.y<ridge)col=mix(vec3(.018,.015,.016),vec3(.11,.055,.026),exp(-(ridge-s.y)*0.+(-(s.y-HZ))*70.)*.8)*(1.+F*2.);'
++'col=mix(col,vec3(.17,.085,.04),exp(-up*30.)*.5);}'
++'else{vec2 g=pl(s);float depth=HZ-s.y;float tw=1./(1.+7.*depth*depth);'
+/* dry mud, plates curled at the edge, seams that give out instead of closing into neat cells */
++'vec2 wg=g+vec2(fc(g*.4),fc(g*.4+5.))*.8+vec2(fc(g*1.7+2.),fc(g*1.7+9.))*.16;float nz=fc(g*.55+11.);'
++'float c1=crack(wg*.72)+smoothstep(.56,.32,nz)*.13;float c2=crack(wg*2.3+3.)+smoothstep(.62,.3,fc(g*1.1+6.))*.09;'
++'float e0=.016+.03*tw;vec2 gx=g+vec2(e0,0.),gy=g+vec2(0.,e0);'
++'vec2 wx=gx+vec2(fc(gx*.4),fc(gx*.4+5.))*.8+vec2(fc(gx*1.7+2.),fc(gx*1.7+9.))*.16;vec2 wy=gy+vec2(fc(gy*.4),fc(gy*.4+5.))*.8+vec2(fc(gy*1.7+2.),fc(gy*1.7+9.))*.16;'
++'float cx=crack(wx*.72)+smoothstep(.56,.32,nz)*.13;float cy=crack(wy*.72)+smoothstep(.56,.32,nz)*.13;'
++'float hh=smoothstep(0.,.075,c1)+exp(-c1*8.)*.5+.32*smoothstep(0.,.05,c2);float hx=smoothstep(0.,.075,cx)+exp(-cx*8.)*.5+.32*smoothstep(0.,.05,crack(wx*2.3+3.)+.03);float hy=smoothstep(0.,.075,cy)+exp(-cy*8.)*.5+.32*smoothstep(0.,.05,crack(wy*2.3+3.)+.03);'
++'float grit=fb(g*5.5);float gritx=fc(gx*5.5);float grity=fc(gy*5.5);float gg=fc(g*5.5);'
++'vec2 nm=vec2(hx-hh+(gritx-gg)*.5,hy-hh+(grity-gg)*.5)/e0*.018;'
++'float tone=fb(g*.8);vec3 alb=mix(vec3(.16,.142,.122),vec3(.052,.05,.054),smoothstep(.28,.72,tone+(grit-.5)*.5));'
++'float lgt=clamp(.86+nm.y*-2.2+nm.x*-.9,.05,1.6);vec3 ash=alb*lgt*vec3(1.,.97,.95);'
++'ash*=.08+.92*smoothstep(0.,.03*tw+.006,c1);ash*=.42+.58*smoothstep(0.,.02*tw+.004,c2);'
++'ash+=vec3(.09,.04,.015)*exp(-depth*4.);'
+/* gold only where the ground has opened, and only some of it. Close to you it wakes. */
++'float near=exp(-length(g-pl(M))*.32);float wake=smoothstep(.46,.66,fc(g*.26+T*.012))+near*1.3;'
++'float pulse=.55+.45*sin(T*.5+fc(g*.5)*9.-length(g-pl(M))*.7);float vein=1.-smoothstep(.0,(.02+.012*near)*tw+.003,c1);'
++'ash+=vec3(1.,.5,.13)*vein*min(wake,1.5)*pulse*.95;ash+=vec3(.9,.34,.08)*exp(-c1*22./tw)*min(wake,1.3)*.07;'
 +'float m=0.;for(int i=0;i<9;i++){vec4 p=P[i];if(p.z<=0.)continue;vec2 q=g-pl(p.xy);float rr=p.z*2.75;m+=rr*rr/(dot(q,q)+.004);}'
-+'m*=.75+.5*fb(g*.9+T*.03);float mask=smoothstep(.82,1.04,m);'
-+'float e=.012;float h0=wet(g),hx=wet(g+vec2(e,0.)),hy=wet(g+vec2(0.,e));vec2 nr=vec2(hx-h0,hy-h0)/e;'
-+'vec2 rf=vec2(s.x+nr.x*.1,HZ+depth*.75+nr.y*.13);vec3 rc=sky(rf);float fres=pow(clamp(1.-depth*.72,0.,1.),2.);'
-+'vec3 sil=mix(rc*1.75,vec3(.95,.94,.91),fres*.6);float spec=pow(clamp(.5+nr.x*.8+nr.y*.9,0.,1.),9.);sil+=vec3(.95)*spec;'
-+'float men=smoothstep(.72,.9,m)*(1.-smoothstep(.9,1.08,m));'
-+'col=mix(ash,sil,mask);col=mix(col,vec3(.05,.045,.04),men*.72);'
-+'col=mix(col,vec3(.42,.415,.4),exp(-depth*8.5)*.82);}'
-+'float gr=h(gl_FragCoord.xy+T)*.03;col+=gr-.015;gl_FragColor=vec4(col*D,1.);}';
++'m*=.75+.5*fc(g*.9+T*.03);float mask=smoothstep(.82,1.04,m);col=ash;'
++'if(m>.5){float e=.012;float h0=wet(g),hxx=wet(g+vec2(e,0.)),hyy=wet(g+vec2(0.,e));vec2 nr=vec2(hxx-h0,hyy-h0)/e;'
++'vec2 rf=vec2(s.x+nr.x*.12,HZ+depth*.8+nr.y*.15);vec3 rc=weather(rf);float dr=length(rf-vec2(-M.x*.02,HZ+(TOP-HZ)*.64));float rr2=(TOP-HZ)*.2;rc+=vec3(.8)*exp(-abs(dr-rr2)*55.);'
++'float fres=pow(clamp(1.-depth*.8,0.,1.),2.);vec3 sil=mix(rc*1.7+vec3(.03),vec3(.46,.45,.43),fres*.4);float spec=pow(clamp(.5+nr.x*.22+nr.y*.26,0.,1.),14.);sil+=vec3(.5)*spec;sil=min(sil,vec3(.72,.72,.7));'
++'float men=smoothstep(.72,.9,m)*(1.-smoothstep(.9,1.08,m));col=mix(ash,sil,mask);col=mix(col,vec3(.012,.011,.01),men*.8);}'
++'col*=1.+F*1.6;col+=F*vec3(.018,.02,.026);'
++'vec3 fog=vec3(.15,.078,.04)+F*vec3(.12,.13,.15);col=mix(col,fog,exp(-depth*9.)*.9);}'
++'col=pow(max(col,0.),vec3(.9));float lum=dot(col,vec3(.3,.59,.11));col=mix(vec3(lum),col,.86);'
++'float gr=h(gl_FragCoord.xy+fract(T)*91.)*.03;col+=gr-.015;gl_FragColor=vec4(col*D,1.);}';
 function shader(type,src){var s=gl.createShader(type);gl.shaderSource(s,src);gl.compileShader(s);if(!gl.getShaderParameter(s,gl.COMPILE_STATUS)){if(window.console)console.warn(gl.getShaderInfoLog(s));return null;}return s;}
 function initGL(){
   try{
@@ -245,21 +271,21 @@ function initGL(){
     gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,3,-1,-1,3]),gl.STATIC_DRAW);
     gl.enableVertexAttribArray(gl.getAttribLocation(pr,'a'));
     gl.vertexAttribPointer(gl.getAttribLocation(pr,'a'),2,gl.FLOAT,false,0,0);
-    ['R','M','T','D','P','W'].forEach(function(k){U[k]=gl.getUniformLocation(pr,k);});
+    ['R','M','T','D','P','W','C','K','F'].forEach(function(k){U[k]=gl.getUniformLocation(pr,k);});
     glOK=true;
   }catch(e){glOK=false;}
 }
-var W=0,H=0,DPR=1;
+var W=0,H=0,DPR=1,QS=1,slowN=0,slowT=0;
 function resize(){
   W=window.innerWidth;H=window.innerHeight;DPR=Math.min(window.devicePixelRatio||1,2);
   fx.width=W*DPR;fx.height=H*DPR;c2.setTransform(DPR,0,0,DPR,0,0);
-  var q=(MOBILE?.72:1)*Math.min(DPR,1.25);
+  var q=(MOBILE?.72:1)*Math.min(DPR,1.25)*QS;
   glCv.width=Math.round(W*q);glCv.height=Math.round(H*q);
   if(glOK)gl.viewport(0,0,glCv.width,glCv.height);
   place();
 }
 function toS(x,y){var mn=Math.min(W,H);return [(x-W/2)/mn,(H/2-y)/mn];}
-function horizonY(){return H*.22;}
+function horizonY(){return H*.38;}
 
 // Same seven in the same places on every visit. The seed lives on this device.
 var spots=[],eighthSpot=null;
@@ -271,7 +297,7 @@ function place(){
     var a=off+i/7*6.283+(r()-.5)*.42;var j=.85+r()*.2;
     var x=W/2+Math.cos(a)*rx*j,y=cy+Math.sin(a)*ry*j,persp=.66+.56*(y-horizonY())/(H-horizonY());
     var pts=[],k=5+Math.floor(r()*2);
-    for(var n=0;n<k;n++){var t=n/k*6.283+(r()-.5)*.5;pts.push([Math.cos(t)*(.62+r()*.42),Math.sin(t)*(1.05+r()*.45)]);}
+    for(var n=0;n<k;n++){var t=n/k*6.283+(r()-.5)*.5;pts.push([Math.cos(t)*(.5+r()*.34),Math.sin(t)*(1.45+r()*.62)]);}
     return {s:s,x:x,y:y,r:size*persp,pts:pts,ph:r()*6.28,drip:[]};
   });
   eighthSpot={s:EIGHTH,x:W/2,y:cy,r:size*.95,pts:[[-.5,-1.3],[.62,-1.1],[.72,.4],[.1,1.45],[-.7,.8]],ph:1,drip:[]};
@@ -349,24 +375,24 @@ function tick(dt){
 }
 
 // ── DRAWING ON THE PLAIN ──
-function poly(sp,scale){var b=Math.sin(performance.now()/1400+sp.ph)*2;c2.beginPath();sp.pts.forEach(function(p,i){var x=sp.x+p[0]*sp.r*scale,y=sp.y+b+p[1]*sp.r*scale;i?c2.lineTo(x,y):c2.moveTo(x,y);});c2.closePath();}
+function poly(sp,scale){var b=0;c2.beginPath();sp.pts.forEach(function(p,i){var x=sp.x+p[0]*sp.r*scale,y=sp.y+b+p[1]*sp.r*scale;i?c2.lineTo(x,y):c2.moveTo(x,y);});c2.closePath();}
 function drawShard(sp,t){
   var s=sp.s,c=s.color,seen=s.seen||(s===EIGHTH&&eighthRead),hot=active===sp;
-  var bob=Math.sin(t/1400+sp.ph)*2;
+  var bob=0;
   // its shadow on the ash
-  c2.save();c2.translate(sp.x,sp.y+sp.r*1.55);c2.scale(1,.2);c2.beginPath();c2.arc(0,0,sp.r*1.05,0,6.29);c2.fillStyle='rgba(0,0,0,.42)';c2.fill();c2.restore();
+  c2.save();c2.translate(sp.x,sp.y+sp.r*1.5);var sg=c2.createLinearGradient(0,0,0,sp.r*2.5);sg.addColorStop(0,'rgba(0,0,0,.72)');sg.addColorStop(1,'rgba(0,0,0,0)');c2.fillStyle=sg;c2.beginPath();c2.moveTo(-sp.r*.5,0);c2.lineTo(sp.r*.5,0);c2.lineTo(sp.r*.95,sp.r*2.5);c2.lineTo(-sp.r*.95,sp.r*2.5);c2.closePath();c2.fill();c2.restore();
   poly(sp,1);
   var g=c2.createLinearGradient(sp.x-sp.r,sp.y-sp.r*1.4+bob,sp.x+sp.r,sp.y+sp.r*1.4+bob);
-  g.addColorStop(0,'rgba(232,229,222,.96)');g.addColorStop(.28,'rgba(128,126,122,.92)');g.addColorStop(.5,'rgba(42,41,40,.94)');g.addColorStop(.72,'rgba(108,106,102,.92)');g.addColorStop(1,'rgba(214,210,202,.95)');
+  g.addColorStop(0,'rgba(92,94,100,.97)');g.addColorStop(.3,'rgba(26,27,31,.98)');g.addColorStop(.62,'rgba(10,10,12,.99)');g.addColorStop(.86,'rgba(38,30,24,.98)');g.addColorStop(1,'rgba(112,72,38,.96)');
   c2.fillStyle=g;c2.fill();
-  c2.lineWidth=hot?2:1.1;c2.strokeStyle='rgba('+c[0]+','+c[1]+','+c[2]+','+(seen||hot?.95:.6)+')';
-  if(hot||seen){c2.shadowColor='rgba('+c[0]+','+c[1]+','+c[2]+',.8)';c2.shadowBlur=hot?24:12;}
+  c2.lineWidth=hot?1.6:.9;c2.strokeStyle=(seen||hot)?'rgba('+c[0]+','+c[1]+','+c[2]+',.85)':'rgba(205,205,198,.42)';
+  if(hot||seen){c2.shadowColor='rgba('+c[0]+','+c[1]+','+c[2]+',.8)';c2.shadowBlur=hot?16:5;}
   c2.stroke();c2.shadowBlur=0;
   // a glint crossing the glass
   c2.save();poly(sp,1);c2.clip();var gx=((t/40+sp.ph*90)%(sp.r*9))-sp.r*4.5;
-  c2.translate(sp.x+gx,sp.y);c2.rotate(.5);c2.fillStyle='rgba(255,255,255,.26)';c2.fillRect(-sp.r*.11,-sp.r*3,sp.r*.22,sp.r*6);c2.restore();
-  c2.font=(sp.r*.82)+'px serif';c2.textAlign='center';c2.textBaseline='middle';
-  c2.fillStyle=seen?'rgba('+c[0]+','+c[1]+','+c[2]+',1)':'rgba(240,237,230,.9)';
+  c2.translate(sp.x+gx,sp.y);c2.rotate(.5);c2.fillStyle='rgba(255,255,255,.09)';c2.fillRect(-sp.r*.11,-sp.r*3,sp.r*.22,sp.r*6);c2.restore();
+  c2.font=(sp.r*.66)+'px serif';c2.textAlign='center';c2.textBaseline='middle';
+  c2.fillStyle=hot?'rgba('+c[0]+','+c[1]+','+c[2]+',1)':seen?'rgba('+c[0]+','+c[1]+','+c[2]+',.7)':'rgba(205,205,198,.42)';
   c2.shadowColor='#000';c2.shadowBlur=6;c2.fillText(s.glyph,sp.x,sp.y+bob);c2.shadowBlur=0;
   // silver leaving it
   sp.drip=sp.drip.filter(function(d){d.y+=d.v*1.5;d.v+=.06;
@@ -387,11 +413,11 @@ function drawFigure(t){
     c2.save();c2.scale(1,v[0]*(1+br));c2.globalAlpha=form*v[1];
     var tilt=(stillStage>=2||reversing)?.2:0;
     var body=c2.createLinearGradient(0,-hh,0,0);
-    body.addColorStop(0,'rgba(230,228,222,.92)');body.addColorStop(.42,'rgba(138,136,132,.72)');body.addColorStop(1,'rgba(90,88,86,.08)');
+    body.addColorStop(0,'rgba(58,60,64,.96)');body.addColorStop(.46,'rgba(18,18,20,.92)');body.addColorStop(1,'rgba(8,8,9,.12)');
     c2.fillStyle=body;
     c2.beginPath();c2.moveTo(-hh*.15,-hh*.76);c2.quadraticCurveTo(-hh*.26,-hh*.42,-hh*.13,-hh*.24);c2.lineTo(-hh*.1,0);c2.lineTo(hh*.1,0);c2.lineTo(hh*.13,-hh*.24);c2.quadraticCurveTo(hh*.26,-hh*.42,hh*.15,-hh*.76);c2.closePath();c2.fill();
     c2.save();c2.translate(0,-hh*.86);c2.rotate(tilt);
-    var head=c2.createRadialGradient(-hh*.03,-hh*.03,1,0,0,hh*.13);head.addColorStop(0,'rgba(240,238,232,.98)');head.addColorStop(1,'rgba(150,148,144,.72)');
+    var head=c2.createRadialGradient(-hh*.03,-hh*.03,1,0,0,hh*.13);head.addColorStop(0,'rgba(116,118,122,.98)');head.addColorStop(1,'rgba(14,14,16,.96)');
     c2.fillStyle=head;c2.beginPath();c2.ellipse(0,0,hh*.095,hh*.125,0,0,6.29);c2.fill();c2.restore();
     if(n>=4||reversing){c2.strokeStyle='rgba(232,190,90,'+(reversing?.95:(n-3)/4)+')';c2.lineWidth=1;
       c2.beginPath();c2.moveTo(-hh*.05,-hh*.7);c2.quadraticCurveTo(-hh*.1,-hh*.4,-hh*.03,-hh*.1);c2.moveTo(hh*.06,-hh*.68);c2.quadraticCurveTo(hh*.11,-hh*.38,hh*.03,-hh*.14);c2.moveTo(-hh*.07,-hh*.46);c2.lineTo(hh*.08,-hh*.42);c2.stroke();}
@@ -404,19 +430,27 @@ function drawSmoke(){
   if(REDUCED)return;
   if(smoke.length<(MOBILE?12:24))smoke.push({x:rx,y:ry-Math.random()*60,r:6+Math.random()*12,a:.14,vx:(Math.random()-.5)*.35,vy:-.32-Math.random()*.45});
   smoke=smoke.filter(function(p){p.x+=p.vx;p.y+=p.vy;p.r+=.13;p.a*=.986;
-    var g=c2.createRadialGradient(p.x,p.y,0,p.x,p.y,p.r);g.addColorStop(0,'rgba(190,188,184,'+p.a+')');g.addColorStop(1,'rgba(190,188,184,0)');c2.fillStyle=g;c2.fillRect(p.x-p.r,p.y-p.r,p.r*2,p.r*2);return p.a>.012;});
+    var g=c2.createRadialGradient(p.x,p.y,0,p.x,p.y,p.r);g.addColorStop(0,'rgba(120,118,116,'+p.a+')');g.addColorStop(1,'rgba(190,188,184,0)');c2.fillStyle=g;c2.fillRect(p.x-p.r,p.y-p.r,p.r*2,p.r*2);return p.a>.012;});
 }
 function fallbackPools(){
   spots.forEach(function(sp){var R=sp.s.pool*Math.min(W,H)*.9;if(R<2)return;var g=c2.createRadialGradient(sp.x,sp.y+sp.r*1.5,0,sp.x,sp.y+sp.r*1.5,R);g.addColorStop(0,'rgba(216,212,204,.85)');g.addColorStop(1,'rgba(216,212,204,0)');c2.fillStyle=g;c2.save();c2.translate(0,(sp.y+sp.r*1.5)*.6);c2.scale(1,.4);c2.fillRect(sp.x-R,sp.y-R,R*2,R*2+sp.r*4);c2.restore();});
 }
 
 // ── THE LOOP ──
+// it comes closer by exactly as many shards as you have touched. Nothing on the page will mention it.
+var giant=0,giantK=0,flashAt=0,flashPow=0,nextFlash=performance.now()+(REDUCED?1e12:5000);
+function flashNow(now){
+  if(now>nextFlash){flashAt=now;flashPow=.42+Math.random()*.4;nextFlash=now+9000+Math.random()*12000;}
+  var t=(now-flashAt)/1000;if(t<0||t>2.6)return 0;
+  return flashPow*(t<.14?t/.14:Math.exp(-(t-.14)*2.4))*(.8+.2*Math.sin(t*23));
+}
 var uP=new Float32Array(36),uW=new Float32Array(24),dim=1;
 function frame(now){
   requestAnimationFrame(frame);
   if(document.hidden)return;
   if(REDUCED&&now-frame.last<400)return;
   var dt=Math.min(80,now-lastF);lastF=now;frame.last=now;
+  slowN++;slowT+=dt;if(slowN>=45){if(slowT/slowN>30&&QS>.42){QS*=.8;resize();}slowN=0;slowT=0;}
   var soft=function(k){return 1-Math.pow(1-k,dt/16.67);};
   if(px>=0){curX=curX<0?px:curX+(px-curX)*soft(.42);curY=curY<0?py:curY+(py-curY)*soft(.42);document.getElementById('CUR').style.transform='translate('+curX.toFixed(1)+'px,'+curY.toFixed(1)+'px)';}
   vx*=Math.pow(.94,dt/16.67);vy*=Math.pow(.94,dt/16.67);
@@ -432,6 +466,9 @@ function frame(now){
   rx=rx||W*fx0;ry=ry||H*fy0;
   if(!running&&!done){rx=W*fx0;ry=H*fy0;}else{rx+=(tx-rx)*soft(ease);ry+=(ty-ry)*soft(ease);}
 
+  var mnS=Math.min(W,H),skyH=(H*.38)/mnS;
+  var gT=(running||done)?skyH*(.3+encountered.length*.085):skyH*.22;
+  giant+=(gT-giant)*soft(.012);giantK+=((reversing?.34:(stillStage>=2?.12:0))-giantK)*soft(.012);
   // the pools. Each one is exactly as big as the time you gave it.
   var i,mn=Math.min(W,H);
   spots.forEach(function(sp,k){
@@ -450,6 +487,7 @@ function frame(now){
     gl.uniform2f(U.R,glCv.width,glCv.height);
     var mp=toS(px>=0?px:W/2,px>=0?py:H*.7);gl.uniform2f(U.M,mp[0],mp[1]);
     gl.uniform1f(U.T,REDUCED?12:now/1000);gl.uniform1f(U.D,dim);
+    gl.uniform1f(U.C,giant);gl.uniform1f(U.K,giantK);gl.uniform1f(U.F,flashNow(now));
     gl.uniform4fv(U.P,uP);gl.uniform3fv(U.W,uW);
     gl.drawArrays(gl.TRIANGLES,0,3);
   }
@@ -654,6 +692,7 @@ try{
   [['%c▽ you opened the back of the mirror.','color:#C9A84C;font:12px monospace'],
    ['%cit measures whatever stays. you are staying.','color:#A8A49C;font:12px monospace'],
    ['%cthe easing on the reflection is one number. it is lower the first time you come.','color:#A8A49C;font:12px monospace'],
+   ['%cwatch the horizon when the sky lights. count how close it is after each shard.','color:#A8A49C;font:12px monospace'],
    ['%ci would not read the file named after you. i would not stop anyone either.','color:#7E7A74;font:italic 12px monospace']
   ].forEach(function(l,i){setTimeout(function(){console.log(l[0],l[1]);},900*i);});
 }catch(e){}
