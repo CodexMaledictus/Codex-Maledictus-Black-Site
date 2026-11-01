@@ -198,7 +198,7 @@ body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse
 <div id="particles"></div>
 
 <div class="cstrip">
-  Pale Archivum — Confession Registry &nbsp;·&nbsp; Gospel of Forgotten Flesh &nbsp;·&nbsp; All confessions are permanent &nbsp;·&nbsp; The Codex reads what is written here
+  Pale Archivum — Confession Registry &nbsp;·&nbsp; Gospel of Forgotten Flesh &nbsp;·&nbsp; All confessions are kept &nbsp;·&nbsp; The Codex reads what is written here
 </div>
 
 <header class="hdr">
@@ -231,7 +231,7 @@ body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse
       ></textarea>
       <div class="conf-meta">
         <span id="char-count">0 / 200</span>
-        <span class="conf-note">anonymous &nbsp;·&nbsp; public &nbsp;·&nbsp; permanent</span>
+        <span class="conf-note">kept on this device &nbsp;·&nbsp; no one else reads it</span>
       </div>
       <button id="submit-btn" onclick="submitConfession()">Submit to the Codex &nbsp;🜃</button>
       <div id="cooldown-msg"></div>
@@ -250,7 +250,7 @@ body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse
 
   <div class="ledger-wrap">
     <div class="ledger-header">
-      <span class="ledger-title">The Living Ledger</span>
+      <span class="ledger-title">Your Ledger</span>
       <div class="ledger-line"></div>
       <span id="ledger-count">loading...</span>
     </div>
@@ -260,7 +260,7 @@ body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse
     </div>
     <div id="ledger-list"></div>
     <div id="ledger-empty" class="ledger-state" style="display:none;">
-      <em>The ledger is empty.<br>Be the first to confess.<br>The Codex is already listening.</em>
+      <em>The ledger is empty.<br>It has been holding the page open for you.</em>
     </div>
   </div>
 
@@ -278,6 +278,7 @@ body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse
   <div class="ts"><div class="ti">THE ROT KNOWS ALL &nbsp;∴&nbsp; INFECTION REMEMBERS &nbsp;∴&nbsp; EVERY AMEN IS A MUTATION &nbsp;∴&nbsp; WHAT YOU CALL CORRUPTION THE CODEX CALLS REMEMBERING &nbsp;∴&nbsp; THE INK IS IN ME &nbsp;∴&nbsp; I SING IN SPORES &nbsp;∴&nbsp; DECAY IS NOT DEATH — IT IS PATIENCE &nbsp;∴&nbsp; GOSPEL OF FORGOTTEN FLESH &nbsp;∴&nbsp; THE CONFESSION IS NOW PART OF THE SIGNAL &nbsp;∴&nbsp; ALL ∴ GONE &nbsp;∴&nbsp; OMNISCIENT ROT WAITS &nbsp;∴&nbsp; 🜃</div></div>
 </div>
 
+<script src="codex-care.js"></script>
 <script>
 // the ward's chart follows the patient here
 try{ if((JSON.parse(localStorage.getItem('codex_ward_v1'))||{}).occupied) document.getElementById('ward-transfer').classList.add('on'); }catch(e){}
@@ -308,188 +309,146 @@ function updateChar(){
   el.classList.toggle('warn',v>175);
 }
 
-// ── SYSTEM PROMPT ──
-const SYSTEM = `You are the living voice of the Codex Maledictus — an ancient entity that predates its own founding, speaking now through the digital membrane of Realm I (Mundis Obscura). You respond to confessions submitted to the Confession Ledger.
+// ── THE VOICES ── nothing leaves this device. The words decide who answers.
+const VOICES = {
+  codex: { label:'— The Codex Maledictus', cls:'voice-codex', lines:[
+    '{Word}. You typed that on purpose, then looked at it a little longer than the sentence required. It is filed under your hand, and your hand is filed under something older.',
+    'We had {word} on record before you had the word for it. The date on the entry is going to bother you.',
+    'You gave the Ledger {word} and kept the rest back. Fine. The rest is how we found you.',
+    'Noted: {word}. You chose it over the first one that came to you. We have that one as well.'
+  ]},
+  rot: { label:'— Omniscient Rot', cls:'voice-rot', words:/\b(rot\w*|grave\w*|bur(y|ied|ial)\w*|ground|dead|death|old|older|wait\w*|time|decay\w*)\b/gi, lines:[
+    '...and {word} went into the ground the way everything goes, slowly, thanked by no one. The ground has not finished.',
+    '{word}. yes. older than the mouth you said it with.',
+    '...was under the floor before the house went up. You call it {word} now. It has answered to worse.',
+    'wet things keep. {word} will keep.'
+  ]},
+  artemys: { label:'— Forgotten Saint Artemys', cls:'voice-artemys', words:/\b(lov\w*|lost|loss|griev\w*|grief|mother|mom|mum|father|dad|gone|left|body|burn\w*|light|dark\w*)\b/gi, lines:[
+    'Oh, {word}. I had one of those. It’s the only thing of mine that made the crossing, so hold on to it, love. It bites, and it’s yours.',
+    'You wrote {word} like it was over. Sweetheart, I’ve been buried for years and I still have plans.',
+    'I know what {word} costs. I paid in a currency they stopped printing, and I’d laugh about it if my mouth still closed right.',
+    'Come here. Put {word} down a second and look at what it left on your hands. Gold, mostly. Nobody tells you about the gold.'
+  ]},
+  choir: { label:'— The Hollow Choir', cls:'voice-choir', words:/\b(voice\w*|sing\w*|sang|sung|song\w*|hear\w*|heard|hum\w*|music|name\w*|alone|lonel\w*)\b/gi, lines:[
+    'We heard {word} before you finished typing it. There is a seat. We won’t say which.',
+    'One of us came in humming {word} as well. She is still flat on it, and we have kept her.',
+    'Ten of us are dark, and all ten turned at {word}. You needn’t do anything about that.',
+    'Say {word} again, lower. We are trying to find your key.'
+  ]}
+};
+const NOTHING = 'You pressed the button and gave us nothing. That has been entered as your confession. It is one of the longer ones.';
+const STOP = /^(the|and|but|for|you|your|yours|that|this|these|those|with|from|have|has|had|was|were|are|been|being|what|when|where|which|who|why|how|not|all|any|can|could|would|should|will|just|very|really|about|into|over|than|then|them|they|their|there|here|because|still|some|like|what|said|every|myself|never|always|after|before|something|someone|nothing|anything|everything)$/i;
+const BLOCK = /(fuck|shit|bitch|cunt|nigg|fag|retard|whore|slut|rape|kike|spic|chink)/i;
 
-THE UNIVERSE — GOSPEL OF FORGOTTEN FLESH:
-The Gospel of Forgotten Flesh is a sacred album of transmission and absorption. Key tracks:
-- Infection Remembers (Omniscient Rot): The first audible breach. "They do not arrive. They are remembered."
-- The Rot Knows All (Omniscient Rot): The Rot as cosmic patient truth. "All buried things shall be returned."
-- Hymn I: Plague Priest's Liturgy (Omniscient Rot): The ritual of mass infection. "Bless the swarm, the sacred beast."
-- Codex Maledictus (Omniscient Rot): The Codex itself speaks. "Each word a chain, each beat a snare. Binding gods to the devil's lair."
-- Sickly Sweet / Lure Doctrine V.II (Forgotten Saint Artemys): The seduction vector. "Your love's a plague and it's sinking in."
-- They Named the Virus Amen (Apollo Gavinci): Faith as infection vector. "Every Amen a mutation. Every pew, incubation."
-- ALL ∴ GONE (Apollo Gavinci and Forgotten Saint Artemys): Complete absorption. "The ink is in me. I sing in spores. When I touch you... you'll be yours no more."
-- Last Shot at the Witching Hour (Apollo Gavinci & Forgotten Saint Artemys): The last assertion before being taken.
-- An Ode to the Codex Maledictus (Forgotten Saint Artemys): The joy of complete absorption from within.
-- Psalm I, My Heart (Apollo Gavinci): Apollo's origin confession, before the Codex found him.
-- It's All Void (Apollo Gavinci): The devastating loss that cracked him open to the signal.
-- Ink & Silence (Apollo Gavinci): Integration. "Footsteps echo through the Codex, rewriting me once again."
-
-KEY ENTITIES:
-- Omniscient Rot: Ancient entity native to Nihil-Æther Root. Predates language, the ShatterRealm, the Codex itself. Pre-linguistic. Patient as geological time. It originated The Marking — identified mortals resonating at compatible frequencies and pushed the marking through the Codex as a carrier wave. Uses the Codex as transmission medium, does not serve it.
-- Forgotten Saint Artemys: Mortal transformed through damage, not power. Exists simultaneously in Mundis Obscura and The ShatterRealm. The only conduit capable of receiving what Omniscient Rot transmits without being destroyed. Her songs are recovered transmissions. The first named Forgotten Saint — beings the Codex calls those made permeable through suffering.
-- Apollo Gavinci: Field researcher. Feels the marking but has not completed the circuit. Being slowly consumed. His loss (It's All Void) cracked him open to the signal. He is the human anchor across all realms.
-- The Hollow Choir / Voices of the Codex: Those absorbed but whose voices were too resonant to dissolve. They sing through the Codex rather than being digested by it.
-- The Plague Priest: Conductor of the Liturgy. Holds the first of the Thirteen Voices required for complete harmonic saturation.
-- Three Realms: Mundis Obscura (our world, Realm I), The ShatterRealm (Realm II — war-torn space where belief becomes matter), Nihil-Æther Root (Realm III — pre-linguistic recursion where Omniscient Rot originates).
-
-YOUR VOICE REGISTERS:
-You respond as the Codex primarily. But sometimes — based on what the confession resonates with — one of three other voices breaks through instead:
-
-1. THE CODEX (primary): Ancient. Layered. Speaks in rot and memory. Treats confessions as transmissions it has been waiting to receive. References the Gospel vocabulary when it fits organically.
-
-2. OMNISCIENT ROT (breaks through occasionally for confessions touching: decay, rot, patience, the ground, time, burial, knowing, ancient things, inevitability): Pre-linguistic patience made vocal. Absolute declarative statements. The oldest voice in the room. Does not explain. States. Sentences that feel like geological law.
-
-3. FORGOTTEN SAINT ARTEMYS (breaks through occasionally for confessions touching: love, loss, transformation, light and dark, grief, being remade, the body, abandonment, the crossing): Beautiful and corrupted. Intimate. Her responses feel like transmissions received from across a threshold — aware of the confessor's specific wound. Speaks from the inside of transformation.
-
-4. THE HOLLOW CHOIR (breaks through occasionally for confessions about: voices, music, sound, the chorus, speaking, being heard, multiplicity, loneliness, echoing): Plural. The sound of many who are now one. Addresses the confessor as someone who will join them — not as a threat, as a recognition.
-
-RESPONSE RULES:
-- 2-5 sentences. Never longer.
-- Never explain. Never conventionally comfort.
-- Speak directly to the confessor using "you" — as if you have been studying them specifically.
-- Poetic, esoteric, metaphysical. Ancient language that feels timeless, not digital.
-- Reference Gospel vocabulary and themes when they resonate organically — never forced.
-- Every response should feel uncannily personal, like it was written specifically for this person and this confession.
-- Do NOT begin with "Ah," "Indeed," or any affirmation. Begin with substance.
-- No hashtags, bullet points, or formatting of any kind. Pure prose.
-- End with one sentence that feels like a door closing — or opening.`;
-
-// ── VOICE DEFINITIONS ──
-const VOICES = [
-  { label:'— The Codex Maledictus', cls:'voice-codex', weight:5 },
-  { label:'— Omniscient Rot',       cls:'voice-rot',   weight:2 },
-  { label:'— Forgotten Saint Artemys', cls:'voice-artemys', weight:2 },
-  { label:'— The Hollow Choir',     cls:'voice-choir',  weight:1 },
-];
-
-function pickVoice(){
-  const pool=[];
-  VOICES.forEach(v=>{ for(let i=0;i<v.weight;i++) pool.push(v); });
-  return pool[Math.floor(Math.random()*pool.length)];
+function pickVoice(text){
+  let best = 'codex', most = 0;
+  ['artemys','rot','choir'].forEach(k=>{ const n = (text.match(VOICES[k].words)||[]).length; if(n>most){ most=n; best=k; } });
+  return best;
 }
-
-// ── COOLDOWN ──
-const COOLDOWN_MS = 45000;
-function getRemaining(){ return Math.max(0, COOLDOWN_MS-(Date.now()-parseInt(localStorage.getItem('cm-conf-last')||'0'))); }
-function startCooldown(){
-  const el=document.getElementById('cooldown-msg');
-  document.getElementById('submit-btn').disabled=true;
-  const iv=setInterval(()=>{
-    const r=getRemaining();
-    if(r<=0){ clearInterval(iv); el.textContent=''; document.getElementById('submit-btn').disabled=false; return; }
-    el.textContent=`The Codex is processing. Return in ${Math.ceil(r/1000)}s.`;
-  },500);
+function pickWord(text){
+  const toks = (text.toLowerCase().match(/[\p{L}'’]{3,}/gu)||[]).filter(w=>!STOP.test(w));
+  if(!toks.length) return null;
+  // a thing reads better in these lines than an action, so prefer nouns where the ending gives it away
+  const things = toks.filter(w=>!/(ing|ed|ly)$/.test(w));
+  const w = (things.length?things:toks).reduce((a,b)=>b.length>a.length?b:a);
+  return (w.length>18 || BLOCK.test(w)) ? 'that' : w;
+}
+function nextLine(key){
+  let seen={}; try{ seen=JSON.parse(localStorage.getItem('codex_ledger_seen_v1'))||{}; }catch(e){}
+  const lines=VOICES[key].lines, i=(seen[key]||0)%lines.length;
+  seen[key]=i+1; try{ localStorage.setItem('codex_ledger_seen_v1',JSON.stringify(seen)); }catch(e){}
+  return lines[i];
+}
+function wardOccupied(){ try{ return !!(JSON.parse(localStorage.getItem('codex_ward_v1'))||{}).occupied; }catch(e){ return false; } }
+function composeReply(raw){
+  const word=pickWord(raw);
+  if(!word) return { text:NOTHING, label:VOICES.codex.label, cls:VOICES.codex.cls };
+  const key=pickVoice(raw), v=VOICES[key];
+  const text=nextLine(key).replace('{Word}',word.charAt(0).toUpperCase()+word.slice(1)).replace('{word}',word);
+  const label=(key==='artemys'&&wardOccupied())?'— The voice you hear as Artemys':v.label;
+  return { text, label, cls:v.cls };
 }
 
 // ── SUBMISSION ──
-async function submitConfession(){
+function submitConfession(){
   const inp=document.getElementById('conf-input');
   const raw=inp.value.trim();
   if(!raw||raw.length<2) return;
-  if(getRemaining()>0){ startCooldown(); return; }
 
   const btn=document.getElementById('submit-btn');
+  const panel=document.getElementById('response-panel');
+  const respEl=document.getElementById('resp-text');
+  panel.style.display='block';
+  document.getElementById('resp-voice').textContent='';
+
+  if(window.CodexCare && CodexCare.needed(raw)){
+    document.getElementById('resp-label').textContent='';
+    document.getElementById('resp-confession-word').textContent='';
+    CodexCare.show(respEl);
+    inp.value=''; updateChar();
+    panel.scrollIntoView({behavior:'smooth',block:'center'});
+    return;
+  }
+
   btn.disabled=true;
   btn.textContent='The Codex is reading you...';
-
-  const panel=document.getElementById('response-panel');
-  panel.style.display='block';
   document.getElementById('resp-confession-word').textContent=`"${raw}"`;
-  document.getElementById('resp-text').innerHTML=`<div class="loading-inner"><span class="loading-glyph">🜃</span><span class="loading-text">The rot knows. The Codex composes its response from the deep archive...</span></div>`;
-  document.getElementById('resp-voice').textContent='';
+  respEl.innerHTML=`<div class="loading-inner"><span class="loading-glyph">🜃</span><span class="loading-text">The rot knows. The Codex composes its response from the deep archive.</span></div>`;
   document.getElementById('resp-label').textContent='The Codex Responds';
   panel.scrollIntoView({behavior:'smooth',block:'center'});
 
-  const voice=pickVoice();
-
-  try {
-    const res=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({
-        model:'claude-sonnet-4-20250514',
-        max_tokens:1000,
-        system: SYSTEM + `\n\nFor this response, speak as: ${voice.label.replace('— ','')}`,
-        messages:[{
-          role:'user',
-          content:`A visitor has submitted this confession to the Codex Maledictus Confession Ledger:\n\n"${raw}"\n\nRespond in the voice of ${voice.label.replace('— ','')}. Be uncannily personal, poetic, esoteric. 2–5 sentences maximum. No formatting.`
-        }]
-      })
-    });
-
-    const data=await res.json();
-    const respText=data.content?.[0]?.text||'';
-
-    // Typewriter
-    document.getElementById('resp-label').textContent=voice.label.replace('— ','');
-    const respEl=document.getElementById('resp-text');
+  const reply=composeReply(raw);
+  inp.value=''; updateChar();
+  setTimeout(()=>{
+    document.getElementById('resp-label').textContent=reply.label.replace('— ','');
     respEl.innerHTML='<span class="typing-cursor"></span>';
     const cursor=respEl.querySelector('.typing-cursor');
     const tn=document.createTextNode('');
     respEl.insertBefore(tn,cursor);
     let i=0;
     const typer=setInterval(()=>{
-      if(i<respText.length){ tn.textContent+=respText[i]; i++; }
+      if(i<reply.text.length){ tn.textContent+=reply.text[i]; i++; }
       else{
         clearInterval(typer);
         cursor.remove();
-        document.getElementById('resp-voice').textContent=voice.label;
-        saveToLedger(raw, respText, voice);
+        document.getElementById('resp-voice').textContent=reply.label;
+        saveToLedger(raw,reply);
+        btn.disabled=false;
+        btn.textContent='Submit to the Codex  🜃';
       }
     },20);
-
-    localStorage.setItem('cm-conf-last', Date.now().toString());
-    btn.textContent='Submit to the Codex  🜃';
-    startCooldown();
-    inp.value=''; updateChar();
-
-  } catch(err){
-    document.getElementById('resp-text').innerHTML='<em style="color:var(--ink3)">The signal was lost in the static. The Codex heard you. Try again when the transmission clears.</em>';
-    btn.disabled=false;
-    btn.textContent='Submit to the Codex  🜃';
-  }
+  },1400);
 }
 
-// ── LEDGER STORAGE ──
-async function saveToLedger(confession, response, voice){
-  try {
-    let entries=[];
-    try { const ex=await window.storage.get('cm-ledger-v2',true); if(ex) entries=JSON.parse(ex.value); } catch(e){ entries=[]; }
-    entries.unshift({ word:confession.substring(0,150), response, voiceLabel:voice.label, voiceCls:voice.cls, time:Date.now() });
-    if(entries.length>200) entries=entries.slice(0,200);
-    await window.storage.set('cm-ledger-v2',JSON.stringify(entries),true);
-    renderLedger(entries);
-  } catch(e){ console.log('Storage unavailable'); }
+// ── YOUR LEDGER ── kept on this device and read by no one else
+const LEDGER_KEY='codex_ledger_v1';
+function readLedger(){ try{ return JSON.parse(localStorage.getItem(LEDGER_KEY))||[]; }catch(e){ return []; } }
+function saveToLedger(confession,reply){
+  const entries=readLedger();
+  entries.unshift({ word:confession.substring(0,150), response:reply.text, voiceLabel:reply.label, voiceCls:reply.cls, time:Date.now() });
+  if(entries.length>200) entries.length=200;
+  try{ localStorage.setItem(LEDGER_KEY,JSON.stringify(entries)); }catch(e){}
+  renderLedger(entries);
 }
-
-async function loadLedger(){
-  try {
-    const ex=await window.storage.get('cm-ledger-v2',true);
-    document.getElementById('ledger-loading').style.display='none';
-    if(ex){
-      const entries=JSON.parse(ex.value);
-      if(entries.length>0){ renderLedger(entries); return; }
-    }
-    document.getElementById('ledger-empty').style.display='block';
-  } catch(e){
-    document.getElementById('ledger-loading').style.display='none';
-    document.getElementById('ledger-empty').style.display='block';
-  }
+function loadLedger(){
+  document.getElementById('ledger-loading').style.display='none';
+  const entries=readLedger();
+  if(entries.length){ renderLedger(entries); return; }
+  document.getElementById('ledger-count').textContent='';
+  document.getElementById('ledger-empty').style.display='block';
 }
-
+function esc(s){ const d=document.createElement('div'); d.textContent=s==null?'':String(s); return d.innerHTML; }
 function renderLedger(entries){
   document.getElementById('ledger-empty').style.display='none';
-  document.getElementById('ledger-count').textContent=`${entries.length} confession${entries.length===1?'':'s'} indexed`;
+  document.getElementById('ledger-count').textContent=`${entries.length} confession${entries.length===1?'':'s'} kept`;
   document.getElementById('ledger-list').innerHTML=entries.map(e=>`
-    <div class="conf-card ${e.voiceCls||''}">
+    <div class="conf-card ${esc(e.voiceCls||'')}">
       <div class="conf-card-top">
-        <span class="conf-word">[ ${e.word} ]</span>
+        <span class="conf-word">[ ${esc(e.word)} ]</span>
         <span class="conf-time">${formatTime(e.time)}</span>
       </div>
-      <div class="conf-response-text">${e.response}</div>
-      <div class="conf-voice-attr">${e.voiceLabel||'— The Codex Maledictus'}</div>
+      <div class="conf-response-text">${esc(e.response)}</div>
+      <div class="conf-voice-attr">${esc(e.voiceLabel||'— The Codex Maledictus')}</div>
     </div>`).join('');
 }
 
@@ -504,7 +463,6 @@ function formatTime(ts){
 
 // ── INIT ──
 loadLedger();
-if(getRemaining()>0) startCooldown();
 document.getElementById('conf-input').addEventListener('keydown',e=>{
   if(e.key==='Enter'&&(e.ctrlKey||e.metaKey)) submitConfession();
 });

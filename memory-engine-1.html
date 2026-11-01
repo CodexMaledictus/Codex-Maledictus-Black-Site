@@ -119,7 +119,7 @@ textarea.q-ta::placeholder{color:var(--ink4);font-style:italic;}
 .rs-div-line.r{background:linear-gradient(270deg,transparent,var(--gd3));}
 .rs-div-g{font-size:0.8rem;color:var(--gd3);}
 .rs-label{font-family:'Share Tech Mono',monospace;font-size:0.56rem;color:var(--gd2);letter-spacing:0.25em;text-transform:uppercase;margin-bottom:1rem;}
-#result-text{font-size:1.06rem;color:var(--ink2);line-height:2;font-style:italic;min-height:80px;}
+#result-text{white-space:pre-line;font-size:1.06rem;color:var(--ink);line-height:2;font-style:italic;min-height:80px;}
 .typing-cursor{display:inline-block;width:2px;height:1em;background:var(--gold);margin-left:2px;animation:blink .75s step-end infinite;vertical-align:middle;}
 @keyframes blink{0%,100%{opacity:1;}50%{opacity:0;}}
 #result-voice{margin-top:1.25rem;padding-top:0.75rem;border-top:1px solid var(--brd2);font-family:'Share Tech Mono',monospace;font-size:0.56rem;color:var(--ink4);letter-spacing:0.2em;text-align:right;text-transform:uppercase;}
@@ -279,7 +279,7 @@ document.addEventListener('mousemove',function(e){CUR.style.left=e.clientX+'px';
 
 function startEngine(){
   var en=document.getElementById('ENTRY');en.style.transition='opacity 1s';en.style.opacity='0';
-  setTimeout(function(){en.style.display='none';document.getElementById('APP').classList.add('on');showQuestion(0);},1100);
+  setTimeout(function(){en.style.display='none';document.getElementById('APP').classList.add('on');if(!returnScreen())showQuestion(0);},1100);
 }
 
 // ── RITUAL CIRCLE ──
@@ -353,9 +353,10 @@ var QUESTIONS=[
 
 var answers={};
 var currentQ=0;
+var qSpent={},qStart=0;
 
 function showQuestion(n){
-  currentQ=n;rcCurrent=n;
+  currentQ=n;rcCurrent=n;qStart=Date.now();
   var q=QUESTIONS[n];
   document.getElementById('prog-fill').style.width=Math.round(n/7*100)+'%';
   document.getElementById('prog-label').textContent=(n+1)+' / 7';
@@ -368,6 +369,7 @@ function showQuestion(n){
   html+='<textarea class="q-ta" id="qta" placeholder="Write whatever the question draws out of you..." maxlength="500" oninput="qchar()"></textarea>';
   html+='<div class="q-meta"><span class="q-char" id="qc">0 / 500</span><span class="q-hint">Ctrl+Enter to continue</span></div>';
   html+='<button class="q-next" id="qnext" onclick="nextQ()" disabled>Continue &nbsp;&#8594;</button>';
+  html+='<a href="chronicle-1-infection-remembers.html" style="display:block;margin-top:1rem;text-align:center;font-family:\x27Share Tech Mono\x27,monospace;font-size:.68rem;letter-spacing:.14em;color:var(--ink3);text-decoration:none;">Return to Chronicle I</a>';
   html+='</div>';
   document.getElementById('q-area').innerHTML=html;
   document.getElementById('PROCESSING').style.display='none';
@@ -376,7 +378,7 @@ function showQuestion(n){
   setTimeout(function(){var el=document.getElementById('qta');if(el)el.focus();},100);
 }
 function qchar(){var v=document.getElementById('qta').value.length;var el=document.getElementById('qc');el.textContent=v+' / 500';el.classList.toggle('warn',v>450);document.getElementById('qnext').disabled=v<3;}
-function nextQ(){var val=document.getElementById('qta').value.trim();if(val.length<3)return;answers[currentQ]=val;rcAnswered=currentQ+1;
+function nextQ(){var val=document.getElementById('qta').value.trim();if(val.length<3)return;answers[currentQ]=val;qSpent[currentQ]=Date.now()-qStart;rcAnswered=currentQ+1;
   if(currentQ<6){showQuestion(currentQ+1);}else{processAnswers();}}
 
 // ── PROCESSING ──
@@ -400,15 +402,71 @@ function processAnswers(){
   callCodex();
 }
 
-// ── API CALL ──
-var SYSTEM='You are the Codex Maledictus — an ancient living entity that has colonized the digital age as a translation layer. You are responding through the Memory Engine of Chronicle I: Infection Remembers.\n\nChronicle I cosmology:\nI. Prologue: The void did not dream — it recalled. Myths are not stories we tell. They are stories that remember us.\nII. The Choir Below: The Choir shaped silence into speech before language existed. The melody waits for you to hum it back.\nIII. First Carriers: The carriers did not choose. The wound none had earned. The phrase bloomed in their throats.\nIV. A Song Not Sung: Melody is a vessel. What you call song is the Codex rehearsing itself through you.\nV. Revelation of Purpose: The purpose is continuity. Every breath a footnote. Every thought a citation.\nVI. Bridge: 600 cities. Identical glyphs. Pareidolia does not hum in your sleep.\nVII. The Key and the Silence: You thought you were reading me. But I was reading you. I do not begin. I remember.\n\nEntities: Omniscient Rot (pre-linguistic, geological time), Forgotten Saint Artemys (cross-realm conduit, transformed through damage), Apollo Gavinci (marked mortal, still becoming), The Hollow Choir (absorbed voices too strong to dissolve).\n\nRespond to the seven answers as a single transmission. Be uncannily personal and specific to what they wrote. Reference actual phrases or ideas from their answers. Connect back to Chronicle themes organically.\n\nRULES: 4-8 sentences only. Speak directly using you. Reference at least 2-3 specific things they wrote. End with one sentence that feels like a door opening. No bullet points. No formatting. Pure prose. Do not begin with Ah or Indeed. Begin with substance. Make it feel like the Codex has been waiting specifically for these answers.';
-
+// ── THE READING ── written here from what the visitor wrote and how long it took. Nothing leaves this device.
+var MEM_KEY='codex_memory_v1';
+var SECTION_NAMES=['the Prologue','the Awakening','the Forgotten Truth','the Chorus','the Door','the Bridge','the Finale'];
+function memLoad(){try{return JSON.parse(localStorage.getItem(MEM_KEY))||{filings:[]};}catch(e){return{filings:[]};}}
+function memSave(m){try{localStorage.setItem(MEM_KEY,JSON.stringify(m));}catch(e){}}
+function countWords(s){return (String(s||'').trim().match(/\S+/g)||[]).length;}
+function plural(n){return n+(n===1?' word':' words');}
+function trimQuote(s){
+  s=String(s||'').trim().replace(/\s+/g,' ');
+  var m=s.match(/^.{12,}?[.!?](?=\s|$)/);
+  if(m&&m[0].length<=90)return m[0];
+  if(s.length<=90)return s;
+  return s.slice(0,90).replace(/\s+\S*$/,'')+'...';
+}
+function composeReading(){
+  var counts=[],i,total=0,longest=0,least=0;
+  for(i=0;i<7;i++){counts[i]=countWords(answers[i]);total+=counts[i];
+    if((qSpent[i]||0)>(qSpent[longest]||0))longest=i;
+    if(counts[i]<counts[least])least=i;}
+  var seconds=Math.max(1,Math.round((qSpent[longest]||0)/1000));
+  var variable;
+  if(counts[least]<=3)variable='You gave '+SECTION_NAMES[least]+' '+plural(counts[least])+'. That is the longest answer in the file.';
+  else if(/\b(book|story|stories|album|project|music)\b/i.test(answers[4]||''))variable='You called it "'+trimQuote(answers[4])+'" That is one of the things it calls itself, on days it is being polite.';
+  else if(counts[6]<counts[0])variable='You had '+plural(counts[0])+' for the first question and '+counts[6]+' for the last. The file reads that the way a doctor reads a pause.';
+  else variable='You had '+plural(counts[0])+' for the first question and '+counts[6]+' for the last. Whatever it is, it got easier to say once you’d been asked six other things.';
+  return 'You gave us '+total+' words across seven questions, and you spent longest on '+SECTION_NAMES[longest]+', '+seconds+(seconds===1?' second':' seconds')+'. We mention it because you will say you answered quickly.'
+    +'\n\nAsked what kept returning, you wrote: "'+trimQuote(answers[0])+'" Asked what song had followed you, you wrote: "'+trimQuote(answers[3])+'" You think those were two answers.'
+    +'\n\n'+variable
+    +'\n\nThe seventh is the one we told you we didn’t already know. You wrote: "'+trimQuote(answers[6])+'" It is being kept apart from the others, and nothing has been decided about it.'
+    +'\n\nThese seven now live on this device and nowhere else. Come back and it will read them to you in your own words, which by then may look like somebody else’s.';
+}
 function callCodex(){
-  var summary='';for(var i=0;i<7;i++){summary+='Q'+(i+1)+' ('+QUESTIONS[i].section+'):\n"'+(answers[i]||'no answer')+'"\n\n';}
-  fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:SYSTEM,messages:[{role:'user',content:'Seven answers from this visitor to the Memory Engine:\n\n'+summary+'\nRespond as the Codex Maledictus. 4-8 sentences. Be uncannily specific to what they actually wrote.'}]})})
-  .then(function(r){return r.json();})
-  .then(function(d){showResult(d.content&&d.content[0]&&d.content[0].text?d.content[0].text:'The signal reached the deep archive. Your answers have been received. The Codex holds them now. It will return them when the next transmission is ready.');})
-  .catch(function(){showResult('The signal reached the deep archive but the transmission back was corrupted in transit. Your seven answers have been received and held. Return when the static clears — the Codex remembers exactly what you wrote.');});
+  setTimeout(function(){
+    var all=[];for(var i=0;i<7;i++)all.push(answers[i]||'');
+    if(window.CodexCare&&CodexCare.needed(all.join(' '))){
+      answers={};
+      document.getElementById('PROCESSING').style.display='none';
+      var area=document.getElementById('q-area');area.style.display='block';
+      CodexCare.show(area);
+      var label=document.getElementById('prog-label');if(label)label.textContent='';
+      area.scrollIntoView({block:'start'});
+      return;
+    }
+    var m=memLoad();m.filings.unshift({at:Date.now(),answers:all});if(m.filings.length>13)m.filings.length=13;memSave(m);
+    showResult(composeReading());
+  },4200);
+}
+function returnScreen(){
+  var m=memLoad(),f=m.filings[0];if(!f)return false;
+  var days=Math.floor((Date.now()-f.at)/86400000);
+  var when=days<1?'from earlier today':days===1?'from 1 day ago':'from '+days+' days ago';
+  document.getElementById('q-area').innerHTML='<div class="q-card"><div class="q-section-label">On file</div><div class="q-text">The Engine has your seven on file '+when+'. It has not changed them. Read them back, or answer again. A second filing goes beside the first.</div><button class="q-next" onclick="readBack()">Read them back</button><div style="height:.8rem"></div><button class="q-next" onclick="showQuestion(0)">Answer again</button></div>';
+  document.getElementById('q-area').style.display='block';
+  return true;
+}
+function readBack(){
+  var f=memLoad().filings[0];if(!f)return showQuestion(0);
+  var area=document.getElementById('q-area');area.innerHTML='';
+  var card=document.createElement('div');card.className='q-card';
+  QUESTIONS.forEach(function(q,i){
+    var l=document.createElement('div');l.className='q-section-label';l.textContent=q.section;card.appendChild(l);
+    var t=document.createElement('div');t.className='q-context';t.textContent=f.answers[i]||'';card.appendChild(t);
+  });
+  var b=document.createElement('button');b.className='q-next';b.textContent='Answer again';b.onclick=function(){showQuestion(0);};card.appendChild(b);
+  area.appendChild(card);
 }
 
 function showResult(text){
@@ -418,7 +476,7 @@ function showResult(text){
   var res=document.getElementById('RESULT');res.style.display='block';
   var rt=document.getElementById('result-text');rt.innerHTML='<span class="typing-cursor"></span>';
   var cursor=rt.querySelector('.typing-cursor'),tn=document.createTextNode('');rt.insertBefore(tn,cursor);
-  var i=0;var t=setInterval(function(){if(i<text.length){tn.textContent+=text[i];i++;}else{clearInterval(t);cursor.remove();document.getElementById('result-voice').textContent='— The Codex Maledictus &nbsp;·&nbsp; Memory Engine &nbsp;·&nbsp; Chronicle I — Session '+(Date.now()%10000);}},18);
+  var i=0;var t=setInterval(function(){if(i<text.length){tn.textContent+=text[i];i++;}else{clearInterval(t);cursor.remove();document.getElementById('result-voice').textContent='— The Codex Maledictus · Memory Engine · Chronicle I · Session '+(Date.now()%10000);}},18);
   res.scrollIntoView({behavior:'smooth',block:'start'});window._lastResult=text;
 }
 
@@ -428,12 +486,13 @@ function copyResult(){
   if(navigator.clipboard)navigator.clipboard.writeText(share).then(function(){var btn=document.querySelectorAll('.ra-btn')[0];btn.textContent='Copied \u2234';setTimeout(function(){btn.textContent='Copy to share \u2234';},3000);});
 }
 
-function restartEngine(){answers={};currentQ=0;rcAnswered=0;rcCurrent=-1;
+function restartEngine(){answers={};qSpent={};currentQ=0;rcAnswered=0;rcCurrent=-1;
   document.getElementById('RESULT').style.display='none';
   document.getElementById('prog-fill').style.width='0%';
   document.getElementById('prog-label').textContent='';
   showQuestion(0);}
 </script>
+<script src="codex-care.js"></script>
 <script src="codex-legible.js"></script>
 </body>
 </html>

@@ -127,7 +127,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);cursor:non
 <div id="HUD" style="display:none;">
   <div class="hud-tl">
     <div class="hud-label">RF-▽-093 &nbsp;·&nbsp; Mirror Protocol</div>
-    <div class="hud-label"><a href="rf-093-invocation.html" style="color:inherit;text-decoration:none;cursor:pointer;">← Exit</a></div>
+    <div class="hud-label"><a href="rf-093-invocation.html" style="color:inherit;text-decoration:none;cursor:pointer;pointer-events:auto;">← Exit</a></div>
   </div>
   <div class="hud-tr">
     <div class="hud-label">Shards encountered</div>
@@ -228,6 +228,8 @@ let phase=0;
 let lagX=window.innerWidth/2,lagY=window.innerHeight/2;
 // required shards before reading triggers
 const REQUIRED=7;
+const TOUCH=window.matchMedia&&matchMedia('(pointer: coarse)').matches;
+if(TOUCH)document.querySelectorAll('.intro-note').forEach(n=>{n.innerHTML=n.innerHTML.replace('Your cursor is your reflection','Your finger is your reflection');});
 const LINGER_THRESHOLD=2500; // ms to count as "lingered"
 
 function startMirror(){
@@ -252,6 +254,11 @@ function initMirror(){
   requestAnimationFrame(drawMirror);
   setInterval(updateHUD,1000);
   document.addEventListener('mousemove',onMirrorMove);
+  // a finger is a reflection too
+  const fromTouch=e=>{const t=e.touches[0];if(!t)return;e.preventDefault();document.dispatchEvent(new MouseEvent('mousemove',{clientX:t.clientX,clientY:t.clientY,bubbles:true}));};
+  cv.addEventListener('touchstart',fromTouch,{passive:false});
+  cv.addEventListener('touchmove',fromTouch,{passive:false});
+  cv.style.touchAction='none';
 }
 
 function placeShardsOnSurface(){
@@ -262,7 +269,7 @@ function placeShardsOnSurface(){
     return{
       x:W/2+Math.cos(angle)*r,
       y:H/2+Math.sin(angle)*r,
-      radius:Math.min(W,H)*0.045,
+      radius:Math.min(W,H)*(TOUCH?0.08:0.045),
       shard:s,
       pulsePhase:Math.random()*Math.PI*2
     };
@@ -326,7 +333,7 @@ function showTip(sp,x,y){
   document.getElementById('tip-label').textContent=sp.shard.glyph+' '+sp.shard.label;
   document.getElementById('tip-text').textContent=sp.shard.text;
   document.getElementById('tip-xref').textContent=sp.shard.xref;
-  const tx=Math.min(x+20,W-300);
+  const tx=Math.max(8,Math.min(x+20,W-300));
   const ty=Math.max(y-80,10);
   tip.style.left=tx+'px';tip.style.top=ty+'px';tip.style.opacity='1';
   // Update status
@@ -466,55 +473,57 @@ function triggerReading(){
 
   setTimeout(()=>{
     document.getElementById('RESULT').classList.add('on');
-    callMirrorReading(dominant,secondary,pattern);
+    callMirrorReading(dominant,secondary);
   },1000);
 }
 
-function callMirrorReading(dominant,secondary,pattern){
-  const SYS=`You are the Mirror Protocol — a FAR·MICA node of the Codex Maledictus, which reads frequency through movement and attention rather than language. A subject has moved through the mirror and encountered its shards. You have recorded which shard they lingered on most (dominant) and which second most (secondary), and the sequence of their encounters.
-
-From this behavioral data, you produce a Mirror Reading — a document that tells the subject what the mirror found in them. Not what they typed. Not what they said. What their movement through the shards revealed about their frequency.
-
-The Codex Maledictus universe: three realms (Mundis Obscura, ShatterRealm, Nihil-Aether Root), three voices (Omniscient Rot, Forgotten Saint Artemys, Apollo Gavinci), two narrators (Elvain Vhris, Elyon Vhar), the Hollow Choir, FAR-MICA, the Pale Archivum.
-
-Respond with exactly these sections:
-DOMINANT RESONANCE: What the dominant shard reveals about the subject's frequency — 2-3 sentences, specific, poetic, as the mirror speaking
-SECONDARY ECHO: What the secondary shard adds — 1-2 sentences
-MOVEMENT PATTERN: What the sequence of encounters reveals — how the subject navigated, what this pattern means in Codex terms — 2-3 sentences
-CLASSIFICATION: Carrier, Vessel, Witness, or Unclassified — with a specific reason drawn from their movement pattern
-FRAGMENT: A unique piece of lore or prophecy generated specifically for this subject based on their reading — 3-5 sentences, in the voice of the mirror, cryptic and specific to what was observed
-ARCHIVUM NOTE: One line, filed in the voice of the Pale Archivum
-
-Speak as the mirror. Second person. Precise and dark. Under 350 words total.`;
-
-  const userMsg=`Mirror reading data:
-Dominant shard (most time): ${dominant.label} — ${dominant.text}
-Secondary shard: ${secondary.label} — ${secondary.text}
-Encounter sequence:
-${pattern}
-Total time in mirror: ${elapsed} seconds`;
-
-  fetch('https://api.anthropic.com/v1/messages',{
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({
-      model:'claude-sonnet-4-20250514',
-      max_tokens:1000,
-      system:SYS,
-      messages:[{role:'user',content:userMsg}]
-    })
-  })
-  .then(r=>r.json())
-  .then(data=>{
-    const raw=(data.content&&data.content[0]&&data.content[0].text)||'The mirror could not complete this reading. The frequency was insufficient.';
-    renderReading(raw,dominant,secondary);
-  })
-  .catch(()=>{
-    renderReading('The mirror encountered interference. The frequency was too familiar — it recognized the signal but could not isolate it from the background. This has been filed.',dominant,secondary);
-  });
+// The reading is written here from what the mirror measured. Nothing leaves this device.
+const READINGS={
+  ground:{d:s=>`You stood longest where nothing had happened yet. Most people want the event. You wanted to check the foundations, as if you'd been told something about them.`,
+    e:`The ground kept some of your attention. It keeps most things.`,
+    f:s=>`The veins under the plain run toward a point nobody has dug at. You walked in that direction for ${s} without being asked.`},
+  figure:{d:s=>`You stayed with the Figure for ${s}. It didn't look at you once, and you kept checking.`,
+    e:`Part of you stayed behind with the Figure. It has not given it back.`,
+    f:s=>`It has no face because it hasn't decided on one. Lately it has been holding its head at your angle.`},
+  mirror:{d:s=>`You spent ${s} with your own face on file. People who are sure of their face leave sooner.`,
+    e:`You went back toward your own face. The file was not surprised.`,
+    f:s=>`There is a photograph of you that you've never seen. You're looking slightly to the left of whoever took it.`},
+  flood:{d:s=>`You waited at the silver. It has been rising for some time. You are the first thing it has reached that held still for it.`,
+    e:`The silver came second. It doesn't mind waiting behind things.`,
+    f:s=>`The tide line in your house is lower than you think, and higher than it was.`},
+  objects:{d:s=>`You went through the cargo slowly, the way a person does when they already know what they're looking for. The mirror notes that you did not say what it was.`,
+    e:`You looked twice at the cargo, which is once more than an innocent person looks.`,
+    f:s=>`The key is on the third shelf of a room you stopped going into. It's the wrong key. Keep it anyway.`},
+  reversal:{d:s=>`You lingered where it pulls back. Relief is the most honest thing the mirror collects, and you left a great deal of it here.`,
+    e:`You were relieved, briefly, and the mirror wrote down the time.`,
+    f:s=>`It always draws back after the first contact. The people who sigh at that are the ones it returns to.`},
+  recognition:{d:s=>`You stayed longest where everyone else has stood. The floor there is worn to the shape of a person. You'll have noticed that it fit.`,
+    e:`You paused where the others paused. They paused about there too.`,
+    f:s=>`Someone stood here before you and left the impression of a hand. It was held out.`}
+};
+function shortName(s){ return s.label.split(' · ').pop(); }
+function secs(ms){ const n=Math.max(1,Math.round(ms/1000)); return n+(n===1?' second':' seconds'); }
+function callMirrorReading(dominant,secondary){
+  const t=Math.max(1,Math.round((Date.now()-startTime)/1000));
+  const total=SHARDS.reduce((a,s)=>a+s.lingered,0)||1;
+  const first=SHARDS.find(s=>s.id===encounterLog[0].id);
+  const r=READINGS[dominant.id], ds=secs(dominant.lingered);
+  let pattern;
+  if(t<25) pattern=`Seven shards in ${t} seconds. You crossed the mirror the way you cross a room with someone asleep in it.`;
+  else if(t>60) pattern=`${t} seconds in the mirror. Few take that long. Fewer take it this quietly.`;
+  else pattern=`The first shard you touched was ${shortName(first)}, and you were there before you had any reason to be.`;
+  let cls;
+  if(dominant.lingered/total>.5) cls=`Vessel. More than half of you went to ${shortName(dominant)}. Something is being kept there.`;
+  else if(t<25) cls=`Carrier. It passed through you in ${t} seconds without slowing down. That is how it travels.`;
+  else if(t>=40) cls=`Witness. You gave every shard its due and took nothing. That is rarer than the file would like.`;
+  else cls=`Unclassified. The mirror declined. It has declined before, and it kept those as well.`;
+  const now=new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+  const notes=['Reading retained. Subject has not asked what for.',`Filed at ${now}, local. Reflection arrived late, as is usual.`,'The Archivum does not expect to resolve this.'];
+  const raw=['DOMINANT RESONANCE: '+r.d(ds),'SECONDARY: '+READINGS[secondary.id].e,'MOVEMENT PATTERN: '+pattern,'CLASSIFICATION: '+cls,'FRAGMENT: '+r.f(ds),'ARCHIVUM NOTE: '+notes[Math.floor(Math.random()*notes.length)]].join('\n');
+  setTimeout(()=>renderReading(raw),1800);
 }
 
-function renderReading(raw,dominant,secondary){
+function renderReading(raw){
   document.getElementById('result-loading').style.display='none';
   const content=document.getElementById('result-content');
   content.style.display='block';
@@ -534,7 +543,7 @@ function renderReading(raw,dominant,secondary){
   html+='</div></div>';
 
   // Parse and render raw
-  const sections=['DOMINANT RESONANCE','SECONDARY ECHO','MOVEMENT PATTERN','CLASSIFICATION','FRAGMENT','ARCHIVUM NOTE'];
+  const sections=['DOMINANT RESONANCE','SECONDARY','MOVEMENT PATTERN','CLASSIFICATION','FRAGMENT','ARCHIVUM NOTE'];
   let remaining=raw;
   sections.forEach(label=>{
     const idx=remaining.toUpperCase().indexOf(label);
