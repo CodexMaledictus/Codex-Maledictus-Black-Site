@@ -293,7 +293,7 @@ body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse
 
 <div id="APP">
 <nav class="top-nav">
-  <a class="nav-back" href="index.html" onclick="return navBack()">← The Pale Archive</a>
+  <a class="nav-back" href="pale-archive.html" onclick="return navBack()">← The Pale Archive</a>
   <span class="nav-id">RF-▽-093 &nbsp;·&nbsp; Recovered Fragments &nbsp;·&nbsp; Invocation</span>
   <div class="nav-links">
     <a class="nav-link deep" href="rf-093-lore.html">Lore ▶</a>
@@ -451,7 +451,7 @@ body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse
 
 <footer class="rf-footer">
   🜃 &nbsp; CODEX MALEDICTUS &nbsp;·&nbsp; RECOVERED FRAGMENTS &nbsp;·&nbsp; RF-▽-093 &nbsp;·&nbsp;
-  <a href="index.html">The Pale Archive</a> &nbsp;·&nbsp;
+  <a href="pale-archive.html">The Pale Archive</a> &nbsp;·&nbsp;
   <a href="infection-lore.html">Pale Archivum</a> &nbsp;·&nbsp;
   <a href="chronicle-1-infection-remembers.html">Chronicle I</a>
 </footer>
@@ -597,7 +597,7 @@ function initPage(){
 }
 
 function navBack(){
-  ritualNav('index.html','Returning to the Pale Archive.','The fragment remains in the record.');
+  ritualNav('pale-archive.html','Returning to the Pale Archive.','The fragment remains in the record.');
   return false;
 }
 
@@ -606,6 +606,9 @@ function ritualNav(url,l1,l2){
   setTimeout(()=>window.location.href=url,800);
 }
 </script>
+<script src="codex-summon.js"></script>
+<script src="codex-nav.js"></script>
+<script>(function(){var n=document.createElement("div");n.id="codex-nav";document.getElementById("APP").appendChild(n);initCodexNav("rf-093-invocation");})();</script>
 <script src="codex-legible.js"></script>
 </body>
 </html>

@@ -133,7 +133,7 @@ const CODEX_MAP = {
   "plague-priest-lore": {
     file: "plague-priest-lore.html", title: "The Plague Priest · Lore", seq: 9, realm: "I-II",
     phase: "Lore",
-    description: "Not a person. A configuration mortals enter. Three identical witness descriptions from people who have never met.",
+    description: "Not a person. A configuration mortals enter. The Archivum's account of it, and the note it did not mean to keep.",
     closingWhisper: "The posture teaches itself by being held.",
     pathA: "plague-priest-decoder", pathB: "plague-priest-apocrypha",
     labelA: "Decode the signal", labelB: "Read the Apocrypha",
@@ -143,8 +143,8 @@ const CODEX_MAP = {
   "plague-priest-decoder": {
     file: "plague-priest-decoder.html", title: "The Plague Priest · Decoder", seq: 10, realm: "I-II",
     phase: "Decoder",
-    description: "The Liturgy decoded line by line. Three layers per verse. The Hidden Doctrine has never been published outside the Archivum.",
-    closingWhisper: "You may be drawing one of the glyphs now.",
+    description: "The Liturgy decoded line by line. The Hidden Doctrine has never been published outside the Archivum.",
+    closingWhisper: "It requires the open mouth.",
     pathA: "plague-priest-apocrypha", pathB: "rf-093-lore",
     labelA: "Read the Apocrypha", labelB: "Follow the Recovered Fragments",
     bearerChamber: null
@@ -153,7 +153,7 @@ const CODEX_MAP = {
   "plague-priest-apocrypha": {
     file: "plague-priest-apocrypha.html", title: "Apocrypha · The Plague Priest", seq: 11, realm: "I-II",
     phase: "Apocrypha",
-    description: "What the Plague Priest left in the Cathedral that the Archivum has declined to publish. The third seal has never been opened.",
+    description: "What the Plague Priest left in the Cathedral that the Archivum has declined to publish.",
     closingWhisper: "The unsaid is the louder half.",
     pathA: "rf-093-lore", pathB: "codex-remembers-you",
     labelA: "Follow the Recovered Fragments", labelB: "Open the artifact",
@@ -163,7 +163,7 @@ const CODEX_MAP = {
   "rf-093-lore": {
     file: "rf-093-lore.html", title: "Recovered Fragment 093 · Lore", seq: 12, realm: "I",
     phase: "Lore",
-    description: "The first fragment that survived the redaction. First documented appearance of Elvain Vhris.",
+    description: "The first fragment that survived the redaction.",
     closingWhisper: "Other fragments survive. We have not found them.",
     pathA: "rf-093-invocation", pathB: "rf-093-mirror",
     labelA: "Read the Invocation", labelB: "Find what it mirrors",
@@ -173,8 +173,8 @@ const CODEX_MAP = {
   "rf-093-invocation": {
     file: "rf-093-invocation.html", title: "Recovered Fragment 093 · Invocation", seq: 13, realm: "I",
     phase: "Invocation",
-    description: "The words the analyst was found writing on Day 11. She had not been taught these words.",
-    closingWhisper: "Her hand kept writing after she had stopped.",
+    description: "The words recovered with the fragment. The reflection arrives before you do.",
+    closingWhisper: "It was there before you looked.",
     pathA: "rf-093-mirror", pathB: "rf-093-apocrypha",
     labelA: "Find what it mirrors", labelB: "Read the Apocrypha",
     bearerChamber: null
@@ -768,6 +768,20 @@ function navResolvePalette() {
 // NAV RENDERER, v5
 // ============================================================
 
+// Where a room leads outside the descent: the record itself, and the list.
+const SUMMON_RITE = { invite: 'The Cathedral does not announce its rites. Leave an address and the next one will find you.', button: 'Be found', done: 'Entered. The next rite knows where you are.', already: 'Your address is already with the congregation.' };
+const SUMMON_FRAGMENT = { invite: 'Other fragments survive. When one is recovered, the file sends word to whoever left an address.', button: 'Leave it', done: 'Filed. The next fragment knows where you are.', already: 'Your address is already in the file.' };
+const NAV_EXTRAS = {
+  'plague-priest-liturgy': { summon: SUMMON_RITE },
+  'plague-priest-lore': { outlet: { href: 'plague-priest-liturgy.html', label: 'Hear what it was tuned to', dest: 'The Liturgy, as recovered' } },
+  'plague-priest-decoder': { outlet: { href: 'plague-priest-liturgy.html', label: 'Hear the lines you decoded', dest: 'The Liturgy, as recovered' } },
+  'plague-priest-apocrypha': { outlet: { href: 'https://open.spotify.com/album/1R70HqAWhxWUiHgqgG2UIf', label: 'Hear the broadcast source', dest: 'The Gospel of Forgotten Flesh, on Spotify', out: true }, summon: SUMMON_RITE },
+  'rf-093-lore': { outlet: { href: 'https://www.amazon.com/dp/B0FQ9QDMQ2', label: 'Request evidence access', dest: 'Book I, on Amazon Kindle', out: true } },
+  'rf-093-invocation': { outlet: { href: 'https://youtu.be/lDo91ztT_ZQ', label: 'Watch the transmission', dest: 'Chronicle I, on YouTube', out: true } },
+  'rf-093-apocrypha': { outlet: { href: 'https://www.amazon.com/dp/B0FQ9QDMQ2', label: 'Request evidence access', dest: 'Book I, on Amazon Kindle', out: true }, summon: SUMMON_FRAGMENT },
+  'gospel-forgotten-flesh': { summon: { invite: 'When the next transmission is released, it goes to whoever left an address.', button: 'Leave it', done: 'Filed. The next transmission knows where you are.', already: 'Your address is already on file.' } }
+};
+
 function initCodexNav(currentId) {
   const page = CODEX_MAP[currentId];
   if (!page) return;
@@ -812,6 +826,8 @@ function initCodexNav(currentId) {
   // THE SEAL
   const seal = composeSeal(currentId, page);
 
+  const extras = NAV_EXTRAS[currentId] || {};
+
   const doorHTML = hasOwnGate
     ? `<div class="cnav-gatenote">The descent continues through the gate above.</div>`
     : (forward ? `
@@ -823,6 +839,11 @@ function initCodexNav(currentId) {
       <a class="cnav-door cnav-chamber cnav-single" href="${chamberHref}">
         <span class="cnav-door-label">Enter the Chamber</span>
         <span class="cnav-door-dest">${chamberTitle}</span>
+      </a>` : '') +
+      (extras.outlet ? `
+      <a class="cnav-door cnav-a cnav-single" href="${extras.outlet.href}"${extras.outlet.out ? ' target="_blank" rel="noopener"' : ''}>
+        <span class="cnav-door-label">${extras.outlet.label}</span>
+        <span class="cnav-door-dest">${extras.outlet.dest}</span>
       </a>` : '');
 
   nav.innerHTML = `
@@ -848,6 +869,8 @@ function initCodexNav(currentId) {
 
       ${doorHTML}
 
+      ${extras.summon ? '<div class="cnav-summon"></div>' : ''}
+
       <div class="cnav-meta">
         <span class="cnav-realm">Realm ${page.realm} · ${page.phase}</span>
         ${realmGloss ? `<span class="cnav-realm-gloss">${realmGloss}</span>` : ''}
@@ -859,6 +882,10 @@ function initCodexNav(currentId) {
   `;
 
   applyNavPalette(nav, pal);
+
+  if (extras.summon && window.CodexSummon) {
+    CodexSummon.mount(nav.querySelector('.cnav-summon'), extras.summon);
+  }
 }
 
 function applyNavPalette(nav, pal) {
@@ -936,6 +963,12 @@ function applyNavPalette(nav, pal) {
     .cnav-a { background: transparent; border-color: var(--cnav-accent-dim); color: #E4DDD0; }
     .cnav-a::before { background: rgba(201, 168, 76, 0.08); }
     .cnav-a:hover { border-color: var(--cnav-accent); }
+    .cnav-summon { width: 100%; max-width: 480px; text-align: center; }
+    .cnav-summon .csm-note { font-family: 'Crimson Text', Georgia, serif; font-style: italic; font-size: 17px; line-height: 1.5; color: rgba(228,221,208,0.82); margin: 0 0 12px; }
+    .cnav-summon .csm-form { display: flex; flex-wrap: wrap; gap: 8px; }
+    .cnav-summon .csm-input { flex: 1 1 180px; min-width: 0; background: rgba(0,0,0,0.5); border: 1px solid var(--cnav-accent-dim); color: #E4DDD0; font-family: 'Share Tech Mono', monospace; font-size: 15px; padding: 11px; }
+    .cnav-summon .csm-input:focus { outline: none; border-color: var(--cnav-accent); }
+    .cnav-summon .csm-send { background: transparent; border: 1px solid var(--cnav-accent); color: var(--cnav-accent); font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; padding: 11px 16px; cursor: pointer; }
     .cnav-chamber {
       background: linear-gradient(180deg, rgba(16,12,4,0.6), rgba(8,5,2,0.85));
       border-color: var(--cnav-bearer-dim); color: #E0C878;
