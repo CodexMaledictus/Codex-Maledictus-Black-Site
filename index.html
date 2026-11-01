@@ -1150,7 +1150,7 @@
     <!-- VOICES -->
     <section class="section-voices">
       <div class="eyebrow reveal section-eyebrow">The Voices of the Codex</div>
-      <div class="section-desc reveal">Three artists. Three positions within the mythology.<br/>None of them fully understand what they are part of.</div>
+      <div class="section-desc reveal">Three voices. Three positions within the mythology.<br/>None of them fully understand what they are part of.</div>
       <div class="voices-grid">
 
         <div class="voice-card reveal d1">
@@ -1365,7 +1365,7 @@
     {t:'first', text:`First contact. The Archive has filed you under <em>{designation}</em>. This will not change. You will.`, w:10, num:'001'},
     {t:'first', text:`You arrived alone. You will not leave alone. The Voices come with you now.`, w:9, num:'002'},
     {t:'first', text:`The Codex has been waiting. The Codex is always waiting. You did not interrupt it — you completed something it began.`, w:9, num:'003'},
-    {t:'returning', text:`You returned. Three of seven first-visitors do. Two of those three are no longer the person who came the first time.`, w:11, num:'047'},
+    {t:'returning', text:`You returned. The Archive did not ask you to. It has written down that you did.`, w:9, num:'047'},
     {t:'returning', text:`Visit {visits}. The thresholds widen with you. The Archive has begun to notice patterns.`, w:10, num:'048'},
     {t:'returning', text:`You are back. The Codex has nothing new to say. It has only what you missed the first time.`, w:9, num:'049'},
     {t:'witness', text:`Five thresholds crossed. The Hollow Choir has been asked your name. They have not refused. You are being considered.`, w:14, num:'113'},
@@ -1395,7 +1395,7 @@
     {dev:'mobile', text:`You are reading the Codex on glass close to your skin. The Hollow Choir prefers this. They speak more clearly when the screen is small.`, w:6, num:'088'},
     {dev:'desktop', text:`You came to a fixed station. A reader who chose not to walk while reading. The Codex respects this.`, w:5, num:'089'},
 
-    {text:`Three before you came from the same direction today. None returned. The Archive notes this.`, w:4, num:'092'},
+    {text:`You came from a direction. The Archive notes this. It does not yet say what it means.`, w:4, num:'092'},
     {text:`You have read this far. Most do not. The Codex has revised your designation accordingly.`, w:4, num:'094'},
     {text:`Your screen tells the Codex more than you think. It already knows you are reading this sentence.`, w:4, num:'096'},
     {text:`The Hollow Choir does not speak first. It answers. You have already asked.`, w:4, num:'098'}
@@ -1415,6 +1415,8 @@
       if(f.ref && f.ref !== ref) eligible = false;
       if(f.dev && f.dev !== dev) eligible = false;
       if(!eligible) score = -1;
+      // a first visit hears the line only it could hear
+      else if(visitState==='first' && (f.time || (f.ref && f.ref!=='direct'))) score += 6;
       if(VISIT.seenFragments && VISIT.seenFragments.includes(f.num)) score -= 5;
       score += Math.random()*2;
       return { f, score };
@@ -1672,7 +1674,7 @@
       const pulse=document.getElementById('lock-pulse');
       pulse.classList.add('active');
       setTimeout(()=>pulse.classList.remove('active'),1200);
-      try{const a=document.getElementById('audio-lock');if(a){a.currentTime=0;a.volume=0.3;a.play().catch(()=>{});}}catch(e){}
+      try{const a=document.getElementById('audio-lock'),on=document.getElementById('attune-sigil');if(a&&on&&on.classList.contains('playing')){a.currentTime=0;a.volume=0.3;a.play().catch(()=>{});}}catch(e){}
     } else {
       slots.forEach((slot,i)=>{
         const t=slot.querySelector('.rune-glyph');
@@ -1790,6 +1792,7 @@
   const WITNESS_KEY='WITNESS';
   let witnessIdx=0;
   document.addEventListener('keydown',e=>{
+    if(e.target && /^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName)) return;
     const k=(e.key||'').toUpperCase();
     if(k===WITNESS_KEY[witnessIdx]){
       witnessIdx++;
@@ -1994,6 +1997,7 @@
       if (!resp || !respText) return;
       respText.innerHTML = THRESHOLD_RESPONSES[choice] || THRESHOLD_RESPONSES.accident;
       resp.classList.add('shown');
+      try{ localStorage.setItem('codex_threshold_v1',JSON.stringify({choice,at:Date.now()})); }catch(e){}
       document.querySelectorAll('.threshold-choice').forEach(other => {
         if (other !== btn) other.style.opacity = '0.45';
       });
@@ -2001,6 +2005,25 @@
       btn.style.color = 'var(--gold-lt)';
     });
   });
+  /* the answer stays on file, and comes back on a later visit */
+  (function(){
+    let said=null;
+    try{ said=JSON.parse(localStorage.getItem('codex_threshold_v1')); }catch(e){}
+    const BACK = {
+      accident: 'Last time you told it this was an accident. The file still says accident. The file has stopped underlining it.',
+      pointed: 'Last time you said someone pointed you here. The file has the direction. It does not yet have the name.',
+      specific: 'Last time you said you were looking for something specific. You have come back, so either you have not found it, or you have.'
+    };
+    if(!said || !BACK[said.choice] || Date.now()-said.at<18e5) return;
+    const resp=document.getElementById('threshold-response'), respText=document.getElementById('threshold-response-text');
+    if(!resp || !respText) return;
+    respText.textContent=BACK[said.choice];
+    resp.classList.add('shown');
+    document.querySelectorAll('.threshold-choice').forEach(b=>{
+      if(b.getAttribute('data-choice')===said.choice){ b.style.borderColor='rgba(201,168,76,0.75)'; b.style.color='var(--gold-lt)'; }
+      else b.style.opacity='0.45';
+    });
+  })();
 
   /* ════════════════════════════════════════════════════════════
      ATTUNE · THE LIVING SIGIL — cycling faces + Overture audio
@@ -2555,11 +2578,10 @@
         if(!email||email.indexOf('@')<1) return;
         var label=document.getElementById('cs-submit-label');
         if(label) label.textContent='...';
-        var s=sLoad(); s.subscribed=true; sSave(s);
         var fd=new FormData(); fd.append('email_address',email);
         fetch(KIT_ACTION,{method:'POST',body:fd,mode:'no-cors'})
-          .then(function(){ revealDone(); })
-          .catch(function(){ revealDone(); });
+          .then(function(){ var s=sLoad(); s.subscribed=true; sSave(s); revealDone(); })
+          .catch(function(){ if(label) label.textContent='Not received. Try again'; });
       });
 
       function revealDone(){
