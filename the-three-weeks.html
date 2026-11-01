@@ -94,8 +94,8 @@ var ENTRIES={
   8:[{stat:'Sent',ttl:"Hymn I: Plague Priest's Liturgy",note:"Recovered from one chamber at Deck Hollow-13. One voice leading. Logged as outgoing, because it was the only thing on the line.",files:[{t:'The Liturgy room',h:'plague-priest-liturgy.html'}]}],
   13:[{stat:'Received',ttl:'Hymn I: Recovered Transmission',note:"Five days. Reconstructed from rot, the label says, and dug out from beneath collapsed voice-drives in the Archive of Tongues. It doesn't differ from the Liturgy by a single word. It's cleaner than the original, and no one rehearsed it.",margin:['I have recommended that staff stop humming at their desks. The recommendation was circulated, and read, and I could hear them reading it.','Elvain Vhris'],files:[sp('4xhzJst0nXRZyzZQ9iU2Bm','Hear it on Spotify'),{t:'Catalogued: Hymn I, Recovered Transmission',h:WA,x:1}]}],
   15:[{stat:'Received',ttl:'Wound Protocol: Swarm-Tongue ∴ Unclean Scripture',note:'Two minutes with no audible words. The Archivum has a text anyway, and it won’t say how. The text says "we."',q:'We were here b-b-b-before the flies.',margin:['Transcriber 2 and Transcriber 5 worked in separate buildings. Their copies agree down to the stutters. Neither stutters. Transcriber 5 has begun to.','Elvain Vhris'],files:[sp('4OxUBmgpQlcj3fWGM8IdTI','Hear it on Spotify'),{t:'Catalogued: The Swarm That Thinks',h:WA,x:1}]}],
-  22:[{stat:'Received',ttl:'The Rot Knows All',note:"No note was filed on this one. The shift's handwriting resumes on the line below.",q:'All buried things shall be returned.',files:[sp('09AiUtn2t9LKcx0KoDSIb4','Hear it on Spotify')]},
-      {stat:'Received',ttl:'Endless Horizons, and Endless Horizons ∴ Redux',note:'Two recordings, one date, one text.',files:[sp('1eOdachMXMukSvBbnqGnQG','Endless Horizons on Spotify'),sp('0EmfgBY9xNO9GFxbc1lssN','The Redux on Spotify'),{t:'Catalogued: The Redux',h:WA,x:1}]}],
+  22:[{stat:'Received',ttl:'Endless Horizons, and Endless Horizons ∴ Redux',note:'Two recordings, one date, one text.',files:[sp('1eOdachMXMukSvBbnqGnQG','Endless Horizons on Spotify'),sp('0EmfgBY9xNO9GFxbc1lssN','The Redux on Spotify'),{t:'Catalogued: The Redux',h:WA,x:1}]},
+      {stat:'Received',ttl:'The Rot Knows All',note:"No note was filed on this one. The shift's handwriting resumes on the line below.",files:[sp('09AiUtn2t9LKcx0KoDSIb4','Hear it on Spotify')]}],
   27:[{stat:'Received',ttl:'Codex Echo ∴ WORTHY',note:'A score composed with no voices. Words written: none. Passages on the recording: two. The note filed with it reads: One to summon. One to seal. The Archivum holds several transcriptions, no two agree on more than a phrase, and none is published here.',margin:['Leave it on. Everyone does.','Elyon Vhar'],files:[sp('7nQJyZMmwZXy4p9F3wDJYL','Hear it on Spotify'),{t:'Catalogued: The Uninvited Verse',h:WA,x:1}]}],
   29:[{stat:'Breach',ttl:'Infection Remembers ∴ The Book Opens',note:'The log stops here. The last thing the shift wrote is the date.',files:[]}]
 };
@@ -139,7 +139,7 @@ function addBlank(){
     else if(quiet>=26000)tick.textContent='The log has you down as listening.';
     else if(quiet>=13000)tick.textContent='The line is still open.';
   },500);
-  function finish(rec){done=true;jset(KEY,rec);w.textContent='';w.appendChild(el('span','stat',now.toLocaleDateString(undefined,{month:'long',day:'numeric',year:'numeric'})+'. Filed.'));renderFiled(w,rec,false);layout();}
+  function finish(rec){done=true;jset(KEY,rec);document.getElementById('AFTER').hidden=false;w.textContent='';w.appendChild(el('span','stat',now.toLocaleDateString(undefined,{month:'long',day:'numeric',year:'numeric'})+'. Filed.'));renderFiled(w,rec,false);layout();}
   form.addEventListener('submit',function(e){
     e.preventDefault();
     var raw=inp.value.trim();if(!raw){return;}
@@ -164,7 +164,8 @@ function renderFiled(w,rec,back){
   w.appendChild(s);
 }
 for(var d=8;d<=29;d++){
-  if(d===28)addBlank();
+  // the last two days stay out of the log until the line resolves
+  if(d===28){addBlank();var after=el('div');after.id='AFTER';after.hidden=!jget(KEY);log.appendChild(after);log=after;}
   if(ENTRIES[d])ENTRIES[d].forEach(function(en){addEntry(d,en);});
   else{var e=el('div','day empty');var b=el('b',null,'June '+d);e.appendChild(b);e.appendChild(document.createTextNode('Nothing received.'));log.appendChild(e);}
 }
@@ -173,7 +174,7 @@ for(var d=8;d<=29;d++){
 var cv=document.getElementById('TRACE'),x=cv.getContext('2d'),W=0,H=0,DPR=Math.min(window.devicePixelRatio||1,2),spikes=[],motes=[];
 for(var mi=0;mi<46;mi++)motes.push({x:Math.random(),y:Math.random(),r:.4+Math.random()*1.3,s:.2+Math.random()*.7,p:Math.random()*6.3});
 function size(){W=innerWidth;H=innerHeight;cv.width=W*DPR;cv.height=H*DPR;x.setTransform(DPR,0,0,DPR,0,0);}
-function layout(){spikes=[].map.call(document.querySelectorAll('[data-spike]'),function(n){var r=n.getBoundingClientRect();return {y:r.top+scrollY+Math.min(30,r.height/2),a:parseFloat(n.getAttribute('data-spike'))};});}
+function layout(){spikes=[].map.call(document.querySelectorAll('[data-spike]'),function(n){var r=n.getBoundingClientRect();return r.height?{y:r.top+scrollY+Math.min(30,r.height/2),a:parseFloat(n.getAttribute('data-spike'))}:null;}).filter(Boolean);}
 function gutX(){var a=document.getElementById('APP').getBoundingClientRect();return a.left+(W<=560?20:30);}
 var born=performance.now();
 function draw(now){
