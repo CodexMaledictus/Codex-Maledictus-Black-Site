@@ -125,7 +125,7 @@ body::after{content:'';position:fixed;inset:0;z-index:69;pointer-events:none;bac
       <div id="result-regs"></div>
     </div>
     <div class="r-doors">
-      <a class="door" id="BRIDGE" href="gospel-forgotten-flesh.html"><b>Enter the Gospel</b><small>It is the thing this engine has been playing back. You told it which song followed you, and it has checked.</small></a>
+      <a class="door" id="BRIDGE" href="gospel-forgotten-flesh.html"><b>Enter the Gospel</b><small>It is the thing this engine has been playing back. You told it which song followed you, and it kept that.</small></a>
       <button class="door" id="tear" type="button"><b>Tear off the strip</b><small>Your seventh answer and the address, as an image. What you took back stays in the machine.</small></button>
       <div id="summon"></div>
       <button class="door" id="again" type="button"><b>Feed it again</b><small>A second filing goes beside the first. Nothing is overwritten.</small></button>
@@ -226,7 +226,7 @@ var QUESTIONS=[
    ctx:'This is the only one the Engine does not already have. It will be held apart from the others.'}
 ];
 var SECTION_NAMES=['the Prologue','the Awakening','the Forgotten Truth','the Chorus','the Door','the Bridge','the Finale'];
-var answers={},measures={},spent={},firstKey={},currentQ=0,qStart=0,prevVal='',delRun='',takenAll=[],idleT=null,lastKey=0;
+var answers={},measures={},spent={},firstKey={},currentQ=0,qStart=0,prevVal='',delRun='',takenAll=[],takenChars=0,idleT=null,lastKey=0;
 
 function card(html){var a=$('q-area');a.style.display='block';a.innerHTML='<div class="plate q-card">'+html+'</div>';window.scrollTo({top:0,behavior:'smooth'});}
 function showQuestion(n){
@@ -237,7 +237,7 @@ function showQuestion(n){
     +'<div id="idle"></div><textarea class="q-ta" id="qta" placeholder="The punch is live." maxlength="500" autocomplete="off" autocapitalize="sentences"></textarea>'
     +'<div class="q-meta"><span id="qc">0 of 500</span><span id="qd"></span></div>'
     +'<button class="btn" id="qnext" type="button" disabled>Register it</button>'
-    +'<a class="q-out" href="chronicle-1-infection-remembers.html">Leave it running and go back to Chronicle I</a>');
+    +'<a class="q-out" href="chronicle-1-infection-remembers.html">Leave it and go back to Chronicle I</a>');
   var ta=$('qta');
   ta.addEventListener('input',onType);
   ta.addEventListener('keydown',function(e){if((e.ctrlKey||e.metaKey)&&e.key==='Enter')nextQ();});
@@ -252,21 +252,25 @@ function onType(){
   if(firstKey[currentQ]==null)firstKey[currentQ]=now-qStart;
   lastKey=now;$('idle').textContent='';
   if(v.length>prevVal.length){
-    var add=v.slice(prevVal.length);if(v.indexOf(prevVal)!==0)add=v.slice(-1);
+    var q=0;while(q<prevVal.length&&v[q]===prevVal[q])q++;
+    var add=v.slice(q,q+(v.length-prevVal.length));
     for(var i=0;i<Math.min(add.length,40);i++)punch(add[i],false);
     if(delRun.trim().length>=3)takenAll.push(delRun.trim());
     delRun='';
   }else if(v.length<prevVal.length){
     var p=0;while(p<v.length&&v[p]===prevVal[p])p++;
     var gone=prevVal.slice(p,p+(prevVal.length-v.length));
-    delRun=gone+delRun;
+    delRun=gone+delRun;takenChars+=gone.length;
     for(i=0;i<Math.min(gone.length,40);i++)punch(gone[i],true);
     clack(true);
+  }else if(v!==prevVal){
+    var z=0;while(z<v.length&&v[z]===prevVal[z])z++;
+    takenChars++;punch(prevVal[z],true);punch(v[z],false);
   }
   prevVal=v;
   $('qc').textContent=v.length+' of 500';$('qc').className=v.length>450?'warn':'';
   $('qnext').disabled=v.trim().length<3;
-  var total=takenAll.join('').length+delRun.length;
+  var total=takenChars;
   $('qd').textContent=total?total+' taken back, all punched':'';
 }
 function idleLines(){
@@ -277,6 +281,11 @@ function idleLines(){
 }
 function nextQ(){
   var ta=$('qta');if(!ta)return;var val=ta.value.trim();if(val.length<3)return;
+  if(window.CodexCare&&CodexCare.needed(val+' '+delRun+' '+takenAll.join(' '))){
+    clearInterval(idleT);answers={};takenAll=[];takenChars=0;delRun='';tape=[];jset(TAPE_KEY,tape);current=-1;
+    var ca=$('q-area');ca.style.display='block';ca.textContent='';CodexCare.show(ca);window.scrollTo({top:0});
+    return;
+  }
   if(delRun.trim().length>=3)takenAll.push(delRun.trim());delRun='';
   answers[currentQ]=val;spent[currentQ]=Date.now()-qStart;lamps[currentQ]=1;clack(true);
   clearInterval(idleT);jset(TAPE_KEY,tape);
@@ -286,10 +295,10 @@ function nextQ(){
 function roomsWalked(){var log=jget('codex_invocation_log',[]),seen={};log.forEach(function(e){if(e&&e.id&&e.id!=='memory-engine-1')seen[e.id]=1;});return Object.keys(seen).length;}
 function measure(n){
   var now=new Date();
-  if(n===1){var t=takenAll.join('').length;return t?'You took back '+t+(t===1?' character':' characters')+' on the first plate. This register is whatever was under them.':'You took nothing back on the first plate. This register stays open in case you do.';}
+  if(n===1){var t=takenChars;return t?'You took back '+t+(t===1?' character':' characters')+' on the first plate. This register is whatever was under them.':'You took nothing back on the first plate. This register stays open in case you do.';}
   if(n===2){var s=Math.max(1,Math.round((firstKey[0]||0)/1000));return 'You looked at the first question for '+s+(s===1?' second':' seconds')+' before your hand moved. People do not remember the part before their hand moves. It does.';}
   if(n===4){return now.toLocaleDateString(undefined,{weekday:'long'})+', '+now.toLocaleTimeString([],{hour:'numeric',minute:'2-digit'})+'. Of everything that was open to you at this hour, you came through this.';}
-  var r=roomsWalked(),mir=jget('codex_mirror_v1',{}),o=r?'You came through '+r+(r===1?' room':' rooms')+' to get here. They all kept a copy of the route.':'You came straight here without going through any other room. Nobody gets the address by accident.';
+  var r=roomsWalked(),mir=jget('codex_mirror_v1',{}),o=r?'You came through '+r+(r===1?' room':' rooms')+' to get here. They all kept a copy of the route.':'The file shows no other room on your way here. Nobody gets the address by accident.';
   if(mir.lastClass)o+=' The mirror already had you as '+mir.lastClass+'.';
   return o;
 }
@@ -320,7 +329,8 @@ function composeReading(){
   p.push({t:'You typed '+total+' words into three plates and spent longest on '+SECTION_NAMES[longest]+', '+seconds+(seconds===1?' second':' seconds')+'. We mention it because you will say you answered quickly.'});
   p.push({t:'Asked what kept returning, you wrote: "'+trimQuote(answers[0])+'" Asked what song had followed you, you wrote: "'+trimQuote(answers[3])+'" You think those were two answers.'});
   var taken=takenAll.slice().sort(function(a,b){return b.length-a.length;})[0];
-  if(taken)p.push({t:'You wrote "'+trimQuote(taken)+'" and took it back. It was punched on the way in, and again on the way out. Look at the red columns on the tape.',c:'taken'});
+  if(taken)p.push({t:'You wrote "'+trimQuote(taken)+'" and took it back. It was punched on the way in, and again on the way out.',c:'taken'});
+  else if(takenChars)p.push({t:'You took back '+takenChars+(takenChars===1?' character':' characters')+', a slip here and there, and none of it long enough to quote. All of it is red on the tape. People tidy first. It is the first thing they do.'});
   else p.push({t:'You did not take back a single character. Nothing on the tape is red. People who write like that have usually rehearsed.'});
   p.push({t:'The seventh is the one we told you we didn’t already have. You wrote: "'+trimQuote(answers[6])+'" It is being kept apart from the others, and nothing has been decided about it.'});
   p.push({t:'All of this lives on this device and nowhere else. Come back and it will read you to yourself, in your own words, which by then may look like somebody else’s.'});
@@ -342,7 +352,7 @@ function finish(){
     var a=$('q-area');a.style.display='block';a.textContent='';CodexCare.show(a);window.scrollTo({top:0});
     return;
   }
-  var m=memLoad();m.filings.unshift({at:Date.now(),answers:all,measures:measures,taken:takenAll.slice(0,13)});if(m.filings.length>13)m.filings.length=13;jset(MEM_KEY,m);
+  var m=memLoad();m.filings.unshift({at:Date.now(),answers:all,measures:measures,taken:takenAll.slice(0,13)});jset(MEM_KEY,m);
   showResult(composeReading());
 }
 var LAST=null;
@@ -354,7 +364,7 @@ function showResult(paras){
   paras.forEach(function(p){var e=document.createElement('p');if(p.c)e.className=p.c;e.textContent=p.t;h.appendChild(e);});
   var r=$('result-regs');r.textContent='';
   [1,2,4,5].forEach(function(n){var d=document.createElement('div');d.textContent=['','II','III','','V','VI'][n]+'. '+(measures[n]||'');r.appendChild(d);});
-  if(window.CodexSummon&&!$('summon').firstChild)CodexSummon.mount($('summon'),{invite:'The Engine punches new transmissions as they are released. Leave an address and it will send you the tape.',button:'Register it',done:'Registered. It was on the tape already, in a way.',already:'Your address is already on the tape.'});
+  if(window.CodexSummon&&!$('summon').firstChild)CodexSummon.mount($('summon'),{invite:'The Engine punches new transmissions as they are released. Leave an address and it will send word.',button:'Register it',done:'Registered. It was on the tape already, in a way.',already:'Your address is already on the tape.'});
   window.scrollTo({top:0,behavior:REDUCED?'auto':'smooth'});
 }
 // the strip leaves with you. What you took back does not.
@@ -377,7 +387,7 @@ $('tear').addEventListener('click',function(){
     small.textContent='Torn. The rest of the roll is still feeding.';
   },'image/png');
 });
-function restart(){answers={};measures={};spent={};firstKey={};takenAll=[];lamps=[0,0,0,0,0,0,0];$('RESULT').style.display='none';showQuestion(0);}
+function restart(){answers={};measures={};spent={};firstKey={};takenAll=[];takenChars=0;lamps=[0,0,0,0,0,0,0];$('RESULT').style.display='none';showQuestion(0);}
 $('again').addEventListener('click',restart);
 
 // ── COMING BACK ── it has not changed them. It has only had them longer.

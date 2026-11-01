@@ -224,7 +224,9 @@ function burn(now){
   root.style.setProperty('--lx',lx+'px');root.style.setProperty('--ly',ly+'px');root.style.setProperty('--flick',f.toFixed(3));
   const r=leaf.getBoundingClientRect();
   document.querySelectorAll('.lemon').forEach(el=>{const b=el.getBoundingClientRect();
-    el.style.setProperty('--mx',(lx-b.left)+'px');el.style.setProperty('--my',(ly-b.top)+'px');});
+    // the margin notes are written upside down, so the flame lands on them from the other side
+    const flip=el.classList.contains('m');
+    el.style.setProperty('--mx',(flip?b.right-lx:lx-b.left)+'px');el.style.setProperty('--my',(flip?b.bottom-ly:ly-b.top)+'px');});
 }
 requestAnimationFrame(burn);
 
@@ -267,7 +269,7 @@ const VOICES = {
     'Say {word} again, lower. We are trying to find your key.'
   ]}
 };
-const NOTHING='You pressed the button and gave us nothing. That has been entered as your confession. It is one of the longer ones.';
+const NOTHING='You pressed the button and gave us next to nothing. That has been entered as your confession. It is one of the longer ones.';
 const STOP=/^(the|and|but|for|you|your|yours|that|this|these|those|with|from|have|has|had|was|were|are|been|being|what|when|where|which|who|why|how|not|all|any|can|could|would|should|will|just|very|really|about|into|over|than|then|them|they|their|there|here|because|still|some|like|what|said|every|myself|never|always|after|before|something|someone|nothing|anything|everything)$/i;
 const BLOCK=/(fuck|shit|bitch|cunt|nigg|fag|retard|whore|slut|rape|kike|spic|chink)/i;
 function pickVoice(text){let best='codex',most=0;['artemys','rot','choir'].forEach(k=>{const n=(text.match(VOICES[k].words)||[]).length;if(n>most){most=n;best=k;}});return best;}
@@ -292,7 +294,7 @@ function composeReply(raw){
   const label=(key==='artemys'&&wardOccupied())?'The voice you hear as Artemys':v.label;
   return {text,label,cls:v.cls};
 }
-// what other rooms already filed about this hand. Each thing is mentioned once.
+// what other rooms already filed about this hand. Each margin note is written once.
 function crossNote(){
   const seen=jget('codex_ledger_seen_v1',{}),mem=jget('codex_memory_v1',{}).filings||[],mir=jget('codex_mirror_v1',{});
   if(!seen.engine&&mem[0]&&mem[0].answers&&mem[0].answers[3]){
@@ -399,9 +401,10 @@ const AFTERS=[
 function fillInAbsence(entries,ward){
   const newest=entries[0];if(!newest)return;
   const away=Date.now()-(ward.lastOpen||newest.time);
-  if(away<3600000||newest.after)return;
-  const days=Math.floor((Date.now()-newest.time)/864e5);
-  newest.after=days>=13?'Thirteen days. The ink on this entry has outlived the reason you wrote it, and the reason is not gone.':AFTERS[(ward.afterN||0)%AFTERS.length];
+  const days=Math.floor((Date.now()-newest.time)/864e5),thirteen=days>=13&&!ward.thirteen;
+  if(!thirteen&&(away<3600000||newest.after))return;
+  if(thirteen)ward.thirteen=1;
+  newest.after=thirteen?'Thirteen days. The ink on this entry has outlived the reason you wrote it, and the reason is not gone.':AFTERS[(ward.afterN||0)%AFTERS.length];
   ward.afterN=(ward.afterN||0)+1;
   jset(LEDGER_KEY,entries);
 }
@@ -410,7 +413,7 @@ function fillInAbsence(entries,ward){
 let lastAct=Date.now(),still=0;
 function mark(){lastAct=Date.now();}
 ['pointermove','keydown','scroll','pointerdown'].forEach(n=>document.addEventListener(n,()=>{
-  if(Date.now()-lastAct>900&&still>0&&still<3){still=0;leaf.classList.remove('st1','st2');}
+  if(Date.now()-lastAct>900&&still>0&&still<3){still=0;leaf.classList.remove('st1','st2');$('lede').textContent=LEDE;}
   mark();
 },{passive:true}));
 const LEDE=$('lede').textContent;

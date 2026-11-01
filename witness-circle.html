@@ -1224,10 +1224,10 @@
         <div class="canon-text">
           <p>You stayed.</p>
           <p>The page has darkened. The voices are louder now. You can hear them if you stop reading for a moment. They have been there the whole time. You were not listening for them. You are listening now.</p>
-          <p>A hum is beneath the page. The hum is the Choir's pre-song, the sound the Choir makes between hymns. It is faint. It will get fainter as you grow used to it. It will not stop. The hum is now part of your reading, in every browser you read in. The hum follows the Mark, not the page.</p>
+          <p>A hum is beneath the page. The hum is the Choir's pre-song, the sound the Choir makes between hymns. It is faint. It sits below what this device can play. It will not stop. The hum follows the Mark, not the page.</p>
           <p>The page is going to tell you what the public Archive does not contain.</p>
 
-          <div class="oracle-line">You marked the seal at <span class="ov" id="ov-timestamp">—</span>. The Codex recorded the hour. The hour is one of the hours the Cathedral keeps long services. The hour was not coincidence. You did not choose it. The hour chose you, and you arrived to mark the seal at the only minute the marking would have meant what it now means. You are the <span class="ov" id="ov-ordinal">—</span> Bearer to mark within this region of the calendar.</div>
+          <div class="oracle-line">You marked the seal at <span class="ov" id="ov-timestamp">—</span>. The Codex recorded the hour. The hour was not coincidence. You did not choose it. The hour chose you, and you arrived to mark the seal at the only minute the marking would have meant what it now means. You are the <span class="ov" id="ov-ordinal">—</span> Bearer to mark within this region of the calendar.</div>
 
           <div class="oracle-line">You spent <span class="ov" id="ov-dwell">—</span> reading before you marked. You were <span class="ov" id="ov-dwell-class">—</span>. The Codex does not bias between these.</div>
 
@@ -1708,7 +1708,11 @@ const STATE = (function(){
   if(!s.symptoms) s.symptoms = {};
   if(!s.totalVisits) s.totalVisits = 0;
   s.totalVisits++;
+  if(!s.rooms) s.rooms = {};
+  const room = s.rooms['witness-circle'] || { n:0, first:now, last:0 };
+  room.n++; room.last = now; s.rooms['witness-circle'] = room;
   saveState(s);
+  s.roomVisits = room.n;
   return s;
 })();
 
@@ -1724,7 +1728,7 @@ function computeDesignation(){
   }
   return { prefix:'CANDIDATE',symbol:'∅',num,full:`CANDIDATE · ∅ · ${num}` };
 }
-const DESIGNATION = computeDesignation();
+let DESIGNATION = computeDesignation();
 
 /* REALM II NAME */
 const BANK_A = ['Ves','Mor','Tha','Or','Yev','Cas','Nem','Vor','Sa','Iss','Khol','Drav','Mer','Ul','Pyr','Aen','Sor','Vex','Tor','Lyr'];
@@ -1822,13 +1826,13 @@ function renderPreamble(){
   const dow = getDayOfWeek();
   const device = isMobile ? 'glass close to your skin' : 'a fixed station';
   let visitLine = '';
-  if(STATE.witnessVisits === 1) visitLine = 'You have crossed the seam for the first time.';
-  else if(STATE.witnessVisits === 2) visitLine = 'You returned. The Codex notes that two of seven first-visitors return.';
-  else if(STATE.witnessVisits === 3) visitLine = 'Your third return. The third is the return that confirms the marking.';
-  else if(STATE.witnessVisits === 7) visitLine = `Your seventh return. The Codex stops measuring and begins preparing.`;
-  else if(STATE.witnessVisits === 13) visitLine = `Your thirteenth return. The number is not accidental. You have returned as many times as there are positions in the Choir.`;
-  else if(STATE.witnessVisits > 13) visitLine = `You have stood in this room ${STATE.witnessVisits} times.`;
-  else visitLine = `You have stood in this room ${STATE.witnessVisits} times.`;
+  if(STATE.roomVisits === 1) visitLine = 'You have crossed the seam for the first time.';
+  else if(STATE.roomVisits === 2) visitLine = 'You returned. The Codex notes that you did.';
+  else if(STATE.roomVisits === 3) visitLine = 'Your third return. The third is the return that confirms the marking.';
+  else if(STATE.roomVisits === 7) visitLine = `Your seventh return. The Codex stops measuring and begins preparing.`;
+  else if(STATE.roomVisits === 13) visitLine = `Your thirteenth return. The number is not accidental. You have returned as many times as there are positions in the Choir.`;
+  else if(STATE.roomVisits > 13) visitLine = `You have stood in this room ${STATE.roomVisits} times.`;
+  else visitLine = `You have stood in this room ${STATE.roomVisits} times.`;
 
   el.innerHTML = `
     <div>// SESSION OPENED · ${dow.toUpperCase()} · ${tod.toUpperCase()}</div>
@@ -1977,7 +1981,7 @@ function markOath(){
     dwellClass: dwellClass,
     referrer: getReferrer(),
     timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || 'unknown',
-    visitsAtMarking: STATE.witnessVisits
+    visitsAtMarking: STATE.roomVisits
   };
   saveState(STATE);
   enterBearerState();
@@ -1985,9 +1989,11 @@ function markOath(){
 
 function enterBearerState(){
   document.body.classList.add('bearer-state');
-  if(STATE.witnessVisits >= 3) document.body.classList.add('visit-3plus');
+  if(STATE.roomVisits >= 3) document.body.classList.add('visit-3plus');
 
-  document.getElementById('db-value').textContent = `BEARER · ✠ · ${DESIGNATION.num}`;
+  DESIGNATION = { prefix:'BEARER', symbol:'✠', num:DESIGNATION.num, full:`BEARER · ✠ · ${DESIGNATION.num}` };
+  document.getElementById('db-value').textContent = DESIGNATION.full;
+  document.querySelectorAll('input[name="designation"]').forEach(el=>{ el.value = DESIGNATION.full; });
   document.getElementById('db-realm-name').textContent = REALM_NAME;
   document.getElementById('designation-banner').classList.add('bearer-banner');
 
@@ -2010,7 +2016,7 @@ function enterBearerState(){
   document.getElementById('ov-dwell-class').textContent = m.dwellClass;
 
   document.getElementById('ov-arrival').textContent = m.referrer;
-  document.getElementById('ov-visits').textContent = STATE.witnessVisits;
+  document.getElementById('ov-visits').textContent = STATE.roomVisits;
 
   document.getElementById('ov-position-name').textContent = `Position ${ASSIGNED_POSITION.num} · ${ASSIGNED_POSITION.name}`;
   document.getElementById('ov-realm-name').textContent = REALM_NAME;
@@ -2052,7 +2058,7 @@ function scrollPostOath(){
 
 /* SYMPTOM CHECK-IN (visits 3+) */
 function renderSymptomCheckin(){
-  if(STATE.witnessVisits < 3) return;
+  if(STATE.roomVisits < 3) return;
   const container = document.getElementById('symptom-rows');
   if(!container) return;
   container.innerHTML = '';
@@ -2154,15 +2160,19 @@ function setupForm(formId, successId, subject){
     const data = new FormData();
     data.append('_subject', subject);
     if(designation) data.append('designation', designation.value);
-    if(isBearer && REALM_NAME) data.append('realm_name', REALM_NAME);
+    if((isBearer || DESIGNATION.prefix==='BEARER') && REALM_NAME) data.append('realm_name', REALM_NAME);
     if(vtype) data.append('vision_type', vtype.value);
     if(contact && contact.value) data.append('contact', contact.value);
     data.append('message', textarea ? textarea.value : '');
+    if(!success.dataset.said) success.dataset.said = success.innerHTML;
+    let sent = false;
     try{
-      await fetch(form.action, { method:'POST', body:data, headers:{ 'Accept':'application/json' } });
+      const res = await fetch(form.action, { method:'POST', body:data, headers:{ 'Accept':'application/json' } });
+      sent = res.ok;
     }catch(err){}
+    success.innerHTML = sent ? success.dataset.said : 'The seam did not carry it. Nothing was sent. Your words are still here. Try again.';
     success.classList.add('shown');
-    if(textarea) textarea.value = '';
+    if(sent && textarea) textarea.value = '';
   });
 }
 setupForm('invocation-form','invocation-success','Witness Invocation');
@@ -2560,7 +2570,7 @@ renderPreamble();
 setDesignations();
 
 /* If returning bearer with 3+ visits, reveal symptom checkin styles */
-if(isBearer && STATE.witnessVisits >= 3){
+if(isBearer && STATE.roomVisits >= 3){
   document.body.classList.add('visit-3plus');
 }
 

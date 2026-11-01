@@ -678,7 +678,7 @@ function observeSr(){document.querySelectorAll('.sr').forEach(el=>{if(!el.classL
 // ── WATCHER, quiet tier ──
 const PAGE_ID='apocrypha-chronicle-1';
 let WATCH=null;
-try{WATCH=window.CodexWatch?window.CodexWatch.init(PAGE_ID,{tier:'quiet'}):null;}catch(e){WATCH=null;}
+try{WATCH=window.CodexWatch?window.CodexWatch.create({pageId:PAGE_ID}):null;}catch(e){WATCH=null;}
 function obs(text,w){try{if(WATCH&&WATCH.observe)WATCH.observe(text,w||1);}catch(e){}}
 
 // arrival recognition from the descent log

@@ -803,7 +803,12 @@ const STATE=(function(){
   if(!s.fingerprint)s.fingerprint=makeFingerprint();
   if(!s.totalVisits)s.totalVisits=0;
   s.totalVisits++;
-  saveWitnessState(s);return s;
+  if(!s.rooms)s.rooms={};
+  const room=s.rooms['infection-lore']||{n:0,first:now,last:0};
+  const prev=room.last;room.n++;room.last=now;s.rooms['infection-lore']=room;
+  saveWitnessState(s);
+  s.roomVisits=room.n;s.roomFirst=room.first;s.roomPrev=prev;
+  return s;
 })();
 const isBearer=!!STATE.bearer;
 
@@ -893,15 +898,17 @@ const SIGNALS=(function(){
   const timeStr=now.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
   const hourBand = hour<5?'dead':hour<9?'waking':hour<17?'working':hour<22?'evening':'dead';
   const daysSinceFirst=STATE.firstWitnessVisit?Math.floor((Date.now()-STATE.firstWitnessVisit)/86400000):0;
-  return {now,hour,hourBand,tz,region,lang,device,weekday,timeStr,daysSinceFirst,visits:STATE.totalVisits};
+  const daysInRoom=Math.floor((Date.now()-STATE.roomFirst)/86400000);
+  const daysAway=STATE.roomPrev?Math.floor((Date.now()-STATE.roomPrev)/86400000):0;
+  return {now,hour,hourBand,tz,region,lang,device,weekday,timeStr,daysSinceFirst,daysInRoom,daysAway,visits:STATE.roomVisits};
 })();
 
 // the single underplayed hook fact, chosen for impact, by priority
 function pickHookFact(){
   const s=SIGNALS;
   if(s.visits>1){
-    if(s.daysSinceFirst>=13)return `You came back on the thirteenth day. The chant said you would.`;
-    if(s.daysSinceFirst>=1)return `You were gone ${s.daysSinceFirst} day${s.daysSinceFirst>1?'s':''}. It did not stop while you were away.`;
+    if(s.daysInRoom===13)return `You came back on the thirteenth day. The chant said you would.`;
+    if(s.daysAway>=1)return `You were gone ${s.daysAway} day${s.daysAway>1?'s':''}. It did not stop while you were away.`;
     return `You came back. It noticed.`;
   }
   if(s.hourBand==='dead')return `It is ${s.timeStr} where you are. You are awake at the hour the Codex prefers.`;
@@ -1254,8 +1261,11 @@ function onPointer(x,y){
   setLensPos(x,y);
   checkLensTargets(x,y);
 }
-window.addEventListener('mousemove',e=>onPointer(e.clientX,e.clientY));
-window.addEventListener('touchmove',e=>{if(lensArmed&&e.touches[0]){onPointer(e.touches[0].clientX,e.touches[0].clientY);e.preventDefault();}},{passive:false});
+let lensAt=null;
+window.addEventListener('mousemove',e=>{lensAt=[e.clientX,e.clientY];onPointer(e.clientX,e.clientY);});
+window.addEventListener('touchmove',e=>{if(lensArmed&&e.touches[0]){lensAt=[e.touches[0].clientX,e.touches[0].clientY];onPointer(lensAt[0],lensAt[1]);e.preventDefault();}},{passive:false});
+// an eye held still keeps reading
+setInterval(()=>{if(lensArmed&&lensAt&&!document.hidden)checkLensTargets(lensAt[0],lensAt[1]);},120);
 
 // dwell-to-reveal: a veil must be under the lens for a beat
 const veilDwell=new WeakMap();
@@ -1627,7 +1637,7 @@ function personalCorruptLine(){
   if(s.hour<5||s.hour>=22) opts.push("you are awake at an hour the record keeps for itself");
   if(s.visits>1) opts.push("you have read this page before, and it kept the first reading");
   if(s.visits>1) opts.push("you came back, which is the part it was waiting to record");
-  if(s.daysSinceFirst>=1) opts.push("you were away "+s.daysSinceFirst+(s.daysSinceFirst===1?" day":" days")+", and it held your place");
+  if(s.daysAway>=1) opts.push("you were away "+s.daysAway+(s.daysAway===1?" day":" days")+", and it held your place");
   const dwell=Math.round((Date.now()-pageEnterTime)/60000);
   if(dwell>=3) opts.push("you have been here "+dwell+" minutes; long enough to be read");
   if(s.region) opts.push("the record has been where you are reading from");

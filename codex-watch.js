@@ -106,7 +106,18 @@
     this._mem.lastPage = this.pageId;
     saveJSON(WATCH_KEY, this._mem);
 
-    this.returning = (this.sig.totalVisits > 1) || (this._mem.sessions > 1) || cipherHas('inf-apoc-seen');
+    // a room only calls you a returner if you have stood in that room
+    this._mem.pages = this._mem.pages || {};
+    this._mem.pages[this.pageId] = (this._mem.pages[this.pageId] || 0) + 1;
+    saveJSON(WATCH_KEY, this._mem);
+    this.returning = this._mem.pages[this.pageId] > 1;
+    this.cameFromApoc = false;
+    try {
+      var trail = JSON.parse(localStorage.getItem('codex_invocation_log')) || [];
+      for (var i = trail.length - 1; i >= 0; i--) {
+        if (trail[i].id !== this.pageId) { this.cameFromApoc = trail[i].id === 'apocrypha-infection'; break; }
+      }
+    } catch (e) {}
     this.cameFromLore = cipherHas('inf-lore-intus') || cipherHas('inf-lore-flip');
     this.behavior.deadHour = (this.sig.band === 'dead');
 
@@ -169,6 +180,7 @@
     // stillness => being read
     setInterval(function () {
       var idle = Date.now() - self._lastMove;
+      if (idle > 8000) self.behavior.stillMs = Math.max(self.behavior.stillMs, idle);
       if (idle > 8000 && !self.seenTexts['__still']) {
         self.seenTexts['__still'] = 1;
         self.observe('Subject went still for ' + Math.round(idle / 1000) + ' seconds. The file notes: it reads most clearly when the reader stops moving.', 2);
@@ -202,7 +214,7 @@
         self._awaySince = 0;
         var secs = Math.round(away / 1000);
         // the file grew while they were gone. this is TRUE (we kept running).
-        self.observe('Subject left for ' + secs + ' second' + (secs === 1 ? '' : 's') + '. The file did not. ' + (self.behavior.leaveAttempts) + ' observation' + (self.behavior.leaveAttempts === 1 ? '' : 's') + ' added in your absence. You came back to find it had not waited politely.', 3);
+        self.observe('Subject left for ' + secs + ' second' + (secs === 1 ? '' : 's') + '. The file did not. One observation added in your absence. You came back to find it had not waited politely.', 3);
       }
     });
     global.addEventListener('blur', function () { self._awaySince = self._awaySince || Date.now(); });

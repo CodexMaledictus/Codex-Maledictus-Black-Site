@@ -23,9 +23,15 @@
       form.addEventListener('submit', function(e){
         e.preventDefault();
         var fd = new FormData(); fd.append('email_address', input.value.trim());
-        var finish = function(){ form.remove(); note.textContent = o.done; };
-        var s = load(); s.subscribed = true; save(s);
-        fetch(ACTION, {method:'POST', body:fd, mode:'no-cors'}).then(finish, finish);
+        // only a send that left this device counts as an address on file
+        send.disabled = true;
+        fetch(ACTION, {method:'POST', body:fd, mode:'no-cors'}).then(function(){
+          var s = load(); s.subscribed = true; save(s);
+          form.remove(); note.textContent = o.done;
+        }, function(){
+          send.disabled = false;
+          note.textContent = 'It did not reach the file. Nothing was kept. Try it again.';
+        });
       });
       host.appendChild(note); host.appendChild(form);
     }

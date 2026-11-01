@@ -153,7 +153,9 @@ function load(){try{return JSON.parse(localStorage.getItem(KEY))||{};}catch(e){r
 function save(o){try{localStorage.setItem(KEY,JSON.stringify(o));}catch(e){}}
 var FILE=load();
 FILE.seed=FILE.seed||Math.floor(Math.random()*1e9);
-FILE.visits=(FILE.visits||0)+1;
+// a reload is not a visit
+if(!FILE.visits||Date.now()-(FILE.seenAt||0)>18e5)FILE.visits=(FILE.visits||0)+1;
+FILE.seenAt=Date.now();
 save(FILE);
 var VISIT=FILE.visits;
 function givenName(){try{return (JSON.parse(localStorage.getItem('codex_named_voice_v1'))||{}).name||'';}catch(e){return '';}}
@@ -305,7 +307,7 @@ function place(){
 
 // ── THE VISITOR ──
 var curX=-1,curY=-1,px=-1,py=-1,hasPointer=false,lastMove=Date.now(),vx=0,vy=0;
-var fx0=FILE.lastX!=null?FILE.lastX:.5,fy0=FILE.lastY!=null?FILE.lastY:.68;
+var fx0=FILE.lastX!=null?Math.max(.05,Math.min(.95,FILE.lastX)):.5,fy0=FILE.lastY!=null?Math.max(.45,Math.min(.95,FILE.lastY)):.68;
 var rx=0,ry=0,moved=false;
 function onMove(x,y){
   var now=Date.now(),dt=Math.max(16,now-(onMove.t||now));onMove.t=now;
@@ -449,8 +451,8 @@ function frame(now){
   requestAnimationFrame(frame);
   if(document.hidden)return;
   if(REDUCED&&now-frame.last<400)return;
-  var dt=Math.min(80,now-lastF);lastF=now;frame.last=now;
-  slowN++;slowT+=dt;if(slowN>=45){if(slowT/slowN>30&&QS>.42){QS*=.8;resize();}slowN=0;slowT=0;}
+  var dt=Math.min(REDUCED?500:80,now-lastF);lastF=now;frame.last=now;
+  if(!REDUCED)slowN++;slowT+=dt;if(slowN>=45){if(slowT/slowN>30&&QS>.42){QS*=.8;resize();}slowN=0;slowT=0;}
   var soft=function(k){return 1-Math.pow(1-k,dt/16.67);};
   if(px>=0){curX=curX<0?px:curX+(px-curX)*soft(.42);curY=curY<0?py:curY+(py-curY)*soft(.42);document.getElementById('CUR').style.transform='translate('+curX.toFixed(1)+'px,'+curY.toFixed(1)+'px)';}
   vx*=Math.pow(.94,dt/16.67);vy*=Math.pow(.94,dt/16.67);
@@ -469,7 +471,7 @@ function frame(now){
   var mnS=Math.min(W,H),skyH=(H*.38)/mnS;
   var gT=(running||done)?skyH*(.3+encountered.length*.085):skyH*.22;
   giant+=(gT-giant)*soft(.012);giantK+=((reversing?.34:(stillStage>=2?.12:0))-giantK)*soft(.012);
-  // the pools. Each one is exactly as big as the time you gave it.
+  // the pools. Each one grows with the time you gave it.
   var i,mn=Math.min(W,H);
   spots.forEach(function(sp,k){
     var target=sp.s.seen?.007+Math.min(.2,Math.sqrt(sp.s.ms/1000)*.05):0;
@@ -605,7 +607,7 @@ function compose(){
   else pattern='The first shard you touched was '+shortName(first)+', and you were there before you had any reason to be.';
   if(dom.ms/total>.5){cls='Vessel';col='#E06A58';why='More than half of you went to '+shortName(dom)+'. Something is being kept there.';}
   else if(t<25){cls='Carrier';col='#B795F0';why='It passed through you in '+t+' seconds without slowing down. That is how it travels.';}
-  else if(t>=40){cls='Witness';col='#E8CE86';why='You gave every shard its due and took nothing. That is rarer than the file would like.';}
+  else if(t>=40){cls='Witness';col='#E8CE86';why='You stayed, and you took nothing. That is rarer than the file would like.';}
   else{cls='Unclassified';col='#D8D4CC';why='The mirror declined. It has declined before, and it kept those as well.';}
   var now=new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
   var late=VISIT===1?'Reflection arrived late, as is usual.':VISIT===2?'Reflection arrived on time, which is not usual.':'Reflection arrived before the subject. Filed under ordinary.';

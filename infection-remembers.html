@@ -693,7 +693,7 @@ body.bearer-state .naming-input-wrap,body.bearer-state #naming-default{display:n
 })();
 
 // ════════════════════════════════════════════════════════════
-// TIMING KNOBS, nudge these freely, they are all in ms / counts
+// how long each thing is allowed to take. it has been patient about all of them
 // ════════════════════════════════════════════════════════════
 const KNOBS={
   inscriptionSurfaceMs: 22000,   // how long on-page before the chant surfaces (dwell)
@@ -728,7 +728,12 @@ const STATE=(function(){
   if(!s.fingerprint)s.fingerprint=makeFingerprint();
   if(!s.totalVisits)s.totalVisits=0;
   s.totalVisits++;
-  saveWitnessState(s);return s;
+  if(!s.rooms)s.rooms={};
+  const room=s.rooms['infection-remembers']||{n:0,first:now,last:0};
+  const prev=room.last;room.n++;room.last=now;s.rooms['infection-remembers']=room;
+  saveWitnessState(s);
+  s.roomVisits=room.n;s.roomFirst=room.first;s.roomPrev=prev;
+  return s;
 })();
 const isBearer=!!STATE.bearer;
 
@@ -817,15 +822,17 @@ const SIGNALS=(function(){
   const timeStr=now.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
   const hourBand = hour<5?'dead':hour<9?'waking':hour<17?'working':hour<22?'evening':'dead';
   const daysSinceFirst=STATE.firstWitnessVisit?Math.floor((Date.now()-STATE.firstWitnessVisit)/86400000):0;
-  return {now,hour,hourBand,tz,region,lang,device,weekday,timeStr,daysSinceFirst,visits:STATE.totalVisits};
+  const daysInRoom=Math.floor((Date.now()-STATE.roomFirst)/86400000);
+  const daysAway=STATE.roomPrev?Math.floor((Date.now()-STATE.roomPrev)/86400000):0;
+  return {now,hour,hourBand,tz,region,lang,device,weekday,timeStr,daysSinceFirst,daysInRoom,daysAway,visits:STATE.roomVisits};
 })();
 
 // the single underplayed hook fact, chosen for impact, by priority
 function pickHookFact(){
   const s=SIGNALS;
   if(s.visits>1){
-    if(s.daysSinceFirst>=13)return `You came back on the thirteenth day. The chant said you would.`;
-    if(s.daysSinceFirst>=1)return `You were gone ${s.daysSinceFirst} day${s.daysSinceFirst>1?'s':''}. It did not stop while you were away.`;
+    if(s.daysInRoom===13)return `You came back on the thirteenth day. The chant said you would.`;
+    if(s.daysAway>=1)return `You were gone ${s.daysAway} day${s.daysAway>1?'s':''}. It did not stop while you were away.`;
     return `You came back. It noticed.`;
   }
   if(s.hourBand==='dead')return `It is ${s.timeStr} where you are. You are awake at the hour the Codex prefers.`;
@@ -1194,11 +1201,9 @@ const STRATUM_META={
 // PERSONAL STRATUM (fingerprint-keyed)
 // ════════════════════════════════════════════════════════════
 function buildPersonalStratum(){
-  const h=hashString(STATE.fingerprint+'·verse');
-  const instanceN=(h%2400)+1;
   const ts=new Date(STATE.firstWitnessVisit);
   const dateStr=ts.toLocaleDateString();
-  return `The Codex has noted your specific reception. You are the <em>${instanceN.toLocaleString()}</em> carrier to read this line on this device. The ink does not dry because the verse is still being written. <em>You are writing the next instance.</em> The Codex first opened to you on ${dateStr}. It has not closed since.`;
+  return `The Codex has noted your specific reception. You are the carrier who read this line on this device. The ink does not dry because the verse is still being written. <em>You are writing the next instance.</em> The Codex first opened to you on ${dateStr}. It has not closed since.`;
 }
 
 // ════════════════════════════════════════════════════════════
@@ -1449,7 +1454,7 @@ function fireReveal(viaStillness){
   linesEl.innerHTML='';
   // 1) one silent fact, underplayed (the watching-back)
   const watch = s.visits>1
-    ? (s.daysSinceFirst>=1?`You were gone ${s.daysSinceFirst} day${s.daysSinceFirst>1?'s':''}. The chant kept its place.`:`You came back the same day. It noticed that too.`)
+    ? (s.daysAway>=1?`You were gone ${s.daysAway} day${s.daysAway>1?'s':''}. The chant kept its place.`:`You came back the same day. It noticed that too.`)
     : (s.hourBand==='dead'?`It is ${s.timeStr} where you are.`
       : s.region?`You are reading from ${s.region}, on ${s.weekday}.`
       : `${s.weekday}, ${s.timeStr}, on ${s.device}.`);
@@ -1574,7 +1579,7 @@ const MID_FIRST=[
 // line that exists nowhere else, and the two seams out (the sworn
 // room and where the other returned gather).
 // ════════════════════════════════════════════════════════════
-const IS_DAY_THIRTEEN = (SIGNALS.visits>1 && SIGNALS.daysSinceFirst>=13);
+const IS_DAY_THIRTEEN = (SIGNALS.visits>1 && SIGNALS.daysInRoom===13);
 const DISCORD_URL='https://discord.gg/g9XNFVD8Fn';
 
 function runThreshold(){
@@ -1820,7 +1825,6 @@ function initTabTitle(){document.addEventListener('visibilitychange',()=>{docume
 // GO
 // ════════════════════════════════════════════════════════════
 runThreshold();
-window.IR_RESET=function(){try{localStorage.removeItem(NAMED_VOICE_KEY);}catch(e){}if(CIPHER_OK)try{Cipher.reset();}catch(e){}location.reload();};
 
 </script>
 

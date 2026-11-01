@@ -157,7 +157,7 @@ body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse
 <div class="dec-progress">
   <span class="dec-prog-label">Decoding</span>
   <div class="dec-prog-track"><div class="dec-prog-fill" id="prog-fill"></div></div>
-  <span class="dec-prog-val" id="prog-val">0 / 22</span>
+  <span class="dec-prog-val" id="prog-val">0 / 20</span>
 </div>
 
 <div class="dec-wrap" id="dec-wrap"></div>
@@ -326,7 +326,7 @@ function buildDecoder(){
     div.innerHTML=`
       <div class="ds-header">
         <span class="ds-label">☣ &nbsp; ${sec.label}</span>
-        <span class="ds-status ${secDecoded?'decoded':'locked'}" id="dss-${sec.id}">${secDecoded?'DECODED':'LOCKED'}</span>
+        <span class="ds-status ${secDecoded?'decoded':'locked'}" id="dss-${sec.id}">${secDecoded?'DECODED':'UNREAD'}</span>
       </div>
       <div class="ds-body">
         <div class="ds-surface">

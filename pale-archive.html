@@ -978,7 +978,11 @@ const STATE=(function(){
   if(!s.symptoms)s.symptoms={};
   if(!s.totalVisits)s.totalVisits=0;
   s.totalVisits++;
+  if(!s.rooms)s.rooms={};
+  const room=s.rooms['pale-archive']||{n:0,first:now,last:0};
+  room.n++;room.last=now;s.rooms['pale-archive']=room;
   saveWitnessState(s);
+  s.roomVisits=room.n;
   return s;
 })();
 const isBearer=!!STATE.bearer;
@@ -1099,7 +1103,7 @@ const WHISPER_POOLS = {
     'the codex measures the pause.',
     'each return deepens the inscription.',
     'the reader has been on this page for some time.',
-    'the cursor has not moved. the codex notes this also.',
+    'the cursor is where you left it. the codex notes this also.',
   ],
   mid:[
     'the reader has been here longer than they meant to.',
@@ -1200,7 +1204,7 @@ function computePageStatus(pageId){
   const visits=log.filter(e=>e.id===pageId);
   const count=visits.length;
   if(pageId==='pale-archive'){
-    if(STATE.totalVisits>1)return{status:'returned',count:STATE.totalVisits,last:STATE.lastVisit};
+    if(STATE.roomVisits>1)return{status:'returned',count:STATE.roomVisits,last:STATE.lastVisit};
     return{status:'holding',count:1,last:STATE.lastVisit};
   }
   if(count===0)return{status:'unopened',count:0,last:null};
@@ -1411,11 +1415,11 @@ function appendSelfEntry(){
   const days=Math.floor((Date.now()-STATE.firstWitnessVisit)/(1000*60*60*24));
   const caseNum=`2026-${DESIGNATION.num}-${isBearer?'BR':'CN'}`;
   const fragments=[];
-  fragments.push(`<p>On <strong>${firstVisitStr}</strong> the reader designated <strong>${DESIGNATION.full}</strong> entered the Archive. They have returned <strong>${STATE.totalVisits}</strong> time${STATE.totalVisits!==1?'s':''} since.</p>`);
+  fragments.push(`<p>On <strong>${firstVisitStr}</strong> the reader designated <strong>${DESIGNATION.full}</strong> entered the Archive. They have returned <strong>${STATE.roomVisits-1}</strong> time${STATE.roomVisits!==2?'s':''} since.</p>`);
   if(uniquePagesRead>0){
     let deepestSeq=-1,deepestTitle='';
     log.forEach(e=>{const p=PAGES.find(pp=>pp.id===e.id);if(p&&p.seq!==null&&p.seq>deepestSeq){deepestSeq=p.seq;deepestTitle=p.title;}});
-    fragments.push(`<p>They have read <strong>${uniquePagesRead}</strong> of <strong>22</strong> entries listed in this Archive. The deepest they have descended is <em>${deepestTitle||'the surface'}</em>.</p>`);
+    fragments.push(`<p>They have read <strong>${uniquePagesRead}</strong> of <strong>23</strong> entries listed in this Archive. The deepest they have descended is <em>${deepestTitle||'the surface'}</em>.</p>`);
   }else{
     fragments.push(`<p>They have not yet opened any of the entries listed here. They are reading the index. The index is reading them.</p>`);
   }
@@ -1440,7 +1444,7 @@ function appendSelfEntry(){
         <div class="tl-self-stat"><span class="tl-self-stat-lbl">Case Number</span><span class="tl-self-stat-val">${caseNum}</span></div>
         <div class="tl-self-stat"><span class="tl-self-stat-lbl">First Witnessed</span><span class="tl-self-stat-val">${firstVisitStr}</span></div>
         <div class="tl-self-stat"><span class="tl-self-stat-lbl">Last Witnessed</span><span class="tl-self-stat-val">${lastVisitStr}</span></div>
-        <div class="tl-self-stat"><span class="tl-self-stat-lbl">Visits Recorded</span><span class="tl-self-stat-val">${STATE.totalVisits}</span></div>
+        <div class="tl-self-stat"><span class="tl-self-stat-lbl">Visits Recorded</span><span class="tl-self-stat-val">${STATE.roomVisits}</span></div>
         <div class="tl-self-stat"><span class="tl-self-stat-lbl">Pages Read</span><span class="tl-self-stat-val">${[...new Set(log.map(e=>e.id))].length} / 23</span></div>
         <div class="tl-self-stat"><span class="tl-self-stat-lbl">Status</span><span class="tl-self-stat-val ${isBearer?'bearer':''}">${isBearer?'BEARER · INCORPORATED':'CANDIDATE · APPROACHING'}</span></div>
         ${NAMED_VOICE&&SAFE_VOICE_NAME?`<div class="tl-self-stat"><span class="tl-self-stat-lbl">Voice Named</span><span class="tl-self-stat-val">${SAFE_VOICE_NAME}</span></div>`:''}
@@ -1534,7 +1538,7 @@ function setupRecoveryGate(){
   function tryPhrase(){
     const phrase=input.value.toLowerCase().trim();
     const normalized=phrase.replace(/[^a-z\s]/g,'').replace(/\s+/g,' ').trim();
-    if(normalized==='the door was always open'){
+    if(normalized==='the reading is complete'){
       result.textContent='// recognized · bearer state restored · reloading';
       result.className='rg-result ok';
       const updated=loadWitnessState();
@@ -1612,7 +1616,7 @@ function applyCorruptionVisuals(c){
     const t=(c-0.5)/0.5;
     r=Math.round(stage1[0]+(stage2[0]-stage1[0])*t);
     g=Math.round(stage1[1]+(stage2[1]-stage1[1])*t);
-    b=Math.round(stage2[2]+(stage2[2]-stage1[2])*t);
+    b=Math.round(stage1[2]+(stage2[2]-stage1[2])*t);
   }
   if(!isBearer){
     document.documentElement.style.setProperty('--paper-r', r);
@@ -2009,7 +2013,7 @@ function runReturningSequence(){
   const lastVisitStr=localStorage.getItem('cm-pa-lastvisit');
   const lastDate=lastVisitStr?new Date(lastVisitStr):new Date(STATE.lastVisit-86400000);
   const now=new Date();
-  const daysSince=Math.max(0,Math.round((now-lastDate)/(1000*60*60*24)));
+  const daysSince=Math.max(0,Math.floor((new Date(now.toISOString().split('T')[0])-new Date(lastDate.toISOString().split('T')[0]))/(1000*60*60*24)));
   const newPages=newPagesSince(lastVisitStr||new Date(STATE.firstWitnessVisit).toISOString().split('T')[0]);
   const lines=[];
   if(isBearer){
@@ -2020,7 +2024,7 @@ function runReturningSequence(){
   }
   lines.push({text:'',cls:'rt-dim'});
   lines.push({text:`You were last witnessed ${daysSince===0?'earlier today':`${daysSince} day${daysSince!==1?'s':''} ago`}.`,cls:''});
-  lines.push({text:`You have returned ${STATE.totalVisits} time${STATE.totalVisits!==1?'s':''}.`,cls:''});
+  lines.push({text:`You have returned ${STATE.roomVisits-1} time${STATE.roomVisits!==2?'s':''}.`,cls:''});
   if(wasInscribed){
     lines.push({text:'',cls:'rt-dim'});
     lines.push({text:'The Codex has noted your inscription. The document opens for you faster now.',cls:'rt-warn'});
@@ -2074,7 +2078,7 @@ function firePaReveal(delayMs){
     if(rv && said){
       said.innerHTML='The archive is built around a thing it cannot reach. So it records the shape of the absence instead — and calls the record <em>remembering</em>. You found what it keeps trying to write beneath its own words. It does not forgive that. It answers it.';
       if(wEl) wEl.textContent=word;
-      if(gram) gram.innerHTML='The second of three. You carried one word down; now you hold two. One room remains — the sworn room, the deepest. It is not listed, and it has no door you can click. It opens only to one who returns to the surface and <em>witnesses</em> the record aloud — who names the act, at the front of the document, and so is named in turn. <em>Go back up. Speak it.</em>';
+      if(gram) gram.innerHTML='The second of three. You carried one word down; now you hold two. One room remains — the sworn room, the deepest. It is not listed, and this page will not take you there. It opens only to one who returns to the surface and <em>witnesses</em> the record aloud — who names the act, at the front of the document, and so is named in turn. <em>Go back up. Speak it.</em>';
       var wait=(typeof delayMs==='number')?delayMs:0;
       setTimeout(function(){
         rv.classList.add('shown');
@@ -2138,7 +2142,7 @@ function wireUnlistedEntry(){
     title:'The One Who Spoke It Back',
     realm:'—',
     phase:'Recovered Fragment · Not Agreed',
-    prose:'She came to the end of the document and did not look away. She had seen it first, before the others, and the others had not heard. So when the record reached her she did the one thing it cannot do for itself: she <span class="ue-key">witnessed</span> it — said what it was, aloud, at the threshold, in the first person, as though it were hers. <span class="ue-mark">remembers</span> <span class="ue-mark">me</span>. And the page, which keeps everything and is kept by no one, went quiet the way a thing goes <span class="ue-mark">unheard</span> — not gone, only no longer arriving. The deepest room is not listed and has no door you can click. It opens to one who speaks the act at the surface — who stands at the front of the record and <span class="ue-key">witnesses</span> it aloud. This entry was not listed. You were not meant to read it. You are reading it.'
+    prose:'She came to the end of the document and did not look away. She had seen it first, before the others, and the others had not heard. So when the record reached her she did the one thing it cannot do for itself: she <span class="ue-key">witnessed</span> it — said what it was, aloud, at the threshold, in the first person, as though it were hers. <span class="ue-mark">remembers</span> <span class="ue-mark">me</span>. And the page, which keeps everything and is kept by no one, went quiet the way a thing goes <span class="ue-mark">unheard</span> — not gone, only no longer arriving. The deepest room is not listed, and this page will not take you there. It opens to one who speaks the act at the surface — who stands at the front of the record and <span class="ue-key">witnesses</span> it aloud. This entry was not listed. You were not meant to read it. You are reading it.'
   };
 
   let node=null;       // the live .tl-node wrapper
@@ -2422,7 +2426,7 @@ const originalTitle=document.title;
 const blurredTitles=['the archive is still counting','the index is reading you','you have not closed the document','the door was always open','the codex has not stopped editing this page'];
 document.addEventListener('visibilitychange',()=>{document.title=document.hidden?blurredTitles[Math.floor(Math.random()*blurredTitles.length)]:originalTitle;});
 const lastVisitDate=localStorage.getItem('cm-pa-lastvisit');
-if(STATE.totalVisits>1&&lastVisitDate){runReturningSequence();}else{runBootRitual();}
+if(STATE.roomVisits>1&&lastVisitDate){runReturningSequence();}else{runBootRitual();}
 </script>
 
 <script src="codex-nav.js"></script>

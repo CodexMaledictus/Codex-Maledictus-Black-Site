@@ -838,12 +838,14 @@ function renderSeal(i){
     <div class="sr-head"><span class="sc-num">Section ${s.num}</span><span class="sc-time">${s.time}</span><span class="sc-name">${s.name}</span></div>
     <div class="sc-narr">${s.narr}</div>
     <div class="sc-apollo"><div class="sc-apollo-text">"${s.apollo}"</div></div>
-    <div class="sc-provocation">${s.provocation}</div>`;
+    <div class="sc-provocation">${s.provocation}</div>${s.xref?`
+    <div class="sc-xref"><div class="sc-xref-lbl">What he checked</div><div class="sc-xref-term">${s.xref.term}</div><div class="sc-xref-rhyme">${s.xref.rhyme}</div></div>`:''}`;
   panel.scrollTop=0;void panel.offsetWidth;
 }
 function selectSeal(i){
   const first=!openedSeals.has(i);
   openedSeals.add(i);
+  try{localStorage.setItem('codex_chronicle_seals_v1',JSON.stringify([...openedSeals]));}catch(e){}
   renderSeal(i);
   setActiveStrip(i);
   const hint=document.getElementById('seal-hint');if(hint&&!centerArmed)hint.style.display='none';
@@ -860,6 +862,8 @@ function selectSeal(i){
 // Algol / Beta Persei, the eclipsing binary the ancients feared as the Demon Star,
 // whose light is only ever occluded and always returns. The glimmer in the coldest voice.
 let fragmentRevealed=false;
+// what you cracked stays cracked
+try{JSON.parse(localStorage.getItem('codex_chronicle_seals_v1')||'[]').forEach(i=>openedSeals.add(i));}catch(e){}
 function openCenterSeal(){
   if(!centerArmed||fragmentRevealed)return; fragmentRevealed=true;
   if(window.CodexMark)CodexMark.give(3,2500);
@@ -938,7 +942,7 @@ function initPage(){
     setTimeout(()=>{ if(!ledgerOpen) flashLedger(); },2400);
   }
   observeSr();
-  buildStrip();
+  buildStrip();if(openedSeals.size===7)armCenter();
   wireHovers();
 }
 </script>

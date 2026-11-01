@@ -540,7 +540,7 @@ drawArchive();
 // ── THE WATCHER, quiet tier ──
 const PAGE_ID='lore-chronicle-1';
 let WATCH=null;
-try{WATCH=window.CodexWatch?window.CodexWatch.init(PAGE_ID,{tier:'quiet'}):null;}catch(e){WATCH=null;}
+try{WATCH=window.CodexWatch?window.CodexWatch.create({pageId:PAGE_ID}):null;}catch(e){WATCH=null;}
 function obs(text,w){try{if(WATCH&&WATCH.observe)WATCH.observe(text,w||1);}catch(e){}renderLedgerEntry(text,w||1);}
 
 // case file ledger render

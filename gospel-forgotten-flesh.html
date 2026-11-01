@@ -538,7 +538,7 @@ hr.lhr{border:none;border-top:1px solid var(--brd2);margin:1.75rem 0;}
 <!-- TAB III: LYRIC DECODER -->
 <div class="panel" id="p-decoder">
   <div class="sec-head sr"><div class="sec-num">Section III</div><div class="sec-title">The Lyric Decoder</div></div>
-  <p class="decoder-intro sr">Every line in the Gospel operates on three frequencies simultaneously. Select a track, then click any lyric line to decode it across all three layers.</p>
+  <p class="decoder-intro sr">Every line in the Gospel operates on three frequencies simultaneously. The Archivum has translated two transmissions so far. Select a track, then click any lyric line to decode it across all three layers.</p>
   <div class="decoder-key sr">
     <div class="dk"><span style="color:var(--am);font-size:0.9rem;">🜃</span>&nbsp;<span style="color:var(--am2);">In the Archive</span>&nbsp;— the Codex mythology reading</div>
     <div class="dk"><span style="color:var(--vt);font-size:0.9rem;">🜁</span>&nbsp;<span style="color:var(--vt);">In the World</span>&nbsp;— the metaphysical truth</div>
@@ -568,7 +568,7 @@ hr.lhr{border:none;border-top:1px solid var(--brd2);margin:1.75rem 0;}
 <!-- TAB IV: ORACLE -->
 <div class="panel" id="p-oracle">
   <div class="sec-head sr"><div class="sec-num">Section IV</div><div class="sec-title">The Alignment Oracle</div></div>
-  <p class="oracle-intro sr">Six questions drawn from the Gospel. The Oracle does not judge — it reads. Answer honestly. The Oracle has already read your hesitation.</p>
+  <p class="oracle-intro sr">Six questions drawn from the Gospel. The Oracle does not judge — it reads. Answer honestly.</p>
   <div class="oracle-voices-preview sr">
     <div class="ovp ovp-rot"><img src="Assets/Gospel of Forgotten Flesh/Omniscient-Rot-result.jpeg" alt="" loading="lazy"/><div class="ovp-overlay"></div><div class="ovp-label">Omniscient Rot</div></div>
     <div class="ovp ovp-art"><img src="Assets/Gospel of Forgotten Flesh/Forgotten-Saint-Artemys-result.jpeg" alt="" loading="lazy"/><div class="ovp-overlay"></div><div class="ovp-label">Forgotten Saint Artemys</div></div>
@@ -843,7 +843,7 @@ const TRACKS=[
   {n:13,name:'Ink & Silence (Margins of the Map)',artist:'Apollo Gavinci',time:'3:38',voice:'apo',cls:'INTEGRATION — FINAL TRANSMISSION',fn:'Apollo after. Not gone — integrated.',scr:'"Footsteps echo through the Codex, rewriting me once again."',lore:'Apollo is still present — still writing. But the self is no longer singular.',link:null},
 ];
 const GROUP={rot:[1,2,3,4],art:[5,8,9,10],apo:[6,7,9,11,12,13]};
-let openTracks={rot:0,art:0,apo:0};
+let openTracks={rot:0,art:0,apo:0};const openedNums=new Set();
 function buildTracks(){
   Object.entries(GROUP).forEach(([v,nums])=>{
     const c=document.getElementById('tl-'+v);if(!c)return;
@@ -861,7 +861,7 @@ function togTe(g,n,voice){
   const el=document.getElementById('te-'+g+'-'+n);if(!el)return;
   const wasOpen=el.classList.contains('open');
   el.classList.toggle('open');
-  if(!wasOpen){const vk=voice==='both'?'apo':voice;openTracks[vk]=(openTracks[vk]||0)+1;updateMeter();}
+  if(!wasOpen&&!openedNums.has(n)){openedNums.add(n);const vk=voice==='both'?'apo':voice;openTracks[vk]=(openTracks[vk]||0)+1;updateMeter();}
 }
 function updateMeter(){
   const tot=openTracks.rot+openTracks.art+openTracks.apo;
