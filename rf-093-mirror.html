@@ -278,15 +278,14 @@ function place(){
 }
 
 // ── THE VISITOR ──
-var px=-1,py=-1,hasPointer=false,lastMove=Date.now(),vx=0,vy=0;
+var curX=-1,curY=-1,px=-1,py=-1,hasPointer=false,lastMove=Date.now(),vx=0,vy=0;
 var fx0=FILE.lastX!=null?FILE.lastX:.5,fy0=FILE.lastY!=null?FILE.lastY:.68;
 var rx=0,ry=0,moved=false;
 function onMove(x,y){
   var now=Date.now(),dt=Math.max(16,now-(onMove.t||now));onMove.t=now;
-  if(px>=0){vx=vx*.8+(x-px)/dt*.2;vy=vy*.8+(y-py)/dt*.2;}
+  if(px>=0){vx=vx*.92+(x-px)/dt*.08;vy=vy*.92+(y-py)/dt*.08;}
   px=x;py=y;hasPointer=true;moved=true;lastMove=now;
-  $('CUR').style.transform='translate('+x+'px,'+y+'px)';
-  if(running&&Math.random()<(COARSE?.14:.07))ripple(x,y);
+    if(running&&Math.random()<(COARSE?.14:.07))ripple(x,y);
 }
 document.addEventListener('pointermove',function(e){onMove(e.clientX,e.clientY);},{passive:true});
 document.addEventListener('pointerdown',function(e){onMove(e.clientX,e.clientY);if(running)ripple(e.clientX,e.clientY);},{passive:true});
@@ -418,17 +417,20 @@ function frame(now){
   if(document.hidden)return;
   if(REDUCED&&now-frame.last<400)return;
   var dt=Math.min(80,now-lastF);lastF=now;frame.last=now;
+  var soft=function(k){return 1-Math.pow(1-k,dt/16.67);};
+  if(px>=0){curX=curX<0?px:curX+(px-curX)*soft(.42);curY=curY<0?py:curY+(py-curY)*soft(.42);document.getElementById('CUR').style.transform='translate('+curX.toFixed(1)+'px,'+curY.toFixed(1)+'px)';}
+  vx*=Math.pow(.94,dt/16.67);vy*=Math.pow(.94,dt/16.67);
   if(running&&!done)tick(dt);
 
   // the reflection. First it is late. Then it is on time. Then it is early.
   var tx=px>=0?px:W*fx0,ty=px>=0?py:H*fy0;
   if(!moved||!running){tx=W*fx0;ty=H*fy0;}
-  if(VISIT>=3&&moved&&hasPointer){tx+=vx*210;ty+=vy*210;}
+  if(VISIT>=3&&moved&&hasPointer){var lead=Math.min(90,Math.hypot(vx,vy)*150),sp0=Math.hypot(vx,vy)||1;tx+=vx/sp0*lead;ty+=vy/sp0*lead;}
   tx=Math.max(10,Math.min(W-10,tx));ty=Math.max(horizonY()+50,Math.min(H-10,ty));
-  var ease=VISIT===1?.045:VISIT===2?.3:.14;
+  var ease=VISIT===1?.04:VISIT===2?.1:.07;
   if(reversing){tx=W/2;ty=horizonY()+(H-horizonY())*.56;ease=.03;}
   rx=rx||W*fx0;ry=ry||H*fy0;
-  if(!running&&!done){rx=W*fx0;ry=H*fy0;}else{rx+=(tx-rx)*ease;ry+=(ty-ry)*ease;}
+  if(!running&&!done){rx=W*fx0;ry=H*fy0;}else{rx+=(tx-rx)*soft(ease);ry+=(ty-ry)*soft(ease);}
 
   // the pools. Each one is exactly as big as the time you gave it.
   var i,mn=Math.min(W,H);
