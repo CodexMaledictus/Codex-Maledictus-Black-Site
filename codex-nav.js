@@ -233,7 +233,7 @@ const CODEX_MAP = {
   "madmens-gospel": {
     file: "madmens-gospel.html", title: "The Madmen's Gospel", seq: 19, realm: "I",
     phase: "Broadcast Source",
-    description: "Gospel II. Three witnesses heard the buried flesh speak, and went mad with comprehension.",
+    description: "Gospel II. There were always three voices. Everyone calls them mad. What if they're right?",
     closingWhisper: "The sane ones sleep.",
     pathA: "confession-ledger", pathB: "witness-circle",
     labelA: "Find the Ledger", labelB: "Approach the seam",
