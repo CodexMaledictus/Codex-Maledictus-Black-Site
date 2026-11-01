@@ -130,9 +130,11 @@ function addBlank(){
   var quiet=0,done=false,inView=false,last=Date.now();
   function wake(){quiet=0;tick.textContent='';}
   inp.addEventListener('input',wake);
-  if('IntersectionObserver' in window){new IntersectionObserver(function(es){inView=es[0].isIntersecting;},{threshold:.4}).observe(w);}else inView=true;
+
   var iv=setInterval(function(){
     var t=Date.now(),dt=t-last;last=t;
+    // the line only counts silence while it is actually on screen
+    var box=w.getBoundingClientRect();inView=box.top<innerHeight*.8&&box.bottom>innerHeight*.2;
     if(done||document.hidden||!inView||document.activeElement===inp&&inp.value)return;
     quiet+=dt;
     if(quiet>=39000){clearInterval(iv);finish({kind:'silence',at:Date.now()});}
