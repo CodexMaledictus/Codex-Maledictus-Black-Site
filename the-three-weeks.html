@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<!--
+  This log was kept by whoever was on shift. The shift has not been relieved.
+  There is a line near the bottom with a word missing, and the log does not mind who finishes it.
+-->
+<title>The Three Weeks · Reception Log</title>
+<meta name="description" content="A rite went out on June 8. The log was kept to see whether anything would come back.">
+<meta property="og:title" content="The Three Weeks · Reception Log">
+<meta property="og:description" content="A rite went out on June 8. The log was kept to see whether anything would come back.">
+<meta property="og:type" content="website">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cinzel:wght@400;600&family=IM+Fell+English:ital@0;1&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+:root{--room:#060E0C;--oxide:#B0693A;--oxide2:rgba(176,105,58,.34);--amber:#E0A83C;--bone:#D9D2BE;--dim:#9FA79B;--gut:62px;}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{background:var(--room);}
+body{min-height:100vh;background-color:var(--room);color:var(--bone);font-family:'Share Tech Mono',monospace;overflow-x:hidden;}
+#TRACE{position:fixed;inset:0;width:100%;height:100%;z-index:0;display:block;pointer-events:none;}
+#VIG{position:fixed;inset:0;z-index:1;pointer-events:none;background:radial-gradient(ellipse at 50% 40%,transparent 45%,rgba(0,0,0,.72) 100%),repeating-linear-gradient(0deg,transparent 0 3px,rgba(0,0,0,.1) 3px 4px);}
+#APP{position:relative;z-index:2;max-width:760px;margin:0 auto;padding:clamp(48px,9vh,96px) 18px 40px var(--gut);}
+.eye{font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--oxide);line-height:1.6;}
+h1{font:700 clamp(38px,8vw,64px)/1.08 'Cinzel Decorative',serif;color:var(--amber);margin:14px 0 18px;text-shadow:0 0 36px rgba(224,168,60,.3);}
+.intro{font:italic 400 clamp(20px,3vw,24px)/1.45 'IM Fell English',serif;margin-bottom:46px;max-width:30em;}
+.day{display:block;width:100%;text-align:left;background:none;border:0;border-top:1px solid rgba(176,105,58,.16);color:inherit;font:inherit;padding:9px 0;}
+.empty{font-size:13px;color:var(--dim);letter-spacing:.04em;}
+.empty b{font-weight:400;display:inline-block;min-width:76px;color:var(--oxide);}
+.got{border-top:1px solid var(--oxide2);background:linear-gradient(90deg,rgba(224,168,60,.07),rgba(6,14,12,.7) 70%);margin:0;}
+.row{display:block;width:100%;background:none;border:0;color:inherit;font:inherit;text-align:left;cursor:pointer;padding:18px 14px 16px;}
+.row:focus-visible{outline:1px solid var(--amber);}
+.stat{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--amber);}
+.stat i{font-style:normal;color:var(--oxide);margin-left:6px;}
+.ttl{display:block;font:600 clamp(17px,2.6vw,21px)/1.3 'Cinzel',serif;margin-top:7px;color:var(--bone);}
+.more{display:none;padding:0 14px 20px;}
+.got.open .more{display:block;}
+.got.open .stat i{visibility:hidden;}
+.note{font:400 19px/1.5 'IM Fell English',serif;margin-bottom:12px;}
+.q{font:italic 400 20px/1.5 'IM Fell English',serif;color:var(--amber);margin-bottom:12px;}
+.margin{font:italic 400 18px/1.5 'IM Fell English',serif;color:var(--dim);border-left:2px solid var(--oxide2);padding-left:12px;margin-bottom:14px;}
+.margin span{display:block;font-style:normal;font-size:15px;margin-top:4px;color:var(--oxide);}
+.files{display:flex;flex-wrap:wrap;gap:8px 16px;font-size:13px;letter-spacing:.05em;}
+.files a{color:var(--amber);text-decoration:none;border-bottom:1px solid var(--oxide2);padding:4px 0;}
+.files a:hover,.files a:focus-visible{color:#fff;border-color:var(--amber);outline:none;}
+#BLANK{border:1px solid var(--oxide);background:rgba(6,14,12,.86);padding:22px 16px;margin:18px 0;box-shadow:0 0 44px rgba(224,168,60,.08);}
+#BLANK .stat{display:block;margin-bottom:14px;}
+#had{font:italic 400 19px/1.5 'IM Fell English',serif;color:var(--amber);margin-bottom:12px;}
+#prompt span{display:block;font-style:normal;font-size:15px;margin-top:4px;color:var(--oxide);}
+#prompt{font:italic 400 20px/1.5 'IM Fell English',serif;margin-bottom:18px;}
+#line{font:400 clamp(20px,3.4vw,26px)/1.4 'IM Fell English',serif;color:var(--bone);margin-bottom:14px;}
+#line u{text-decoration:none;color:var(--amber);border-bottom:1px solid var(--amber);padding:0 3px;}
+#ans{display:flex;gap:8px;flex-wrap:wrap;}
+#word{flex:1 1 170px;min-width:0;background:#030806;border:1px solid var(--oxide);color:var(--bone);font:400 17px 'Share Tech Mono',monospace;padding:11px;caret-color:var(--amber);}
+#word:focus{outline:none;border-color:var(--amber);}
+#word::placeholder{color:#7f867b;}
+#send{background:transparent;border:1px solid var(--amber);color:var(--amber);font:400 12px 'Share Tech Mono',monospace;letter-spacing:.2em;text-transform:uppercase;padding:11px 16px;cursor:pointer;}
+#send:hover,#send:focus-visible{background:rgba(224,168,60,.14);outline:none;}
+#tick{font-size:13px;color:var(--oxide);min-height:20px;margin-top:12px;}
+#said{font:400 19px/1.5 'IM Fell English',serif;}
+#said .count{display:block;margin-top:16px;font:italic 400 24px/1.35 'IM Fell English',serif;color:var(--amber);}
+#said small{display:block;margin-top:12px;font:400 13px 'Share Tech Mono',monospace;color:var(--dim);letter-spacing:.05em;}
+#DOOR{display:block;text-decoration:none;text-align:center;color:var(--amber);border:1px solid var(--amber);border-radius:140px 140px 0 0;padding:64px 20px 30px;margin:40px auto 0;max-width:340px;background:radial-gradient(ellipse at 50% 110%,rgba(224,168,60,.26),rgba(6,14,12,.92) 66%);transition:box-shadow .7s ease;}
+#DOOR:hover,#DOOR:focus-visible{box-shadow:0 0 52px rgba(224,168,60,.3);outline:none;}
+#DOOR b{display:block;font:700 26px/1.2 'Cinzel Decorative',serif;}
+#DOOR small{display:block;margin-top:8px;font:12px 'Share Tech Mono',monospace;letter-spacing:.14em;text-transform:uppercase;color:var(--bone);}
+#codex-nav{margin-top:20px;}
+@media(max-width:560px){:root{--gut:40px;}#APP{padding-right:14px;}}
+</style>
+<script>window.va=window.va||function(){(window.vaq=window.vaq||[]).push(arguments);};</script>
+<script defer src="/_vercel/insights/script.js"></script>
+</head>
+<body>
+<canvas id="TRACE" aria-hidden="true"></canvas>
+<div id="VIG"></div>
+<main id="APP">
+  <div class="eye">Pale Archivum · Reception Log · June 8 to June 29, 2025</div>
+  <h1>The Three Weeks</h1>
+  <p class="intro">A rite went out on June 8. The log below was kept to see whether anything would come back.</p>
+  <div id="LOG"></div>
+  <a id="DOOR" data-codex-door href="infection-remembers.html"><b>The Book Opens</b><small>Infection Remembers</small></a>
+  <div id="codex-nav"></div>
+</main>
+<script src="codex-care.js"></script>
+<script>
+(function(){
+'use strict';
+var REDUCED=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+var KEY='codex_reply_v1',WA='https://www.worldanvil.com/w/codex-maledictus-codexmaledictus';
+function jget(k){try{return JSON.parse(localStorage.getItem(k));}catch(e){return null;}}
+function jset(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
+function sp(id,t){return {t:t,h:'https://open.spotify.com/album/'+id,x:1};}
+var ENTRIES={
+  8:[{stat:'Sent',ttl:"Hymn I: Plague Priest's Liturgy",note:"Recovered from one chamber at Deck Hollow-13. One voice leading. Logged as outgoing, because it was the only thing on the line.",files:[{t:'The Liturgy room',h:'plague-priest-liturgy.html'}]}],
+  13:[{stat:'Received',ttl:'Hymn I: Recovered Transmission',note:"Five days. Reconstructed from rot, the label says, and dug out from beneath collapsed voice-drives in the Archive of Tongues. It doesn't differ from the Liturgy by a single word. It's cleaner than the original, and no one rehearsed it.",margin:['I have recommended that staff stop humming at their desks. The recommendation was circulated, and read, and I could hear them reading it.','Elvain Vhris'],files:[sp('4xhzJst0nXRZyzZQ9iU2Bm','Hear it on Spotify'),{t:'Catalogued: Hymn I, Recovered Transmission',h:WA,x:1}]}],
+  15:[{stat:'Received',ttl:'Wound Protocol: Swarm-Tongue ∴ Unclean Scripture',note:'Two minutes with no audible words. The Archivum has a text anyway, and it won’t say how. The text says "we."',q:'We were here b-b-b-before the flies.',margin:['Transcriber 2 and Transcriber 5 worked in separate buildings. Their copies agree down to the stutters. Neither stutters. Transcriber 5 has begun to.','Elvain Vhris'],files:[sp('4OxUBmgpQlcj3fWGM8IdTI','Hear it on Spotify'),{t:'Catalogued: The Swarm That Thinks',h:WA,x:1}]}],
+  22:[{stat:'Received',ttl:'The Rot Knows All',note:"No note was filed on this one. The shift's handwriting resumes on the line below.",q:'All buried things shall be returned.',files:[sp('09AiUtn2t9LKcx0KoDSIb4','Hear it on Spotify')]},
+      {stat:'Received',ttl:'Endless Horizons, and Endless Horizons ∴ Redux',note:'Two recordings, one date, one text.',files:[sp('1eOdachMXMukSvBbnqGnQG','Endless Horizons on Spotify'),sp('0EmfgBY9xNO9GFxbc1lssN','The Redux on Spotify'),{t:'Catalogued: The Redux',h:WA,x:1}]}],
+  27:[{stat:'Received',ttl:'Codex Echo ∴ WORTHY',note:'A score composed with no voices. Words written: none. Passages on the recording: two. The note filed with it reads: One to summon. One to seal. The Archivum holds several transcriptions, no two agree on more than a phrase, and none is published here.',margin:['Leave it on. Everyone does.','Elyon Vhar'],files:[sp('7nQJyZMmwZXy4p9F3wDJYL','Hear it on Spotify'),{t:'Catalogued: The Uninvited Verse',h:WA,x:1}]}],
+  29:[{stat:'Breach',ttl:'Infection Remembers ∴ The Book Opens',note:'The log stops here. The last thing the shift wrote is the date.',files:[]}]
+};
+var log=document.getElementById('LOG');
+function el(tag,cls,text){var e=document.createElement(tag);if(cls)e.className=cls;if(text!=null)e.textContent=text;return e;}
+function addEntry(day,en){
+  var g=el('div','got');g.setAttribute('data-spike',en.stat==='Sent'?'.6':en.stat==='Breach'?'1.5':'1');
+  var b=el('button','row');b.type='button';b.setAttribute('aria-expanded','false');
+  var s=el('span','stat','June '+day+'. '+en.stat+'.');var i=el('i',null,'open');s.appendChild(i);b.appendChild(s);b.appendChild(el('span','ttl',en.ttl));
+  var m=el('div','more');m.appendChild(el('p','note',en.note));
+  if(en.q)m.appendChild(el('p','q',en.q));
+  if(en.margin){var mg=el('p','margin',en.margin[0]);mg.appendChild(el('span',null,en.margin[1]));m.appendChild(mg);}
+  if(en.files.length){var f=el('div','files');en.files.forEach(function(x){var a=el('a',null,x.t);a.href=x.h;if(x.x){a.target='_blank';a.rel='noopener';}f.appendChild(a);});m.appendChild(f);}
+  b.addEventListener('click',function(){var o=g.classList.toggle('open');b.setAttribute('aria-expanded',o?'true':'false');layout();});
+  g.appendChild(b);g.appendChild(m);log.appendChild(g);
+}
+function addBlank(){
+  var w=el('section');w.id='BLANK';w.setAttribute('data-spike','1.2');
+  var now=new Date();
+  w.appendChild(el('span','stat',now.toLocaleDateString(undefined,{month:'long',day:'numeric',year:'numeric'})+'. Open.'));
+  log.appendChild(w);
+  var seen=[];try{seen=(jget('codex_invocation_log')||[]).map(function(e){return e.id;});}catch(e){}
+  var file=jget(KEY);
+  if(file){renderFiled(w,file,true);return;}
+  if(seen.indexOf('plague-priest-liturgy')>=0)w.appendChild(el('p',null,'You heard the first one. It’s on your record.')).id='had';
+  var p=el('p',null,'You’ve read it to the end. Say the last line of the hymn. You know the one.');p.id='prompt';p.appendChild(el('span',null,'Elyon Vhar'));w.appendChild(p);
+  var line=el('p',null,'Mutoid vermin we ');line.id='line';line.appendChild(el('u',null,'        '));w.appendChild(line);
+  var form=el('form');form.id='ans';
+  var inp=el('input');inp.id='word';inp.type='text';inp.maxLength=200;inp.autocomplete='off';inp.placeholder='say it, or do not';inp.setAttribute('aria-label','The last word of the hymn');
+  var btn=el('button',null,'File it');btn.id='send';btn.type='submit';form.appendChild(inp);form.appendChild(btn);w.appendChild(form);
+  var tick=el('p',null,'');tick.id='tick';w.appendChild(tick);
+  var quiet=0,done=false,inView=false,last=Date.now();
+  function wake(){quiet=0;tick.textContent='';}
+  inp.addEventListener('input',wake);
+  if('IntersectionObserver' in window){new IntersectionObserver(function(es){inView=es[0].isIntersecting;},{threshold:.4}).observe(w);}else inView=true;
+  var iv=setInterval(function(){
+    var t=Date.now(),dt=t-last;last=t;
+    if(done||document.hidden||!inView||document.activeElement===inp&&inp.value)return;
+    quiet+=dt;
+    if(quiet>=39000){clearInterval(iv);finish({kind:'silence',at:Date.now()});}
+    else if(quiet>=26000)tick.textContent='The log has you down as listening.';
+    else if(quiet>=13000)tick.textContent='The line is still open.';
+  },500);
+  function finish(rec){done=true;jset(KEY,rec);w.textContent='';w.appendChild(el('span','stat',now.toLocaleDateString(undefined,{month:'long',day:'numeric',year:'numeric'})+'. Filed.'));renderFiled(w,rec,false);layout();}
+  form.addEventListener('submit',function(e){
+    e.preventDefault();
+    var raw=inp.value.trim();if(!raw){return;}
+    clearInterval(iv);
+    if(window.CodexCare&&CodexCare.needed(raw)){done=true;w.textContent='';CodexCare.show(w);layout();return;}
+    var norm=raw.toLowerCase().replace(/[^a-z ]/g,'').trim();
+    var right=/(^| )declare$/.test(norm);
+    finish({kind:right?'reply':'other',word:raw.slice(0,200),at:Date.now()});
+  });
+}
+function renderFiled(w,rec,back){
+  var s=el('div');s.id='said';
+  var when=rec.at?new Date(rec.at).toLocaleDateString(undefined,{month:'long',day:'numeric',year:'numeric'}):'';
+  if(back){
+    if(rec.kind==='silence'){s.appendChild(el('p',null,'No reply. Filed.'));s.appendChild(el('p',null,'The line stays closed. You had your turn, and you spent it listening.'));}
+    else{s.appendChild(el('p',null,'Mutoid vermin we '+(rec.kind==='reply'?'declare':'')));if(rec.kind!=='reply')s.appendChild(el('p',null,'Filed in your hand: '+rec.word));s.appendChild(el('p',null,when+'. It can’t be changed.'));}
+  }else{
+    s.appendChild(el('p',null,rec.kind==='silence'?'No reply. Filed.':rec.kind==='reply'?'Reply received. Filed under your date.':'Received. It isn’t the word in the hymn. The log took it anyway.'));
+  }
+  s.appendChild(el('span','count','Whatever you were humming has been counted.'));
+  s.appendChild(el('small',null,rec.kind==='silence'?'Silences logged on this device: 1.':'Replies logged on this device: 1.'));
+  w.appendChild(s);
+}
+for(var d=8;d<=29;d++){
+  if(d===28)addBlank();
+  if(ENTRIES[d])ENTRIES[d].forEach(function(en){addEntry(d,en);});
+  else{var e=el('div','day empty');var b=el('b',null,'June '+d);e.appendChild(b);e.appendChild(document.createTextNode('Nothing received.'));log.appendChild(e);}
+}
+
+// ── THE TRACE ── flat through the empty days. It only moves where something came in.
+var cv=document.getElementById('TRACE'),x=cv.getContext('2d'),W=0,H=0,DPR=Math.min(window.devicePixelRatio||1,2),spikes=[],motes=[];
+for(var mi=0;mi<46;mi++)motes.push({x:Math.random(),y:Math.random(),r:.4+Math.random()*1.3,s:.2+Math.random()*.7,p:Math.random()*6.3});
+function size(){W=innerWidth;H=innerHeight;cv.width=W*DPR;cv.height=H*DPR;x.setTransform(DPR,0,0,DPR,0,0);}
+function layout(){spikes=[].map.call(document.querySelectorAll('[data-spike]'),function(n){var r=n.getBoundingClientRect();return {y:r.top+scrollY+Math.min(30,r.height/2),a:parseFloat(n.getAttribute('data-spike'))};});}
+function gutX(){var a=document.getElementById('APP').getBoundingClientRect();return a.left+(W<=560?20:30);}
+var born=performance.now();
+function draw(now){
+  if(!REDUCED)requestAnimationFrame(draw);
+  if(document.hidden)return;
+  var t=(now-born)/1000,sy=scrollY,gx=gutX();
+  x.fillStyle='#060E0C';x.fillRect(0,0,W,H);
+  // oxide bloom that travels with the nearest received date
+  spikes.forEach(function(s){var y=s.y-sy;if(y<-300||y>H+300)return;var g=x.createRadialGradient(gx,y,0,gx,y,Math.max(W*.55,260));g.addColorStop(0,'rgba(224,168,60,'+(.1*s.a)+')');g.addColorStop(.4,'rgba(176,105,58,'+(.045*s.a)+')');g.addColorStop(1,'rgba(6,14,12,0)');x.fillStyle=g;x.fillRect(0,y-320,W,640);});
+  // the graticule of the instrument
+  x.strokeStyle='rgba(176,105,58,.055)';x.lineWidth=1;x.beginPath();
+  for(var i=0;i<W;i+=64){x.moveTo(i+.5,0);x.lineTo(i+.5,H);}
+  for(var j=-(sy%64);j<H;j+=64){x.moveTo(0,j+.5);x.lineTo(W,j+.5);}x.stroke();
+  // dust in the lamp
+  motes.forEach(function(m){var mx=(m.x*W+Math.sin(t*.2*m.s+m.p)*22),my=((m.y*H-t*6*m.s-sy*.14)%H+H)%H;x.fillStyle='rgba(224,168,60,'+(.1+.13*Math.sin(t*m.s+m.p)*Math.sin(t*m.s+m.p))+')';x.beginPath();x.arc(mx,my,m.r,0,6.3);x.fill();});
+  // the signal
+  x.beginPath();
+  for(var py=0;py<=H;py+=3){
+    var ay=py+sy,off=Math.sin(ay*.09+t*2)*.6;
+    spikes.forEach(function(s){var d=(ay-s.y)/22;if(Math.abs(d)<3.5){var amp=Math.exp(-d*d)*s.a*(W<=560?20:34);off+=amp*Math.sin(ay*.62+t*(REDUCED?0:5))+amp*.4;}});
+    if(py===0)x.moveTo(gx+off,py);else x.lineTo(gx+off,py);
+  }
+  x.strokeStyle='#E0A83C';x.lineWidth=1.3;x.shadowColor='rgba(224,168,60,.8)';x.shadowBlur=9;x.stroke();x.shadowBlur=0;
+}
+size();layout();
+addEventListener('resize',function(){size();layout();if(REDUCED)draw(performance.now());});
+addEventListener('load',layout);
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(layout);
+if(REDUCED){addEventListener('scroll',function(){draw(performance.now());},{passive:true});draw(performance.now());}else requestAnimationFrame(draw);
+try{console.log('%cthe channel you are reading this on has been open for some time.','color:#E0A83C;font-family:monospace;');}catch(e){}
+})();
+</script>
+<script src="codex-nav.js"></script>
+<script>if(typeof initCodexNav==='function'){initCodexNav('the-three-weeks');}</script>
+</body>
+</html>

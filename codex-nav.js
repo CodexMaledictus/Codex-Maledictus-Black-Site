@@ -150,6 +150,16 @@ const CODEX_MAP = {
     bearerChamber: null
   },
 
+  "the-three-weeks": {
+    file: "the-three-weeks.html", title: "The Three Weeks", seq: null, realm: "I-II",
+    phase: "Hallway",
+    description: "The reception log, June 8 to June 29, 2025. A rite went out. The log was kept to see whether anything would come back.",
+    closingWhisper: "The shift has not been relieved.",
+    pathA: "infection-remembers", pathB: null,
+    labelA: "The Book Opens", labelB: null,
+    bearerChamber: null
+  },
+
   "plague-priest-apocrypha": {
     file: "plague-priest-apocrypha.html", title: "Apocrypha · The Plague Priest", seq: 11, realm: "I-II",
     phase: "Apocrypha",
@@ -796,7 +806,7 @@ const NAV_EXTRAS = {
   'plague-priest-liturgy': { summon: SUMMON_RITE },
   'plague-priest-lore': { outlet: { href: 'plague-priest-liturgy.html', label: 'Hear what it was tuned to', dest: 'The Liturgy, as recovered' } },
   'plague-priest-decoder': { outlet: { href: 'plague-priest-liturgy.html', label: 'Hear the lines you decoded', dest: 'The Liturgy, as recovered' } },
-  'plague-priest-apocrypha': { outlet: { href: 'https://open.spotify.com/album/1R70HqAWhxWUiHgqgG2UIf', label: 'Hear the broadcast source', dest: 'The Gospel of Forgotten Flesh, on Spotify', out: true }, summon: SUMMON_RITE },
+  'plague-priest-apocrypha': { outlet: { href: 'https://open.spotify.com/album/1R70HqAWhxWUiHgqgG2UIf', label: 'Hear the broadcast source', dest: 'The Gospel of Forgotten Flesh, on Spotify', out: true }, hall: { href: 'the-three-weeks.html', label: 'Read the reception log', dest: 'The Three Weeks, June 8 to 29, 2025' }, summon: SUMMON_RITE },
   'rf-093-lore': { outlet: { href: 'https://www.amazon.com/dp/B0FQ9QDMQ2', label: 'Request evidence access', dest: 'Book I, on Amazon Kindle', out: true } },
   'rf-093-invocation': { outlet: { href: 'https://youtu.be/lDo91ztT_ZQ', label: 'Watch the transmission', dest: 'Chronicle I, on YouTube', out: true } },
   'rf-093-apocrypha': { outlet: { href: 'https://www.amazon.com/dp/B0FQ9QDMQ2', label: 'Request evidence access', dest: 'Book I, on Amazon Kindle', out: true }, summon: SUMMON_FRAGMENT },
@@ -865,6 +875,11 @@ function initCodexNav(currentId) {
       <a class="cnav-door cnav-a cnav-single" href="${extras.outlet.href}"${extras.outlet.out ? ' target="_blank" rel="noopener"' : ''}>
         <span class="cnav-door-label">${extras.outlet.label}</span>
         <span class="cnav-door-dest">${extras.outlet.dest}</span>
+      </a>` : '') +
+      (extras.hall ? `
+      <a class="cnav-door cnav-a cnav-single" href="${extras.hall.href}">
+        <span class="cnav-door-label">${extras.hall.label}</span>
+        <span class="cnav-door-dest">${extras.hall.dest}</span>
       </a>` : '');
 
   nav.innerHTML = `
