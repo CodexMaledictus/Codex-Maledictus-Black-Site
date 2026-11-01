@@ -644,8 +644,9 @@ const SEAL_RARE = [
 // ============================================================
 
 function sealClusterRegister(page) {
-  if (!page || typeof page.seq !== 'number') return 'surface';
-  const q = page.seq;
+  if (!page || typeof page.reg !== 'number') return 'surface';
+  // each family keeps its own register wherever the route puts it
+  const q = page.reg;
   if (q <= 1) return 'surface';
   if (q <= 7) return 'gnostic';
   if (q <= 11) return 'liturgical';
@@ -768,8 +769,25 @@ function navResolvePalette() {
 // NAV RENDERER, v5
 // ============================================================
 
-// The descent as a walker meets it, door by door. The homepage arch reads this to say where you stopped.
-const CODEX_ROUTE = ['infection-remembers','infection-lore','apocrypha-infection','chronicle-1-infection-remembers','lore-chronicle-1','apocrypha-chronicle-1','codex-remembers-you','memory-engine-1','gospel-forgotten-flesh','madmens-gospel','confession-ledger','witness-circle'];
+// The descent as a walker meets it, door by door. This is the only list: doors, numbers and the homepage arch all read it.
+// Order approved November 1, 2026, with lore rulings in site/route-lore-rulings-2026-11-01.md.
+const CODEX_ROUTE = ['madmens-gospel','gospel-forgotten-flesh','plague-priest-liturgy','plague-priest-lore','plague-priest-decoder','plague-priest-apocrypha','infection-remembers','infection-lore','apocrypha-infection','chronicle-1-infection-remembers','lore-chronicle-1','apocrypha-chronicle-1','memory-engine-1','rf-093-lore','rf-093-invocation','rf-093-mirror','rf-093-apocrypha','codex-remembers-you','confession-ledger','witness-circle'];
+const ROUTE_LABELS = {
+  'gospel-forgotten-flesh': 'Hear the Gospel before it',
+  'plague-priest-liturgy': 'Hear the oldest rite',
+  'infection-remembers': 'The Book Opens',
+  'rf-093-lore': 'Follow the Recovered Fragments',
+  'codex-remembers-you': 'Open the artifact',
+  'confession-ledger': 'Find the Ledger',
+  'witness-circle': 'Cross the seam'
+};
+Object.keys(CODEX_MAP).forEach(id => { CODEX_MAP[id].reg = CODEX_MAP[id].seq; });
+CODEX_ROUTE.forEach((id, i) => {
+  const m = CODEX_MAP[id], next = CODEX_ROUTE[i + 1];
+  m.seq = i + 2;
+  if (next && m.pathA !== next) { m.labelA = ROUTE_LABELS[next] || (m.pathB === next && m.labelB) || CODEX_MAP[next].title; m.pathA = next; }
+});
+CODEX_MAP['index'].pathB = CODEX_ROUTE[0];
 
 // Where a room leads outside the descent: the record itself, and the list.
 const SUMMON_RITE = { invite: 'The Cathedral does not announce its rites. Leave an address and the next one will find you.', button: 'Be found', done: 'Entered. The next rite knows where you are.', already: 'Your address is already with the congregation.' };

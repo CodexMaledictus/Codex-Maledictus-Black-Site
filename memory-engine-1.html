@@ -125,7 +125,7 @@ body::after{content:'';position:fixed;inset:0;z-index:69;pointer-events:none;bac
       <div id="result-regs"></div>
     </div>
     <div class="r-doors">
-      <a class="door" id="BRIDGE" href="gospel-forgotten-flesh.html"><b>Enter the Gospel</b><small>It is the thing this engine has been playing back. You told it which song followed you, and it kept that.</small></a>
+      <a class="door" id="BRIDGE" href="rf-093-lore.html"><b>Follow the Recovered Fragments</b><small>You told it which song followed you, and it kept that. The first fragment to survive the redaction is filed next.</small></a>
       <button class="door" id="tear" type="button"><b>Tear off the strip</b><small>Your seventh answer and the address, as an image. What you took back stays in the machine.</small></button>
       <div id="summon"></div>
       <button class="door" id="again" type="button"><b>Feed it again</b><small>A second filing goes beside the first. Nothing is overwritten.</small></button>
@@ -411,7 +411,7 @@ function readBack(){
   });
   (f.taken||[]).forEach(function(tk,i){var l=document.createElement('div');l.className='m-reg';l.textContent='Taken back, red column';p.appendChild(l);var t=document.createElement('div');t.className='m-out';t.textContent=tk;p.appendChild(t);});
   var b=document.createElement('button');b.className='btn';b.textContent='Feed it again';b.onclick=restart;p.appendChild(b);
-  var c=document.createElement('a');c.className='q-out';c.href='gospel-forgotten-flesh.html';c.textContent='Or go on to the Gospel';p.appendChild(c);
+  var c=document.createElement('a');c.className='q-out';c.href='rf-093-lore.html';c.textContent='Or go on to the Recovered Fragments';p.appendChild(c);
   a.appendChild(p);window.scrollTo({top:0,behavior:'smooth'});
 }
 
