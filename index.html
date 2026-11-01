@@ -394,6 +394,34 @@
     .door-watch .di-lid { transform-origin:center;transform-box:fill-box;animation:eyeBlink 7s ease-in-out infinite; }
     @keyframes eyeBlink { 0%,92%,100%{transform:scaleY(0);} 95%{transform:scaleY(1);} 97%{transform:scaleY(0);} }
 
+    /* ── THE WAY DOWN ── one arch, four quieter doors beside it. Light comes from under the threshold. */
+    .doors-row { display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;width:100%;max-width:640px;margin-left:auto;margin-right:auto;align-items:end; }
+    .doors-row .door { width:auto;max-width:none;border-radius:90px 90px 0 0;padding:34px 8px 18px;background:rgba(5,6,10,.82);border-bottom-width:3px;box-shadow:inset 0 0 0 4px rgba(5,6,10,.9),inset 0 0 0 5px rgba(201,168,76,.14); }
+    .doors-row .door::before { transform:none;opacity:0;transition:opacity .7s ease;background:radial-gradient(ellipse at 50% 100%,rgba(201,168,76,.26),transparent 70%); }
+    .doors-row .door:hover::before { transform:none;opacity:1; }
+    .doors-row .door:hover { transform:none; }
+    .doors-row .door-descend { grid-column:1 / -1;justify-self:center;width:min(320px,100%);min-height:380px;justify-content:flex-end;border-radius:160px 160px 0 0;padding:0 24px 34px;font-size:15px;color:var(--ash);border-color:rgba(143,240,229,.55);background:radial-gradient(ellipse at 50% 105%,rgba(79,168,138,.3),rgba(5,8,10,.94) 62%);box-shadow:inset 0 0 0 6px rgba(5,6,10,.92),inset 0 0 0 7px rgba(143,240,229,.22),0 0 44px rgba(79,168,138,.14);margin-bottom:12px; }
+    .doors-row .door-descend::before { background:radial-gradient(ellipse at 50% 100%,rgba(143,240,229,.3),transparent 68%); }
+    .doors-row .door-descend .door-icon { width:64px;height:64px; }
+    .doors-row .door-descend .door-sub { font-size:15px;opacity:.8; }
+    .doors-row .door-listen { background:rgba(5,6,10,.82);border-color:var(--gold);color:var(--gold-lt); }
+    .doors-row .door-listen .di-stroke { stroke:var(--gold-lt); }
+    .doors-row .door-listen .di-fill { fill:var(--gold-lt); }
+    .doors-row .door-side { border-color:rgba(201,168,76,.32);color:rgba(228,221,208,.82); }
+    .doors-row .door-side .di-stroke { stroke:rgba(201,168,76,.85); }
+    .doors-row .door-side .di-fill { fill:rgba(201,168,76,.85); }
+    .doors-row .door:not(.door-descend) { font-size:9px;letter-spacing:.24em; }
+    .doors-row .door:not(.door-descend) .door-sub { font-size:13px;opacity:.72;letter-spacing:0; }
+    .threshold-choice::before,.threshold-cta::before,.cs-submit::before { transform:none !important;opacity:0;transition:opacity .7s ease;background:radial-gradient(ellipse at 50% 100%,rgba(201,168,76,.22),transparent 72%) !important; }
+    .threshold-choice:hover::before,.threshold-cta:hover::before,.cs-submit:hover::before { opacity:1; }
+    @media (max-width:640px) { .doors-row { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+
+    /* ── STILLNESS ── */
+    #still-line { position:fixed;left:50%;bottom:92px;transform:translateX(-50%);z-index:60;width:min(520px,calc(100% - 40px));text-align:center;font-family:'Crimson Text',serif;font-style:italic;font-size:20px;line-height:1.45;color:var(--gold-lt);text-shadow:0 0 14px #000,0 0 4px #000;opacity:0;pointer-events:none;transition:opacity 1.6s ease;background:radial-gradient(ellipse at center,rgba(3,3,6,.92) 40%,rgba(3,3,6,0) 100%);padding:18px 14px; }
+    #still-line.on { opacity:1; }
+    #still-line:not(.on) a { pointer-events:none; }
+    #still-line a { display:block;margin-top:8px;font-family:'Share Tech Mono',monospace;font-style:normal;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:rgba(143,240,229,.95);text-decoration:none;pointer-events:auto; }
+
     /* ── SCROLL HINT ── */
     .scroll-hint { position:absolute;bottom:32px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:10px;opacity:0;animation:fadeIn 1s ease 3.8s forwards; }
     .scroll-hint span { font-family:'Cinzel',serif;font-size:7px;letter-spacing:.52em;text-transform:uppercase;color:rgba(201,168,76,.28); }
@@ -420,6 +448,36 @@
     .voice-card:hover .voice-name { color:var(--gold-lt); }
     .voice-realm { font-family:'Cinzel',serif;font-size:8px;letter-spacing:.3em;text-transform:uppercase;color:rgba(201,168,76,.38);margin-bottom:10px; }
     .voice-desc { font-family:'Crimson Text',serif;font-style:italic;font-size:14px;color:rgba(228,221,208,.38);text-align:center;line-height:1.6; }
+
+    /* three recovered files, and none of them was opened the same way */
+    .voices-grid { display:flex;flex-direction:column;gap:44px; }
+    .voice-card { display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);grid-template-rows:auto auto auto auto 1fr;column-gap:30px;padding:0;align-items:start;text-align:left; }
+    .voice-card .voice-img-wrap { grid-column:1;grid-row:1 / -1;width:100%;height:100%;min-height:340px;margin:0;align-self:stretch; }
+    .voice-card .voice-img { position:absolute;inset:0;height:100%;clip-path:none;filter:grayscale(.3) brightness(.78) contrast(1.08); }
+    .voice-file { grid-column:2;margin:26px 22px 22px 0;padding-bottom:10px;border-bottom:1px solid rgba(201,168,76,.2);font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:.14em;line-height:1.6;text-transform:uppercase;color:rgba(201,168,76,.8); }
+    .voice-card .voice-name { grid-column:2;text-align:left;font-size:21px;margin:0 22px 8px 0;line-height:1.25; }
+    .voice-card .voice-realm { grid-column:2;font-size:10px;margin:0 22px 18px 0;color:rgba(201,168,76,.72); }
+    .voice-card .voice-desc { grid-column:2;text-align:left;font-size:18px;line-height:1.55;margin:0 22px 30px 0;color:rgba(228,221,208,.82); }
+    /* I. the man's file: an ordinary record, kept too carefully */
+    .vf-man { border-color:rgba(201,168,76,.2);width:88%;align-self:flex-start; }
+    /* II. the saint: the largest file, and the image is on the wrong side */
+    .vf-saint { grid-template-columns:minmax(0,6fr) minmax(0,7fr);border-color:rgba(143,240,229,.24);box-shadow:0 0 50px rgba(79,168,138,.08); }
+    .vf-saint .voice-img-wrap { grid-column:2;min-height:520px; }
+    .vf-saint .voice-file,.vf-saint .voice-name,.vf-saint .voice-realm,.vf-saint .voice-desc { grid-column:1;margin-left:26px;margin-right:0; }
+    .vf-saint .voice-name { font-size:26px; }
+    .vf-saint .voice-file { color:rgba(143,240,229,.85);border-color:rgba(143,240,229,.24); }
+    /* III. no file was ever opened on this one. It has no frame, and it brightens only if you stay */
+    .vf-rot { background:none;border-color:transparent;width:88%;align-self:flex-end; }
+    .voice-card .voice-num { display:none; }
+    .vf-rot .voice-img { filter:grayscale(.5) brightness(.62) contrast(1.15);transition:filter 4s ease; }
+    .vf-rot:hover .voice-img { filter:grayscale(.2) brightness(.8) contrast(1.15); }
+    .vf-rot .voice-file { color:rgba(201,84,74,.92);border-color:rgba(122,18,18,.5); }
+    @media (max-width:640px) {
+      .voice-card,.vf-saint { grid-template-columns:minmax(0,1fr);grid-template-rows:none;width:100%; }
+      .voice-card .voice-img-wrap,.vf-saint .voice-img-wrap { grid-column:1;grid-row:auto;min-height:340px; }
+      .vf-saint .voice-img-wrap { min-height:440px; }
+      .voice-file,.voice-card .voice-name,.voice-card .voice-realm,.voice-card .voice-desc,.vf-saint .voice-file,.vf-saint .voice-name,.vf-saint .voice-realm,.vf-saint .voice-desc { grid-column:1;margin-left:18px;margin-right:18px; }
+    }
 
     /* ── REALMS ── */
     .section-realms { position:relative;z-index:5;width:100%;border-top:1px solid rgba(201,168,76,.07);border-bottom:1px solid rgba(201,168,76,.07);background:linear-gradient(90deg,rgba(122,18,18,.04),rgba(12,12,20,.75),rgba(79,168,138,.04)); }
@@ -780,7 +838,7 @@
     .cs-done.cs-done-show{ display:block;animation:csDoneIn 1.2s ease forwards; }
     @keyframes csDoneIn{ from{opacity:0;transform:translateY(6px);} to{opacity:1;transform:none;} }
     @media (max-width:768px){
-      .cs-form{ flex-direction:column; }
+      .cs-form{ flex-direction:column; } .cs-input{ flex:0 0 auto;width:100%; }
       .cs-submit{ width:100%; }
     }
   </style>
@@ -1060,22 +1118,9 @@
           <div class="apocrypha-note">— Elvain Vhris, Recovered Fragment 093</div>
         </div>
 
-        <!-- THREE DOORS -->
+        <!-- THE WAY DOWN -->
         <a class="madman-line" href="madmens-gospel.html">A man hears his name before anyone has said it. Everyone calls him mad. What if he's right?<span>The Madmen's Gospel ∴ Gospel II</span></a>
         <div class="doors-row">
-          <a class="door door-listen" href="gospel-forgotten-flesh.html">
-            <span class="door-icon" aria-hidden="true">
-              <!-- transmission: sound radiating as sigil from a seeing point -->
-              <svg viewBox="-17 -17 34 34" xmlns="http://www.w3.org/2000/svg">
-                <circle class="di-fill" cx="-9" cy="0" r="2.4"/>
-                <path class="di-stroke" d="M -3,-6 A 8,8 0 0 1 -3,6"/>
-                <path class="di-stroke" d="M 2,-10 A 13,13 0 0 1 2,10"/>
-                <path class="di-stroke" d="M 7,-14 A 18,18 0 0 1 7,14"/>
-              </svg>
-            </span>
-            <span class="door-label">Listen</span>
-            <span class="door-sub door-sub-z">Enter the Gospel</span>
-          </a>
           <a class="door door-descend" href="infection-remembers.html">
             <span class="door-icon" aria-hidden="true">
               <!-- doorway arch with descending chevrons -->
@@ -1089,6 +1134,19 @@
             <span class="door-label">Descend</span>
             <span class="door-sub door-sub-z">Into the Archive</span>
           </a>
+          <a class="door door-listen" href="gospel-forgotten-flesh.html">
+            <span class="door-icon" aria-hidden="true">
+              <!-- transmission: sound radiating as sigil from a seeing point -->
+              <svg viewBox="-17 -17 34 34" xmlns="http://www.w3.org/2000/svg">
+                <circle class="di-fill" cx="-9" cy="0" r="2.4"/>
+                <path class="di-stroke" d="M -3,-6 A 8,8 0 0 1 -3,6"/>
+                <path class="di-stroke" d="M 2,-10 A 13,13 0 0 1 2,10"/>
+                <path class="di-stroke" d="M 7,-14 A 18,18 0 0 1 7,14"/>
+              </svg>
+            </span>
+            <span class="door-label">Listen</span>
+            <span class="door-sub door-sub-z">Enter the Gospel</span>
+          </a>
           <a class="door door-watch" href="https://www.youtube.com/@CodexMaledictus" target="_blank" rel="noopener">
             <span class="door-icon" aria-hidden="true">
               <!-- the eye within the transmission frame; it watches back -->
@@ -1101,6 +1159,28 @@
             </span>
             <span class="door-label">Watch</span>
             <span class="door-sub door-sub-z">The Transmissions</span>
+          </a>
+          <a class="door door-side" href="https://www.amazon.com/dp/B0FQ9QDMQ2" target="_blank" rel="noopener">
+            <span class="door-icon" aria-hidden="true">
+              <!-- a closed book with the cut page showing -->
+              <svg viewBox="-17 -17 34 34" xmlns="http://www.w3.org/2000/svg">
+                <path class="di-stroke" d="M -11,-14 L 11,-14 L 11,14 L -11,14 Z"/>
+                <path class="di-stroke" d="M -6,-14 L -6,14"/>
+                <path class="di-stroke" d="M -1,-6 L 7,-6 M -1,0 L 7,0"/>
+              </svg>
+            </span>
+            <span class="door-label">Read</span>
+            <span class="door-sub door-sub-z">The Fragment</span>
+          </a>
+          <a class="door door-side" href="#" id="door-summons">
+            <span class="door-icon" aria-hidden="true">
+              <!-- a frequency, left behind -->
+              <svg viewBox="-17 -17 34 34" xmlns="http://www.w3.org/2000/svg">
+                <path class="di-stroke" d="M -15,0 L -9,0 L -6,-8 L -1,9 L 3,-12 L 7,6 L 9,0 L 15,0"/>
+              </svg>
+            </span>
+            <span class="door-label">Leave</span>
+            <span class="door-sub door-sub-z">Your Frequency</span>
           </a>
         </div>
 
@@ -1153,8 +1233,9 @@
       <div class="section-desc reveal">Three voices. Three positions within the mythology.<br/>None of them fully understand what they are part of.</div>
       <div class="voices-grid">
 
-        <div class="voice-card reveal d1">
+        <div class="voice-card vf-man reveal d1">
           <div class="voice-num">I</div>
+          <div class="voice-file">File I · Testimony · Status: still writing</div>
           <div class="voice-img-wrap">
             <div class="voice-img-glow"></div>
             <img loading="lazy" class="voice-img" src="Assets/Codex Maledictus Index/apollo-gavinci.jpeg" alt="Apollo Gavinci" />
@@ -1164,8 +1245,9 @@
           <div class="voice-desc">The man who thought he built this. A marked mortal documenting what he cannot explain. His records are the most dangerous kind — honest.</div>
         </div>
 
-        <div class="voice-card reveal d2 cipher-host" id="artemys-card">
+        <div class="voice-card vf-saint reveal d2 cipher-host" id="artemys-card">
           <div class="voice-num">II</div>
+          <div class="voice-file">File II · Exhumation · Status: returned</div>
           <div class="voice-img-wrap">
             <div class="voice-img-glow"></div>
             <img loading="lazy" class="voice-img" src="Assets/Codex Maledictus Index/forgotten-saint-artemys.jpeg" alt="Forgotten Saint Artemys" />
@@ -1187,8 +1269,9 @@
           </div>
         </div>
 
-        <div class="voice-card reveal d3">
+        <div class="voice-card vf-rot reveal d3">
           <div class="voice-num">III</div>
+          <div class="voice-file">File III · No intake record · Status: not applicable</div>
           <div class="voice-img-wrap">
             <div class="voice-img-glow"></div>
             <img loading="lazy" class="voice-img" src="Assets/Codex Maledictus Index/omniscient-rot.jpeg" alt="Omniscient Rot" />
@@ -2005,6 +2088,42 @@
       btn.style.color = 'var(--gold-lt)';
     });
   });
+  /* the side door to the list opens the same summons as the footer */
+  (function(){
+    const d=document.getElementById('door-summons'), link=document.getElementById('summons-link');
+    if(d&&link) d.addEventListener('click',e=>{e.preventDefault();link.click();});
+  })();
+  /* nobody moves, and the page notices. 13, 26, 39. */
+  (function(){
+    const KEY='codex_still_v1';
+    let waited=null;
+    try{ waited=JSON.parse(localStorage.getItem(KEY)); }catch(e){}
+    const el=document.createElement('div'); el.id='still-line'; document.body.appendChild(el);
+    let last=Date.now(), stage=0;
+    const wake=()=>{ last=Date.now(); if(stage&&stage<3) stage=0; if(stage||el.classList.contains('on')) el.classList.remove('on'); };
+    ['pointermove','pointerdown','keydown','scroll','touchstart'].forEach(n=>addEventListener(n,wake,{passive:true}));
+    function busy(){
+      if(document.hidden) return true;
+      const boot=document.getElementById('boot');
+      if(boot && getComputedStyle(boot).display!=='none' && getComputedStyle(boot).opacity!=='0') return true;
+      const veil=document.getElementById('transmission-veil'), cr=document.getElementById('cipher-reveal');
+      return !!((veil&&veil.classList.contains('shown'))||(cr&&cr.classList.contains('shown')));
+    }
+    function say(text,door){
+      el.textContent=text;
+      if(door){ const a=document.createElement('a'); a.href='infection-remembers.html'; a.textContent='Go down without touching anything else'; el.appendChild(a); }
+      el.classList.add('on');
+    }
+    setInterval(()=>{
+      if(busy()){ last=Date.now(); return; }
+      const band=document.getElementById('codex-summons');
+      el.style.bottom=(band&&band.classList.contains('cs-up'))?(band.offsetHeight+16)+'px':'';
+      const s=(Date.now()-last)/1000;
+      if(s>=13&&stage<1){ stage=1; say(waited?'You waited here before. It kept your place.':'You have stopped moving. It has not.'); }
+      if(s>=26&&stage<2){ stage=2; say('Twenty-six seconds. The eye has not looked away either.'); }
+      if(s>=39&&stage<3){ stage=3; say('Thirty-nine. There is a room below that answers to this.',true); try{ localStorage.setItem(KEY,JSON.stringify({at:Date.now()})); }catch(e){} }
+    },1000);
+  })();
   /* the answer stays on file, and comes back on a later visit */
   (function(){
     let said=null;
