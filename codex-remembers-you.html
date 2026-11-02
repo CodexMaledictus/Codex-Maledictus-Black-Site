@@ -17,13 +17,13 @@
 <meta property="og:image" content="https://codexmaledictus.com/Assets/Codex%20Remembers%20You/The-Artifact.jpeg">
 <link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
-:root{--table:#17120F;--paper:#D6D2C6;--ink:#0D0605;--pen:#D61F12;--pencil:#2A2420;}
+:root{--table:#17120F;--paper:#D6D2C6;--ink:#000;--pen:#D61F12;--pencil:#2A2420;}
 *{margin:0;padding:0;box-sizing:border-box;}
 html{background:var(--table);}
 body{min-height:100vh;background-color:var(--table);color:var(--ink);font-family:'IM Fell English',Georgia,serif;overflow-x:hidden;}
 html.held,html.held body{overflow:hidden;}
 /* The lamp. It multiplies over everything, so the red is real: red ink on this paper disappears under it. */
-#LAMP{position:fixed;inset:0;z-index:50;pointer-events:none;mix-blend-mode:multiply;background:radial-gradient(ellipse 120% 78% at 50% 34%,#D92C1B 0%,#A81F12 50%,#4A0B06 100%);opacity:0;transition:opacity .25s;}
+#LAMP{position:fixed;inset:0;z-index:50;pointer-events:none;mix-blend-mode:multiply;background:radial-gradient(ellipse 120% 78% at 50% 34%,#F4765E 0%,#E8664E 55%,#8A2416 100%);opacity:0;transition:opacity .25s;}
 body.lit #LAMP{opacity:1;}
 body.lit.settled #LAMP{animation:lamp 11s ease-in-out infinite;}
 @keyframes lamp{0%,100%{opacity:1}50%{opacity:.93}}
@@ -40,7 +40,7 @@ body.white #LAMP{opacity:0!important;animation:none!important;}
 .sheet{position:relative;background-color:var(--paper);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3'/%3E%3CfeColorMatrix values='0 0 0 0 .25 0 0 0 0 .2 0 0 0 0 .15 0 0 0 .3 0'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)'/%3E%3C/svg%3E");padding:clamp(24px,6vw,52px) clamp(20px,6vw,54px);margin-bottom:22px;box-shadow:0 18px 44px rgba(0,0,0,.75);}
 .sheet:nth-of-type(odd){transform:rotate(-.25deg);}
 .sheet:nth-of-type(even){transform:rotate(.2deg);}
-.mono{font:400 12px/1.65 'Share Tech Mono',monospace;letter-spacing:.06em;}
+.mono{font:400 14px/1.6 'Share Tech Mono',monospace;letter-spacing:.06em;}
 .mono a,.sub a{color:inherit;}
 h1{font:400 clamp(30px,7vw,46px)/1.12 'IM Fell English',serif;margin:18px 0 18px;}
 h2{font:400 clamp(23px,5vw,30px)/1.2 'IM Fell English',serif;margin-bottom:14px;}
@@ -53,13 +53,13 @@ body:not(.white) .redpen{color:#CDC6B8;}
 .redpen{color:var(--pen);font-style:italic;font-size:clamp(19px,2.6vw,22px);line-height:1.4;padding-left:2.4em;margin:2px 0 14px;transform:rotate(-1deg);}
 .redpen.sig{font-size:17px;text-align:right;}
 .dir{list-style:none;border-top:1px solid var(--ink);border-bottom:1px solid var(--ink);padding:12px 0;margin-top:14px;}
-.dir li{font:400 13px/1.7 'Share Tech Mono',monospace;}
+.dir li{font:400 14px/1.65 'Share Tech Mono',monospace;}
 .stamp{display:inline-block;border:2px solid var(--ink);padding:5px 10px;font:400 13px/1.3 'Share Tech Mono',monospace;letter-spacing:.1em;text-transform:uppercase;transform:rotate(-2.5deg);}
 #BROKEN{display:none;margin-top:16px;}
 #BROKEN.on{display:inline-block;}
 figure{margin:18px 0;}
 figure img{display:block;width:100%;height:auto;}
-figcaption{font:400 11px/1.5 'Share Tech Mono',monospace;margin-top:6px;}
+figcaption{font:400 13px/1.5 'Share Tech Mono',monospace;margin-top:6px;}
 .opts{display:flex;flex-direction:column;gap:9px;margin:18px 0 6px;}
 .opt{background:transparent;border:1px solid var(--ink);color:var(--ink);text-align:left;font:400 clamp(19px,2.6vw,21px)/1.3 'IM Fell English',serif;padding:13px 14px;cursor:pointer;min-height:48px;}
 .opt:hover,.opt:focus-visible{background:rgba(0,0,0,.14);outline:none;}
@@ -67,12 +67,12 @@ figcaption{font:400 11px/1.5 'Share Tech Mono',monospace;margin-top:6px;}
 #REPLY p:first-child{font-size:clamp(23px,4vw,28px);line-height:1.3;}
 .subj{list-style:none;}
 .subj li{padding:11px 0;border-top:1px solid rgba(13,6,5,.5);font-size:clamp(18px,2.5vw,20px);line-height:1.4;}
-.subj b{font-weight:400;font-family:'Share Tech Mono',monospace;font-size:13px;display:block;letter-spacing:.06em;}
+.subj b{font-weight:400;font-family:'Share Tech Mono',monospace;font-size:14px;display:block;letter-spacing:.06em;}
 .subj a{color:inherit;}
 #READER{display:none;}
 #READER.on{display:block;}
 .buy{display:block;text-align:center;background:var(--ink);color:var(--paper);text-decoration:none;font:400 14px/1.3 'Share Tech Mono',monospace;letter-spacing:.14em;text-transform:uppercase;padding:17px 12px;margin:18px 0 8px;}
-.sub{font:400 12px/1.5 'Share Tech Mono',monospace;text-align:center;}
+.sub{font:400 14px/1.5 'Share Tech Mono',monospace;text-align:center;}
 #SWITCH{position:fixed;right:10px;bottom:calc(10px + env(safe-area-inset-bottom));z-index:40;background:#17120F;color:#D6D2C6;border:1px solid #D6D2C6;font:400 12px/1 'Share Tech Mono',monospace;letter-spacing:.08em;padding:13px 13px;cursor:pointer;display:none;}
 body.settled #SWITCH{display:block;}
 #STILL{position:fixed;left:14px;bottom:calc(14px + env(safe-area-inset-bottom));max-width:min(58vw,330px);z-index:40;color:#D6D2C6;font:italic 400 19px/1.3 'IM Fell English',serif;opacity:0;transition:opacity 1.4s;pointer-events:none;text-shadow:0 0 6px #000,0 0 2px #000;}
