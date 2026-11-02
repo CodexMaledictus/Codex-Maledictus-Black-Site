@@ -1206,6 +1206,7 @@ let pageEnterTime=Date.now();
 // THRESHOLD, descent-aware. Knows if the entry inscription solved.
 // ════════════════════════════════════════════════════════════
 const cameFromEntry = (CIPHER_OK && Cipher.has && Cipher.has('inf-inscription-restored'));
+const cameFromTransmission = document.referrer.indexOf('infection-remembers') !== -1;
 function runThreshold(){
   const midEl=document.getElementById('th-mid');
   const turnEl=document.getElementById('th-turn');
@@ -1213,7 +1214,7 @@ function runThreshold(){
     midEl.innerHTML='<span class="frag" style="opacity:1">You restored the word the transmission had lost. <em>It returns.</em> You proved you could read what had rotted. Now the Archivum will show you what returned, and it will show it to you wrong first, the way the ones who lived it wrote it down.</span>';
     turnEl.innerHTML='You read the chant. Now read the record.<br>The first reading is the lie. The eye is the second.';
   } else {
-    midEl.innerHTML='<span class="frag" style="opacity:1">You came in through the side, through the archive that lets anyone stand anywhere. That is allowed. But know what you are holding: a record written by people inside the event, who called it infection because they had no better word for being remembered by something vast.</span>';
+    midEl.innerHTML='<span class="frag" style="opacity:1">'+(cameFromTransmission?'You heard the transmission through and left the chant broken. That is allowed.':'You came in through the side, through the archive that lets anyone stand anywhere. That is allowed.')+' But know what you are holding: a record written by people inside the event, who called it infection because they had no better word for being remembered by something vast.</span>';
     turnEl.innerHTML='Everything on the surface here is the lie they were sold.<br>The eye is how you read underneath it.';
   }
   setTimeout(()=>turnEl.classList.add('show'),400);
