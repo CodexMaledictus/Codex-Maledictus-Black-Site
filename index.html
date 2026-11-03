@@ -168,6 +168,8 @@
     .start-line { font-family:'Crimson Text',serif;font-size:clamp(18px,2.4vw,22px);color:var(--ash);line-height:1.55; }
     .start-door { display:inline-block;padding:13px 26px;border:1px solid var(--gold-deep);color:var(--gold-lt);font-family:'Crimson Text',serif;font-size:clamp(16px,2vw,19px);letter-spacing:.06em;text-decoration:none;transition:border-color .4s,background .4s; }
     .start-door:hover,.start-door:focus-visible { border-color:var(--gold);background:rgba(201,168,76,.08); }
+    #descend { scroll-margin-top:30vh; }
+    html { scroll-behavior:smooth; }
 
     /* ── THE READING (treated as a received transmission, addressed to you) ── */
     .reading-block {
@@ -1054,7 +1056,7 @@
         <!-- THE START · one plain line and one door, for anyone who does not know the record yet -->
         <div class="start">
           <div class="start-line">This is a record of things people saw and were told to forget. You can read it in order, one room at a time.</div>
-          <a class="start-door" href="madmens-gospel.html">Start with the man who heard his name →</a>
+          <a class="start-door" href="#descend">Begin at the arch below ↓</a>
         </div>
 
         <!-- THE READING (woven in as another recovered fragment, addressed to you) -->
@@ -1134,7 +1136,7 @@
         <a class="madman-line" href="madmens-gospel.html">A man hears his name before anyone has said it. Everyone calls him mad. What if he's right?<span>The Madmen's Gospel ∴ Gospel II</span></a>
         <a class="madman-hear" href="https://open.spotify.com/album/221eiCbBGLwo8Z9MUJtWQc" target="_blank" rel="noopener">Hear it on Spotify ↗</a>
         <div class="doors-row">
-          <a class="door door-descend" href="madmens-gospel.html">
+          <a class="door door-descend" id="descend" href="madmens-gospel.html">
             <span class="door-icon" aria-hidden="true">
               <!-- doorway arch with descending chevrons -->
               <svg viewBox="-17 -17 34 34" xmlns="http://www.w3.org/2000/svg">
