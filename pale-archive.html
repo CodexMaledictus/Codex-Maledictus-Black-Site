@@ -694,6 +694,37 @@ body.bearer-state .attune-inscription .insc-line{color:var(--bearer-amber);}
   animation:ueKeyEye 4.5s ease-in-out infinite;
 }
 @keyframes ueKeyEye{ 0%,100%{opacity:.35;transform:translate(-50%,-50%) scale(.85);} 50%{opacity:.75;transform:translate(-50%,-50%) scale(1.08);} }
+
+/* ── THE CLOSET · each witness's receipts, kept by the Archive. Read from this device only. ── */
+.closet{max-width:520px;margin:70px auto 40px;padding:0 4px;text-align:center;}
+.clo-door{display:inline-flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:6px;width:min(220px,70vw);min-height:300px;padding:0 18px 28px;background:linear-gradient(180deg,#14100B,#0A0805 70%);border:2px solid var(--frame);border-bottom-width:6px;box-shadow:inset 0 0 0 5px #0A0805,inset 0 0 0 6px rgba(184,146,60,.35),0 10px 30px rgba(26,20,16,.25);color:#E8DCBC;cursor:pointer;font:inherit;position:relative;}
+.clo-door::after{content:'';position:absolute;right:22px;top:52%;width:7px;height:7px;border-radius:50%;background:var(--gold);box-shadow:0 0 6px rgba(212,180,92,.6);}
+.clo-door:focus-visible{outline:2px solid var(--gold);outline-offset:5px;}
+.clo-name{font-family:'IM Fell English',Georgia,serif;font-size:24px;letter-spacing:.02em;}
+.clo-sub{font-family:'Share Tech Mono',monospace;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#C8B88E;line-height:1.6;}
+.clo-in{display:none;margin-top:-6px;background:#0A0805;border:2px solid var(--frame);padding:34px 18px 30px;color:#E8DCBC;text-align:left;}
+.closet.open .clo-in{display:block;}
+.closet.open .clo-door{min-height:0;padding:14px 18px;width:100%;flex-direction:row;justify-content:center;border-bottom-width:2px;}
+.closet.open .clo-door::after{display:none;}
+.clo-lyric{font-family:'IM Fell English',Georgia,serif;font-style:italic;font-size:clamp(22px,4.6vw,27px);line-height:1.35;color:#F5EEDB;}
+.clo-credit{font-family:'Share Tech Mono',monospace;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#B8997A;margin:6px 0 18px;}
+.clo-plain{font-family:'IM Fell English',Georgia,serif;font-size:19px;line-height:1.55;color:#E8DCBC;margin-bottom:26px;}
+.clo-new{font-family:'Share Tech Mono',monospace;font-size:13px;letter-spacing:.1em;color:var(--gold-lt);margin:-12px 0 20px;}
+.clo-slips{display:flex;flex-direction:column;align-items:center;gap:14px;}
+.clo-slip{width:min(300px,100%);background:#F3EFE4;color:#1A1410;font-family:'Share Tech Mono',monospace;font-size:13.5px;line-height:1.55;padding:14px 16px 18px;box-shadow:0 3px 10px rgba(0,0,0,.45);-webkit-mask:linear-gradient(#000,#000) top/100% calc(100% - 6px) no-repeat,conic-gradient(from -45deg at bottom,#0000,#000 1deg 89deg,#0000 90deg) bottom/12px 6px repeat-x;mask:linear-gradient(#000,#000) top/100% calc(100% - 6px) no-repeat,conic-gradient(from -45deg at bottom,#0000,#000 1deg 89deg,#0000 90deg) bottom/12px 6px repeat-x;}
+.clo-slip:nth-child(odd){transform:rotate(-.8deg);}
+.clo-slip:nth-child(even){transform:rotate(.7deg);}
+.clo-slip .h{letter-spacing:.12em;text-transform:uppercase;font-size:12px;border-bottom:1px dashed #6B5840;padding-bottom:6px;margin-bottom:8px;}
+.clo-slip .q{font-family:'IM Fell English',Georgia,serif;font-size:17px;}
+.clo-slip .d{color:#6B5840;font-size:11.5px;margin-top:6px;}
+.clo-slip .t{border-top:1px dashed #6B5840;margin-top:10px;padding-top:8px;}
+.clo-empty{font-family:'IM Fell English',Georgia,serif;font-size:18px;line-height:1.6;color:#C8B88E;text-align:center;}
+.clo-board{display:block;margin:30px auto 0;background:none;border:0;border-top:3px solid #3A2C1C;border-bottom:3px solid #3A2C1C;width:100%;padding:10px 0;color:#B8997A;font:italic 17px 'IM Fell English',Georgia,serif;cursor:pointer;}
+.clo-board:focus-visible{outline:1px solid var(--gold);outline-offset:4px;}
+.clo-under{display:none;text-align:center;padding:22px 0 4px;}
+.clo-under.on{display:block;}
+.clo-under .v{font-family:'IM Fell English',Georgia,serif;font-style:italic;font-size:22px;color:#F5EEDB;margin-bottom:16px;}
+.clo-under a{display:block;margin:10px auto 0;color:var(--gold-lt);font-family:'Share Tech Mono',monospace;font-size:13px;letter-spacing:.12em;text-transform:uppercase;text-decoration:none;border-bottom:1px solid rgba(212,180,92,.4);width:max-content;max-width:100%;padding-bottom:2px;}
 </style>
 <script>window.va=window.va||function(){(window.vaq=window.vaq||[]).push(arguments);};</script>
 <script defer src="/_vercel/insights/script.js"></script>
@@ -850,6 +881,27 @@ body.bearer-state .attune-inscription .insc-line{color:var(--bearer-amber);}
   </div>
 
   <div class="timeline-wrap sr" id="timeline-wrap"></div>
+
+  <!-- THE CLOSET · the visitor's own receipts, kept by the Archive. Nothing here leaves this device. -->
+  <div class="closet" id="closet">
+    <button type="button" class="clo-door" id="clo-door" aria-expanded="false" aria-controls="clo-in">
+      <span class="clo-name">The closet</span>
+      <span class="clo-sub" id="clo-sub">What you kept.</span>
+    </button>
+    <div class="clo-in" id="clo-in">
+      <div class="clo-lyric">Keep my receipts in the closet.</div>
+      <div class="clo-credit">Thoughts of a Madman · Gospel II</div>
+      <div class="clo-plain">Everybody keeps proof of something they were told they imagined. These are yours.</div>
+      <div class="clo-new" id="clo-new" hidden></div>
+      <div class="clo-slips" id="clo-slips"></div>
+      <button type="button" class="clo-board" id="clo-board" aria-expanded="false" aria-controls="clo-under">One board is loose.</button>
+      <div class="clo-under" id="clo-under">
+        <div class="v">Keep my visions underneath.</div>
+        <a href="https://open.spotify.com/album/221eiCbBGLwo8Z9MUJtWQc" target="_blank" rel="noopener">Hear Thoughts of a Madman ↗</a>
+        <a id="clo-tape" href="#" target="_blank" rel="noopener" hidden>Beats From the Madman's Closet ↗</a>
+      </div>
+    </div>
+  </div>
 
   <div class="recovery-gate" id="recovery-gate">
     <div class="rg-label">Recovery Rite</div>
@@ -2435,6 +2487,59 @@ const lastVisitDate=localStorage.getItem('cm-pa-lastvisit');
 if(STATE.roomVisits>1&&lastVisitDate){runReturningSequence();}else{runBootRitual();}
 </script>
 
+<script src="codex-care.js"></script>
+<script>
+/* THE CLOSET · reads what the other rooms already kept on this device and prints it back as receipts.
+   Writes only codex_closet_v1 (how many receipts were here at the last look). Sends nothing anywhere. */
+(function(){
+  var BEAT_TAPE=''; // the beat tape's link, once it is out. Empty keeps its door hidden.
+  function $(i){return document.getElementById(i);}
+  function get(k,d){try{var v=JSON.parse(localStorage.getItem(k));return v==null?d:v;}catch(e){return d;}}
+  function safe(s){s=String(s||'').replace(/\s+/g,' ').trim();if(!s)return '';if(window.CodexCare&&CodexCare.needed(s))return '';return s.length>70?s.slice(0,70).replace(/\s+\S*$/,'')+'...':s;}
+  function day(t){try{return t?new Date(t).toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'}):'';}catch(e){return '';}}
+  function receipts(){
+    var out=[],v;
+    v=get('codex_flood_v1',{});var obj=safe(v.obj);
+    if(obj)out.push({h:'RF-093 · The Flood',l:['Item declared:'],q:'"'+obj+'"',e:'Condition: kept'});
+    v=get('codex_file_553_v1',{});
+    var L={right:'the right color',wrong:'the wrong color',never:'a color you never chose',none:'you could not say'};
+    if(L[v.a])out.push({h:'Case File 553-A',l:['Line IV, as you reported it:'],q:L[v.a],d:day(v.at)});
+    v=get('codex_ground_v1',{});var n=(v.cur&&v.cur.length)||(v.last&&v.last.length)||0;
+    if(n)out.push({h:'RF-093 · The Ground',l:['Pressure retained: '+n+(n===1?' mark':' marks')]});
+    v=get('codex_congregation_v1',{});
+    if(v.bone)out.push({h:'Plague Priest · Stage IV',l:['You kept reading.']});
+    if(v.declined||v.requested)out.push({h:'Plague Priest',l:['Re-evaluation: '+(v.declined?'declined':'requested')]});
+    v=get('codex_reply_v1',null);
+    if(v&&v.kind==='silence')out.push({h:'The Three Weeks',l:['Your reply: none. You listened.'],d:day(v.at)});
+    else if(v&&v.word){var w=safe(v.word);if(w)out.push({h:'The Three Weeks',l:['Your reply, received:'],q:'"'+w+'"',d:day(v.at)});}
+    v=get('codex_memory_v1',{});var f=(v.filings||[])[0];
+    if(f&&f.answers&&!(window.CodexCare&&CodexCare.needed((f.answers||[]).join(' ')))){var s=safe(f.answers[3]);if(s)out.push({h:'The Memory Engine',l:['The song you said followed you:'],q:'"'+s+'"',d:day(f.at)});}
+    v=get('codex_ledger_v1',[]);
+    if(v&&v.length)out.push({h:'The Confession Ledger',l:[v.length+(v.length===1?' confession':' confessions')+' on file.','The Ledger keeps the words.']});
+    return out;
+  }
+  function el(t,c,x){var e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e;}
+  var door=$('clo-door');if(!door)return;
+  var all=receipts(),S=get('codex_closet_v1',{}),fresh=(S.seen!=null&&all.length>S.seen)?all.length-S.seen:0;
+  if(fresh)$('clo-sub').textContent='What you kept. '+fresh+' more since you last looked.';
+  function render(){
+    var box=$('clo-slips');box.textContent='';
+    if(!all.length){box.appendChild(el('p','clo-empty','Nothing kept yet. Every room you go through hands you something. It ends up in here.'));return;}
+    if(fresh){$('clo-new').hidden=false;$('clo-new').textContent=fresh+' more since you last looked.';}
+    all.forEach(function(r,i){var s=el('div','clo-slip');s.appendChild(el('div','h',r.h));
+      (r.l||[]).forEach(function(x){s.appendChild(el('div',null,x));});
+      if(r.q)s.appendChild(el('div','q',r.q));if(r.e)s.appendChild(el('div',null,r.e));if(r.d)s.appendChild(el('div','d',r.d));
+      if(i===all.length-1)s.appendChild(el('div','t','Total: '+all.length+'. Kept. Not shown to anyone.'));
+      box.appendChild(s);});
+  }
+  door.addEventListener('click',function(){
+    var c=$('closet'),open=!c.classList.contains('open');c.classList.toggle('open',open);door.setAttribute('aria-expanded',open?'true':'false');
+    if(open){render();try{localStorage.setItem('codex_closet_v1',JSON.stringify({seen:all.length,at:Date.now()}));}catch(e){}$('clo-sub').textContent='What you kept.';}
+  });
+  $('clo-board').addEventListener('click',function(){var u=$('clo-under'),on=!u.classList.contains('on');u.classList.toggle('on',on);this.setAttribute('aria-expanded',on?'true':'false');});
+  if(BEAT_TAPE){$('clo-tape').href=BEAT_TAPE;$('clo-tape').hidden=false;}
+})();
+</script>
 <script src="codex-nav.js"></script>
 <div id="codex-nav"></div>
 <script>if(typeof initCodexNav==='function'){initCodexNav('pale-archive');}</script>
