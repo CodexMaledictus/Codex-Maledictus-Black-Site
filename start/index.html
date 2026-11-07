@@ -14,70 +14,173 @@
   <meta name="twitter:card" content="summary_large_image" />
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-13 -13 26 26'><circle cx='0' cy='0' r='11.5' fill='%23050505' stroke='%23C9A84C' stroke-width='1.4'/><path d='M -7.5,-4 L 7.5,-4 L 0,8 Z' fill='none' stroke='%23C9A84C' stroke-width='1.3'/><circle cx='-3.2' cy='-1.3' r='1.3' fill='%23C9A84C'/><circle cx='3.2' cy='-1.3' r='1.3' fill='%23C9A84C'/><circle cx='0' cy='3.5' r='1.3' fill='%23C9A84C'/></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
   <style>
-    :root{--ink:#050505;--bone:#E8E0CC;--dim:#B5AC98;--gold:#C9A84C;--gold-lt:#E2C873;--line:rgba(201,168,76,.28);}
+    :root{--void:#030304;--bone:#E4DDD0;--dim:#B3AA98;--gold:#C9A84C;--gold-lt:#E0C878;--gold-deep:#8A7330;--teal:#8FF0E5;--teal-d:#4FA88A;--line:rgba(201,168,76,.26);}
     *{box-sizing:border-box;margin:0;padding:0;}
     html{scroll-behavior:smooth;}
-    body{background:var(--ink);color:var(--bone);font:400 1.2rem/1.6 'Crimson Text',Georgia,serif;min-height:100vh;
-      background-image:radial-gradient(ellipse at 50% 0%,rgba(201,168,76,.08),transparent 60%);}
-    main{max-width:620px;margin:0 auto;padding:72px 20px 56px;}
-    .kicker{font:400 .78rem/1 'Share Tech Mono',monospace;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);text-align:center;margin-bottom:34px;}
-    h1{font:600 clamp(1.9rem,6vw,2.6rem)/1.2 'Cinzel',serif;text-align:center;color:#F4EEDD;margin-bottom:26px;}
-    .lead p{margin-bottom:16px;}
-    .lead p:last-child{color:var(--dim);font-style:italic;}
-    .doors{display:flex;flex-direction:column;gap:14px;margin:38px 0 56px;}
-    .door{display:block;text-decoration:none;color:inherit;border:1px solid var(--line);padding:20px 22px;background:rgba(201,168,76,.03);transition:border-color .3s,background .3s;}
-    .door:hover,.door:focus-visible{border-color:var(--gold);background:rgba(201,168,76,.08);outline:none;}
-    .door .n{font:400 .74rem/1 'Share Tech Mono',monospace;letter-spacing:.2em;color:var(--gold);text-transform:uppercase;}
-    .door .t{display:block;font:600 1.3rem/1.3 'Cinzel',serif;color:#F4EEDD;margin:8px 0 4px;}
-    .door .d{display:block;color:var(--dim);font-size:1.08rem;}
-    .door.first{border-color:rgba(201,168,76,.6);}
-    #leave{border-top:1px solid var(--line);padding-top:40px;scroll-margin-top:20px;}
-    #leave h2{font:600 1.35rem/1.3 'Cinzel',serif;color:#F4EEDD;margin-bottom:10px;}
-    #leave .plain{color:var(--dim);margin-bottom:6px;}
-    .csm-note{font-style:italic;color:var(--bone);margin:10px 0 12px;}
+    body{background:var(--void);color:var(--bone);font:400 1.2rem/1.65 'Crimson Text',Georgia,serif;min-height:100vh;overflow-x:hidden;
+      background-image:radial-gradient(ellipse 90% 55% at 50% -5%,rgba(201,168,76,.11),transparent 65%),radial-gradient(ellipse 70% 40% at 50% 105%,rgba(79,168,138,.07),transparent 70%);}
+    /* the grain and the dark at the edges, the same as the front door */
+    .grain{position:fixed;inset:-50%;pointer-events:none;z-index:50;opacity:.07;
+      background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+      animation:grain 1.2s steps(6) infinite;}
+    @keyframes grain{0%{transform:translate(0,0)}20%{transform:translate(-3%,2%)}40%{transform:translate(2%,-3%)}60%{transform:translate(-2%,-1%)}80%{transform:translate(3%,3%)}100%{transform:translate(0,0)}}
+    .vignette{position:fixed;inset:0;pointer-events:none;z-index:49;background:radial-gradient(ellipse at center,transparent 55%,rgba(0,0,0,.75) 100%);}
+    main{position:relative;z-index:2;max-width:660px;margin:0 auto;padding:64px 16px 56px;}
+
+    .mark{display:block;margin:0 auto 26px;width:62px;height:62px;background:none;border:0;cursor:pointer;-webkit-tap-highlight-color:transparent;}
+    .mark svg{width:100%;height:100%;overflow:visible;filter:drop-shadow(0 0 14px rgba(201,168,76,.35));animation:breathe 6.5s ease-in-out infinite;transition:transform 1.6s cubic-bezier(.16,1,.3,1);}
+    .mark.turned svg{transform:rotate(120deg);}
+    .mark:focus-visible{outline:1px solid var(--gold);outline-offset:8px;border-radius:50%;}
+    @keyframes breathe{0%,100%{opacity:.78}50%{opacity:1}}
+    .mark-line{text-align:center;font:italic 400 1.02rem/1.5 'Crimson Text',serif;color:var(--gold-lt);min-height:1.5em;margin:-14px 0 18px;opacity:0;transition:opacity 1.4s;}
+    .mark-line.on{opacity:.9;}
+
+    .kicker{font:400 .74rem/1 'Share Tech Mono',monospace;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);text-align:center;opacity:.85;}
+    .arrival{font:400 .86rem/1.6 'Share Tech Mono',monospace;letter-spacing:.06em;color:rgba(143,240,229,.82);text-align:center;min-height:3.2em;margin:16px auto 22px;max-width:30em;}
+    .arrival .cur{display:inline-block;width:.55em;height:1em;vertical-align:-.15em;background:rgba(143,240,229,.7);margin-left:2px;animation:blink 1s steps(1) infinite;}
+    @keyframes blink{50%{opacity:0}}
+    h1{font:900 clamp(1.75rem,6.4vw,2.7rem)/1.18 'Cinzel Decorative',serif;letter-spacing:.03em;text-align:center;color:var(--gold);
+      text-shadow:0 0 80px rgba(201,168,76,.28),0 0 26px rgba(201,168,76,.14),0 2px 6px rgba(0,0,0,.9);margin-bottom:28px;opacity:0;animation:rise 1.8s cubic-bezier(.16,1,.3,1) .5s forwards;}
+    @keyframes rise{from{opacity:0;transform:translateY(14px);filter:blur(4px)}to{opacity:1;transform:none;filter:none}}
+    .div{display:flex;align-items:center;gap:14px;margin:0 auto 26px;max-width:360px;}
+    .div::before,.div::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--gold-deep),transparent);}
+    .div span{color:var(--gold);font-size:13px;opacity:.6;}
+    .lead{opacity:0;animation:rise 1.6s cubic-bezier(.16,1,.3,1) 1.3s forwards;}
+    .lead p{margin-bottom:15px;}
+    .lead .first{font-size:1.3rem;color:#EEE7D8;}
+    .lead .pick{color:var(--dim);font-style:italic;text-align:center;margin-top:24px;}
+
+    /* the doors: one arch, two beside it */
+    .doors{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:30px auto 40px;max-width:440px;align-items:end;opacity:0;animation:rise 1.6s cubic-bezier(.16,1,.3,1) 2s forwards;}
+    .door{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:9px;text-decoration:none;color:rgba(228,221,208,.86);
+      border:1px solid rgba(201,168,76,.34);border-bottom-width:3px;border-radius:90px 90px 0 0;padding:34px 10px 18px;min-height:190px;overflow:hidden;
+      background:rgba(5,6,10,.85);box-shadow:inset 0 0 0 4px rgba(5,6,10,.9),inset 0 0 0 5px rgba(201,168,76,.14);transition:border-color .6s,box-shadow .6s;}
+    .door::before{content:'';position:absolute;inset:0;opacity:0;transition:opacity .7s;background:radial-gradient(ellipse at 50% 100%,rgba(201,168,76,.26),transparent 70%);}
+    .door:hover::before,.door:focus-visible::before{opacity:1;}
+    .door:focus-visible{outline:none;border-color:var(--gold-lt);}
+    .door>*{position:relative;z-index:1;}
+    .door svg{width:40px;height:40px;}
+    .di-s{fill:none;stroke:rgba(201,168,76,.85);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;}
+    .di-f{fill:rgba(201,168,76,.85);}
+    .door .lab{font:600 .7rem/1 'Cinzel',serif;letter-spacing:.3em;text-transform:uppercase;}
+    .door .t{font:600 1.02rem/1.25 'Cinzel',serif;color:#F1EADB;text-align:center;}
+    .door .d{font:italic 400 .98rem/1.35 'Crimson Text',serif;color:var(--dim);text-align:center;}
+    .door .nx{display:none;font:400 .66rem/1 'Share Tech Mono',monospace;letter-spacing:.2em;color:var(--teal);text-transform:uppercase;}
+    .door.next .nx{display:block;}
+    .door.next{border-color:rgba(143,240,229,.5);}
+    .door-listen{grid-column:1 / -1;justify-self:center;width:min(300px,100%);min-height:330px;border-radius:150px 150px 0 0;padding:0 22px 30px;
+      border-color:var(--gold);color:var(--gold-lt);background:radial-gradient(ellipse at 50% 108%,rgba(201,168,76,.24),rgba(5,6,10,.94) 62%);
+      box-shadow:inset 0 0 0 6px rgba(5,6,10,.92),inset 0 0 0 7px rgba(201,168,76,.24),0 0 46px rgba(201,168,76,.12);margin-bottom:6px;}
+    .door-listen svg{width:60px;height:60px;}
+    .door-listen .di-s{stroke:var(--gold-lt);} .door-listen .di-f{fill:var(--gold-lt);}
+    .door-listen .t{font-size:1.25rem;}
+    .door-listen .ring{animation:ring 3.2s ease-out infinite;opacity:0;}
+    .door-listen .ring.r2{animation-delay:.5s}.door-listen .ring.r3{animation-delay:1s}
+    @keyframes ring{0%{opacity:0}20%{opacity:1}70%,100%{opacity:0}}
+    .door-enter .chev{animation:chev 2.4s ease-in-out infinite;opacity:.3;}
+    .door-enter .c2{animation-delay:.3s}.door-enter .c3{animation-delay:.6s}
+    @keyframes chev{0%,100%{opacity:.25}50%{opacity:1}}
+    .door-watch .lid{transform-origin:center;transform-box:fill-box;animation:lid 7s ease-in-out infinite;fill:rgba(5,6,10,1);}
+    @keyframes lid{0%,92%,100%{transform:scaleY(0)}95%{transform:scaleY(1)}97%{transform:scaleY(0)}}
+    .door-watch .di-f{fill:rgba(201,84,74,.9);}
+
+    /* what surfaces when nobody moves */
+    .still{min-height:3.4em;text-align:center;margin:-10px 0 34px;}
+    .still p{font:italic 400 1.14rem/1.5 'Crimson Text',serif;color:var(--gold-lt);opacity:0;transform:translateY(6px);transition:opacity 2.4s,transform 2.4s;}
+    .still p.on{opacity:.88;transform:none;}
+
+    /* the slip: leave your frequency */
+    #leave{position:relative;border:1px solid var(--line);padding:30px 22px 24px;background:linear-gradient(180deg,rgba(201,168,76,.05),rgba(5,6,10,.6));scroll-margin-top:24px;}
+    #leave::before{content:'';position:absolute;top:-1px;left:50%;width:70px;height:1px;transform:translateX(-50%);background:var(--gold-lt);box-shadow:0 0 12px var(--gold);}
+    #leave .k{font:400 .7rem/1 'Share Tech Mono',monospace;letter-spacing:.26em;color:var(--gold);text-transform:uppercase;text-align:center;}
+    #leave h2{font:700 1.45rem/1.3 'Cinzel Decorative',serif;color:#F1EADB;text-align:center;margin:12px 0 10px;}
+    #leave .plain{color:var(--dim);text-align:center;margin-bottom:4px;}
+    .csm-note{font-style:italic;color:var(--bone);text-align:center;margin:8px 0 14px;}
     .csm-form{display:flex;gap:10px;flex-wrap:wrap;}
-    .csm-input{flex:1 1 200px;min-width:0;background:#0E0D0B;border:1px solid var(--line);color:var(--bone);font:400 1.1rem 'Crimson Text',serif;padding:12px 14px;}
-    .csm-input:focus{outline:none;border-color:var(--gold);}
-    .csm-input::placeholder{color:#8E8676;}
-    .csm-send{background:var(--gold);color:#0A0805;border:0;font:600 1rem 'Cinzel',serif;letter-spacing:.06em;padding:12px 20px;cursor:pointer;}
+    .csm-input{flex:1 1 200px;min-width:0;background:#0B0A08;border:1px solid var(--line);color:var(--bone);font:400 1.1rem 'Crimson Text',serif;padding:12px 14px;}
+    .csm-input:focus{outline:none;border-color:var(--gold);box-shadow:0 0 18px rgba(201,168,76,.15);}
+    .csm-input::placeholder{color:#878070;}
+    .csm-send{flex:0 0 auto;background:transparent;color:var(--gold-lt);border:1px solid var(--gold);font:600 .82rem 'Cinzel',serif;letter-spacing:.24em;text-transform:uppercase;padding:12px 20px;cursor:pointer;transition:background .4s,color .4s;}
+    .csm-send:hover,.csm-send:focus-visible{background:var(--gold);color:#0A0805;outline:none;}
     .csm-send:disabled{opacity:.6;cursor:default;}
-    .fine{font:400 .8rem/1.6 'Share Tech Mono',monospace;color:#8E8676;margin-top:14px;letter-spacing:.04em;}
-    footer{text-align:center;margin-top:56px;font:400 .8rem/1.8 'Share Tech Mono',monospace;letter-spacing:.16em;text-transform:uppercase;}
-    footer a{color:var(--gold);text-decoration:none;margin:0 10px;}
-    footer .tag{display:block;color:var(--dim);letter-spacing:.08em;text-transform:none;font:italic 400 1.05rem 'Crimson Text',serif;margin-top:18px;}
+    .fine{font:400 .76rem/1.6 'Share Tech Mono',monospace;color:#878070;margin-top:16px;text-align:center;letter-spacing:.03em;}
+
+    footer{text-align:center;margin-top:52px;font:400 .76rem/2 'Share Tech Mono',monospace;letter-spacing:.16em;text-transform:uppercase;}
+    footer a{color:var(--gold);text-decoration:none;margin:0 10px;opacity:.85;}
+    footer a:hover{opacity:1;}
+    footer .tag{display:block;color:var(--dim);letter-spacing:.06em;text-transform:none;font:italic 400 1.05rem 'Crimson Text',serif;margin-top:16px;}
+    @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}h1,.lead,.doors{opacity:1}.grain{display:none}}
   </style>
 </head>
 <body>
+<div class="grain" aria-hidden="true"></div>
+<div class="vignette" aria-hidden="true"></div>
 <main>
+  <button class="mark" id="mark" type="button" aria-label="The mark">
+    <svg viewBox="-13 -13 26 26" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <circle cx="0" cy="0" r="11.5" fill="none" stroke="#C9A84C" stroke-width="1"/>
+      <path d="M -7.5,-4 L 7.5,-4 L 0,8 Z" fill="none" stroke="#C9A84C" stroke-width="1"/>
+      <circle cx="-3.2" cy="-1.3" r="1.1" fill="#E0C878"/><circle cx="3.2" cy="-1.3" r="1.1" fill="#E0C878"/><circle cx="0" cy="3.5" r="1.1" fill="#E0C878"/>
+    </svg>
+  </button>
+  <div class="mark-line" id="mark-line" aria-live="polite"></div>
+
   <div class="kicker">Codex Maledictus · Start here</div>
+  <div class="arrival" id="arrival" aria-live="polite"></div>
+
   <h1>Some things you hear stay with you.</h1>
+  <div class="div" aria-hidden="true"><span>🜏</span></div>
+
   <div class="lead">
-    <p>A line from a song you can't shake. A sound in an empty room. Something you were told you imagined.</p>
+    <p class="first">A line from a song you can't shake. A sound in an empty room. Something you were told you imagined.</p>
     <p>The Codex Maledictus is a record of those things. It is told in songs by Apollo Gavinci, in a book, in short films, and in rooms on this site that remember you were here.</p>
-    <p>You don't need to know anything first. Pick one door.</p>
+    <p class="pick">You don't need to know anything first. Pick one door.</p>
   </div>
 
   <nav class="doors" aria-label="Where to begin">
-    <a class="door first" href="https://open.spotify.com/album/221eiCbBGLwo8Z9MUJtWQc" target="_blank" rel="noopener">
-      <span class="n">I · Listen</span>
+    <a class="door door-listen" data-door="listen" href="https://open.spotify.com/album/221eiCbBGLwo8Z9MUJtWQc" target="_blank" rel="noopener">
+      <svg viewBox="-17 -17 34 34" aria-hidden="true">
+        <circle class="di-f" cx="-9" cy="0" r="2.4"/>
+        <path class="di-s ring" d="M -3,-6 A 8,8 0 0 1 -3,6"/>
+        <path class="di-s ring r2" d="M 2,-10 A 13,13 0 0 1 2,10"/>
+        <path class="di-s ring r3" d="M 7,-14 A 18,18 0 0 1 7,14"/>
+      </svg>
+      <span class="nx">The next door</span>
+      <span class="lab">Listen</span>
       <span class="t">Thoughts of a Madman ↗</span>
       <span class="d">The second Gospel. Start with the first track and let it play through.</span>
     </a>
-    <a class="door" href="../madmens-gospel.html">
-      <span class="n">II · Enter</span>
+    <a class="door door-enter" data-door="enter" href="../madmens-gospel.html">
+      <svg viewBox="-17 -17 34 34" aria-hidden="true">
+        <path class="di-s" d="M -11,15 L -11,-3 A 11,11 0 0 1 11,-3 L 11,15"/>
+        <path class="di-s chev" d="M -6,-7 L 0,-2 L 6,-7"/>
+        <path class="di-s chev c2" d="M -6,-1 L 0,4 L 6,-1"/>
+        <path class="di-s chev c3" d="M -6,5 L 0,10 L 6,5"/>
+      </svg>
+      <span class="nx">The next door</span>
+      <span class="lab">Enter</span>
       <span class="t">The first room</span>
-      <span class="d">Read the record in order, one room at a time. Each one has a door to the next.</span>
+      <span class="d">Read it in order. Each room opens the next.</span>
     </a>
-    <a class="door" href="https://www.youtube.com/@CodexMaledictus" target="_blank" rel="noopener">
-      <span class="n">III · Watch</span>
+    <a class="door door-watch" data-door="watch" href="https://www.youtube.com/@CodexMaledictus" target="_blank" rel="noopener">
+      <svg viewBox="-17 -17 34 34" aria-hidden="true">
+        <path class="di-s" d="M -14,0 Q 0,-12 14,0 Q 0,12 -14,0 Z"/>
+        <circle class="di-f" cx="0" cy="0" r="4"/>
+        <rect class="lid" x="-15" y="-9" width="30" height="18"/>
+      </svg>
+      <span class="nx">The next door</span>
+      <span class="lab">Watch</span>
       <span class="t">The transmissions ↗</span>
-      <span class="d">Short films from the record, true history with something underneath.</span>
+      <span class="d">True history, with something underneath.</span>
     </a>
   </nav>
 
+  <div class="still" id="still" aria-live="polite"><p id="still-1"></p></div>
+
   <section id="leave" aria-labelledby="leave-h">
+    <div class="k">For those who want word</div>
     <h2 id="leave-h">Leave your frequency</h2>
     <p class="plain">One letter when something new is recovered: a song, a film, a room. Nothing else.</p>
     <div id="summon"></div>
@@ -92,11 +195,99 @@
 
 <script src="../codex-summon.js"></script>
 <script>
-  if(window.CodexSummon)CodexSummon.mount(document.getElementById('summon'),{
-    invite:'Leave an address and the Archive will write when one surfaces.',
+/* START HERE · the stranger's door. It notices where they came from, remembers
+   which door they took, and lets one line surface if they stay still.
+   Keeps codex_start_v1 {visits, door, at}. Reads codex_witness_state_v1 to know
+   whether the front door has seen them. Nothing leaves this device. */
+(function(){
+  var KEY='codex_start_v1', REDUCED=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function $(i){return document.getElementById(i);}
+  function get(k){try{return JSON.parse(localStorage.getItem(k))||{};}catch(e){return {};}}
+  function put(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
+  var S=get(KEY); S.visits=(S.visits||0)+1; put(KEY,S);
+  var front=get('codex_witness_state_v1').visits||0;
+
+  function source(){
+    try{
+      var q=new URLSearchParams(location.search).get('utm_source')||'';
+      var r=q||(document.referrer?new URL(document.referrer).hostname:'');
+      r=r.toLowerCase();
+      if(!r) return 'direct';
+      if(r.indexOf('codexmaledictus')>-1) return 'self';
+      if(/tiktok/.test(r)) return 'tiktok';
+      if(/youtu/.test(r)) return 'youtube';
+      if(/instagram/.test(r)) return 'instagram';
+      if(/threads/.test(r)) return 'threads';
+      if(/twitter|x\.com|^t\.co/.test(r)) return 'x';
+      if(/reddit/.test(r)) return 'reddit';
+      if(/spotify/.test(r)) return 'spotify';
+      if(/linktr/.test(r)) return 'linktree';
+      if(/google|bing|duckduckgo/.test(r)) return 'search';
+      if(/discord/.test(r)) return 'discord';
+      return 'other';
+    }catch(e){return 'direct';}
+  }
+  var DOORS={listen:'Listen',enter:'Enter',watch:'Watch'}, ORDER=['listen','enter','watch'];
+  var line;
+  if(S.visits>1&&S.door){
+    line='You came back. Last time you took the door marked '+DOORS[S.door]+'. The next one is open.';
+  } else {
+    line={
+      tiktok:'You came from TikTok. Something there followed you here.',
+      youtube:'You came from a transmission. You heard enough to look for the source.',
+      instagram:'You came from an image. Images are how it usually starts.',
+      threads:'You came from a thread. You pulled it.',
+      x:'You came from a place called X. Someone there was talking about this.',
+      reddit:'You came from a forum. Somebody there said they heard it too.',
+      spotify:'You came from the music. Most people stop at the music.',
+      linktree:'You followed a list of links to the one that mattered.',
+      search:'You searched for this. Most people only find it by accident.',
+      discord:'You came from a chamber of voices.',
+      self:'You came from inside the record. This is where strangers begin.',
+      other:'Someone sent you here. They may not know why.',
+      direct:'No one sent you here. The Archive noticed that most of all.'
+    }[source()];
+    if(front>0&&S.visits===1) line+=' The front door has seen you before.';
+  }
+  var ar=$('arrival');
+  if(REDUCED){ar.textContent=line;}
+  else{
+    var i=0,cur=document.createElement('span');cur.className='cur';
+    var txt=document.createTextNode('');ar.appendChild(txt);ar.appendChild(cur);
+    setTimeout(function step(){txt.data=line.slice(0,++i);if(i<line.length)setTimeout(step,26+Math.random()*30);else setTimeout(function(){cur.remove();},2600);},900);
+  }
+
+  /* the door they took last time stays remembered; the next one is marked */
+  if(S.door){var nx=ORDER[(ORDER.indexOf(S.door)+1)%3];var el=document.querySelector('[data-door="'+nx+'"]');if(el)el.classList.add('next');}
+  Array.prototype.forEach.call(document.querySelectorAll('[data-door]'),function(a){
+    a.addEventListener('click',function(){var s=get(KEY);s.door=a.getAttribute('data-door');s.at=Date.now();put(KEY,s);});
+  });
+
+  /* the mark: three turns, three lines, then it rests */
+  var MARK=['Every room has one of these somewhere.','It turns a third each time. It was drawn to be returned to.','You keep touching it. The Archive keeps count.'],m=0;
+  $('mark').addEventListener('click',function(){
+    this.classList.toggle('turned');var ml=$('mark-line');ml.textContent=MARK[Math.min(m,MARK.length-1)];m++;ml.classList.add('on');
+  });
+
+  /* nobody moves, and the page notices. 13, then 26. */
+  var LINES=['You think you found this. It may have found you.','Those who stay help shape it. You are staying.'],shown=0,last=Date.now();
+  function moved(){last=Date.now();}
+  ['pointermove','pointerdown','keydown','scroll','touchstart'].forEach(function(e){addEventListener(e,moved,{passive:true});});
+  setInterval(function(){
+    if(document.hidden||shown>=LINES.length)return;
+    if(Date.now()-last>=13000){
+      last=Date.now();var p=$('still-1');p.classList.remove('on');
+      setTimeout(function(){p.textContent=LINES[shown];p.classList.add('on');shown++;},shown?900:0);
+    }
+  },1000);
+
+  if(window.CodexSummon)CodexSummon.mount($('summon'),{
+    invite:'Leave an address and the Archive will write when something surfaces.',
     button:'Leave it',
-    done:'Sent. If a letter asks you to confirm, open it, or the Archive can’t write back.',
+    done:'Received. If a letter asks you to confirm, open it, or the Archive can’t write back.',
     already:'The Archive already has your address. It will write when something surfaces.'});
+  console.log('%cYou opened the back of the start page. That is not where strangers usually look.','color:#C9A84C');
+})();
 </script>
 <script defer src="/_vercel/insights/script.js"></script>
 </body>
