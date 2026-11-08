@@ -2752,8 +2752,9 @@
         var label=document.getElementById('cs-submit-label');
         if(label) label.textContent='...';
         var fd=new FormData(); fd.append('email_address',email);
-        fetch(KIT_ACTION,{method:'POST',body:fd,mode:'no-cors'})
-          .then(function(){ var s=sLoad(); s.subscribed=true; sSave(s); revealDone(); })
+        fetch(KIT_ACTION,{method:'POST',body:fd,headers:{'Accept':'application/json'}})
+          .then(function(r){ return r.json(); })
+          .then(function(j){ if(!j||j.status!=='success'){ if(label) label.textContent='Not received. Try again'; return; } var s=sLoad(); s.subscribed=true; sSave(s); revealDone(); })
           .catch(function(){ if(label) label.textContent='Not received. Try again'; });
       });
 

@@ -10,7 +10,19 @@
       if(!host) return;
       var note = document.createElement('p');
       note.className = 'csm-note';
-      if(load().subscribed){ note.textContent = o.already; host.appendChild(note); return; }
+      if(load().subscribed && !o.again){
+        note.textContent = o.already; host.appendChild(note);
+        // a second address, or a first one that never arrived, is always allowed
+        var again = document.createElement('button');
+        again.type = 'button'; again.className = 'csm-again'; again.textContent = 'Leave a different address';
+        again.style.cssText = 'background:none;border:0;padding:0;color:inherit;font:inherit;font-size:.9em;text-decoration:underline;opacity:.75;cursor:pointer;';
+        again.addEventListener('click', function(){
+          host.removeChild(note); host.removeChild(again);
+          var p = {}; for(var k in o) p[k] = o[k]; p.again = true;
+          global.CodexSummon.mount(host, p);
+        });
+        host.appendChild(again); return;
+      }
       note.textContent = o.invite;
       var form = document.createElement('form');
       form.className = 'csm-form';
@@ -25,10 +37,17 @@
         var fd = new FormData(); fd.append('email_address', input.value.trim());
         // only a send that left this device counts as an address on file
         send.disabled = true;
-        fetch(ACTION, {method:'POST', body:fd, mode:'no-cors'}).then(function(){
+        // Kit answers in JSON and allows any origin, so read what it actually said
+        fetch(ACTION, {method:'POST', body:fd, headers:{'Accept':'application/json'}}).then(function(r){ return r.json(); }).then(function(j){
+          if(!j || j.status !== 'success'){
+            send.disabled = false;
+            var why = j && j.errors && j.errors.messages && j.errors.messages[0];
+            note.textContent = why ? (why + '. Nothing was kept. Try it again.') : 'It did not reach the file. Nothing was kept. Try it again.';
+            return;
+          }
           var s = load(); s.subscribed = true; save(s);
           form.remove(); note.textContent = o.done;
-        }, function(){
+        }).catch(function(){
           send.disabled = false;
           note.textContent = 'It did not reach the file. Nothing was kept. Try it again.';
         });
