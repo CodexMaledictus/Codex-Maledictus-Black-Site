@@ -1,0 +1,10 @@
+{
+  "redirects": [
+    { "source": "/gospel-hub.html", "destination": "/madmens-gospel.html", "permanent": true },
+    { "source": "/apocrypha.html", "destination": "/apocrypha-infection.html", "permanent": true },
+    { "source": "/the-codex.html", "destination": "/", "permanent": true },
+    { "source": "/forgotten-saint-artemys.html", "destination": "/pale-archive.html", "permanent": true },
+    { "source": "/recovered-fragments.html", "destination": "/pale-archive.html", "permanent": true },
+    { "source": "/apollo-gavinci.html", "destination": "/start/", "permanent": true }
+  ]
+}
