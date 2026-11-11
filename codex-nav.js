@@ -922,6 +922,8 @@ function initCodexNav(currentId) {
         ${realmGloss ? `<span class="cnav-realm-gloss">${realmGloss}</span>` : ''}
       </div>
 
+      <div class="cnav-start"><a href="/start/">Start here</a><span>·</span><a href="/start/#leave">Leave your frequency</a></div>
+
       ${seal.daily ? `<div class="cseal-daily"><span class="cseal-daily-lbl">· SEAL OF THE DAY ·</span>${seal.daily}</div>` : ''}
 
     </div>
@@ -951,6 +953,10 @@ function applyNavPalette(nav, pal) {
 (function injectNavStyles() {
   const style = document.createElement('style');
   style.textContent = `
+    .cnav-start { text-align:center; margin:22px 0 0; font-family:"Share Tech Mono",monospace; font-size:11px; letter-spacing:.18em; text-transform:uppercase; }
+    .cnav-start a { color:var(--cnav-accent); text-decoration:none; opacity:.72; border-bottom:1px solid var(--cnav-accent-dim); padding-bottom:2px; }
+    .cnav-start a:hover { opacity:1; }
+    .cnav-start span { color:var(--cnav-whisper); margin:0 10px; }
     #codex-nav {
       position: relative; z-index: 10; padding: 80px 32px 100px; width: 100%;
       --cnav-accent: #C9A84C; --cnav-accent-dim: rgba(201,168,76,0.35);
