@@ -4,77 +4,145 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Workstation 553-A · Codex Maledictus</title>
-  <meta name="description" content="Someone left in the middle of their work. Their machine is still here. A puzzle played on a recovered terminal." />
+  <meta name="description" content="Someone left in the middle of their work. Their computer is still here. A puzzle played on a recovered workstation." />
   <link rel="canonical" href="https://codexmaledictus.com/play/" />
   <meta property="og:title" content="Workstation 553-A" />
-  <meta property="og:description" content="Someone left in the middle of their work. Their machine is still here." />
+  <meta property="og:description" content="Someone left in the middle of their work. Their computer is still here." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://codexmaledictus.com/play/" />
   <meta property="og:image" content="https://codexmaledictus.com/Assets/Codex%20Maledictus%20Index/codex-as-object.jpeg" />
   <meta name="twitter:card" content="summary_large_image" />
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-13 -13 26 26'><circle cx='0' cy='0' r='11.5' fill='%23050505' stroke='%23C9A84C' stroke-width='1.4'/><path d='M -7.5,-4 L 7.5,-4 L 0,8 Z' fill='none' stroke='%23C9A84C' stroke-width='1.3'/><circle cx='-3.2' cy='-1.3' r='1.3' fill='%23C9A84C'/><circle cx='3.2' cy='-1.3' r='1.3' fill='%23C9A84C'/><circle cx='0' cy='3.5' r='1.3' fill='%23C9A84C'/></svg>">
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=VT323&family=Share+Tech+Mono&family=Special+Elite&family=Crimson+Text:ital@0;1&display=swap" rel="stylesheet" />
   <script>window.va=window.va||function(){(window.vaq=window.vaq||[]).push(arguments);};</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Cinzel+Decorative:wght@700&family=Crimson+Text:ital@0;1&family=Share+Tech+Mono&family=Special+Elite&family=VT323&display=swap" rel="stylesheet" />
   <style>
-    :root{--room:#07080A;--bezel:#1B1A17;--glass:#030805;--phos:#8FF0B4;--phos-d:#3E8A5E;--amber:#E0C878;--paper:#E9E3D2;--ink:#2A2118;}
+    :root{--room:#07080A;--paper:#E9E3D2;--gold:#C9A84C;--gold-lt:#E0C878;}
     *{box-sizing:border-box;margin:0;padding:0;}
-    html,body{height:100%;}
-    body{background:var(--room);color:var(--paper);font:400 1.1rem/1.6 'Crimson Text',Georgia,serif;overflow-x:hidden;
-      background-image:radial-gradient(ellipse 80% 60% at 50% 40%,rgba(143,240,180,.05),transparent 70%);}
-    .grain{position:fixed;inset:-50%;pointer-events:none;z-index:60;opacity:.06;
+    body{background:var(--room);color:var(--paper);font:400 1.1rem/1.6 'Crimson Text',Georgia,serif;overflow-x:hidden;min-height:100vh;
+      background-image:radial-gradient(ellipse 80% 60% at 50% 35%,rgba(120,160,255,.05),transparent 70%);}
+    .grain{position:fixed;inset:-50%;pointer-events:none;z-index:60;opacity:.05;
       background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
       animation:grain 1.2s steps(6) infinite;}
     @keyframes grain{0%{transform:translate(0,0)}25%{transform:translate(-3%,2%)}50%{transform:translate(2%,-3%)}75%{transform:translate(-2%,-1%)}100%{transform:translate(0,0)}}
-    main{max-width:760px;margin:0 auto;padding:28px 16px 48px;}
+    main{max-width:900px;margin:0 auto;padding:24px 12px 48px;}
+    .tagline{font:400 .7rem/1.5 'Share Tech Mono',monospace;letter-spacing:.2em;color:#8E8676;text-transform:uppercase;text-align:center;margin-bottom:12px;}
+    .opening{text-align:center;font-style:italic;color:#CFC7B4;max-width:32em;margin:0 auto 18px;min-height:3.2em;}
 
-    /* the label on the evidence bag, and the plain line before anything */
-    .tagline{font:400 .72rem/1.5 'Share Tech Mono',monospace;letter-spacing:.2em;color:#8E8676;text-transform:uppercase;text-align:center;margin-bottom:14px;}
-    .opening{text-align:center;font-style:italic;color:#CFC7B4;max-width:30em;margin:0 auto 22px;min-height:3.2em;}
+    /* an ordinary flat office monitor, 2019 */
+    .monitor{position:relative;background:#111214;border-radius:10px;padding:10px 10px 26px;box-shadow:0 30px 60px rgba(0,0,0,.6),0 0 0 1px #24262A;}
+    .monitor::after{content:'';position:absolute;left:50%;bottom:9px;width:44px;height:3px;border-radius:2px;background:#2A2C30;transform:translateX(-50%);}
+    .led{position:absolute;right:16px;bottom:10px;width:5px;height:5px;border-radius:50%;background:#2A2A26;transition:background .6s,box-shadow .6s;}
+    .led.on{background:#5AB0FF;box-shadow:0 0 6px #5AB0FF;}
+    .glass{position:relative;aspect-ratio:16/10;background:#000;overflow:hidden;border-radius:2px;}
+    .wake{position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(120,170,255,.2),transparent 70%);opacity:0;transition:opacity .4s;z-index:1;pointer-events:none;}
 
-    /* the monitor */
-    .monitor{position:relative;background:linear-gradient(160deg,#25231F,#141310 70%);border-radius:22px;padding:22px 22px 46px;box-shadow:0 30px 60px rgba(0,0,0,.6),inset 0 2px 0 rgba(255,255,255,.05);}
-    .monitor::after{content:'IDMF · FORENSIC TERMINAL';position:absolute;left:0;right:0;bottom:15px;text-align:center;font:400 .62rem 'Share Tech Mono',monospace;letter-spacing:.3em;color:#5E594E;}
-    .led{position:absolute;right:28px;bottom:16px;width:7px;height:7px;border-radius:50%;background:#2A2A26;transition:background .6s,box-shadow .6s;}
-    .led.on{background:#7CFF9E;box-shadow:0 0 8px #7CFF9E;}
-    .glass{position:relative;aspect-ratio:4/3;background:var(--glass);border-radius:14px;overflow:hidden;box-shadow:inset 0 0 60px rgba(0,0,0,.9);}
-    .glass::before{content:'';position:absolute;inset:0;pointer-events:none;z-index:5;background:repeating-linear-gradient(0deg,rgba(0,0,0,.28) 0 1px,transparent 1px 3px);}
-    .glass::after{content:'';position:absolute;inset:0;pointer-events:none;z-index:6;background:radial-gradient(ellipse at center,transparent 55%,rgba(0,0,0,.65));}
-    .wake{position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(143,240,180,.22),transparent 70%);opacity:0;transition:opacity .4s;z-index:1;}
-    .screen{position:absolute;inset:0;padding:5% 6%;font:400 clamp(.95rem,2.9vw,1.35rem)/1.25 'VT323',monospace;color:var(--phos);text-shadow:0 0 6px rgba(143,240,180,.55);z-index:2;overflow:hidden;}
-    .screen.flick{animation:flick .12s steps(2) 3;}
+    /* boot text */
+    .boot{position:absolute;inset:0;padding:4% 5%;font:400 clamp(.85rem,2.4vw,1.2rem)/1.3 'VT323',monospace;color:#C8D2DC;z-index:2;}
+    .boot .dim{color:#68707A;}
     @keyframes flick{50%{opacity:.4;transform:translateX(2px)}}
-    .dim{color:var(--phos-d);}
-    .cur{display:inline-block;width:.6em;height:1em;background:var(--phos);vertical-align:-.12em;animation:blink 1s steps(1) infinite;}
-    @keyframes blink{50%{opacity:0}}
-    .login{margin-top:6%;}
-    .login label{display:block;}
-    .login input{background:transparent;border:0;border-bottom:1px solid var(--phos-d);color:var(--phos);font:inherit;text-shadow:inherit;width:9em;outline:none;caret-color:var(--phos);}
-    .login input:focus{border-bottom-color:var(--phos);}
-    .login .msg{min-height:1.3em;margin-top:.6em;}
-    .desk{display:grid;grid-template-columns:repeat(4,1fr);gap:4% 3%;margin-top:4%;}
-    .icon{background:none;border:0;color:var(--phos);font:inherit;text-shadow:inherit;text-align:center;cursor:pointer;padding:4px;}
-    .icon .g{display:block;font-size:1.7em;line-height:1;}
-    .icon .n{display:block;font-size:.72em;word-break:break-all;}
-    .icon.bad{color:#6FBF92;animation:bad 3.4s infinite;}
-    @keyframes bad{0%,90%,100%{opacity:1;transform:none}92%{opacity:.2;transform:translateX(-3px)}95%{opacity:.8;transform:translateX(2px) skewX(8deg)}}
-    .icon:focus-visible{outline:1px dashed var(--phos);}
 
-    /* the desk in front of the monitor */
-    .desktop-real{display:grid;grid-template-columns:1.1fr 1fr;gap:18px;margin-top:22px;align-items:start;}
-    .photo{background:#DCD5C2;padding:10px 10px 30px;transform:rotate(-2.2deg);box-shadow:0 8px 20px rgba(0,0,0,.55);color:var(--ink);}
-    .photo .img{background:#2B2620;aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
+    /* the desktop */
+    .os{position:absolute;inset:0;display:none;font:400 clamp(11px,1.55vw,13px)/1.35 system-ui,'Segoe UI',Roboto,Arial,sans-serif;color:#111;z-index:3;
+      background:linear-gradient(160deg,#0B5394 0%,#0A3D6E 55%,#062645 100%);transition:background 3s,filter 3s;}
+    .os.on{display:block;}
+    .os::before{content:'';position:absolute;left:50%;top:44%;width:28%;aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;opacity:.13;transition:opacity 2s;
+      background:radial-gradient(circle,transparent 58%,#fff 59%,#fff 61%,transparent 62%),radial-gradient(circle,transparent 40%,#fff 41%,#fff 42%,transparent 43%);}
+    .os .wm{position:absolute;left:50%;top:44%;transform:translate(-50%,-50%);color:rgba(255,255,255,.18);font:600 clamp(10px,1.6vw,14px) system-ui,Arial;letter-spacing:.3em;text-align:center;transition:color 2s;}
+    .icons{position:absolute;left:1.5%;top:2%;bottom:12%;display:flex;flex-direction:column;flex-wrap:wrap;gap:1.2% 2%;align-content:flex-start;}
+    .ic{width:clamp(56px,10vw,78px);background:none;border:1px solid transparent;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.8);font:inherit;text-align:center;cursor:pointer;padding:3px 2px;border-radius:2px;}
+    .ic:hover,.ic:focus-visible{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.3);outline:none;}
+    .ic .g{display:block;margin:0 auto 2px;width:clamp(26px,4.4vw,36px);height:clamp(26px,4.4vw,36px);}
+    .ic .n{display:block;font-size:.95em;word-break:break-all;}
+    .ic.bad{animation:bad 3.6s infinite;}
+    .ic.done .n::after{content:' ✓';color:#9EF0B8;}
+    @keyframes bad{0%,90%,100%{opacity:1;transform:none}92%{opacity:.15;transform:translateX(-3px)}95%{opacity:.85;transform:translateX(2px) skewX(10deg)}}
+    .task{position:absolute;left:0;right:0;bottom:0;height:9%;min-height:26px;background:rgba(16,20,26,.92);display:flex;align-items:center;gap:8px;padding:0 6px;color:#fff;transition:background 2s,opacity 2.4s;}
+    .task .st{height:72%;aspect-ratio:1;background:none;border:0;display:flex;align-items:center;justify-content:center;}
+    .task .st i{display:block;width:60%;height:60%;border:2px solid #9DC3FF;border-radius:2px;transform:rotate(45deg);}
+    .task .tb{flex:1;font-size:.9em;opacity:.8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .task .clk{font-size:.9em;text-align:right;line-height:1.15;}
+
+    /* windows */
+    .win{position:absolute;left:12%;top:6%;width:76%;max-height:80%;background:#F3F3F3;border:1px solid #8A8A8A;box-shadow:0 10px 30px rgba(0,0,0,.5);display:none;flex-direction:column;z-index:10;transition:background 2s,border-color 2s;}
+    .win.on{display:flex;}
+    .win .bar{display:flex;align-items:center;height:26px;flex:0 0 26px;background:#fff;border-bottom:1px solid #DDD;padding-left:8px;font-size:.95em;color:#222;transition:background 2s,color 2s;}
+    .win .bar .t{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .win .bar button{width:38px;height:100%;border:0;background:none;font:inherit;font-size:1.1em;cursor:pointer;color:inherit;}
+    .win .bar button:hover{background:#E81123;color:#fff;}
+    .win .body{flex:1;overflow:auto;padding:12px 14px;background:#fff;color:#111;font:400 1em/1.5 Consolas,'Courier New',monospace;white-space:pre-wrap;transition:background 2s,color 2s;}
+    .win .body a{color:#0645AD;}
+    .choices{display:flex;flex-direction:column;gap:6px;margin-top:10px;white-space:normal;}
+    .choices button{text-align:left;padding:6px 10px;border:1px solid #AAA;background:#F7F7F7;font:inherit;cursor:pointer;color:inherit;}
+    .choices button:hover{background:#E5F1FB;border-color:#0078D7;}
+    .player{white-space:normal;font-family:system-ui,Arial,sans-serif;}
+    .tiles{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0;}
+    .tile{flex:1 1 30%;min-width:84px;padding:10px 6px;border:1px solid #9BB;background:#EAF4F4;font:600 .95em system-ui,Arial;cursor:pointer;color:#123;}
+    .tile.sel{outline:2px solid #0078D7;background:#D6EBFF;}
+    .tile.ok{background:#DFF5E3;border-color:#5A9;}
+    .player .wave{height:34px;background:repeating-linear-gradient(90deg,#6A9 0 2px,transparent 2px 5px);opacity:.35;-webkit-mask:linear-gradient(transparent,#000 30%,#000 70%,transparent);mask:linear-gradient(transparent,#000 30%,#000 70%,transparent);}
+    .player iframe{width:100%;height:152px;border:0;border-radius:12px;margin-top:10px;}
+    .hold{white-space:normal;user-select:none;-webkit-user-select:none;touch-action:none;}
+    .hold p{color:#E6E6E6;transition:color 1s;margin-bottom:.7em;}
+    .hold p.up{color:#111;}
+    .hold .hint{font-family:system-ui,Arial;font-size:.9em;color:#777;margin-bottom:10px;}
+    .glitchwin{position:absolute;inset:0;z-index:20;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.88);color:#9EF0B8;font:400 1.1em/1.3 'VT323',monospace;text-align:center;padding:8%;}
+    .glitchwin.on{display:flex;animation:flick .1s steps(2) 4;}
+
+    /* the decay: each solve pulls the machine toward the record */
+    .os.d1{filter:saturate(.75) contrast(1.05);}
+    .os.d1 .wm{color:rgba(255,255,255,.28);}
+    .os.d2{background:linear-gradient(160deg,#16222E 0%,#0E141B 60%,#07090C 100%);filter:saturate(.6) contrast(1.1);}
+    .os.d2 .task{background:rgba(8,8,8,.95);}
+    .os.d2 .win .bar{background:#E9E4D6;}
+    .os.d3{background:radial-gradient(ellipse at 50% 40%,#1A140B 0%,#0A0806 60%,#030303 100%);filter:none;}
+    .os.d3::before{opacity:.25;background:radial-gradient(circle,transparent 58%,#C9A84C 59%,#C9A84C 61%,transparent 62%),radial-gradient(circle,transparent 40%,#C9A84C 41%,#C9A84C 42%,transparent 43%);}
+    .os.d3 .wm{color:rgba(201,168,76,.45);font-family:'Cinzel',serif;}
+    .os.d3 .ic{color:#E0C878;}
+    .os.d3 .win{background:#0C0A07;border-color:#5A4A26;}
+    .os.d3 .win .bar{background:#14110B;color:#C9A84C;border-bottom-color:#3A2F18;font-family:'Cinzel',serif;}
+    .os.d3 .win .body{background:#0C0A07;color:#E4DDD0;font-family:'Crimson Text',Georgia,serif;font-size:1.1em;}
+    .os.d3 .win .body a{color:#E0C878;}
+    .os.d3 .hold p{color:#2A241A;}
+    .os.d3 .hold p.up{color:#F1EADB;}
+    .os.d3 .hold .hint{color:#8E8676;}
+    .os.d3 .choices button,.os.d3 .tile{background:#15110A;color:#E4DDD0;border-color:#5A4A26;}
+    .os.d3 .task{background:#0A0806;color:#C9A84C;}
+    .os.d4{background:#030303;}
+    .os.d4 .icons,.os.d4 .task{opacity:0;pointer-events:none;transition:opacity 2.4s;}
+    .os.d4::before,.os.d4 .wm{opacity:0;}
+
+    /* the end */
+    .seal{position:absolute;inset:0;z-index:30;display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:5%;background:radial-gradient(ellipse at center,#120E07,#020202 75%);color:#E4DDD0;overflow:auto;}
+    .seal.on{display:flex;}
+    .seal h2{font:700 clamp(1.1rem,3.4vw,1.9rem)/1.2 'Cinzel Decorative',serif;color:var(--gold);text-shadow:0 0 30px rgba(201,168,76,.3);margin-bottom:10px;}
+    .seal p{font:italic 400 clamp(.9rem,2.2vw,1.1rem)/1.5 'Crimson Text',serif;max-width:30em;margin:0 auto 8px;}
+    .seal .des{font:400 .78em 'Share Tech Mono',monospace;letter-spacing:.2em;color:#8FF0E5;margin:6px 0 12px;}
+    .doors{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:8px;}
+    .doors a{font:600 clamp(.62rem,1.6vw,.8rem) 'Cinzel',serif;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-lt);text-decoration:none;border:1px solid rgba(201,168,76,.5);padding:9px 12px;}
+    .doors a:hover{background:rgba(201,168,76,.12);}
+    .csm-note{font-style:italic;margin:8px 0;}
+    .csm-form{display:flex;gap:8px;flex-wrap:wrap;}
+    .csm-input{flex:1 1 160px;min-width:0;background:#0B0A08;border:1px solid rgba(201,168,76,.4);color:#E4DDD0;font:400 1rem 'Crimson Text',serif;padding:8px 10px;}
+    .csm-send{background:transparent;color:var(--gold-lt);border:1px solid var(--gold);font:600 .75rem 'Cinzel',serif;letter-spacing:.2em;text-transform:uppercase;padding:8px 14px;cursor:pointer;}
+
+    /* her desk, in front of the monitor */
+    .desk{display:grid;grid-template-columns:1.1fr 1fr;gap:18px;margin-top:22px;align-items:start;}
+    .photo{background:#DCD5C2;padding:10px 10px 28px;transform:rotate(-2.2deg);box-shadow:0 8px 20px rgba(0,0,0,.55);color:#2A2118;}
+    .photo .img{background:#2B2620;aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;}
     .tag{background:#EFE6C8;color:#2A2118;width:78%;padding:8px 10px;font:400 .68rem/1.5 'Share Tech Mono',monospace;transform:rotate(3deg);box-shadow:0 2px 6px rgba(0,0,0,.5);
       -webkit-mask:linear-gradient(100deg,#000 72%,transparent 72.5%);mask:linear-gradient(100deg,#000 72%,transparent 72.5%);}
-    .tag b{font-weight:400;letter-spacing:.08em;}
     .photo .cap{font:400 .8rem 'Special Elite',monospace;margin-top:8px;text-align:center;}
     .note{background:#E9D97A;color:#2A2118;padding:14px 14px 18px;font:400 .95rem/1.4 'Special Elite',monospace;transform:rotate(1.6deg);box-shadow:0 8px 18px rgba(0,0,0,.5);}
     .note small{display:block;margin-top:8px;font-size:.75rem;opacity:.7;}
-
-    .sound{position:fixed;right:14px;bottom:14px;z-index:70;background:rgba(7,8,10,.8);border:1px solid #2E2C27;color:#8E8676;font:400 .7rem 'Share Tech Mono',monospace;letter-spacing:.14em;text-transform:uppercase;padding:8px 10px;cursor:pointer;}
-    .after{margin-top:26px;text-align:center;font:italic 400 1rem/1.6 'Crimson Text',serif;color:#A79F8C;min-height:1.6em;}
-    .after a{color:var(--amber);}
-    @media (max-width:560px){.glass{aspect-ratio:1/1;}.desktop-real{grid-template-columns:1fr;}.photo{max-width:320px;margin:0 auto;}.note{max-width:300px;margin:0 auto;}.desk{grid-template-columns:repeat(3,1fr);}}
+    .after{margin-top:20px;text-align:center;font:italic 400 1rem/1.6 'Crimson Text',serif;color:#A79F8C;min-height:1.6em;}
+    .after a{color:var(--gold-lt);}
+    .sound{position:fixed;right:14px;bottom:14px;z-index:70;background:rgba(7,8,10,.85);border:1px solid #2E2C27;color:#8E8676;font:400 .7rem 'Share Tech Mono',monospace;letter-spacing:.14em;text-transform:uppercase;padding:8px 10px;cursor:pointer;}
+    @media (max-width:640px){
+      .glass{aspect-ratio:3/4;}
+      .win{left:3%;top:3%;width:94%;max-height:86%;}
+      .desk{grid-template-columns:1fr;}.photo{max-width:320px;margin:0 auto;}.note{max-width:300px;margin:0 auto;}
+    }
     @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
   </style>
 </head>
@@ -82,17 +150,28 @@
 <div class="grain" aria-hidden="true"></div>
 <main>
   <div class="tagline">Evidence Locker 553-A · Item 12 · Workstation, IDMF issue</div>
-  <p class="opening" id="opening">Someone left in the middle of their work. Their machine is still here.</p>
+  <p class="opening" id="opening">Someone left in the middle of their work. Their computer is still here.</p>
 
   <div class="monitor">
-    <div class="glass" id="glass" aria-live="polite">
+    <div class="glass" id="glass">
       <div class="wake" id="wake"></div>
-      <div class="screen" id="screen"></div>
+      <div class="boot" id="boot" aria-live="polite"></div>
+      <div class="os" id="os">
+        <div class="wm">INSTITUTE FOR<br>DIGITAL MEMORY FORENSICS</div>
+        <div class="icons" id="icons"></div>
+        <div class="win" id="win" role="dialog" aria-labelledby="win-t">
+          <div class="bar"><span class="t" id="win-t"></span><button type="button" id="win-x" aria-label="Close">×</button></div>
+          <div class="body" id="win-b"></div>
+        </div>
+        <div class="glitchwin" id="gw" aria-live="polite"></div>
+        <div class="task"><button class="st" type="button" aria-label="Start"><i></i></button><span class="tb" id="tb">mdey · Intake 553-A</span><span class="clk" id="clk">3:00 AM<br>6/22/2019</span></div>
+        <div class="seal" id="seal"></div>
+      </div>
     </div>
     <div class="led" id="led" aria-hidden="true"></div>
   </div>
 
-  <div class="desktop-real">
+  <div class="desk">
     <figure class="photo">
       <div class="img">
         <div class="tag" aria-label="Evidence tag, torn">
@@ -111,130 +190,216 @@
 </main>
 <button class="sound" id="sound" type="button" aria-pressed="false">Sound off</button>
 
+<script src="../codex-summon.js"></script>
 <script>
-/* WORKSTATION 553-A · Chapter One, the first five minutes: the boot and the intake.
-   Keeps codex_play_v1 {visits, booted, intake, at}. Reports each step as its own page
-   to the site's visitor analytics, so starts, stops and finishes can be counted.
-   Nothing leaves this device except those page counts. */
+/* WORKSTATION 553-A · Chapter One.
+   An ordinary 2019 office computer that turns into the record as the player solves it.
+   Keeps codex_play_v1 {visits, booted, intake, solved:{notes,rec,photo,log}, color, sealed}.
+   Writes codex_file_553_v1 like the case file room does, so the site remembers the answer.
+   Reports each step as its own page to the site's visitor counts. Nothing else leaves the device. */
 (function(){
   var KEY='codex_play_v1',REDUCED=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
   function $(i){return document.getElementById(i);}
-  function get(){try{return JSON.parse(localStorage.getItem(KEY))||{};}catch(e){return {};}}
-  function put(s){try{localStorage.setItem(KEY,JSON.stringify(s));}catch(e){}}
-  function step(path){try{if(window.va)window.va('pageview',{route:path,path:path});}catch(e){}}
-  var S=get();S.visits=(S.visits||0)+1;put(S);
-  var scr=$('screen'),wake=$('wake'),led=$('led');
+  function get(k){try{return JSON.parse(localStorage.getItem(k))||{};}catch(e){return {};}}
+  function put(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
+  function step(p){try{window.va('pageview',{route:p,path:p});}catch(e){}}
+  var S=get(KEY);S.visits=(S.visits||0)+1;S.solved=S.solved||{};put(KEY,S);
+  function save(){put(KEY,S);}
+  var boot=$('boot'),wake=$('wake'),os=$('os');
 
-  /* sound: a hum made here, nothing downloaded. Off until asked for. */
+  /* sound, made here, off until asked for */
   var ac=null,hum=null;
-  function startHum(){
-    try{
-      ac=ac||new (window.AudioContext||window.webkitAudioContext)();
-      var g=ac.createGain();g.gain.value=0;g.connect(ac.destination);
-      var o=ac.createOscillator();o.type='sine';o.frequency.value=60;o.connect(g);o.start();
-      var o2=ac.createOscillator();o2.type='triangle';o2.frequency.value=120.4;var g2=ac.createGain();g2.gain.value=.25;o2.connect(g2);g2.connect(g);o2.start();
-      var len=ac.sampleRate*2,buf=ac.createBuffer(1,len,ac.sampleRate),d=buf.getChannelData(0);for(var i=0;i<len;i++)d[i]=(Math.random()*2-1)*.5;
-      var n=ac.createBufferSource();n.buffer=buf;n.loop=true;var f=ac.createBiquadFilter();f.type='lowpass';f.frequency.value=700;var gn=ac.createGain();gn.gain.value=.18;n.connect(f);f.connect(gn);gn.connect(g);n.start();
-      g.gain.linearRampToValueAtTime(.05,ac.currentTime+1.5);hum=g;
-    }catch(e){}
-  }
-  function stopHum(){try{if(hum){hum.gain.linearRampToValueAtTime(0,ac.currentTime+.6);}}catch(e){}hum=null;}
-  function blip(freq,dur){try{if(!ac||!hum)return;var o=ac.createOscillator(),g=ac.createGain();o.type='square';o.frequency.value=freq;g.gain.value=.03;o.connect(g);g.connect(ac.destination);o.start();o.stop(ac.currentTime+(dur||.05));}catch(e){}}
-  $('sound').addEventListener('click',function(e){e.stopPropagation();var on=this.getAttribute('aria-pressed')!=='true';this.setAttribute('aria-pressed',on);this.textContent=on?'Sound on':'Sound off';if(on)startHum();else stopHum();});
+  function startHum(){try{ac=ac||new (window.AudioContext||window.webkitAudioContext)();var g=ac.createGain();g.gain.value=0;g.connect(ac.destination);
+    var len=ac.sampleRate*2,b=ac.createBuffer(1,len,ac.sampleRate),d=b.getChannelData(0);for(var i=0;i<len;i++)d[i]=Math.random()*2-1;
+    var n=ac.createBufferSource();n.buffer=b;n.loop=true;var f=ac.createBiquadFilter();f.type='lowpass';f.frequency.value=420;n.connect(f);f.connect(g);n.start();
+    var o=ac.createOscillator();o.frequency.value=58;var go=ac.createGain();go.gain.value=.3;o.connect(go);go.connect(g);o.start();
+    g.gain.linearRampToValueAtTime(.045,ac.currentTime+1.5);hum=g;}catch(e){}}
+  function stopHum(){try{if(hum)hum.gain.linearRampToValueAtTime(0,ac.currentTime+.5);}catch(e){}hum=null;}
+  function blip(fr,du,ty){try{if(!ac||!hum)return;var o=ac.createOscillator(),g=ac.createGain();o.type=ty||'square';o.frequency.value=fr;g.gain.value=.025;o.connect(g);g.connect(ac.destination);o.start();o.stop(ac.currentTime+(du||.05));}catch(e){}}
+  function silence(on){try{if(hum)hum.gain.linearRampToValueAtTime(on?0:.045,ac.currentTime+.3);}catch(e){}}
+  $('sound').addEventListener('click',function(){var on=this.getAttribute('aria-pressed')!=='true';this.setAttribute('aria-pressed',on);this.textContent=on?'Sound on':'Sound off';if(on)startHum();else stopHum();});
 
-  /* typing onto the glass */
   function type(lines,done,speed){
-    var i=0;scr.innerHTML='';
-    (function next(){
-      if(i>=lines.length){if(done)done();return;}
-      var L=lines[i++],div=document.createElement('div');if(L.c)div.className=L.c;scr.appendChild(div);
-      var t=L.t||'',k=0;
-      if(REDUCED||speed===0){div.textContent=t;blip(880);setTimeout(next,L.w||40);return;}
-      (function ch(){div.textContent=t.slice(0,++k);if(k%3===0)blip(1200+Math.random()*300,.02);if(k<t.length)setTimeout(ch,speed||14);else setTimeout(next,L.w||120);})();
-    })();
+    var i=0;boot.innerHTML='';
+    (function next(){if(i>=lines.length){if(done)done();return;}
+      var L=lines[i++],div=document.createElement('div');if(L.c)div.className=L.c;boot.appendChild(div);var t=L.t||'',k=0;
+      if(REDUCED){div.textContent=t;setTimeout(next,30);return;}
+      (function ch(){div.textContent=t.slice(0,++k);if(k%3===0)blip(1300,.015);if(k<t.length)setTimeout(ch,speed||14);else setTimeout(next,L.w||120);})();})();
   }
 
   /* 1 · THE BOOT. It will not wake while you move. */
-  var still=0,need=REDUCED?1500:5000,last=Date.now(),booted=false,dark=true;
-  function moved(){last=Date.now();if(!booted&&still>400){scr.classList.add('flick');setTimeout(function(){scr.classList.remove('flick');},400);}still=0;}
-  ['pointermove','pointerdown','keydown','scroll','touchstart','wheel'].forEach(function(e){addEventListener(e,function(ev){if(ev.target&&ev.target.id==='sound')return;moved();},{passive:true});});
-  function waiting(){
-    scr.innerHTML='<div class="dim">NO SIGNAL</div><div class="dim" style="margin-top:1em">'+(S.booted?'It remembers being woken. It still wants you still.':'')+'</div>';
-  }
-  waiting();
+  var last=Date.now(),need=REDUCED?1200:5000,booted=false,dark=true;
+  function moved(e){if(e&&e.target&&e.target.id==='sound')return;last=Date.now();}
+  ['pointermove','pointerdown','keydown','scroll','touchstart','wheel'].forEach(function(e){addEventListener(e,moved,{passive:true});});
+  boot.innerHTML='<div class="dim">NO SIGNAL</div>'+(S.booted?'<div class="dim" style="margin-top:1em">It remembers being woken. It still wants you still.</div>':'');
   var tick=setInterval(function(){
     if(booted||document.hidden)return;
-    still=Date.now()-last;var p=Math.min(1,still/need);
-    wake.style.opacity=(p*p).toFixed(3);
+    var p=Math.min(1,(Date.now()-last)/need);wake.style.opacity=(p*p).toFixed(3);
     if(p>.35&&dark){dark=false;$('after').textContent='Hold still. It is warming.';}
-    if(p<.1&&!dark){dark=true;$('after').textContent=S.booted?'':'It went dark when you moved.';}
-    if(p>=1){booted=true;clearInterval(tick);boot();}
+    if(p<.1&&!dark){dark=true;$('after').textContent='It went dark when you moved.';}
+    if(p>=1){booted=true;clearInterval(tick);startBoot();}
   },100);
-  setTimeout(function(){if(!booted&&!S.booted)$('after').textContent='Nothing happens while you are looking for something to press.';},9000);
+  setTimeout(function(){if(!booted)$('after').textContent='Nothing happens while you are looking for something to press.';},9000);
 
-  function boot(){
-    led.classList.add('on');wake.style.opacity=.12;$('after').textContent='';
-    S.booted=Date.now();put(S);step('/play/boot');
+  function startBoot(){
+    $('led').classList.add('on');wake.style.opacity=0;$('after').textContent='';
+    S.booted=Date.now();save();step('/play/boot');
     var fast=S.visits>1;
-    type([
-      {t:'IDMF FORENSIC SYSTEMS  REV 4.1',c:'dim'},
-      {t:'MEMORY CHECK ............ OK'},
-      {t:'EVIDENCE SEAL ........... BROKEN',w:500},
-      {t:'LAST SESSION: DAY 11, 03:00',w:300},
-      {t:'SESSION WAS NOT CLOSED.',w:700},
-      {t:fast?'WELCOME BACK.':'',c:'dim',w:200},
-      {t:' '}
-    ],login,fast?6:14);
+    type([{t:'IDMF FORENSIC SYSTEMS',c:'dim'},{t:'Memory check .......... OK'},{t:'Evidence seal ......... BROKEN',w:500},
+      {t:'Last session: Day 11, 3:00 AM',w:300},{t:'That session was never closed.',w:700},{t:' '}],
+      S.intake?function(){setTimeout(desktop,300);}:login,fast?6:14);
   }
 
-  /* 2 · THE INTAKE. Her login is on the tag; the torn part is on her note. */
+  /* 2 · THE INTAKE. */
   function login(){
-    var box=document.createElement('form');box.className='login';box.autocomplete='off';
-    box.innerHTML='<label>USER: <span>mdey</span></label><label>PASSWORD: <input id="pw" name="pw" type="text" inputmode="text" spellcheck="false" autocapitalize="characters" aria-label="Password"></label><div class="msg" id="msg"></div>';
-    scr.appendChild(box);
-    var pw=$('pw'),msg=$('msg'),tries=0;
+    var box=document.createElement('form');box.autocomplete='off';box.style.marginTop='4%';
+    box.innerHTML='<div>User: mdey</div><label>Password: <input id="pw" type="text" spellcheck="false" autocapitalize="characters" aria-label="Password" style="background:transparent;border:0;border-bottom:1px solid #68707A;color:inherit;font:inherit;width:9em;outline:none"></label><div id="msg" style="min-height:1.3em;margin-top:.5em"></div>';
+    boot.appendChild(box);var pw=$('pw'),msg=$('msg'),tries=0;
     setTimeout(function(){try{pw.focus({preventScroll:true});}catch(e){}},200);
-    box.addEventListener('submit',function(e){
-      e.preventDefault();
-      var v=pw.value.toUpperCase().replace(/[^A-Z0-9]/g,'');
-      if(v==='IDMF0411'||v==='0411'){granted();return;}
+    box.addEventListener('submit',function(e){e.preventDefault();var v=pw.value.toUpperCase().replace(/[^A-Z0-9]/g,'');
+      if(v==='IDMF0411'||v==='0411'){S.intake=Date.now();save();step('/play/intake');type([{t:'Access granted.'},{t:'Good morning, Miriam.',w:900}],desktop,16);return;}
       tries++;blip(140,.18);
-      msg.textContent=tries===1?'ACCESS DENIED.':tries===2?'ACCESS DENIED. THE TAG IS TORN.':tries===3?'ACCESS DENIED. READ HER NOTE AGAIN.':'ACCESS DENIED. THE LOG SAYS WHICH DAY.';
-      if(tries===2)$('after').textContent='The rest of her badge number was never on the tag.';
-      pw.select();
-    });
+      msg.textContent=['Access denied.','Access denied. The tag is torn.','Access denied. Read her note again.','Access denied. The boot log said which day.'][Math.min(tries-1,3)];
+      if(tries===2)$('after').textContent='The rest of her badge number was never on the tag.';pw.select();});
   }
 
-  function granted(){
-    S.intake=Date.now();put(S);step('/play/intake');
-    blip(660,.08);setTimeout(function(){blip(990,.12);},90);
-    scr.classList.add('flick');
-    type([
-      {t:'ACCESS GRANTED.'},
-      {t:'GOOD MORNING, MIRIAM.',w:900},
-      {t:'',w:300}
-    ],desk,16);
-  }
-
-  /* the desktop. In this preview, the files show but do not open yet. */
-  function desk(){
-    scr.innerHTML='<div class="dim">MDEY · INTAKE 553-A · 9 ITEMS</div>';
-    var grid=document.createElement('div');grid.className='desk';
-    var files=[
-      ['▤','case_notes.txt'],['♪','rec_0611.wav'],['▣','locker_07.jpg'],['▤','log_day11.txt'],
-      ['▦','seats.chart',1],['▤','crossings.lst',1],['▣','plain.img',1],['▤','????.txt',1],['▢','.',1]
-    ];
-    files.forEach(function(f){var b=document.createElement('button');b.type='button';b.className='icon'+(f[2]?' bad':'');
-      b.innerHTML='<span class="g">'+f[0]+'</span><span class="n"></span>';b.querySelector('.n').textContent=f[1];
-      b.addEventListener('click',function(){blip(f[2]?110:520,.06);$('after').textContent=f[2]?'It opens for an instant and closes again.':'This record is still being restored. It opens in the full chapter.';});
-      grid.appendChild(b);});
-    scr.appendChild(grid);
+  /* 3 · THE DESKTOP. Four real files, five broken ones. */
+  var ICON={
+    txt:'<svg class="g" viewBox="0 0 32 32"><path d="M7 3h13l6 6v20H7z" fill="#fff"/><path d="M20 3v6h6" fill="#DDD"/><path d="M10 14h12M10 18h12M10 22h8" stroke="#8AA" stroke-width="1.5"/></svg>',
+    wav:'<svg class="g" viewBox="0 0 32 32"><path d="M7 3h13l6 6v20H7z" fill="#fff"/><path d="M20 3v6h6" fill="#DDD"/><path d="M10 20v-4M13 22v-8M16 24v-12M19 21v-6M22 19v-2" stroke="#2A7" stroke-width="1.8"/></svg>',
+    jpg:'<svg class="g" viewBox="0 0 32 32"><path d="M7 3h13l6 6v20H7z" fill="#fff"/><path d="M20 3v6h6" fill="#DDD"/><path d="M9 25l5-7 4 5 3-3 4 5z" fill="#4A8"/><circle cx="13" cy="13" r="2" fill="#E9B"/></svg>',
+    bad:'<svg class="g" viewBox="0 0 32 32"><path d="M7 3h13l6 6v20H7z" fill="#cfd8dc"/><path d="M20 3v6h6" fill="#9AA"/><path d="M11 13l10 10M21 13L11 23" stroke="#C33" stroke-width="2"/></svg>'
+  };
+  var FILES=[
+    {id:'notes',name:'case_notes.txt',ic:'txt',open:openNotes},
+    {id:'rec',name:'rec_0611.wav',ic:'wav',open:openRec},
+    {id:'photo',name:'locker_07.jpg',ic:'jpg',open:openPhoto},
+    {id:'log',name:'log_day11.txt',ic:'txt',open:openLog},
+    {id:'b1',name:'seats.chart',ic:'bad',bad:1},{id:'b2',name:'crossings.lst',ic:'bad',bad:2},{id:'b3',name:'plain.img',ic:'bad',bad:3},
+    {id:'b4',name:'note_2031.txt',ic:'bad',bad:4},{id:'b5',name:'.',ic:'bad',bad:5}
+  ];
+  function decay(){var n=(S.solved.notes?1:0)+(S.solved.rec?1:0)+(S.solved.log?1:0);
+    os.className='os on'+(n>=1?' d1':'')+(n>=2?' d2':'')+(S.solved.rec&&S.solved.notes?' d3':'')+(S.sealed?' d4':'');return n;}
+  function desktop(){
+    boot.style.display='none';decay();
+    var box=$('icons');box.innerHTML='';
+    FILES.forEach(function(f){var b=document.createElement('button');b.type='button';b.className='ic'+(f.bad?' bad':'')+(S.solved[f.id]?' done':'');
+      b.innerHTML=ICON[f.ic]+'<span class="n"></span>';b.querySelector('.n').textContent=f.name;
+      b.addEventListener('click',function(){blip(f.bad?110:520,.05);if(f.bad)broken(f.bad);else f.open();});box.appendChild(b);});
     step('/play/desktop');
-    $('opening').textContent='She was the last one to log in. Now you are.';
-    $('after').innerHTML='Preview ends here. The rest of the record is being restored. <a href="/start/">Start here</a> while you wait.';
+    $('opening').textContent='She was the last one to log in. Now you are. Open her files.';
+    $('after').textContent='';
+    if(S.sealed)setTimeout(function(){showSeal(true);},400);
+    if(new Date().getHours()===3)$('clk').innerHTML='<span style="letter-spacing:.3em">· · ·</span><br>6/22/2019';
+  }
+  function refresh(){decay();Array.prototype.forEach.call($('icons').children,function(b,i){if(S.solved[FILES[i].id])b.classList.add('done');});}
+
+  var win=$('win'),wb=$('win-b'),holdStop=null;
+  function openWin(title,html,cls){if(holdStop)holdStop();$('win-t').textContent=title;wb.className='body'+(cls?' '+cls:'');wb.innerHTML=html;win.classList.add('on');wb.scrollTop=0;$('tb').textContent=title;}
+  function closeWin(){win.classList.remove('on');$('tb').textContent='mdey · Intake 553-A';if(holdStop)holdStop();}
+  $('win-x').addEventListener('click',closeWin);
+
+  /* case_notes.txt · who she was, the handling rules, the observer, Line IV */
+  var COLOR={right:'the right color',wrong:'the wrong color',never:'a color you never chose',none:'you could not say'};
+  function openNotes(){
+    var f=get('codex_file_553_v1');
+    var html='CASE 553-A · QUEENS · INTAKE NOTES\nAnalyst: Dr. Miriam K. Dey, linguistics\n\n'+
+      'Handling, per directive:\n  Read only under red light.\n  Do not recite aloud.\n  If more than seven syllables stay in memory, report it.\n\n'+
+      'Note 1. The ghost-words are back. Syllables in the dataset that are gone from every other copy. Arnett says compression. Compression does not choose.\n\n'+
+      'Note 2. It behaves differently when I watch it. I know how that sounds. So did Thomas Young, firing light through two slits in 1801. Watch which slit it takes, and the pattern changes. Measured, and repeated for two hundred years.\n'+
+      '  <a href="https://youtu.be/b_nVM133EB4" target="_blank" rel="noopener">Ref: the double slit, full transcription ↗</a>\n\n'+
+      'Note 3. Line IV of every witness statement asks the same thing. Everyone answers it differently. I am leaving it here for whoever is next.\n\n'+
+      'LINE IV. What color was it?';
+    openWin('case_notes.txt · Notepad',html);
+    var ch=document.createElement('div');ch.className='choices';
+    if(f.a&&COLOR[f.a]){var p=document.createElement('div');p.textContent='You already reported it, somewhere else in the record: '+COLOR[f.a]+'. It is filed.';ch.appendChild(p);}
+    else Object.keys(COLOR).forEach(function(k){var b=document.createElement('button');b.type='button';b.textContent=COLOR[k].charAt(0).toUpperCase()+COLOR[k].slice(1)+'.';
+      b.addEventListener('click',function(){put('codex_file_553_v1',{a:k,at:Date.now()});S.color=k;ch.innerHTML='';var p=document.createElement('div');p.textContent='Filed. Line IV: '+COLOR[k]+'. Nobody else will answer it the way you just did.';ch.appendChild(p);solve('notes');});
+      ch.appendChild(b);});
+    wb.appendChild(ch);
+    if(f.a&&!S.solved.notes)solve('notes');
   }
 
-  console.log('%cMDEY: if you are reading the source, you are already further in than I was on Day 1.','color:#8FF0B4');
+  /* rec_0611.wav · put the fragments back in order */
+  var LINE=["somethin'","standin'","in the room","and it","knows me","by name."];
+  function openRec(){
+    if(S.solved.rec){openWin('rec_0611.wav · Media Player',restoredHTML(),'player');return;}
+    var order=[3,0,5,2,4,1],sel=-1;
+    openWin('rec_0611.wav · Media Player','<div><b>rec_0611.wav</b> · recovered audio · 6 fragments, out of order</div><div class="wave"></div><div class="tiles" id="tiles"></div><div style="font-size:.95em;opacity:.75">Tap two fragments to swap them. Put the recording back the way it was spoken.</div>','player');
+    function draw(){var t=$('tiles');t.innerHTML='';order.forEach(function(w,i){var b=document.createElement('button');b.type='button';b.className='tile'+(i===sel?' sel':'');b.textContent=LINE[w];
+      b.addEventListener('click',function(){blip(300+w*90,.12,'sine');if(sel<0){sel=i;}else{var x=order[sel];order[sel]=order[i];order[i]=x;sel=-1;}draw();check();});t.appendChild(b);});}
+    function check(){for(var i=0;i<6;i++)if(order[i]!==i)return;
+      Array.prototype.forEach.call($('tiles').children,function(b){b.classList.add('ok');});
+      [523,659,784].forEach(function(f,i){setTimeout(function(){blip(f,.2,'sine');},i*160);});
+      setTimeout(function(){wb.innerHTML=restoredHTML();solve('rec');},1200);}
+    draw();
+  }
+  function restoredHTML(){return '<div><b>rec_0611.wav</b> · restored</div><p style="margin-top:8px">"Somethin\' standin\' in the room, and it knows me by name."</p><p style="margin-top:8px;opacity:.75">The recovered audio matches a published recording: <i>Thoughts of a Madman</i>, Apollo Gavinci, Gospel II, track 12. She had it on loop the night before Day 11.</p><iframe src="https://open.spotify.com/embed/album/221eiCbBGLwo8Z9MUJtWQc?utm_source=generator&theme=0" loading="lazy" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" title="Thoughts of a Madman on Spotify"></iframe>';}
+
+  /* locker_07.jpg · the evidence shelf, and a reflection that should not be there */
+  function openPhoto(){
+    openWin('locker_07.jpg · Photos','<svg viewBox="0 0 400 260" style="width:100%;display:block;background:#1a1d20"><defs><linearGradient id="gl"><stop offset="0" stop-color="#9ab"/><stop offset="1" stop-color="#345"/></linearGradient></defs><rect x="40" y="30" width="320" height="200" fill="#2a2e33" stroke="#555"/><rect x="40" y="120" width="320" height="6" fill="#444"/><rect x="70" y="70" width="80" height="50" fill="#6b5a3e"/><text x="110" y="100" font-size="11" fill="#e9e3d2" text-anchor="middle" font-family="monospace">ITEM 7</text><rect x="230" y="160" width="90" height="70" fill="#6b5a3e"/><text x="275" y="200" font-size="11" fill="#e9e3d2" text-anchor="middle" font-family="monospace">ITEM 12</text><rect x="180" y="40" width="40" height="70" fill="url(#gl)" opacity=".5"/><g opacity=".22"><circle cx="200" cy="62" r="7" fill="#000"/><rect x="194" y="70" width="12" height="30" fill="#000"/></g><g opacity=".09"><circle cx="210" cy="64" r="7" fill="#000"/><rect x="204" y="72" width="12" height="30" fill="#000"/></g></svg><p style="margin-top:8px">Evidence Locker 553-A, shelf 2. Photographed at intake.</p><p style="opacity:.7">There is one person reflected in the glass. Count again.</p><p style="opacity:.7">Recovery note, IDMF: two analysts vanished after reporting reflected versions of themselves.</p>','');
+    if(!S.solved.photo){S.solved.photo=Date.now();save();refresh();}
+  }
+
+  /* log_day11.txt · readable only while held */
+  var LOG=['DAY 11 · 2:52 AM','The ghost-words stopped vanishing tonight. They are in every copy now. Mine too. My notes from Monday have a sentence I did not write, in my handwriting.','I numbered everything. I thought the numbers would hold it. It took the numbers and wore them.','I keep counting things and stopping in the middle, like I remembered I am counting inside something.','3:00 AM. The room is quieter than a room should be. Somethin\' is standing in it. It knows me by name.','I am going to check.','Annotation, appended later: She stopped here. She checked. Day 11.'];
+  var held=false;
+  addEventListener('pointerup',function(){held=false;silence(false);});
+  addEventListener('pointercancel',function(){held=false;silence(false);});
+  addEventListener('keydown',function(e){if(e.code==='Space'&&holdStop){held=true;e.preventDefault();}});
+  addEventListener('keyup',function(e){if(e.code==='Space')held=false;});
+  function openLog(){
+    if(!(S.solved.notes&&S.solved.rec)){openWin('log_day11.txt · Notepad','This file is locked.\n\nIt opens once her notes are filed and her recording is restored. She did not want it read out of order.');return;}
+    openWin('log_day11.txt · Notepad','<div class="hint">Her last entry only stays readable while you hold it. Press and hold anywhere on this page, or hold the space bar.</div>'+LOG.map(function(){return '<p></p>';}).join(''),'hold');
+    var ps=wb.querySelectorAll('p');Array.prototype.forEach.call(ps,function(p,i){p.textContent=LOG[i];});
+    var lvl=0,read=0;
+    wb.onpointerdown=function(e){held=true;silence(true);if(e.cancelable)e.preventDefault();};
+    var iv=setInterval(function(){
+      lvl=held?Math.min(LOG.length,lvl+0.035):Math.max(0,lvl-0.06);
+      Array.prototype.forEach.call(ps,function(p,i){p.classList.toggle('up',i<lvl);});
+      if(lvl>read)read=lvl;
+      if(read>=LOG.length&&!S.solved.log){solve('log');clearInterval(iv);holdStop=null;setTimeout(seal,2200);}
+    },100);
+    holdStop=function(){clearInterval(iv);held=false;silence(false);holdStop=null;};
+  }
+
+  /* the broken files: they open for an instant, show a fragment, and close */
+  var gw=$('gw');
+  function broken(n){
+    var rows='';var k=2+Math.floor(Math.random()*5);for(var i=0;i<k;i++)rows+='<br>0'+(i+2)+' '+'█▓▒░█▓'.split('').sort(function(){return Math.random()-.5;}).join('');
+    var html={
+      1:'SEATS.CHART<br><br>I &nbsp;II &nbsp;III &nbsp;<span style="opacity:.3">IV V VI VII VIII IX X XI XII XIII</span><br>● &nbsp;● &nbsp;● &nbsp;&nbsp;<span id="seat4" style="opacity:.25">○</span><span style="opacity:.25"> ○ ○ ○ ○ ○ ○ ○ ○ ○</span>',
+      2:'CROSSINGS.LST · FORGOTTEN SAINTS<br><br>01 ARTEMYS'+rows,
+      3:'<svg viewBox="0 0 300 150" style="width:80%"><rect width="300" height="150" fill="#05060a"/><g fill="#9ab" opacity=".55"><polygon points="0,150 60,95 120,150"/><polygon points="80,150 150,80 210,150"/><polygon points="170,150 240,100 300,150"/><polygon points="40,150 95,120 140,150"/></g><g stroke="#cde" stroke-width=".6" opacity=".7"><path d="M60 95l10 30M150 80l-12 40M240 100l8 25"/></g></svg><br>PLAIN.IMG · cannot render',
+      4:'NOTE_2031.TXT · created 3/13/2031<br><br><i>"Somethin\' standin\' in the room, and it knows me by name."</i><br>speaker: ███ <span style="opacity:.5">(label unstable)</span>',
+      5:'&nbsp;'
+    }[n];
+    gw.innerHTML='<div>'+html+'</div>';gw.classList.add('on');
+    if(n===5){silence(true);$('after').textContent='0 bytes. The fan stopped while it was open.';}
+    else $('after').textContent='It opens for an instant and closes again.';
+    if(n===1)setTimeout(function(){var s=$('seat4');if(s){s.textContent='●';s.style.opacity=1;setTimeout(function(){s.textContent='○';s.style.opacity=.25;},90);}},700);
+    step('/play/broken-'+n);
+    setTimeout(function(){gw.classList.remove('on');if(n===5)silence(false);},n===5?2600:1700);
+  }
+
+  function solve(id){if(S.solved[id])return;S.solved[id]=Date.now();save();refresh();step('/play/'+id);
+    var n=decay();$('after').textContent=n===1?'Something on the screen changed. It is subtle.':n===2?'The machine is not what it was when you sat down.':'';
+    if(n===2)$('opening').textContent='It looks less like her computer every time you open something.';}
+
+  /* the end of Chapter One */
+  function seal(){closeWin();S.sealed=Date.now();save();decay();step('/play/sealed');setTimeout(function(){showSeal(false);},2400);}
+  function showSeal(back){
+    var w=get('codex_witness_state_v1'),seed=String(w.firstSeen||S.booted||Date.now()),h=0;for(var i=0;i<seed.length;i++){h=((h<<5)-h)+seed.charCodeAt(i);h|=0;}
+    var des='ANALYST OF RECORD · 553-A · '+String(Math.abs(h)%10000).padStart(4,'0');
+    var el=$('seal');el.innerHTML='<h2>'+(back?'You came back.':'Intake complete.')+'</h2><div class="des">'+des+'</div><p>She tried to finish her intake on Day 11. You finished it for her. The record has both of you now.</p><p>What she heard has a name. The rest of her files are still being restored.</p><div class="doors"><a href="https://open.spotify.com/album/221eiCbBGLwo8Z9MUJtWQc" target="_blank" rel="noopener">Hear what she heard ↗</a><a href="/madmens-gospel.html">Go deeper into the record</a><a href="https://youtu.be/b_nVM133EB4" target="_blank" rel="noopener">The science she cited ↗</a></div><div id="sum" style="margin-top:14px;width:min(420px,100%);font-size:.95em"></div>';
+    el.classList.add('on');
+    if(window.CodexSummon)CodexSummon.mount($('sum'),{invite:'Leave an address, and the record will write when her next file is restored.',button:'Leave it',done:'Received. If a letter asks you to confirm, open it, or the record can’t write back.',already:'The record already has your address. It will write when her next file opens.'});
+    $('opening').textContent=back?'You finished her intake. The machine kept you.':'The machine turned itself off. It did not forget you.';
+    $('after').innerHTML='Chapter One of <i>Workstation 553-A</i>. <a href="/start/">Start here</a> to see the rest of the record.';
+  }
+
+  console.log('%cmdey: if you are reading the source, you are already further in than I was on Day 1.','color:#8FF0B4');
 })();
 </script>
 <script defer src="/_vercel/insights/script.js"></script>
