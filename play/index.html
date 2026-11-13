@@ -268,13 +268,17 @@
     txt:'<svg class="g" viewBox="0 0 32 32"><path d="M7 3h13l6 6v20H7z" fill="#fff"/><path d="M20 3v6h6" fill="#DDD"/><path d="M10 14h12M10 18h12M10 22h8" stroke="#8AA" stroke-width="1.5"/></svg>',
     wav:'<svg class="g" viewBox="0 0 32 32"><path d="M7 3h13l6 6v20H7z" fill="#fff"/><path d="M20 3v6h6" fill="#DDD"/><path d="M10 20v-4M13 22v-8M16 24v-12M19 21v-6M22 19v-2" stroke="#2A7" stroke-width="1.8"/></svg>',
     jpg:'<svg class="g" viewBox="0 0 32 32"><path d="M7 3h13l6 6v20H7z" fill="#fff"/><path d="M20 3v6h6" fill="#DDD"/><path d="M9 25l5-7 4 5 3-3 4 5z" fill="#4A8"/><circle cx="13" cy="13" r="2" fill="#E9B"/></svg>',
-    bad:'<svg class="g" viewBox="0 0 32 32"><path d="M7 3h13l6 6v20H7z" fill="#cfd8dc"/><path d="M20 3v6h6" fill="#9AA"/><path d="M11 13l10 10M21 13L11 23" stroke="#C33" stroke-width="2"/></svg>'
+    bad:'<svg class="g" viewBox="0 0 32 32"><path d="M7 3h13l6 6v20H7z" fill="#cfd8dc"/><path d="M20 3v6h6" fill="#9AA"/><path d="M11 13l10 10M21 13L11 23" stroke="#C33" stroke-width="2"/></svg>',
+    dir:'<svg class="g" viewBox="0 0 32 32"><path d="M3 8h10l3 3h13v16H3z" fill="#E8C35A"/><path d="M3 12h26v15H3z" fill="#F5D57A"/></svg>',
+    hid:'<svg class="g" viewBox="0 0 32 32" opacity=".55"><path d="M3 8h10l3 3h13v16H3z" fill="#9AA"/><path d="M3 12h26v15H3z" fill="#BCC"/></svg>'
   };
   var FILES=[
     {id:'notes',name:'case_notes.txt',ic:'txt',open:openNotes},
     {id:'rec',name:'rec_0611.wav',ic:'wav',open:openRec},
     {id:'photo',name:'locker_07.jpg',ic:'jpg',open:openPhoto},
     {id:'log',name:'log_day11.txt',ic:'txt',open:openLog},
+    {id:'bm',name:'bookmarks',ic:'dir',open:openBookmarks},
+    {id:'hid',name:'.case_553',ic:'hid',hidden:1,open:openHidden},
     {id:'b1',name:'seats.chart',ic:'bad',bad:1},{id:'b2',name:'crossings.lst',ic:'bad',bad:2},{id:'b3',name:'plain.img',ic:'bad',bad:3},
     {id:'b4',name:'note_2031.txt',ic:'bad',bad:4},{id:'b5',name:'.',ic:'bad',bad:5}
   ];
@@ -283,7 +287,7 @@
   function desktop(){
     boot.style.display='none';decay();
     var box=$('icons');box.innerHTML='';
-    FILES.forEach(function(f){var b=document.createElement('button');b.type='button';b.className='ic'+(f.bad?' bad':'')+(S.solved[f.id]?' done':'');
+    FILES.forEach(function(f){if(f.hidden&&!(S.showHidden||S.sealed))return;var b=document.createElement('button');b.type='button';b.className='ic'+(f.bad?' bad':'')+(S.solved[f.id]?' done':'');b.setAttribute('data-id',f.id);
       b.innerHTML=ICON[f.ic]+'<span class="n"></span>';b.querySelector('.n').textContent=f.name;
       b.addEventListener('click',function(){blip(f.bad?110:520,.05);if(f.bad)broken(f.bad);else f.open();});box.appendChild(b);});
     step('/play/desktop');
@@ -292,7 +296,39 @@
     if(S.sealed)setTimeout(function(){showSeal(true);},400);
     if(new Date().getHours()===3)$('clk').innerHTML='<span style="letter-spacing:.3em">· · ·</span><br>6/22/2019';
   }
-  function refresh(){decay();Array.prototype.forEach.call($('icons').children,function(b,i){if(S.solved[FILES[i].id])b.classList.add('done');});}
+  function refresh(){decay();Array.prototype.forEach.call($('icons').children,function(b){if(S.solved[b.getAttribute('data-id')])b.classList.add('done');});}
+
+  /* her Start menu: a real 2019 habit, and the way to the hidden folder */
+  var menu=document.createElement('div');
+  menu.style.cssText='position:absolute;left:0;bottom:9%;z-index:15;display:none;min-width:200px;background:#1F2329;color:#fff;border:1px solid #3A3F47;box-shadow:0 8px 20px rgba(0,0,0,.5);font:inherit;';
+  os.appendChild(menu);
+  function drawMenu(){menu.innerHTML='';[
+      [S.showHidden?'Hide hidden files':'Show hidden files',function(){S.showHidden=!S.showHidden;save();menu.style.display='none';desktop();blip(700,.06);if(S.showHidden)$('after').textContent='Something on her desktop was there the whole time.';}],
+      ['Shut down',function(){menu.style.display='none';$('after').textContent='It will not shut down. That session was never closed.';blip(140,.18);}]
+    ].forEach(function(m){var b=document.createElement('button');b.type='button';b.textContent=m[0];b.style.cssText='display:block;width:100%;text-align:left;padding:10px 14px;background:none;border:0;color:inherit;font:inherit;cursor:pointer;';b.onmouseenter=function(){b.style.background='#2E3440';};b.onmouseleave=function(){b.style.background='none';};b.addEventListener('click',m[1]);menu.appendChild(b);});}
+  document.querySelector('.task .st').addEventListener('click',function(e){e.stopPropagation();drawMenu();menu.style.display=menu.style.display==='block'?'none':'block';});
+  os.addEventListener('click',function(e){if(!menu.contains(e.target))menu.style.display='none';});
+
+  /* bookmarks: what she was reading, and where the record lives now */
+  function openBookmarks(){
+    var L=[['The music she had on loop','https://open.spotify.com/artist/1vKFBmWToCei9dCSePXuow','Spotify'],
+      ['The channel she kept citing','https://www.youtube.com/@CodexMaledictus','YouTube'],
+      ['The wiki someone made about her case','https://www.worldanvil.com/w/codex-maledictus-codexmaledictus','World Anvil'],
+      ['Where the clips kept turning up','https://www.tiktok.com/@codexmaledictus','TikTok'],
+      ['Images she saved','https://www.instagram.com/codexmaledictusreturns','Instagram'],
+      ['Threads she followed','https://www.threads.com/@codexmaledictusreturns','Threads'],
+      ['Posts she was watching','https://x.com/CodexMaledictus','X'],
+      ['A room of voices','https://discord.gg/g9XNFVD8Fn','Discord']];
+    openWin('bookmarks · File Explorer','<div style="white-space:normal;font-family:system-ui,Arial">'+L.map(function(l){return '<a href="'+l[1]+'" target="_blank" rel="noopener" style="display:flex;justify-content:space-between;gap:10px;padding:8px 4px;border-bottom:1px solid rgba(128,128,128,.25);text-decoration:none;color:inherit"><span>'+l[0]+'</span><span style="opacity:.6">'+l[2]+' ↗</span></a>';}).join('')+'<p style="margin-top:10px;opacity:.6;font-size:.9em">Saved by mdey, 2019. Some of these did not exist yet when she saved them.</p></div>','');
+    step('/play/bookmarks');
+  }
+
+  /* the hidden folder: the rest of the record, filed as her case */
+  function openHidden(){
+    var R=[['00_start_here.lnk','/start/','Where strangers begin'],['01_the_descent.lnk','/madmens-gospel.html','The first room, in order'],['02_index_of_everything.lnk','/pale-archive.html','The Pale Archive'],['03_evidence_item_7.lnk','/codex-remembers-you.html','What the IDMF kept'],['04_transcriptions.lnk','/the-transcriptions.html','The science underneath'],['05_the_ground.lnk','/rf-093-invocation.html','Hold it, and it stays'],['06_confessions.lnk','/confession-ledger.html','What others left']];
+    openWin('.case_553 · hidden','<div style="white-space:normal;font-family:system-ui,Arial">'+R.map(function(r){return '<a href="'+r[1]+'" style="display:flex;justify-content:space-between;gap:10px;padding:8px 4px;border-bottom:1px solid rgba(128,128,128,.25);text-decoration:none;color:inherit"><span>'+r[0]+'</span><span style="opacity:.6">'+r[2]+'</span></a>';}).join('')+'<p style="margin-top:10px;opacity:.6;font-size:.9em">Shortcuts. They point outside this machine, into the record itself.</p></div>','');
+    step('/play/hidden');
+  }
 
   var win=$('win'),wb=$('win-b'),holdStop=null;
   function openWin(title,html,cls){if(holdStop)holdStop();$('win-t').textContent=title;wb.className='body'+(cls?' '+cls:'');wb.innerHTML=html;win.classList.add('on');wb.scrollTop=0;$('tb').textContent=title;}
@@ -306,18 +342,30 @@
     var html='CASE 553-A · QUEENS · INTAKE NOTES\nAnalyst: Dr. Miriam K. Dey, linguistics\n\n'+
       'Handling, per directive:\n  Read only under red light.\n  Do not recite aloud.\n  If more than seven syllables stay in memory, report it.\n\n'+
       'Note 1. The ghost-words are back. Syllables in the dataset that are gone from every other copy. Arnett says compression. Compression does not choose.\n\n'+
-      'Note 2. It behaves differently when I watch it. I know how that sounds. So did Thomas Young, firing light through two slits in 1801. Watch which slit it takes, and the pattern changes. Measured, and repeated for two hundred years.\n'+
-      '  <a href="https://youtu.be/b_nVM133EB4" target="_blank" rel="noopener">Ref: the double slit, full transcription ↗</a>\n\n'+
-      'Note 3. Line IV of every witness statement asks the same thing. Everyone answers it differently. I am leaving it here for whoever is next.\n\n'+
-      'LINE IV. What color was it?';
+      'Note 2. <span id="obs"></span>\n'+
+      '<span id="obs-hint" style="opacity:.6">  (This note is corrupted while it is being watched. Take your hands off and let it be.)</span>\n'+
+      '<span id="obs-ref" style="display:none">  <a href="https://youtu.be/b_nVM133EB4" target="_blank" rel="noopener">Ref: the double slit, full transcription ↗</a></span>\n\n'+
+      '<span id="obs-rest" style="display:none">Note 3. Line IV of every witness statement asks the same thing. Everyone answers it differently. I am leaving it here for whoever is next.\n\nLINE IV. What color was it?</span>';
     openWin('case_notes.txt · Notepad',html);
-    var ch=document.createElement('div');ch.className='choices';
+    var NOTE2='It behaves differently when I watch it. So did light, for Thomas Young in 1801. Fire it through two slits unwatched and it makes a wave pattern. Watch which slit it takes, and the pattern is gone. Measured, and repeated for two hundred years. If you can read this, you stopped watching. That is the whole experiment.';
+    var obs=$('obs'),clear=!!S.observed,since=0;
+    function scramble(t){return t.replace(/[A-Za-z]/g,function(){return 'abcdefghijklmnopqrstuvwxyz░▒'.charAt(Math.floor(Math.random()*28));});}
+    var ch=document.createElement('div');ch.className='choices';ch.style.display='none';
+    function reveal(){clear=true;obs.textContent=NOTE2;$('obs-hint').style.display='none';$('obs-ref').style.display='';$('obs-rest').style.display='';ch.style.display='';if(f.a&&COLOR[f.a])solve('notes');}
+    if(clear)reveal();
+    else{obs.textContent=scramble(NOTE2);
+      var oiv=setInterval(function(){
+        if(!win.classList.contains('on')||$('win-t').textContent.indexOf('case_notes')<0){clearInterval(oiv);return;}
+        var watched=Date.now()-last<3500;
+        if(watched){since=0;obs.textContent=scramble(NOTE2);}
+        else{since+=200;obs.textContent=since>600?NOTE2:scramble(NOTE2);if(since>1400){clearInterval(oiv);S.observed=Date.now();save();step('/play/observed');blip(880,.1,'sine');reveal();}}
+      },200);}
     if(f.a&&COLOR[f.a]){var p=document.createElement('div');p.textContent='You already reported it, somewhere else in the record: '+COLOR[f.a]+'. It is filed.';ch.appendChild(p);}
     else Object.keys(COLOR).forEach(function(k){var b=document.createElement('button');b.type='button';b.textContent=COLOR[k].charAt(0).toUpperCase()+COLOR[k].slice(1)+'.';
       b.addEventListener('click',function(){put('codex_file_553_v1',{a:k,at:Date.now()});S.color=k;ch.innerHTML='';var p=document.createElement('div');p.textContent='Filed. Line IV: '+COLOR[k]+'. Nobody else will answer it the way you just did.';ch.appendChild(p);solve('notes');});
       ch.appendChild(b);});
     wb.appendChild(ch);
-    if(f.a&&!S.solved.notes)solve('notes');
+    if(clear&&f.a&&COLOR[f.a])solve('notes');
   }
 
   /* rec_0611.wav · put the fragments back in order */
@@ -338,8 +386,12 @@
 
   /* locker_07.jpg · the evidence shelf, and a reflection that should not be there */
   function openPhoto(){
-    openWin('locker_07.jpg · Photos','<svg viewBox="0 0 400 260" style="width:100%;display:block;background:#1a1d20"><defs><linearGradient id="gl"><stop offset="0" stop-color="#9ab"/><stop offset="1" stop-color="#345"/></linearGradient></defs><rect x="40" y="30" width="320" height="200" fill="#2a2e33" stroke="#555"/><rect x="40" y="120" width="320" height="6" fill="#444"/><rect x="70" y="70" width="80" height="50" fill="#6b5a3e"/><text x="110" y="100" font-size="11" fill="#e9e3d2" text-anchor="middle" font-family="monospace">ITEM 7</text><rect x="230" y="160" width="90" height="70" fill="#6b5a3e"/><text x="275" y="200" font-size="11" fill="#e9e3d2" text-anchor="middle" font-family="monospace">ITEM 12</text><rect x="180" y="40" width="40" height="70" fill="url(#gl)" opacity=".5"/><g opacity=".22"><circle cx="200" cy="62" r="7" fill="#000"/><rect x="194" y="70" width="12" height="30" fill="#000"/></g><g opacity=".09"><circle cx="210" cy="64" r="7" fill="#000"/><rect x="204" y="72" width="12" height="30" fill="#000"/></g></svg><p style="margin-top:8px">Evidence Locker 553-A, shelf 2. Photographed at intake.</p><p style="opacity:.7">There is one person reflected in the glass. Count again.</p><p style="opacity:.7">Recovery note, IDMF: two analysts vanished after reporting reflected versions of themselves.</p>','');
-    if(!S.solved.photo){S.solved.photo=Date.now();save();refresh();}
+    openWin('locker_07.jpg · Photos','<svg viewBox="0 0 400 260" style="width:100%;display:block;background:#1a1d20"><defs><linearGradient id="gl"><stop offset="0" stop-color="#9ab"/><stop offset="1" stop-color="#345"/></linearGradient></defs><rect x="40" y="30" width="320" height="200" fill="#2a2e33" stroke="#555"/><rect x="40" y="120" width="320" height="6" fill="#444"/><rect x="70" y="70" width="80" height="50" fill="#6b5a3e"/><text x="110" y="100" font-size="11" fill="#e9e3d2" text-anchor="middle" font-family="monospace">ITEM 7</text><rect x="230" y="160" width="90" height="70" fill="#6b5a3e"/><text x="275" y="200" font-size="11" fill="#e9e3d2" text-anchor="middle" font-family="monospace">ITEM 12</text><rect x="180" y="40" width="40" height="70" fill="url(#gl)" opacity=".5"/><g opacity=".22"><circle cx="200" cy="62" r="7" fill="#000"/><rect x="194" y="70" width="12" height="30" fill="#000"/></g><g id="refl2" opacity=".09"><circle cx="212" cy="64" r="7" fill="#000"/><rect x="206" y="72" width="12" height="30" fill="#000"/></g><text id="refl-t" x="200" y="128" font-size="8" fill="#e9e3d2" text-anchor="middle" font-family="monospace" opacity="0">VIEW · SHOW HIDDEN FILES</text><circle id="refl-hit" cx="212" cy="78" r="22" fill="transparent" style="cursor:pointer"/></svg><p style="margin-top:8px">Evidence Locker 553-A, shelf 2. Photographed at intake.</p><p style="opacity:.7">One person stood in front of the glass to take this photo. Count the reflections.</p><p style="opacity:.7">Recovery note, IDMF: two analysts vanished after reporting reflected versions of themselves.</p><p id="refl-m" style="margin-top:6px"></p>','');
+    function found(){var g=$('refl2'),t=$('refl-t');if(g)g.setAttribute('opacity','.55');if(t)t.setAttribute('opacity','.9');
+      $('refl-m').textContent='There were two of her. The second one is pointing at the label under the glass: show hidden files.';
+      if(!S.solved.photo){S.solved.photo=Date.now();save();refresh();step('/play/photo');blip(330,.3,'sine');}}
+    if(S.solved.photo)found();
+    else $('refl-hit').addEventListener('click',found);
   }
 
   /* log_day11.txt · readable only while held */
@@ -350,7 +402,7 @@
   addEventListener('keydown',function(e){if(e.code==='Space'&&holdStop){held=true;e.preventDefault();}});
   addEventListener('keyup',function(e){if(e.code==='Space')held=false;});
   function openLog(){
-    if(!(S.solved.notes&&S.solved.rec)){openWin('log_day11.txt · Notepad','This file is locked.\n\nIt opens once her notes are filed and her recording is restored. She did not want it read out of order.');return;}
+    if(!(S.solved.notes&&S.solved.rec&&S.solved.photo)){openWin('log_day11.txt · Notepad','This file is locked.\n\nIt opens once her notes are filed, her recording is restored, and her photo has been looked at properly. She did not want it read out of order.');return;}
     openWin('log_day11.txt · Notepad','<div class="hint">Her last entry only stays readable while you hold it. Press and hold anywhere on this page, or hold the space bar.</div>'+LOG.map(function(){return '<p></p>';}).join(''),'hold');
     var ps=wb.querySelectorAll('p');Array.prototype.forEach.call(ps,function(p,i){p.textContent=LOG[i];});
     var lvl=0,read=0;
