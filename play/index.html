@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Workstation 553-A · Codex Maledictus</title>
+  <meta name="description" content="Someone left in the middle of their work. Their machine is still here. A puzzle played on a recovered terminal." />
+  <link rel="canonical" href="https://codexmaledictus.com/play/" />
+  <meta property="og:title" content="Workstation 553-A" />
+  <meta property="og:description" content="Someone left in the middle of their work. Their machine is still here." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://codexmaledictus.com/play/" />
+  <meta property="og:image" content="https://codexmaledictus.com/Assets/Codex%20Maledictus%20Index/codex-as-object.jpeg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-13 -13 26 26'><circle cx='0' cy='0' r='11.5' fill='%23050505' stroke='%23C9A84C' stroke-width='1.4'/><path d='M -7.5,-4 L 7.5,-4 L 0,8 Z' fill='none' stroke='%23C9A84C' stroke-width='1.3'/><circle cx='-3.2' cy='-1.3' r='1.3' fill='%23C9A84C'/><circle cx='3.2' cy='-1.3' r='1.3' fill='%23C9A84C'/><circle cx='0' cy='3.5' r='1.3' fill='%23C9A84C'/></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=VT323&family=Share+Tech+Mono&family=Special+Elite&family=Crimson+Text:ital@0;1&display=swap" rel="stylesheet" />
+  <script>window.va=window.va||function(){(window.vaq=window.vaq||[]).push(arguments);};</script>
+  <style>
+    :root{--room:#07080A;--bezel:#1B1A17;--glass:#030805;--phos:#8FF0B4;--phos-d:#3E8A5E;--amber:#E0C878;--paper:#E9E3D2;--ink:#2A2118;}
+    *{box-sizing:border-box;margin:0;padding:0;}
+    html,body{height:100%;}
+    body{background:var(--room);color:var(--paper);font:400 1.1rem/1.6 'Crimson Text',Georgia,serif;overflow-x:hidden;
+      background-image:radial-gradient(ellipse 80% 60% at 50% 40%,rgba(143,240,180,.05),transparent 70%);}
+    .grain{position:fixed;inset:-50%;pointer-events:none;z-index:60;opacity:.06;
+      background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+      animation:grain 1.2s steps(6) infinite;}
+    @keyframes grain{0%{transform:translate(0,0)}25%{transform:translate(-3%,2%)}50%{transform:translate(2%,-3%)}75%{transform:translate(-2%,-1%)}100%{transform:translate(0,0)}}
+    main{max-width:760px;margin:0 auto;padding:28px 16px 48px;}
+
+    /* the label on the evidence bag, and the plain line before anything */
+    .tagline{font:400 .72rem/1.5 'Share Tech Mono',monospace;letter-spacing:.2em;color:#8E8676;text-transform:uppercase;text-align:center;margin-bottom:14px;}
+    .opening{text-align:center;font-style:italic;color:#CFC7B4;max-width:30em;margin:0 auto 22px;min-height:3.2em;}
+
+    /* the monitor */
+    .monitor{position:relative;background:linear-gradient(160deg,#25231F,#141310 70%);border-radius:22px;padding:22px 22px 46px;box-shadow:0 30px 60px rgba(0,0,0,.6),inset 0 2px 0 rgba(255,255,255,.05);}
+    .monitor::after{content:'IDMF · FORENSIC TERMINAL';position:absolute;left:0;right:0;bottom:15px;text-align:center;font:400 .62rem 'Share Tech Mono',monospace;letter-spacing:.3em;color:#5E594E;}
+    .led{position:absolute;right:28px;bottom:16px;width:7px;height:7px;border-radius:50%;background:#2A2A26;transition:background .6s,box-shadow .6s;}
+    .led.on{background:#7CFF9E;box-shadow:0 0 8px #7CFF9E;}
+    .glass{position:relative;aspect-ratio:4/3;background:var(--glass);border-radius:14px;overflow:hidden;box-shadow:inset 0 0 60px rgba(0,0,0,.9);}
+    .glass::before{content:'';position:absolute;inset:0;pointer-events:none;z-index:5;background:repeating-linear-gradient(0deg,rgba(0,0,0,.28) 0 1px,transparent 1px 3px);}
+    .glass::after{content:'';position:absolute;inset:0;pointer-events:none;z-index:6;background:radial-gradient(ellipse at center,transparent 55%,rgba(0,0,0,.65));}
+    .wake{position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(143,240,180,.22),transparent 70%);opacity:0;transition:opacity .4s;z-index:1;}
+    .screen{position:absolute;inset:0;padding:5% 6%;font:400 clamp(.95rem,2.9vw,1.35rem)/1.25 'VT323',monospace;color:var(--phos);text-shadow:0 0 6px rgba(143,240,180,.55);z-index:2;overflow:hidden;}
+    .screen.flick{animation:flick .12s steps(2) 3;}
+    @keyframes flick{50%{opacity:.4;transform:translateX(2px)}}
+    .dim{color:var(--phos-d);}
+    .cur{display:inline-block;width:.6em;height:1em;background:var(--phos);vertical-align:-.12em;animation:blink 1s steps(1) infinite;}
+    @keyframes blink{50%{opacity:0}}
+    .login{margin-top:6%;}
+    .login label{display:block;}
+    .login input{background:transparent;border:0;border-bottom:1px solid var(--phos-d);color:var(--phos);font:inherit;text-shadow:inherit;width:9em;outline:none;caret-color:var(--phos);}
+    .login input:focus{border-bottom-color:var(--phos);}
+    .login .msg{min-height:1.3em;margin-top:.6em;}
+    .desk{display:grid;grid-template-columns:repeat(4,1fr);gap:4% 3%;margin-top:4%;}
+    .icon{background:none;border:0;color:var(--phos);font:inherit;text-shadow:inherit;text-align:center;cursor:pointer;padding:4px;}
+    .icon .g{display:block;font-size:1.7em;line-height:1;}
+    .icon .n{display:block;font-size:.72em;word-break:break-all;}
+    .icon.bad{color:#6FBF92;animation:bad 3.4s infinite;}
+    @keyframes bad{0%,90%,100%{opacity:1;transform:none}92%{opacity:.2;transform:translateX(-3px)}95%{opacity:.8;transform:translateX(2px) skewX(8deg)}}
+    .icon:focus-visible{outline:1px dashed var(--phos);}
+
+    /* the desk in front of the monitor */
+    .desktop-real{display:grid;grid-template-columns:1.1fr 1fr;gap:18px;margin-top:22px;align-items:start;}
+    .photo{background:#DCD5C2;padding:10px 10px 30px;transform:rotate(-2.2deg);box-shadow:0 8px 20px rgba(0,0,0,.55);color:var(--ink);}
+    .photo .img{background:#2B2620;aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
+    .tag{background:#EFE6C8;color:#2A2118;width:78%;padding:8px 10px;font:400 .68rem/1.5 'Share Tech Mono',monospace;transform:rotate(3deg);box-shadow:0 2px 6px rgba(0,0,0,.5);
+      -webkit-mask:linear-gradient(100deg,#000 72%,transparent 72.5%);mask:linear-gradient(100deg,#000 72%,transparent 72.5%);}
+    .tag b{font-weight:400;letter-spacing:.08em;}
+    .photo .cap{font:400 .8rem 'Special Elite',monospace;margin-top:8px;text-align:center;}
+    .note{background:#E9D97A;color:#2A2118;padding:14px 14px 18px;font:400 .95rem/1.4 'Special Elite',monospace;transform:rotate(1.6deg);box-shadow:0 8px 18px rgba(0,0,0,.5);}
+    .note small{display:block;margin-top:8px;font-size:.75rem;opacity:.7;}
+
+    .sound{position:fixed;right:14px;bottom:14px;z-index:70;background:rgba(7,8,10,.8);border:1px solid #2E2C27;color:#8E8676;font:400 .7rem 'Share Tech Mono',monospace;letter-spacing:.14em;text-transform:uppercase;padding:8px 10px;cursor:pointer;}
+    .after{margin-top:26px;text-align:center;font:italic 400 1rem/1.6 'Crimson Text',serif;color:#A79F8C;min-height:1.6em;}
+    .after a{color:var(--amber);}
+    @media (max-width:560px){.glass{aspect-ratio:1/1;}.desktop-real{grid-template-columns:1fr;}.photo{max-width:320px;margin:0 auto;}.note{max-width:300px;margin:0 auto;}.desk{grid-template-columns:repeat(3,1fr);}}
+    @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+  </style>
+</head>
+<body>
+<div class="grain" aria-hidden="true"></div>
+<main>
+  <div class="tagline">Evidence Locker 553-A · Item 12 · Workstation, IDMF issue</div>
+  <p class="opening" id="opening">Someone left in the middle of their work. Their machine is still here.</p>
+
+  <div class="monitor">
+    <div class="glass" id="glass" aria-live="polite">
+      <div class="wake" id="wake"></div>
+      <div class="screen" id="screen"></div>
+    </div>
+    <div class="led" id="led" aria-hidden="true"></div>
+  </div>
+
+  <div class="desktop-real">
+    <figure class="photo">
+      <div class="img">
+        <div class="tag" aria-label="Evidence tag, torn">
+          <b>IDMF · EVIDENCE</b><br>CASE 553-A · QUEENS<br>ITEM 12 · WORKSTATION<br>ASSIGNED: DEY, M.K.<br>BADGE IDMF-04
+        </div>
+      </div>
+      <figcaption class="cap">Intake photo. Tag torn on arrival.</figcaption>
+    </figure>
+    <div class="note" aria-label="A note stuck to the monitor">
+      pw is my badge.<br>last two = the day I stopped being alone in here.
+      <small>Found on the bezel. Her handwriting.</small>
+    </div>
+  </div>
+
+  <div class="after" id="after"></div>
+</main>
+<button class="sound" id="sound" type="button" aria-pressed="false">Sound off</button>
+
+<script>
+/* WORKSTATION 553-A · Chapter One, the first five minutes: the boot and the intake.
+   Keeps codex_play_v1 {visits, booted, intake, at}. Reports each step as its own page
+   to the site's visitor analytics, so starts, stops and finishes can be counted.
+   Nothing leaves this device except those page counts. */
+(function(){
+  var KEY='codex_play_v1',REDUCED=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function $(i){return document.getElementById(i);}
+  function get(){try{return JSON.parse(localStorage.getItem(KEY))||{};}catch(e){return {};}}
+  function put(s){try{localStorage.setItem(KEY,JSON.stringify(s));}catch(e){}}
+  function step(path){try{if(window.va)window.va('pageview',{route:path,path:path});}catch(e){}}
+  var S=get();S.visits=(S.visits||0)+1;put(S);
+  var scr=$('screen'),wake=$('wake'),led=$('led');
+
+  /* sound: a hum made here, nothing downloaded. Off until asked for. */
+  var ac=null,hum=null;
+  function startHum(){
+    try{
+      ac=ac||new (window.AudioContext||window.webkitAudioContext)();
+      var g=ac.createGain();g.gain.value=0;g.connect(ac.destination);
+      var o=ac.createOscillator();o.type='sine';o.frequency.value=60;o.connect(g);o.start();
+      var o2=ac.createOscillator();o2.type='triangle';o2.frequency.value=120.4;var g2=ac.createGain();g2.gain.value=.25;o2.connect(g2);g2.connect(g);o2.start();
+      var len=ac.sampleRate*2,buf=ac.createBuffer(1,len,ac.sampleRate),d=buf.getChannelData(0);for(var i=0;i<len;i++)d[i]=(Math.random()*2-1)*.5;
+      var n=ac.createBufferSource();n.buffer=buf;n.loop=true;var f=ac.createBiquadFilter();f.type='lowpass';f.frequency.value=700;var gn=ac.createGain();gn.gain.value=.18;n.connect(f);f.connect(gn);gn.connect(g);n.start();
+      g.gain.linearRampToValueAtTime(.05,ac.currentTime+1.5);hum=g;
+    }catch(e){}
+  }
+  function stopHum(){try{if(hum){hum.gain.linearRampToValueAtTime(0,ac.currentTime+.6);}}catch(e){}hum=null;}
+  function blip(freq,dur){try{if(!ac||!hum)return;var o=ac.createOscillator(),g=ac.createGain();o.type='square';o.frequency.value=freq;g.gain.value=.03;o.connect(g);g.connect(ac.destination);o.start();o.stop(ac.currentTime+(dur||.05));}catch(e){}}
+  $('sound').addEventListener('click',function(e){e.stopPropagation();var on=this.getAttribute('aria-pressed')!=='true';this.setAttribute('aria-pressed',on);this.textContent=on?'Sound on':'Sound off';if(on)startHum();else stopHum();});
+
+  /* typing onto the glass */
+  function type(lines,done,speed){
+    var i=0;scr.innerHTML='';
+    (function next(){
+      if(i>=lines.length){if(done)done();return;}
+      var L=lines[i++],div=document.createElement('div');if(L.c)div.className=L.c;scr.appendChild(div);
+      var t=L.t||'',k=0;
+      if(REDUCED||speed===0){div.textContent=t;blip(880);setTimeout(next,L.w||40);return;}
+      (function ch(){div.textContent=t.slice(0,++k);if(k%3===0)blip(1200+Math.random()*300,.02);if(k<t.length)setTimeout(ch,speed||14);else setTimeout(next,L.w||120);})();
+    })();
+  }
+
+  /* 1 · THE BOOT. It will not wake while you move. */
+  var still=0,need=REDUCED?1500:5000,last=Date.now(),booted=false,dark=true;
+  function moved(){last=Date.now();if(!booted&&still>400){scr.classList.add('flick');setTimeout(function(){scr.classList.remove('flick');},400);}still=0;}
+  ['pointermove','pointerdown','keydown','scroll','touchstart','wheel'].forEach(function(e){addEventListener(e,function(ev){if(ev.target&&ev.target.id==='sound')return;moved();},{passive:true});});
+  function waiting(){
+    scr.innerHTML='<div class="dim">NO SIGNAL</div><div class="dim" style="margin-top:1em">'+(S.booted?'It remembers being woken. It still wants you still.':'')+'</div>';
+  }
+  waiting();
+  var tick=setInterval(function(){
+    if(booted||document.hidden)return;
+    still=Date.now()-last;var p=Math.min(1,still/need);
+    wake.style.opacity=(p*p).toFixed(3);
+    if(p>.35&&dark){dark=false;$('after').textContent='Hold still. It is warming.';}
+    if(p<.1&&!dark){dark=true;$('after').textContent=S.booted?'':'It went dark when you moved.';}
+    if(p>=1){booted=true;clearInterval(tick);boot();}
+  },100);
+  setTimeout(function(){if(!booted&&!S.booted)$('after').textContent='Nothing happens while you are looking for something to press.';},9000);
+
+  function boot(){
+    led.classList.add('on');wake.style.opacity=.12;$('after').textContent='';
+    S.booted=Date.now();put(S);step('/play/boot');
+    var fast=S.visits>1;
+    type([
+      {t:'IDMF FORENSIC SYSTEMS  REV 4.1',c:'dim'},
+      {t:'MEMORY CHECK ............ OK'},
+      {t:'EVIDENCE SEAL ........... BROKEN',w:500},
+      {t:'LAST SESSION: DAY 11, 03:00',w:300},
+      {t:'SESSION WAS NOT CLOSED.',w:700},
+      {t:fast?'WELCOME BACK.':'',c:'dim',w:200},
+      {t:' '}
+    ],login,fast?6:14);
+  }
+
+  /* 2 · THE INTAKE. Her login is on the tag; the torn part is on her note. */
+  function login(){
+    var box=document.createElement('form');box.className='login';box.autocomplete='off';
+    box.innerHTML='<label>USER: <span>mdey</span></label><label>PASSWORD: <input id="pw" name="pw" type="text" inputmode="text" spellcheck="false" autocapitalize="characters" aria-label="Password"></label><div class="msg" id="msg"></div>';
+    scr.appendChild(box);
+    var pw=$('pw'),msg=$('msg'),tries=0;
+    setTimeout(function(){try{pw.focus({preventScroll:true});}catch(e){}},200);
+    box.addEventListener('submit',function(e){
+      e.preventDefault();
+      var v=pw.value.toUpperCase().replace(/[^A-Z0-9]/g,'');
+      if(v==='IDMF0411'||v==='0411'){granted();return;}
+      tries++;blip(140,.18);
+      msg.textContent=tries===1?'ACCESS DENIED.':tries===2?'ACCESS DENIED. THE TAG IS TORN.':tries===3?'ACCESS DENIED. READ HER NOTE AGAIN.':'ACCESS DENIED. THE LOG SAYS WHICH DAY.';
+      if(tries===2)$('after').textContent='The rest of her badge number was never on the tag.';
+      pw.select();
+    });
+  }
+
+  function granted(){
+    S.intake=Date.now();put(S);step('/play/intake');
+    blip(660,.08);setTimeout(function(){blip(990,.12);},90);
+    scr.classList.add('flick');
+    type([
+      {t:'ACCESS GRANTED.'},
+      {t:'GOOD MORNING, MIRIAM.',w:900},
+      {t:'',w:300}
+    ],desk,16);
+  }
+
+  /* the desktop. In this preview, the files show but do not open yet. */
+  function desk(){
+    scr.innerHTML='<div class="dim">MDEY · INTAKE 553-A · 9 ITEMS</div>';
+    var grid=document.createElement('div');grid.className='desk';
+    var files=[
+      ['▤','case_notes.txt'],['♪','rec_0611.wav'],['▣','locker_07.jpg'],['▤','log_day11.txt'],
+      ['▦','seats.chart',1],['▤','crossings.lst',1],['▣','plain.img',1],['▤','????.txt',1],['▢','.',1]
+    ];
+    files.forEach(function(f){var b=document.createElement('button');b.type='button';b.className='icon'+(f[2]?' bad':'');
+      b.innerHTML='<span class="g">'+f[0]+'</span><span class="n"></span>';b.querySelector('.n').textContent=f[1];
+      b.addEventListener('click',function(){blip(f[2]?110:520,.06);$('after').textContent=f[2]?'It opens for an instant and closes again.':'This record is still being restored. It opens in the full chapter.';});
+      grid.appendChild(b);});
+    scr.appendChild(grid);
+    step('/play/desktop');
+    $('opening').textContent='She was the last one to log in. Now you are.';
+    $('after').innerHTML='Preview ends here. The rest of the record is being restored. <a href="/start/">Start here</a> while you wait.';
+  }
+
+  console.log('%cMDEY: if you are reading the source, you are already further in than I was on Day 1.','color:#8FF0B4');
+})();
+</script>
+<script defer src="/_vercel/insights/script.js"></script>
+</body>
+</html>
