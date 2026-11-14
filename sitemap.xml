@@ -1,11 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://codexmaledictus.com/</loc></url>
-  <url><loc>https://codexmaledictus.com/start/</loc></url>
   <url><loc>https://codexmaledictus.com/play/</loc></url>
-  <url><loc>https://codexmaledictus.com/madmens-gospel.html</loc></url>
-  <url><loc>https://codexmaledictus.com/gospel-forgotten-flesh.html</loc></url>
-  <url><loc>https://codexmaledictus.com/pale-archive.html</loc></url>
-  <url><loc>https://codexmaledictus.com/infection-remembers.html</loc></url>
+  <url><loc>https://codexmaledictus.com/start/</loc></url>
+  <url><loc>https://codexmaledictus.com/Codex-Sigil.html</loc></url>
+  <url><loc>https://codexmaledictus.com/apocrypha-chronicle-1.html</loc></url>
+  <url><loc>https://codexmaledictus.com/apocrypha-infection.html</loc></url>
+  <url><loc>https://codexmaledictus.com/chronicle-1-infection-remembers.html</loc></url>
   <url><loc>https://codexmaledictus.com/codex-remembers-you.html</loc></url>
+  <url><loc>https://codexmaledictus.com/confession-ledger.html</loc></url>
+  <url><loc>https://codexmaledictus.com/gospel-forgotten-flesh.html</loc></url>
+  <url><loc>https://codexmaledictus.com/infection-lore.html</loc></url>
+  <url><loc>https://codexmaledictus.com/infection-remembers.html</loc></url>
+  <url><loc>https://codexmaledictus.com/lore-chronicle-1.html</loc></url>
+  <url><loc>https://codexmaledictus.com/madmens-gospel.html</loc></url>
+  <url><loc>https://codexmaledictus.com/memory-engine-1.html</loc></url>
+  <url><loc>https://codexmaledictus.com/pale-archive.html</loc></url>
+  <url><loc>https://codexmaledictus.com/plague-priest-apocrypha.html</loc></url>
+  <url><loc>https://codexmaledictus.com/plague-priest-decoder.html</loc></url>
+  <url><loc>https://codexmaledictus.com/plague-priest-liturgy.html</loc></url>
+  <url><loc>https://codexmaledictus.com/plague-priest-lore.html</loc></url>
+  <url><loc>https://codexmaledictus.com/rf-093-apocrypha.html</loc></url>
+  <url><loc>https://codexmaledictus.com/rf-093-invocation.html</loc></url>
+  <url><loc>https://codexmaledictus.com/rf-093-lore.html</loc></url>
+  <url><loc>https://codexmaledictus.com/rf-093-mirror.html</loc></url>
+  <url><loc>https://codexmaledictus.com/the-three-weeks.html</loc></url>
+  <url><loc>https://codexmaledictus.com/the-transcriptions.html</loc></url>
+  <url><loc>https://codexmaledictus.com/witness-circle.html</loc></url>
 </urlset>

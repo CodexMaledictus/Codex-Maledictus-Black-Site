@@ -1,5 +1,5 @@
 # The record does not ask who is reading.
-# Some rooms are listed. Most are found.
+# Every room is listed. What is inside them still has to be found.
 User-agent: *
 Allow: /
 Sitemap: https://codexmaledictus.com/sitemap.xml
