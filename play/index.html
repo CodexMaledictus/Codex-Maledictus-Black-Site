@@ -270,15 +270,20 @@
     jpg:'<svg class="g" viewBox="0 0 32 32"><path d="M7 3h13l6 6v20H7z" fill="#fff"/><path d="M20 3v6h6" fill="#DDD"/><path d="M9 25l5-7 4 5 3-3 4 5z" fill="#4A8"/><circle cx="13" cy="13" r="2" fill="#E9B"/></svg>',
     bad:'<svg class="g" viewBox="0 0 32 32"><path d="M7 3h13l6 6v20H7z" fill="#cfd8dc"/><path d="M20 3v6h6" fill="#9AA"/><path d="M11 13l10 10M21 13L11 23" stroke="#C33" stroke-width="2"/></svg>',
     dir:'<svg class="g" viewBox="0 0 32 32"><path d="M3 8h10l3 3h13v16H3z" fill="#E8C35A"/><path d="M3 12h26v15H3z" fill="#F5D57A"/></svg>',
-    hid:'<svg class="g" viewBox="0 0 32 32" opacity=".55"><path d="M3 8h10l3 3h13v16H3z" fill="#9AA"/><path d="M3 12h26v15H3z" fill="#BCC"/></svg>'
+    hid:'<svg class="g" viewBox="0 0 32 32" opacity=".55"><path d="M3 8h10l3 3h13v16H3z" fill="#9AA"/><path d="M3 12h26v15H3z" fill="#BCC"/></svg>',
+    lnk:'<svg class="g" viewBox="0 0 32 32"><path d="M7 3h13l6 6v20H7z" fill="#fff"/><path d="M20 3v6h6" fill="#DDD"/><path d="M11 12h10l-5 8z" fill="none" stroke="#B8932F" stroke-width="1.6"/><circle cx="14.2" cy="14.4" r=".9" fill="#B8932F"/><circle cx="17.8" cy="14.4" r=".9" fill="#B8932F"/><circle cx="16" cy="17" r=".9" fill="#B8932F"/><rect x="4" y="20" width="10" height="10" fill="#fff" stroke="#555" stroke-width="1"/><path d="M6.5 27.5l5-5M8.5 22.5h3v3" stroke="#246" stroke-width="1.5" fill="none"/></svg>',
+    tmp:'<svg class="g" viewBox="0 0 32 32" opacity=".55"><path d="M7 3h13l6 6v20H7z" fill="#fff"/><path d="M20 3v6h6" fill="#DDD"/><path d="M10 14h12M10 18h12M10 22h5" stroke="#8AA" stroke-width="1.5"/></svg>'
   };
+  var HOME='/';
   var FILES=[
     {id:'notes',name:'case_notes.txt',ic:'txt',open:openNotes},
     {id:'rec',name:'rec_0611.wav',ic:'wav',open:openRec},
     {id:'photo',name:'locker_07.jpg',ic:'jpg',open:openPhoto},
     {id:'log',name:'log_day11.txt',ic:'txt',open:openLog},
     {id:'bm',name:'bookmarks',ic:'dir',open:openBookmarks},
+    {id:'site',name:'codexmaledictus.lnk',ic:'lnk',open:openSite},
     {id:'hid',name:'.case_553',ic:'hid',hidden:1,open:openHidden},
+    {id:'warn',name:'~$warning.txt',ic:'tmp',hidden:1,open:openWarn},
     {id:'b1',name:'seats.chart',ic:'bad',bad:1},{id:'b2',name:'crossings.lst',ic:'bad',bad:2},{id:'b3',name:'plain.img',ic:'bad',bad:3},
     {id:'b4',name:'note_2031.txt',ic:'bad',bad:4},{id:'b5',name:'.',ic:'bad',bad:5}
   ];
@@ -303,6 +308,7 @@
   menu.style.cssText='position:absolute;left:0;bottom:9%;z-index:15;display:none;min-width:200px;background:#1F2329;color:#fff;border:1px solid #3A3F47;box-shadow:0 8px 20px rgba(0,0,0,.5);font:inherit;';
   os.appendChild(menu);
   function drawMenu(){menu.innerHTML='';[
+      ['Codex Maledictus ↗',function(){menu.style.display='none';blip(520,.05);window.open(HOME,'_blank','noopener');step('/play/site');}],
       [S.showHidden?'Hide hidden files':'Show hidden files',function(){S.showHidden=!S.showHidden;save();menu.style.display='none';desktop();blip(700,.06);if(S.showHidden)$('after').textContent='Something on her desktop was there the whole time.';}],
       ['Shut down',function(){menu.style.display='none';$('after').textContent='It will not shut down. That session was never closed.';blip(140,.18);}]
     ].forEach(function(m){var b=document.createElement('button');b.type='button';b.textContent=m[0];b.style.cssText='display:block;width:100%;text-align:left;padding:10px 14px;background:none;border:0;color:inherit;font:inherit;cursor:pointer;';b.onmouseenter=function(){b.style.background='#2E3440';};b.onmouseleave=function(){b.style.background='none';};b.addEventListener('click',m[1]);menu.appendChild(b);});}
@@ -322,6 +328,24 @@
     openWin('bookmarks · File Explorer','<div style="white-space:normal;font-family:system-ui,Arial">'+L.map(function(l){return '<a href="'+l[1]+'" target="_blank" rel="noopener" style="display:flex;justify-content:space-between;gap:10px;padding:8px 4px;border-bottom:1px solid rgba(128,128,128,.25);text-decoration:none;color:inherit"><span>'+l[0]+'</span><span style="opacity:.6">'+l[2]+' ↗</span></a>';}).join('')+'<p style="margin-top:10px;opacity:.6;font-size:.9em">Saved by mdey, 2019. Some of these did not exist yet when she saved them.</p></div>','');
     step('/play/bookmarks');
   }
+
+  /* the shortcut nobody made: the way out to the record, always on her desktop */
+  function openSite(){
+    var P=[['Type','Internet Shortcut'],['Target','codexmaledictus.com'],['Created','Day 11, 3:00 AM'],['Created by','(no user)'],['Opened','1 time, by mdey']];
+    openWin('codexmaledictus.lnk · Properties','<div style="white-space:normal;font-family:system-ui,Arial;line-height:1.6"><table style="border-collapse:collapse;width:100%">'+P.map(function(p){return '<tr><td style="opacity:.6;padding:4px 14px 4px 0;vertical-align:top">'+p[0]+'</td><td style="padding:4px 0">'+p[1]+'</td></tr>';}).join('')+'</table><p style="margin-top:14px"><a href="'+HOME+'" target="_blank" rel="noopener" style="display:inline-block;padding:9px 18px;border:1px solid currentColor;text-decoration:none;color:inherit">Open ↗</a></p></div>','');
+    step('/play/site');
+  }
+
+  /* her last words: an unsaved draft, found only with hidden files shown */
+  var WARN='~$warning.txt · recovered from autosave · last written Day 11, 3:07 AM\n\n'+
+    'Whoever logs in after me. Read this before you open the shortcut.\n\n'+
+    'I did not put it there. At 3:00 the hum stopped and an icon was on my desktop. No installer, no user, no author in the properties. Only a time. 3:00 AM, Day 11.\n\n'+
+    'It opens a website. The address is plain. Nothing on it should exist yet. My case number is in it. So are the ghost-words, every one I lost, set down in order, as if someone had kept them for me. There are rooms in it I have not walked into, and they already have my handwriting in the margins.\n\n'+
+    'I did not find it. It found me. It had been looking for me the way I look for a word I almost remember.\n\n'+
+    'I am not frightened. Write that down, Arnett, if you read this. It is the other thing. It is being answered.\n\n'+
+    'If it is on your desktop too, then it knows your name now. Go in slowly. Read what it shows you. Keep what stays.\n\n'+
+    'I am going to';
+  function openWarn(){openWin('~$warning.txt · Notepad (recovered)',WARN.replace(/&/g,'&amp;').replace(/</g,'&lt;'),'');step('/play/warning');blip(240,.2,'sine');}
 
   /* the hidden folder: the rest of the record, filed as her case */
   function openHidden(){
@@ -444,7 +468,7 @@
   function showSeal(back){
     var w=get('codex_witness_state_v1'),seed=String(w.firstSeen||S.booted||Date.now()),h=0;for(var i=0;i<seed.length;i++){h=((h<<5)-h)+seed.charCodeAt(i);h|=0;}
     var des='ANALYST OF RECORD · 553-A · '+String(Math.abs(h)%10000).padStart(4,'0');
-    var el=$('seal');el.innerHTML='<h2>'+(back?'You came back.':'Intake complete.')+'</h2><div class="des">'+des+'</div><p>She tried to finish her intake on Day 11. You finished it for her. The record has both of you now.</p><p>What she heard has a name. The rest of her files are still being restored.</p><div class="doors"><a href="https://open.spotify.com/album/221eiCbBGLwo8Z9MUJtWQc" target="_blank" rel="noopener">Hear what she heard ↗</a><a href="/madmens-gospel.html">Go deeper into the record</a><a href="https://youtu.be/b_nVM133EB4" target="_blank" rel="noopener">The science she cited ↗</a></div><div id="sum" style="margin-top:14px;width:min(420px,100%);font-size:.95em"></div>';
+    var el=$('seal');el.innerHTML='<h2>'+(back?'You came back.':'Intake complete.')+'</h2><div class="des">'+des+'</div><p>She tried to finish her intake on Day 11. You finished it for her. The record has both of you now.</p><p>What she heard has a name. The rest of her files are still being restored.</p><div class="doors"><a href="/">Enter the Codex</a><a href="https://open.spotify.com/album/221eiCbBGLwo8Z9MUJtWQc" target="_blank" rel="noopener">Hear what she heard ↗</a><a href="/madmens-gospel.html">Go deeper into the record</a><a href="https://youtu.be/b_nVM133EB4" target="_blank" rel="noopener">The science she cited ↗</a></div><div id="sum" style="margin-top:14px;width:min(420px,100%);font-size:.95em"></div>';
     el.classList.add('on');
     if(window.CodexSummon)CodexSummon.mount($('sum'),{invite:'Leave an address, and the record will write when her next file is restored.',button:'Leave it',done:'Received. If a letter asks you to confirm, open it, or the record can’t write back.',already:'The record already has your address. It will write when her next file opens.'});
     $('opening').textContent=back?'You finished her intake. The machine kept you.':'The machine turned itself off. It did not forget you.';
