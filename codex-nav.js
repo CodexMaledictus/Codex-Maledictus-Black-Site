@@ -922,7 +922,7 @@ function initCodexNav(currentId) {
         ${realmGloss ? `<span class="cnav-realm-gloss">${realmGloss}</span>` : ''}
       </div>
 
-      <div class="cnav-start"><a href="/start/">Start here</a><span>·</span><a href="/start/#leave">Leave your frequency</a></div>
+      <div class="cnav-start"><a href="/#start">Start here</a><span>·</span><a href="/#leave">Leave your frequency</a></div>
 
       ${seal.daily ? `<div class="cseal-daily"><span class="cseal-daily-lbl">· SEAL OF THE DAY ·</span>${seal.daily}</div>` : ''}
 

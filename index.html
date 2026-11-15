@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <link rel="canonical" href="https://codexmaledictus.com/" />
   <title>Codex Maledictus</title>
-  <meta name="description" content="What you are looking for brought you here." />
+  <meta name="description" content="Some things you hear stay with you. The Codex Maledictus is a record of them, told in songs by Apollo Gavinci, a book, short films and rooms that remember you." />
   <meta property="og:title" content="Codex Maledictus" />
-  <meta property="og:description" content="The Pale Archive · Living Record · You Were Brought Here" />
+  <meta property="og:description" content="Some things you hear stay with you. This is a record of them." />
   <meta property="og:type" content="website" />
   <meta property="og:image" content="https://codexmaledictus.com/Assets/Codex%20Maledictus%20Index/codex-as-object.jpeg" />
 
@@ -855,6 +855,75 @@
       .cs-form{ flex-direction:column; } .cs-input{ flex:0 0 auto;width:100%; }
       .cs-submit{ width:100%; }
     }
+
+    /* ── THE START · the stranger's door, first on the page. It shows at once,
+       with no wait behind the boot, and holds the signup. Was /start/ until
+       November 15, 2026. ── */
+    .sb{position:relative;z-index:2;max-width:660px;margin:0 auto;padding:56px 16px 40px;text-align:left;scroll-margin-top:0;}
+    .sb .sb-k{font:400 .74rem/1 'Share Tech Mono',monospace;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);text-align:center;opacity:.85;}
+    .sb .sb-arrival{font:400 .86rem/1.6 'Share Tech Mono',monospace;letter-spacing:.06em;color:rgba(143,240,229,.82);text-align:center;min-height:3.2em;margin:16px auto 20px;max-width:30em;}
+    .sb .sb-arrival .cur{display:inline-block;width:.55em;height:1em;vertical-align:-.15em;background:rgba(143,240,229,.7);margin-left:2px;animation:sbBlink 1s steps(1) infinite;}
+    @keyframes sbBlink{50%{opacity:0}}
+    .sb h2.sb-h{font:900 clamp(1.75rem,6.4vw,2.7rem)/1.18 'Cinzel Decorative',serif;letter-spacing:.03em;text-align:center;color:var(--gold);
+      text-shadow:0 0 80px rgba(201,168,76,.28),0 0 26px rgba(201,168,76,.14),0 2px 6px rgba(0,0,0,.9);margin-bottom:26px;}
+    .sb .sb-div{display:flex;align-items:center;gap:14px;margin:0 auto 24px;max-width:360px;}
+    .sb .sb-div::before,.sb .sb-div::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--gold-deep),transparent);}
+    .sb .sb-div span{color:var(--gold);font-size:13px;opacity:.6;}
+    .sb .sb-lead p{font-size:1.2rem;line-height:1.65;margin-bottom:15px;color:var(--ash);}
+    .sb .sb-lead .first{font-size:1.3rem;color:#EEE7D8;}
+    .sb .sb-lead .pick{color:#B3AA98;font-style:italic;text-align:center;margin-top:22px;}
+    .sb-doors{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:26px auto 34px;max-width:440px;align-items:end;}
+    .sb-door{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:9px;text-decoration:none;color:rgba(228,221,208,.86);
+      border:1px solid rgba(201,168,76,.34);border-bottom-width:3px;border-radius:90px 90px 0 0;padding:34px 10px 18px;min-height:190px;overflow:hidden;
+      background:rgba(5,6,10,.85);box-shadow:inset 0 0 0 4px rgba(5,6,10,.9),inset 0 0 0 5px rgba(201,168,76,.14);transition:border-color .6s,box-shadow .6s;}
+    .sb-door::before{content:'';position:absolute;inset:0;opacity:0;transition:opacity .7s;background:radial-gradient(ellipse at 50% 100%,rgba(201,168,76,.26),transparent 70%);}
+    .sb-door:hover::before,.sb-door:focus-visible::before{opacity:1;}
+    .sb-door:focus-visible{outline:none;border-color:var(--gold-lt);}
+    .sb-door>*{position:relative;z-index:1;}
+    .sb-door svg{width:40px;height:40px;}
+    .sb-door .s{fill:none;stroke:rgba(201,168,76,.85);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;}
+    .sb-door .f{fill:rgba(201,168,76,.85);}
+    .sb-door .lab{font:600 .7rem/1 'Cinzel',serif;letter-spacing:.3em;text-transform:uppercase;}
+    .sb-door .t{font:600 1.02rem/1.25 'Cinzel',serif;color:#F1EADB;text-align:center;}
+    .sb-door .d{font:italic 400 .98rem/1.35 'Crimson Text',serif;color:#B3AA98;text-align:center;}
+    .sb-door .nx{display:none;font:400 .66rem/1 'Share Tech Mono',monospace;letter-spacing:.2em;color:#8FF0E5;text-transform:uppercase;}
+    .sb-door.next .nx{display:block;}
+    .sb-door.next{border-color:rgba(143,240,229,.5);}
+    .sb-listen{grid-column:1 / -1;justify-self:center;width:min(300px,100%);min-height:300px;border-radius:150px 150px 0 0;padding:0 22px 28px;
+      border-color:var(--gold);color:var(--gold-lt);background:radial-gradient(ellipse at 50% 108%,rgba(201,168,76,.24),rgba(5,6,10,.94) 62%);
+      box-shadow:inset 0 0 0 6px rgba(5,6,10,.92),inset 0 0 0 7px rgba(201,168,76,.24),0 0 46px rgba(201,168,76,.12);margin-bottom:6px;}
+    .sb-listen svg{width:60px;height:60px;}
+    .sb-listen .s{stroke:var(--gold-lt);} .sb-listen .f{fill:var(--gold-lt);}
+    .sb-listen .t{font-size:1.25rem;}
+    .sb-listen .ring{animation:sbRing 3.2s ease-out infinite;opacity:0;}
+    .sb-listen .ring.r2{animation-delay:.5s}.sb-listen .ring.r3{animation-delay:1s}
+    @keyframes sbRing{0%{opacity:0}20%{opacity:1}70%,100%{opacity:0}}
+    .sb-enter .chev{animation:sbChev 2.4s ease-in-out infinite;opacity:.3;}
+    .sb-enter .c2{animation-delay:.3s}.sb-enter .c3{animation-delay:.6s}
+    @keyframes sbChev{0%,100%{opacity:.25}50%{opacity:1}}
+    .sb-watch .lid{transform-origin:center;transform-box:fill-box;animation:sbLid 7s ease-in-out infinite;fill:rgba(5,6,10,1);}
+    @keyframes sbLid{0%,92%,100%{transform:scaleY(0)}95%{transform:scaleY(1)}97%{transform:scaleY(0)}}
+    .sb-watch .f{fill:rgba(201,84,74,.9);}
+    .sb .sb-still{min-height:3.4em;text-align:center;margin:-6px 0 26px;}
+    .sb .sb-still p{font:italic 400 1.14rem/1.5 'Crimson Text',serif;color:var(--gold-lt);opacity:0;transform:translateY(6px);transition:opacity 2.4s,transform 2.4s;}
+    .sb .sb-still p.on{opacity:.88;transform:none;}
+    #leave{position:relative;border:1px solid rgba(201,168,76,.26);padding:30px 22px 24px;background:linear-gradient(180deg,rgba(201,168,76,.05),rgba(5,6,10,.6));scroll-margin-top:24px;}
+    #leave::before{content:'';position:absolute;top:-1px;left:50%;width:70px;height:1px;transform:translateX(-50%);background:var(--gold-lt);box-shadow:0 0 12px var(--gold);}
+    #leave .k{font:400 .7rem/1 'Share Tech Mono',monospace;letter-spacing:.26em;color:var(--gold);text-transform:uppercase;text-align:center;}
+    #leave h3{font:700 1.45rem/1.3 'Cinzel Decorative',serif;color:#F1EADB;text-align:center;margin:12px 0 10px;}
+    #leave .plain{color:#B3AA98;text-align:center;margin-bottom:4px;font-size:1.15rem;}
+    #leave .csm-note{font-style:italic;color:var(--ash);text-align:center;margin:8px 0 14px;font-size:1.1rem;}
+    #leave .csm-form{display:flex;gap:10px;flex-wrap:wrap;}
+    #leave .csm-input{flex:1 1 200px;min-width:0;background:#0B0A08;border:1px solid rgba(201,168,76,.26);color:var(--ash);font:400 1.1rem 'Crimson Text',serif;padding:12px 14px;}
+    #leave .csm-input:focus{outline:none;border-color:var(--gold);box-shadow:0 0 18px rgba(201,168,76,.15);}
+    #leave .csm-input::placeholder{color:#878070;}
+    #leave .csm-send{flex:0 0 auto;background:transparent;color:var(--gold-lt);border:1px solid var(--gold);font:600 .82rem 'Cinzel',serif;letter-spacing:.24em;text-transform:uppercase;padding:12px 20px;transition:background .4s,color .4s;}
+    #leave .csm-send:hover,#leave .csm-send:focus-visible{background:var(--gold);color:#0A0805;outline:none;}
+    #leave .csm-send:disabled{opacity:.6;}
+    #leave .fine{font:400 .76rem/1.6 'Share Tech Mono',monospace;color:#878070;margin-top:16px;text-align:center;letter-spacing:.03em;}
+    .sb .sb-more{display:block;width:max-content;margin:34px auto 0;font:400 .74rem/1 'Share Tech Mono',monospace;letter-spacing:.24em;text-transform:uppercase;color:rgba(201,168,76,.7);text-decoration:none;padding:8px 6px;}
+    .sb .sb-more:hover,.sb .sb-more:focus-visible{color:var(--gold-lt);outline:none;}
+    @media (prefers-reduced-motion:reduce){.sb *{animation:none!important;transition:none!important}}
   </style>
 <script>window.va=window.va||function(){(window.vaq=window.vaq||[]).push(arguments);};</script>
 <script defer src="/_vercel/insights/script.js"></script>
@@ -915,7 +984,72 @@
   <!-- MAIN -->
   <div id="main">
 
-    <section class="hero">
+    <!-- THE START · first thing a stranger sees. Was /start/ until November 15, 2026. -->
+    <section class="sb" id="start" aria-labelledby="sb-h">
+      <div class="sb-k">Codex Maledictus</div>
+      <div class="sb-arrival" id="sb-arrival" aria-live="polite"></div>
+
+      <h2 class="sb-h" id="sb-h">Some things you hear stay with you.</h2>
+      <div class="sb-div" aria-hidden="true"><span>🜏</span></div>
+
+      <div class="sb-lead">
+        <p class="first">A line from a song you can't shake. A sound in an empty room. Something you were told you imagined.</p>
+        <p>The Codex Maledictus is a record of those things. It is told in songs by Apollo Gavinci, in a book, in short films, and in rooms on this site that remember you were here.</p>
+        <p class="pick">You don't need to know anything first. Pick one door.</p>
+      </div>
+
+      <nav class="sb-doors" aria-label="Where to begin">
+        <a class="sb-door sb-listen" data-door="listen" href="https://open.spotify.com/album/221eiCbBGLwo8Z9MUJtWQc" target="_blank" rel="noopener">
+          <svg viewBox="-17 -17 34 34" aria-hidden="true">
+            <circle class="f" cx="-9" cy="0" r="2.4"/>
+            <path class="s ring" d="M -3,-6 A 8,8 0 0 1 -3,6"/>
+            <path class="s ring r2" d="M 2,-10 A 13,13 0 0 1 2,10"/>
+            <path class="s ring r3" d="M 7,-14 A 18,18 0 0 1 7,14"/>
+          </svg>
+          <span class="nx">The next door</span>
+          <span class="lab">Listen</span>
+          <span class="t">The Madmen's Gospel ↗</span>
+          <span class="d">The second Gospel. Start with the first track and let it play through.</span>
+        </a>
+        <a class="sb-door sb-enter" data-door="enter" href="madmens-gospel.html">
+          <svg viewBox="-17 -17 34 34" aria-hidden="true">
+            <path class="s" d="M -11,15 L -11,-3 A 11,11 0 0 1 11,-3 L 11,15"/>
+            <path class="s chev" d="M -6,-7 L 0,-2 L 6,-7"/>
+            <path class="s chev c2" d="M -6,-1 L 0,4 L 6,-1"/>
+            <path class="s chev c3" d="M -6,5 L 0,10 L 6,5"/>
+          </svg>
+          <span class="nx">The next door</span>
+          <span class="lab">Enter</span>
+          <span class="t">The first room</span>
+          <span class="d">Read it in order. Each room opens the next.</span>
+        </a>
+        <a class="sb-door sb-watch" data-door="watch" href="https://www.youtube.com/@CodexMaledictus" target="_blank" rel="noopener">
+          <svg viewBox="-17 -17 34 34" aria-hidden="true">
+            <path class="s" d="M -14,0 Q 0,-12 14,0 Q 0,12 -14,0 Z"/>
+            <circle class="f" cx="0" cy="0" r="4"/>
+            <rect class="lid" x="-15" y="-9" width="30" height="18"/>
+          </svg>
+          <span class="nx">The next door</span>
+          <span class="lab">Watch</span>
+          <span class="t">The transmissions ↗</span>
+          <span class="d">True history, with something underneath.</span>
+        </a>
+      </nav>
+
+      <div class="sb-still" aria-live="polite"><p id="sb-still"></p></div>
+
+      <section id="leave" aria-labelledby="leave-h">
+        <div class="k">For those who want word</div>
+        <h3 id="leave-h">Leave your frequency</h3>
+        <p class="plain">One letter when something new is recovered: a song, a film, a room. Nothing else.</p>
+        <div id="sb-summon"></div>
+        <p class="fine">Your address goes to the Codex mailing list and nowhere else. Every letter has a way out.</p>
+      </section>
+
+      <a class="sb-more" href="#codex">The rest of the record ↓</a>
+    </section>
+
+    <section class="hero" id="codex">
       <div class="hero-ghost" id="heroGhost">CODEX</div>
       <div class="hero-inner">
 
@@ -1339,8 +1473,8 @@
         <a class="nav-link" href="codex-remembers-you.html">The Codex Remembers</a>
         <a class="nav-link" href="confession-ledger.html">Confession Ledger</a>
         <a class="nav-link" href="https://www.amazon.com/dp/B0FQ9QDMQ2" target="_blank" rel="noopener">The Book</a>
-        <a class="nav-link" href="start/">Start Here</a>
-        <a class="nav-link nav-summon" href="start/#leave" id="summons-link">Leave Your Frequency</a>
+        <a class="nav-link" href="#start">Start Here</a>
+        <a class="nav-link nav-summon" href="#leave" id="summons-link">Leave Your Frequency</a>
       </div>
       <div class="nav-glyph">🜏</div>
     </nav>
@@ -2069,7 +2203,17 @@
     li++;
     setTimeout(nextLine, li===1?520:580);
   }
-  setTimeout(nextLine,700);
+  /* the start block never waits behind the boot: on a phone, or when someone
+     comes in through a start link, the page opens at once */
+  const QUICK = (window.matchMedia && matchMedia('(max-width:768px),(pointer:coarse)').matches) || /^#(start|leave)$/.test(location.hash);
+  if(QUICK){
+    mainEl.style.transition='none';
+    mainEl.classList.add('show');
+    bootEl.remove();
+    renderReading();
+  } else {
+    setTimeout(nextLine,700);
+  }
 
   /* reveal */
   const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');obs.unobserve(e.target);}});},{threshold:.1});
@@ -2817,6 +2961,98 @@
 
   <script src="codex-cipher.js"></script>
   <script src="codex-nav.js" defer></script>
+  <script src="codex-summon.js"></script>
+  <script>
+  /* THE START · notices where a stranger came from, remembers which door they
+     took, and lets one line surface if they stay still. Keeps codex_start_v1
+     {visits, door, at}, the same key /start/ kept. Nothing leaves this device. */
+  (function(){
+    var KEY='codex_start_v1', REDUCED=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+    function $(i){return document.getElementById(i);}
+    function get(k){try{return JSON.parse(localStorage.getItem(k))||{};}catch(e){return {};}}
+    function put(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
+    var S=get(KEY); S.visits=(S.visits||0)+1; put(KEY,S);
+    var front=get('codex_witness_state_v1').visits||0;
+    /* an old /start/ link passes the real referrer along before it forwards here */
+    var carried=null;
+    try{carried=sessionStorage.getItem('codex_ref');sessionStorage.removeItem('codex_ref');}catch(e){}
+    function source(){
+      try{
+        var q=new URLSearchParams(location.search).get('utm_source')||'';
+        var ref=carried!==null?carried:document.referrer;
+        var r=q||(ref?new URL(ref).hostname:'');
+        r=r.toLowerCase();
+        if(!r) return 'direct';
+        if(r.indexOf('codexmaledictus')>-1) return 'self';
+        if(/itch/.test(r)) return 'itch';
+        if(/tiktok/.test(r)) return 'tiktok';
+        if(/youtu/.test(r)) return 'youtube';
+        if(/instagram/.test(r)) return 'instagram';
+        if(/threads/.test(r)) return 'threads';
+        if(/twitter|x\.com|^t\.co/.test(r)) return 'x';
+        if(/reddit/.test(r)) return 'reddit';
+        if(/spotify/.test(r)) return 'spotify';
+        if(/linktr/.test(r)) return 'linktree';
+        if(/google|bing|duckduckgo/.test(r)) return 'search';
+        if(/discord/.test(r)) return 'discord';
+        return 'other';
+      }catch(e){return 'direct';}
+    }
+    var DOORS={listen:'Listen',enter:'Enter',watch:'Watch'}, ORDER=['listen','enter','watch'];
+    var line;
+    if(S.visits>1&&S.door){
+      line='You came back. Last time you took the door marked '+DOORS[S.door]+'. The next one is open.';
+    } else {
+      line={
+        itch:'You came from her workstation. Whatever you found there, the record goes on here.',
+        tiktok:'You came from TikTok. Something there followed you here.',
+        youtube:'You came from a transmission. You heard enough to look for the source.',
+        instagram:'You came from an image. Images are how it usually starts.',
+        threads:'You came from a thread. You pulled it.',
+        x:'You came from a place called X. Someone there was talking about this.',
+        reddit:'You came from a forum. Somebody there said they heard it too.',
+        spotify:'You came from the music. Most people stop at the music.',
+        linktree:'You followed a list of links to the one that mattered.',
+        search:'You searched for this. Most people only find it by accident.',
+        discord:'You came from a chamber of voices.',
+        self:'You came from inside the record. This is where strangers begin.',
+        other:'Someone sent you here. They may not know why.',
+        direct:'No one sent you here. The Archive noticed that most of all.'
+      }[source()];
+      if(front>1&&S.visits===1) line+=' The Archive has seen you before.';
+    }
+    var ar=$('sb-arrival');
+    if(ar){
+      if(REDUCED){ar.textContent=line;}
+      else{
+        var i=0,cur=document.createElement('span');cur.className='cur';
+        var txt=document.createTextNode('');ar.appendChild(txt);ar.appendChild(cur);
+        setTimeout(function step(){txt.data=line.slice(0,++i);if(i<line.length)setTimeout(step,26+Math.random()*30);else setTimeout(function(){cur.remove();},2600);},600);
+      }
+    }
+    if(S.door){var nx=ORDER[(ORDER.indexOf(S.door)+1)%3];var el=document.querySelector('.sb [data-door="'+nx+'"]');if(el)el.classList.add('next');}
+    Array.prototype.forEach.call(document.querySelectorAll('.sb [data-door]'),function(a){
+      a.addEventListener('click',function(){var s=get(KEY);s.door=a.getAttribute('data-door');s.at=Date.now();put(KEY,s);});
+    });
+    /* nobody moves, and the page notices. 13, then 26. Only while the start block is in view. */
+    var LINES=['You think you found this. It may have found you.','Those who stay help shape it. You are staying.'],shown=0,last=Date.now(),sb=$('start');
+    function moved(){last=Date.now();}
+    ['pointermove','pointerdown','keydown','scroll','touchstart'].forEach(function(e){addEventListener(e,moved,{passive:true});});
+    setInterval(function(){
+      if(document.hidden||shown>=LINES.length||!sb)return;
+      var r=sb.getBoundingClientRect();if(r.bottom<0||r.top>innerHeight)return;
+      if(Date.now()-last>=13000){
+        last=Date.now();var p=$('sb-still');p.classList.remove('on');
+        setTimeout(function(){p.textContent=LINES[shown];p.classList.add('on');shown++;},shown?900:0);
+      }
+    },1000);
+    if(window.CodexSummon&&$('sb-summon'))CodexSummon.mount($('sb-summon'),{
+      invite:'Leave an address and the Archive will write when something surfaces.',
+      button:'Leave it',
+      done:'Received. If a letter asks you to confirm, open it, or the Archive can’t write back.',
+      already:'The Archive already has your address. It will write when something surfaces.'});
+  })();
+  </script>
 
 </body>
 </html>
