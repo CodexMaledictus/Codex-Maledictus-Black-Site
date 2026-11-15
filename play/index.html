@@ -143,6 +143,28 @@
       .win{left:3%;top:3%;width:94%;max-height:86%;}
       .desk{grid-template-columns:1fr;}.photo{max-width:320px;margin:0 auto;}.note{max-width:300px;margin:0 auto;}
     }
+    /* her desk, kept in reach. When the window is short, the desk sits beside the monitor.
+       When it is still out of view (a fixed frame, a phone), a button brings it up. */
+    @media (min-width:700px) and (max-height:820px){
+      main{display:grid;grid-template-columns:minmax(0,1fr) 224px;column-gap:20px;max-width:1120px;padding:12px 14px 16px;}
+      .tagline,.opening,.after{grid-column:1/-1;}
+      .opening{margin-bottom:10px;min-height:0;}
+      .monitor{grid-column:1;width:min(100%,calc((100vh - 150px) * 1.6));justify-self:center;}
+      .desk{grid-column:2;grid-template-columns:1fr;margin-top:6px;gap:22px;}
+      .desk .tag{width:94%;padding:6px 7px;font-size:.6rem;transform:rotate(2deg);}
+      .after{margin-top:10px;}
+    }
+    .deskbtn{position:fixed;left:14px;bottom:14px;z-index:70;display:none;background:rgba(7,8,10,.88);border:1px solid #6B5A2A;color:#E0C878;font:400 .72rem 'Share Tech Mono',monospace;letter-spacing:.14em;text-transform:uppercase;padding:8px 12px;cursor:pointer;}
+    .deskbtn.show{display:block;}
+    .deskbtn.new{animation:deskpulse 1.6s ease-in-out 3;}
+    @keyframes deskpulse{50%{box-shadow:0 0 14px rgba(224,200,120,.55);border-color:#E0C878;}}
+    .deskview{position:fixed;inset:0;z-index:80;background:rgba(3,3,4,.86);display:none;align-items:center;justify-content:center;padding:16px;}
+    .deskview.on{display:flex;}
+    .deskview .in{width:min(560px,100%);max-height:100%;overflow:auto;padding:10px 6px;}
+    .deskview .desk{margin-top:0;}
+    .deskview .said{margin-top:18px;text-align:center;font:italic 400 1rem/1.5 'Crimson Text',serif;color:#CFC7B4;min-height:1.5em;}
+    .deskview .back{display:block;margin:16px auto 0;background:transparent;border:1px solid #6B5A2A;color:#E0C878;font:400 .72rem 'Share Tech Mono',monospace;letter-spacing:.14em;text-transform:uppercase;padding:8px 14px;cursor:pointer;}
+    @media (max-width:640px){.deskview .desk{grid-template-columns:1fr;gap:16px;}}
     @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
   </style>
 </head>
@@ -188,6 +210,8 @@
 
   <div class="after" id="after"></div>
 </main>
+<button class="deskbtn" id="deskbtn" type="button" aria-haspopup="dialog">Her desk</button>
+<div class="deskview" id="deskview" role="dialog" aria-modal="true" aria-label="Her desk"><div class="in"><div id="deskcopy"></div><p class="said" id="desksaid"></p><button class="back" id="deskback" type="button">Back to the screen</button></div></div>
 <button class="sound" id="sound" type="button" aria-pressed="false">Sound off</button>
 
 <script src="../codex-summon.js"></script>
@@ -476,6 +500,21 @@
   }
 
   console.log('%cmdey: if you are reading the source, you are already further in than I was on Day 1.','color:#8FF0B4');
+})();
+
+/* HER DESK · the evidence tag and her note, brought up when they are out of view. */
+(function(){
+  function $(i){return document.getElementById(i);}
+  var desk=document.querySelector('main .desk'),btn=$('deskbtn'),view=$('deskview'),after=$('after');
+  if(!desk||!btn||!view||!('IntersectionObserver' in window))return;
+  new IntersectionObserver(function(es){es.forEach(function(e){btn.classList.toggle('show',e.intersectionRatio<.35);});},{threshold:[0,.35,1]}).observe(desk);
+  function open(){$('deskcopy').innerHTML=desk.outerHTML;$('desksaid').innerHTML=after?after.innerHTML:'';view.classList.add('on');btn.classList.remove('new');try{$('deskback').focus({preventScroll:true});}catch(e){}}
+  function close(){view.classList.remove('on');try{btn.focus({preventScroll:true});}catch(e){}}
+  btn.addEventListener('click',open);$('deskback').addEventListener('click',close);
+  view.addEventListener('click',function(e){if(e.target===view)close();});
+  addEventListener('keydown',function(e){if(e.key==='Escape'&&view.classList.contains('on'))close();});
+  /* when the machine says something below the screen, the button glows so it is not missed */
+  if(after&&'MutationObserver' in window)new MutationObserver(function(){if(after.textContent&&btn.classList.contains('show')){btn.classList.remove('new');void btn.offsetWidth;btn.classList.add('new');}}).observe(after,{childList:true,characterData:true,subtree:true});
 })();
 </script>
 <script defer src="/_vercel/insights/script.js"></script>
