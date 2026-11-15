@@ -373,7 +373,7 @@
 
   /* the hidden folder: the rest of the record, filed as her case */
   function openHidden(){
-    var R=[['00_start_here.lnk','/start/','Where strangers begin'],['01_the_descent.lnk','/madmens-gospel.html','The first room, in order'],['02_index_of_everything.lnk','/pale-archive.html','The Pale Archive'],['03_evidence_item_7.lnk','/codex-remembers-you.html','What the IDMF kept'],['04_transcriptions.lnk','/the-transcriptions.html','The science underneath'],['05_the_ground.lnk','/rf-093-invocation.html','Hold it, and it stays'],['06_confessions.lnk','/confession-ledger.html','What others left']];
+    var R=[['00_start_here.lnk','/#start','Where strangers begin'],['01_the_descent.lnk','/madmens-gospel.html','The first room, in order'],['02_index_of_everything.lnk','/pale-archive.html','The Pale Archive'],['03_evidence_item_7.lnk','/codex-remembers-you.html','What the IDMF kept'],['04_transcriptions.lnk','/the-transcriptions.html','The science underneath'],['05_the_ground.lnk','/rf-093-invocation.html','Hold it, and it stays'],['06_confessions.lnk','/confession-ledger.html','What others left']];
     openWin('.case_553 · hidden','<div style="white-space:normal;font-family:system-ui,Arial">'+R.map(function(r){return '<a href="'+r[1]+'" style="display:flex;justify-content:space-between;gap:10px;padding:8px 4px;border-bottom:1px solid rgba(128,128,128,.25);text-decoration:none;color:inherit"><span>'+r[0]+'</span><span style="opacity:.6">'+r[2]+'</span></a>';}).join('')+'<p style="margin-top:10px;opacity:.6;font-size:.9em">Shortcuts. They point outside this machine, into the record itself.</p></div>','');
     step('/play/hidden');
   }
@@ -496,7 +496,7 @@
     el.classList.add('on');
     if(window.CodexSummon)CodexSummon.mount($('sum'),{invite:'Leave an address, and the record will write when her next file is restored.',button:'Leave it',done:'Received. If a letter asks you to confirm, open it, or the record can’t write back.',already:'The record already has your address. It will write when her next file opens.'});
     $('opening').textContent=back?'You finished her intake. The machine kept you.':'The machine turned itself off. It did not forget you.';
-    $('after').innerHTML='Chapter One of <i>Workstation 553-A</i>. <a href="/start/">Start here</a> to see the rest of the record.';
+    $('after').innerHTML='Chapter One of <i>Workstation 553-A</i>. <a href="/#start">Start here</a> to see the rest of the record.';
   }
 
   console.log('%cmdey: if you are reading the source, you are already further in than I was on Day 1.','color:#8FF0B4');
