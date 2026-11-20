@@ -241,7 +241,7 @@ const CODEX_MAP = {
   },
 
   "gospel-forgotten-flesh": {
-    file: "gospel-forgotten-flesh.html", title: "The Gospel of Forgotten Flesh", seq: 18, realm: "I",
+    file: "gospel-forgotten-flesh.html", title: "A Gospel of Forgotten Flesh", seq: 18, realm: "I",
     phase: "Broadcast Source",
     description: "The album from which every Ritual Transmission is relayed. The third Remembering of the current cycle.",
     closingWhisper: "You have heard them already. You did not know.",
@@ -574,7 +574,6 @@ const SEAL_CORE = {
 
 // CLOSINGS. The speakable phrases and their variants.
 const SEAL_CLOSE = [
-  'Pray you always have a hush to fear.',
   "Don't let it go unheard.",
   'The Codex remembers you now.',
   'The record stays open.',
@@ -816,7 +815,7 @@ const NAV_EXTRAS = {
   'plague-priest-liturgy': { summon: SUMMON_RITE },
   'plague-priest-lore': { outlet: { href: 'plague-priest-liturgy.html', label: 'Hear what it was tuned to', dest: 'The Liturgy, as recovered' } },
   'plague-priest-decoder': { outlet: { href: 'plague-priest-liturgy.html', label: 'Hear the lines you decoded', dest: 'The Liturgy, as recovered' } },
-  'plague-priest-apocrypha': { outlet: { href: 'https://open.spotify.com/album/1R70HqAWhxWUiHgqgG2UIf', label: 'Hear the broadcast source', dest: 'The Gospel of Forgotten Flesh, on Spotify', out: true }, hall: { href: 'the-three-weeks.html', label: 'Read the reception log', dest: 'The Three Weeks, June 8 to 29, 2025' }, summon: SUMMON_RITE },
+  'plague-priest-apocrypha': { outlet: { href: 'https://open.spotify.com/album/1R70HqAWhxWUiHgqgG2UIf', label: 'Hear the broadcast source', dest: 'A Gospel of Forgotten Flesh, on Spotify', out: true }, hall: { href: 'the-three-weeks.html', label: 'Read the reception log', dest: 'The Three Weeks, June 8 to 29, 2025' }, summon: SUMMON_RITE },
   'rf-093-lore': { outlet: { href: 'https://www.amazon.com/dp/B0FQ9QDMQ2', label: 'Request evidence access', dest: 'Book I, on Amazon Kindle', out: true } },
   'rf-093-invocation': { outlet: { href: 'https://youtu.be/lDo91ztT_ZQ', label: 'Watch the transmission', dest: 'Chronicle I, on YouTube', out: true } },
   'rf-093-apocrypha': { outlet: { href: 'https://www.amazon.com/dp/B0FQ9QDMQ2', label: 'Request evidence access', dest: 'Book I, on Amazon Kindle', out: true }, summon: SUMMON_FRAGMENT },
