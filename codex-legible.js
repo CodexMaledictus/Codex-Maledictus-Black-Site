@@ -38,7 +38,7 @@
         if (rgb(s.backgroundColor)[3] < .5) lift(e, 4.5);
       } else {
         if (e.style.color || e.tagName === 'EM' || e.tagName === 'SPAN') return;      // a line set dark by hand is meant to be found
-        if (NARROW && fs < 10) e.style.fontSize = '10px';
+        if (NARROW) { var floor = text.length >= 40 ? 13 : 11; if (fs < floor) e.style.fontSize = floor + 'px'; }   // a sentence on a phone is meant to be read
         if (text.length >= 20) {
           var g = ground(e), c = rgb(s.color), cr = (Math.max(lum(c),lum(g))+.05)/(Math.min(lum(c),lum(g))+.05);
           if (cr >= 1.2) lift(e, 3.5);

@@ -4,7 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="canonical" href="https://codexmaledictus.com/lore-chronicle-1.html" />
-  <title>Chronicle I , Case File CM-1 // The Archivum's Reading</title>
+  <title>Chronicle I, Case File CM-1: The Archivum's Reading · Codex Maledictus</title>
+<meta property="og:title" content="Chronicle I, Case File CM-1: The Archivum's Reading">
+<meta property="og:description" content="The Pale Archivum's classified case file on Apollo Gavinci. Seven stages decoded. The 600 cities. The Testimony Oracle. Clearance: none required. The Archive decides who reads.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://codexmaledictus.com/lore-chronicle-1.html">
+<meta property="og:site_name" content="Codex Maledictus">
+<meta property="og:image" content="https://codexmaledictus.com/Assets/Chronicle%20I/six-hundred-cities.jpeg">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="description" content="The Pale Archivum's classified case file on Apollo Gavinci. Seven stages decoded. The 600 cities. The Testimony Oracle. Clearance: none required. The Archive decides who reads.">
 <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400;1,600&family=IM+Fell+English:ital@0;1&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <script src="codex-cipher.js"></script>
@@ -294,7 +301,7 @@ body{background:var(--void);color:var(--ash);font-family:'Crimson Text',serif;ov
   <div class="boot-glyph">PALE ARCHIVUM // INTERNAL RECORDS</div>
   <div id="boot-lines"></div>
   <div class="boot-bar"><div class="boot-fill"></div></div>
-  <div class="boot-lbl">CASE FILE CM-1 , RETRIEVAL IN PROGRESS</div>
+  <div class="boot-lbl">CASE FILE CM-1 · RETRIEVAL IN PROGRESS</div>
 </div>
 
 <!-- MAIN -->
@@ -314,7 +321,7 @@ body{background:var(--void);color:var(--ash);font-family:'Crimson Text',serif;ov
         <span class="hr-bar" style="width:44%;"></span>
       </div>
       <p class="hero-readline">He is not the author in this room. He is the subject.<br>What follows is the institution's reading of the man,<br>conducted while he believed he was alone.</p>
-      <div class="hero-stamp">Clearance: None On File , Proceeding</div>
+      <div class="hero-stamp">Clearance: None On File · Proceeding</div>
       <div class="hero-clearance">The Archive decides who reads. It has decided.</div>
     </div>
   </section>
@@ -585,7 +592,7 @@ try{
 const BOOT_LINES=[
   {t:'PALE ARCHIVUM // INTERNAL RECORDS DIVISION',r:false},
   {t:'RETRIEVING CASE FILE CM-1 . . .',r:false},
-  {t:'SUBJECT: GAVINCI, APOLLO , STATUS: IN TRANSIT',r:true},
+  {t:'SUBJECT: GAVINCI, APOLLO · STATUS: IN TRANSIT',r:true},
   {t:'READER CLEARANCE: NONE ON FILE',warn:true},
   {t:'PROCEEDING. THE ARCHIVE DECIDES WHO READS.',r:true}
 ];
@@ -603,8 +610,8 @@ function bootNext(){
   const el=document.createElement('div');
   el.className='bline'+(L.warn?' warn':'');
   if(L.r){
-    const parts=L.t.split(' , ');
-    el.innerHTML='<span class="redact">'+parts[0]+'</span>'+(parts[1]?' , '+parts[1]:'');
+    const parts=L.t.split(' · ');
+    el.innerHTML='<span class="redact">'+parts[0]+'</span>'+(parts[1]?' · '+parts[1]:'');
   }else{
     el.textContent=L.t;
   }
@@ -760,7 +767,7 @@ function revealSelfAnnotation(){
   const el=document.getElementById('self-annotation');
   if(!el)return;
   el.innerHTML=
-    '<div class="sa-head">ENTRY VIII , UNNUMBERED , ARCHIVUM SELF-ANNOTATION , FILED BY NO ANALYST ON RECORD</div>'
+    '<div class="sa-head">ENTRY VIII · UNNUMBERED · ARCHIVUM SELF-ANNOTATION · FILED BY NO ANALYST ON RECORD</div>'
     +'<div class="sa-body">'
     +'<p>This entry was not written for the subject\u0027s file. It was found in it.</p>'
     +'<p>Annotations have been appearing in Case File CM-1 in the Archivum\u0027s own house style. Correct stamps. Correct margins. Correct restraint. No analyst on record filed them. Attribution analysis returns a match for the institution itself, which is not a result the method is supposed to be able to produce.</p>'

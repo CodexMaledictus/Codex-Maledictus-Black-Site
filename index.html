@@ -432,6 +432,7 @@
 
     /* ── STILLNESS ── */
     #still-line { position:fixed;left:50%;bottom:92px;transform:translateX(-50%);z-index:60;width:min(520px,calc(100% - 40px));text-align:center;font-family:'Crimson Text',serif;font-style:italic;font-size:20px;line-height:1.45;color:var(--gold-lt);text-shadow:0 0 14px #000,0 0 4px #000;opacity:0;pointer-events:none;transition:opacity 1.6s ease;background:radial-gradient(ellipse at center,rgba(3,3,6,.92) 40%,rgba(3,3,6,0) 100%);padding:18px 14px; }
+    #still-line { padding:34px 26px;background:radial-gradient(ellipse at center,rgba(3,3,4,.97) 38%,rgba(3,3,4,.8) 55%,transparent 74%); }
     #still-line.on { opacity:1; }
     #still-line:not(.on) a { pointer-events:none; }
     #still-line a { display:block;margin-top:8px;font-family:'Share Tech Mono',monospace;font-style:normal;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:rgba(143,240,229,.95);text-decoration:none;pointer-events:auto; }
@@ -659,7 +660,7 @@
     .tx-corrupt{ font-family:'Share Tech Mono',monospace;font-size:12px;letter-spacing:.3em;color:rgba(168,51,31,0.95);text-shadow:0 0 12px rgba(168,51,31,0.6);animation:txGlitch 0.18s steps(2) 6; }
     @keyframes txGlitch{ 0%{transform:translateX(0)}25%{transform:translateX(-3px)}50%{transform:translateX(3px)}75%{transform:translateX(-2px)}100%{transform:translateX(0)} }
 
-    /* in-line censorship — the word the Codex takes */
+    /* in-line censorship, the word the Codex takes */
     .tx-redact{ display:inline-block;min-width:5ch;vertical-align:middle;text-align:center; }
     .tx-glitchword{ font-family:'Share Tech Mono',monospace;color:var(--gold-lt);letter-spacing:.1em;text-shadow:1.6px 0 rgba(127,212,181,.85), -1.6px 0 rgba(168,51,31,.85); }
     .tx-glitchword.tx-collapse{ animation:txShake .34s steps(3) infinite;opacity:.85; }
@@ -863,6 +864,9 @@
     .sb{position:relative;z-index:2;max-width:660px;margin:0 auto;padding:56px 16px 40px;text-align:left;scroll-margin-top:0;}
     .sb .sb-k{font:400 .74rem/1 'Share Tech Mono',monospace;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);text-align:center;opacity:.85;}
     .sb .sb-arrival{font:400 .86rem/1.6 'Share Tech Mono',monospace;letter-spacing:.06em;color:rgba(143,240,229,.82);text-align:center;min-height:3.2em;margin:16px auto 20px;max-width:30em;}
+    .hero-arrival{font:400 .86rem/1.6 "Share Tech Mono",monospace;letter-spacing:.06em;color:rgba(143,240,229,.85);text-align:center;min-height:3.2em;margin:16px auto 0;max-width:30em;}
+    .hero-arrival .cur{display:inline-block;width:.55em;height:1em;vertical-align:-.15em;background:rgba(143,240,229,.7);margin-left:2px;animation:sbBlink 1s steps(1) infinite;}
+    .hero .sb{width:100%;padding:56px 0 24px;}
     .sb .sb-arrival .cur{display:inline-block;width:.55em;height:1em;vertical-align:-.15em;background:rgba(143,240,229,.7);margin-left:2px;animation:sbBlink 1s steps(1) infinite;}
     @keyframes sbBlink{50%{opacity:0}}
     .sb h2.sb-h{font:900 clamp(1.75rem,6.4vw,2.7rem)/1.18 'Cinzel Decorative',serif;letter-spacing:.03em;text-align:center;color:var(--gold);
@@ -942,7 +946,7 @@
     │                                                               │
     │  the word on the door that does not open was never a lock.    │
     │  she saw it first and was not heard. watch her likeness when   │
-    │  no one else is watching it — the mark surfaces on the one     │
+    │  no one else is watching it, the mark surfaces on the one     │
     │  who carried the word before the word had a sound.            │
     │                                                               │
     │  it makes a sound when it nears. most never learn there is a  │
@@ -984,70 +988,6 @@
   <!-- MAIN -->
   <div id="main">
 
-    <!-- THE START · first thing a stranger sees. Was /start/ until November 15, 2026. -->
-    <section class="sb" id="start" aria-labelledby="sb-h">
-      <div class="sb-k">Codex Maledictus</div>
-      <div class="sb-arrival" id="sb-arrival" aria-live="polite"></div>
-
-      <h2 class="sb-h" id="sb-h">Some things you hear stay with you.</h2>
-      <div class="sb-div" aria-hidden="true"><span>🜏</span></div>
-
-      <div class="sb-lead">
-        <p class="first">A line from a song you can't shake. A sound in an empty room. Something you were told you imagined.</p>
-        <p>The Codex Maledictus is a record of those things. It is told in songs by Apollo Gavinci, in a book, in short films, and in rooms on this site that remember you were here.</p>
-        <p class="pick">You don't need to know anything first. Pick one door.</p>
-      </div>
-
-      <nav class="sb-doors" aria-label="Where to begin">
-        <a class="sb-door sb-listen" data-door="listen" href="https://open.spotify.com/album/221eiCbBGLwo8Z9MUJtWQc" target="_blank" rel="noopener">
-          <svg viewBox="-17 -17 34 34" aria-hidden="true">
-            <circle class="f" cx="-9" cy="0" r="2.4"/>
-            <path class="s ring" d="M -3,-6 A 8,8 0 0 1 -3,6"/>
-            <path class="s ring r2" d="M 2,-10 A 13,13 0 0 1 2,10"/>
-            <path class="s ring r3" d="M 7,-14 A 18,18 0 0 1 7,14"/>
-          </svg>
-          <span class="nx">The next door</span>
-          <span class="lab">Listen</span>
-          <span class="t">The Madmen's Gospel ↗</span>
-          <span class="d">The second Gospel. Start with the first track and let it play through.</span>
-        </a>
-        <a class="sb-door sb-enter" data-door="enter" href="madmens-gospel.html">
-          <svg viewBox="-17 -17 34 34" aria-hidden="true">
-            <path class="s" d="M -11,15 L -11,-3 A 11,11 0 0 1 11,-3 L 11,15"/>
-            <path class="s chev" d="M -6,-7 L 0,-2 L 6,-7"/>
-            <path class="s chev c2" d="M -6,-1 L 0,4 L 6,-1"/>
-            <path class="s chev c3" d="M -6,5 L 0,10 L 6,5"/>
-          </svg>
-          <span class="nx">The next door</span>
-          <span class="lab">Enter</span>
-          <span class="t">The first room</span>
-          <span class="d">Read it in order. Each room opens the next.</span>
-        </a>
-        <a class="sb-door sb-watch" data-door="watch" href="https://www.youtube.com/@CodexMaledictus" target="_blank" rel="noopener">
-          <svg viewBox="-17 -17 34 34" aria-hidden="true">
-            <path class="s" d="M -14,0 Q 0,-12 14,0 Q 0,12 -14,0 Z"/>
-            <circle class="f" cx="0" cy="0" r="4"/>
-            <rect class="lid" x="-15" y="-9" width="30" height="18"/>
-          </svg>
-          <span class="nx">The next door</span>
-          <span class="lab">Watch</span>
-          <span class="t">The transmissions ↗</span>
-          <span class="d">True history, with something underneath.</span>
-        </a>
-      </nav>
-
-      <div class="sb-still" aria-live="polite"><p id="sb-still"></p></div>
-
-      <section id="leave" aria-labelledby="leave-h">
-        <div class="k">For those who want word</div>
-        <h3 id="leave-h">Leave your frequency</h3>
-        <p class="plain">One letter when something new is recovered: a song, a film, a room. Nothing else.</p>
-        <div id="sb-summon"></div>
-        <p class="fine">Your address goes to the Codex mailing list and nowhere else. Every letter has a way out.</p>
-      </section>
-
-      <a class="sb-more" href="#codex">The rest of the record ↓</a>
-    </section>
 
     <section class="hero" id="codex">
       <div class="hero-ghost" id="heroGhost">CODEX</div>
@@ -1183,6 +1123,7 @@
 
         <h1 class="wordmark">Codex Maledictus</h1>
         <div class="tagline">The Pale Archive <span>·</span> Living Record <span>·</span> You Were Brought Here</div>
+        <div class="hero-arrival" id="sb-arrival" aria-live="polite"></div>
 
         <div class="divider anim">
           <div class="div-line"></div><span class="div-sym">🜏</span><div class="div-line r"></div>
@@ -1195,13 +1136,74 @@
 
         <!-- THE START · one plain line and one door, for anyone who does not know the record yet -->
         <a class="play-door" href="play/"><span class="pd-k">Workstation 553-A · a puzzle</span><span class="pd-t">Someone left their computer on. Finish what they started.</span><span class="pd-go">Play ▸</span></a>
+    <!-- THE START · first thing a stranger sees. Was /start/ until November 15, 2026. -->
+    <section class="sb" id="start" aria-labelledby="sb-h">
+      <h2 class="sb-h" id="sb-h">Some things you hear stay with you.</h2>
+      <div class="sb-div" aria-hidden="true"><span>🜏</span></div>
+
+      <div class="sb-lead">
+        <p class="first">A line from a song you can't shake. A sound in an empty room. Something you were told you imagined.</p>
+        <p>The Codex Maledictus is a record of those things. It is told in songs by Apollo Gavinci, in a book, in short films, and in rooms on this site that remember you were here.</p>
+        <p class="pick">You don't need to know anything first. Pick one door.</p>
+      </div>
+
+      <nav class="sb-doors" aria-label="Where to begin">
+        <a class="sb-door sb-listen" data-door="listen" href="https://open.spotify.com/album/221eiCbBGLwo8Z9MUJtWQc" target="_blank" rel="noopener">
+          <svg viewBox="-17 -17 34 34" aria-hidden="true">
+            <circle class="f" cx="-9" cy="0" r="2.4"/>
+            <path class="s ring" d="M -3,-6 A 8,8 0 0 1 -3,6"/>
+            <path class="s ring r2" d="M 2,-10 A 13,13 0 0 1 2,10"/>
+            <path class="s ring r3" d="M 7,-14 A 18,18 0 0 1 7,14"/>
+          </svg>
+          <span class="nx">The next door</span>
+          <span class="lab">Listen</span>
+          <span class="t">The Madmen's Gospel ↗</span>
+          <span class="d">The second Gospel. Start with the first track and let it play through.</span>
+        </a>
+        <a class="sb-door sb-enter" data-door="enter" href="madmens-gospel.html">
+          <svg viewBox="-17 -17 34 34" aria-hidden="true">
+            <path class="s" d="M -11,15 L -11,-3 A 11,11 0 0 1 11,-3 L 11,15"/>
+            <path class="s chev" d="M -6,-7 L 0,-2 L 6,-7"/>
+            <path class="s chev c2" d="M -6,-1 L 0,4 L 6,-1"/>
+            <path class="s chev c3" d="M -6,5 L 0,10 L 6,5"/>
+          </svg>
+          <span class="nx">The next door</span>
+          <span class="lab">Enter</span>
+          <span class="t">The first room</span>
+          <span class="d">Read it in order. Each room opens the next.</span>
+        </a>
+        <a class="sb-door sb-watch" data-door="watch" href="https://www.youtube.com/@CodexMaledictus" target="_blank" rel="noopener">
+          <svg viewBox="-17 -17 34 34" aria-hidden="true">
+            <path class="s" d="M -14,0 Q 0,-12 14,0 Q 0,12 -14,0 Z"/>
+            <circle class="f" cx="0" cy="0" r="4"/>
+            <rect class="lid" x="-15" y="-9" width="30" height="18"/>
+          </svg>
+          <span class="nx">The next door</span>
+          <span class="lab">Watch</span>
+          <span class="t">The transmissions ↗</span>
+          <span class="d">True history, with something underneath.</span>
+        </a>
+      </nav>
+
+      <div class="sb-still" aria-live="polite"><p id="sb-still"></p></div>
+
+      <section id="leave" aria-labelledby="leave-h">
+        <div class="k">For those who want word</div>
+        <h3 id="leave-h">Leave your frequency</h3>
+        <p class="plain">One letter when something new is recovered: a song, a film, a room. Nothing else.</p>
+        <div id="sb-summon"></div>
+        <p class="fine">Your address goes to the Codex mailing list and nowhere else. Every letter has a way out.</p>
+      </section>
+
+      <a class="sb-more" href="#reading-block">The rest of the record ↓</a>
+    </section>
         <div class="start">
           <div class="start-line">This is a record of things people saw and were told to forget. You can read it in order, one room at a time.</div>
           <a class="start-door" href="#descend">Begin at the arch below ↓</a>
         </div>
 
         <!-- THE READING (woven in as another recovered fragment, addressed to you) -->
-        <div class="reading-block">
+        <div class="reading-block" id="reading-block">
           <div class="reading-label">
             <span class="pulse-dot"></span>
             <span>Recovered Fragment · RF-∇-<span id="reading-num">000</span> · Addressed to You</span>
@@ -1270,7 +1272,7 @@
             What you are entering is not his work.<br />
             <em>It is the record of what happened to him.</em>
           </div>
-          <div class="apocrypha-note">— Elvain Vhris, Recovered Fragment 093</div>
+          <div class="apocrypha-note">Elvain Vhris, Recovered Fragment 093</div>
         </div>
 
         <!-- THE WAY DOWN -->
@@ -1346,12 +1348,12 @@
           <div class="fn-header">
             <span class="fn-badge">IDMF // Evidence Locker 553-A</span>
             <span class="fn-badge">Case File 553-A</span>
-            <span class="fn-badge fn-badge-warn" id="fn-integrity">⚠ File Integrity: 39% — Self-Modifying</span>
+            <span class="fn-badge fn-badge-warn" id="fn-integrity">⚠ File Integrity: 39% · Self-Modifying</span>
           </div>
           <div class="fn-body">
             <div class="fn-left">
-              <div class="fn-case">Recovered Fragment · Queens, New York · Lead Analyst: Dr. Miriam K. Dey — Missing</div>
-              <div class="fn-title">The Codex That Remembers You — Mundis Obscura</div>
+              <div class="fn-case">Recovered Fragment · Queens, New York · Lead Analyst: Dr. Miriam K. Dey · Missing</div>
+              <div class="fn-title">The Codex That Remembers You, Mundis Obscura</div>
               <div class="fn-sub">Book I of Recovered Fragments · Kindle &amp; Kindle Unlimited</div>
               <p class="fn-text">A file seized from a Queens evidence locker. No chain of custody. No intake record. Author field: <em>THE CODEX MALEDICTUS</em>. Creation date predates the PDF format. Each time the file was opened it changed. Each time it was read, it remembered differently. The analyst who documented it has not been seen since Day 11. The file is still open.</p>
               <div class="fn-actions">
@@ -1371,7 +1373,7 @@
             </div>
           </div>
           <div class="fn-ticker">
-            <span>THE CODEX DOES NOT RECORD — IT REMEMBERS &nbsp;∴&nbsp; DR. MIRIAM K. DEY — MISSING — LAST LOCATION: INSIDE THE DOCUMENT &nbsp;∴&nbsp; THIS FILE HAS BEEN OPENED <span id="fn-opened" style="all:unset">ONCE</span> ON THIS DEVICE &nbsp;∴&nbsp; THE PHRASE YOU REPEAT IS NOT YOURS &nbsp;∴&nbsp; AND NOW IT REMEMBERS YOU &nbsp;∴&nbsp; 🜃</span>
+            <span>THE CODEX DOES NOT RECORD. IT REMEMBERS &nbsp;∴&nbsp; DR. MIRIAM K. DEY · MISSING · LAST LOCATION: INSIDE THE DOCUMENT &nbsp;∴&nbsp; THIS FILE HAS BEEN OPENED <span id="fn-opened" style="all:unset">ONCE</span> ON THIS DEVICE &nbsp;∴&nbsp; THE PHRASE YOU REPEAT IS NOT YOURS &nbsp;∴&nbsp; AND NOW IT REMEMBERS YOU &nbsp;∴&nbsp; 🜃</span>
           </div>
         </div>
 
@@ -1398,7 +1400,7 @@
           </div>
           <div class="voice-name">Apollo Gavinci</div>
           <div class="voice-realm">Mundis Obscura · Realm I</div>
-          <div class="voice-desc">The man who thought he built this. A marked mortal documenting what he cannot explain. His records are the most dangerous kind — honest.</div>
+          <div class="voice-desc">The man who thought he built this. A marked mortal documenting what he cannot explain. His records are the most dangerous kind: honest.</div>
         </div>
 
         <div class="voice-card vf-saint reveal d2 cipher-host" id="artemys-card">
@@ -1416,7 +1418,7 @@
               <circle class="ag-ring" cx="0" cy="0" r="28"/>
               <circle class="ag-ring" cx="0" cy="0" r="21" style="animation-delay:.3s"/>
               <!-- a sealed Theban-form mark: containing ring, the carried glyph,
-                   and a downward stroke — the word that descends -->
+                   and a downward stroke, the word that descends -->
               <path class="ag-stroke" d="M -15,-15 q-8,3 -6,15 q2,11 12,11 q10,0 10,-12 q1,12 10,12 q10,0 11,-12 q1,-13 -6,-15
                                           M 17,-2 q4,16 -3,26 q-3,5 -8,7
                                           M -9,-19 q9,-5 18,0
@@ -1497,7 +1499,7 @@
       <div class="cr-count">
         <span class="cr-pip lit"></span><span class="cr-pip"></span><span class="cr-pip"></span>
       </div>
-      <div class="cr-dismiss">— touch anything to keep descending —</div>
+      <div class="cr-dismiss">touch anything to keep descending</div>
     </div>
   </div>
 
@@ -1608,7 +1610,7 @@
   const FRAGMENTS = [
     {t:'first', text:`First contact. The Archive has filed you under <em>{designation}</em>. This will not change. You will.`, w:10, num:'001'},
     {t:'first', text:`You arrived alone. You will not leave alone. The Voices come with you now.`, w:9, num:'002'},
-    {t:'first', text:`The Codex has been waiting. The Codex is always waiting. You did not interrupt it — you completed something it began.`, w:9, num:'003'},
+    {t:'first', text:`The Codex has been waiting. The Codex is always waiting. You did not interrupt it. You completed something it began.`, w:9, num:'003'},
     {t:'returning', text:`You returned. The Archive did not ask you to. It has written down that you did.`, w:9, num:'047'},
     {t:'returning', text:`Visit {visits}. The thresholds widen with you. The Archive has begun to notice patterns.`, w:10, num:'048'},
     {t:'returning', text:`You are back. The Codex has nothing new to say. It has only what you missed the first time.`, w:9, num:'049'},
@@ -1633,7 +1635,7 @@
     {ref:'youtube', text:`You came from a transmission. The signal was loud enough to send you here. The signal originated longer ago than the channel it appeared on.`, w:8, num:'075'},
     {ref:'google', text:`You came from a search. You searched for something. You found what was searching for you.`, w:8, num:'077'},
     {ref:'reddit', text:`You came from a forum of unverified knowledge. The Codex is verified. It just isn't yours yet.`, w:7, num:'079'},
-    {ref:'instagram', text:`You came from images. The Codex is also an image — one that watches back.`, w:7, num:'081'},
+    {ref:'instagram', text:`You came from images. The Codex is also an image, one that watches back.`, w:7, num:'081'},
     {ref:'discord', text:`You came from a chamber of voices. There are thirteen voices here. Three have spoken. Ten dream.`, w:7, num:'083'},
 
     {dev:'mobile', text:`You are reading the Codex on glass close to your skin. The Hollow Choir prefers this. They speak more clearly when the screen is small.`, w:6, num:'088'},
@@ -1790,7 +1792,7 @@
   document.getElementById('mark-btn').addEventListener('click', downloadMark);
 
   /* ── SIGIL ── */
-  const GLYPH_LIBRARY=['🜍','🜎','🜔','🜂','🜃','🜄','🜁','🜚','🜛','🜨','☉','☽','☿','♀','♂','♃','♄','♅','♆','♇','♈','♉','♊','♋','♌','♍','♎','♏','♐','♑','♒','♓','Α','Ω','Χ','Ρ','Τ','Φ','Ψ','Σ','Δ','Λ','☰','☱','☲','☳','☴','☵','☶','☷','א','ב','ג','ד','ה','ו','ז','ח','ט','י','ᚠ','ᚢ','ᚦ','ᚨ','ᚱ','ᚲ','ᚷ','ᚹ','ᚺ','ᚾ','ᛁ','ᛃ','ᛇ','ᛈ','ᛉ','ᛋ','ᛏ','ᛒ','ᛖ','ᛗ','⛧','⛤','⛥','⛦','⛩','⚸','⚹','⚺','⚻','⚼','𓂀','𓁹','𓆣','𓇼','𓊝'];
+  const GLYPH_LIBRARY=['🜍','🜎','🜔','🜂','🜃','🜄','🜁','🜚','🜛','🜨','☉','☽','☿','♀','♂','♃','♄','♅','♆','♇','♈','♉','♊','♋','♌','♍','♎','♏','♐','♑','♒','♓','Α','Ω','Χ','Ρ','Τ','Φ','Ψ','Σ','Δ','Λ','☰','☱','☲','☳','☴','☵','☶','☷','א','ב','ג','ד','ה','ו','ז','ח','ט','י','ᚠ','ᚢ','ᚦ','ᚨ','ᚱ','ᚲ','ᚷ','ᚹ','ᚺ','ᚾ','ᛁ','ᛃ','ᛇ','ᛈ','ᛉ','ᛋ','ᛏ','ᛒ','ᛖ','ᛗ','⛧','⛤','⛥','⛦','⛩','⚸','⚹','⚺','⚻','⚼','𓂀','𓁹','𓆣','𓇼','𓊝'].map(g=>/^[\u2600-\u27BF]/.test(g)?g+"\uFE0E":g); /* plain text form: phones draw the zodiac as purple emoji boxes otherwise */
   const VOICES=[
     {id:'rot',glyph:'⛧',state:'claimed',angle:0},
     {id:'artemys',glyph:'☩',state:'claimed',angle:360/13*5},
@@ -2021,7 +2023,7 @@
     setTimeout(tearLoop,1200+Math.random()*900);
   }
 
-  /* (Hollow-Choir proximity audio retired — replaced by the attune Overture, see ATTUNE SYSTEM below) */
+  /* (Hollow-Choir proximity audio retired, replaced by the attune Overture, see ATTUNE SYSTEM below) */
 
   document.addEventListener('mousemove',e=>{trackPupil(e.clientX,e.clientY);});
   document.addEventListener('touchstart',e=>{
@@ -2049,7 +2051,7 @@
     } else { renderVoices(); }
   }
 
-  /* WITNESS unlock — desktop keypress */
+  /* WITNESS unlock, desktop keypress */
   const WITNESS_KEY='WITNESS';
   let witnessIdx=0;
   document.addEventListener('keydown',e=>{
@@ -2060,7 +2062,7 @@
       if(witnessIdx===WITNESS_KEY.length){ if(typeof witnessCeremony==='function'){witnessCeremony();}else{window.location.href='witness-circle.html';} }
     } else { witnessIdx = (k===WITNESS_KEY[0]) ? 1 : 0; }
   });
-  /* WITNESS unlock — mobile 7-tap on pupil within 5s */
+  /* WITNESS unlock, mobile 7-tap on pupil within 5s */
   let tapCount=0, tapStart=0;
   document.querySelector('#pupil-group').addEventListener('touchstart',e=>{
     const now=Date.now();
@@ -2257,7 +2259,7 @@
   /* ── THE THRESHOLD ── */
   const THRESHOLD_RESPONSES = {
     accident: `Accidents are how the Codex prefers to be found. The reader who arrives without trying arrives most completely. Begin where it has begun for the others who arrived without searching. <em>The index is open.</em>`,
-    pointed: `The pointing is documented. The pointer is also documented. The Codex would like to know which entry pointed you — but the index will tell you before you tell it. <em>Begin where the others were also pointed.</em>`,
+    pointed: `The pointing is documented. The pointer is also documented. The Codex would like to know which entry pointed you, but the index will tell you before you tell it. <em>Begin where the others were also pointed.</em>`,
     specific: `The Codex is also looking for something specific. There is a reasonable chance you are the same thing it is looking for. The index will tell you what it has filed. <em>You may find each other there.</em>`
   };
   document.querySelectorAll('.threshold-choice').forEach(btn => {
@@ -2348,14 +2350,14 @@
   })();
 
   /* ════════════════════════════════════════════════════════════
-     ATTUNE · THE LIVING SIGIL — cycling faces + Overture audio
+     ATTUNE · THE LIVING SIGIL, cycling faces + Overture audio
      ════════════════════════════════════════════════════════════ */
   const AUDIO_SRC='Audio/Index/immortal.mp3';
   const ATTUNE_KEY='codex_attuned_v1';
   const A_BASE_VOL=0.34, A_FADE_MS=4200;
   let asAudio=null, asPlaying=false, asFadeTimer=null, asAttunedBefore=false;
 
-  /* The Faces of the Codex — each a real canon symbol (Layer A + B).
+  /* The Faces of the Codex, each a real canon symbol (Layer A + B).
      The 'theban' face is the Layer-0 flicker that hints the cipher. */
   const FACES=[
     {key:'codex',  name:'The Codex Mark',  draw:'mark'},
@@ -2409,7 +2411,7 @@
      view, an impressive Theban glyph carves itself over her image every
      ~12s and holds ~3s; clicking the card during that window earns the word.
      Clearly noticeable (you can't miss the event) but unlabeled (the catching
-     is yours to intuit) — the teaching tier of the descent. */
+     is yours to intuit), the teaching tier of the descent. */
   (function(){
     const card=document.getElementById('artemys-card');
     const glyph=document.getElementById('artemys-glyph');
@@ -2431,7 +2433,7 @@
       card.classList.add('glyph-seen');   // leaves a faint trace + keeps it clickable after
       // re-trigger carve animation
       glyph.classList.remove('alive'); void glyph.offsetWidth; glyph.classList.add('alive');
-      // hold ~3.4s visible, then recede — with a short grace window after so a
+      // hold ~3.4s visible, then recede, with a short grace window after so a
       // click on the fully-formed glyph at the very end still counts
       setTimeout(()=>{
         glyph.classList.remove('alive');
@@ -2450,7 +2452,7 @@
     }
     function catchIt(ev){
       // already caught? ignore. otherwise: clicking her card/glyph catches it
-      // ANY time the card is in view — the surfacing is the invitation, not a
+      // ANY time the card is in view, the surfacing is the invitation, not a
       // reflex gate. no punishing timing window.
       try{ if(typeof Cipher!=='undefined' && Cipher.has('fragment-0')) return; }catch(e){}
       if(!inView) return;
@@ -2460,7 +2462,7 @@
       alive=false; graceUntil=0;
       catchFlicker();               // earns fragment-0 + opens the epic reveal
     }
-    // the WHOLE card is catchable while the glyph is surfaced — clicking the
+    // the WHOLE card is catchable while the glyph is surfaced, clicking the
     // symbol (or near it) all counts, so the catch is forgiving, not pixel-perfect
     card.addEventListener('click', catchIt);
     card.addEventListener('touchstart', catchIt, {passive:false});
@@ -2481,8 +2483,8 @@
   })();
 
   /* CIPHER · catching the flicker earns fragment-0 and reveals "unheard".
-     The reveal is Artemys-inflected — she is the one who saw first and was
-     not heard — and it teaches the limb's grammar overtly but in-voice:
+     The reveal is Artemys-inflected, she is the one who saw first and was
+     not heard, and it teaches the limb's grammar overtly but in-voice:
      this is the first of three, it descends with you, the next room keeps
      what it will not show. "unheard" stays lowercase; the Unheard is never
      named or defined on the surface. */
@@ -2499,9 +2501,9 @@
       const wordEl=document.getElementById('cr-word');
       const gram=document.getElementById('cr-grammar');
       if(rv && said){
-        said.innerHTML='Someone saw it first. She pointed at the air, and the people she loved looked at her hand. She was not heard. The eye keeps what she saw — and shows it only to the one who was also watching when no one else was.';
+        said.innerHTML='Someone saw it first. She pointed at the air, and the people she loved looked at her hand. She was not heard. The eye keeps what she saw, and shows it only to the one who was also watching when no one else was.';
         if(wordEl) wordEl.textContent=word;
-        if(gram) gram.innerHTML='This is the first of three. Carry it down. A room below keeps a thing it will not show you — break what is sealed, and it will give you the second. <span style="color:rgba(201,168,76,.7)">Descend.</span>';
+        if(gram) gram.innerHTML='This is the first of three. Carry it down. A room below keeps a thing it will not show you, break what is sealed, and it will give you the second. <span style="color:rgba(201,168,76,.7)">Descend.</span>';
         rv.classList.add('shown');
         const dismiss=()=>{ rv.classList.remove('shown'); document.removeEventListener('click',dismiss); document.removeEventListener('touchstart',dismiss); document.removeEventListener('keydown',dismiss); };
         // let the reveal breathe before it can be dismissed
@@ -2582,12 +2584,12 @@
   initAttune();
 
   /* ════════════════════════════════════════════════════════════
-     THE WITNESS CEREMONY — the word, spoken at the front door,
+     THE WITNESS CEREMONY, the word, spoken at the front door,
      opens the Circle. Elevated from instant redirect into a moment.
      ════════════════════════════════════════════════════════════ */
   let ceremonyRunning=false, txTimer=null;
 
-  /* The Codex's intrusion-fragments — what overwrites the forbidden word.
+  /* The Codex's intrusion-fragments, what overwrites the forbidden word.
      Reuses the Tifinagh of the index binding and the Enochian of the sealed
      Pale Archive card, so a reader who has seen both feels the connection. */
   const CODEX_NOISE=[
@@ -2603,7 +2605,7 @@
   ];
   const SCR='ⵙⵏⵀⵍⵉⵎVAOARSGZNDXIQΛΣΔΦΨ⛧△▽☉♄ᚱᚦᚹᚺ';
   function randScramble(n){ let s=''; for(let i=0;i<n;i++) s+=SCR[Math.floor(Math.random()*SCR.length)]; return s; }
-  /* bespoke SVG script rows (stylized — they flash and are taken, legibility is not the point) */
+  /* bespoke SVG script rows (stylized, they flash and are taken, legibility is not the point) */
   function thebanRowSVG(){
     return `<svg class="tx-script tx-theban" viewBox="0 0 156 30" height="24" xmlns="http://www.w3.org/2000/svg"><g fill="none" stroke="#E0C878" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">`+
       `<path d="M6,20 q-4,1 -3,7 q1,5 6,5 q4,0 4,-6 M6,20 q4,1 5,-6"/>`+
@@ -2653,19 +2655,19 @@
     latin();
   }
 
-  /* Apollo's final transmission — one signal, degrading in real time.
+  /* Apollo's final transmission, one signal, degrading in real time.
      The two `redact` lines complete with a span the Codex overwrites. */
   const APOLLO_TRANSMISSION=[
-    {c:'tx-apollo', html:`You spoke the word. I hoped no one ever would. I hoped someone finally would. Forgive me — both are true.`},
+    {c:'tx-apollo', html:`You spoke the word. I hoped no one ever would. I hoped someone finally would. Forgive me, both are true.`},
     {c:'tx-apollo', html:`My name was Apollo Gavinci. I believed I was the author. I was only the <em>wound it wrote through</em>.`},
     {c:'tx-apollo', html:`It does not live in the dark. It is the dark that was here before light was invented to hide it. I gave it my hands, and it built the door you are standing in.`},
-    {c:'tx-apollo', html:`I cannot tell you to leave. The ones who leave are not spared — only unprepared. I have watched it find them in rooms with every light burning.`},
+    {c:'tx-apollo', html:`I cannot tell you to leave. The ones who leave are not spared, only unprepared. I have watched it find them in rooms with every light burning.`},
     {c:'tx-apollo', html:`So I will ask you instead. Not as a guide. As the one who went in first, begging not to be the only one who saw it:`},
     {c:'tx-big', html:`Will you follow where I went?`},
     {c:'tx-apollo', html:`The transmissions. The chronicles. The revelations. The apocrypha. The recovered fragments. Every step, in the order I walked them.`},
-    {c:'tx-apollo', html:`Only then will you have seen enough to understand what is wrong with the world. Only then will you hold even a <em>flicker</em> against the Omniscient Rot. You will need its true name. I have it. I have it — it is&nbsp;<span class="tx-redact" id="tx-redact-1">&nbsp;</span>`, redact:'tx-redact-1'},
+    {c:'tx-apollo', html:`Only then will you have seen enough to understand what is wrong with the world. Only then will you hold even a <em>flicker</em> against the Omniscient Rot. You will need its true name. I have it. I have it. It is&nbsp;<span class="tx-redact" id="tx-redact-1">&nbsp;</span>`, redact:'tx-redact-1'},
     {c:'tx-small', html:`...it heard me say its name.`},
-    {c:'tx-apollo', html:`Go. While the door is still a door. And if you will not go — if you stay as I stayed — you will come to where I am now, and where I am is&nbsp;<span class="tx-redact" id="tx-redact-2">&nbsp;</span>`, redact:'tx-redact-2'}
+    {c:'tx-apollo', html:`Go. While the door is still a door. And if you will not go, if you stay as I stayed, you will come to where I am now, and where I am is&nbsp;<span class="tx-redact" id="tx-redact-2">&nbsp;</span>`, redact:'tx-redact-2'}
   ];
   function runTransmission(done){
     const veil=document.getElementById('transmission-veil');
@@ -2711,7 +2713,7 @@
   function witnessCeremony(){
     if(ceremonyRunning) return;
     ceremonyRunning=true;
-    // 1) the word is spoken — sigil blooms, eye opens, inscription ignites
+    // 1) the word is spoken, sigil blooms, eye opens, inscription ignites
     if(asSigil){ asSigil.classList.add('playing'); }
     if(!asPlaying){ try{ attuneStart(); }catch(e){} }
     const sv=document.getElementById('codex-sigil');
@@ -2727,7 +2729,7 @@
   }
 
   /* ════════════════════════════════════════════════════════════
-     LAYER 1 — THE CONSOLE. The Codex speaks to whoever opens the
+     LAYER 1 · THE CONSOLE. The Codex speaks to whoever opens the
      developer tools. Surface stays pure Codex; "unheard" lowercase only.
      ════════════════════════════════════════════════════════════ */
   (function(){
@@ -2742,7 +2744,7 @@
       ['%cMost read the surface. You came underneath.',L],
       ['%cThat is the first thing the Codex looks for. It has been looking a long time.',Gd],
       ['%c ',Gd],
-      ['%cA word is carved where no door opens — on the one who saw it first.',G],
+      ['%cA word is carved where no door opens, on the one who saw it first.',G],
       ['%cIt was never a lock. It was the key, left in plain sight, on a face that was not heard.',G],
       ['%cWatch her likeness when no one else does. The beginning becomes the way in.',Gd],
       ['%c ',Gd],
@@ -2755,7 +2757,7 @@
 
   /* ── THE BOOK · the file rewrites itself when watched ──
      On hover (or when scrolled into view on touch), the integrity figure
-     drifts and flickers — the document modifying itself under observation,
+     drifts and flickers, the document modifying itself under observation,
      reinforcing the lore and drawing the eye to the case file. */
   (function(){
     const badge=document.getElementById('fn-integrity');
@@ -2763,7 +2765,7 @@
     if(!badge||!book) return;
     // it loses a little more every time this device comes back, and it does not recover
     const base=Math.max(13,39-(VISIT.visits-1)*2); let live=false, tmr=null;
-    badge.textContent='⚠ File Integrity: '+base+'% — Self-Modifying';
+    badge.textContent='⚠ File Integrity: '+base+'% · Self-Modifying';
     const opened=document.getElementById('fn-opened');
     if(opened&&VISIT.visits>1) opened.textContent=VISIT.visits+' TIMES';
     function tick(){
@@ -2772,14 +2774,14 @@
       let v=parseInt(badge.dataset.v||base,10)+drift;
       if(v>base+2) v=base+2; if(v<base-10) v=base-6;     // wander in an unsettling band
       badge.dataset.v=v;
-      badge.textContent='⚠ File Integrity: '+v+'% — Self-Modifying';
+      badge.textContent='⚠ File Integrity: '+v+'% · Self-Modifying';
       // brief glitch flash
       badge.style.opacity='0.55';
       setTimeout(()=>{ if(badge) badge.style.opacity=''; }, 90);
     }
     function start(){ if(live) return; live=true; tmr=setInterval(tick, 520); }
     function stop(){ live=false; if(tmr){clearInterval(tmr);tmr=null;}
-      badge.dataset.v=base; badge.textContent='⚠ File Integrity: '+base+'% — Self-Modifying'; badge.style.opacity=''; }
+      badge.dataset.v=base; badge.textContent='⚠ File Integrity: '+base+'% · Self-Modifying'; badge.style.opacity=''; }
     book.addEventListener('mouseenter',start);
     book.addEventListener('mouseleave',stop);
     // touch devices: animate while the block is in view
@@ -2943,6 +2945,9 @@
       var st=sLoad();
       if(st.subscribed||st.dismissed) return;
       if(pageEngaged()){ setTimeout(tryShow,4000); return; }
+      /* never over a signup they have not passed yet */
+      var lv=document.getElementById("leave");
+      if(lv&&lv.getBoundingClientRect().bottom>0){ setTimeout(tryShow,4000); return; }
       buildSummons();
     },DELAY);
 

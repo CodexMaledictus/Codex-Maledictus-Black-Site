@@ -5,6 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <link rel="canonical" href="https://codexmaledictus.com/Codex-Sigil.html" />
   <title>The Codex Sigil · Codex Maledictus</title>
+<meta name="description" content="The sigil of the Codex Maledictus. Thirteen seats around one eye. Three of them have spoken.">
+<meta property="og:title" content="The Codex Sigil">
+<meta property="og:description" content="The sigil of the Codex Maledictus. Thirteen seats around one eye. Three of them have spoken.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://codexmaledictus.com/Codex-Sigil.html">
+<meta property="og:site_name" content="Codex Maledictus">
+<meta property="og:image" content="https://codexmaledictus.com/Assets/Codex%20Maledictus%20Index/sigil-codex.jpeg">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Cinzel:wght@400;500&family=Crimson+Text:ital,wght@0,400;1,400&family=Share+Tech+Mono&display=swap" rel="stylesheet">
@@ -19,7 +27,7 @@
     --gold-lt:#E0C878;
     --gold-deep:#8A7330;
     --ash:#E4DDD0;
-    /* Realm III contamination — the leak */
+    /* Realm III contamination, the leak */
     --leak:#4FA88A;
     --leak-lt:#7FD4B5;
     --leak-deep:#1F5544;
@@ -126,7 +134,7 @@
     justify-content:center;
   }
 
-  /* Dual glow behind sigil — crimson outer, green inner from the leak */
+  /* Dual glow behind sigil, crimson outer, green inner from the leak */
   .sigil-vessel::before{
     content:'';
     position:absolute;
@@ -162,7 +170,7 @@
     overflow:visible;
   }
 
-  /* Tears are now green — Realm III contamination running down */
+  /* Tears are now green · Realm III contamination running down */
   .page-tear{
     position:absolute;
     width:3.5px;
@@ -317,7 +325,7 @@
           <stop offset="40%" stop-color="#4FA88A" stop-opacity="0.95"/>
           <stop offset="100%" stop-color="#4FA88A" stop-opacity="0"/>
         </linearGradient>
-        <!-- Pupil leak gradient — the Realm III core showing through -->
+        <!-- Pupil leak gradient, the Realm III core showing through -->
         <radialGradient id="leakCore" cx="0.5" cy="0.5" r="0.5">
           <stop offset="0%" stop-color="#7FD4B5" stop-opacity="1"/>
           <stop offset="50%" stop-color="#4FA88A" stop-opacity="0.95"/>
@@ -353,14 +361,14 @@
         </filter>
       </defs>
 
-      <!-- LAYER 5 — Outer Binding Ring -->
+      <!-- LAYER 5 · Outer Binding Ring -->
       <g id="layer-outer">
         <circle cx="0" cy="0" r="285" fill="url(#crimsonBleed)" opacity="0.5"/>
         <circle cx="0" cy="0" r="285" fill="none" stroke="url(#goldShine)" stroke-width="1.5" opacity="0.85"/>
         <circle cx="0" cy="0" r="278" fill="none" stroke="var(--gold-deep)" stroke-width="0.5" opacity="0.6"/>
         <g id="binding-inscription"></g>
 
-        <!-- Three crimson cracks — the violence in the binding -->
+        <!-- Three crimson cracks, the violence in the binding -->
         <g id="cracks">
           <g class="crack" transform="rotate(35)">
             <path d="M 0,-285 L -3,-260 L 4,-235 L -2,-210 L 5,-185" stroke="var(--crimson)" stroke-width="1.4" fill="none" filter="url(#crimsonGlow)" opacity="0.75"/>
@@ -377,21 +385,21 @@
         </g>
       </g>
 
-      <!-- LAYER 4 — Voice Ring -->
+      <!-- LAYER 4 · Voice Ring -->
       <g id="layer-voices">
         <circle cx="0" cy="0" r="255" fill="none" stroke="var(--gold-deep)" stroke-width="0.5" opacity="0.4"/>
         <circle cx="0" cy="0" r="225" fill="none" stroke="var(--gold-deep)" stroke-width="0.5" opacity="0.4"/>
         <g id="voice-positions"></g>
       </g>
 
-      <!-- LAYER 3 — Inner Rune Ring -->
+      <!-- LAYER 3 · Inner Rune Ring -->
       <g id="layer-runes">
         <circle cx="0" cy="0" r="215" fill="none" stroke="var(--gold-deep)" stroke-width="0.5" opacity="0.45"/>
         <circle cx="0" cy="0" r="185" fill="none" stroke="var(--gold-deep)" stroke-width="0.5" opacity="0.45"/>
         <g id="rune-positions"></g>
       </g>
 
-      <!-- LAYER 2 — Compass Star -->
+      <!-- LAYER 2 · Compass Star -->
       <g id="layer-compass">
         <g filter="url(#goldGlow)">
           <path id="compass-star" d="
@@ -404,7 +412,7 @@
             fill="none" stroke="var(--gold-lt)" stroke-width="0.7" opacity="0.85"/>
         </g>
 
-        <!-- THE WOUND — now bleeds green Realm-III contamination at its edges -->
+        <!-- THE WOUND, now bleeds green Realm-III contamination at its edges -->
         <circle cx="0" cy="0" r="115" fill="url(#woundBleed)"/>
         <!-- Green glow ring at the wound's edge (contamination escaping) -->
         <circle cx="0" cy="0" r="115" fill="none" stroke="var(--leak)" stroke-width="1.8" opacity="0.45" filter="url(#leakGlow)"/>
@@ -419,7 +427,7 @@
         </g>
       </g>
 
-      <!-- LAYER 1 — THE WADJET (gold structure, green leak in pupil) -->
+      <!-- LAYER 1 · THE WADJET (gold structure, green leak in pupil) -->
       <g id="layer-wadjet">
 
         <!-- BROW BAR -->
@@ -438,7 +446,7 @@
             fill="none" stroke="var(--gold-lt)" stroke-width="0.8" opacity="0.7"/>
         </g>
 
-        <!-- PUPIL — gold disc with GREEN Realm-III leak at core -->
+        <!-- PUPIL, gold disc with GREEN Realm-III leak at core -->
         <g id="pupil-group" style="transition:transform 0.3s ease-out">
           <!-- Outer green halo radiating from the pupil (the leak escaping the eye) -->
           <circle cx="-10" cy="0" r="28" fill="var(--leak)" opacity="0.18" filter="url(#leakGlow)"/>
@@ -446,15 +454,15 @@
           <circle cx="-10" cy="0" r="20" fill="url(#goldDeep)" stroke="var(--gold-deep)" stroke-width="0.8"/>
           <!-- Pupil inner -->
           <circle cx="-10" cy="0" r="16" fill="#0A1614"/>
-          <!-- Realm III green leak — the contamination showing through -->
+          <!-- Realm III green leak, the contamination showing through -->
           <circle cx="-10" cy="0" r="11" fill="url(#leakCore)" filter="url(#leakGlowSoft)" opacity="0.92"/>
           <circle cx="-10" cy="0" r="6" fill="var(--leak-lt)" opacity="0.95"/>
-          <!-- Catchlight — kept gold to read as wet eye surface -->
+          <!-- Catchlight, kept gold to read as wet eye surface -->
           <circle cx="-14" cy="-5" r="3.5" fill="var(--gold-lt)" opacity="0.85"/>
           <circle cx="-14" cy="-5" r="1.5" fill="#FFF6D8" opacity="0.6"/>
         </g>
 
-        <!-- INNER CORNER TEARDROP — kept gold (this is the SEAL element, not the leak) -->
+        <!-- INNER CORNER TEARDROP, kept gold (this is the SEAL element, not the leak) -->
         <g filter="url(#strongGlow)">
           <path d="M -88,8 L -94,28 Q -96,52 -88,58 Q -78,52 -82,28 L -84,8 Z"
             fill="url(#goldShine)" stroke="var(--gold-deep)" stroke-width="0.7" stroke-linejoin="round"/>
@@ -488,10 +496,10 @@
   </div>
 
   <div class="caption">
-    <div class="designation">SEAL ∅ — THE LENS</div>
+    <div class="designation">SEAL ∅ · THE LENS</div>
     <h1>The Codex Sees You</h1>
-    <p>The wound never closes. The eye never sleeps. The thirteen wait in their silence. Three have spoken. Ten dream still — and the dream is you.</p>
-    <div class="attribution">— Recovered Fragment ∅ · Elvain Vhris</div>
+    <p>The wound never closes. The eye never sleeps. The thirteen wait in their silence. Three have spoken. Ten dream still, and the dream is you.</p>
+    <div class="attribution">Recovered Fragment ∅ · Elvain Vhris</div>
   </div>
 </div>
 
@@ -525,7 +533,7 @@ const GLYPH_LIBRARY = [
   'ᚠ','ᚢ','ᚦ','ᚨ','ᚱ','ᚲ','ᚷ','ᚹ','ᚺ','ᚾ','ᛁ','ᛃ','ᛇ','ᛈ','ᛉ','ᛋ','ᛏ','ᛒ','ᛖ','ᛗ',
   '⛧','⛤','⛥','⛦','⛩','⚸','⚹','⚺','⚻','⚼',
   '𓂀','𓁹','𓆣','𓇼','𓊝'
-];
+].map(g=>/^[\u2600-\u27BF]/.test(g)?g+"\uFE0E":g); /* plain text form: phones draw the zodiac as purple emoji boxes otherwise */
 
 /* THE THIRTEEN VOICES */
 const VOICES = [
@@ -646,7 +654,7 @@ function renderBindingInscription(){
   });
 }
 
-/* CODEX MARK — the tattoo glyph */
+/* CODEX MARK, the tattoo glyph */
 function createCodexMarkSVG(){
   const g = document.createElementNS(SVG_NS,'g');
   g.setAttribute('class','codex-mark codex-mark-glyph');
@@ -675,7 +683,7 @@ function createCodexMarkSVG(){
   return g;
 }
 
-/* RUNE RING — twelve cycling positions */
+/* RUNE RING, twelve cycling positions */
 const RUNE_RADIUS = 200;
 const RUNE_COUNT = 12;
 const RUNE_CYCLE_MS = 2400;
@@ -778,7 +786,7 @@ function updateLockCounter(){
   if(el) el.textContent = `LOCK_BEATS: ${lockBeatCount}`;
 }
 
-/* WADJET PUPIL — cursor tracking */
+/* WADJET PUPIL, cursor tracking */
 const pupilGroup = document.getElementById('pupil-group');
 const sigilSvg = document.getElementById('codex-sigil');
 let pupilTargetX = 0, pupilTargetY = 0;
@@ -806,7 +814,7 @@ function pupilLoop(){
 }
 pupilLoop();
 
-/* TEARS — green Realm-III contamination */
+/* TEARS, green Realm-III contamination */
 function spawnSvgTear(anchorX, anchorY){
   const tearGroup = document.getElementById('svg-tears');
   const tear = document.createElementNS(SVG_NS,'path');
@@ -876,7 +884,7 @@ function tearLoop(){
   setTimeout(tearLoop, 1200 + Math.random()*900);
 }
 
-/* HOLLOW CHOIR — proximity audio */
+/* HOLLOW CHOIR, proximity audio */
 const choir = document.getElementById('audio-choir');
 let choirStarted = false;
 let choirTargetVol = 0;

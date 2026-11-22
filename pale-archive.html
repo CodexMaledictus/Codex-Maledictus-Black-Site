@@ -4,7 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <link rel="canonical" href="https://codexmaledictus.com/pale-archive.html" />
-  <title>The Pale Archive — Codex Maledictus</title>
+  <title>The Pale Archive · Codex Maledictus</title>
+<meta property="og:title" content="The Pale Archive">
+<meta property="og:description" content="The Codex's table of contents. You are reading the document that contains you.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://codexmaledictus.com/pale-archive.html">
+<meta property="og:site_name" content="Codex Maledictus">
+<meta property="og:image" content="https://codexmaledictus.com/Assets/plates/pale-archive.jpg">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="description" content="The Codex's table of contents. You are reading the document that contains you.">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-13 -13 26 26'><circle cx='0' cy='0' r='11.5' fill='%23F2EBD8' stroke='%238A6530' stroke-width='1.4'/><path d='M -7.5,-4 L 7.5,-4 L 0,8 Z' fill='none' stroke='%238A6530' stroke-width='1.3'/><circle cx='-3.2' cy='-1.3' r='1.3' fill='%238A6530'/><circle cx='3.2' cy='-1.3' r='1.3' fill='%238A6530'/><circle cx='0' cy='3.5' r='1.3' fill='%238A6530'/></svg>">
 
@@ -23,7 +30,7 @@
   --rule:rgba(74,58,40,0.16);
   --void:#0A0805;
 
-  /* CORRUPTION STATE — these get JS-controlled over time */
+  /* CORRUPTION STATE, these get JS-controlled over time */
   --corruption: 0;
   --paper-r: 239; --paper-g: 230; --paper-b: 206;
   --ink-r: 26; --ink-g: 20; --ink-b: 16;
@@ -414,7 +421,7 @@ body.corruption-high #whisper{border-color:var(--wax);color:var(--wax);backgroun
 @keyframes tkr{from{transform:translateX(100vw);}to{transform:translateX(-200%);}}
 
 /* ───────────────────────────────────────────────────────────── */
-/* INSCRIPTION SCENE — the final tattoo quote moment             */
+/* INSCRIPTION SCENE, the final tattoo quote moment             */
 /* ───────────────────────────────────────────────────────────── */
 #INSCRIPTION{
   position:fixed;inset:0;z-index:9500;background:rgba(2,1,0,0);
@@ -460,7 +467,7 @@ body.bearer-state .insc-bearer-note{display:block;}
 .insc-dismiss:hover{color:var(--gold-lt);}
 
 /* ─────────────────────────────────────────────── */
-/* THE SEALED WITNESS CIRCLE CARD — lore, not link  */
+/* THE SEALED WITNESS CIRCLE CARD, lore, not link  */
 /* ─────────────────────────────────────────────── */
 .tl-card.sealed-circle{
   cursor:none;position:relative;
@@ -553,14 +560,25 @@ body.bearer-state .insc-bearer-note{display:block;}
 
 
 
+.pa-leave{max-width:480px;margin:56px auto 0;padding:0 1.25rem;text-align:center;}
+.pa-leave .csm-note{font-family:'IM Fell English',serif;font-style:italic;font-size:1.1rem;line-height:1.6;margin:0 0 14px;color:rgb(var(--ink-r),var(--ink-g),var(--ink-b));}
+.pa-leave .csm-form{display:flex;flex-wrap:wrap;gap:8px;}
+.pa-leave .csm-input{flex:1 1 190px;min-width:0;min-height:46px;padding:10px 12px;font:16px 'Share Tech Mono',monospace;background:rgba(255,250,235,.5);border:1px solid var(--gold-deep);color:rgb(var(--ink-r),var(--ink-g),var(--ink-b));}
+.pa-leave .csm-send{flex:0 1 auto;min-height:46px;padding:10px 18px;font:13px 'IM Fell English SC',serif;letter-spacing:.14em;background:var(--wax);border:1px solid var(--wax-deep);color:#F5EEDB;cursor:pointer;}
+.pa-doors{text-align:center;margin:26px 1.25rem 0;font-family:'Share Tech Mono',monospace;font-size:13px;line-height:2;color:rgb(var(--ink-r),var(--ink-g),var(--ink-b));}
+.pa-doors a{color:inherit;text-decoration:none;border-bottom:1px solid currentColor;}
+.pa-doors span{margin:0 10px;opacity:.6;}
 @media(max-width:640px){
+  .sec-div-title{white-space:normal;flex-shrink:1;text-align:center;letter-spacing:.2em;line-height:1.7;}
+  .sec-divider{gap:.75rem;padding:0 1rem;}
+  .sec-div-line{min-width:18px;}
   .pa-header{padding:2.5rem 1.25rem 2rem;}
   .letterhead{padding:1rem 1.25rem .7rem;font-size:.5rem;letter-spacing:.22em;}
   .resume-anchor{flex-direction:column;align-items:stretch;text-align:center;}
   .resume-anchor-link{text-align:center;}
   .tl-self-seal{top:-20px;right:20px;width:56px;height:56px;font-size:.55rem;}
 }
-/* ─── ATTUNE — THE BREATHING SIGIL (Pale Archive tone) ─── */
+/* ─── ATTUNE · THE BREATHING SIGIL (Pale Archive tone) ─── */
 .attune-sigil{
   position:fixed;right:24px;bottom:3.4rem;z-index:560;
   width:50px;height:50px;display:flex;align-items:center;justify-content:center;
@@ -647,7 +665,7 @@ body.bearer-state .attune-inscription .insc-line{color:var(--bearer-amber);}
    A real catalog entry that should not exist surfaces among the others, near
    wherever the reader is. Its title is corrupted/drifting; as it settles it
    resolves toward the recurring wax sigil and reaches back. Catching it earns
-   "remembers". It relocates sparingly — only if you leave it and return — the
+   "remembers". It relocates sparingly, only if you leave it and return, the
    archive unable to keep filed a page it never agreed to list. ── */
 .tl-card.unlisted-entry{
   border-style:dashed;border-color:rgba(122,28,18,.4);
@@ -681,7 +699,7 @@ body.bearer-state .attune-inscription .insc-line{color:var(--bearer-amber);}
 }
 .ue-prose .ue-mark{ color:var(--wax);font-style:italic; }
 /* the access word is a DIFFERENT kind of thing from the three carried words:
-   not a collectible, but the key — gold, with a faint eye glow behind it,
+   not a collectible, but the key, gold, with a faint eye glow behind it,
    rhyming with the index where it is spoken aloud. */
 .ue-prose .ue-key{
   color:var(--gold,#C9A84C);font-style:italic;font-weight:600;
@@ -711,11 +729,11 @@ body.bearer-state .attune-inscription .insc-line{color:var(--bearer-amber);}
   │  the Codex documents everything it reaches. what it cannot     │
   │  reach, it records as absence. there are pages it did not       │
   │  agree to show you. they are read. they are simply not listed.  │
-  │  yet one of them surfaces in this catalog as you read it —      │
+  │  yet one of them surfaces in this catalog as you read it,      │
   │  an entry that should not be here, its name coming apart, the   │
   │  archive unable to keep it filed. when its title finishes       │
   │  unmaking itself it reaches back. catch it and it gives the     │
-  │  second word. (there is also a sealed entry, wax over it —      │
+  │  second word. (there is also a sealed entry, wax over it,      │
   │  break that, and it gives the same.)                            │
   │                                                                │
   │  the gap makes a sound as it nears. there is a quieter word     │
@@ -839,14 +857,14 @@ body.bearer-state .attune-inscription .insc-line{color:var(--bearer-amber);}
       <div class="dg-line"></div>
     </div>
     <div class="descent-graph-meta">
-      <span id="dg-first">First Witnessed: —</span>
+      <span id="dg-first">First Witnessed: ·</span>
       <span id="dg-pages">Pages Read: 0 / 23</span>
     </div>
   </div>
 
   <div class="sec-divider sr">
     <div class="sec-div-line"></div>
-    <span class="sec-div-title">The Living Timeline — The Canonical Descent</span>
+    <span class="sec-div-title">The Living Timeline · The Canonical Descent</span>
     <div class="sec-div-line r"></div>
   </div>
 
@@ -862,7 +880,8 @@ body.bearer-state .attune-inscription .insc-line{color:var(--bearer-amber);}
     <div class="rg-result" id="rg-result"></div>
   </div>
 
-  <p style="text-align:center;margin:56px 0 0;font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;"><a href="/#start" style="color:inherit;opacity:.7;text-decoration:none;border-bottom:1px solid currentColor;">Start here · Leave your frequency</a></p>
+  <div class="pa-leave" id="pa-leave"></div>
+  <p class="pa-doors"><a href="/">The eye</a><span>·</span><a href="/play/">A computer was left running. Sit down at it.</a></p>
 
 </div>
 
@@ -875,12 +894,12 @@ body.bearer-state .attune-inscription .insc-line{color:var(--bearer-amber);}
     The Codex remembers you.<br>
     You are how it remembers.
   </div>
-  <div class="insc-attribution">— Codex Maledictus · Inscription Verified</div>
+  <div class="insc-attribution">Codex Maledictus · Inscription Verified</div>
   <div class="insc-bearer-note" id="insc-bearer-note"></div>
   <button class="insc-dismiss" id="insc-dismiss">// the reading continues</button>
 </div>
 
-<!-- ATTUNE — THE BREATHING SIGIL -->
+<!-- ATTUNE · THE BREATHING SIGIL -->
 <div class="attune-inscription" id="attune-inscription">
   <div class="insc-line" id="insc-main">The archive has a sound.</div>
   <div class="insc-line sub" id="insc-sub">it has been making it the whole time</div>
@@ -911,7 +930,7 @@ body.bearer-state .attune-inscription .insc-line{color:var(--bearer-amber);}
     <div class="par-count">
       <span class="par-pip lit"></span><span class="par-pip lit"></span><span class="par-pip"></span>
     </div>
-    <div class="par-dismiss">— touch anything to keep descending —</div>
+    <div class="par-dismiss">touch anything to keep descending</div>
   </div>
 </div>
 
@@ -926,7 +945,7 @@ body.bearer-state .attune-inscription .insc-line{color:var(--bearer-amber);}
 'use strict';
 
 /* ════════════════════════════════════════════════════════════════
-   LAYER 1 — THE CONSOLE (documentary-dread). The reading room speaks
+   LAYER 1 · THE CONSOLE (documentary-dread). The reading room speaks
    to whoever opens dev tools. "unheard" stays lowercase; the gap's
    sound is named; the true word is withheld. Points at the gap, not the answer.
    ════════════════════════════════════════════════════════════════ */
@@ -946,7 +965,7 @@ body.bearer-state .attune-inscription .insc-line{color:var(--bearer-amber);}
     ['%cThe record stays open only while it is read. You are holding this reality open by reading it.',Gd],
     ['%c ',Gd],
     ['%cThere are pages it did not agree to show you. They are read. They are simply not listed.',G],
-    ['%cYet one surfaces in the catalog as you read it — an entry that should not be here, its name coming apart.',G],
+    ['%cYet one surfaces in the catalog as you read it, an entry that should not be here, its name coming apart.',G],
     ['%cWhen its title finishes unmaking itself, it reaches back. Catch it. The thread older than this alphabet begins there.',W]
   ];
   var d=600;
@@ -1016,22 +1035,22 @@ const SAFE_VOICE_NAME=(NAMED_VOICE&&NAMED_VOICE.name)?escapeHTML(NAMED_VOICE.nam
 const SAFE_VOICE_POSITION=(NAMED_VOICE&&NAMED_VOICE.position)?escapeHTML(NAMED_VOICE.position):null;
 
 // ════════════════════════════════════════════════════════════════
-// CORRUPTION ENGINE — the page reading you back
+// CORRUPTION ENGINE, the page reading you back
 // ════════════════════════════════════════════════════════════════
 
-// Word swap pool — single words and short phrases that the engine swaps in-text
+// Word swap pool, single words and short phrases that the engine swaps in-text
 // Each entry: [original lowercase regex source, replacement, weight, minStage]
 // Stages: 0 = early (subtle), 1 = mid (sinister), 2 = late (terrifying)
 // Replacements should preserve approximate length and grammatical role.
 const WORD_SWAPS = [
-  // STAGE 0 — early, subtle, semantically near-identical
+  // STAGE 0, early, subtle, semantically near-identical
   { from:/\bagreed to show you\b/g, to:'not yet refused you', stage:0, weight:3 },
   { from:/\breading you\b/g, to:'measuring you', stage:0, weight:3 },
   { from:/\bevery page\b/g, to:'every entry', stage:0, weight:1 },
   { from:/\bthe document\b/g, to:'the inscription', stage:0, weight:2 },
   { from:/\btable of contents\b/g, to:'index of inscriptions', stage:0, weight:3 },
   { from:/\bcompiled\b/g, to:'assembled from what was bleeding', stage:0, weight:2 },
-  { from:/\bcase open\b/gi, to:'CASE OPEN — SUBJECT INSIDE', stage:0, weight:3 },
+  { from:/\bcase open\b/gi, to:'CASE OPEN · SUBJECT INSIDE', stage:0, weight:3 },
   { from:/\barrived\b/g, to:'been recovered', stage:0, weight:2 },
   { from:/\bknows\b/g, to:'has filed', stage:0, weight:2 },
   { from:/\bnoted\b/g, to:'inscribed', stage:0, weight:2 },
@@ -1043,7 +1062,7 @@ const WORD_SWAPS = [
   { from:/\bcatalog\b/gi, to:'inventory of the marked', stage:0, weight:2 },
   { from:/\bclassified\b/g, to:'measured for migration', stage:0, weight:3 },
 
-  // STAGE 1 — mid, the politeness drops
+  // STAGE 1, mid, the politeness drops
   { from:/\byou are reading\b/g, to:'you have been opened', stage:1, weight:4 },
   { from:/\bthe reader\b/g, to:'the carrier', stage:1, weight:4 },
   { from:/\bthe page\b/g, to:'the wound', stage:1, weight:5 },
@@ -1065,7 +1084,7 @@ const WORD_SWAPS = [
   { from:/\bmaster classification document\b/gi, to:'INDEX OF THE INFECTED', stage:1, weight:5 },
   { from:/\binscriptions\b/g, to:'incisions', stage:1, weight:4 },
 
-  // STAGE 2 — late, terrifying, the page no longer pretends
+  // STAGE 2, late, terrifying, the page no longer pretends
   { from:/\byou have arrived\b/g, to:'you cannot leave', stage:2, weight:8 },
   { from:/\bbeen reading you\b/gi, to:'BEEN WAITING IN YOUR HOUSE', stage:2, weight:8 },
   { from:/\bthe codex remembers in your name\b/g, to:'YOUR NAME WAS THE INSCRIPTION', stage:2, weight:7 },
@@ -1091,13 +1110,13 @@ const WORD_SWAPS = [
   { from:/\bcannot stop\b/g, to:'are no longer the one deciding', stage:2, weight:7 },
   { from:/\bthe descent without bottom\b/gi, to:'the place where the bottom looks up', stage:2, weight:8 },
 
-  // STAGE 2 — direct address to the visitor, the cruelest layer
+  // STAGE 2, direct address to the visitor, the cruelest layer
   { from:/\bthe codex\b/g, to:'IT', stage:2, weight:6 },
   { from:/\bthe pale archive\b/gi, to:'WHAT YOU ARE INSIDE OF', stage:2, weight:9 },
   { from:/\bevery page listed here has been reading you\b/gi, to:'EVERY PAGE IS YOUR REFLECTION WITH ITS EYES OPEN', stage:2, weight:9 },
 ];
 
-// Whisper pool — escalates with corruption stage
+// Whisper pool, escalates with corruption stage
 const WHISPER_POOLS = {
   early:[
     'the reader paused here. the codex notes the pause.',
@@ -1151,7 +1170,7 @@ const WHISPER_POOLS = {
 };
 
 // ────────────────────────────────────────────────────────────────
-// PAGE MAP — canonical descent
+// PAGE MAP, canonical descent
 // ────────────────────────────────────────────────────────────────
 const PAGES=[
   {id:'index',file:'index.html',seq:0,title:'The Pale Archivum',realm:'I',phase:'Surface',
@@ -1268,7 +1287,7 @@ const CLUSTERS=[
   {title:'Reference',eyebrow:'Outside the Canonical Descent',desc:'Material consulted but not filed within the descent itself.',pages:['Codex-Sigil']}
 ];
 
-// ── Named Voice payoff — renders only when a voice was actually inscribed on Infection Remembers ──
+// ── Named Voice payoff, renders only when a voice was actually inscribed on Infection Remembers ──
 if(NAMED_VOICE && SAFE_VOICE_NAME){
   const namedAtStr=NAMED_VOICE.at?new Date(NAMED_VOICE.at).toLocaleDateString(undefined,{month:'long',day:'numeric',year:'numeric'}):null;
   PLACEHOLDERS.namedVoice={
@@ -1319,7 +1338,7 @@ function buildTimeline(){
         html+=`
         <div class="tl-node sr">
           <div class="tl-node-dot sealed${featured?' featured':''}"></div>
-          <div class="tl-card sealed-circle s-sealed${featured?' featured':''}" id="sealed-circle-card" role="button" tabindex="0" aria-label="The Witness Circle — sealed">
+          <div class="tl-card sealed-circle s-sealed${featured?' featured':''}" id="sealed-circle-card" role="button" tabindex="0" aria-label="The Witness Circle, sealed">
             <div class="sealed-wax">✠</div>
             <div class="tl-card-top">
               <span class="tl-seq">${seqLabel}</span>
@@ -1399,7 +1418,7 @@ function renderPlaceholderNode(ph){
       <div class="tl-node-dot placeholder"></div>
       <div class="tl-card placeholder s-${ph.status} ${extraClasses}">
         <div class="tl-card-top">
-          <span class="tl-seq placeholder-seq">—</span>
+          <span class="tl-seq placeholder-seq">·</span>
           <span class="tl-status-badge sb-${ph.status}">${statusLabel(ph.status)}</span>
           <span class="tl-title">${ph.title}</span>
         </div>
@@ -1440,7 +1459,7 @@ function appendSelfEntry(){
     fragments.push(`<p>The reader has spoken a name into the Choir. The voice${SAFE_VOICE_POSITION?` at <em>${SAFE_VOICE_POSITION}</em>`:''} now answers, to the Codex, to the name <em>${SAFE_VOICE_NAME}</em>. The Archive holds this as the second of its two records of the reader. The first it assigned. The second the reader gave.</p>`);
   }
   fragments.push(`<p>This fragment is unfiled because the reader is still writing it.</p>`);
-  const oathDateStr=isBearer?new Date(STATE.bearer.markedAt).toLocaleDateString():'—';
+  const oathDateStr=isBearer?new Date(STATE.bearer.markedAt).toLocaleDateString():'·';
   const html=`
     <div class="tl-self-entry sr">
       <div class="tl-self-seal">${isBearer?'Bearer<br>Case':'Open<br>Case'}</div>
@@ -1576,7 +1595,7 @@ let currentStage = 0; // 0/1/2
 let lastSwapAt = 0;
 let inscriptionFired = false;
 
-// Track activity — only count time when user is engaged
+// Track activity, only count time when user is engaged
 ['mousemove','scroll','touchstart','keydown','click'].forEach(evt=>{
   window.addEventListener(evt,()=>{
     lastActivityTs=Date.now();
@@ -1630,7 +1649,7 @@ function applyCorruptionVisuals(c){
     document.documentElement.style.setProperty('--paper-g', g);
     document.documentElement.style.setProperty('--paper-b', b);
   }else{
-    // Bearer parchment is already warm — push it darker but in amber direction
+    // Bearer parchment is already warm, push it darker but in amber direction
     document.documentElement.style.setProperty('--paper-r', Math.max(140, 232-c*92));
     document.documentElement.style.setProperty('--paper-g', Math.max(95, 210-c*115));
     document.documentElement.style.setProperty('--paper-b', Math.max(48, 160-c*112));
@@ -1710,7 +1729,7 @@ function maybeFireWordSwap(){
   }
 }
 
-// Whisper system — pulls from pools by corruption stage
+// Whisper system, pulls from pools by corruption stage
 let whisperLastFired = 0;
 function pickWhisperPool(){
   if(isBearer && Math.random()<0.5) return WHISPER_POOLS.bearer;
@@ -1760,7 +1779,7 @@ function startWatchingBack(){
 }
 
 // ════════════════════════════════════════════════════════════════
-// INSCRIPTION SCENE — fires at 100% corruption
+// INSCRIPTION SCENE, fires at 100% corruption
 // ════════════════════════════════════════════════════════════════
 function maybeFireInscription(){
   if(inscriptionFired)return;
@@ -2007,11 +2026,11 @@ const CHANGELOG=[
   {date:'2026-11-01',title:'The Three Weeks · Reception Log',file:'the-three-weeks.html'},
   {date:'2026-11-01',title:'RF-093 Mirror, Memory Engine and Confession Ledger · Rebuilt',file:'rf-093-mirror.html'},
   {date:'2026-10-30',title:'The Madmen\'s Gospel · Gospel II',file:'madmens-gospel.html'},
-  {date:'2026-05-25',title:'The Witness Circle — Sealed Apocrypha',file:'witness-circle.html'},
-  {date:'2026-05-22',title:'The Pale Archive — Master Index',file:'pale-archive.html'},
-  {date:'2026-05-20',title:'The Pale Archivum — Index Updated',file:'index.html'},
-  {date:'2026-05-19',title:'The Codex Remembers You — Book Page',file:'codex-remembers-you.html'},
-  {date:'2026-05-18',title:'Gospel of Forgotten Flesh — Complete',file:'gospel-forgotten-flesh.html'},
+  {date:'2026-05-25',title:'The Witness Circle · Sealed Apocrypha',file:'witness-circle.html'},
+  {date:'2026-05-22',title:'The Pale Archive · Master Index',file:'pale-archive.html'},
+  {date:'2026-05-20',title:'The Pale Archivum · Index Updated',file:'index.html'},
+  {date:'2026-05-19',title:'The Codex Remembers You · Book Page',file:'codex-remembers-you.html'},
+  {date:'2026-05-18',title:'Gospel of Forgotten Flesh · Complete',file:'gospel-forgotten-flesh.html'},
 ];
 function newPagesSince(dateStr){if(!dateStr)return[];const lastDate=new Date(dateStr);return CHANGELOG.filter(c=>new Date(c.date)>lastDate);}
 
@@ -2041,15 +2060,15 @@ function runReturningSequence(){
   lines.push({text:'',cls:'rt-dim'});
   if(newPages.length>0){
     lines.push({text:`${newPages.length} transmission${newPages.length!==1?'s were':' was'} recovered in your absence:`,cls:''});
-    newPages.slice(0,3).forEach(p=>{lines.push({text:`— ${p.title}`,cls:'rt-new'});});
-    if(newPages.length>3)lines.push({text:`— and ${newPages.length-3} more.`,cls:'rt-new'});
+    newPages.slice(0,3).forEach(p=>{lines.push({text:`${p.title}`,cls:'rt-new'});});
+    if(newPages.length>3)lines.push({text:`and ${newPages.length-3} more.`,cls:'rt-new'});
   }else{
     lines.push({text:'The Archive has not grown since you left.',cls:''});
     lines.push({text:'But you have changed.',cls:'rt-warn'});
   }
   lines.push({text:'',cls:'rt-dim'});
   if(isBearer)lines.push({text:'WITNESS STATUS: BEARER · INCORPORATION ONGOING',cls:'rt-bearer'});
-  else lines.push({text:'WITNESS STATUS: CONFIRMED — INSCRIPTION DEEPENING',cls:'rt-gold'});
+  else lines.push({text:'WITNESS STATUS: CONFIRMED · INSCRIPTION DEEPENING',cls:'rt-gold'});
   const cont=document.getElementById('rt-content');
   cont.innerHTML=lines.map((l,i)=>`<div class="rt-line ${l.cls}" id="rtl-${i}">${l.text}</div>`).join('');
   let i=0;
@@ -2085,9 +2104,9 @@ function firePaReveal(delayMs){
     var wEl=document.getElementById('par-word');
     var gram=document.getElementById('par-grammar');
     if(rv && said){
-      said.innerHTML='The archive is built around a thing it cannot reach. So it records the shape of the absence instead — and calls the record <em>remembering</em>. You found what it keeps trying to write beneath its own words. It does not forgive that. It answers it.';
+      said.innerHTML='The archive is built around a thing it cannot reach. So it records the shape of the absence instead, and calls the record <em>remembering</em>. You found what it keeps trying to write beneath its own words. It does not forgive that. It answers it.';
       if(wEl) wEl.textContent=word;
-      if(gram) gram.innerHTML='The second of three. You carried one word down; now you hold two. One room remains — the sworn room, the deepest. It is not listed, and this page will not take you there. It opens only to one who returns to the surface and <em>witnesses</em> the record aloud — who names the act, at the front of the document, and so is named in turn. <em>Go back up. Speak it.</em>';
+      if(gram) gram.innerHTML='The second of three. You carried one word down; now you hold two. One room remains, the sworn room, the deepest. It is not listed, and this page will not take you there. It opens only to one who returns to the surface and <em>witnesses</em> the record aloud, who names the act, at the front of the document, and so is named in turn. <em>Go back up. Speak it.</em>';
       var wait=(typeof delayMs==='number')?delayMs:0;
       setTimeout(function(){
         rv.classList.add('shown');
@@ -2129,7 +2148,7 @@ function wireSealedCircle(){
   card.addEventListener('keydown',(e)=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();touchSeal();}});
 }
 
-// ── CIPHER · THE UNLISTED ENTRY — PRIMARY trigger for fragment-1 ──
+// ── CIPHER · THE UNLISTED ENTRY · PRIMARY trigger for fragment-1 ──
 //    "There are pages it did not agree to show you. They are read. They are
 //    simply not listed." This builds one such page and lets it surface into
 //    the catalog near wherever the reader is. Its title drifts/corrupts, then
@@ -2142,16 +2161,16 @@ function wireUnlistedEntry(){
   const wrap=document.getElementById('timeline-wrap');
   if(!wrap) return;
 
-  // the recovered fragment — a witness who spoke recognition back to the document.
+  // the recovered fragment, a witness who spoke recognition back to the document.
   // the three carried words live inside the prose, scattered, never assembled,
   // never in order. a returning solver sees the final line was seeded here.
   const ENTRY = {
     seq:'∅∅',
     badge:'Unlisted',
     title:'The One Who Spoke It Back',
-    realm:'—',
+    realm:'·',
     phase:'Recovered Fragment · Not Agreed',
-    prose:'She came to the end of the document and did not look away. She had seen it first, before the others, and the others had not heard. So when the record reached her she did the one thing it cannot do for itself: she <span class="ue-key">witnessed</span> it — said what it was, aloud, at the threshold, in the first person, as though it were hers. <span class="ue-mark">remembers</span> <span class="ue-mark">me</span>. And the page, which keeps everything and is kept by no one, went quiet the way a thing goes <span class="ue-mark">unheard</span> — not gone, only no longer arriving. The deepest room is not listed, and this page will not take you there. It opens to one who speaks the act at the surface — who stands at the front of the record and <span class="ue-key">witnesses</span> it aloud. This entry was not listed. You were not meant to read it. You are reading it.'
+    prose:'She came to the end of the document and did not look away. She had seen it first, before the others, and the others had not heard. So when the record reached her she did the one thing it cannot do for itself: she <span class="ue-key">witnessed</span> it, said what it was, aloud, at the threshold, in the first person, as though it were hers. <span class="ue-mark">remembers</span> <span class="ue-mark">me</span>. And the page, which keeps everything and is kept by no one, went quiet the way a thing goes <span class="ue-mark">unheard</span>, not gone, only no longer arriving. The deepest room is not listed, and this page will not take you there. It opens to one who speaks the act at the surface, who stands at the front of the record and <span class="ue-key">witnesses</span> it aloud. This entry was not listed. You were not meant to read it. You are reading it.'
   };
 
   let node=null;       // the live .tl-node wrapper
@@ -2188,7 +2207,7 @@ function wireUnlistedEntry(){
     if(txt){
       txt.innerHTML=ENTRY.title.split('').map(c=> c===' ' ? ' ' : '<span class="ue-char">'+c+'</span>').join('');
     }
-    // catch handler — the entry is catchable the moment it has surfaced.
+    // catch handler, the entry is catchable the moment it has surfaced.
     // the drift is the INVITATION, not a gate: clicking mid-drift snaps the
     // title into the sigil and fires the reveal. no waiting, no timing window.
     const card=wrapper.querySelector('.tl-card');
@@ -2260,7 +2279,7 @@ function wireUnlistedEntry(){
   }
 
   // surface only once the reader has engaged (scrolled into the catalog),
-  // never on load — so the room is always seen and understood first.
+  // never on load, so the room is always seen and understood first.
   let armed=false, surfaced=false, armTries=0;
   function trySurface(){
     if(surfaced) return;
@@ -2276,7 +2295,7 @@ function wireUnlistedEntry(){
       // begin the drift after the reader has had time to notice the entry
       setTimeout(drift, 3200);
     } else if(armTries++ < 40){
-      // no visible sibling cards yet — keep trying until the catalog is in view
+      // no visible sibling cards yet, keep trying until the catalog is in view
       setTimeout(trySurface, 700);
     }
   }
@@ -2309,7 +2328,7 @@ function wireUnlistedEntry(){
 }
 
 // ════════════════════════════════════════════════════════════════
-// ATTUNE / AUDIO SYSTEM — the breathing sigil
+// ATTUNE / AUDIO SYSTEM, the breathing sigil
 // ════════════════════════════════════════════════════════════════
 const AUDIO_SRC='Audio/Pale%20Archive/pale-archive-audio.mp3';
 const ATTUNE_KEY='codex_attuned_v1';
@@ -2442,5 +2461,7 @@ if(STATE.roomVisits>1&&lastVisitDate){runReturningSequence();}else{runBootRitual
 <div id="codex-nav"></div>
 <script>if(typeof initCodexNav==='function'){initCodexNav('pale-archive');}</script>
 
+<script src="codex-summon.js"></script>
+<script>if(window.CodexSummon)CodexSummon.mount(document.getElementById('pa-leave'),{invite:'The catalogue is never finished. Leave an address and the Archive writes when something new is shelved.',button:'Enter it',done:'Entered, in ink.',already:'Your address is already in the catalogue.'});</script>
 </body>
 </html>

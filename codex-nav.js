@@ -822,6 +822,24 @@ const NAV_EXTRAS = {
   'gospel-forgotten-flesh': { summon: { invite: 'When the next transmission is released, it goes to whoever left an address.', button: 'Leave it', done: 'Filed. The next transmission knows where you are.', already: 'Your address is already on file.' } }
 };
 
+// One way to leave an address in every room, each in that room's own words. Rooms with a form of their own are left alone.
+const ROOM_SUMMONS = {
+  'madmens-gospel': { invite: 'The ward keeps a list of who was awake when the last one came in. Leave an address and you are on it for the next.', button: 'Stay awake', done: 'You are on the list. The ward will write.', already: 'The ward already has you down as awake.' },
+  'plague-priest-lore': { invite: 'The posture can’t be sent by letter. Word of the next rite can. Leave an address.', button: 'Send me word', done: 'Received. Word will reach you.', already: 'Word already knows its way to you.' },
+  'plague-priest-decoder': { invite: 'When another hymn surfaces, it goes out by letter to whoever left an address. Bring what you learned here.', button: 'Write to me', done: 'Entered. Keep your ear open.', already: 'Your address is already under the hymn.' },
+  'infection-remembers': { invite: 'The first breach found people by accident. The next can find you on purpose. Leave an address.', button: 'Find me', done: 'It will not have to look for you.', already: 'It already knows where to find you.' },
+  'infection-lore': { invite: 'The framework went to a short list, and the list was never closed. Leave an address and the next page comes to you.', button: 'Add mine', done: 'Added. The next page is yours too.', already: 'You are already on the short list.' },
+  'apocrypha-infection': { invite: 'Nobody on the distribution list was authorized. It goes out anyway. Leave an address.', button: 'Leave it', done: 'Distributed. You were never cleared for this.', already: 'You are already on the distribution list.' },
+  'chronicle-1-infection-remembers': { invite: 'There was room under the seventh seal for one more hand. Leave an address and hear when the next Chronicle opens.', button: 'Put my hand to it', done: 'Pressed into the wax.', already: 'Your hand is already under the seal.' },
+  'lore-chronicle-1': { invite: 'Case files are amended by letter. Leave an address and the next amendment is sent to you.', button: 'File it', done: 'On file. Amendments will follow.', already: 'Amendments are already sent to you.' },
+  'apocrypha-chronicle-1': { invite: 'They signed it anyway. You only need to leave an address, and you will hear when the next file is unsealed.', button: 'Countersign', done: 'Countersigned, in your own handwriting.', already: 'Your countersignature is already here.' },
+  'rf-093-lore': { invite: 'Ninety-two fragments should come before this one. When one of them surfaces, word goes to whoever left an address.', button: 'Wait for it', done: 'Filed. The next fragment will have somewhere to go.', already: 'Your address is already in the file.' },
+  'rf-093-invocation': { invite: 'The ground keeps where you pressed. It can’t write letters. The file can. Leave an address.', button: 'Leave it', done: 'Kept, with the marks you made.', already: 'The file already has your address.' },
+  'codex-remembers-you': { invite: 'Case 553-A still takes correspondence. Leave an address and the file writes when something is added to it.', button: 'Correspond', done: 'Received. The file will write.', already: 'The file already writes to you.' },
+  'the-three-weeks': { invite: 'The shift has not been relieved. Leave an address and the next reception is passed to you.', button: 'Take the shift', done: 'You have the next one.', already: 'You are already on the shift.' }
+};
+Object.keys(ROOM_SUMMONS).forEach(id => { const x = NAV_EXTRAS[id] = NAV_EXTRAS[id] || {}; if (!x.summon) x.summon = ROOM_SUMMONS[id]; });
+
 function initCodexNav(currentId) {
   const page = CODEX_MAP[currentId];
   if (!page) return;
@@ -923,6 +941,8 @@ function initCodexNav(currentId) {
 
       <div class="cnav-start"><a href="/#start">Start here</a><span>·</span><a href="/#leave">Leave your frequency</a></div>
 
+      <div class="cnav-start cnav-play"><a href="/play/">A computer was left running. Sit down at it.</a></div>
+
       ${seal.daily ? `<div class="cseal-daily"><span class="cseal-daily-lbl">· SEAL OF THE DAY ·</span>${seal.daily}</div>` : ''}
 
     </div>
@@ -930,8 +950,10 @@ function initCodexNav(currentId) {
 
   applyNavPalette(nav, pal);
 
-  if (extras.summon && window.CodexSummon) {
-    CodexSummon.mount(nav.querySelector('.cnav-summon'), extras.summon);
+  if (extras.summon) {
+    const mountSummon = () => { if (window.CodexSummon) CodexSummon.mount(nav.querySelector('.cnav-summon'), extras.summon); };
+    if (window.CodexSummon) mountSummon();
+    else { const s = document.createElement('script'); s.src = 'codex-summon.js'; s.onload = mountSummon; document.head.appendChild(s); }
   }
 }
 
@@ -1017,7 +1039,7 @@ function applyNavPalette(nav, pal) {
     .cnav-summon { width: 100%; max-width: 480px; text-align: center; }
     .cnav-summon .csm-note { font-family: 'Crimson Text', Georgia, serif; font-style: italic; font-size: 17px; line-height: 1.5; color: rgba(228,221,208,0.82); margin: 0 0 12px; }
     .cnav-summon .csm-form { display: flex; flex-wrap: wrap; gap: 8px; }
-    .cnav-summon .csm-input { flex: 1 1 180px; min-width: 0; background: rgba(0,0,0,0.5); border: 1px solid var(--cnav-accent-dim); color: #E4DDD0; font-family: 'Share Tech Mono', monospace; font-size: 15px; padding: 11px; }
+    .cnav-summon .csm-input { flex: 1 1 180px; min-width: 0; background: rgba(0,0,0,0.5); border: 1px solid var(--cnav-accent-dim); color: #E4DDD0; font-family: 'Share Tech Mono', monospace; font-size: 16px; padding: 11px; }
     .cnav-summon .csm-input:focus { outline: none; border-color: var(--cnav-accent); }
     .cnav-summon .csm-send { background: transparent; border: 1px solid var(--cnav-accent); color: var(--cnav-accent); font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; padding: 11px 16px; cursor: pointer; }
     .cnav-chamber {
@@ -1047,7 +1069,8 @@ function applyNavPalette(nav, pal) {
       font-size: 8px; letter-spacing: 0.4em; margin-bottom: 6px; opacity: 0.8;
     }
 
-    @media (max-width: 600px) { #codex-nav { padding: 60px 20px 80px; } }
+    @media (max-width: 600px) { #codex-nav { padding: 60px 20px 80px; } .cseal-recog,.cnav-door-label,.cnav-realm,.cseal-daily-lbl,.cnav-realm-gloss,.cnav-gatenote,.cseal-daily { font-size: 12px; } .cnav-door-label { letter-spacing: .24em; } .cnav-realm,.cseal-daily-lbl { letter-spacing: .24em; } .cnav-start { line-height: 2.6; } .cnav-summon .csm-send { font-size: 13px; min-height: 46px; flex: 1 1 100%; } }
+    .cnav-play { margin-top: 4px; letter-spacing: .08em; text-transform: none; font-size: 13px; line-height: 1.7; }
   `;
   document.head.appendChild(style);
 })();
