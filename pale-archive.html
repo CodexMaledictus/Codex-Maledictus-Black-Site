@@ -1958,7 +1958,7 @@ function hold(ms){return new Promise(r=>setTimeout(r,ms));}
 function armBootSkip(){
   const hint=document.createElement('div');
   hint.textContent='// touch or press any key to pass //';
-  hint.style.cssText='position:absolute;left:0;right:0;bottom:6%;text-align:center;font-family:"Share Tech Mono",monospace;font-size:11px;letter-spacing:.14em;color:rgba(212,180,92,.75);opacity:0;transition:opacity 1.2s ease;pointer-events:none;';
+  hint.style.cssText='position:absolute;left:0;right:0;bottom:0;padding:34px 0 18px;background:linear-gradient(transparent,#030203 55%);text-align:center;font-family:"Share Tech Mono",monospace;font-size:11px;letter-spacing:.14em;color:rgba(212,180,92,.75);opacity:0;transition:opacity 1.2s ease;pointer-events:none;';
   document.getElementById('BOOT').appendChild(hint);
   setTimeout(()=>{hint.style.opacity='1';},2500);
   const pass=()=>{bootSkip=true;bootWake.splice(0).forEach(w=>w());hint.remove();removeEventListener('pointerdown',pass);removeEventListener('keydown',pass);};
