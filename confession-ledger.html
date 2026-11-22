@@ -275,12 +275,12 @@ const VOICES = {
   ]}
 };
 const NOTHING='You pressed the button and gave us next to nothing. That has been entered as your confession. It is one of the longer ones.';
-const STOP=/^(the|and|but|for|you|your|yours|that|this|these|those|with|from|have|has|had|was|were|are|been|being|what|when|where|which|who|why|how|not|all|any|can|could|would|should|will|just|very|really|about|into|over|than|then|them|they|their|there|here|because|still|some|like|what|said|every|myself|never|always|after|before|something|someone|nothing|anything|everything)$/i;
+const STOP=/^(the|and|but|for|you|your|yours|that|this|these|those|with|from|have|has|had|was|were|are|been|being|what|when|where|which|who|why|how|not|all|any|can|could|would|should|will|just|very|really|about|into|over|than|then|them|they|their|there|here|because|still|some|like|what|said|every|myself|never|always|after|before|something|someone|nothing|anything|everything|under|above|below|beneath|behind|beside|between|beyond|inside|outside|within|without|through|toward|towards|across|along|around|against|among|until|till|since|during|upon|onto|near|down|out|off|away|back|again|once|ever|only|even|also|too|yet|though|although|unless|while|whether|either|neither|nor|maybe|perhaps|almost|enough|instead|now|today|tonight|yesterday|tomorrow|already|ago|him|his|her|hers|she|its|our|ours|mine|himself|herself|itself|themselves|yourself|ourselves|anyone|everyone|someone|nobody|anybody|everybody|somebody|somewhere|anywhere|nowhere|everywhere|one|two|three|many|much|more|most|less|few|other|others|another|same|such|own|old|new|first|last|did|does|done|may|might|must|shall|got|get|gets|gave|give|given|went|goes|gone|came|come|comes|kept|keep|keeps|told|tell|say|says|saw|see|seen|heard|hear|felt|feel|feels|knew|know|known|think|thought|made|make|makes|took|take|taken|left|leave|want|wants|need|needs|let|put|find|found|lost|lose|became|become|began|begin|bring|brought|stood|stand|stay|stays|loved|believe|remember|forget|forgot|forgotten|actually|honestly|really)$/i;
 const BLOCK=/(fuck|shit|bitch|cunt|nigg|fag|retard|whore|slut|rape|kike|spic|chink)/i;
 function pickVoice(text){let best='codex',most=0;['artemys','rot','choir'].forEach(k=>{const n=(text.match(VOICES[k].words)||[]).length;if(n>most){most=n;best=k;}});return best;}
 function pickWord(text){
-  const toks=(text.toLowerCase().match(/[\p{L}'’]{3,}/gu)||[]).filter(w=>!STOP.test(w));
-  if(!toks.length)return null;
+  const toks=(text.toLowerCase().match(/[\p{L}'’]{3,}/gu)||[]).filter(w=>!STOP.test(w)&&!/['’](t|s|m|d|ll|re|ve)$/.test(w));
+  if(!toks.length)return text.trim().split(/s+/).length>2?'that':null;
   // a thing reads better in these lines than an action, so prefer nouns where the ending gives it away
   const things=toks.filter(w=>!/(ing|ed|ly)$/.test(w));
   const w=(things.length?things:toks).reduce((a,b)=>b.length>a.length?b:a);
