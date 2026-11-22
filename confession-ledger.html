@@ -280,7 +280,7 @@ const BLOCK=/(fuck|shit|bitch|cunt|nigg|fag|retard|whore|slut|rape|kike|spic|chi
 function pickVoice(text){let best='codex',most=0;['artemys','rot','choir'].forEach(k=>{const n=(text.match(VOICES[k].words)||[]).length;if(n>most){most=n;best=k;}});return best;}
 function pickWord(text){
   const toks=(text.toLowerCase().match(/[\p{L}'’]{3,}/gu)||[]).filter(w=>!STOP.test(w)&&!/['’](t|s|m|d|ll|re|ve)$/.test(w));
-  if(!toks.length)return text.trim().split(/s+/).length>2?'that':null;
+  if(!toks.length)return text.trim().split(' ').length>2?'that':null;
   // a thing reads better in these lines than an action, so prefer nouns where the ending gives it away
   const things=toks.filter(w=>!/(ing|ed|ly)$/.test(w));
   const w=(things.length?things:toks).reduce((a,b)=>b.length>a.length?b:a);
