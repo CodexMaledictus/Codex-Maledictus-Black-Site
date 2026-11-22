@@ -622,7 +622,7 @@
       transition:opacity 1s ease,transform 1s ease;
     }
     @media (max-width:768px){ .attune-inscription{ right:72px;bottom:24px;max-width:62vw; padding:16px 12px 16px 26px;border-radius:14px;background:radial-gradient(ellipse at 62% 50%,rgba(3,3,4,.96) 42%,rgba(3,3,4,.82) 62%,transparent 80%); } }
-    @media (max-width:768px){ .tagline{font-size:10px;letter-spacing:.2em;line-height:2;color:rgba(201,168,76,.72);padding:0 8px;} .tagline span{margin:0 6px;} .attune-inscription .ai-sub{font-size:12px;color:rgba(201,168,76,.75);} .attune-inscription .ai-name{font-size:10px;} }
+    @media (max-width:768px){ .attune-inscription{padding:9px 14px 9px 22px;bottom:30px;max-width:none;background:linear-gradient(90deg,transparent,rgba(3,3,4,.96) 12%);} .attune-inscription .ai-main{font-size:15px;} .attune-inscription .ai-sub,.attune-inscription .ai-name{display:none!important;} .tagline{font-size:10px;letter-spacing:.2em;line-height:2;color:rgba(201,168,76,.72);padding:0 8px;} .tagline span{margin:0 6px;} }
     .attune-inscription.shown{ opacity:1;transform:none; }
     .attune-inscription .ai-main{ font-family:'Crimson Text',serif;font-style:italic;font-size:14.5px;line-height:1.55;color:rgba(201,168,76,.85);text-shadow:0 0 14px rgba(0,0,0,.9); }
     .attune-inscription .ai-sub{ font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:.14em;color:rgba(201,168,76,.5);margin-top:4px; }
@@ -865,6 +865,27 @@
     .sb{position:relative;z-index:2;max-width:660px;margin:0 auto;padding:56px 16px 40px;text-align:left;scroll-margin-top:0;}
     .sb .sb-k{font:400 .74rem/1 'Share Tech Mono',monospace;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);text-align:center;opacity:.85;}
     .sb .sb-arrival{font:400 .86rem/1.6 'Share Tech Mono',monospace;letter-spacing:.06em;color:rgba(143,240,229,.82);text-align:center;min-height:3.2em;margin:16px auto 20px;max-width:30em;}
+    /* ── WHAT BROUGHT YOU HERE ── */
+    .brought{width:100%;max-width:820px;margin:58px auto 0;}
+    .br-h{font:700 clamp(1.35rem,5.4vw,2rem)/1.3 'Cinzel Decorative',serif;color:var(--gold-lt);text-shadow:0 0 34px rgba(201,168,76,.3);margin:0 0 22px;text-align:center;}
+    .br-list{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:start;}
+    .br-item{border:1px solid rgba(201,168,76,.3);background:radial-gradient(ellipse at 50% 120%,rgba(122,18,60,.2),rgba(6,5,10,.78) 70%);transition:border-color .6s,box-shadow .6s;}
+    .br-item:nth-child(3n+2){background:radial-gradient(ellipse at 50% 120%,rgba(79,168,138,.2),rgba(6,5,10,.78) 70%);}
+    .br-item:nth-child(3n){background:radial-gradient(ellipse at 50% 120%,rgba(96,72,170,.22),rgba(6,5,10,.78) 70%);}
+    .br-item.on{border-color:var(--gold-lt);box-shadow:0 0 34px rgba(201,168,76,.16);}
+    .br-q{display:block;width:100%;min-height:54px;padding:14px 16px;background:none;border:0;color:#EEE7D8;font:italic 400 1.14rem/1.4 'Crimson Text',serif;text-align:center;cursor:inherit;}
+    .br-q:hover,.br-item.on .br-q{color:var(--gold-lt);}
+    .br-q:focus-visible{outline:1px solid #8FF0E5;outline-offset:-4px;}
+    .br-a{display:grid;grid-template-rows:0fr;visibility:hidden;transition:grid-template-rows .6s cubic-bezier(.16,1,.3,1),visibility .6s;}
+    .br-item.on .br-a{grid-template-rows:1fr;visibility:visible;}
+    .br-in{overflow:hidden;min-height:0;}
+    .br-in p{font-size:1.08rem;line-height:1.55;color:rgba(228,221,208,.86);margin:0 18px 14px;text-align:center;}
+    .br-in a{display:flex;flex-direction:column;gap:5px;align-items:center;margin:0 16px 18px;padding:13px 14px;border:1px solid rgba(143,240,229,.5);text-decoration:none;text-align:center;background:rgba(6,14,14,.5);}
+    .br-in a:hover,.br-in a:focus-visible{border-color:#8FF0E5;box-shadow:0 0 24px rgba(79,168,138,.28);outline:none;}
+    .br-in .t{font:600 1.02rem/1.3 'Cinzel',serif;color:#F1EADB;}
+    .br-in .go{font:400 .82rem/1.3 'Share Tech Mono',monospace;letter-spacing:.12em;color:#8FF0E5;}
+    @media (max-width:700px){.br-list{grid-template-columns:1fr;}.brought{margin-top:46px;}}
+    @media (prefers-reduced-motion:reduce){.br-a,.br-item{transition:none;}}
     .hero-arrival{font:400 .86rem/1.6 "Share Tech Mono",monospace;letter-spacing:.06em;color:rgba(143,240,229,.85);text-align:center;min-height:3.2em;margin:16px auto 0;max-width:30em;}
     .hero-arrival .cur{display:inline-block;width:.55em;height:1em;vertical-align:-.15em;background:rgba(143,240,229,.7);margin-left:2px;animation:sbBlink 1s steps(1) infinite;}
     .hero .sb{width:100%;padding:56px 0 24px;}
@@ -1137,6 +1158,24 @@
 
         <!-- THE START · one plain line and one door, for anyone who does not know the record yet -->
         <a class="play-door" href="play/"><span class="pd-k">Workstation 553-A · a puzzle</span><span class="pd-t">Someone left their computer on. Finish what they started.</span><span class="pd-go">Play ▸</span></a>
+        <!-- WHAT BROUGHT YOU HERE · one answer, one door -->
+        <section class="brought" aria-labelledby="br-h">
+          <h2 class="br-h" id="br-h">What brought you here?</h2>
+          <div class="br-list">
+            <div class="br-item"><button class="br-q" type="button" aria-expanded="false" aria-controls="br-imagined"><span>Someone told me I imagined it.</span></button>
+              <div class="br-a" id="br-imagined"><div class="br-in"><p>So was everyone on this ward. It will keep a chart on you, too.</p><a href="madmens-gospel.html" data-brought="imagined"><span class="t">The Madmen's Gospel</span><span class="go">Be admitted</span></a></div></div></div>
+            <div class="br-item"><button class="br-q" type="button" aria-expanded="false" aria-controls="br-watched"><span>A room I know feels watched.</span></button>
+              <div class="br-a" id="br-watched"><div class="br-in"><p>He swore it was in the room. By the second verse it was in the doorway.</p><a href="https://www.worldanvil.com/w/codex-maledictus-codexmaledictus/a/the-one-standing-in-the-room-myth" data-brought="watched" target="_blank" rel="noopener"><span class="t">The One Standing in the Room</span><span class="go">Read the account &#8599;</span></a></div></div></div>
+            <div class="br-item"><button class="br-q" type="button" aria-expanded="false" aria-controls="br-unsaid"><span>There's something I've never said out loud.</span></button>
+              <div class="br-a" id="br-unsaid"><div class="br-in"><p>There is a book open on a table. Write it there. It stays on your device, and something with a different hand will answer.</p><a href="confession-ledger.html" data-brought="unsaid"><span class="t">The Confession Ledger</span><span class="go">Pick up the pen</span></a></div></div></div>
+            <div class="br-item"><button class="br-q" type="button" aria-expanded="false" aria-controls="br-checked"><span>I want something I can check.</span></button>
+              <div class="br-a" id="br-checked"><div class="br-in"><p>Real sources first, named and dated. Then the Codex reads them back.</p><a href="the-transcriptions.html" data-brought="checked"><span class="t">The Transcriptions</span><span class="go">See the sources</span></a></div></div></div>
+            <div class="br-item"><button class="br-q" type="button" aria-expanded="false" aria-controls="br-burning"><span>I lost nearly all of it and I'm still here.</span></button>
+              <div class="br-a" id="br-burning"><div class="br-in"><p>So is he. He made a song out of the part that was still burning.</p><a href="https://open.spotify.com/track/50Y6gcKqWzAPGKBa7DdfpW" data-brought="burning" target="_blank" rel="noopener"><span class="t">Last Flame Alive</span><span class="go">Hear it &#8599;</span></a></div></div></div>
+            <div class="br-item"><button class="br-q" type="button" aria-expanded="false" aria-controls="br-worlds"><span>I build worlds of my own.</span></button>
+              <div class="br-a" id="br-worlds"><div class="br-in"><p>Then come and see how deep this one goes. Hundreds of pages, and the songs that started them.</p><a href="https://www.worldanvil.com/w/codex-maledictus-codexmaledictus" data-brought="worlds" target="_blank" rel="noopener"><span class="t">The Codex on World Anvil</span><span class="go">Walk in &#8599;</span></a></div></div></div>
+          </div>
+        </section>
     <!-- THE START · first thing a stranger sees. Was /start/ until November 15, 2026. -->
     <section class="sb" id="start" aria-labelledby="sb-h">
       <h2 class="sb-h" id="sb-h">Some things you hear stay with you.</h2>
@@ -3063,5 +3102,20 @@
   })();
   </script>
 
+<script>
+(function(){
+  /* one answer, one door. The door a visitor takes is counted as a page, like the game's steps. Nothing about them is kept. */
+  var items=[].slice.call(document.querySelectorAll('.br-item'));
+  items.forEach(function(it){
+    var b=it.querySelector('.br-q');
+    b.addEventListener('click',function(){
+      var open=!it.classList.contains('on');
+      items.forEach(function(o){o.classList.remove('on');o.querySelector('.br-q').setAttribute('aria-expanded','false');});
+      if(open){it.classList.add('on');b.setAttribute('aria-expanded','true');}
+    });
+  });
+  [].forEach.call(document.querySelectorAll('[data-brought]'),function(a){a.addEventListener('click',function(){var p='/brought/'+a.getAttribute('data-brought');try{window.va('pageview',{route:p,path:p});}catch(e){}});});
+})();
+</script>
 </body>
 </html>
